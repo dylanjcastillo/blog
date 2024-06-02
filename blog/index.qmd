@@ -1,0 +1,45 @@
+---
+listing:
+  - id: posts 
+    contents: posts
+    sort: "date desc"
+    type: table 
+    fields: [date, title, reading-time]
+    categories: true 
+    sort-ui: false 
+    filter-ui: false 
+  - id: today-i-learned 
+    contents: til
+    type: table 
+    fields: [date, title, reading-time]
+    categories: true
+    sort: "date desc"
+    sort-ui: false
+    filter-ui: false
+page-layout: full
+title-block-banner: true
+---
+
+Hi there 👋, I'm Dylan, the founder of [Iwana Labs](https://iwanalabs.com).
+
+I've been working with AI for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and am an [open-source contributor](https://github.com/dylanjcastillo). I've delivered projects for large-scale corporations, government agencies, and startups. I'm currently freelancing as an AI engineer at [REMATIQ](https://rematiq.com) and working on a few personal projects.
+
+Some of my open-source work and projects have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [CMOs of Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie). 
+
+## Posts
+
+This collection features my longer posts on AI, Data Science, programming, and occasional personal topics like yearly reviews or random thoughts.
+
+:::{#posts}
+:::
+
+## TIL
+
+Inspired by [Simon Willison](https://simonwillison.net/til/) I've decided to start keeping a collection of short posts that I've written to help me remember things. 
+
+I believe that reducing the bar in terms of how developed a post needs to be will allow me to post more often, plus it'll also help me remember things better. 
+
+The posts here are mostly technical and won't go into that much detail.
+
+:::{#today-i-learned}
+:::

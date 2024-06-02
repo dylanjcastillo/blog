@@ -1,0 +1,12 @@
+---
+title: "Projects"
+listing: true
+---
+
+I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've working in the AI & ML space for almost a decade.
+
+I've delivered successful projects for organizations like Deliveroo, the Boston Consulting Group (BCG), the European Commission, and the Olympics.
+
+In my free time, I like writing. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
+
+If you're interested in working with me or just want to chat, feel free to reach out to me at dylan@iwanalabs.com or connect with me on LinkedIn. I'd love to hear from you!
