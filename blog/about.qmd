@@ -18,10 +18,10 @@ about:
 
 I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've worked in the AI & ML space for almost a decade.
 
-I've delivered successful projects for organizations like Deliveroo, the Boston Consulting Group (BCG), the European Commission, and the Olympics.
+I've delivered successful projects for organizations like [Deliveroo](https://www.deliveroo.com/), [Boston Consulting Group (BCG)](https://www.bcg.com/), [the European Commission](https://ec.europa.eu/), and [the Olympics](https://www.olympics.com/).
 
-In my free time, I like working on random side projects and contributing to open-source projects. Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [CMOs of Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie). 
+In my free time, I like working on random side projects (open source, personal, or otherwise). Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [CMOs of Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie). 
 
-When I find the time, I write about topics I'm interested in. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
+Every once in a while, I write about topics I'm interested in. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
 
-If you're interested in working with me or just want to chat, feel free to reach out to me at [dylan@iwanalabs.com](mailto:dylan@iwanalabs.com) or connect with me on [LinkedIn](https://linkedin.com/in/dylanjcastillo/). I'd love to hear from you!
+If you're interested in working with me or just want to chat, feel free to reach out to me at [dylan@iwanalabs.com](mailto:dylan@iwanalabs.com) or connect with me on [LinkedIn](https://linkedin.com/in/dylanjcastillo/).
