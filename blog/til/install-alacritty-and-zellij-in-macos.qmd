@@ -1,0 +1,133 @@
+---
+title: "Installing Alacritty and Zellij in macOS"
+date: "06/08/2024"
+toc: true
+toc-depth: 2
+author-meta: "Dylan Castillo"
+description-meta: "Tips on installing Alacritty and Zellij in macOS."
+date-meta: "06/08/2024"
+categories:
+    - TIL
+---
+
+Today, after reading about [DHH's Omakub](https://world.hey.com/dhh/introducing-omakub-354db366), I decided to install Alacritty and Zellij on my M3 MacBook Pro.
+
+To be honest, I was just procrastinating. 
+
+And I've made a deal with myself: whenever I procrastinate, I have to write a TIL about whatever I did instead of my actual work (if it's something actually useful!). So, here you go.
+
+## Installing Alacritty
+
+Alacritty is a terminal emulator, similar to [Iterm2](https://iterm2.com/) and others. It's selling point is that it's very fast.
+
+The best way to install it is using Homebrew.
+
+```bash
+brew install --cask alacritty
+```
+
+Then, you you can customize it to your liking by creating a `~/.config/alacritty/alacritty.toml` file.
+
+I ended up modifying just a couple of things:
+
+1. Increase padding.
+2. Change the font.
+3. Change the color scheme. I used Tokyo Night from [basecamp/omakub](https://github.com/basecamp/omakub/blob/master/themes/alacritty/tokyo-night.toml).
+
+<details>
+<summary>Show the code</summary>
+
+```yaml
+[window]
+padding.x = 16 
+padding.y = 14 
+decorations = "none" # Removes the window decoration (title bar, etc.)
+
+[font]
+size = 13 #I'm getting old, so I had to increase the font size
+
+# I like the FiraCode Nerd Font
+normal = { family = "FiraCode Nerd Font", style = "Regular" }
+bold = { family = "FiraCode Nerd Font", style = "Bold" }
+italic = { family = "FiraCode Nerd Font", style = "Italic" }
+
+# Tokyo Night theme
+[colors]
+[colors.primary]
+background = '#1a1b26'
+foreground = '#a9b1d6'
+
+# Normal colors
+[colors.normal]
+black = '#32344a'
+red = '#f7768e'
+green = '#9ece6a'
+yellow = '#e0af68'
+blue = '#7aa2f7'
+magenta = '#ad8ee6'
+cyan = '#449dab'
+white = '#787c99'
+
+# Bright colors
+[colors.bright]
+black = '#444b6a'
+red = '#ff7a93'
+green = '#b9f27c'
+yellow = '#ff9e64'
+blue = '#7da6ff'
+magenta = '#bb9af7'
+cyan = '#0db9d7'
+white = '#acb0d0'
+
+[colors.selection]
+background = '#7aa2f7'
+```
+
+</details>
+
+## Installing Zellij
+
+Zellij is like [`tmux`](https://en.wikipedia.org/wiki/Tmux), but better. I liked that it shows you the keys you need to press to navigate, split the screen, etc. When I use `tmux` I keep going back to this [cheat sheet](https://tmuxcheatsheet.com) to remember the key bindings.
+
+Same as before, the best way to install it is using Homebrew.
+
+```bash
+brew install zellij
+```
+
+You can customize it by creating a `~/.config/zellij/config.kdl` file.
+
+In my case, I just set up a tokyo night theme, copied from [here](https://github.com/basecamp/omakub/blob/master/themes/zellij/tokyo-night.kdl).
+
+```kdl
+theme "tokyo-night"
+
+themes {
+    tokyo-night {
+        fg 169 177 214
+        bg 26 27 38
+        black 56 62 90
+        red 249 51 87
+        green 158 206 106
+        yellow 224 175 104
+        blue 122 162 247
+        magenta 187 154 247
+        cyan 42 195 222
+        white 192 202 245
+        orange 255 158 100
+    }
+}
+```
+
+## Making Zellij play nice with Alacritty
+
+I had some issues when trying to use Zellij with Alacritty. I could make it work when starting alacritty from the terminal but not when I launched it from the dock or with Spotlight.
+
+To make it work, all you need to do is to add the full path to the `zellij` binary in the `~/.config/alacritty/alacritty.toml` file.
+
+```yaml
+[shell]
+     program = "/opt/homebrew/opt/zellij/bin"
+```
+
+
