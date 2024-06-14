@@ -1,24 +1,34 @@
 ---
-title: "Installing Alacritty and Zellij in macOS"
+title: "Installing Alacritty, Zellij, and Neovim in macOS"
 date: "06/08/2024"
 toc: true
 toc-depth: 2
 author-meta: "Dylan Castillo"
-description-meta: "Tips on installing Alacritty and Zellij in macOS."
+description-meta: "Tips on installing Alacritty, Zellij, and Neovim in macOS."
 date-meta: "06/08/2024"
 categories:
     - TIL
 ---
 
-Today, after reading about [DHH's Omakub](https://world.hey.com/dhh/introducing-omakub-354db366), I decided to install Alacritty and Zellij on my M3 MacBook Pro.
+Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.
 
-To be honest, I was just procrastinating. 
+When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a genius stealing millions from banks when, in reality, I’m just struggling to read a JSON file.
 
-And I've made a deal with myself: whenever I procrastinate, I have to write a TIL about whatever I did instead of my actual work (if it's something actually useful!). So, here you go.
+I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode. 
+
+It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying ["I use Arch btw"](https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/). I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work^[**Linux user:** I'm sure you're itching to explain how I'm completely wrong about this, and how you haven't had to fix anything in years. Please reach me at [elon@x.com](mailto:elon@x.com)]. So that didn't last long.
+
+But, today, after reading about [DHH's Omakub](https://world.hey.com/dhh/introducing-omakub-354db366), I though it was time to give my hacker dreams a second shot.
+
+Installing Ubuntu felt like a bit too much work^[Can you even install Ubuntu on a Mac?], so I decided to settle on just upgrading my terminal game.
+
+I decided to set up Alacritty, Zellij, and Neovim on my M3 MacBook Pro.
+
+Sure, I have client projects to deliver. But how could I let go of one-in-a-lifetime opportunity to procrastinate and feel like a Mr. Hacker<sup>TM</sup> for an afternoon?
 
 ## Installing Alacritty
 
-Alacritty is a terminal emulator, similar to [Iterm2](https://iterm2.com/) and others. It's selling point is that it's very fast.
+Alacritty is a terminal emulator, similar to [Iterm2](https://iterm2.com/) and others. It's selling point is that it's very fast due to GPU-acceleration. Plus, you also get 256 colors support by default.
 
 The best way to install it is using Homebrew.
 
@@ -87,7 +97,9 @@ background = '#7aa2f7'
 
 ## Installing Zellij
 
-Zellij is like [`tmux`](https://en.wikipedia.org/wiki/Tmux), but better. I liked that it shows you the keys you need to press to navigate, split the screen, etc. When I use `tmux` I keep going back to this [cheat sheet](https://tmuxcheatsheet.com) to remember the key bindings.
+Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux). It has a nice modern UI and is easier to navigate. 
+
+With `tmux` I kept going back to this [cheat sheet](https://tmuxcheatsheet.com) to remember the key bindings. With Zellij, you can have the keybindings on screen, which is a nice touch.
 
 Same as before, the best way to install it is using Homebrew.
 
@@ -119,7 +131,7 @@ themes {
 }
 ```
 
-## Making Zellij play nice with Alacritty
+### Making Zellij play nice with Alacritty
 
 I had some issues when trying to use Zellij with Alacritty. I could make it work when starting alacritty from the terminal but not when I launched it from the dock or with Spotlight.
 
@@ -130,4 +142,5 @@ To make it work, all you need to do is to add the full path to the `zellij` bina
      program = "/opt/homebrew/opt/zellij/bin"
 ```
 
+## Installing Neovim
 
