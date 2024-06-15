@@ -6,13 +6,15 @@ toc-depth: 2
 author-meta: "Dylan Castillo"
 description-meta: "Tips on installing Alacritty, Zellij, and Neovim in macOS."
 date-meta: "06/08/2024"
+lightbox: true
+fig-cap-location: margin 
 categories:
     - TIL
 ---
 
 Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.
 
-When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a genius stealing millions from banks when, in reality, I’m just struggling to read a JSON file.
+When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to read a JSON file.
 
 I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode. 
 
@@ -42,7 +44,7 @@ I ended up modifying just a couple of things:
 
 1. Increase padding.
 2. Change the font.
-3. Change the color scheme. I used Tokyo Night from [basecamp/omakub](https://github.com/basecamp/omakub/blob/master/themes/alacritty/tokyo-night.toml).
+3. Change the color scheme. I used One Dark from [this gist](https://gist.github.com/r-darwish/f8bb21a6c89a02c4bef76cc38bddad39).
 
 <details>
 <summary>Show the code</summary>
@@ -54,52 +56,71 @@ padding.y = 14
 decorations = "none" # Removes the window decoration (title bar, etc.)
 
 [font]
-size = 13 #I'm getting old, so I had to increase the font size
+size = 13
 
-# I like the FiraCode Nerd Font
+# FiraCode Nerd Font
 normal = { family = "FiraCode Nerd Font", style = "Regular" }
 bold = { family = "FiraCode Nerd Font", style = "Bold" }
 italic = { family = "FiraCode Nerd Font", style = "Italic" }
 
-# Tokyo Night theme
+# One Dark theme
 [colors]
 [colors.primary]
-background = '#1a1b26'
-foreground = '#a9b1d6'
+background = '0x1e2127'
+foreground = '0xabb2bf'
+bright_foreground = '0xe6efff'
 
 # Normal colors
 [colors.normal]
-black = '#32344a'
-red = '#f7768e'
-green = '#9ece6a'
-yellow = '#e0af68'
-blue = '#7aa2f7'
-magenta = '#ad8ee6'
-cyan = '#449dab'
-white = '#787c99'
+black = '0x1e2127'
+red = '0xe06c75'
+green = '0x98c379'
+yellow = '0xd19a66'
+blue = '0x61afef'
+magenta = '0xc678dd'
+cyan = '0x56b6c2'
+white = '0x828791'
 
 # Bright colors
 [colors.bright]
-black = '#444b6a'
-red = '#ff7a93'
-green = '#b9f27c'
-yellow = '#ff9e64'
-blue = '#7da6ff'
-magenta = '#bb9af7'
-cyan = '#0db9d7'
-white = '#acb0d0'
+black = '0x5c6370'
+red = '0xe06c75'
+green = '0x98c379'
+yellow = '0xd19a66'
+blue = '0x61afef'
+magenta = '0xc678dd'
+cyan = '0x56b6c2'
+white = '0xe6efff'
 
-[colors.selection]
-background = '#7aa2f7'
+# Dim colors
+[colors.dim]
+black = '0x1e2127'
+red = '0xe06c75'
+green = '0x98c379'
+yellow = '0xd19a66'
+blue = '0x61afef'
+magenta = '0xc678dd'
+cyan = '0x56b6c2'
+white = '0x828791'
 ```
 
 </details>
 
+I use [FiraCode](https://github.com/tonsky/FiraCode) Nerd Font. [Nerd Fonts](https://www.nerdfonts.com/) are a collection of fonts that include glyphs such as icons that represent folders, file types, [weird arrows](https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true), etc.
+
+You can install them using [Homebrew Cask](https://brew.sh/cask/).
+
+```bash
+brew install font-<name-of-the-font>-nerd-font # For example, font-fira-code-nerd-font
+```
+
 ## Installing Zellij
 
-Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux). It has a nice modern UI and is easier to navigate. 
+Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux). Whenever I had to do something in `tmux`, half of the time it took me to finish the task was spent figuring out the key bindings. Zellij shows you (if you don't disable it) the key bindings on screen, which is a great improvement to the user experience. 
 
-With `tmux` I kept going back to this [cheat sheet](https://tmuxcheatsheet.com) to remember the key bindings. With Zellij, you can have the keybindings on screen, which is a nice touch.
+This is how it looks like:
+
+![Zellij](images/zellij-screenshot.png)
 
 Same as before, the best way to install it is using Homebrew.
 
@@ -109,13 +130,13 @@ brew install zellij
 
 You can customize it by creating a `~/.config/zellij/config.kdl` file.
 
-In my case, I just set up a tokyo night theme, copied from [here](https://github.com/basecamp/omakub/blob/master/themes/zellij/tokyo-night.kdl).
+I just copied the [One Half Dark](https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/themes/one-half-dark.kdl) theme they provide.
 
 ```kdl
-theme "tokyo-night"
+theme "one-half-dark"
 
 themes {
-    tokyo-night {
+    one-half-dark {
         fg 169 177 214
         bg 26 27 38
         black 56 62 90
@@ -131,16 +152,37 @@ themes {
 }
 ```
 
+Is One Half Dark the same as One Dark? I don't really know. I like to live dangerously.
+
 ### Making Zellij play nice with Alacritty
 
-I had some issues when trying to use Zellij with Alacritty. I could make it work when starting alacritty from the terminal but not when I launched it from the dock or with Spotlight.
-
-To make it work, all you need to do is to add the full path to the `zellij` binary in the `~/.config/alacritty/alacritty.toml` file.
+Getting Alacritty to work with Zellij took me a while to figure out. But luckily it's as simple as adding the full path to the `zellij` binary in the `~/.config/alacritty/alacritty.toml` file.
 
 ```yaml
 [shell]
-     program = "/opt/homebrew/opt/zellij/bin"
+     program = "/opt/homebrew/opt/bin/zellij"
 ```
 
-## Installing Neovim
+## Installing Neovim and LazyVim
 
+[Neovim](https://neovim.io/) is a fork from [Vim](https://www.vim.org/), that solves some of Vim's issues[^Including its horrible website.]. I don't really know if it's better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.
+
+[LazyVim](https://github.com/LazyVim/starter) is a premade configuration for Neovim. The purists will probably hate it, but it's a good start. 
+
+I had my own `.vimrc`, and after trying LazyVim for 30 minutes or so, I realized my config sucked.
+
+First, install Neovim using Homebrew.
+
+```bash
+brew install neovim
+```
+
+Then, install LazyVim.
+
+```bash
+git clone https://github.com/LazyVim/starter ~/.config/nvim
+```
+
+Some of my favorite features that LazyVim enabled by default are:
+
+- `<space><space>` to toggle which-key.
