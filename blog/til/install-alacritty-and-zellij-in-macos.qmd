@@ -239,7 +239,8 @@ If you run `lta` you'll get a nice view of the current directory.
 
 ## Conclusion
 
-That's all. There's no real conclusion except that I've likely wasted 4 hours of my life trying to get this setup working.
+That's all. I hope you learned something from this post or, at least, got a cool looking terminal. 
 
-I hope it's useful for you too.
+There's nothing else to say except that I'm likely never going to recover those 4 hours of my life. 
 
+I should get back to work.
