@@ -18,21 +18,21 @@ When I say hacker, I mean having a cool-looking terminal. The kind that makes pe
 
 I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode. 
 
-It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying ["I use Arch btw"](https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/). I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work^[**Linux user:** I'm sure you're itching to explain how I'm completely wrong about this, and how you haven't had to fix anything in years. Please reach me at [elon@x.com](mailto:elon@x.com)]. So that didn't last long.
+It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying ["I use Arch btw"](https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/). I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work^[I'm sure you're itching to explain how I'm completely wrong about this, and how you haven't had to fix anything in years. Please reach me at [elon@x.com](mailto:elon@x.com)]. So that didn't last long.
 
 But, today, after reading about [DHH's Omakub](https://world.hey.com/dhh/introducing-omakub-354db366), I though it was time to give my hacker dreams a second shot.
 
-Installing Ubuntu felt like a bit too much work^[Can you even install Ubuntu on a Mac?], so I decided to settle on just upgrading my terminal game.
+Installing Ubuntu felt like a bit too much work^[Can you even install Ubuntu on a Mac?], so I decided to settle on just upgrading my terminal.
 
 I decided to set up Alacritty, Zellij, and Neovim on my M3 MacBook Pro.
 
-Sure, I have client projects to deliver. But how could I let go of one-in-a-lifetime opportunity to procrastinate and feel like a Mr. Hacker<sup>TM</sup> for an afternoon?
+Sure, I have client projects to deliver. But how could I let go of one-in-a-lifetime opportunity to procrastinate and imagine I'm a genius hacker for an afternoon?
 
 ## Installing Alacritty
 
 Alacritty is a terminal emulator, similar to [Iterm2](https://iterm2.com/) and others. It's selling point is that it's very fast due to GPU-acceleration. Plus, you also get 256 colors support by default.
 
-The best way to install it is using Homebrew.
+The best way to install it is using Homebrew:
 
 ```bash
 brew install --cask alacritty
@@ -108,7 +108,7 @@ white = '0x828791'
 
 I use [FiraCode](https://github.com/tonsky/FiraCode) Nerd Font. [Nerd Fonts](https://www.nerdfonts.com/) are a collection of fonts that include glyphs such as icons that represent folders, file types, [weird arrows](https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true), etc.
 
-You can install them using [Homebrew Cask](https://brew.sh/cask/).
+You can install them using Homebrew: 
 
 ```bash
 brew install font-<name-of-the-font>-nerd-font # For example, font-fira-code-nerd-font
@@ -116,9 +116,9 @@ brew install font-<name-of-the-font>-nerd-font # For example, font-fira-code-ner
 
 ## Installing Zellij
 
-Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux). Whenever I had to do something in `tmux`, half of the time it took me to finish the task was spent figuring out the key bindings. Zellij shows you (if you don't disable it) the key bindings on screen, which is a great improvement to the user experience. 
+Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux).  Whenever I used tmux, I spent half my time figuring out the key bindings. Zellij shows the key bindings on screen (unless you disable it), which greatly improves the user experience. 
 
-This is how it looks like:
+This is what it looks like:
 
 ![Zellij](images/zellij-screenshot.png)
 
@@ -165,7 +165,7 @@ Getting Alacritty to work with Zellij took me a while to figure out. But luckily
 
 ## Installing Neovim and LazyVim
 
-[Neovim](https://neovim.io/) is a fork from [Vim](https://www.vim.org/), that solves some of Vim's issues[^Including its horrible website.]. I don't really know if it's better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.
+[Neovim](https://neovim.io/) is a fork from [Vim](https://www.vim.org/), that solves some of Vim's issues^[Including its horrible website.]. I didn't really know if it was better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.
 
 [LazyVim](https://github.com/LazyVim/starter) is a premade configuration for Neovim. The purists will probably hate it, but it's a good start. 
 
@@ -183,6 +183,63 @@ Then, install LazyVim.
 git clone https://github.com/LazyVim/starter ~/.config/nvim
 ```
 
-Some of my favorite features that LazyVim enabled by default are:
+So far, I've only made a few changes:
 
-- `<space><space>` to toggle which-key.
+- Installed [Copilot](https://github.com/github/copilot.vim) and [CopilotChat](https://github.com/CopilotC-Nvim/CopilotChat.nvim).
+- Installed [One Dark](https://github.com/navarasu/onedark.nvim) color scheme.
+
+The Copilot plugins are available in `:LazyExtras`, so it's very easy to install them. Run `:LazyExtras` and select the plugins, and then install them with {{<kbd I >}}.
+
+To install `One Dark`, you must create a new file in `~/.config/nvim/lua/plugins/` containing the following code:
+
+```lua
+return {
+  { "navarasu/onedark.nvim" },
+
+  -- Configure LazyVim to load One Dark
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "onedark",
+    },
+  },
+}
+```
+
+## Other useful tools
+
+I learned about a few useful tools that I've now included in my daily workflow:
+
+[lazydocker](https://github.com/jesseduffield/lazydocker): A simple terminal UI to manage everything Docker. Much better than everything else I've used.
+
+Here's a screenshot of the main screen:
+
+![lazydocker](images/lazydocker-screenshot.png)
+
+
+[lazygit](https://github.com/jesseduffield/lazygit): A simple terminal UI for `git`. I've found it better than GitHub Desktop when doing complex operations.
+
+Here's a screenshot of the main screen:
+
+![lazygit](images/lazygit-screenshot.png)
+
+[eza](https://github.com/eza-community/eza): An improved version of `ls`. I also added a couple of aliases from Omakub: 
+
+```bash
+alias ls='eza -lh --group-directories-first --icons --hyperlink'
+alias lsa='ls -a'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='lt -a'
+```
+
+If you run `lta` you'll get a nice view of the current directory.
+
+![eza](images/eza-screenshot.png)
+
+
+## Conclusion
+
+That's all. There's no real conclusion except that I've likely wasted 4 hours of my life trying to get this setup working.
+
+I hope it's useful for you too.
+

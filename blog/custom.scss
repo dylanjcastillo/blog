@@ -338,3 +338,10 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0
   --bs-tooltip-bg: var(--bs-tertiary-bg);
   --bs-tooltip-color: var(--bs-emphasis-color);
 }
+
+kbd,
+.kbd {
+  padding: 0.2em 0.4em;
+  color: $gray-900;
+  background-color: $gray-100;
+}
