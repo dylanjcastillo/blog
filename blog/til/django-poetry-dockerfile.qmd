@@ -1,0 +1,178 @@
+---
+title: "A Dockerfile for a Django app using Poetry"
+date: "06/22/2024"
+toc: true
+toc-depth: 2
+author-meta: "Dylan Castillo"
+description-meta: "Simple setup for a Django app using Poetry and Docker."
+date-meta: "06/22/2024"
+lightbox: true
+fig-cap-location: margin 
+categories:
+    - TIL
+---
+
+Since the beginning of this year, I've been using [kamal](https://kamal-deploy.org/) to deploy most of my projects.
+
+I used to hate Docker. But, like vegetables, I've come to realize that there's some good in it.
+
+Also, like vegetables there's also a group of people that will not shut up about how better they are. 
+
+I wanted to create a simple Dockerfile to run a Django app using Poetry, with a SQLite database, and hot reload. Additionally, I wanted to switch between the development and production versions of the container.
+
+## Project structure
+
+This is my project structure:
+
+```bash
+.
+├── db/
+├── src/
+├── entrypoint.sh
+├── Dockerfile
+├── docker-compose.yml
+├── poetry.lock
+└── pyproject.toml
+```
+
+The `src/` directory contains the Django project. The `db/` directory contains the SQLite database. The `entrypoint.sh` file is the entrypoint for the Docker container.
+
+If your project is not structured in a similar way, you might need to adapt the files below to your needs.
+
+## Dockerfile
+
+I created a `Dockerfile` that fulfilled this criteria:
+
+1. A base stage with Python 3.10 and Poetry installed.
+2. A builder stage that installs the dependencies. 
+3. A runner stage that copies the virtual environment from the builder stage.
+4. A development stage that runs the entrypoint as a root user.
+5. A production stage that runs the entrypoint as a non-root user.
+
+Here's the full `Dockerfile`:
+
+<details>
+<summary>Dockerfile</summary>
+
+```dockerfile
+FROM python:3.10-slim AS base
+
+ENV POETRY_HOME=/opt/poetry
+ENV PATH=${POETRY_HOME}/bin:${PATH}
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 - && poetry --version
+
+FROM base AS builder
+
+WORKDIR /app
+COPY poetry.lock pyproject.toml ./
+RUN poetry config virtualenvs.in-project true
+RUN poetry install --only main --no-interaction
+
+FROM base AS runner
+
+WORKDIR /app
+COPY --from=builder /app/.venv/ /app/.venv/
+
+COPY . /app
+RUN mkdir -p /db
+
+EXPOSE 8000
+
+RUN chmod +x /app/src/entrypoint.sh
+
+FROM runner AS development
+
+WORKDIR /app/src
+ENTRYPOINT [ "/app/src/entrypoint.sh" ]
+
+FROM runner AS production
+
+# Set user and group
+ARG user=django
+ARG group=django
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g ${gid} ${group}
+RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user} 
+
+# Switch to user
+RUN chown -R ${uid}:${gid} /app
+RUN chown -R ${uid}:${gid} /db
+
+USER ${uid}:${gid}
+
+WORKDIR /app/src
+ENTRYPOINT [ "/app/src/entrypoint.sh" ]
+
+```
+</details>
+
+## Entrypoint
+
+For `entrypoint.sh` I use this:
+
+```bash
+#!/bin/sh
+
+if [ "$ENVIRONMENT" = "production" ]; then
+    echo "Running in production mode"
+    exec poetry run gunicorn -c gunicorn.conf.py
+elif [ "$ENVIRONMENT" = "development" ]; then
+    echo "Running in development mode"
+    exec poetry run python manage.py runserver 0.0.0.0:8000
+else
+    echo "ENVIRONMENT variable is not set"
+fi
+```
+
+If `ENVIRONMENT` is set to `production`, the container will run the production server using gunicorn. If it is `development`, the container will run Django's development server.
+
+## Docker-compose
+
+Then, I have a docker-compose that lets you run the development and production containers: 
+
+```yaml
+services:
+  app:
+    build:
+      context: .
+      target: ${ENVIRONMENT}
+    platform: linux/amd64
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
+      - DJANGO_SECURE_SSL_REDIRECT=${DJANGO_SECURE_SSL_REDIRECT}
+      - DJANGO_SECURE_HSTS_SECONDS=${DJANGO_SECURE_HSTS_SECONDS}
+      - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=${DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS}
+      - DJANGO_SECURE_HSTS_PRELOAD=${DJANGO_SECURE_HSTS_PRELOAD}
+      - DJANGO_SESSION_COOKIE_SECURE=${DJANGO_SESSION_COOKIE_SECURE}
+      - DJANGO_CSRF_COOKIE_SECURE=${DJANGO_CSRF_COOKIE_SECURE}
+      - CACHE_REDIS_URL=${CACHE_REDIS_URL}
+      - ENVIRONMENT=${ENVIRONMENT}
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./db/:/app/db/"
+    develop:
+      watch:
+        - action: sync
+          path: ./src/
+          target: /app/src
+        - action: rebuild
+          path: pyproject.toml
+```
+
+In this `docker-compose`, I use `ENVIRONMENT` to switch between the development and production containers. 
+
+I also use the [Compose Watch](https://docs.docker.com/compose/file-watch/) to reload the container when I make changes to the code and to rebuild the container when I make changes to the `pyproject.toml` file.
+
+That's it. I hope it helps you.
