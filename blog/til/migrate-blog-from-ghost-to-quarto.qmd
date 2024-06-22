@@ -12,15 +12,15 @@ categories:
 
 When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that [Ghost](https://ghost.org/) was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.
 
-I envisioned myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of the AI blogging scene, churning out masterpice after masterpiece. 
+I saw myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of technical writing, producing masterpiece after masterpiece. 
 
-Fast forward five years, and I've paid $1.8k for hosting a blog that hardly gets 8k visits per month and that I'm forced to write in an interface that I hate. 
+Fast forward five years, and I've paid $1.8k for hosting a blog that barely gets 8k visits per month. Plus, I'm forced to write it in an interface that I hate. 
 
-With that kind of money, I could have funded a moderately extravagant hamster-only summer party. Not that I should, but I could. 
+With that kind of money, I could have funded a moderately extravagant hamster-only summer party. 
 
-Yes, I'm not proud of that decision^[Choosing Ghost. No regrets about the hypothetical hamster party.]. 
+Not that I should, but I could. 
 
-So I'm migrating my blog from Ghost to Quarto.
+Yes, I'm not proud of that decision^[Choosing Ghost. No regrets about the hypothetical hamster party.]. So I'm migrating my blog from Ghost to Quarto.
 
 Here's how I did it.
 

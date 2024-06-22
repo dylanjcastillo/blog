@@ -14,7 +14,7 @@ categories:
 
 Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.
 
-When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to read a JSON file.
+When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to exit vim.
 
 I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode. 
 
@@ -185,10 +185,10 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 
 So far, I've only made a few changes:
 
-- Installed [Copilot](https://github.com/github/copilot.vim) and [CopilotChat](https://github.com/CopilotC-Nvim/CopilotChat.nvim).
+- Installed [Copilot](https://github.com/github/copilot.vim), [CopilotChat](https://github.com/CopilotC-Nvim/CopilotChat.nvim), and [mini-surround](https://github.com/echasnovski/mini.surround).
 - Installed [One Dark](https://github.com/navarasu/onedark.nvim) color scheme.
 
-The Copilot plugins are available in `:LazyExtras`, so it's very easy to install them. Run `:LazyExtras` and select the plugins, and then install them with {{<kbd I >}}.
+The plugins I mentioned are available in `:LazyExtras`, so it's very easy to install them. Run `:LazyExtras`, select the plugins, and then install them with {{<kbd I >}}.
 
 To install `One Dark`, you must create a new file in `~/.config/nvim/lua/plugins/` containing the following code:
 
@@ -208,22 +208,33 @@ return {
 
 ## Other useful tools
 
-I learned about a few useful tools that I've now included in my daily workflow:
+While exploring [Omakub's repository](https://github.com/basecamp/omakub/), I also learned about other useful tools that I've now included in my daily workflow:
+
+### lazydocker
 
 [lazydocker](https://github.com/jesseduffield/lazydocker): A simple terminal UI to manage everything Docker. Much better than everything else I've used.
 
-Here's a screenshot of the main screen:
+Docker is great. But, until now, the experience of managing Docker containers sucked.
+
+Take a look at the main screen:
 
 ![lazydocker](images/lazydocker-screenshot.png)
 
+### lazygit
 
-[lazygit](https://github.com/jesseduffield/lazygit): A simple terminal UI for `git`. I've found it better than GitHub Desktop when doing complex operations.
+[lazygit](https://github.com/jesseduffield/lazygit) is a simple terminal UI for `git`. 
+
+I've found it better than GitHub Desktop when doing complex operations.
 
 Here's a screenshot of the main screen:
 
 ![lazygit](images/lazygit-screenshot.png)
 
-[eza](https://github.com/eza-community/eza): An improved version of `ls`. I also added a couple of aliases from Omakub: 
+### eza 
+
+[eza](https://github.com/eza-community/eza) is an improved version of `ls`.
+
+I also added a couple of aliases from Omakub: 
 
 ```bash
 alias ls='eza -lh --group-directories-first --icons --hyperlink'
@@ -241,6 +252,6 @@ If you run `lta` you'll get a nice view of the current directory.
 
 That's all. I hope you learned something from this post or, at least, got a cool looking terminal. 
 
-There's nothing else to say except that I'm likely never going to recover those 4 hours of my life. 
+There's nothing else to say except that I'm never going to recover those 4 hours of my life. 
 
 I should get back to work.
