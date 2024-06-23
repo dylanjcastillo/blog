@@ -12,11 +12,17 @@ categories:
     - TIL
 ---
 
-Since the beginning of this year, I've been using [kamal](https://kamal-deploy.org/) to deploy most of my projects.
+[Pieter Levels](https://levels.io/) is making over $100k/month with a single VPS using PHP and Jquery. And until very recently, he's deployment consistent of uploading files via FTP.
 
-I used to hate Docker. But, like vegetables, I've come to realize that there's some good in it.
+This proves that if you focus on what your users want and marketing your product, you can make a lot of money.
 
-Also, like vegetables there's also a group of people that will not shut up about how better they are. 
+Inspired by his story, I decided to continue being poor and spend an inordinate amount of time this year improving my deployment process. 
+
+Who needs money when you can get the satisfaction of a properly set up CI/CD pipeline?
+
+These days, I've been using [kamal](https://kamal-deploy.org/) to deploy most of my projects.
+
+I used to hate Docker. But, like vegetables, I've come to realize that there's some good in it^[Also, like vegetables there's also a group of people that will not shut up about how better they are].
 
 I wanted to create a simple Dockerfile to run a Django app using Poetry, with a SQLite database, and hot reload. Additionally, I wanted to switch between the development and production versions of the container.
 
@@ -175,4 +181,8 @@ In this `docker-compose`, I use `ENVIRONMENT` to switch between the development 
 
 I also use the [Compose Watch](https://docs.docker.com/compose/file-watch/) to reload the container when I make changes to the code and to rebuild the container when I make changes to the `pyproject.toml` file.
 
-That's it. I hope it helps you.
+## Conclusion
+
+That's it. I hope you find this useful.
+
+And remember, while Pieter is busy counting his cash, here you are counting the number of successful builds.
