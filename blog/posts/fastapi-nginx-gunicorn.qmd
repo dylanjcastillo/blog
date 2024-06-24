@@ -1,0 +1,505 @@
+---
+title: "How to Securely Deploy a FastAPI app with NGINX and Gunicorn"
+description: "In this tutorial, you'll learn how to use NGINX, and Gunicorn+Uvicorn to deploy a FastAPI app, and generate a free SSL certificate for it."
+author: "Dylan Castillo"
+date: "02/03/2024"
+date-modified: "02/03/2024"
+meta-description: "In this tutorial, you'll learn how to use NGINX, and Gunicorn+Uvicorn to deploy a FastAPI app, and generate a free SSL certificate for it."
+meta-author: "Dylan Castillo"
+toc: true
+toc-depth: 2
+lightbox: true
+fig-cap-location: margin 
+categories:
+    - python
+---
+
+Deploying a [FastAPI](https://fastapi.tiangolo.com/) web app to a Virtual Private Server (VPS) is tricky. If you're not familiar with technologies such as NGINX, Gunicorn, and Uvicorn, it can easily overwhelm you. I wrote this tutorial so you won't have to spend as much time on your first deployment as I did.
+
+FastAPI is one of the most popular Python libraries for developing APIs, thanks to its performance and ease of use. If you're using machine learning models in your web app, it's likely the go-to tool for you.
+
+[NGINX](https://www.nginx.com/) , [Gunicorn](https://gunicorn.org/), and [Uvicorn](https://www.uvicorn.org/) are battle-tested technologies that are frequently used as a reverse proxy and ASGI server when deploying Python web apps. If you're familiar with Django or Flask, you've probably heard about some of them before.
+
+In this tutorial, I'll show you how to combine these tools to deploy a FastAPI web app. You will:
+
+* Learn the basics about FastAPI, NGINX, Gunicorn, and Uvicorn.
+* Set up Gunicorn + Uvicorn as an ASGI server.
+* Configure NGINX as a reverse proxy server.
+* Generate a free SSL certificate for your app using Let's Encrypt.
+
+Let's get to it!
+
+## Prerequisites
+
+* You should have access to a Debian-based VPS. I will use Ubuntu 20.04.
+* You should be familiar with basic shell commands, such as `sudo`, `mkdir`, or `cd`.
+* You should know how to [exit](https://stackoverflow.com/a/11828573) vim 😜
+
+## Tech Stack
+
+Before we go any further, I'll give you a quick rundown of the technologies you'll be using:
+
+* **FastAPI** is one of the most popular Python frameworks for building APIs.  
+It's built on top of [Starlette](https://www.starlette.io/) and [Pydantic](https://docs.pydantic.dev/) and uses standard Python type hints. It's loved by developers because of it is performant, easy to learn, and provides a great developer experience.
+* **Gunicorn** is a popular web server used to deploy Python web apps. Typically, it's used as a WSGI server, but it's possible to combine it with Uvicorn to work as an ASGI server.
+* **Uvicorn** is an ASGI web server implementation for Python. It's the recommended web server for Starlette and FastAPI.
+* **NGINX** is an open-source tool with many uses. It started out as a web server but can now be used as a reverse proxy server, a load balancer, and more.  
+NGINX is often used as a reverse proxy in front of the app's web server when working with Python web frameworks.
+
+Now, let's get to the interesting part!
+
+## (Optional) Step 1: Secure Your Server
+
+This step isn't required, but it's still a good idea to at least skim it. Even more so if you're not sure what you're doing. This will make your application more secure.
+
+### Enable Automatic Updates
+
+First, you should make sure your server has the latest software:
+
+
+```shell
+sudo apt update && sudo apt upgrade -y
+```
+These are common commands you'll see when working with Debian-based servers:
+
+* `sudo apt update` updates the package list index on the user's system.
+* `sudo apt upgrade` upgrades the installed packages to their latest versions. You provide the `-y` flag to proceed with the installation without requiring confirmation.
+
+Next, you should set up automatic security updates, so that you don't have to do them manually. For that, you'll need to install and enable `unnattended-upgrades`:
+
+
+```shell
+sudo apt install unattended-upgrades
+```
+Once the installation is finished, edit `/etc/apt/apt.conf.d/20auto-upgrades` to include the following lines:
+
+
+```shell
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+```
+These lines configure `unattended-upgrades` so that it runs automatically. Here's what they do:
+
+* `APT::Periodic::Update-Package-Lists "1"` means that the list of packages will be automatically updated every day.
+* `APT::Periodic::Unattended-Upgrade "1"` means that the system will be updated to the latest version of the packages without the user having to intervene.
+* `"APT::Periodic::AutocleanInterval "7"` means that the auto-clean operation, which gets rid of old and unnecessary package files, will run once a week.
+
+Lastly, edit `/etc/apt/apt.conf.d/50unattended-upgrades` to make sure the system automatically reboots when kernel updates require it:
+
+
+```shell
+Unattended-Upgrade::Automatic-Reboot "true"; # change to true
+```
+You can also configure your system to send emails when there are issues with the upgrades. If you want to do that, take a look at [this](https://www.cyberciti.biz/faq/ubuntu-enable-setup-automatic-unattended-security-updates/) article.
+
+Whew! You've now ensured that your system is up to date and will remain so. Next, you'll create a user to make sure you don't give your app more permissions than it needs to run.
+
+### Create a Non-root User
+
+If your server ever gets hacked, having a non-root user reduces the damage the malicious actor can do. That, [among other reasons](https://askubuntu.com/questions/1127174/purpose-of-creating-non-root-user), justifies the creation of a non-root user.
+
+```shell
+sudo adduser fastapi-user # replace fastapi-user with your preferred name
+sudo gpasswd -a fastapi-user sudo # add to sudoers
+su - fastapi-user # login as fastapi-user 
+```
+
+These commands will create a user name `fastapi-user`, add it to the `sudo` group (which contains all users with root privileges), and then log in as that user.
+
+Then, you will set up your server so that you connect to it using an SSH key instead of a password. It's safer and faster, so you have nothing to lose.
+
+If you don't already have an SSH key, open a new terminal **on your local machine** and run the following command. Otherwise, skip this step, and move directly to copy your public SSH key.
+
+```shell
+ssh-keygen -t ed25519 -C "username@email.com"
+```
+
+‌This command will create and store an SSH key in your local machine. You employ two parameters:
+
+1. `-t ed25519` to specify which algorithm to use to generate the key. You went with [ED25519](https://ed25519.cr.yp.to/), which is a very safe and efficient algorithm.
+2. `-C username@email.com` to append your email as a comment at the end of the key. Make sure to replace `username@email.com` it with your actual email.
+
+Then, copy your public SSH key by using this command and copying the output:
+
+
+```shell
+cat ~/.ssh/id_ed25519.pub
+```
+Go back to the **remote server's** terminal and type in the following commands:
+
+
+```shell
+mkdir ~/.ssh/
+chmod 700 -R ~/.ssh/
+sudo vim ~/.ssh/authorized_keys
+```
+These commands will: 
+
+1. Create a `.ssh` directory
+2. Set the necessary permissions (the owner of `.ssh/` has full read, write, and execute permissions, but other users and groups shouldn't).
+3. Open `authorized_keys` with an editor
+
+Paste your public SSH key into `authorized_keys`. Save the changes and close the editor. Make sure the changes worked by closing the terminal and logging back into your machine using the following command:
+
+
+```shell
+ssh fastapi-user@your-server-ip
+```
+Once you've tested that it works, you should disable the root login and use password authentication for SSH connections. To do this, you'll have to update the following values in `/etc/ssh/sshd_config` using **vim** (or any other editor) using `sudo` privileges:
+
+
+```shell
+PermitRootLogin no # change to no
+...
+PasswordAuthentication no # change to no
+```
+
+These modifications will prohibit users from logging in as `root` and also disable the option of authenticating using a password rather than an SSH key.
+
+### Other Security Measures
+
+Most cloud providers offer firewall services, but if yours doesn't, you should [configure one](https://www.linode.com/docs/guides/configure-firewall-with-ufw/) and only allow incoming traffic to the necessary ports: 80, 443, and 22. 
+
+Also, you can install [fail2ban](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-20-04) to prevent brute-force authentication attacks. To learn more about the best practices to secure a Linux server, check out [this guide](https://www.linode.com/docs/guides/set-up-and-secure/) from Linode.
+
+## Step 2: Install Software Tools
+
+You will require a few software tools. Begin by running the following commands to install Python:
+
+
+```shell
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.11 python3.11-venv -y
+```
+
+Then, install **Supervisor** and **NGINX**:
+
+```shell
+sudo apt install supervisor nginx -y
+```
+Supervisor is a process control system for Unix-like operating systems, including Linux. It's intended to monitor and manage the processes of programs, ensuring that they are always running and restarting them if they crash or shut down. 
+
+NGINX,as mentioned before, is a popular multifaceted software, that's often used as a reverse proxy when deploying web applications.
+
+Enable and start Supervisor:
+
+
+```shell
+sudo systemctl enable supervisor
+sudo systemctl start supervisor
+```
+
+`enable` will make sure Supervisor starts on boot, and `start` will start Supervisor right away.
+
+## Step 3: Set Up Your FastAPI App
+
+Start by cloning the sample app into `/home/fastapi-user`:
+
+```shell
+git clone https://github.com/dylanjcastillo/fastapi-nginx-gunicorn
+```
+This will work with public repositories. If you want to deploy an app from a private GitHub repository, you should set up a [GitHub deploy key](https://dylancastillo.co/how-to-use-github-deploy-keys/) and clone the repository using it.
+
+Next, create a virtual environment and activate it in the project directory:
+
+```shell
+cd /home/fastapi-user/fastapi-nginx-gunicorn
+python3.11 -m venv .venv
+source .venv/bin/activate
+```
+These commands will change your current location to the project directory, create a virtual environment in it, and activate it. From now on, you should see a `(.venv)` prefix in your command line.
+
+Now, use `pip` to install the libraries specified in `requirements.txt`:
+
+```shell
+pip install -r requirements.txt
+```
+This will install the packages in `requirements.txt`: `fastapi`, `gunicorn`, and `uvicorn`, in your current virtual environment.
+
+Verify that everything went well by running the application:
+
+```shell
+uvicorn main:app
+```
+You shouldn't get any errors when you run this command. You can also verify that it's working by opening a new terminal window, connecting to the server, and making a request with `curl`:
+
+```shell
+curl http://localhost:8000
+```
+You should get the following response:
+
+
+```shell
+{"message":"It's working!"}
+```
+
+You're halfway there. You got your FastAPI app running, next you'll configure Gunicorn to serve as a WSGI server.
+
+## Step 4: Configure Gunicorn
+
+There are two parts to configuring Gunicorn. First, specifying the configuration requirements of `gunicorn`. Second, setting up a **Supervisor** program to run it.
+
+### Set Up Gunicorn
+
+You'll first create a file to define the parameters you'll use when running Gunicorn. For that, create a file called `gunicorn_start` in the project directory:
+
+```shell
+vim gunicorn_start
+```
+
+Then, add the following content to it:
+
+
+```bash
+#!/bin/bash
+
+NAME=fastapi-app
+DIR=/home/fastapi-user/fastapi-nginx-gunicorn
+USER=fastapi-user
+GROUP=fastapi-user
+WORKERS=3
+WORKER_CLASS=uvicorn.workers.UvicornWorker
+VENV=$DIR/.venv/bin/activate
+BIND=unix:$DIR/run/gunicorn.sock
+LOG_LEVEL=error
+
+cd $DIR
+source $VENV
+
+exec gunicorn main:app \
+  --name $NAME \
+  --workers $WORKERS \
+  --worker-class $WORKER_CLASS \
+  --user=$USER \
+  --group=$GROUP \
+  --bind=$BIND \
+  --log-level=$LOG_LEVEL \
+  --log-file=-
+```
+
+Here's what you're defining:
+
+* **Line 1** indicates that the script is to be run by the bash shell.
+* **Lines 3 to 11** specify the configuration options that you'll pass to Gunicorn. Most parameters are self-explanatory, except for `WORKERS`, `WORKER_CLASS`, and `BIND`:
+	+ **`WORKERS`:** defines the number of workers that Gunicorn will use, it's usually recommended to use the number of CPU cores + 1.
+	+ **`WORKER_CLASS`:** type of worker used. In this case, you specify Uvicorn workers, which allows you to [use it as an ASGI server](https://fastapi.tiangolo.com/deployment/server-workers/#gunicorn-with-uvicorn-workers).
+	+ **`BIND`:** Specifies the [server socket](https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html) that Gunicorn binds to.
+* **Lines 13 and 14** change the location to the project directory and activate the virtual environment.
+* **Lines 16 to 24** run Gunicorn with the specified parameters.
+
+Save and close the fine. Then, make it executable by running the following:
+
+```shell
+chmod u+x gunicorn_start
+```
+Finally, make a `run` folder in your project directory for the Unix socket file you defined in the `BIND` parameter:
+
+
+```shell
+mkdir run
+```
+
+When you have multiple servers communicating on the same machine, [using a Unix socket file is better](https://stackoverflow.com/questions/19916016/gunicorn-nginx-server-via-socket-or-proxy).
+
+### Configure **Supervisor**
+
+First, create a directory called `logs` in the project directory to store your application's error logs:
+
+```shell
+mkdir logs
+```
+
+Next, create a Supervisor'sconfiguration file by running the following command:
+
+```shell
+sudo vim /etc/supervisor/conf.d/fastapi-app.conf
+```
+
+There copy and paste the following:
+
+
+```shell
+[program:fastapi-app]
+command=/home/fastapi-user/fastapi-nginx-gunicorn/gunicorn_start
+user=fastapi-user
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/fastapi-user/fastapi-nginx-gunicorn/logs/gunicorn-error.log
+```
+
+This configuration file runs the file you created earlier, `gunicorn_start`, using the `fastapi-user`. Supervisor will start the application anytime the server starts, and will also restart it if it fails. 
+
+This configuration file executes the `gunicorn_start` file you created earlier using `fastapi-user` as the user. Supervisor will launch the application whenever the server boots up and will restart it if the application fails. The errors are logged into `gunicorn-error.log` in `logs` in the project directory.
+
+Reread Supervisor's configuration file and restart the service by running these commands:
+
+```shell
+sudo supervisorctl reread
+sudo supervisorctl update
+```
+
+Finally, you can check the status of the program by running this command:
+
+
+```shell
+sudo supervisorctl status fastapi-app
+```
+
+If everything went well, the `fastapi-app` service status should be set to `RUNNING`.
+
+You can also test it by opening a new terminal window, connecting to the server, and issuing a GET request using `curl`:
+
+```shell
+curl --unix-socket /home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock localhost
+```
+
+You should see the following output:
+
+```json
+{"message":"It's working!"}
+```
+
+Finally, if you make changes to the code, you can restart the service to apply to changes by running this command:
+
+```shell
+sudo supervisorctl restart fastapi-app
+```
+
+Way to go! You've got an ASGI server running using Gunicorn and Uvicorn. Next, you'll set up a reverse proxy server using NGINX.
+
+## Step 5: Configure NGINX
+
+Create a new NGINX configuration file for your project:
+
+```shell
+sudo vim /etc/nginx/sites-available/fastapi-app
+```
+Open the NGINX configuration file and paste the following content:
+
+```bash
+upstream app_server {
+    server unix:/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen 80;
+
+    # add here the ip address of your server
+    # or a domain pointing to that ip (like example.com or www.example.com)
+    server_name XXXX;
+
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+
+    access_log /home/fastapi-user/fastapi-nginx-gunicorn/logs/nginx-access.log;
+    error_log /home/fastapi-user/fastapi-nginx-gunicorn/logs/nginx-error.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+                        
+        if (!-f $request_filename) {
+            proxy_pass http://app_server;
+            break;
+        }
+	}
+}
+```
+
+This is the NGINX configuration file. Here's how it works:
+
+* **Lines 1 to 3** define a cluster of servers called `app_server` that NGINX will proxy requests to. The requests are redirected to the Unix socket file located at `/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock`. Setting `fail_timeout=0` tells NGINX not to consider the server as failed even if it does not respond.
+* **Lines 1 to 5** define the configuration for the virtual server that NGINX will use to serve requests. In this case, it listens on port 80. Replace XXXX by the IP or the site's name.
+* **Lines 12 and 13** specify `keepalive_timeout` to set the maximum amount of time that a client can keep a persistent connection open, and `client_max_body_size` to set a limit to size of the client request body that NGINX will allow.
+* **Lines 15 and 16** specify the locations where NGINX will write its access and error logs.
+* **Lines 18 to 27** defines how NGINX will handle requests to the root directory `/`. You provide some specifications to handle headers, and set a directive to proxy the requests to the `app_server` you defined earlier.
+
+Enable the configuration of your site by creating a symbolic link from the file in `sites-available` into `sites-enabled` by running this command:
+
+
+```shell
+sudo ln -s /etc/nginx/sites-available/fastapi-app /etc/nginx/sites-enabled/
+```
+
+Test that the configuration file is OK and restart NGINX:
+
+```shell
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+If everything went well, now you should be able to make a GET request successfully to the IP of your server from your browser or using `curl`. Once again, you should see the following output:
+
+```json
+{"message":"It's working!"}
+```
+
+You should have your FastAPI app running by now, as well as Gunicorn+Uvicorn as an ASGI server and NGINX in front of them as a reverse proxy. 
+
+### Permissions Error
+
+If you get a permission error telling you that NGINX cannot access the unix socket, you can add the `www-data` user (which typically is the user running the NGINX processes) to the `fastapi-user` group. You can use the following command:
+
+```shell
+sudo usermod -aG fastapi-user www-data
+```
+
+Good job! If you haven't bought a domain name for your API, you can stop reading here. If you have one, proceed to the next step to obtain an SSL certificate and enable HTTPS.
+
+## (Optional) Step 6: Obtain a Free SSL Certificate Using Certbot
+
+This only applies if you have a domain for which you want to obtain an SSL certificate. 
+
+If you're using Ubuntu, you can skip this step. Otherwise, you first need to install `snapd`:
+
+```shell
+sudo apt install snapd
+```
+
+Next, make sure you have the latest version available:
+
+```shell
+sudo snap install core; sudo snap refresh core
+```
+
+Install certbot and make sure the `cerbot` command is executable:
+
+```shell
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+```
+
+Next, generate a certificate for your domain interactively by running the following command:
+
+```shell
+sudo certbot --nginx
+```
+
+Finally, Certbot will automatically handle the renewal of your certificate. To test that it works run the following:
+
+```shell
+sudo certbot renew --dry-run
+```
+
+If it worked as expected, you should see a `Congratulations, all simulated renewals succeeded...` message.
+
+If everything went well, you should be able to make a successful get request using HTTPS.
+
+## Conclusion
+
+That's all there is to it! This tutorial showed you how to use NGINX, Gunicorn, and Uvicorn to deploy a FastAPI application. FastAPI is one of the most popular Python web frameworks. It's become the go-to option for deploying machine learning-powered web apps, so becoming acquainted with it is a wise career move.
+
+In this article you've learned:
+
+* Why and when should you use FastAPI, NGINX, Gunicorn, and Uvicorn.
+* How to **set up Gunicorn+Uvicorn as an ASGI server**.
+* How to **use Supervisor to run Gunicorn.**
+* How to **configure NGINX and generate a free SSL certificate using certbot.**
+
+If you have any questions or feedback, let me know in the comments!
+
+All the code for this tutorial is [available on GitHub](https://github.com/dylanjcastillo/fastapi-nginx-gunicorn).
