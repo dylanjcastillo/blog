@@ -13,7 +13,7 @@
     An [open-source](https://github.com/iwanalabs/django-htmx-components/) collection of components built with Django and HTMX that you can copy and paste into your projects.
 
 - title: "lystinct"
-  path:
+  path: https://www.reddit.com/r/RealEstateTechnology/comments/17p0nm6/i_made_an_app_that_helps_you_write_real_estate/
   date: 2023-06-22
   categories: [Django, HTMX, hyperscript, replicate, OpenAI]
   description: |
@@ -62,14 +62,14 @@
     An [open-source](https://github.com/dylanjcastillo/pandas-cheatsheet/) interactive cheat sheet with code snippets demonstrating basic pandas operations.
 
 - title: "Fast Flood"
-  path:
+  path: https://www.youtube.com/watch?v=FoiH8MjNQBI
   date: 2023-06-22
   categories: [puzzle]
   description: |
     A daily logic puzzle based on [Flood](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/flood.html). I made it after the NYT bought Wordle for more than $1 million. Fast Flood got more than 100k visitors, and was featured in [The Hustle](https://thehustle.co/), and led to a five-figure offer. I turned it down and didn't make any money :D
 
 - title: "planMIR"
-  path:
+  path: https://www.instagram.com/planmir_com/
   date: 2023-06-22
   categories: [Django]
   description: |
