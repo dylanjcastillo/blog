@@ -29,8 +29,8 @@ $yellow: #f39c12 !default;
 $green: #00bc8c !default;
 $teal: #20c997 !default;
 $cyan: #3498db !default;
-$code-color: #a6dc38 !default;
-$inline-code-color-bg: #35444a !default;
+$code-color: #eb841b !default;
+$inline-code-color-bg: #363b43 !default;
 
 // Body
 
@@ -248,11 +248,18 @@ h6,
   display: none !important;
 }
 
+h1 code:not(.sourceCode),
+h2 code:not(.sourceCode),
+h3 code:not(.sourceCode),
+h4 code:not(.sourceCode),
+h5 code:not(.sourceCode),
+h6 code:not(.sourceCode),
 p code:not(.sourceCode),
 li code:not(.sourceCode),
 td code:not(.sourceCode) {
   background-color: $inline-code-color-bg;
 }
+
 // Variables
 
 $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap" !default;
