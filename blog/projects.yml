@@ -1,0 +1,104 @@
+- title: "AItheneum"
+  path: https://aitheneum.iwanalabs.com/
+  date: 2023-06-22
+  categories: [Django, HTMX, OpenAI, LlamaIndex]
+  description: |
+    A collection of classic books enhanced with AI to make them easier to read and understand.
+
+- title: "Django HTMX Components"
+  path: https://dhc.iwanalabs.com/
+  date: 2023-06-22
+  categories: [Django, HTMX]
+  description: |
+    An [open-source](https://github.com/iwanalabs/django-htmx-components/) collection of components built with Django and HTMX that you can copy and paste into your projects.
+
+- title: "lystinct"
+  path:
+  date: 2023-06-22
+  categories: [Django, HTMX, hyperscript, replicate, OpenAI]
+  description: |
+    AI real estate listing description generator. It reduces the time it takes to write a listing from 1 hour to 2 minutes.
+
+- title: "deepsheet"
+  path: https://deepsheet.dylancastillo.co/
+  date: 2023-06-22
+  categories: [Plotly, Pyodide, Litestar, ChatGPT]
+  description: |
+    AI tool that helps you analyze data and make graphs using ChatGPT.
+
+- title: "Namemancer"
+  path:
+  date: 2023-06-22
+  categories: [AI]
+  description: |
+    AI tool that helps you come up with cool titles for your startup. It generates a list of 20 potential titles, accompanied by fitting slogans, and checks if the corresponding .com domains are available. Then, it scores and ranks the titles for you.
+
+- title: "Ask Seneca"
+  path: https://seneca.dylancastillo.co/
+  date: 2023-06-22
+  categories: [GPT-3]
+  description: |
+    A GPT3-based stoic philosopher who gives you life advice based on Seneca's writings. It also gives you the sources it used to answer your questions.
+
+- title: "Shell Genie"
+  path: https://github.com/dylanjcastillo/shell-genie
+  date: 2023-06-22
+  categories: [GPT-3]
+  description: |
+    A command-line tool that lets you interact with the terminal in plain English. You ask the genie what you want to do and it will give you the command you need. It uses GPT-3 in the backend.
+
+- title: "Python Data Visualization Cookbook"
+  path: https://dataviz.dylancastillo.co
+  date: 2023-06-22
+  categories: [pandas, matplotlib, seaborn, plotly.express]
+  description: |
+    An [open-source](https://github.com/dylanjcastillo/pandas-cheatsheet/) interactive cookbook with +35 recipes for creating commonly used graphs with pandas, matplotlib, seaborn, and plotly.express.
+
+- title: "Pandas Cheat Sheet"
+  path: https://pandas.dylancastillo.co/
+  date: 2023-06-22
+  categories: [pandas]
+  description: |
+    An [open-source](https://github.com/dylanjcastillo/pandas-cheatsheet/) interactive cheat sheet with code snippets demonstrating basic pandas operations.
+
+- title: "Fast Flood"
+  path:
+  date: 2023-06-22
+  categories: [puzzle]
+  description: |
+    A daily logic puzzle based on [Flood](https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/flood.html). I made it after the NYT bought Wordle for more than $1 million. Fast Flood got more than 100k visitors, and was featured in [The Hustle](https://thehustle.co/), and led to a five-figure offer. I turned it down and didn't make any money :D
+
+- title: "planMIR"
+  path:
+  date: 2023-06-22
+  categories: [Django]
+  description: |
+    A web app that helps physicians prepare for the Spanish medical residence entry exam. I made it to help my wife prepare for the exam while learning more about Django.
+
+- title: "Anchoring"
+  path: https://anchoring.dylancastillo.co/
+  date: 2023-06-22
+  categories: [cognitive science]
+  description: |
+    Another cognitive science experiment. The instructions were lengthier and a bit confusing, so it got less traction than the the 2-4-6 task.
+
+- title: "The 2-4-6 Task"
+  path: https://task246.dylancastillo.co/
+  date: 2023-06-22
+  categories: [cognitive science]
+  description: |
+    A fun [cognitive science experiment](https://en.wikipedia.org/wiki/Peter_Cathcart_Wason#Wason_and_the_2-4-6_Task) designed by Peter Wason in the 1970s. It sparked some [insightful discussions](https://www.reddit.com/r/SampleSize/comments/jhrnt8/casual_im_trying_to_replicate_a_famous_experiment/) on reddit. Try it yourself before reading about it!
+
+- title: "Polituits"
+  path: http://polituits.com/
+  date: 2023-06-22
+  categories: [sentiment analysis, Twitter]
+  description: |
+    A web app that tracked the sentiment toward Spanish politicians on Twitter in near-real time. I trained the models, built the frontend and backend, and deployed the app on an Ubuntu server. I learned a lot in the process!
+
+- title: "Stay Home & Learn"
+  path: https://stayhomeandlearn.org/
+  date: 2023-06-22
+  categories: [Google Sheets, HTML, CSS]
+  description: |
+    A collection of free educational and self-improvement resources made free due to the pandemic. I created it with Google Sheets and a little HTML and CSS.

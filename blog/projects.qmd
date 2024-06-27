@@ -1,12 +1,17 @@
 ---
 title: "Projects"
-listing: true
+author: "Dylan Castillo"
+date: "09/10/2022"
+date-modified: "03/27/2024"
+listing:
+  - id: projects
+    contents: projects.yml
+    sort: "date desc"
+    type: table 
+    fields: [title, description]
+    categories: false
+    sort-ui: false 
+    filter-ui: false 
 ---
 
-I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've working in the AI & ML space for almost a decade.
-
-I've delivered successful projects for organizations like Deliveroo, the Boston Consulting Group (BCG), the European Commission, and the Olympics.
-
-In my free time, I like writing. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
-
-If you're interested in working with me or just want to chat, feel free to reach out to me at dylan@iwanalabs.com or connect with me on LinkedIn. I'd love to hear from you!
+These are some of my most popular side projects, from newest to oldest.

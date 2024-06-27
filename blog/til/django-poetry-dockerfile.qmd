@@ -10,6 +10,8 @@ lightbox: true
 fig-cap-location: margin 
 categories:
     - TIL
+    - python
+    - django
 ---
 
 [Pieter Levels](https://levels.io/) is making over $100k/month with a single VPS using PHP and Jquery. And until very recently, he's deployment consistent of uploading files via FTP.
