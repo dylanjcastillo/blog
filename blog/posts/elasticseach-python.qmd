@@ -1,9 +1,17 @@
 ---
 title: "How to Use Elasticsearch in Python"
-description: "This tutorial will teach you the basics of using Elasticsearch in Python. You'll learn how to set up an Elasticsearch cluster in your machine, to create an index, add data to that index, and search your data."
-author: "Dylan Castillo"
+meta-author: "Dylan Castillo"
+meta-description: "This tutorial will teach you the basics of using Elasticsearch in Python. You'll learn how to set up an Elasticsearch cluster in your machine, to create an index, add data to that index, and search your data."
 date: "08/12/2022"
 date-modified: "04/25/2023"
+toc: true
+toc-depth: 2
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
 ---
 
 [Elasticsearch](https://www.elastic.co/elasticsearch/) (ES) is a technology used by many companies, including GitHub, Uber, and Facebook. It's not often taught in Data Science courses, but it's something you'll likely come across in your career.

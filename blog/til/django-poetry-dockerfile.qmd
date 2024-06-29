@@ -30,6 +30,8 @@ I used to hate Docker. But, like with Gollum, I've come to realize that it's not
 
 I wanted to create a simple Dockerfile to run a Django app using Poetry, with a SQLite database, and hot reload. Additionally, I wanted to switch between the development and production versions of the container.
 
+So here's a simple Dockerfile that does just that.
+
 ## Project structure
 
 This is my project structure:
