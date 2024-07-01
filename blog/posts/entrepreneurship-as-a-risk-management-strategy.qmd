@@ -3,9 +3,9 @@ title: "Entrepreneurship as a Risk Management Strategy"
 meta-author: "Dylan Castillo"
 meta-description: "Entrepreneurship, contrary to popular belief, is a great risk management strategy. Here I explain why."
 date: "06/17/2022"
-date-modified: "06/17/2022"
+date-modified: last-modified
 toc: true
-toc-depth: 2
+toc-depth: 3
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

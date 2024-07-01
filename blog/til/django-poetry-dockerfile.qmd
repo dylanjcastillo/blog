@@ -2,7 +2,7 @@
 title: "A Dockerfile for a Django app using Poetry"
 date: "06/22/2024"
 toc: true
-toc-depth: 2
+toc-depth: 3
 author-meta: "Dylan Castillo"
 description-meta: "Simple setup for a Django app using Poetry and Docker."
 date-meta: "06/22/2024"

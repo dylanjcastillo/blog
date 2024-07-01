@@ -1,11 +1,13 @@
 ---
 title: "Migrate blog from Ghost to Quarto"
 date: "06/16/2024"
+date-modified: last-modified
 author-meta: "Dylan Castillo"
 description-meta: "I migrated my blog from Ghost to Quarto."
-date-meta: "06/16/2024"
 lightbox: true
 fig-cap-location: margin 
+toc: true
+toc-depth: 3
 categories:
     - TIL
 ---

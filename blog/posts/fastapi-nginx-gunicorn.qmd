@@ -3,13 +3,13 @@ title: "How to Securely Deploy a FastAPI app with NGINX and Gunicorn"
 meta-author: "Dylan Castillo"
 meta-description: "In this tutorial, you'll learn how to use NGINX, and Gunicorn+Uvicorn to deploy a FastAPI app, and generate a free SSL certificate for it."
 date: "02/03/2023"
-date-modified: "04/25/2023"
+date-modified: last-modified
 lightbox: true
 fig-cap-location: margin 
 categories:
     - python
 toc: true
-toc-depth: 2
+toc-depth: 3
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

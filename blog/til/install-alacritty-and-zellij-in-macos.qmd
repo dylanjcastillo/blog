@@ -2,7 +2,7 @@
 title: "Installing Alacritty, Zellij, and Neovim in macOS"
 date: "06/08/2024"
 toc: true
-toc-depth: 2
+toc-depth: 3
 author-meta: "Dylan Castillo"
 description-meta: "Tips on installing Alacritty, Zellij, and Neovim in macOS."
 date-meta: "06/08/2024"
