@@ -17,6 +17,7 @@ website:
   comments:
     utterances:
       repo: dylanjcastillo/blog_comments/
+      theme: dark-blue
 
 format:
   html:
