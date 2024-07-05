@@ -1,7 +1,6 @@
 ---
 title: "Live Components with Django and htmx"
-meta-description: "Using Django and htmx to render components through server-sent events."
-author: "Dylan Castillo"
+description-meta: "Using Django and htmx to render components through server-sent events."
 date: "01/28/2024"
 date-modified: last-modified
 lightbox: true
@@ -10,6 +9,14 @@ toc: true
 toc-depth: 3
 categories:
   - TIL
+  - django
+  - htmx
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
 ---
 
 I discovered [`django-components`](https://github.com/EmilStenstrom/django-components/) late last year and I quickly realized it was the missing piece in my Django + htmx workflow. It made my developer experience so much better, that I even started contributing to it.

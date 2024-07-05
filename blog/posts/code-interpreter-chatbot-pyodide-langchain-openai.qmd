@@ -1,7 +1,7 @@
 ---
 title: "Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI"
-meta-description: "Learn how to build your own code interpreter chatbot using Pyodide, LangChain, and OpenAI."
-meta-author: "Dylan Castillo"
+description-meta: "Learn how to build your own code interpreter chatbot using Pyodide, LangChain, and OpenAI."
+
 date: "05/12/2023"
 date-modified: last-modified
 toc: true

@@ -1,12 +1,12 @@
 ---
 title: "2023: Personal Snapshot"
 date: "01/05/2024"
-date-modified: last-modified 
-meta-description: "An annual review of 2023. I took a look at what went well in 2023 and what I should change for 2024."
+date-modified: last-modified
+description-meta: "An annual review of 2023. I took a look at what went well in 2023 and what I should change for 2024."
 toc: true
 toc-depth: 3
 lightbox: true
-fig-cap-location: margin 
+fig-cap-location: margin
 categories:
   - personal-snapshot
 author:
@@ -37,7 +37,7 @@ I shipped five AI apps (not including client work). I developed four on my own a
 
 ![AI apps I built in 2023](images/2023-personal-snapshot/image-2.png){height=400px}
 
-I also wrote 9 blog posts. I was very motivated at first and worked with a good friend, [Jing](https://www.linkedin.com/in/hujingjing/), as an accountability partner. We ended up prioritizing other projects and stopped the accountability challenge, but it was fun and effective while it lasted. I'm very grateful to Jing for joining me in this challenge. 
+I also wrote 9 blog posts. I was very motivated at first and worked with a good friend, [Jing](https://www.linkedin.com/in/hujingjing/), as an accountability partner. We ended up prioritizing other projects and stopped the accountability challenge, but it was fun and effective while it lasted. I'm very grateful to Jing for joining me in this challenge.
 
 I focused on writing tutorials about AI topics, but I got tired after a while. Writing high-quality tutorials demands a lot of effort. Plus, AI evolves so fast that my tutorials often become outdated within months. That sucked!
 
@@ -45,7 +45,7 @@ I focused on writing tutorials about AI topics, but I got tired after a while. W
 
 When I stopped writing regularly, my site's traffic started to drop. I also believe ChatGPT was a major factor. My basic-level tutorials, which ChatGPT can easily replace, have stopped growing.
 
-I'm making a change this year in my content creation strategy. I'll focus on creating videos for technical topics and write about *evergreen* subjects on my blog. I've realized that making videos for technical content is a time-saver compared to writing tutorials. Showing users directly through videos is simpler than writing detailed descriptions or taking screenshots and explaining them.
+I'm making a change this year in my content creation strategy. I'll focus on creating videos for technical topics and write about _evergreen_ subjects on my blog. I've realized that making videos for technical content is a time-saver compared to writing tutorials. Showing users directly through videos is simpler than writing detailed descriptions or taking screenshots and explaining them.
 
 My original plan for my blog was to share my thoughts. I ended up writing technical tutorials because it was a more effective way to drive traffic, but in all honesty, I didn't enjoy it very much. So I'm going back to my original plan.
 

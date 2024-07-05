@@ -1,28 +1,31 @@
 ---
 listing:
-  - id: posts 
+  - id: posts
     contents: posts
     sort: "date desc"
-    type: table 
+    type: table
     fields: [date, title, reading-time]
-    categories: true 
-    sort-ui: false 
-    filter-ui: false 
-  - id: today-i-learned 
+    max-description-length: 100
+    categories: true
+    sort-ui: false
+    filter-ui: false
+    page-size: 10
+  - id: today-i-learned
     contents: til
-    type: table 
+    type: table
     fields: [date, title, reading-time]
     categories: true
     sort: "date desc"
     sort-ui: false
     filter-ui: false
+    page-size: 10
 page-layout: full
 title-block-banner: true
 ---
 
 Hi there 👋, I'm Dylan, the founder of [Iwana Labs](https://iwanalabs.com).
 
-I've been working in AI for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and I like working on [open-source projects](https://github.com/dylanjcastillo). I've delivered projects for large-scale corporations, government agencies, and startups. 
+I've been working in AI for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and I like working on [open-source projects](https://github.com/dylanjcastillo). I've delivered projects for large-scale corporations, government agencies, and startups.
 
 I'm currently freelancing as an AI engineer at [REMATIQ](https://rematiq.com) and working on [Namemancer](https://namemancer.com).
 

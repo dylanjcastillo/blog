@@ -2,16 +2,16 @@
 title: "Projects"
 author: "Dylan Castillo"
 date: "09/10/2022"
-date-modified: "03/27/2024"
+date-modified: last-modified
 listing:
   - id: projects
     contents: projects.yml
     sort: "date desc"
-    type: table 
+    type: table
     fields: [title, description]
     categories: false
-    sort-ui: false 
-    filter-ui: false 
+    sort-ui: false
+    filter-ui: false
 ---
 
 These are some of my most popular side projects, from newest to oldest.

@@ -1,7 +1,6 @@
 ---
 title: "How to Use OpenSearch in Python"
-meta-description: "This tutorial covers the basics of using OpenSearch in Python. You'll learn how to set up a local development cluster, create an index, and store and search your data."
-meta-author: "Dylan Castillo"
+description-meta: "This tutorial covers the basics of using OpenSearch in Python. You'll learn how to set up a local development cluster, create an index, and store and search your data."
 date: "08/31/2022"
 date-modified: last-modified
 toc: true

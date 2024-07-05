@@ -2,14 +2,15 @@
 title: "Migrate blog from Ghost to Quarto"
 date: "06/16/2024"
 date-modified: last-modified
-meta-author: "Dylan Castillo"
-meta-description: "I migrated my blog from Ghost to Quarto."
+
+description-meta: "I migrated my blog from Ghost to Quarto."
 lightbox: true
 fig-cap-location: margin 
 toc: true
 toc-depth: 3
 categories:
     - TIL
+    - quarto
 ---
 
 When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that [Ghost](https://ghost.org/) was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.

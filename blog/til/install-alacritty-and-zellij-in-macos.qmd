@@ -7,16 +7,19 @@ author-meta: "Dylan Castillo"
 description-meta: "Tips on installing Alacritty, Zellij, and Neovim in macOS."
 date-meta: "06/08/2024"
 lightbox: true
-fig-cap-location: margin 
+fig-cap-location: margin
 categories:
-    - TIL
+  - TIL
+  - alacritty
+  - zellij
+  - neovim
 ---
 
 Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.
 
 When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to exit vim.
 
-I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode. 
+I use macOS. The closest I've been to being a hacker is using [vim hotkeys](https://github.com/VSCodeVim/Vim) in VSCode.
 
 It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying ["I use Arch btw"](https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/). I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work^[I'm sure you're itching to explain how I'm completely wrong about this, and how you haven't had to fix anything in years. Please reach me at [elon@x.com](mailto:elon@x.com)]. So that didn't last long.
 
@@ -51,8 +54,8 @@ I ended up modifying just a couple of things:
 
 ```yaml
 [window]
-padding.x = 16 
-padding.y = 14 
+padding.x = 16
+padding.y = 14
 decorations = "none" # Removes the window decoration (title bar, etc.)
 
 [font]
@@ -108,7 +111,7 @@ white = '0x828791'
 
 I use [FiraCode](https://github.com/tonsky/FiraCode) Nerd Font. [Nerd Fonts](https://www.nerdfonts.com/) are a collection of fonts that include glyphs such as icons that represent folders, file types, [weird arrows](https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true), etc.
 
-You can install them using Homebrew: 
+You can install them using Homebrew:
 
 ```bash
 brew install font-<name-of-the-font>-nerd-font # For example, font-fira-code-nerd-font
@@ -116,7 +119,7 @@ brew install font-<name-of-the-font>-nerd-font # For example, font-fira-code-ner
 
 ## Installing Zellij
 
-Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux).  Whenever I used tmux, I spent half my time figuring out the key bindings. Zellij shows the key bindings on screen (unless you disable it), which greatly improves the user experience. 
+Zellij is an improved version of [`tmux`](https://en.wikipedia.org/wiki/Tmux). Whenever I used tmux, I spent half my time figuring out the key bindings. Zellij shows the key bindings on screen (unless you disable it), which greatly improves the user experience.
 
 This is what it looks like:
 
@@ -167,7 +170,7 @@ Getting Alacritty to work with Zellij took me a while to figure out. But luckily
 
 [Neovim](https://neovim.io/) is a fork from [Vim](https://www.vim.org/), that solves some of Vim's issues^[Including its horrible website.]. I didn't really know if it was better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.
 
-[LazyVim](https://github.com/LazyVim/starter) is a premade configuration for Neovim. The purists will probably hate it, but it's a good start. 
+[LazyVim](https://github.com/LazyVim/starter) is a premade configuration for Neovim. The purists will probably hate it, but it's a good start.
 
 I had my own `.vimrc`, and after trying LazyVim for 30 minutes or so, I realized my config sucked.
 
@@ -222,7 +225,7 @@ Take a look at the main screen:
 
 ### lazygit
 
-[lazygit](https://github.com/jesseduffield/lazygit) is a simple terminal UI for `git`. 
+[lazygit](https://github.com/jesseduffield/lazygit) is a simple terminal UI for `git`.
 
 I've found it better than GitHub Desktop when doing complex operations.
 
@@ -230,11 +233,11 @@ Here's a screenshot of the main screen:
 
 ![lazygit](images/lazygit-screenshot.png)
 
-### eza 
+### eza
 
 [eza](https://github.com/eza-community/eza) is an improved version of `ls`.
 
-I also added a couple of aliases from Omakub: 
+I also added a couple of aliases from Omakub:
 
 ```bash
 alias ls='eza -lh --group-directories-first --icons --hyperlink'
@@ -247,11 +250,10 @@ If you run `lta` you'll get a nice view of the current directory.
 
 ![eza](images/eza-screenshot.png)
 
-
 ## Conclusion
 
-That's all. I hope you learned something from this post or, at least, got a cool looking terminal. 
+That's all. I hope you learned something from this post or, at least, got a cool looking terminal.
 
-There's nothing else to say except that I'm never going to recover those 4 hours of my life. 
+There's nothing else to say except that I'm never going to recover those 4 hours of my life.
 
 I should get back to work.

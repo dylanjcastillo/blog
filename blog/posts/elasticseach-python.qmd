@@ -1,7 +1,7 @@
 ---
 title: "How to Use Elasticsearch in Python"
-meta-author: "Dylan Castillo"
-meta-description: "This tutorial will teach you the basics of using Elasticsearch in Python. You'll learn how to set up an Elasticsearch cluster in your machine, to create an index, add data to that index, and search your data."
+
+description-meta: "This tutorial will teach you the basics of using Elasticsearch in Python. You'll learn how to set up an Elasticsearch cluster in your machine, to create an index, add data to that index, and search your data."
 date: "08/12/2022"
 date-modified: last-modified
 toc: true

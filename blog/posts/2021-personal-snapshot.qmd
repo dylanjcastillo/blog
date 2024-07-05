@@ -1,8 +1,8 @@
 ---
 title: "2021: Personal Snapshot"
 date: "01/31/2022"
+description-meta: "An annual review of 2021. I took a look at what went well in 2021 and what I should change for 2022."
 date-modified: last-modified
-meta-description: "An annual review of 2021. I took a look at what went well in 2021 and what I should change for 2022."
 toc: true
 toc-depth: 3
 lightbox: true

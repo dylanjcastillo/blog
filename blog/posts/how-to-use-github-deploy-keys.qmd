@@ -1,7 +1,7 @@
 ---
 title: "How to Use GitHub Deploy Keys"
-meta-description: "Github deploy keys make it easy to deploy your app's code to a server. In this article, you'll learn how to create, configure, and use them."
-meta-author: "Dylan Castillo"
+description-meta: "Github deploy keys make it easy to deploy your app's code to a server. In this article, you'll learn how to create, configure, and use them."
+
 date: "10/07/2021"
 date-modified: last-modified
 lightbox: true

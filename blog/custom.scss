@@ -46,6 +46,7 @@ $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
+
 // This is inconsistent with Bootstrap semantics. That is, $dark
 // should actually be a light color in a dark mode setting, :shrug:
 // https://github.com/thomaspark/bootswatch/issues/989
@@ -126,16 +127,16 @@ $navbar-light-toggler-border-color: rgba($body-bg, 0.1) !default;
 // Pagination
 
 $pagination-color: $body-color !default;
-$pagination-bg: $success !default;
+$pagination-bg: $orange !default;
 $pagination-border-width: 0 !default;
 $pagination-border-color: transparent !default;
 $pagination-hover-color: $body-color !default;
-$pagination-hover-bg: lighten($success, 10%) !default;
+$pagination-hover-bg: lighten($orange, 15%) !default;
 $pagination-hover-border-color: transparent !default;
 $pagination-active-bg: $pagination-hover-bg !default;
 $pagination-active-border-color: transparent !default;
 $pagination-disabled-color: $body-color !default;
-$pagination-disabled-bg: darken($success, 15%) !default;
+$pagination-disabled-bg: darken($orange, 15%) !default;
 $pagination-disabled-border-color: transparent !default;
 
 // Cards
@@ -351,4 +352,8 @@ kbd,
   padding: 0.2em 0.4em;
   color: $gray-900;
   background-color: $gray-100;
+}
+
+.listing-date {
+  white-space: nowrap;
 }

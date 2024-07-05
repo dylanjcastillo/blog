@@ -1,9 +1,8 @@
 ---
 title: "How to Cluster Documents Using Word2Vec and K-means"
-meta-author: "Dylan Castillo"
-meta-description: "Learn how to cluster documents using Word2Vec. In this tutorial, you'll train a Word2Vec model, generate word embeddings, and use K-means to create groups of news articles."
+description-meta: "Learn how to cluster documents using Word2Vec. In this tutorial, you'll train a Word2Vec model, generate word embeddings, and use K-means to create groups of news articles."
 date: "01/18/2021"
-date-modified: "01/31/2023"
+date-modified: last-modified
 toc: true
 toc-depth: 3
 author:
