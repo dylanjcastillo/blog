@@ -1,0 +1,226 @@
+---
+title: "Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP"
+
+description-meta: "This article will teach you how to cluster text data with LLMs using cutting-edge tools."
+date: "06/09/2023"
+date-modified: last-modified
+toc: true
+toc-depth: 3
+lightbox: true
+fig-cap-location: margin
+categories:
+  - python
+  - ml
+  - llm
+  - openai
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.
+
+While older methods are still relevant, if I had to cluster text data today, I'd start with OpenAI or Cohere's embeddings. It's faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.
+
+I haven't seen many tutorials on this topic, so I wrote one. In this tutorial, I'll show you how to cluster news articles using OpenAI embeddings, LangChain, and HDBSCAN.
+
+Let's get to it!
+
+## Prerequisites
+
+To make the most of this tutorial, you should be familiar with the following concepts:
+
+- [How to cluster text data](https://dylancastillo.co/nlp-snippets-cluster-documents-using-word2vec/#how-to-cluster-documents) using traditional ML methods.
+- What are [OpenAI Embeddings](https://platform.openai.com/docs/guides/embeddings)
+- How [HDBSCAN](https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html) works
+
+In addition, you'll need an [OpenAI account](beta.openai.com/).
+
+## Set Up Your Local Environment
+
+1. Create a virtual environment using `venv`:
+
+```shell
+python3.10 -m venv .venv
+```
+
+2. Create a `requirements.txt` file that contains the following packages:
+
+````shell
+hdbscan
+openai
+pandas
+numpy
+python-dotenv
+tiktoken
+notebook
+plotly
+umap-learn
+
+3. Activate the virtual environment and install the packages:
+
+```shell
+source .venv/bin/activate
+pip3 install -r requirements.txt
+````
+
+4. Create a file called `.env`, and add the your OpenAI key:
+
+```shell
+OPENAI_API_KEY=<your key>
+```
+
+5. Create an empty notebook file. For the rest of this tutorial, you'll work on it.
+
+## Clustering Documents
+
+You should think of the clustering process in three steps:
+
+1. Generate numerical vector representations of documents using OpenAI's embedding capabilities.
+2. Apply a clustering algorithm on the vectors to group the documents.
+3. Generate a title for each cluster summarizing the articles contained in it.
+
+That's it! Now, you'll see how that looks in practice.
+
+### Import the Required Packages
+
+Start by importing the required Python libraries. Copy the following code in your notebook:
+
+```python
+import os
+
+import hdbscan
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import requests
+from dotenv import load_dotenv
+from openai import OpenAI
+from umap import UMAP
+
+load_dotenv()
+```
+
+This code imports the libraries you'll use throughout the tutorial. Here's the purpose of each one:
+
+- **`os`** helps you read the environment variables.
+- **`hdbscan`** gives you a wrapper of HDBSCAN, the clustering algorithm you'll use to group the documents.
+- **`openai`** to use OpenAI LLMs.
+- **`umap`** loads [UMAP](https://umap-learn.readthedocs.io/en/latest/) for dimensionality reduction and visualizing clusters.
+- **`dotenv`** load the environment variables you define in `.env`.
+
+Next, you'll get a sample of news articles to cluster.
+
+### Download the data and generate embeddings
+
+Download, read these [articles](https://www.kaggle.com/datasets/dylanjcastillo/news-headlines-2024/), and generate documents you'll use to create the embeddings:
+
+```python
+df = pd.read_csv("news_data_dedup.csv")
+docs = [
+    f"{title}\n{description}"
+    for title, description in zip(df.title, df.description)
+]
+```
+
+Then, initialize the OpenAI client and generate the embeddings:
+
+```python
+client = OpenAI()
+response = client.embeddings.create(input=docs, model="text-embedding-3-small")
+embeddings = [np.array(x.embedding) for x in response.data]
+```
+
+### Cluster documents
+
+Once you have the embeddings, you can cluster them using `hdbscan`:
+
+```python
+hdb = hdbscan.HDBSCAN(min_samples=3, min_cluster_size=3).fit(embeddings)
+```
+
+This code will generate clusters using the embeddings generated, and then create a DataFrame with the results. Itfits the `hdbscan` algorithm. In this case, I set `min_samples` and `min_cluster_size` to 3, but depending on your data this may change. Check [HDBSCAN's documentation](https://hdbscan.readthedocs.io/en/latest/parameter_selection.html) to learn more about these parameters.
+
+Next, you'll create topic titles for each cluster based on their contents.
+
+### Visualize the clusters
+
+After you've generated the clusters, you can visualize them using [UMAP](https://pair-code.github.io/understanding-umap/):
+
+```python
+umap = UMAP(n_components=2, random_state=42, n_neighbors=80, min_dist=0.1)
+
+df_umap = (
+    pd.DataFrame(umap.fit_transform(np.array(embeddings)), columns=['x', 'y'])
+    .assign(cluster=lambda df: hdb.labels_.astype(str))
+    .query('cluster != "-1"')
+    .sort_values(by='cluster')
+)
+
+fig = px.scatter(df_umap, x='x', y='y', color='cluster')
+fig.show()
+```
+
+You should get something similar to this graph:
+
+![](images/clustering-documents-with-openai-langchain-hdbscan/image.png)This will give you a sense of how good are the clusters generated.
+
+### Create a Topic Title per Cluster
+
+For each cluster, you'll generate a topic title summarizing the articles in that cluster. Copy the following code to your notebook:
+
+```python
+df["cluster_name"] = "Uncategorized"
+
+def generate_topic_titles():
+    system_message = "You're an expert journalist. You're helping me write short but compelling topic titles for groups of news articles."
+    user_template = "Using the following articles, write a 4 to 5 word title that summarizes them.\n\nARTICLES:\n\n{}\n\nTOPIC TITLE:"
+
+    for c in df.cluster.unique():
+        sample_articles = df.query(f"cluster == '{c}'").to_dict(orient="records")
+        articles_str = "\n\n".join(
+            [
+                f"[{i}] {article['title']}\n{article['description'][:200]}{'...' if len(article['description']) > 200 else ''}"
+                for i, article in enumerate(
+                    sample_articles, start=1
+                )
+            ]
+        )
+        messages = [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_template.format(articles_str)},
+        ]
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo", messages=messages, temperature=0.7, seed=42
+        )
+
+        topic_title = response.choices[0].message.content
+        df.loc[df.cluster == c, "cluster_name"] = topic_title
+        # print(f"Cluster {c} - {topic_title}")
+```
+
+This code takes all the articles per cluster and uses `gpt-3.5-turbo` to generate a relevant topic title from them. Itgoes through each cluster, takes the articles in it, and makes a prompt using that to generate a topic title for that cluster.
+
+Finally, you can check the resulting clusters and topic titles, as follows:
+
+```python
+c = 6
+with pd.option_context("display.max_colwidth", None):
+    print(df.query(f"cluster == '{c}'").topic_title.values[0])
+    display(df.query(f"cluster == '{c}'").drop(columns=["topic_title"]).head())
+```
+
+In my case, running this code produces the following articles and topic titles:
+
+![](images/clustering-documents-with-openai-langchain-hdbscan/image-1.png)
+
+All articles seem to be related to the topic title. Yay!
+
+### Conclusion
+
+In this short tutorial, you've learned how to cluster documents using OpenAI embeddings, HDBSCAN, and UMAP. I hope you find this useful. Let me know in the comments if you have any questions.
+
+Check out the [code](https://github.com/dylanjcastillo/random/tree/main/self-organizing-news) on GitHub. You can also check [this project](https://news.iwanalabs.com/) I built with [Iswar](https://github.com/iswarmondal) which shows this in practice.

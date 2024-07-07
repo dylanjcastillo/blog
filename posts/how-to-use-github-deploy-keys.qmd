@@ -1,0 +1,139 @@
+---
+title: "How to Use GitHub Deploy Keys"
+description-meta: "Github deploy keys make it easy to deploy your app's code to a server. In this article, you'll learn how to create, configure, and use them."
+
+date: "10/07/2021"
+date-modified: last-modified
+lightbox: true
+fig-cap-location: margin 
+categories:
+    - python
+toc: true
+toc-depth: 3
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+Deployment is more of an art than science. Ask ten developers, and you'll end up with ten different ways to deploy your app. However, there are a few topics on which everyone agrees. One of those is using deploy keys.
+
+A [GitHub deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys) is an SSH key that gives read –and optionally write– access to a single repository on GitHub. It makes it easy to pull your app's code to a server automatically.
+
+With a deploy key, you just connect to your server, do a `git fetch`, and you're done! Forget about connecting with an SFTP and uploading your files manually.
+
+This tutorial will show you how to use GitHub deploy keys in your next project. Let's get started!
+
+## Prerequisites
+
+If you're planning on using deploy keys, I suppose you have something to deploy, right? 🤔
+
+Before you continue with the next sections, make sure that:
+
+1. You have a repository with your app's code on GitHub.
+2. You have access to a Linux server with [git](https://git-scm.com/) installed.
+
+If so, continue to the next section.
+
+Create an SSH Key on Your Server
+--------------------------------
+
+A GitHub deploy key is, ultimately, an SSH key. So you'll start by creating an SSH key on your server.
+
+First, connect to your server and open a terminal. Once you're in, create an SSH key by executing the following command:
+
+
+```shell
+ssh-keygen -t ed25519 -C "USERNAME@EMAIL.com"
+```
+
+‌This command will create and store an SSH key. You use two parameters:
+
+1. `-t ed25519` to specify which algorithm to use to generate the key. You chose  [ED25519](https://ed25519.cr.yp.to/), a very secure and efficient algorithm.
+2. `-C USERNAME@EMAIL.com` to append your email as a comment at the end of the key. Make sure to replace `USERNAME@EMAIL.com` with your actual email.
+
+You can learn more about these parameters [here](https://manpages.ubuntu.com/manpages/xenial/man1/ssh-keygen.1.html). But don't worry, you don't need to know much more to use GitHub deploy keys.
+
+After running the command, you'll get a couple of questions asking you to specify a path and set a passphrase for the key. You can save the key at the default path and skip setting a passphrase. So just hit *Enter* when prompted.
+
+## Add the Key to SSH Config
+
+Next, you'll create an [**SSH config file**](https://man.openbsd.org/ssh_config.5). This file allows you to define the instructions required to connect to remote servers using SSH. It's an easy way to manage multiple servers' SSH keys or to keep deploy keys of different repositories in the same server.
+
+You can create and edit the SSH config file by running these commands:
+
+```shell
+touch ~/.ssh/config 
+chmod 600 ~/.ssh/config 
+vim ~/.ssh/config # Or: nano ~/.ssh/config 
+```
+
+These commands will create an SSH config file, set the correct permissions, and open it using *vim*. You can also use *nano* to open the file if you're unfamiliar with vim's shortcuts.
+
+An SSH config file consists of sections specifying the instructions required for each server you'll connect to. So, in this case, you'll provide the instructions needed to connect to your repository. For that, copy this text to the file:
+
+
+```shell
+Host github-YOUR-APP 
+	HostName github.com 
+    AddKeysToAgent yes 
+    PreferredAuthentications publickey 
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+‌In the code snippet above, you provide the settings required to connect to GitHub using the SSH key you just created. You specify the following parameters:
+
+* **Host:** the name you'll use in the terminal when referring to this server. Choose a name that's easy to remember.
+* **HostName:** the real hostname that you'll connect to. In this case, [github.com](https://github.com).
+* **AddKeysToAgent:** specifies if it should add the private key to the `ssh-agent`.
+* **PreferredAuthentications:** order in which the client tries authentication methods. In this case, you only use your `publickey`.
+* **IdentityFile:** specifies a file from which the key is read. You need to specify the name of the **private key** you generated earlier. If you used the default name, it should be `~/.ssh/id_ed25519`.
+
+That's all you need to do on the server. Next, you'll use your SSH key to create a deploy key on GitHub.
+
+## Create a Deploy Key on GitHub
+
+First, copy the **public key** from the SSH key you created earlier. The easiest way of doing that is to run:
+
+
+```shell
+cat ~/.ssh/id_ed25519.pub
+```
+Then select and copy the resulting text from the command line. It should look something like this:
+
+```shell
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com
+```
+
+‌Next, open your preferred browser and go to the repository with your app's code on GitHub. Click on *Settings*, select *Deploy keys,* and then click on *Add deploy key.*
+
+![](images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png)
+
+Add deploy key on GitHub
+
+Copy the key in the *Key* textbox and set a title to the key. You can leave *Allow write access* unchecked and click on *Add key*. *Allow write access* allows you to make changes to the repository using the deploy key. For security reasons, you don't want to do that in most cases.
+
+![](images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png)
+
+Next, you can go back to your server's terminal and clone your repository. You can do that by running this command:
+
+```shell
+git clone git@github-YOUR-APP:dylanjcastillo/random.git              
+```
+This will clone your app's repository to your server. Please remember to replace `github-YOUR-APP` by the `Host` you specified in the SSH config file. Otherwise, it won't work.
+
+That's all!
+
+## Conclusion
+
+This tutorial showed you how to create and use GitHub deploy keys. Using a deploy key will save you time and provide you with a safer way to deploy your app.
+
+In this tutorial, you've learned:
+
+* How to **create an SSH key** on your server.
+* What an **SSH config file** is and how to use it.
+* How to **add a deploy key** to your GitHub repository.
+
+If you have any questions or feedback, let me know in the comments!

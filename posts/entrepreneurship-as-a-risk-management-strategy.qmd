@@ -1,0 +1,87 @@
+---
+title: "Entrepreneurship as a Risk Management Strategy"
+
+description-meta: "Entrepreneurship, contrary to popular belief, is a great risk management strategy. Here I explain why."
+date: "06/17/2022"
+date-modified: last-modified
+toc: true
+toc-depth: 3
+categories:
+  - personal
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+Entrepreneurship, contrary to popular belief, is a great risk management strategy. Thoughtful entrepreneurs take on similar risks as employees while getting a chance to win a much larger pot.
+
+Also, it's more fun!
+
+If you've ever read a book about how to start a business, you'll know that most business failures can be attributed to a few factors:
+
+1. You made a product nobody wants.
+2. You are operating in a bad market.
+3. You ran out of money before you could fix 1 or 2.
+
+As a result, avoiding those mistakes should be your number one priority. This will increase your chances of success and ensure you stay in the entrepreneurship game long enough to give yourself a fair chance of winning.
+
+You don't have to have those three things perfectly covered before you begin. Along the way, you could learn how to build products and pick the right market.
+
+But one thing is certain, starting a business without a financial safety net is like going to a pistol duel with a nail clipper. It might work, and stories will be written about you if you succeed, but there's a good chance you'll get your brains blown out.
+
+Once you've taken steps to improve your odds of success and ensured that failure won't mean financial ruin, there's little downside to "taking the risk" of starting your own business. Allow me to explain.
+
+Let's start with a favorable scenario. You start a business, and it succeeds. In the best case, you could reap most of the financial benefits because you own most of the company's equity. This could mean life-changing money. While if you're an employee at a successful company, you either own very little equity or none at all. Only extremely rare circumstances, such as being an early employee in a tech unicorn, could result in comparable results.
+
+Therefore, starting your own business will put you in a better position to build wealth than working for someone else. It is no surprise that surveys of wealthy citizens reveal that [most of them make their income from businesses, not salaries.](https://www.nytimes.com/2022/05/14/opinion/sunday/rich-happiness-big-data.html)
+
+Consider the inverse scenario. You are the owner of a failing business. Suppose you funded your business with your savings rather than debt. In that case, the worst-case scenario is that you'll lose some of your savings and the time you've invested in the company. But, since, in any case, you'll likely work thirty to forty years of your life, getting out of the rat race for a few years and using some of your savings before retirement won't make a huge difference in the end result.
+
+Furthermore, you would've gained valuable skills you can use in your next ventures or in a regular job. You could go back to full-time employment and potentially earn more money than before!
+
+Think about what would happen to an employee in the same situation (a failing business). That's when you most need job security, but also the time when many learn that it doesn't exist. A company fighting for survival will not hesitate to let you go (ask [Coinbase](https://www.wsj.com/articles/crypto-exchange-coinbase-to-lay-off-18-of-staff-11655211069)). In the best-case scenario, you'll be overworked because you'll take on the work of those who were let go. In the worst-case scenario, you'll have to return to the job market and look for another job, just like the failed entrepreneur.
+
+In conclusion, if all goes well, the advantages of being an entrepreneur far outweigh the benefits of being an employee. If things don't go as planned, being an entrepreneur is just slightly worse than being an employee. With similar risk profiles, entrepreneurship produces better results. Not bad, is it?
+
+Allow me to clarify. This article isn't intended to convince you to start your own business. I'm writing it because these were some of the factors I considered before embarking on my entrepreneurial journey.
+
+Right now, I'm in the early stages. Read on if you'd like to learn more.
+
+## The Plan
+
+I had considered starting my own business for a long time but didn't feel prepared. Also, I didn't have enough savings and worried that not having a job would risk my family's wellbeing.
+
+In 2019, I devised a strategy to get into a position where I could devote all my time to building a business. First, I'd maximize my savings rate and learn as much as possible about businesses until I had at least one year worth of savings. Then, I'd take time away from work to build a business.
+
+I thought a good starting point could be freelancing for companies outside of Spain. That would allow me to learn the ins and outs of running a one-man business and save money at a higher rate compared to full-time employment or freelancing with local companies.
+
+Last year, I landed my first freelancing contract at the [European Commission](https://ec.europa.eu/info/index_en), and, a few months later, at [Deliveroo](https://deliveroo.co.uk/). I'll finish my contract with Deliveroo next month and have saved enough money to take time away from work.
+
+In addition to freelancing, I also spent a lot of time learning about businesses. I read, listened to podcasts, and consumed any useful material I could find. More importantly, I created a few small products, launched them, and talked to users.
+
+I haven't decided for how long I will be away from work. Most likely, I'll start with 6 months and will correct course depending on my burn rate, inflation, and whether I feel I'm progressing toward my goal.
+
+Regarding business ideas, I'll concentrate on projects that could help me decouple the amount of time I work from how much money I make. That is, I'll either build products or develop [productized services](https://neilpatel.com/blog/productized-services/).
+
+I have a list of +45 ideas that I've started keeping since I devised this plan. Most suck. But these are the ones I've shortlisted to tackle in the short-term:
+
+- **Fast Flood:** I built a small game called [Fast Flood](https://fastflood.dylancastillo.co/#open-modal). It got good traction, and I even got a low five-figure offer for it. I have a few improvements that I'd like to try, and I hope, later on, to sell it for more.
+- **2X your salary using LinkedIn course:** In the last 6 years, I've increased my income by 30% on average every year. I have an okayish educational background but have found good-paying jobs at international organizations, a top-tier consulting firm, and a top-tech European company. I believe I can help other Data scientists learn how to use LinkedIn to make more money and find better jobs.
+- **Data Visualization with Python course:** I teach a course about Data Science at [Nuclio Digital School](https://nuclio.school/). I've received pretty positive feedback, so I believe I could build an online course and sell it through Gumroad or Udemy.
+- **Career coaching for Data scientists:** Instead of doing a course, I would personally help Data scientists get a higher-paying jobs or help them get into freelancing. I'd charge them a variable fee depending on the salary I help them achieve. There's already at least one [startup](https://talently.tech/) doing that.
+- **Grammarly + Quillbot in Spanish:** Grammarly is a $10bn company. There might be [364 million Spanish speakers](https://www.internetworldstats.com/stats7.htm) users on the internet. I believe there's a market for a tool that helps you write better in that language.
+
+I'll work on these ideas in the order listed and  dedicate up to a month to each of them. If they don't get any traction, I'll move on to the next one. It's also possible that, along the way, I replace some of them with more promising ideas.
+
+Also, I recently received some leads for projects that I believe could become productized services. So I'm going to make some time for that in parallel, while working in the other ideas.
+
+## What's Next?
+
+This week I'm starting with Fast Flood. I already have a list of improvements I want to make, so I will focus on that for now.
+
+You can follow my updates on [Twitter](https://twitter.com/dylanjcastillo) and [LinkedIn](https://www.linkedin.com/in/dylanjcastillo/).
+
+_Thanks to Luis for his feedback on this piece._

@@ -1,0 +1,112 @@
+---
+title: "My Experience at Entrepreneur First"
+description-meta: "This is a personal reflection on my time at Entrepreneur First. I'll explain what it is and how it works, as well as what I liked and didn't like about it. "
+date: "01/20/2023"
+date-modified: last-modified
+toc: true
+toc-depth: 3
+categories:
+  - personal
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+On September 2, 2022, I received an invitation to join the 10th cohort of [Entrepreneur First (EF)](https://www.joinef.com/) in Berlin. Less than a month later, I packed up and moved there, eager to find a cofounder to begin what I hoped would become a billion-dollar company.
+
+Over the past three months, I've poured countless hours into brainstorming with other founders, talking to over a hundred potential customers, and honing our pitch for investors. Last week, my cofounder and I had the opportunity to present our idea to EF's Investment Committee (IC). Unfortunately, they informed us today that they've decided not to invest in our team.
+
+I'm writing this to reflect on my experience during these past three months. I'll provide some background on what EF is and how it works, and then delve into what I liked and didn't like about it. If you're considering participating in Entrepreneur First, I hope this article will help you make an informed decision.
+
+## What's Entrepreneur First?
+
+EF is a global organization that helps talented individuals start companies. They provide funding, mentorship, and resources to individuals with the potential to become successful tech entrepreneurs. EF focuses on assisting individuals with technical and business backgrounds in forming teams and building startups from the ground up. It has programs in Singapore, India, the United Kingdom, Canada, Germany, and France.
+
+The program connects you with a group of roughly 50 individuals who have the ambition, urgency, and skills required to build a startup. You receive a stipend of 2,000€ per month for the first three months, but you have to work on the program full-time in return. This will allow you to solely focus on finding your cofounder and developing your idea. In our cohort, most participants had recently quit their jobs or finished their studies (usually PhDs) before joining.
+
+If your team does well in the first three months, you may be eligible for an initial investment of £80,000 (as of January 2023).
+
+## How's the Application Process?
+
+The application process is pretty simple. One of EF's recruiters contacted me on LinkedIn and asked if I wanted to join the program. Then he asked me to fill out an application. Most of the questions on the form were about why I wanted to join the program and why I would be a good fit for it. Then, I interviewed with the Berlin program's general manager and the recruiter who had contacted me.
+
+I could have done a better job in the interview because I ended up rambling through some of the questions. But I was still able to pique people's interest when I described some of the strategies I used to get more than 100,000 users to play [Fast Flood](https://fastflood.dylancastillo.co/) when I launched it. Overall, it was a positive experience, and I got in.
+
+After talking with other participants, I found that the process was similar for everyone. The only difference appears to be the number of interviews you might do, which ranged from one to three. If you know someone from a previous cohort, you should definitely ask for a referral, as it will probably increase your chances of getting in.
+
+## What's the Structure of the Program?
+
+The program is split into two parts. _Form_, which lasts three months and culminates with you pitching your idea to IC, and _Launch_, which lasts six months and is only available if you are selected for funding after IC. Since I just finished Form and cannot access Launch, I will only talk about that part of the program in this article.
+
+Form is meant to help you find a cofounder, come up with ideas, and get customer feedback on them. During the first eight weeks of this phase, most of your time should be spent looking for the right cofounder. If, after this period, you're not on a team, you have to leave the program, but you'll still get your full stipend.
+
+During this time, you mostly do one of two things: participate in a sort of speed-dating event for entrepreneurs or test your idea with customers. Once the Form phase is over, you'll only be working on your company.
+
+The speed-dating contest consists of you talking to potential cofounders about business ideas (aka ideation sessions) to see if there's anything you both want to work on. If you feel there's a "match" with another cofounder, then you can team up and work on your idea. If you later realize you weren't a good fit, you can split up and go back to the pool of sole founders to find another cofounder.
+
+When working in a team, most of the time is spent on three main tasks. The first task is to reach out to potential customers through your personal network, LinkedIn, and other platforms to understand their pain points and determine if your idea addresses them. The second task is to process feedback from customer interviews to update your hypotheses about the business. The third task is to make sure that the team is aiming for a big market, that the company has some way to defend itself, and that any other important factors are taken into account so that the company can be successful in the future.
+
+During the first few weeks of Form, you could also choose to attend several workshops about entrepreneurship and new businesses. We also had a few regular activities:
+
+- **Weekly check-ins with your venture partner and venture developer:** You get feedback on your idea and provide progress updates. In my case, the venture partner was a previous EF founder who sold his company to Twitter, and the venture developer was an expert in product development. Both provided very useful feedback throughout the program.
+- **Weekly check-in with your Form representative:** You can ask questions about the program and talk about how you feel as the program progresses.
+- **Bi-weekly Friday pitches:** You present your idea to the rest of the teams and receive feedback.
+- **Weekly social drinks:** You drink beer and talk with other people :)
+
+As you get closer to IC, you also get invited to other meetings to provide you with more feedback. For IC, you're asked to provide a pitch video, a slide deck, and a product demo. For the funding decision, they will also look at what your venture partner and developer say about you, as well as what the local EF staff says.
+
+In our cohort, many participants tried working with multiple teams before finding the right fit. I tried three teams. In total, 49 teams were formed (h/t [Simon Farshid](https://www.linkedin.com/in/simon-farshid/) for tracking this), and 13 teams presented their ideas to IC. Roughly half of the participants were not in teams by the end of the Form phase.
+
+## What I liked about Entrepreneur First
+
+By now, you should have a good idea of what to expect during the program. Now, let me tell you what I liked about EF:
+
+1. **The people:** The best thing about the program is the connections you make. You join a group of highly skilled people who are eager to start their own businesses. As my career progressed, I learned that not many people wanted that, so it was great to meet so many like-minded people. I've also made a few good friends during the program!
+2. **Pressure to talk to customers:** There's a lot of emphasis on talking to customers throughout the program, and I really appreciated that. This forced me to step outside of my comfort zone because I didn't feel as comfortable reaching out to so many people before.
+3. **Revealed preferences:** I wasn't expecting many people to drop out of the program before it finished, but it happened. Many people realize they don't want to start a business after all. Even though there are ups and downs, I've never doubted my desire to start a business, so I was happy to find another data point that I'm on the right track. Overall, I believe this is a low-risk way for people to figure out if they really want to start a business.
+4. **EF's network:** EF alumni have interesting positions in top companies and startups. They're also very open to chatting. It's great to know that you're a short message away from talking to people with relevant positions in successful companies.
+
+Overall, I see many positive sides to the EF experience.
+
+## What I didn't like about Entrepreneur First
+
+While my experience with EF was mostly positive, there were a few areas that I felt could have been improved. I noticed a few things that seemed to make it more difficult to focus on building a company, even though they were intended to help.
+
+These are some of the things I didn't like:
+
+1. **Too much overhead:** By the end of Form, I felt like we had too many unnecessary meetings. I often wondered if it would make sense to combine a few of those meetings to reduce the time it takes. For example, we had two separate meetings with our venture partner and developer, to essentially discuss the same topic. Why not combine those two meetings into one?
+2. **The Entrepreneur Game:** I had the impression that EF wanted us to believe they had everything figured out and that there was a clear path to building a unicorn that we simply had to follow. It was kind of a game, and all we had to do to win was complete all the levels (e.g., find a counterintuitive belief on which to base your company, do 20 customer interviews per week, etc.). Why would most businesses fail if there was such a simple formula for success? The devil is in the details, and I think that founders who do well do so because they keep on grinding for a long time on a good problem space rather than because they find a foolproof recipe or framework. All frameworks for building startups are limited because the real world is opaque and the small, difficult-to-understand details are what matter most.
+3. **Check-ins should not be pitches.** You get "graded" after the check-ins, which creates an incentive to turn those check-ins into pitching sessions. People have fewer incentives to ask difficult questions, as that may cast them in a negative light. Also, this wasn't communicated clearly from the beginning.
+
+Despite these issues, I still believe that the EF staff works hard and has the challenging task of serving an audience with a high bar. They are trying to help entrepreneurs build successful companies.
+
+## What's next for me?
+
+Even though I didn't reach the goal I set for myself when I joined EF, I've learned a lot and met some great people in the last three months. I will move forward with building a company but want to make sure that I use the lessons learned during the program. I'll take a few days to reflect on the best path forward.
+
+The past three months have been hectic, but I've realized that I often fell into the trap of simply "playing the game" of being an entrepreneur rather than focusing on creating something people truly wanted. I don't plan on making that mistake again.
+
+## Conclusion
+
+If I knew what I know now, would I have done the program? Definitely.
+
+Even though there were things I didn't like about it, I learned a lot during the past three months. I liked my time with EF, and I would recommend it to anyone who wants to start a venture-backed business.
+
+There are always ways to make things better, but I know that the EF team is working very hard to create the best program possible. I have nothing but gratitude for the EF team and everyone I met through the program. This experience made me better.
+
+## Addendum: How to Prepare for the Interview at EF?
+
+A few people have asked me on LinkedIn about what's the best way to prepare for the interview at EF. Here's my advice:
+
+1. Prepare a 1-min pitch that explains who you are and why you want to start a company with EF.
+2. Think about your previous experience and projects, figure out what are the most interesting parts of them, and practice breaking them down to others in a compelling way (focusing on their business impact).
+3. Have good answers to the following questions:
+   1. Why do you want to start a company?
+   2. Why are you the right person to start a company with EF?
+   3. How is X going to change in the future? What'd be the impact of those changes? (replace X with your field of expertise)
+   4. What would you do if EF doesn't work out?
+
+Hope this is useful!

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-posts .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      page: 10,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-date","listing-title","listing-author"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-posts'] = new List('listing-posts', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-today-i-learned .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-today-i-learned'] = new List('listing-today-i-learned', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="alternate" type="application/rss+xml" title="Dylan Castillo" href="index.xml" data-external="1"></head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Dylan Castillo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(29)</span></div><div class="category" data-category="alacritty">alacritty <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dataviz">dataviz <span class="quarto-category-count">(2)</span></div><div class="category" data-category="django">django <span class="quarto-category-count">(2)</span></div><div class="category" data-category="htmx">htmx <span class="quarto-category-count">(1)</span></div><div class="category" data-category="llm">llm <span class="quarto-category-count">(5)</span></div><div class="category" data-category="ml">ml <span class="quarto-category-count">(6)</span></div><div class="category" data-category="neovim">neovim <span class="quarto-category-count">(1)</span></div><div class="category" data-category="nlp">nlp <span class="quarto-category-count">(7)</span></div><div class="category" data-category="openai">openai <span class="quarto-category-count">(4)</span></div><div class="category" data-category="personal">personal <span class="quarto-category-count">(2)</span></div><div class="category" data-category="personal-snapshot">personal-snapshot <span class="quarto-category-count">(2)</span></div><div class="category" data-category="productivity">productivity <span class="quarto-category-count">(2)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(20)</span></div><div class="category" data-category="quarto">quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="til">til <span class="quarto-category-count">(4)</span></div><div class="category" data-category="web">web <span class="quarto-category-count">(2)</span></div><div class="category" data-category="zellij">zellij <span class="quarto-category-count">(1)</span></div></div></div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+
+
+
+
+<p>Hi there 👋, I’m Dylan, the founder of <a href="https://iwanalabs.com">Iwana Labs</a>.</p>
+<p>I’ve been working in AI for the <a href="https://linkedin.com/in/dylanjcastillo">past 8 years</a> and I like working on <a href="https://github.com/dylanjcastillo">open-source projects</a>. I’ve delivered projects for large-scale corporations, government agencies, and startups.</p>
+<p>I’m currently freelancing as an AI engineer at <a href="https://rematiq.com">REMATIQ</a> and working on <a href="https://namemancer.com">Namemancer</a>.</p>
+<section id="posts" class="level2">
+<h2 class="anchored" data-anchor-id="posts">Posts</h2>
+<p>This collection features my longer posts on technical topics. I’ve also included some personal posts like yearly reviews.</p>
+<div id="listing-posts" class="quarto-listing quarto-listing-container-table">
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+Date
+</th>
+<th>
+Title
+</th>
+<th>
+Reading Time
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="personal-snapshot" data-listing-date-sort="1704409200000" data-listing-file-modified-sort="1720360719095" data-listing-date-modified-sort="1720360719000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1729" data-listing-title-sort="2023: Personal Snapshot" data-listing-filename-sort="2023-personal-snapshot.qmd">
+<td>
+<span class="listing-date">Jan 5, 2024</span>
+</td>
+<td>
+<a href="./posts/2023-personal-snapshot.html" class="title listing-title">2023: Personal Snapshot</a>
+</td>
+<td>
+<span class="listing-reading-time">9 min</span>
+</td>
+</tr>
+<tr data-index="1" data-categories="python,llm" data-listing-date-sort="1704409200000" data-listing-file-modified-sort="1720365713716" data-listing-date-modified-sort="1720365713000" data-listing-reading-time-sort="1" data-listing-word-count-sort="18" data-listing-title-sort="How many times did Ulysses fart in the Odyssey?" data-listing-filename-sort="farts-in-the-wind-llm-benchmark.ipynb">
+<td>
+<span class="listing-date">Jan 5, 2024</span>
+</td>
+<td>
+<a href="./posts/farts-in-the-wind-llm-benchmark.html" class="title listing-title">How many times did Ulysses fart in the Odyssey?</a>
+</td>
+<td>
+<span class="listing-reading-time">1 min</span>
+</td>
+</tr>
+<tr data-index="2" data-categories="python,llm,openai" data-listing-date-sort="1701039600000" data-listing-file-modified-sort="1720361560714" data-listing-date-modified-sort="1720361560000" data-listing-reading-time-sort="5" data-listing-word-count-sort="929" data-listing-title-sort="Fine-tuning Won't Add New Knowledge To Your Model" data-listing-filename-sort="fine-tuning-vs-rag.md">
+<td>
+<span class="listing-date">Nov 27, 2023</span>
+</td>
+<td>
+<a href="./posts/fine-tuning-vs-rag.html" class="title listing-title">Fine-tuning Won’t Add New Knowledge To Your Model</a>
+</td>
+<td>
+<span class="listing-reading-time">5 min</span>
+</td>
+</tr>
+<tr data-index="3" data-categories="python,ml,llm,openai" data-listing-date-sort="1686261600000" data-listing-file-modified-sort="1720360163017" data-listing-date-modified-sort="1720360163000" data-listing-reading-time-sort="6" data-listing-word-count-sort="1034" data-listing-title-sort="Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP" data-listing-filename-sort="clustering-documents-with-openai-langchain-hdbscan.qmd">
+<td>
+<span class="listing-date">Jun 9, 2023</span>
+</td>
+<td>
+<a href="./posts/clustering-documents-with-openai-langchain-hdbscan.html" class="title listing-title">Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP</a>
+</td>
+<td>
+<span class="listing-reading-time">6 min</span>
+</td>
+</tr>
+<tr data-index="4" data-categories="python,llm,openai" data-listing-date-sort="1683842400000" data-listing-file-modified-sort="1720360150080" data-listing-date-modified-sort="1720360150000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2220" data-listing-title-sort="Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI" data-listing-filename-sort="code-interpreter-chatbot-pyodide-langchain-openai.qmd">
+<td>
+<span class="listing-date">May 12, 2023</span>
+</td>
+<td>
+<a href="./posts/code-interpreter-chatbot-pyodide-langchain-openai.html" class="title listing-title">Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+</tr>
+<tr data-index="5" data-categories="python,ml,nlp" data-listing-date-sort="1682546400000" data-listing-file-modified-sort="1720359940102" data-listing-date-modified-sort="1720359940000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1980" data-listing-title-sort="Semantic Search with Elasticsearch, OpenAI, and LangChain" data-listing-filename-sort="semantic-search-elasticsearch-openai-langchain.qmd">
+<td>
+<span class="listing-date">Apr 27, 2023</span>
+</td>
+<td>
+<a href="./posts/semantic-search-elasticsearch-openai-langchain.html" class="title listing-title">Semantic Search with Elasticsearch, OpenAI, and LangChain</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+</tr>
+<tr data-index="6" data-categories="python,ml,nlp" data-listing-date-sort="1681164000000" data-listing-file-modified-sort="1720359927173" data-listing-date-modified-sort="1720359927000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2335" data-listing-title-sort="Semantic Search with OpenSearch, Cohere, and FastAPI" data-listing-filename-sort="semantic-search-with-opensearch-cohere-and-fastapi.qmd">
+<td>
+<span class="listing-date">Apr 11, 2023</span>
+</td>
+<td>
+<a href="./posts/semantic-search-with-opensearch-cohere-and-fastapi.html" class="title listing-title">Semantic Search with OpenSearch, Cohere, and FastAPI</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+</tr>
+<tr data-index="7" data-categories="python,llm,openai" data-listing-date-sort="1677798000000" data-listing-file-modified-sort="1720360180580" data-listing-date-modified-sort="1720360180000" data-listing-reading-time-sort="17" data-listing-word-count-sort="3212" data-listing-title-sort="Build an AI Search Engine Using FastAPI, Qdrant, and ChatGPT" data-listing-filename-sort="ai-search-engine-fastapi-qdrant-chatgpt.qmd">
+<td>
+<span class="listing-date">Mar 3, 2023</span>
+</td>
+<td>
+<a href="./posts/ai-search-engine-fastapi-qdrant-chatgpt.html" class="title listing-title">Build an AI Search Engine Using FastAPI, Qdrant, and ChatGPT</a>
+</td>
+<td>
+<span class="listing-reading-time">17 min</span>
+</td>
+</tr>
+<tr data-index="8" data-categories="productivity" data-listing-date-sort="1676588400000" data-listing-file-modified-sort="1720357339420" data-listing-date-modified-sort="1720357339000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1952" data-listing-title-sort="Tips for Standing Out on LinkedIn" data-listing-filename-sort="tips-for-standing-out-on-linkedin.qmd">
+<td>
+<span class="listing-date">Feb 17, 2023</span>
+</td>
+<td>
+<a href="./posts/tips-for-standing-out-on-linkedin.html" class="title listing-title">Tips for Standing Out on LinkedIn</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+</tr>
+<tr data-index="9" data-categories="python,web" data-listing-date-sort="1675378800000" data-listing-file-modified-sort="1720360106243" data-listing-date-modified-sort="1720360106000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2708" data-listing-title-sort="How to Securely Deploy a FastAPI app with NGINX and Gunicorn" data-listing-filename-sort="fastapi-nginx-gunicorn.qmd">
+<td>
+<span class="listing-date">Feb 3, 2023</span>
+</td>
+<td>
+<a href="./posts/fastapi-nginx-gunicorn.html" class="title listing-title">How to Securely Deploy a FastAPI app with NGINX and Gunicorn</a>
+</td>
+<td>
+<span class="listing-reading-time">14 min</span>
+</td>
+</tr>
+<tr data-index="10" data-categories="personal" data-listing-date-sort="1674169200000" data-listing-file-modified-sort="1720360027005" data-listing-date-modified-sort="1720360027000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2079" data-listing-title-sort="My Experience at Entrepreneur First" data-listing-filename-sort="my-entrepreneur-first-experience.qmd">
+<td>
+<span class="listing-date">Jan 20, 2023</span>
+</td>
+<td>
+<a href="./posts/my-entrepreneur-first-experience.html" class="title listing-title">My Experience at Entrepreneur First</a>
+</td>
+<td>
+<span class="listing-reading-time">11 min</span>
+</td>
+</tr>
+<tr data-index="11" data-categories="python" data-listing-date-sort="1663711200000" data-listing-file-modified-sort="1720359994991" data-listing-date-modified-sort="1720359994000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1291" data-listing-title-sort="PyScript 101" data-listing-filename-sort="python-pyscript-101.qmd">
+<td>
+<span class="listing-date">Sep 21, 2022</span>
+</td>
+<td>
+<a href="./posts/python-pyscript-101.html" class="title listing-title">PyScript 101</a>
+</td>
+<td>
+<span class="listing-reading-time">7 min</span>
+</td>
+</tr>
+<tr data-index="12" data-categories="python,nlp" data-listing-date-sort="1661896800000" data-listing-file-modified-sort="1720359988525" data-listing-date-modified-sort="1720359988000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1966" data-listing-title-sort="How to Use OpenSearch in Python" data-listing-filename-sort="opensearch-python.qmd">
+<td>
+<span class="listing-date">Aug 31, 2022</span>
+</td>
+<td>
+<a href="./posts/opensearch-python.html" class="title listing-title">How to Use OpenSearch in Python</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+</tr>
+<tr data-index="13" data-categories="python,ml,nlp" data-listing-date-sort="1661205600000" data-listing-file-modified-sort="1720359904183" data-listing-date-modified-sort="1720359904000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1788" data-listing-title-sort="Text Classification Using Python and Scikit-learn" data-listing-filename-sort="text-classification-using-python-and-scikit-learn.qmd">
+<td>
+<span class="listing-date">Aug 23, 2022</span>
+</td>
+<td>
+<a href="./posts/text-classification-using-python-and-scikit-learn.html" class="title listing-title">Text Classification Using Python and Scikit-learn</a>
+</td>
+<td>
+<span class="listing-reading-time">9 min</span>
+</td>
+</tr>
+<tr data-index="14" data-categories="python,nlp" data-listing-date-sort="1660255200000" data-listing-file-modified-sort="1720360133403" data-listing-date-modified-sort="1720360133000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1848" data-listing-title-sort="How to Use Elasticsearch in Python" data-listing-filename-sort="elasticseach-python.qmd">
+<td>
+<span class="listing-date">Aug 12, 2022</span>
+</td>
+<td>
+<a href="./posts/elasticseach-python.html" class="title listing-title">How to Use Elasticsearch in Python</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+</tr>
+<tr data-index="15" data-categories="personal" data-listing-date-sort="1655416800000" data-listing-file-modified-sort="1720360122926" data-listing-date-modified-sort="1720360122000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1298" data-listing-title-sort="Entrepreneurship as a Risk Management Strategy" data-listing-filename-sort="entrepreneurship-as-a-risk-management-strategy.qmd">
+<td>
+<span class="listing-date">Jun 17, 2022</span>
+</td>
+<td>
+<a href="./posts/entrepreneurship-as-a-risk-management-strategy.html" class="title listing-title">Entrepreneurship as a Risk Management Strategy</a>
+</td>
+<td>
+<span class="listing-reading-time">7 min</span>
+</td>
+</tr>
+<tr data-index="16" data-categories="personal-snapshot" data-listing-date-sort="1643583600000" data-listing-file-modified-sort="1720360188134" data-listing-date-modified-sort="1720360188000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1539" data-listing-title-sort="2021: Personal Snapshot" data-listing-filename-sort="2021-personal-snapshot.qmd">
+<td>
+<span class="listing-date">Jan 31, 2022</span>
+</td>
+<td>
+<a href="./posts/2021-personal-snapshot.html" class="title listing-title">2021: Personal Snapshot</a>
+</td>
+<td>
+<span class="listing-reading-time">8 min</span>
+</td>
+</tr>
+<tr data-index="17" data-categories="python" data-listing-date-sort="1633557600000" data-listing-file-modified-sort="1720196141754" data-listing-date-modified-sort="1720196141000" data-listing-reading-time-sort="5" data-listing-word-count-sort="910" data-listing-title-sort="How to Use GitHub Deploy Keys" data-listing-filename-sort="how-to-use-github-deploy-keys.qmd">
+<td>
+<span class="listing-date">Oct 7, 2021</span>
+</td>
+<td>
+<a href="./posts/how-to-use-github-deploy-keys.html" class="title listing-title">How to Use GitHub Deploy Keys</a>
+</td>
+<td>
+<span class="listing-reading-time">5 min</span>
+</td>
+</tr>
+<tr data-index="18" data-categories="python,dataviz" data-listing-date-sort="1625263200000" data-listing-file-modified-sort="1720360100770" data-listing-date-modified-sort="1720360100000" data-listing-reading-time-sort="100" data-listing-word-count-sort="19896" data-listing-title-sort="How to Plot with Python: 8 Popular Graphs Made with pandas, matplotlib, seaborn, and plotly.express" data-listing-filename-sort="how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.qmd">
+<td>
+<span class="listing-date">Jul 3, 2021</span>
+</td>
+<td>
+<a href="./posts/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.html" class="title listing-title">How to Plot with Python: 8 Popular Graphs Made with pandas, matplotlib, seaborn, and plotly.express</a>
+</td>
+<td>
+<span class="listing-reading-time">100 min</span>
+</td>
+</tr>
+<tr data-index="19" data-categories="python,nlp,ml" data-listing-date-sort="1610924400000" data-listing-file-modified-sort="1720359969386" data-listing-date-modified-sort="1720359969000" data-listing-reading-time-sort="21" data-listing-word-count-sort="4178" data-listing-title-sort="How to Cluster Documents Using Word2Vec and K-means" data-listing-filename-sort="nlp-snippets-cluster-documents-using-word2vec.qmd">
+<td>
+<span class="listing-date">Jan 18, 2021</span>
+</td>
+<td>
+<a href="./posts/nlp-snippets-cluster-documents-using-word2vec.html" class="title listing-title">How to Cluster Documents Using Word2Vec and K-means</a>
+</td>
+<td>
+<span class="listing-reading-time">21 min</span>
+</td>
+</tr>
+<tr data-index="20" data-categories="python,nlp" data-listing-date-sort="1607554800000" data-listing-file-modified-sort="1720360015517" data-listing-date-modified-sort="1720360015000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2241" data-listing-title-sort="Clean and Tokenize Text With Python" data-listing-filename-sort="nlp-snippets-clean-and-tokenize-text-with-python.qmd">
+<td>
+<span class="listing-date">Dec 10, 2020</span>
+</td>
+<td>
+<a href="./posts/nlp-snippets-clean-and-tokenize-text-with-python.html" class="title listing-title">Clean and Tokenize Text With Python</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+</tr>
+<tr data-index="21" data-categories="python,dataviz" data-listing-date-sort="1590357600000" data-listing-file-modified-sort="1720360205652" data-listing-date-modified-sort="1720360205000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2391" data-listing-title-sort="4 Ways To Improve Your Graphs Using Plotly" data-listing-filename-sort="4-ways-to-improve-your-plotly-graphs.md">
+<td>
+<span class="listing-date">May 25, 2020</span>
+</td>
+<td>
+<a href="./posts/4-ways-to-improve-your-plotly-graphs.html" class="title listing-title">4 Ways To Improve Your Graphs Using Plotly</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+</tr>
+<tr data-index="22" data-categories="python,web,productivity" data-listing-date-sort="1586988000000" data-listing-file-modified-sort="1720361569963" data-listing-date-modified-sort="1720361569000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2436" data-listing-title-sort="Use Google Sheets, S3, and Python to Build a Website Quickly" data-listing-filename-sort="build-a-site-quickly-using-google-sheets-python-and-aws.md">
+<td>
+<span class="listing-date">Apr 16, 2020</span>
+</td>
+<td>
+<a href="./posts/build-a-site-quickly-using-google-sheets-python-and-aws.html" class="title listing-title">Use Google Sheets, S3, and Python to Build a Website Quickly</a>
+</td>
+<td>
+<span class="listing-reading-time">13 min</span>
+</td>
+</tr>
+<tr data-index="23" data-categories="python" data-listing-date-sort="1583017200000" data-listing-file-modified-sort="1720360114098" data-listing-date-modified-sort="1720360114000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2349" data-listing-title-sort="Fast &amp; Asynchronous In Python: Accelerate Your Requests Using asyncio" data-listing-filename-sort="fast-and-async-in-python-accelerate-your-requests-using-asyncio.md">
+<td>
+<span class="listing-date">Mar 1, 2020</span>
+</td>
+<td>
+<a href="./posts/fast-and-async-in-python-accelerate-your-requests-using-asyncio.html" class="title listing-title">Fast &amp; Asynchronous In Python: Accelerate Your Requests Using asyncio</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+</tr>
+<tr data-index="24" data-categories="ml" data-listing-date-sort="1576796400000" data-listing-file-modified-sort="1720360080661" data-listing-date-modified-sort="1720360080000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2843" data-listing-title-sort="Mind-reading Algorithms: An Introduction to Recommender Systems" data-listing-filename-sort="mind-reading-algorithms.ipynb">
+<td>
+<span class="listing-date">Dec 20, 2019</span>
+</td>
+<td>
+<a href="./posts/mind-reading-algorithms.html" class="title listing-title">Mind-reading Algorithms: An Introduction to Recommender Systems</a>
+</td>
+<td>
+<span class="listing-reading-time">15 min</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+<nav id="posts-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
+</div>
+</section>
+<section id="today-i-learned-til" class="level2">
+<h2 class="anchored" data-anchor-id="today-i-learned-til">Today I Learned (TIL)</h2>
+<p>Inspired by <a href="https://til.simonwillison.net/">Simon Willison</a>, I’ve started a collection of short technical posts of things I’ve learned and think others might find useful.</p>
+<p>I’m trying to force myself to write more, by reducing the friction of the writing process. And this seems like a good way to do that.</p>
+<div id="listing-today-i-learned" class="quarto-listing quarto-listing-container-table">
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+Date
+</th>
+<th>
+Title
+</th>
+<th>
+Reading Time
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="til,python,django" data-listing-date-sort="1719007200000" data-listing-file-modified-sort="1720361724044" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="766" data-listing-title-sort="A Dockerfile for a Django app using Poetry" data-listing-filename-sort="django-poetry-dockerfile.qmd">
+<td>
+<span class="listing-date">Jun 22, 2024</span>
+</td>
+<td>
+<a href="./til/django-poetry-dockerfile.html" class="title listing-title">A Dockerfile for a Django app using Poetry</a>
+</td>
+<td>
+<span class="listing-reading-time">4 min</span>
+</td>
+</tr>
+<tr data-index="1" data-categories="til,quarto" data-listing-date-sort="1718488800000" data-listing-file-modified-sort="1720366015676" data-listing-date-modified-sort="1720366015000" data-listing-reading-time-sort="3" data-listing-word-count-sort="443" data-listing-title-sort="Migrate blog from Ghost to Quarto" data-listing-filename-sort="migrate-blog-from-ghost-to-quarto.qmd">
+<td>
+<span class="listing-date">Jun 16, 2024</span>
+</td>
+<td>
+<a href="./til/migrate-blog-from-ghost-to-quarto.html" class="title listing-title">Migrate blog from Ghost to Quarto</a>
+</td>
+<td>
+<span class="listing-reading-time">3 min</span>
+</td>
+</tr>
+<tr data-index="2" data-categories="til,alacritty,zellij,neovim" data-listing-date-sort="1717797600000" data-listing-file-modified-sort="1720361727759" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1063" data-listing-title-sort="Installing Alacritty, Zellij, and Neovim in macOS" data-listing-filename-sort="install-alacritty-and-zellij-in-macos.qmd">
+<td>
+<span class="listing-date">Jun 8, 2024</span>
+</td>
+<td>
+<a href="./til/install-alacritty-and-zellij-in-macos.html" class="title listing-title">Installing Alacritty, Zellij, and Neovim in macOS</a>
+</td>
+<td>
+<span class="listing-reading-time">6 min</span>
+</td>
+</tr>
+<tr data-index="3" data-categories="til,django,htmx" data-listing-date-sort="1706396400000" data-listing-file-modified-sort="1720365608348" data-listing-date-modified-sort="1720365608000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2003" data-listing-title-sort="Live Components with Django and htmx" data-listing-filename-sort="live-components-with-django-and-htmx.md">
+<td>
+<span class="listing-date">Jan 28, 2024</span>
+</td>
+<td>
+<a href="./til/live-components-with-django-and-htmx.html" class="title listing-title">Live Components with Django and htmx</a>
+</td>
+<td>
+<span class="listing-reading-time">11 min</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div>
+
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments/" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

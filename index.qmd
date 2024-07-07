@@ -1,0 +1,48 @@
+---
+listing:
+  - id: posts
+    contents: posts
+    sort: "date desc"
+    type: table
+    fields: [date, title, reading-time]
+    max-description-length: 100
+    categories: true
+    sort-ui: false
+    filter-ui: false
+    page-size: 10
+    feed: true
+  - id: today-i-learned
+    contents: til
+    type: table
+    fields: [date, title, reading-time]
+    categories: true
+    sort: "date desc"
+    sort-ui: false
+    filter-ui: false
+    page-size: 10
+    feed: true
+page-layout: full
+title-block-banner: true
+---
+
+Hi there 👋, I'm Dylan, the founder of [Iwana Labs](https://iwanalabs.com).
+
+I've been working in AI for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and I like working on [open-source projects](https://github.com/dylanjcastillo). I've delivered projects for large-scale corporations, government agencies, and startups.
+
+I'm currently freelancing as an AI engineer at [REMATIQ](https://rematiq.com) and working on [Namemancer](https://namemancer.com).
+
+## Posts
+
+This collection features my longer posts on technical topics. I've also included some personal posts like yearly reviews.
+
+:::{#posts}
+:::
+
+## Today I Learned (TIL)
+
+Inspired by [Simon Willison](https://til.simonwillison.net/), I've started a collection of short technical posts of things I've learned and think others might find useful.
+
+I'm trying to force myself to write more, by reducing the friction of the writing process. And this seems like a good way to do that.
+
+:::{#today-i-learned}
+:::
