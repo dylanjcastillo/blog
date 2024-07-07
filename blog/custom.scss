@@ -354,13 +354,19 @@ kbd,
   background-color: $gray-100;
 }
 
+// Show full date without line breaks in listings
 .listing-date {
   white-space: nowrap;
 }
-
+// Show plotly graphs
 .plotly-graph {
   border-radius: 0.3em;
   border: 1px solid #000;
   width: 100%;
   height: 400px;
+}
+
+// Fix pagination format
+ul.pagination li {
+  padding-right: 0;
 }
