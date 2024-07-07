@@ -81,15 +81,25 @@ Finally, this year has been good for my relationships with my wife, family, and 
 
 In my last snapshot, I didn't include any photos. When I revised it a few days ago, I realized I missed having them. So, this time, I've included a few.
 
-![](images/2023-personal-snapshot/RUTA-IVA-N-619.jpg)
+::: {layout-nrow=3}
 ![](images/2023-personal-snapshot/IMG_6052-2.png)
+
 ![](images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg)
+
 ![](images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG)
+
 ![](images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg)
+
 ![](images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg)
+
 ![](images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG)
+
 ![](images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG)
+
+![](images/2023-personal-snapshot/RUTA-IVA-N-619.jpg)
+
 ![](images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG)
+:::
 
 This year, a family highlight was my in-laws' visit to Madrid for a few months. We found out that our family loves karaoke, especially my dad and my father-in-law. It was tough to get them off the microphone!
 
