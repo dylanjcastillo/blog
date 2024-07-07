@@ -8,7 +8,7 @@ fig-cap-location: margin
 toc: true
 toc-depth: 3
 categories:
-  - TIL
+  - til
   - django
   - htmx
 author:

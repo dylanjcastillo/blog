@@ -2,26 +2,25 @@
 title: "Migrate blog from Ghost to Quarto"
 date: "06/16/2024"
 date-modified: last-modified
-
 description-meta: "I migrated my blog from Ghost to Quarto."
 lightbox: true
-fig-cap-location: margin 
+fig-cap-location: margin
 toc: true
 toc-depth: 3
 categories:
-    - til
-    - quarto
+  - til
+  - quarto
 ---
 
 When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that [Ghost](https://ghost.org/) was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.
 
-I saw myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of technical writing, producing masterpiece after masterpiece. 
+I saw myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of technical writing, producing masterpiece after masterpiece.
 
-Fast forward five years, and I've paid $1.8k for hosting a blog that barely gets 8k visits per month. Plus, I'm forced to write it in an interface that I hate. 
+Fast forward five years, and I've paid $1.8k for hosting a blog that barely gets 8k visits per month. Plus, I'm forced to write it in an interface that I hate.
 
-With that kind of money, I could have funded a moderately extravagant hamster-only summer party. 
+With that kind of money, I could have funded a moderately extravagant hamster-only summer party.
 
-Not that I should, but I could. 
+Not that I should, but I could.
 
 Yes, I'm not proud of that decision^[Choosing Ghost. No regrets about the hypothetical hamster party.]. So I'm migrating my blog from Ghost to Quarto.
 
@@ -29,7 +28,7 @@ Here's how I did it.
 
 ## Migrate blog from Ghost to Quarto
 
-First, start by downloading a copy of my blog's JSON dump. You can find it in this URL: `<YOUR_BLOG_URL>/ghost/#/settings/migration`. 
+First, start by downloading a copy of my blog's JSON dump. You can find it in this URL: `<YOUR_BLOG_URL>/ghost/#/settings/migration`.
 
 Then click on `Export`, and click on `Export JSON`.
 
@@ -50,55 +49,52 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
 
-
 BLOG_URL = "https://dylancastillo.co"
 BLOG_JSON_DUMP = "../dylan-castillo.ghost.2024-05-28-10-39-09.json"
 BLOG_AUTHOR_NAME = "Dylan Castillo"
 
-
 def download_images(markdown_content, post_slug):
-    soup = BeautifulSoup(markdown_content, "html.parser")
-    images = soup.find_all("img")
-    if images:
-        os.makedirs(post_slug, exist_ok=True)
-        for img in images:
-            img_url_raw = img["src"]
-            img_url = img_url_raw.replace("__GHOST_URL__", BLOG_URL)
-            img_name = os.path.basename(img_url)
-            response = requests.get(img_url, stream=True)
-            if response.status_code == 200:
-                print(f"Downloading image: {img_url} to {post_slug}/{img_name}")
-                with open(os.path.join(post_slug, img_name), "wb") as f:
-                    f.write(response.content)
-                markdown_content = markdown_content.replace(
-                    img_url_raw, os.path.join(post_slug, img_name)
-                )
-            else:
-                print(f"Failed to download image: {img_url}")
-    return markdown_content
-
+soup = BeautifulSoup(markdown_content, "html.parser")
+images = soup.find_all("img")
+if images:
+os.makedirs(post_slug, exist_ok=True)
+for img in images:
+img_url_raw = img["src"]
+img_url = img_url_raw.replace("__GHOST_URL__", BLOG_URL)
+img_name = os.path.basename(img_url)
+response = requests.get(img_url, stream=True)
+if response.status_code == 200:
+print(f"Downloading image: {img_url} to {post_slug}/{img_name}")
+with open(os.path.join(post_slug, img_name), "wb") as f:
+f.write(response.content)
+markdown_content = markdown_content.replace(
+img_url_raw, os.path.join(post_slug, img_name)
+)
+else:
+print(f"Failed to download image: {img_url}")
+return markdown_content
 
 def process_posts(data):
-    posts = data["db"][0]["data"]["posts"]
-    for post in posts:
-        print("Processing post:", post["title"])
-        title = post["title"]
-        description = post["custom_excerpt"]
-        author = BLOG_AUTHOR_NAME
-        date = (
-            datetime.strptime(post["published_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
-                "%m/%d/%Y"
-            )
-            if post["published_at"]
-            else ""
-        )
-        date_modified = (
-            datetime.strptime(post["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
-                "%m/%d/%Y"
-            )
-            if post["updated_at"]
-            else ""
-        )
+posts = data["db"][0]["data"]["posts"]
+for post in posts:
+print("Processing post:", post["title"])
+title = post["title"]
+description = post["custom_excerpt"]
+author = BLOG_AUTHOR_NAME
+date = (
+datetime.strptime(post["published_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
+"%m/%d/%Y"
+)
+if post["published_at"]
+else ""
+)
+date_modified = (
+datetime.strptime(post["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
+"%m/%d/%Y"
+)
+if post["updated_at"]
+else ""
+)
 
         # Convert HTML content to Markdown
         markdown_content = download_images(
@@ -113,11 +109,10 @@ def process_posts(data):
         with open(filename, "w", encoding="utf-8") as file:
             file.write(markdown_content)
 
-
 if __name__ == "__main__":
-    with open(BLOG_JSON_DUMP) as file:
-        data = json.load(file)
-    process_posts(data)
+with open(BLOG_JSON_DUMP) as file:
+data = json.load(file)
+process_posts(data)
 ```
 </details>
 

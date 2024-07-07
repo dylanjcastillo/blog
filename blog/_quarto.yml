@@ -1,8 +1,10 @@
 project:
   type: website
+  output-dir: docs
 
 website:
   title: "Dylan Castillo"
+  site-url: https://dylancastillo.co
   navbar:
     right:
       - projects.qmd
@@ -33,3 +35,6 @@ format:
       margin-width: 276px
       gutter-width: 24px
     code-line-numbers: true
+
+execute:
+  freeze: auto
