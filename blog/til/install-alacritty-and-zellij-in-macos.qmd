@@ -9,7 +9,7 @@ date-meta: "06/08/2024"
 lightbox: true
 fig-cap-location: margin
 categories:
-  - TIL
+  - til
   - alacritty
   - zellij
   - neovim
