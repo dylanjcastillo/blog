@@ -1,0 +1,228 @@
+---
+title: "PyScript 101"
+description-meta: "PyScript is a framework that lets users create Python apps in the browser. This tutorial will teach you the basics to get you started with it."
+date: "09/21/2022"
+date-modified: last-modified
+toc: true
+toc-depth: 3
+categories:
+  - python
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+These past few days, I've been playing around with [PyScript](https://pyscript.net/). I built an interactive cheat sheet for [pandas](https://pandas.dylancastillo.co/) and a cookbook of the most popular [Python data visualization](https://dataviz.dylancastillo.co/) libraries.
+
+I've learned a few things about how it works, so I thought of putting together these notes in case others may find them useful. This article covers the minimum you should know about PyScript to build a simple web app with it.
+
+I deliberately left out topics that I didn't find as useful or interesting. But if you want a more detailed introduction, you should read [this](https://realpython.com/pyscript-python-in-browser/) great tutorial from Real Python.
+
+Let's get to it!
+
+## What's PyScript?
+
+PyScript is a framework that lets users create Python applications in the browser. It's built on top of Pyodide, a CPython port to WebAssembly (WASM).
+
+PyScript's main selling point is that you no longer need a server to use Python and its extensive number of libraries when building a web app. You can plug in PyScript, make a few adjustments, and use many Python libraries in your web app.
+
+People often compare PyScript with [Dash](https://realpython.com/python-dash/) and [Streamlit](https://streamlit.io/). But PyScript works quite differently. It operates on the client side, so no server is required. You could host a web app that uses PyScript for free using services like GitHub Pages.
+
+Dash and Streamlit, on the other hand, require a server, making apps built with these libraries more difficult to deploy and usually more expensive. Furthermore, the server bears the majority of the computational load.
+
+## How to Use PyScript
+
+The good thing about PyScript is that there isn't any installation required. You just need to add it to the `head` of your HTML file.
+
+I'll assume you have a file named `index.html` with this content for this and the following sections:
+
+```python
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Awesome app!</title>
+    </head>
+
+    <body>
+
+    </body>
+</html>
+```
+
+The code above is a minimal example we'll use as a starting point. Next, I'll show you how to use PyScript. You can do it in two ways:
+
+1. [Download a copy](https://github.com/pyscript/pyscript/archive/refs/heads/main.zip) of the latest version of PyScript, and add the required files to `head` in your HTML document:
+
+```python
+<head>
+    ...
+    <link rel="stylesheet" href="path/to/pyscript.css" />
+    <script defer src="path/to/pyscript.js"></script>
+</head>
+
+```
+
+2. Add the CDN version of PyScript's JS and CSS files to `head` in your HTML document:
+
+```python
+ <head>
+     ...
+     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+ </head>
+
+```
+
+PyScript is still under heavy development. If you use the second method, your app may break when new versions are released.
+
+To test your changes locally, use [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) if you like working with VS Code or try any of [these methods](https://stackoverflow.com/questions/38497334/how-to-run-html-file-on-localhost) if you prefer other code editors.
+
+## How to Run Python Code in PyScript
+
+There are two ways to run Python code in PyScript: using `py-script` and `py-repl` tags. These elements inside go inside `body` in your HTML document.
+
+### `py-script`
+
+You can run code using the `py-script` tag in two ways:
+
+1. Wrap your code with a `py-script` tag.
+
+```html
+<body>
+  ...
+  <py-script>print("Hello, world!")</py-script>
+  ...
+</body>
+```
+
+2. Load an external script using the `src` attribute from the `py-script` tag:
+
+```html
+<body>
+    ...
+    <py-script src='path/to/script.py'></pyscript>
+    ...
+</body>
+
+```
+
+The latter is usually preferred to avoid having formatting issues. If you use an HTML auto-formatter, it may break the python code you put inside `py-script`.
+
+### `py-repl`
+
+You can also run code using an interactive interpreter, usually known as read–eval–print loop (REPL). Using a REPL makes it feel like you're running code in a Jupyter notebook.
+
+You can create a REPL with PyScript using the `py-repl` tag as follows:
+
+```html
+<body>
+  <py-repl>print("Hello, world!")</py-repl>
+</body>
+```
+
+If you try using multiple `py-script` and `py-repl` in the same page, you may find some unexpected behavior in the output. I came across [two](https://github.com/pyscript/pyscript/issues/758#issuecomment-1244091704) [issues](https://github.com/pyscript/pyscript/issues/735) related to this but it looks like they'll get fixed soon.
+
+## How to Import Libraries
+
+You can make Python libraries available in your environment when your app loads by specifying them in the `py-env` tag as follows:
+
+```html
+<head>
+  ...
+  <py-env> - numpy - pandas - seaborn </py-env>
+</head>
+```
+
+Or you can load them programmatically using `micropip`:
+
+```html
+<py-script>
+  async def main(): await micropip.install(["numpy", "pandas", "seaborn]) await
+  loop.run_until_complete(main())
+</py-script>
+```
+
+## How to Interact With HTML Elements
+
+PyScript automatically imports a few things from JavaScript's global namespace into your Python environment. This means that you can use use these elements without having to import them beforehand. The most important ones are `window`, `document`, and `console`.
+
+`window`, and `document`, let you read and make changes to elements from the Document Object Model (DOM). While `console` lets you interact with your browser's integrated console.
+
+For example, you could use `document` to select a specific element from the DOM:
+
+```html
+<body>
+  ...
+  <py-script>
+    # Select an element using its ID document.getElementById("input-code") #
+    Select an element using its class document.querySelector(".table")
+  </py-script>
+  ...
+</body>
+```
+
+Or use`document` to read attributes from elements and make changes to them, and print information using `console`:
+
+```html
+<body>
+  <ul id="users-list">
+    <li>Dylan</li>
+    <li>John</li>
+    <li>Paul</li>
+    <li>Jane</li>
+  </ul>
+  <py-script>
+    users = ["Dylan", "John", "Jane"] ul = document.querySelectorAll("ul > li")
+    for li in ul: if li.innerHTML not in users: console.log(li.innerHTML)
+    li.remove()
+  </py-script>
+</body>
+```
+
+You could also make your Python code react to changes in the DOM. But that requires some magic to work because the web browser cannot natively handle Python functions when an event such as a click on a button happens.
+
+For those cases, Pyodide lets you create proxies that bridge Python functions and JavaScript callbacks. You could use `create_proxy` to make your Python code react to changes as follows:
+
+```html
+<body>
+  <input type="text" name="" id="input-text" />
+  <button type="submit" id="button-submit" for="input-text">Submit!</button>
+  <div id="text-length"></div>
+  <py-script>
+    from pyodide import create_proxy input_button =
+    document.getElementById("button-submit") def get_text_length(x):
+    document.getElementById("text-length").innerHTML =
+    len(document.getElementById("input-text").value)
+    input_button.addEventListener("click", create_proxy(get_text_length))
+  </py-script>
+</body>
+```
+
+The code lets the user input a text and run the `get_text_length` Python function, after he or she clicks on the button on the screen. This function calculates the length of the text that the user entered.
+
+Finally, it's worth mentioning that PyScript also provides you with the `[Element](https://realpython.com/pyscript-python-in-browser/#pyscripts-adapter-for-javascript-proxy)` class. It's a basic interface that lets you select elements by ID and do certain operations on them. I found it a bit limited, which is why I didn't cover it in this section.
+
+## Other Topics
+
+There are many topics I didn't cover in this article. So I wanted to provide some resources additional resources I've found useful:
+
+- **PyScript visual components:** PyScript provides a few elements you can use to build the UI of your web app. The [Real Python tutorial](https://realpython.com/pyscript-python-in-browser/#exploring-pyscripts-visual-components) covers them.
+- **Accessing the file system:** Accessing files is a bit tricky. John Hanley made very [detailed](https://www.jhanley.com/blog/pyscript-files-and-file-systems-part-1/) [tutorials](https://www.jhanley.com/blog/pyscript-files-and-file-systems-part-2/) about this topic.
+- **PyScript and plotly:** Getting plotly graphs to work with PyScript is tricky. This [article](https://medium.com/technofile/how-to-use-ploty-with-pyscript-578d3b287293) explains how to do it.
+- **Hosting PyScript:** If you don't need to store data from your users in a server, you can simply host a static page. The easiest way to do that is using [GitHub Pages](https://pages.github.com/). That's what I've used in my projects.
+
+## Conclusion
+
+PyScript is an experimental Python framework that lets you run Python on the web browser. This article covers the basics of PyScript, and will show you how to:
+
+- Use PyScript on a web page
+- Run Python code using PyScript
+- Interact with the DOM using PyScript
+
+If you have any questions or feedback, let me know in the comments!

@@ -9,7 +9,10 @@ toc-depth: 3
 lightbox: true
 fig-cap-location: margin
 categories:
-  - personal-snapshot
+  - python
+  - ml
+  - llm
+  - openai
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

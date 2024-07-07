@@ -5,6 +5,9 @@ date: "08/31/2022"
 date-modified: last-modified
 toc: true
 toc-depth: 3
+categories:
+  - python
+  - nlp
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

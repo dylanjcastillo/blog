@@ -6,6 +6,10 @@ date: "05/12/2023"
 date-modified: last-modified
 toc: true
 toc-depth: 3
+categories:
+  - python
+  - llm
+  - openai
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

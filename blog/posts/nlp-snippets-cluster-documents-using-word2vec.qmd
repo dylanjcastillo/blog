@@ -5,6 +5,10 @@ date: "01/18/2021"
 date-modified: last-modified
 toc: true
 toc-depth: 3
+categories:
+  - python
+  - nlp
+  - ml
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

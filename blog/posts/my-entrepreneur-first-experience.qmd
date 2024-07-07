@@ -1,10 +1,12 @@
 ---
 title: "My Experience at Entrepreneur First"
-description: "This is a personal reflection on my time at Entrepreneur First. I'll explain what it is and how it works, as well as what I liked and didn't like about it. "
+description-meta: "This is a personal reflection on my time at Entrepreneur First. I'll explain what it is and how it works, as well as what I liked and didn't like about it. "
 date: "01/20/2023"
 date-modified: last-modified
 toc: true
 toc-depth: 3
+categories:
+  - personal
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co

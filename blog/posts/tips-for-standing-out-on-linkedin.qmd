@@ -1,0 +1,155 @@
+---
+title: "Tips for Standing Out on LinkedIn"
+description-meta: "Learn how to use LinkedIn to get more and higher quality job opportunities."
+date: "02/17/2023"
+date-modified: last-modified
+toc: true
+toc-depth: 3
+lightbox: true
+fig-cap-location: margin
+categories:
+  - productivity
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+---
+
+A few months ago I wrote a [post](https://www.reddit.com/r/datascience/comments/vzmcc2/some_ideas_to_improve_your_linkedin_profile/) that blew up on [r/datascience](https://www.reddit.com/r/datascience/) about how to make your LinkedIn profile stand out when searching for a job.
+
+Since then, the economic situation has worsened. We're now on the verge of an economic downturn, more than [100,000 people have been laid off](https://layoffs.fyi/) from tech companies this year, and investors are warning founders of [tough times ahead](https://techcrunch.com/2022/05/19/yc-advises-founders-to-plan-for-the-worst/), so I've decided to expand on that original post.
+
+This isn't a post about how to get thousands of followers, nor how to become the most popular LinkedIn [influencer](https://www.youtube.com/shorts/IHt9PJM8Md8). It's about how to use LinkedIn to get more and better quality job opportunities.
+
+It comes from reading many papers about LinkedIn's search and ranking algorithms, learning about LinkedIn Recruiter, and making lots of mistakes while working on [my own profile](https://linkedin.com/in/dylanjcastillo/).
+
+Let's get to it!
+
+## Finding a (Great) Job
+
+There are two ways to find a good job: [obsess over a few companies](https://sive.rs/gethired) or play the numbers game. On the plus side, the former will increase your chances of landing your dream job, while the latter will likely lead to a better financial outcome. On the other hand, the former is riskier because it places all of your eggs in one or a few baskets, whereas the latter may not lead to the job you were hoping for.
+
+In this article, I'll focus on the second strategy as that's the one I've focused on in my career. I never had a dream job in mind because I've always wanted to start my own business and the financial aspect was also important to me, so I prioritized learning relevant skills as well as a good salary. Despite not having a "dream job," I was able to work at cool places like the Boston Consulting Group, Deliveroo, and the Olympics. I've also successfully transitioned into full-time freelancing in a very competitive industry.
+
+However, this does not imply that the approach I took is the best one. Everyone has different preferences and should choose a strategy based on what they want to optimize for.
+
+## Playing the Numbers Game
+
+The numbers game in job hunting consists of increasing the number of relevant job opportunities that you can access. It is not simply applying to as many job openings as possible.
+
+Your goal is to obtain as many relevant opportunities as possible by actively seeking them or by making your profile appealing to hiring managers and recruiters. Those who apply for jobs mindlessly are not following this strategy correctly. They're just wasting their time.
+
+You should think of your job search as a three-part funnel:
+
+1. Leads (job opportunities)
+2. Interviews
+3. Offers
+
+I will cover the first part of the funnel, _Leads_, and a will provide you with some tips for the second, _Interviews_. For the first part, the advice comes from my own experience, and the research I've done about LinkedIn's algorithms. For the second part, the advice is mostly based on my own experience.
+
+You'll need to focus on two things to increase the number of relevant job opportunities or "qualified leads": **inbound** and **outbound** **leads**.
+
+### Inbound Leads
+
+Inbound leads are those that come to you without your intervention. Typically, recruiters and hiring managers connect with you on LinkedIn or send you InMail messages.
+
+Recruiters use [LinkedIn Recruiter](https://business.linkedin.com/talent-solutions/recruiter) to find candidates. They can search for terms such as "Data Scientist" and define filters like  "has worked at Google" when looking for candidates.
+
+After a query is defined, LinkedIn Recruiter uses what they call a [**talent search algorithm**](https://arxiv.org/pdf/1809.06473.pdf). It works in two stages:
+
+1. **Search:** It searches the network and defines a set of a few thousand candidates who meet the recruiter's search criteria.
+2. **Rank:** It provides the recruiter with a list of candidates ranked by how well they fit the search term and how likely they are to respond.
+
+That's all. If you want to get more job opportunities, you must figure out how to increase your chances of appearing in step 1 and ranking higher during step 2.
+
+Fortunately, LinkedIn has released tons of research on its talent search algorithm. It's not difficult to imagine what will help you stand out from the crowd. Here's what I've found more impactful:
+
+1. **Use relevant keywords in your profile.** You won't show up in the results if your profile doesn't include search terms that recruiters use to find candidates. Examine the keywords used in the job descriptions for the positions you're interested in, and make sure you have them in your profile.
+2. **Reply to recruiters.** People often don't reply to recruiters when they're not interested in the job opportunity. But the [algorithm](https://arxiv.org/abs/1809.06473) prioritizes those who are likely to respond over those who are not. Even if it's just to say no, respond to recruiters!
+3. **Engage with the brands you're interested in on LinkedIn.** Recruiters [can narrow down their search](https://youtu.be/S6mVwmCHShk?t=50) to candidates who have interacted with the brand or have connections who work for that company. If you're particularly interested in a company, follow their profile, interact with their content, and add connections who work there.
+4. **Expand your network.** [LinkedIn Recruiter Lite](https://business.linkedin.com/talent-solutions/recruiter-lite), a cheaper version of LinkedIn Recruiter, only lets users reach out to candidates up to their third-degree network. This means that the fewer connections you have, the less likely it is a recruiter can contact you.
+5. **Increase your influence.** If you create engaging content, have a large number of visitors to your profile, or receive endorsements and recommendations, you will [rank higher](https://arxiv.org/abs/1602.04572). As a general rule, try to write useful content on a regular basis and solicit recommendations from relevant contacts. LinkedIn's [Social Selling Index](https://www.linkedin.com/sales/ssi) is a good proxy for how well you're positioning yourself.
+6. **Get a good photo.** This is based on my personal experience. But I believe people are more likely to contact you if your photo looks somewhat professional.
+
+None of these concepts are revolutionary, but most people overlook them when creating their profiles. LinkedIn's goal is to match recruiters with the best possible candidates. So your job is to figure out what recruiters are searching for and how to best match that.
+
+Furthermore, even if recruiters or hiring managers do not pay for LinkedIn Recruiter and instead use the standard search service, the suggestions above will still help you improve your profile.
+
+### Outbound Leads
+
+Outbound opportunities are the ones you apply to. Usually, that means applying for jobs on LinkedIn under the [Jobs](https://www.linkedin.com/jobs/) tab.
+
+This takes time and has a very low ROI if not done correctly. I've discovered that the following increases its effectiveness:
+
+1. Set up [alerts](https://www.linkedin.com/learning/linkedin-quick-tips-2022/set-up-job-alerts) for roles you're interested in.
+2. Don't apply for jobs posted more than a week ago.
+3. Prioritize jobs for which you can contact the poster or someone in a relevant position within the company. In those cases, send them a personalized message expressing your interest. The best way to accomplish this is to connect with them and add a note to the connection request.
+4. Change your CV to fit the position you're applying for. Read the job's requirements and try to highlight the parts of your work history that match them.
+
+Finally, many opportunities are built through real-world connections, so reach out to people outside of LinkedIn, join relevant communities, and attend meetups.
+
+## Interviewing 101
+
+It is usually simple to figure out how to prepare for an interview. The difficult part is carrying out the plan.
+
+I've only worked as a Data Scientist and ML Engineer, so I can't offer advice for interviews outside of those roles. Here are some examples of things that help you get better results for interviews for those roles.
+
+### General Advice
+
+You should do the following for any kind of interview:
+
+1. **Research the company and the role.** You should know what the company does, its competitors, and recent news. You should also think about what the role you're applying for entails. Also, use [Glassdoor](glassdoor.com), [Reddit](reddit.com/), or ask other people to find out what questions they typically ask during interviews.
+2. **Review the projects you've worked on.** Make sure that you know the ins and outs of each one and have an elevator pitch for each of them. You'd be surprised how many people are rejected because they don't fully understand key details in the projects they've worked on or can't clearly explain what they did.
+3. **Be assertive.** One of the worst places to sell yourself short is during an interview. While it's obvious that lying during interviews is bad (and you will be caught sooner or later), not expressing confidence is equally bad.  
+   Consider how many people are willing to lie to get a job; if you sell yourself short, you give dishonest people a better chance of winning.
+4. **See the interview as a conversation of equals.** If you've mastered the technical bits, the only big obstacle in an interview is the mindset. They're seeing if you're a good fit, but you're also seeing if they are a good fit. Don’t treat it like an exam.
+5. **Don't take rejections personally.** Some interviews will go well, others won't. Sometimes you're to blame, and other times it's due to circumstances beyond your control. When you fail an interview, consider why it didn't go well, use the feedback to improve your next interview and move on.
+
+In a nutshell, know yourself, know what you're interviewing for, and be assertive.
+
+### Behavioral interview
+
+These questions are opportunities to sell yourself, so make sure you have good responses. It simply takes practice.
+
+Here's what you should do:
+
+1. Make a list of 10-15 commonly asked questions (you can start [here](https://hbr.org/2021/11/10-common-job-interview-questions-and-how-to-answer-them))
+2. Record yourself answering those questions. For questions like "Give me an example when you did..." or "Tell me about a situation when you..." use the [STAR](https://www.rightattitudes.com/2008/07/15/star-technique-answer-interview-questions/) framework.
+3. See the recordings, give yourself honest feedback, and repeat the process.
+4. Try practicing with a friend or colleague, and ask them for feedback.
+
+Let me say it again: practice these questions! You should make sure you get these "easy" points during an interview.
+
+### Technical interview
+
+Technical interviews aren't usually a great measure of your skills, so don't base your identity on how you do in them. They are like tests, and all you have to do to pass them is study. And if you don't pass, it's not the end of the world; you'll have more chances elsewhere.
+
+Here's what you should do to prepare at the very least:
+
+1. Research how the company and team conduct technical interviews.
+2. Examine the job description to determine the most important topics to research.
+3. Practice questions in the programming languages used in the team on [HackerRank](https://www.hackerrank.com/) or similar.
+4. Use [Anki](https://apps.ankiweb.net/) or another Spaced Repetition System (SRS) to practice key topics you might need to cover. Ideally, make your own cards using your favorite book on the topic.
+
+### Take-home Challenge
+
+These are hard to practice because every company does them their own way. If you're a Data Scientist or ML Engineer, you can go to [Kaggle](https://www.kaggle.com/), find a dataset that looks interesting to you, come up with some interesting questions, and then answer them. Or building a small ML model for a specific purpose.
+
+_Bonus points:_ Make sure your projects look nice, write a README explaining what you did, and put all that on GitHub. Also, write short posts on LinkedIn and share your projects.
+
+## Conclusion
+
+That's it! By now, you should have a good sense of how LinkedIn works and how you can use it to get more opportunities your way.
+
+If you're interested in learning more about the technical aspects of how the LinkedIn search works, they've published a lot of useful material you can check:
+
+- [Personalized Expertise Search at LinkedIn](https://arxiv.org/pdf/1602.04572.pdf)
+- [Towards Deep and Representation Learning for Talent Search at LinkedIn](https://arxiv.org/pdf/1809.06473.pdf)
+- [Talent Search and Recommendation Systems at LinkedIn: Practical Challenges and Lessons Learned](https://arxiv.org/pdf/1809.06481.pdf)
+- [Deep Natural Language Processing For LinkedIn Search](https://arxiv.org/pdf/2108.13300.pdf)
+- [From Query-By-Keyword to Query-By-Example: LinkedIn Talent Search Approach](https://arxiv.org/pdf/1709.00653.pdf)
+- [DeText: A Deep Text Ranking Framework with BERT](https://arxiv.org/pdf/2008.02460.pdf)
+
+I hope you find this useful. If you have any questions [reach out](https://www.linkedin.com/)!

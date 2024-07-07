@@ -7,6 +7,7 @@ lightbox: true
 fig-cap-location: margin
 categories:
   - python
+  - web
 toc: true
 toc-depth: 3
 author:

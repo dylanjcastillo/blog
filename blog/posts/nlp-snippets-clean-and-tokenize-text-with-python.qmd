@@ -1,10 +1,13 @@
 ---
 title: "Clean and Tokenize Text With Python"
-description: "The first step in a Machine Learning project is cleaning the data. In this article, you'll find 20 code snippets to clean and tokenize text data using Python."
+description-meta: "The first step in a Machine Learning project is cleaning the data. In this article, you'll find 20 code snippets to clean and tokenize text data using Python."
 date: "12/10/2020"
 date-modified: last-modified
 toc: true
 toc-depth: 3
+categories:
+  - python
+  - nlp
 author:
   - name: Dylan Castillo
     url: https://dylancastillo.co
