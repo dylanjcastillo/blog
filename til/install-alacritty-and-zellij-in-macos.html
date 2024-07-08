@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="06/08/2024">
+<meta name="description" content="Tips on installing Alacritty, Zellij, and Neovim in macOS.">
+
+<title>Installing Alacritty, Zellij, and Neovim in macOS – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/kbd/kbd.js"></script>
+<link href="../site_libs/quarto-contrib/kbd/kbd.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Dylan Castillo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installing-alacritty" id="toc-installing-alacritty" class="nav-link active" data-scroll-target="#installing-alacritty">Installing Alacritty</a></li>
+  <li><a href="#installing-zellij" id="toc-installing-zellij" class="nav-link" data-scroll-target="#installing-zellij">Installing Zellij</a>
+  <ul class="collapse">
+  <li><a href="#making-zellij-play-nice-with-alacritty" id="toc-making-zellij-play-nice-with-alacritty" class="nav-link" data-scroll-target="#making-zellij-play-nice-with-alacritty">Making Zellij play nice with Alacritty</a></li>
+  </ul></li>
+  <li><a href="#installing-neovim-and-lazyvim" id="toc-installing-neovim-and-lazyvim" class="nav-link" data-scroll-target="#installing-neovim-and-lazyvim">Installing Neovim and LazyVim</a></li>
+  <li><a href="#other-useful-tools" id="toc-other-useful-tools" class="nav-link" data-scroll-target="#other-useful-tools">Other useful tools</a>
+  <ul class="collapse">
+  <li><a href="#lazydocker" id="toc-lazydocker" class="nav-link" data-scroll-target="#lazydocker">lazydocker</a></li>
+  <li><a href="#lazygit" id="toc-lazygit" class="nav-link" data-scroll-target="#lazygit">lazygit</a></li>
+  <li><a href="#eza" id="toc-eza" class="nav-link" data-scroll-target="#eza">eza</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Installing Alacritty, Zellij, and Neovim in macOS</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">til</div>
+    <div class="quarto-category">alacritty</div>
+    <div class="quarto-category">zellij</div>
+    <div class="quarto-category">neovim</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 8, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Ever since I saw <a href="https://www.youtube.com/watch?v=8wU8k2kDaTo">The Matrix</a>, I’ve wanted to be a hacker.</p>
+<p>When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to exit vim.</p>
+<p>I use macOS. The closest I’ve been to being a hacker is using <a href="https://github.com/VSCodeVim/Vim">vim hotkeys</a> in VSCode.</p>
+<p>It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying <a href="https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/">“I use Arch btw”</a>. I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. So that didn’t last long.</p>
+<p>But, today, after reading about <a href="https://world.hey.com/dhh/introducing-omakub-354db366">DHH’s Omakub</a>, I though it was time to give my hacker dreams a second shot.</p>
+<p>Installing Ubuntu felt like a bit too much work<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, so I decided to settle on just upgrading my terminal.</p>
+<p>I decided to set up Alacritty, Zellij, and Neovim on my M3 MacBook Pro.</p>
+<p>Sure, I have client projects to deliver. But how could I let go of one-in-a-lifetime opportunity to procrastinate and imagine I’m a genius hacker for an afternoon?</p>
+<section id="installing-alacritty" class="level2">
+<h2 class="anchored" data-anchor-id="installing-alacritty">Installing Alacritty</h2>
+<p>Alacritty is a terminal emulator, similar to <a href="https://iterm2.com/">Iterm2</a> and others. It’s selling point is that it’s very fast due to GPU-acceleration. Plus, you also get 256 colors support by default.</p>
+<p>The best way to install it is using Homebrew:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> alacritty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, you you can customize it to your liking by creating a <code>~/.config/alacritty/alacritty.toml</code> file.</p>
+<p>I ended up modifying just a couple of things:</p>
+<ol type="1">
+<li>Increase padding.</li>
+<li>Change the font.</li>
+<li>Change the color scheme. I used One Dark from <a href="https://gist.github.com/r-darwish/f8bb21a6c89a02c4bef76cc38bddad39">this gist</a>.</li>
+</ol>
+<details>
+<summary>
+Show the code
+</summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">[</span><span class="at">window</span><span class="kw">]</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="at">padding.x = 16</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="at">padding.y = 14</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="at">decorations = "none"</span><span class="co"> # Removes the window decoration (title bar, etc.)</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">[</span><span class="at">font</span><span class="kw">]</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="at">size = 13</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co"># FiraCode Nerd Font</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="at">normal = { family = "FiraCode Nerd Font", style = "Regular" }</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="at">bold = { family = "FiraCode Nerd Font", style = "Bold" }</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="at">italic = { family = "FiraCode Nerd Font", style = "Italic" }</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co"># One Dark theme</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">[</span><span class="at">colors</span><span class="kw">]</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="kw">[</span><span class="at">colors.primary</span><span class="kw">]</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="at">background = '0x1e2127'</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="at">foreground = '0xabb2bf'</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="at">bright_foreground = '0xe6efff'</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co"># Normal colors</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="kw">[</span><span class="at">colors.normal</span><span class="kw">]</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="at">black = '0x1e2127'</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="at">red = '0xe06c75'</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="at">green = '0x98c379'</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="at">yellow = '0xd19a66'</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="at">blue = '0x61afef'</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="at">magenta = '0xc678dd'</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="at">cyan = '0x56b6c2'</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="at">white = '0x828791'</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co"># Bright colors</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="kw">[</span><span class="at">colors.bright</span><span class="kw">]</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="at">black = '0x5c6370'</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="at">red = '0xe06c75'</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="at">green = '0x98c379'</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="at">yellow = '0xd19a66'</span></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="at">blue = '0x61afef'</span></span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="at">magenta = '0xc678dd'</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="at">cyan = '0x56b6c2'</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="at">white = '0xe6efff'</span></span>
+<span id="cb2-42"><a href="#cb2-42"></a></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co"># Dim colors</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a><span class="kw">[</span><span class="at">colors.dim</span><span class="kw">]</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a><span class="at">black = '0x1e2127'</span></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="at">red = '0xe06c75'</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a><span class="at">green = '0x98c379'</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a><span class="at">yellow = '0xd19a66'</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a><span class="at">blue = '0x61afef'</span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="at">magenta = '0xc678dd'</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="at">cyan = '0x56b6c2'</span></span>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="at">white = '0x828791'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>I use <a href="https://github.com/tonsky/FiraCode">FiraCode</a> Nerd Font. <a href="https://www.nerdfonts.com/">Nerd Fonts</a> are a collection of fonts that include glyphs such as icons that represent folders, file types, <a href="https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true">weird arrows</a>, etc.</p>
+<p>You can install them using Homebrew:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">brew</span> install font-<span class="op">&lt;</span>name-of-the-font<span class="op">&gt;</span>-nerd-font <span class="co"># For example, font-fira-code-nerd-font</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="installing-zellij" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="installing-zellij">Installing Zellij</h2>
+<p>Zellij is an improved version of <a href="https://en.wikipedia.org/wiki/Tmux"><code>tmux</code></a>. Whenever I used tmux, I spent half my time figuring out the key bindings. Zellij shows the key bindings on screen (unless you disable it), which greatly improves the user experience.</p>
+<p>This is what it looks like:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/zellij-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Zellij"><img src="images/zellij-screenshot.png" class="img-fluid figure-img" alt="Zellij"></a></p>
+<figcaption class="margin-caption">Zellij</figcaption>
+</figure>
+</div>
+<p>Same as before, the best way to install it is using Homebrew.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">brew</span> install zellij</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can customize it by creating a <code>~/.config/zellij/config.kdl</code> file.</p>
+<p>I just copied the <a href="https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/themes/one-half-dark.kdl">One Half Dark</a> theme they provide.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource kdl number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>theme "one-half-dark"</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>themes {</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    one-half-dark {</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        fg 169 177 214</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        bg 26 27 38</span>
+<span id="cb5-7"><a href="#cb5-7"></a>        black 56 62 90</span>
+<span id="cb5-8"><a href="#cb5-8"></a>        red 249 51 87</span>
+<span id="cb5-9"><a href="#cb5-9"></a>        green 158 206 106</span>
+<span id="cb5-10"><a href="#cb5-10"></a>        yellow 224 175 104</span>
+<span id="cb5-11"><a href="#cb5-11"></a>        blue 122 162 247</span>
+<span id="cb5-12"><a href="#cb5-12"></a>        magenta 187 154 247</span>
+<span id="cb5-13"><a href="#cb5-13"></a>        cyan 42 195 222</span>
+<span id="cb5-14"><a href="#cb5-14"></a>        white 192 202 245</span>
+<span id="cb5-15"><a href="#cb5-15"></a>        orange 255 158 100</span>
+<span id="cb5-16"><a href="#cb5-16"></a>    }</span>
+<span id="cb5-17"><a href="#cb5-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Is One Half Dark the same as One Dark? I don’t really know. I like to live dangerously.</p>
+<section id="making-zellij-play-nice-with-alacritty" class="level3">
+<h3 class="anchored" data-anchor-id="making-zellij-play-nice-with-alacritty">Making Zellij play nice with Alacritty</h3>
+<p>Getting Alacritty to work with Zellij took me a while to figure out. But luckily it’s as simple as adding the full path to the <code>zellij</code> binary in the <code>~/.config/alacritty/alacritty.toml</code> file.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">[</span><span class="at">shell</span><span class="kw">]</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="at">     program = "/opt/homebrew/opt/bin/zellij"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="installing-neovim-and-lazyvim" class="level2">
+<h2 class="anchored" data-anchor-id="installing-neovim-and-lazyvim">Installing Neovim and LazyVim</h2>
+<p><a href="https://neovim.io/">Neovim</a> is a fork from <a href="https://www.vim.org/">Vim</a>, that solves some of Vim’s issues<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. I didn’t really know if it was better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.</p>
+<p><a href="https://github.com/LazyVim/starter">LazyVim</a> is a premade configuration for Neovim. The purists will probably hate it, but it’s a good start.</p>
+<p>I had my own <code>.vimrc</code>, and after trying LazyVim for 30 minutes or so, I realized my config sucked.</p>
+<p>First, install Neovim using Homebrew.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">brew</span> install neovim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, install LazyVim.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">git</span> clone https://github.com/LazyVim/starter ~/.config/nvim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So far, I’ve only made a few changes:</p>
+<ul>
+<li>Installed <a href="https://github.com/github/copilot.vim">Copilot</a>, <a href="https://github.com/CopilotC-Nvim/CopilotChat.nvim">CopilotChat</a>, and <a href="https://github.com/echasnovski/mini.surround">mini-surround</a>.</li>
+<li>Installed <a href="https://github.com/navarasu/onedark.nvim">One Dark</a> color scheme.</li>
+</ul>
+<p>The plugins I mentioned are available in <code>:LazyExtras</code>, so it’s very easy to install them. Run <code>:LazyExtras</code>, select the plugins, and then install them with <kbd aria-hidden="true">I</kbd><span class="visually-hidden">I</span>.</p>
+<p>To install <code>One Dark</code>, you must create a new file in <code>~/.config/nvim/lua/plugins/</code> containing the following code:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource lua number-lines code-with-copy"><code class="sourceCode lua"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">return</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="op">{</span> <span class="st">"navarasu/onedark.nvim"</span> <span class="op">},</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co">-- Configure LazyVim to load One Dark</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="st">"LazyVim/LazyVim"</span><span class="op">,</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="va">opts</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>      <span class="va">colorscheme</span> <span class="op">=</span> <span class="st">"onedark"</span><span class="op">,</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>    <span class="op">},</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>  <span class="op">},</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="other-useful-tools" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="other-useful-tools">Other useful tools</h2>
+<p>While exploring <a href="https://github.com/basecamp/omakub/">Omakub’s repository</a>, I also learned about other useful tools that I’ve now included in my daily workflow:</p>
+<section id="lazydocker" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="lazydocker">lazydocker</h3>
+<p><a href="https://github.com/jesseduffield/lazydocker">lazydocker</a>: A simple terminal UI to manage everything Docker. Much better than everything else I’ve used.</p>
+<p>Docker is great. But, until now, the experience of managing Docker containers sucked.</p>
+<p>Take a look at the main screen:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/lazydocker-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="lazydocker"><img src="images/lazydocker-screenshot.png" class="img-fluid figure-img" alt="lazydocker"></a></p>
+<figcaption class="margin-caption">lazydocker</figcaption>
+</figure>
+</div>
+</section>
+<section id="lazygit" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="lazygit">lazygit</h3>
+<p><a href="https://github.com/jesseduffield/lazygit">lazygit</a> is a simple terminal UI for <code>git</code>.</p>
+<p>I’ve found it better than GitHub Desktop when doing complex operations.</p>
+<p>Here’s a screenshot of the main screen:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/lazygit-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="lazygit"><img src="images/lazygit-screenshot.png" class="img-fluid figure-img" alt="lazygit"></a></p>
+<figcaption class="margin-caption">lazygit</figcaption>
+</figure>
+</div>
+</section>
+<section id="eza" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="eza">eza</h3>
+<p><a href="https://github.com/eza-community/eza">eza</a> is an improved version of <code>ls</code>.</p>
+<p>I also added a couple of aliases from Omakub:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="bu">alias</span> ls=<span class="st">'eza -lh --group-directories-first --icons --hyperlink'</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="bu">alias</span> lsa=<span class="st">'ls -a'</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="bu">alias</span> lt=<span class="st">'eza --tree --level=2 --long --icons --git'</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="bu">alias</span> lta=<span class="st">'lt -a'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you run <code>lta</code> you’ll get a nice view of the current directory.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/eza-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="eza"><img src="images/eza-screenshot.png" class="img-fluid figure-img" alt="eza"></a></p>
+<figcaption class="margin-caption">eza</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>That’s all. I hope you learned something from this post or, at least, got a cool looking terminal.</p>
+<p>There’s nothing else to say except that I’m never going to recover those 4 hours of my life.</p>
+<p>I should get back to work.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m sure you’re itching to explain how I’m completely wrong about this, and how you haven’t had to fix anything in years. Please reach me at <a href="mailto:elon@x.com">elon@x.com</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Can you even install Ubuntu on a Mac?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Including its horrible website.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylanjcastillo\.github\.io\/blog_quarto\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments/" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","loop":false,"descPosition":"bottom","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

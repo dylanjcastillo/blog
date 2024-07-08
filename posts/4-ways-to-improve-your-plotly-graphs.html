@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2020-05-25">
+<meta name="description" content="Making high-quality data visualizations is a critical skill for Data Scientists. Learn how to get better at it using Plotly’s python library.">
+
+<title>4 Ways To Improve Your Graphs Using Plotly – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Dylan Castillo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-make-a-graph-using-plotly" id="toc-how-to-make-a-graph-using-plotly" class="nav-link active" data-scroll-target="#how-to-make-a-graph-using-plotly">How to Make a Graph Using Plotly</a></li>
+  <li><a href="#list-of-improvements" id="toc-list-of-improvements" class="nav-link" data-scroll-target="#list-of-improvements">List of Improvements</a>
+  <ul class="collapse">
+  <li><a href="#remove-gridlines-and-background-color" id="toc-remove-gridlines-and-background-color" class="nav-link" data-scroll-target="#remove-gridlines-and-background-color">#1: Remove gridlines and background color</a></li>
+  <li><a href="#keep-consistent-colors-across-graphs" id="toc-keep-consistent-colors-across-graphs" class="nav-link" data-scroll-target="#keep-consistent-colors-across-graphs">#2: Keep consistent colors across graphs</a></li>
+  <li><a href="#use-spike-lines-to-compare-data-points" id="toc-use-spike-lines-to-compare-data-points" class="nav-link" data-scroll-target="#use-spike-lines-to-compare-data-points">#3: Use spike lines to compare data points</a></li>
+  <li><a href="#remove-floating-menu-disable-zoom-and-adjust-click-behavior" id="toc-remove-floating-menu-disable-zoom-and-adjust-click-behavior" class="nav-link" data-scroll-target="#remove-floating-menu-disable-zoom-and-adjust-click-behavior">#4: Remove floating menu, disable zoom and adjust click behavior</a></li>
+  </ul></li>
+  <li><a href="#additional-recommendations" id="toc-additional-recommendations" class="nav-link" data-scroll-target="#additional-recommendations">Additional recommendations</a></li>
+  <li><a href="#closing-words" id="toc-closing-words" class="nav-link" data-scroll-target="#closing-words">Closing Words</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">4 Ways To Improve Your Graphs Using Plotly</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">dataviz</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 25, 2020</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">July 8, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>These last weeks I’ve been working on an application using Dash and Plotly. These tools are great if you want to get something out quickly. But, as usual, there’s no magical <code>make_beautiful_graphs</code> parameter you can set to <code>True</code> by default.</p>
+<p>If you want to have beautiful and customized visualizations in your application, you’ll need to spend some time playing around with Plotly’s extensive list of figures’ attributes. I wanted to have something better than the default looks, so I went through Plotly’s documentation, old code snippets I had, and Stack Overflow questions.</p>
+<p>This is not the first time I found myself doing that. However, this time I decided to keep track of the things I frequently do when making graphs with Plotly. That way, I wouldn’t need to read the same documentation or browse the same Stack Overflow questions next time.</p>
+<p>In this article I’m compiling a list of things I frequently do when building data visualizations using Plotly. Rest assured, <a href="https://dylancastillo.co/about/">I’ve been working in data-related positions for a while</a>, so you will not find outrageous things like <em>how to make 3D pie charts</em>. These improvements are based on a sample of one, but I’ve frequently seen others applying similar ideas.</p>
+<p>I’m focusing on practical and simple improvements that apply to most of the basic charts: scatter plots, line charts, bar charts, and some statistical charts. Here you will find things like <em>removing gridlines</em> and not things like <em>selecting the best colors for your 4D contour plot</em>.</p>
+<p>First, I’ll do a brief introduction on how you build graphs using Plotly. Next, I’ll provide a list of improvements and the reasoning behind them. Last, I’ll give additional recommendations I’ve found useful when working with Plotly and other plotting libraries.</p>
+<section id="how-to-make-a-graph-using-plotly" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-make-a-graph-using-plotly">How to Make a Graph Using Plotly</h2>
+<p>There are three things you need to know about the inner workings of Plotly:</p>
+<p>First, making a graph in Plotly is essentially populating a Python dictionary. This dictionary is usually referred to as <em>figure</em>.</p>
+<p>Second, there are two keys in the <em>figure</em> dictionary: <em>layout</em> and <em>data.</em> In <em>layout,</em> you define the looks of your graph like the typography, titles, and axes. In the <em>data</em> key, you set the values and information of the traces you’ll be plotting. That could be something like [1, 2, 3] for X, [5, 3, 9] for Y and bar chart type.</p>
+<p>Finally, once you populate the <em>figure</em> dictionary, it is serialized (transformed) into a JSON structure. This resulting data structure is then used by the Plotly JavaScript library to plot your chart.</p>
+<p>That’s it.</p>
+<p>So, how do you make a <em>figure</em>?</p>
+<p>There are multiple ways to do it. The lowest-level approach is to use Python dictionaries, and the highest-level one is using the <em>Plotly Express</em> interface<em>.</em> I tend to use a mid-level interface called <em>Figure Constructor</em>. It’s easier to debug than using Python dictionaries, and it’s more flexible than <em>Plotly Express</em>.</p>
+<p>The code for making a graph using the <em>Figure Constructor</em> looks as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Simulate data</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
+<span id="cb1-8"><a href="#cb1-8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Generate graph using Figure Constructor</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    xaxis_title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    yaxis_title<span class="op">=</span><span class="st">"price"</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a>fig <span class="op">=</span> go.Figure(</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
+<span id="cb1-19"><a href="#cb1-19"></a>    layout<span class="op">=</span>layout</span>
+<span id="cb1-20"><a href="#cb1-20"></a>)</span>
+<span id="cb1-21"><a href="#cb1-21"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>How to make make a line chart using Plotly</p>
+<p>This is the resulting graph:</p>
+<iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/658.embed?autosize=true&amp;link=false">
+</iframe>
+<figcaption>
+Basic plot in Plotly
+</figcaption>
+<p>For the code snippets listed below, I used the <em>Figure Constructor</em> approach. You may need to adjust the code to make it work for your case if you are using a different interface.</p>
+<p>So let’s get down to the meat and potatoes.</p>
+</section>
+<section id="list-of-improvements" class="level2">
+<h2 class="anchored" data-anchor-id="list-of-improvements">List of Improvements</h2>
+<p>Here’s the list of things I usually do to improve Plotly graphs:</p>
+<ul>
+<li>#1: Remove gridlines and background color</li>
+<li>#2: Keep consistent colors across graphs</li>
+<li>#3: Use spikelines to compare data points</li>
+<li>#4: Remove floating menu, disable zoom and adjust click behavior</li>
+</ul>
+<section id="remove-gridlines-and-background-color" class="level3">
+<h3 class="anchored" data-anchor-id="remove-gridlines-and-background-color">#1: Remove gridlines and background color</h3>
+<p>Gridlines are lines that cross the chart to show axis divisions. They help the viewer visualize the value represented by an unlabeled data point fast. However, gridlines are not very useful when working with interactive graphs. You can hover over a data point and see its value. So more often than not, I remove gridlines when working with Plotly.</p>
+<p>Here’s how you can do it:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Simulate data</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
+<span id="cb2-8"><a href="#cb2-8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFF"</span>,  <span class="co"># Sets background color to white</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb2-14"><a href="#cb2-14"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of X-axis line</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>        showgrid<span class="op">=</span><span class="va">False</span>  <span class="co"># Removes X-axis grid lines</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>    ),</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb2-19"><a href="#cb2-19"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of Y-axis line</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>        showgrid<span class="op">=</span><span class="va">False</span>,  <span class="co"># Removes Y-axis grid lines</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a>    )</span>
+<span id="cb2-23"><a href="#cb2-23"></a>)</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>fig <span class="op">=</span> go.Figure(</span>
+<span id="cb2-26"><a href="#cb2-26"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
+<span id="cb2-27"><a href="#cb2-27"></a>    layout<span class="op">=</span>layout</span>
+<span id="cb2-28"><a href="#cb2-28"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Code snippet to remove grid lines</p>
+<p>And this is how it looks:</p>
+<iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/627.embed?autosize=true&amp;link=false">
+</iframe>
+<figcaption>
+Line chart without gridlines
+</figcaption>
+</section>
+<section id="keep-consistent-colors-across-graphs" class="level3">
+<h3 class="anchored" data-anchor-id="keep-consistent-colors-across-graphs">#2: Keep consistent colors across graphs</h3>
+<p>When working with categories, there are two things people usually like to do. First, they want to assign some specific colors to each group. For instance, if you are analyzing electoral results in the US, you probably want to use particular blue and red variations to identify the Democratic and Republican parties.</p>
+<p>Second, you want this color to remain consistent across all the graphs you do. For example, if you are analyzing some real-world companies, you may want to use their distinctive colors to plot their prices but also when you analyze their returns.</p>
+<p>Here’s how you can do that using Plotly:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Simulate data</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb3-11"><a href="#cb3-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb3-12"><a href="#cb3-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb3-16"><a href="#cb3-16"></a></span>
+<span id="cb3-17"><a href="#cb3-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb3-20"><a href="#cb3-20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb3-22"><a href="#cb3-22"></a>})</span>
+<span id="cb3-23"><a href="#cb3-23"></a></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co"># Build graph</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>COLORS_MAPPER <span class="op">=</span> {</span>
+<span id="cb3-26"><a href="#cb3-26"></a>    <span class="st">"A"</span>: <span class="st">"#38BEC9"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27"></a>    <span class="st">"B"</span>: <span class="st">"#D64545"</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a>}</span>
+<span id="cb3-29"><a href="#cb3-29"></a></span>
+<span id="cb3-30"><a href="#cb3-30"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb3-31"><a href="#cb3-31"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb3-33"><a href="#cb3-33"></a>    barmode<span class="op">=</span><span class="st">"stack"</span>,</span>
+<span id="cb3-34"><a href="#cb3-34"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-35"><a href="#cb3-35"></a>        domain<span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.5</span>],</span>
+<span id="cb3-36"><a href="#cb3-36"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb3-37"><a href="#cb3-37"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb3-38"><a href="#cb3-38"></a>    ),</span>
+<span id="cb3-39"><a href="#cb3-39"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-40"><a href="#cb3-40"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb3-41"><a href="#cb3-41"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a>    ),</span>
+<span id="cb3-43"><a href="#cb3-43"></a>    xaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-44"><a href="#cb3-44"></a>        domain<span class="op">=</span>[<span class="fl">0.6</span>, <span class="dv">1</span>],</span>
+<span id="cb3-45"><a href="#cb3-45"></a>        title<span class="op">=</span><span class="st">"returns"</span>,</span>
+<span id="cb3-46"><a href="#cb3-46"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb3-47"><a href="#cb3-47"></a>    ),</span>
+<span id="cb3-48"><a href="#cb3-48"></a>    yaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-49"><a href="#cb3-49"></a>        anchor<span class="op">=</span><span class="st">"x2"</span>,</span>
+<span id="cb3-50"><a href="#cb3-50"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a>    )</span>
+<span id="cb3-52"><a href="#cb3-52"></a>)</span>
+<span id="cb3-53"><a href="#cb3-53"></a></span>
+<span id="cb3-54"><a href="#cb3-54"></a>data <span class="op">=</span> []</span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="cf">for</span> company,col <span class="kw">in</span> COLORS_MAPPER.items():</span>
+<span id="cb3-56"><a href="#cb3-56"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb3-57"><a href="#cb3-57"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb3-58"><a href="#cb3-58"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb3-59"><a href="#cb3-59"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb3-60"><a href="#cb3-60"></a>        x<span class="op">=</span>time,</span>
+<span id="cb3-61"><a href="#cb3-61"></a>        y<span class="op">=</span>price,</span>
+<span id="cb3-62"><a href="#cb3-62"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
+<span id="cb3-63"><a href="#cb3-63"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a>        name<span class="op">=</span>company</span>
+<span id="cb3-65"><a href="#cb3-65"></a>    )</span>
+<span id="cb3-66"><a href="#cb3-66"></a>    histogram <span class="op">=</span> go.Histogram(</span>
+<span id="cb3-67"><a href="#cb3-67"></a>        x<span class="op">=</span>returns,</span>
+<span id="cb3-68"><a href="#cb3-68"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
+<span id="cb3-69"><a href="#cb3-69"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
+<span id="cb3-70"><a href="#cb3-70"></a>        xaxis<span class="op">=</span><span class="st">"x2"</span>,</span>
+<span id="cb3-71"><a href="#cb3-71"></a>        yaxis<span class="op">=</span><span class="st">"y2"</span>,</span>
+<span id="cb3-72"><a href="#cb3-72"></a>        showlegend<span class="op">=</span><span class="va">False</span></span>
+<span id="cb3-73"><a href="#cb3-73"></a>    )</span>
+<span id="cb3-74"><a href="#cb3-74"></a>    data.append(line_chart)</span>
+<span id="cb3-75"><a href="#cb3-75"></a>    data.append(histogram)</span>
+<span id="cb3-76"><a href="#cb3-76"></a></span>
+<span id="cb3-77"><a href="#cb3-77"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb3-78"><a href="#cb3-78"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/671.embed?autosize=true&amp;link=false">
+</iframe>
+<figcaption>
+Consistent colors across graphs
+</figcaption>
+<p>The snippet above allows you to keep consistent colors when working with multiple graphs that share the same categories. The critical part is the <code>COLOR_MAPPER</code> dictionary and its use when adding new traces. This dictionary is the mapping of the categories and colors you’ll be using across your charts.</p>
+<p>Whenever you add a trace to a graph, you can assign the right color to the <code>marker_color</code> attribute by getting it from the <code>COLOR_MAPPER</code> dictionary.</p>
+<p>The resulting graph looks as follows:</p>
+<p>Consistent colors across graphs</p>
+</section>
+<section id="use-spike-lines-to-compare-data-points" class="level3">
+<h3 class="anchored" data-anchor-id="use-spike-lines-to-compare-data-points">#3: Use spike lines to compare data points</h3>
+<p>A spike line is a vertical or horizontal line that appears when hovering on data. It’s useful for comparing values in line charts and scatter plots. This is how you can add those using Plotly:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># Simulate data</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb4-11"><a href="#cb4-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb4-12"><a href="#cb4-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb4-21"><a href="#cb4-21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb4-22"><a href="#cb4-22"></a>})</span>
+<span id="cb4-23"><a href="#cb4-23"></a></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co"># Build graph</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb4-26"><a href="#cb4-26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28"></a>    hovermode<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    hoverdistance<span class="op">=</span><span class="dv">100</span>, <span class="co"># Distance to show hover label of data point</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>    spikedistance<span class="op">=</span><span class="dv">1000</span>, <span class="co"># Distance to show spike</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb4-32"><a href="#cb4-32"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb4-34"><a href="#cb4-34"></a>        showspikes<span class="op">=</span><span class="va">True</span>, <span class="co"># Show spike line for X-axis</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>        <span class="co"># Format spike</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>        spikethickness<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb4-37"><a href="#cb4-37"></a>        spikedash<span class="op">=</span><span class="st">"dot"</span>,</span>
+<span id="cb4-38"><a href="#cb4-38"></a>        spikecolor<span class="op">=</span><span class="st">"#999999"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39"></a>        spikemode<span class="op">=</span><span class="st">"across"</span>,</span>
+<span id="cb4-40"><a href="#cb4-40"></a>    ),</span>
+<span id="cb4-41"><a href="#cb4-41"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb4-42"><a href="#cb4-42"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb4-43"><a href="#cb4-43"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a>    )</span>
+<span id="cb4-45"><a href="#cb4-45"></a>)</span>
+<span id="cb4-46"><a href="#cb4-46"></a></span>
+<span id="cb4-47"><a href="#cb4-47"></a>data <span class="op">=</span> []</span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
+<span id="cb4-49"><a href="#cb4-49"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb4-50"><a href="#cb4-50"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb4-51"><a href="#cb4-51"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb4-52"><a href="#cb4-52"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb4-53"><a href="#cb4-53"></a>        x<span class="op">=</span>time,</span>
+<span id="cb4-54"><a href="#cb4-54"></a>        y<span class="op">=</span>price,</span>
+<span id="cb4-55"><a href="#cb4-55"></a>        name<span class="op">=</span>company</span>
+<span id="cb4-56"><a href="#cb4-56"></a>    )</span>
+<span id="cb4-57"><a href="#cb4-57"></a>    data.append(line_chart)</span>
+<span id="cb4-58"><a href="#cb4-58"></a></span>
+<span id="cb4-59"><a href="#cb4-59"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb4-60"><a href="#cb4-60"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Code snippet to add spike lines to chart</p>
+<p>This is the resulting graph:</p>
+<iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/700.embed?autosize=true&amp;link=false">
+</iframe>
+<figcaption>
+Chart with spike lines
+</figcaption>
+</section>
+<section id="remove-floating-menu-disable-zoom-and-adjust-click-behavior" class="level3">
+<h3 class="anchored" data-anchor-id="remove-floating-menu-disable-zoom-and-adjust-click-behavior">#4: Remove floating menu, disable zoom and adjust click behavior</h3>
+<p>I’m not too fond of the floating menu that Plotly adds to your chart by default. It makes graphs look <em>cool</em>, but I’ve rarely seen people using it. It has so many options that it’s just confusing for someone looking at a graph for the first time. Usually, I remove it.</p>
+<p>Also, I like to re-define two other user interaction parameters. I prefer to limit the users’ ability to zoom in and change the behavior of clicking on a trace in the legend. In Plotly, by default, if you want to inspect a trace on its own, you have to double-click on the trace, instead of just clicking on it. That’s not very intuitive, so I tend to invert that behavior.</p>
+<p>This is how you can apply those changes:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-3"><a href="#cb5-3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Simulate data</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb5-11"><a href="#cb5-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb5-12"><a href="#cb5-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb5-22"><a href="#cb5-22"></a>})</span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co"># Build graph</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb5-26"><a href="#cb5-26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb5-28"><a href="#cb5-28"></a>    legend<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-29"><a href="#cb5-29"></a>        <span class="co"># Adjust click behavior</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a>        itemclick<span class="op">=</span><span class="st">"toggleothers"</span>,</span>
+<span id="cb5-31"><a href="#cb5-31"></a>        itemdoubleclick<span class="op">=</span><span class="st">"toggle"</span>,</span>
+<span id="cb5-32"><a href="#cb5-32"></a>    ),</span>
+<span id="cb5-33"><a href="#cb5-33"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-34"><a href="#cb5-34"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb5-35"><a href="#cb5-35"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
+<span id="cb5-37"><a href="#cb5-37"></a>    ),</span>
+<span id="cb5-38"><a href="#cb5-38"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-39"><a href="#cb5-39"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb5-40"><a href="#cb5-40"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb5-41"><a href="#cb5-41"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
+<span id="cb5-42"><a href="#cb5-42"></a>    )</span>
+<span id="cb5-43"><a href="#cb5-43"></a>)</span>
+<span id="cb5-44"><a href="#cb5-44"></a></span>
+<span id="cb5-45"><a href="#cb5-45"></a>data <span class="op">=</span> []</span>
+<span id="cb5-46"><a href="#cb5-46"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
+<span id="cb5-47"><a href="#cb5-47"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb5-48"><a href="#cb5-48"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb5-49"><a href="#cb5-49"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb5-50"><a href="#cb5-50"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb5-51"><a href="#cb5-51"></a>        x<span class="op">=</span>time,</span>
+<span id="cb5-52"><a href="#cb5-52"></a>        y<span class="op">=</span>price,</span>
+<span id="cb5-53"><a href="#cb5-53"></a>        name<span class="op">=</span>company</span>
+<span id="cb5-54"><a href="#cb5-54"></a>    )</span>
+<span id="cb5-55"><a href="#cb5-55"></a>    data.append(line_chart)</span>
+<span id="cb5-56"><a href="#cb5-56"></a></span>
+<span id="cb5-57"><a href="#cb5-57"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb5-58"><a href="#cb5-58"></a>fig.show(config<span class="op">=</span>{<span class="st">"displayModeBar"</span>: <span class="va">False</span>, <span class="st">"showTips"</span>: <span class="va">False</span>}) <span class="co"># Remove floating menu and unnecesary dialog box</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is the resulting graph:</p>
+<iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/716.embed?autosize=true&amp;link=false&amp;modebar=false">
+</iframe>
+<figcaption>
+Chart without floating menu, no-zoom and adjusted click behavior
+</figcaption>
+</section>
+</section>
+<section id="additional-recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="additional-recommendations">Additional recommendations</h2>
+<p>There are three things that I’ve found useful for learning how to make better data visualizations:</p>
+<ol type="1">
+<li>Get feedback from your audience: This is not always possible. But if you can do it, always prioritize getting input from those who will use your data visualizations. If you are working on a dashboard, the first thing you should do is understand what problem your dashboard solves. Then see users interacting with it. That has the highest ROI for your time.</li>
+<li>Check out <a href="http://www.storytellingwithdata.com/">Storytelling with Data by Cole Knaflic</a>: It’s a great book if you want to level-up your data visualization design skills. It provides a lot of practical advice and compelling use cases.</li>
+<li><a href="https://plotly.com/python/reference/">Plotly’s Figure Reference</a>: Get used to Plotly’s Figure Reference and documentation. You’ll be using it a lot. Though, there’s nothing to worry about. Plotly has great documentation!</li>
+</ol>
+</section>
+<section id="closing-words" class="level2">
+<h2 class="anchored" data-anchor-id="closing-words">Closing Words</h2>
+<p>I hope you’ve find these ideas useful. There might be some things that do not resonate with you, or others that you feel are missing. If that’s the case, please let me know in the comments below. I’ll be happy to update this and add other valuable advice.</p>
+<p>If you want to keep up-to-date with what I’m doing you can follow me on <a href="https://twitter.com/dylanjcastillo">twitter</a>.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2020,
+  author = {Castillo, Dylan},
+  title = {4 {Ways} {To} {Improve} {Your} {Graphs} {Using} {Plotly}},
+  date = {2020-05-25},
+  url = {https://dylanjcastillo.github.io/blog_quarto/posts/4-ways-to-improve-your-plotly-graphs.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2020" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2020. <span>“4 Ways To Improve Your Graphs Using
+Plotly.”</span> May 25, 2020. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/4-ways-to-improve-your-plotly-graphs.html">https://dylanjcastillo.github.io/blog_quarto/posts/4-ways-to-improve-your-plotly-graphs.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylanjcastillo\.github\.io\/blog_quarto\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments/" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,38 @@
+[
+  {
+    "listing": "/projects.html",
+    "items": []
+  },
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2023-personal-snapshot.html",
+      "/posts/clustering-documents-with-openai-langchain-hdbscan.html",
+      "/posts/code-interpreter-chatbot-pyodide-langchain-openai.html",
+      "/posts/semantic-search-elasticsearch-openai-langchain.html",
+      "/posts/semantic-search-with-opensearch-cohere-and-fastapi.html",
+      "/posts/ai-search-engine-fastapi-qdrant-chatgpt.html",
+      "/posts/tips-for-standing-out-on-linkedin.html",
+      "/posts/fastapi-nginx-gunicorn.html",
+      "/posts/my-entrepreneur-first-experience.html",
+      "/posts/python-pyscript-101.html",
+      "/posts/opensearch-python.html",
+      "/posts/text-classification-using-python-and-scikit-learn.html",
+      "/posts/elasticseach-python.html",
+      "/posts/entrepreneurship-as-a-risk-management-strategy.html",
+      "/posts/2021-personal-snapshot.html",
+      "/posts/how-to-use-github-deploy-keys.html",
+      "/posts/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.html",
+      "/posts/nlp-snippets-cluster-documents-using-word2vec.html",
+      "/posts/nlp-snippets-clean-and-tokenize-text-with-python.html",
+      "/posts/4-ways-to-improve-your-plotly-graphs.html",
+      "/posts/build-a-site-quickly-using-google-sheets-python-and-aws.html",
+      "/posts/fast-and-async-in-python-accelerate-your-requests-using-asyncio.html",
+      "/posts/mind-reading-algorithms.html",
+      "/til/django-poetry-dockerfile.html",
+      "/til/migrate-blog-from-ghost-to-quarto.html",
+      "/til/install-alacritty-and-zellij-in-macos.html",
+      "/til/live-components-with-django-and-htmx.html"
+    ]
+  }
+]
