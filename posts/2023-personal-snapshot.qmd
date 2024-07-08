@@ -35,13 +35,13 @@ Despite reaching an all-time high compared to previous years, I think I could ha
 
 I shipped five AI apps (not including client work). I developed four on my own and created one with a friend. Two of them made it to the front page of [Hacker](https://news.ycombinator.com/item?id=34547015) News and got featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence). Another one won brownie points in an [AI Shark Tank](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s).
 
-![AI apps I built in 2023](images/2023-personal-snapshot/image-2.png){height=400px}
+![AI apps I built in 2023](images/2023-personal-snapshot/image-2.png)
 
 I also wrote 9 blog posts. I was very motivated at first and worked with a good friend, [Jing](https://www.linkedin.com/in/hujingjing/), as an accountability partner. We ended up prioritizing other projects and stopped the accountability challenge, but it was fun and effective while it lasted. I'm very grateful to Jing for joining me in this challenge.
 
 I focused on writing tutorials about AI topics, but I got tired after a while. Writing high-quality tutorials demands a lot of effort. Plus, AI evolves so fast that my tutorials often become outdated within months. That sucked!
 
-![My stats looking like 💩](images/2023-personal-snapshot/image-7.png){height=300px}
+![My stats looking like 💩](images/2023-personal-snapshot/image-7.png)
 
 When I stopped writing regularly, my site's traffic started to drop. I also believe ChatGPT was a major factor. My basic-level tutorials, which ChatGPT can easily replace, have stopped growing.
 
@@ -51,7 +51,7 @@ My original plan for my blog was to share my thoughts. I ended up writing techni
 
 I posted more or less consistently on LinkedIn throughout the year. I got roughly 420k views on my posts. A third of those views came from a single [post](https://www.linkedin.com/posts/dylanjcastillo_a-hackers-guide-to-language-models-activity-7117426046404063233-_T51?utm_source=share&utm_medium=member_desktop), and I gained ~2.3k followers.
 
-![The outcome of spamming LinkedIn](images/2023-personal-snapshot/image.png){height=300px}
+![The outcome of spamming LinkedIn](images/2023-personal-snapshot/image.png)
 
 I met lots of great people and had tons of catch-ups this year. I am grateful for all the people I met this year. Special thanks go to [Max](https://www.linkedin.com/in/dr-maximilian-brunner/), [Emanuel](https://www.linkedin.com/in/emanuel-schamp/), [Sebastián](https://www.linkedin.com/in/jscastanoc/), [Edu](https://www.linkedin.com/in/eduardo-gonzalo-almorox-phd-5b8b4955), and [Rhys](https://www.linkedin.com/in/rhys-donoghue/) for the collaborations we did. Not all things went as planned, but we had fun.
 
@@ -67,7 +67,7 @@ Also, I completed 4,711 minutes of [Z2 training](https://www.howardluksmd.com/zo
 
 This year, I gave stand-up comedy a shot, all thanks to my wife. I've wanted to try it for a long time but kept coming up with excuses. For our fifth anniversary, she surprised me by signing me up for a [course](https://estudioteatromadrid.com/cursos/intensivo-curso-de-stand-up-iniciacion/). It's my favorite gift since getting a Game Boy Advance twenty years ago.
 
-![Me, holding a fart on stage](images/2023-personal-snapshot/image-4.png){height=400px}
+![Me, holding a fart on stage](images/2023-personal-snapshot/image-4.png)
 
 For those who know me in real life, you'll know that I don't enjoy speaking in public. So this was a real challenge for me. I did a presentation with family and friends and went to four [open mics](https://en.wikipedia.org/wiki/Open_mic).
 
@@ -81,6 +81,8 @@ Finally, this year has been good for my relationships with my wife, family, and 
 
 In my last snapshot, I didn't include any photos. When I revised it a few days ago, I realized I missed having them. So, this time, I've included a few.
 
+<details>
+<summary>Click to see photos</summary>
 ::: {layout-nrow=3}
 ![](images/2023-personal-snapshot/IMG_6052-2.png)
 
@@ -100,6 +102,8 @@ In my last snapshot, I didn't include any photos. When I revised it a few days a
 
 ![](images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG)
 :::
+
+</details>
 
 This year, a family highlight was my in-laws' visit to Madrid for a few months. We found out that our family loves karaoke, especially my dad and my father-in-law. It was tough to get them off the microphone!
 
