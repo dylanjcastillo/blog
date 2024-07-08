@@ -16,6 +16,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 Deployment is more of an art than science. Ask ten developers, and you'll end up with ten different ways to deploy your app. However, there are a few topics on which everyone agrees. One of those is using deploy keys.

@@ -17,6 +17,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 A few days ago, I was looking for courses that were free or discounted due to the COVID-19. I thought that others might be doing the same, so I decided to compile some resources and publish them online.

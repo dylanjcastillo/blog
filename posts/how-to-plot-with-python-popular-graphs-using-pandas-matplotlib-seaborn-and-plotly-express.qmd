@@ -16,6 +16,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 I'm teaching a course about the essential tools of Data Science at [Nuclio Digital School](https://nuclio.school/master-data-science/). Among other topics, I planned to go through the most popular data visualization libraries in Python: `pandas`, `matplotlib`, `seaborn`, and `plotly.express`.

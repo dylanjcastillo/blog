@@ -14,10 +14,6 @@ website:
       - icon: twitter
         href: https://twitter.com/dylanjcastillo
   page-footer: "Copyright 2024, Dylan Castillo"
-  comments:
-    utterances:
-      repo: dylanjcastillo/blog_comments/
-      theme: dark-blue
 
 format:
   html:

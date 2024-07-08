@@ -15,6 +15,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 A few months ago I wrote a [post](https://www.reddit.com/r/datascience/comments/vzmcc2/some_ideas_to_improve_your_linkedin_profile/) that blew up on [r/datascience](https://www.reddit.com/r/datascience/) about how to make your LinkedIn profile stand out when searching for a job.

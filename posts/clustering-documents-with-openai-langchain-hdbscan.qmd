@@ -19,6 +19,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.

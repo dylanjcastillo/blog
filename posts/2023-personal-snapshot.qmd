@@ -15,6 +15,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 This is my annual review. It serves two purposes: a deep analysis of the past year and a record of my thoughts at the time of writing.

@@ -15,6 +15,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 [LangChain](https://github.com/hwchase17/langchain) is the new cool kid on the block. It's a library designed to help you interact with Large Language Models (LLMs). Up until recently, I was building most things from scratch when working with LLMs, so I decided to give LangChain a try.

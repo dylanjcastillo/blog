@@ -16,6 +16,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 With all the buzz surrounding [Bing AI](https://blogs.microsoft.com/blog/2023/02/07/reinventing-search-with-a-new-ai-powered-microsoft-bing-and-edge-your-copilot-for-the-web/) and [Bard](https://blog.google/technology/ai/bard-google-ai-search-updates/), I was keen on building a (tiny) AI search engine myself. After a few days of tinkering, I released [Ask Seneca](https://seneca.dylancastillo.co/). It's a small app that allows you to consult a GPT-based Seneca who answers your questions and cites his sources.

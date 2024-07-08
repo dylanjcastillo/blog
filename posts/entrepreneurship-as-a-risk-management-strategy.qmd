@@ -14,6 +14,10 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
 citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
 ---
 
 Entrepreneurship, contrary to popular belief, is a great risk management strategy. Thoughtful entrepreneurs take on similar risks as employees while getting a chance to win a much larger pot.
