@@ -1,1 +1,1 @@
-Sitemap: https://dylanjcastillo.github.io/blog_quarto/sitemap.xml
+Sitemap: https://dylanjcastillo.github.io/blog/sitemap.xml

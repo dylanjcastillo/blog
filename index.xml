@@ -6,14 +6,14 @@
       version="2.0">
 <channel>
 <title>Dylan Castillo</title>
-<link>https://dylanjcastillo.github.io/blog_quarto/</link>
-<atom:link href="https://dylanjcastillo.github.io/blog_quarto/index.xml" rel="self" type="application/rss+xml"/>
+<link>https://dylanjcastillo.github.io/blog/</link>
+<atom:link href="https://dylanjcastillo.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.5.53</generator>
+<generator>quarto-1.5.54</generator>
 <lastBuildDate>Sat, 22 Jun 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>A Dockerfile for a Django app using Poetry</title>
-  <link>https://dylanjcastillo.github.io/blog_quarto/til/django-poetry-dockerfile.html</link>
+  <link>https://dylanjcastillo.github.io/blog/til/django-poetry-dockerfile.html</link>
   <description><![CDATA[ 
 
 
@@ -730,12 +730,12 @@ font-style: inherit;"> pyproject.toml</span></span></code></pre></div>
   <category>til</category>
   <category>python</category>
   <category>django</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/til/django-poetry-dockerfile.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/til/django-poetry-dockerfile.html</guid>
   <pubDate>Sat, 22 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Migrate blog from Ghost to Quarto</title>
-  <link>https://dylanjcastillo.github.io/blog_quarto/til/migrate-blog-from-ghost-to-quarto.html</link>
+  <link>https://dylanjcastillo.github.io/blog/til/migrate-blog-from-ghost-to-quarto.html</link>
   <description><![CDATA[ 
 
 
@@ -754,7 +754,7 @@ font-style: inherit;"> pyproject.toml</span></span></code></pre></div>
 <p>Then click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="https://dylanjcastillo.github.io/blog_quarto/til/images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
+<p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="https://dylanjcastillo.github.io/blog/til/images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
 <figcaption class="margin-caption">Exporting my blog</figcaption>
 </figure>
 </div>
@@ -1222,12 +1222,12 @@ font-style: inherit;">file</span>)</span>
 </section></div> ]]></description>
   <category>til</category>
   <category>quarto</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/til/migrate-blog-from-ghost-to-quarto.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/til/migrate-blog-from-ghost-to-quarto.html</guid>
   <pubDate>Sun, 16 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Installing Alacritty, Zellij, and Neovim in macOS</title>
-  <link>https://dylanjcastillo.github.io/blog_quarto/til/install-alacritty-and-zellij-in-macos.html</link>
+  <link>https://dylanjcastillo.github.io/blog/til/install-alacritty-and-zellij-in-macos.html</link>
   <description><![CDATA[ 
 
 
@@ -1468,7 +1468,7 @@ font-style: inherit;"># For example, font-fira-code-nerd-font</span></span></cod
 <p>This is what it looks like:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/zellij-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Zellij"><img src="https://dylanjcastillo.github.io/blog_quarto/til/images/zellij-screenshot.png" class="img-fluid figure-img" alt="Zellij"></a></p>
+<p><a href="images/zellij-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Zellij"><img src="https://dylanjcastillo.github.io/blog/til/images/zellij-screenshot.png" class="img-fluid figure-img" alt="Zellij"></a></p>
 <figcaption class="margin-caption">Zellij</figcaption>
 </figure>
 </div>
@@ -1594,7 +1594,7 @@ font-style: inherit;">}</span></span></code></pre></div>
 <p>Take a look at the main screen:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/lazydocker-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="lazydocker"><img src="https://dylanjcastillo.github.io/blog_quarto/til/images/lazydocker-screenshot.png" class="img-fluid figure-img" alt="lazydocker"></a></p>
+<p><a href="images/lazydocker-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="lazydocker"><img src="https://dylanjcastillo.github.io/blog/til/images/lazydocker-screenshot.png" class="img-fluid figure-img" alt="lazydocker"></a></p>
 <figcaption class="margin-caption">lazydocker</figcaption>
 </figure>
 </div>
@@ -1606,7 +1606,7 @@ font-style: inherit;">}</span></span></code></pre></div>
 <p>Here’s a screenshot of the main screen:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/lazygit-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="lazygit"><img src="https://dylanjcastillo.github.io/blog_quarto/til/images/lazygit-screenshot.png" class="img-fluid figure-img" alt="lazygit"></a></p>
+<p><a href="images/lazygit-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="lazygit"><img src="https://dylanjcastillo.github.io/blog/til/images/lazygit-screenshot.png" class="img-fluid figure-img" alt="lazygit"></a></p>
 <figcaption class="margin-caption">lazygit</figcaption>
 </figure>
 </div>
@@ -1638,7 +1638,7 @@ font-style: inherit;">'lt -a'</span></span></code></pre></div>
 <p>If you run <code>lta</code> you’ll get a nice view of the current directory.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/eza-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="eza"><img src="https://dylanjcastillo.github.io/blog_quarto/til/images/eza-screenshot.png" class="img-fluid figure-img" alt="eza"></a></p>
+<p><a href="images/eza-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="eza"><img src="https://dylanjcastillo.github.io/blog/til/images/eza-screenshot.png" class="img-fluid figure-img" alt="eza"></a></p>
 <figcaption class="margin-caption">eza</figcaption>
 </figure>
 </div>
@@ -1666,13 +1666,13 @@ font-style: inherit;">'lt -a'</span></span></code></pre></div>
   <category>alacritty</category>
   <category>zellij</category>
   <category>neovim</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/til/install-alacritty-and-zellij-in-macos.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/til/install-alacritty-and-zellij-in-macos.html</guid>
   <pubDate>Sat, 08 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Live Components with Django and htmx</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/til/live-components-with-django-and-htmx.html</link>
+  <link>https://dylanjcastillo.github.io/blog/til/live-components-with-django-and-htmx.html</link>
   <description><![CDATA[ 
 
 
@@ -2601,23 +2601,23 @@ font-style: inherit;">"Stopped notification publisher"</span>)</span></code></pr
   author = {Castillo, Dylan},
   title = {Live {Components} with {Django} and Htmx},
   date = {2024-01-28},
-  url = {https://dylanjcastillo.github.io/blog_quarto/til/live-components-with-django-and-htmx.html},
+  url = {https://dylanjcastillo.github.io/blog/til/live-components-with-django-and-htmx.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2024. <span>“Live Components with Django and
-Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog_quarto/til/live-components-with-django-and-htmx.html">https://dylanjcastillo.github.io/blog_quarto/til/live-components-with-django-and-htmx.html</a>.
+Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog/til/live-components-with-django-and-htmx.html">https://dylanjcastillo.github.io/blog/til/live-components-with-django-and-htmx.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>django</category>
   <category>htmx</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/til/live-components-with-django-and-htmx.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/til/live-components-with-django-and-htmx.html</guid>
   <pubDate>Sun, 28 Jan 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>2023: Personal Snapshot</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/2023-personal-snapshot.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/2023-personal-snapshot.html</link>
   <description><![CDATA[ 
 
 
@@ -2631,7 +2631,7 @@ Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog
 <p>According to my <a href="https://github.com/dylanjcastillo/">GitHub account</a>, I committed code 276 out of 365 days in 2023. I likely coded even more since there were days when I didn’t commit my code. Also, sometimes I used a different account for projects due to company policy.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Squint to see the secret message"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-1.png" class="img-fluid figure-img" alt="Squint to see the secret message"></a></p>
+<p><a href="images/2023-personal-snapshot/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Squint to see the secret message"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-1.png" class="img-fluid figure-img" alt="Squint to see the secret message"></a></p>
 <figcaption class="margin-caption">Squint to see the secret message</figcaption>
 </figure>
 </div>
@@ -2640,7 +2640,7 @@ Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog
 <p>I shipped five AI apps (not including client work). I developed four on my own and created one with a friend. Two of them made it to the front page of <a href="https://news.ycombinator.com/item?id=34547015">Hacker</a> News and got featured in <a href="https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence">The Economist</a>. Another one won brownie points in an <a href="https://www.youtube.com/watch?v=0Sz-Nmi_5xg&amp;t=1432s">AI Shark Tank</a>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="AI apps I built in 2023"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-2.png" class="img-fluid figure-img" alt="AI apps I built in 2023"></a></p>
+<p><a href="images/2023-personal-snapshot/image-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="AI apps I built in 2023"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-2.png" class="img-fluid figure-img" alt="AI apps I built in 2023"></a></p>
 <figcaption class="margin-caption">AI apps I built in 2023</figcaption>
 </figure>
 </div>
@@ -2648,7 +2648,7 @@ Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog
 <p>I focused on writing tutorials about AI topics, but I got tired after a while. Writing high-quality tutorials demands a lot of effort. Plus, AI evolves so fast that my tutorials often become outdated within months. That sucked!</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="My stats looking like 💩"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-7.png" class="img-fluid figure-img" alt="My stats looking like 💩"></a></p>
+<p><a href="images/2023-personal-snapshot/image-7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="My stats looking like 💩"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-7.png" class="img-fluid figure-img" alt="My stats looking like 💩"></a></p>
 <figcaption class="margin-caption">My stats looking like 💩</figcaption>
 </figure>
 </div>
@@ -2658,7 +2658,7 @@ Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog
 <p>I posted more or less consistently on LinkedIn throughout the year. I got roughly 420k views on my posts. A third of those views came from a single <a href="https://www.linkedin.com/posts/dylanjcastillo_a-hackers-guide-to-language-models-activity-7117426046404063233-_T51?utm_source=share&amp;utm_medium=member_desktop">post</a>, and I gained ~2.3k followers.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="The outcome of spamming LinkedIn"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image.png" class="img-fluid figure-img" alt="The outcome of spamming LinkedIn"></a></p>
+<p><a href="images/2023-personal-snapshot/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="The outcome of spamming LinkedIn"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image.png" class="img-fluid figure-img" alt="The outcome of spamming LinkedIn"></a></p>
 <figcaption class="margin-caption">The outcome of spamming LinkedIn</figcaption>
 </figure>
 </div>
@@ -2671,7 +2671,7 @@ Htmx.”</span> January 28, 2024. <a href="https://dylanjcastillo.github.io/blog
 <p>This year, I gave stand-up comedy a shot, all thanks to my wife. I’ve wanted to try it for a long time but kept coming up with excuses. For our fifth anniversary, she surprised me by signing me up for a <a href="https://estudioteatromadrid.com/cursos/intensivo-curso-de-stand-up-iniciacion/">course</a>. It’s my favorite gift since getting a Game Boy Advance twenty years ago.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Me, holding a fart on stage"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-4.png" class="img-fluid figure-img" alt="Me, holding a fart on stage"></a></p>
+<p><a href="images/2023-personal-snapshot/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Me, holding a fart on stage"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-4.png" class="img-fluid figure-img" alt="Me, holding a fart on stage"></a></p>
 <figcaption class="margin-caption">Me, holding a fart on stage</figcaption>
 </figure>
 </div>
@@ -2691,35 +2691,35 @@ Click to see photos
 <div class="quarto-layout-panel" data-layout-nrow="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/IMG_6052-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/IMG_6052-2.png" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/IMG_6052-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/IMG_6052-2.png" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="img-fluid"></a></p>
 </div>
 </div>
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="img-fluid"></a></p>
 </div>
 </div>
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="img-fluid"></a></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="img-fluid"></a></p>
+<p><a href="images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="img-fluid"></a></p>
 </div>
 </div>
 </div>
@@ -2736,7 +2736,7 @@ Click to see photos
 <p>Though, bootstrapping isn’t easy either. My most successful AI product made 60€. Just enough for a decent dinner for two in Madrid.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-5-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="My “best” AI product"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-5-1-1.png" height="300" alt="My “best” AI product" class="figure-img"></a></p>
+<p><a href="images/2023-personal-snapshot/image-5-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="My “best” AI product"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-5-1-1.png" height="300" alt="My “best” AI product" class="figure-img"></a></p>
 <figcaption class="margin-caption">My “best” AI product</figcaption>
 </figure>
 </div>
@@ -2746,7 +2746,7 @@ Click to see photos
 <p>I’ve always dreamed of creating a product, so I ignored the market’s pull towards a consulting company. Instead of doubling down on the demand, I often said no, aiming to focus on my product ideas. After spending much of this year like a person with a hammer in search of a nail, I’ve decided to reverse my approach.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Me running away from the demand"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/2023-personal-snapshot/image-6.png" class="img-fluid figure-img" alt="Me running away from the demand"></a></p>
+<p><a href="images/2023-personal-snapshot/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Me running away from the demand"><img src="https://dylanjcastillo.github.io/blog/posts/images/2023-personal-snapshot/image-6.png" class="img-fluid figure-img" alt="Me running away from the demand"></a></p>
 <figcaption class="margin-caption">Me running away from the demand</figcaption>
 </figure>
 </div>
@@ -2767,21 +2767,21 @@ Click to see photos
   author = {Castillo, Dylan},
   title = {2023: {Personal} {Snapshot}},
   date = {2024-01-05},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/2023-personal-snapshot.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/2023-personal-snapshot.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2024. <span>“2023: Personal Snapshot.”</span> January
-5, 2024. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/2023-personal-snapshot.html">https://dylanjcastillo.github.io/blog_quarto/posts/2023-personal-snapshot.html</a>.
+5, 2024. <a href="https://dylanjcastillo.github.io/blog/posts/2023-personal-snapshot.html">https://dylanjcastillo.github.io/blog/posts/2023-personal-snapshot.html</a>.
 </div></div></section></div> ]]></description>
   <category>personal-snapshot</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/2023-personal-snapshot.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/2023-personal-snapshot.html</guid>
   <pubDate>Fri, 05 Jan 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/clustering-documents-with-openai-langchain-hdbscan.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/clustering-documents-with-openai-langchain-hdbscan.html</link>
   <description><![CDATA[ 
 
 
@@ -3043,7 +3043,7 @@ background-color: null;
 font-style: inherit;">'cluster'</span>)</span>
 <span id="cb8-11">fig.show()</span></code></pre></div>
 <p>You should get something similar to this graph:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid">This will give you a sense of how good are the clusters generated.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid">This will give you a sense of how good are the clusters generated.</p>
 </section>
 <section id="create-a-topic-title-per-cluster" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-topic-title-per-cluster">Create a Topic Title per Cluster</h3>
@@ -3276,7 +3276,7 @@ font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"topic_title"</span>]).head())</span></code></pre></div>
 <p>In my case, running this code produces the following articles and topic titles:</p>
-<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
+<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylanjcastillo.github.io/blog/posts/images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
 <p>All articles seem to be related to the topic title. Yay!</p>
 </section>
 <section id="conclusion" class="level3">
@@ -3293,24 +3293,24 @@ font-style: inherit;">"topic_title"</span>]).head())</span></code></pre></div>
   title = {Clustering {Documents} with {OpenAI} Embeddings, {HDBSCAN}
     and {UMAP}},
   date = {2023-06-09},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/clustering-documents-with-openai-langchain-hdbscan.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/clustering-documents-with-openai-langchain-hdbscan.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Clustering Documents with OpenAI
-Embeddings, HDBSCAN and UMAP.”</span> June 9, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/clustering-documents-with-openai-langchain-hdbscan.html">https://dylanjcastillo.github.io/blog_quarto/posts/clustering-documents-with-openai-langchain-hdbscan.html</a>.
+Embeddings, HDBSCAN and UMAP.”</span> June 9, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/clustering-documents-with-openai-langchain-hdbscan.html">https://dylanjcastillo.github.io/blog/posts/clustering-documents-with-openai-langchain-hdbscan.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>ml</category>
   <category>llm</category>
   <category>openai</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/clustering-documents-with-openai-langchain-hdbscan.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/clustering-documents-with-openai-langchain-hdbscan.html</guid>
   <pubDate>Fri, 09 Jun 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</link>
   <description><![CDATA[ 
 
 
@@ -4420,11 +4420,11 @@ font-style: inherit;">"templates"</span>)</span>
 <p>To test the app, <code>cd</code> into <code>src/</code> and run this code in a terminal within the virtual environment:</p>
 <div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1">litestar run --reload</span></code></pre></div>
 <p>If everything goes well, you’ll see an output similar to this one:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></p>
 <p>Next, open <code>http://127.0.0.1:8000</code> on your browser. You should see the app’s UI.</p>
 <p>Try asking a question to the chatbot. For example, you can ask when were the highest and lowest closing prices of AAPL.</p>
 <p>You should get the following result:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image.png" class="img-fluid"></p>
 <p>That’s all! You’ve built a chatbot capable of running code on your browser.</p>
 </section>
 <section id="next-steps" class="level2">
@@ -4452,23 +4452,23 @@ font-style: inherit;">"templates"</span>)</span>
   title = {Create a {Code} {Interpreter} {Chatbot} with {Pyodide,}
     {LangChain,} and {OpenAI}},
   date = {2023-05-12},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/code-interpreter-chatbot-pyodide-langchain-openai.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/code-interpreter-chatbot-pyodide-langchain-openai.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Create a Code Interpreter Chatbot with
-Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/code-interpreter-chatbot-pyodide-langchain-openai.html">https://dylanjcastillo.github.io/blog_quarto/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</a>.
+Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/code-interpreter-chatbot-pyodide-langchain-openai.html">https://dylanjcastillo.github.io/blog/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>llm</category>
   <category>openai</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</guid>
   <pubDate>Fri, 12 May 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Semantic Search with Elasticsearch, OpenAI, and LangChain</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-elasticsearch-openai-langchain.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/semantic-search-elasticsearch-openai-langchain.html</link>
   <description><![CDATA[ 
 
 
@@ -4498,7 +4498,7 @@ Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylanjc
 <li><strong>Search app:</strong> This is a backend service that uses the user’s search term, generates an embedding from it, and then looks for the most similar embeddings in the vector database.</li>
 </ol>
 <p>Here’s a diagram of this architecture:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="img-fluid"></p>
 <p>If you’ve read my previous <a href="https://dylancastillo.co/semantic-search-with-opensearch-cohere-and-fastapi/">tutorial</a> on semantic search, you might have noticed that the <strong>vectorizer</strong> isn’t part of this architecture. I’m purposely skipping it because <code>langchain</code> takes care of that part for you, so you can have the indexer and vectorizer in the same place.</p>
 <p>Next, you’ll set up your local environment.</p>
 </section>
@@ -4966,8 +4966,8 @@ font-style: inherit;">"response"</span>: response,</span>
 <p>Finally, you can run the app from the terminal (using your virtual environment):</p>
 <div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1">uvicorn app:app --reload</span></code></pre></div>
 <p>Then, visit <code>http://127.0.0.1:8000/docs</code>, and test <code>/ask</code> by making a question about the book:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid">If everything went well, you should get something like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid">That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid">If everything went well, you should get something like this:</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid">That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
 </section>
 <section id="going-to-production" class="level2">
 <h2 class="anchored" data-anchor-id="going-to-production">Going to Production</h2>
@@ -5000,23 +5000,23 @@ font-style: inherit;">"response"</span>: response,</span>
   title = {Semantic {Search} with {Elasticsearch,} {OpenAI,} and
     {LangChain}},
   date = {2023-04-27},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-elasticsearch-openai-langchain.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/semantic-search-elasticsearch-openai-langchain.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Semantic Search with Elasticsearch,
-OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-elasticsearch-openai-langchain.html">https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-elasticsearch-openai-langchain.html</a>.
+OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/semantic-search-elasticsearch-openai-langchain.html">https://dylanjcastillo.github.io/blog/posts/semantic-search-elasticsearch-openai-langchain.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>ml</category>
   <category>nlp</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-elasticsearch-openai-langchain.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/semantic-search-elasticsearch-openai-langchain.html</guid>
   <pubDate>Thu, 27 Apr 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Semantic Search with OpenSearch, Cohere, and FastAPI</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</link>
   <description><![CDATA[ 
 
 
@@ -5053,7 +5053,7 @@ OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylanjcastillo
 <li><strong>Search client:</strong> This is a FastAPI-based backend service that processes the user’s query, vectorizes it, and searches the vector database for the most similar vectors.</li>
 </ol>
 <p>Here’s a diagram of all the components:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="img-fluid"></p>
 <p>Architecture diagram</p>
 <p>Next, you’ll set up your local environment to run the project.</p>
 </section>
@@ -5735,8 +5735,8 @@ font-style: inherit;">"response"</span>: response,</span>
 <li><strong>Lines 28 to 49</strong> define a<code>**/**search</code> endpoint that accepts a query string parameter. It uses Cohere to generate an embedding from a query and then searches the OpenSearch index for the ten most similar documents. Finally, it formats the results as a user response.</li>
 </ul>
 <p>To run the app, you can use <code>uvicorn app:app --reload</code>. You can test the app by opening your browser, navigating to <code>localhost:8000/docs</code>, and clicking on <code>POST /search</code>:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid">For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid">That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid">For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid">That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
@@ -5757,23 +5757,23 @@ font-style: inherit;">"response"</span>: response,</span>
   author = {Castillo, Dylan},
   title = {Semantic {Search} with {OpenSearch,} {Cohere,} and {FastAPI}},
   date = {2023-04-11},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Semantic Search with OpenSearch, Cohere,
-and FastAPI.”</span> April 11, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi.html">https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</a>.
+and FastAPI.”</span> April 11, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi.html">https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>ml</category>
   <category>nlp</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</guid>
   <pubDate>Tue, 11 Apr 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Build an AI Search Engine Using FastAPI, Qdrant, and ChatGPT</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</link>
   <description><![CDATA[ 
 
 
@@ -5803,7 +5803,7 @@ and FastAPI.”</span> April 11, 2023. <a href="https://dylanjcastillo.github.io
 <li><strong>Search:</strong> This consists of a backend service that processes the user’s query, vectorizes it, finds vectors in the index that are the most similar to it, and then calls OpenAI’s API to generate a summarized answer for the user.</li>
 </ol>
 <p>Here’s a visual representation of how the parts of the application you’ll build in this tutorial fit together:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png" class="img-fluid"></p>
 <p>That’s all. Let’s continue!</p>
 </section>
 <section id="set-up-your-local-environment" class="level2">
@@ -5884,7 +5884,7 @@ Note
 <section id="qdrant" class="level3">
 <h3 class="anchored" data-anchor-id="qdrant">Qdrant</h3>
 <p>Create an account at <a href="https://cloud.qdrant.io/">Qdrant</a>, if you don’t already have one. Then, on your account page go to <em>Clusters &gt; Create,</em> and create a cluster of 1GB of RAM, 0.5 vCPU, and 20GB Disk. Qdrant has a generous free tier, and it’s free to run a cluster with those specifications.</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="img-fluid"></p>
 <p>Next, paste the host and API key you obtained when you created your cluster into <code>.env</code>:</p>
 <div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">QDRANT_PORT=6333</span>
 <span id="cb5-2">QDRANT_HOST=&lt;your_qdrant_host&gt;</span>
@@ -5895,7 +5895,7 @@ Note
 <section id="openai" class="level3">
 <h3 class="anchored" data-anchor-id="openai">OpenAI</h3>
 <p>If you don’t have an OpenAI account, <a href="https://platform.openai.com/login">create one</a>. After that, go to <em>Manage account &gt; API keys &gt; &nbsp;+ Create new secret key.</em></p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="img-fluid"></p>
 <p>Then, paste the generated key in <code>.env</code>:</p>
 <div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1">QDRANT_PORT=6333</span>
 <span id="cb6-2">QDRANT_HOST=&lt;your_qdrant_host&gt;</span>
@@ -6635,8 +6635,8 @@ font-style: inherit;">--</span><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">reload</span></span></code></pre></div>
 <p>In your browser, navigate to <code>localhost:8000/docs</code> to test your <code>/ask</code> endpoint:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="img-fluid">A successful response will look as follows:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png" class="img-fluid">That’s it! You have a working version of your AI search engine. Next, I’ll mention some ideas about deployment.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="img-fluid">A successful response will look as follows:</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png" class="img-fluid">That’s it! You have a working version of your AI search engine. Next, I’ll mention some ideas about deployment.</p>
 </section>
 <section id="deploy-your-app" class="level2">
 <h2 class="anchored" data-anchor-id="deploy-your-app">Deploy Your App</h2>
@@ -6667,23 +6667,23 @@ font-style: inherit;">reload</span></span></code></pre></div>
   title = {Build an {AI} {Search} {Engine} {Using} {FastAPI,} {Qdrant,}
     and {ChatGPT}},
   date = {2023-03-03},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/ai-search-engine-fastapi-qdrant-chatgpt.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/ai-search-engine-fastapi-qdrant-chatgpt.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Build an AI Search Engine Using FastAPI,
-Qdrant, and ChatGPT.”</span> March 3, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/ai-search-engine-fastapi-qdrant-chatgpt.html">https://dylanjcastillo.github.io/blog_quarto/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</a>.
+Qdrant, and ChatGPT.”</span> March 3, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/ai-search-engine-fastapi-qdrant-chatgpt.html">https://dylanjcastillo.github.io/blog/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>llm</category>
   <category>openai</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</guid>
   <pubDate>Fri, 03 Mar 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Tips for Standing Out on LinkedIn</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/tips-for-standing-out-on-linkedin.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/tips-for-standing-out-on-linkedin.html</link>
   <description><![CDATA[ 
 
 
@@ -6814,21 +6814,21 @@ Consider how many people are willing to lie to get a job; if you sell yourself s
   author = {Castillo, Dylan},
   title = {Tips for {Standing} {Out} on {LinkedIn}},
   date = {2023-02-17},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/tips-for-standing-out-on-linkedin.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/tips-for-standing-out-on-linkedin.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“Tips for Standing Out on LinkedIn.”</span>
-February 17, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/tips-for-standing-out-on-linkedin.html">https://dylanjcastillo.github.io/blog_quarto/posts/tips-for-standing-out-on-linkedin.html</a>.
+February 17, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/tips-for-standing-out-on-linkedin.html">https://dylanjcastillo.github.io/blog/posts/tips-for-standing-out-on-linkedin.html</a>.
 </div></div></section></div> ]]></description>
   <category>productivity</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/tips-for-standing-out-on-linkedin.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/tips-for-standing-out-on-linkedin.html</guid>
   <pubDate>Fri, 17 Feb 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>How to Securely Deploy a FastAPI app with NGINX and Gunicorn</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/fastapi-nginx-gunicorn.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/fastapi-nginx-gunicorn.html</link>
   <description><![CDATA[ 
 
 
@@ -7375,22 +7375,22 @@ font-style: inherit;">}</span></span></code></pre></div>
   title = {How to {Securely} {Deploy} a {FastAPI} App with {NGINX} and
     {Gunicorn}},
   date = {2023-02-03},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/fastapi-nginx-gunicorn.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/fastapi-nginx-gunicorn.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“How to Securely Deploy a FastAPI App with
-NGINX and Gunicorn.”</span> February 3, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/fastapi-nginx-gunicorn.html">https://dylanjcastillo.github.io/blog_quarto/posts/fastapi-nginx-gunicorn.html</a>.
+NGINX and Gunicorn.”</span> February 3, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/fastapi-nginx-gunicorn.html">https://dylanjcastillo.github.io/blog/posts/fastapi-nginx-gunicorn.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>web</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/fastapi-nginx-gunicorn.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/fastapi-nginx-gunicorn.html</guid>
   <pubDate>Fri, 03 Feb 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>My Experience at Entrepreneur First</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/my-entrepreneur-first-experience.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/my-entrepreneur-first-experience.html</link>
   <description><![CDATA[ 
 
 
@@ -7484,21 +7484,21 @@ NGINX and Gunicorn.”</span> February 3, 2023. <a href="https://dylanjcastillo.
   author = {Castillo, Dylan},
   title = {My {Experience} at {Entrepreneur} {First}},
   date = {2023-01-20},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/my-entrepreneur-first-experience.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/my-entrepreneur-first-experience.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2023. <span>“My Experience at Entrepreneur
-First.”</span> January 20, 2023. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/my-entrepreneur-first-experience.html">https://dylanjcastillo.github.io/blog_quarto/posts/my-entrepreneur-first-experience.html</a>.
+First.”</span> January 20, 2023. <a href="https://dylanjcastillo.github.io/blog/posts/my-entrepreneur-first-experience.html">https://dylanjcastillo.github.io/blog/posts/my-entrepreneur-first-experience.html</a>.
 </div></div></section></div> ]]></description>
   <category>personal</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/my-entrepreneur-first-experience.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/my-entrepreneur-first-experience.html</guid>
   <pubDate>Fri, 20 Jan 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>PyScript 101</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/python-pyscript-101.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/python-pyscript-101.html</link>
   <description><![CDATA[ 
 
 
@@ -8171,21 +8171,21 @@ font-style: inherit;">&gt;</span></span></code></pre></div>
   author = {Castillo, Dylan},
   title = {PyScript 101},
   date = {2022-09-21},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/python-pyscript-101.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/python-pyscript-101.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“PyScript 101.”</span> September 21, 2022.
-<a href="https://dylanjcastillo.github.io/blog_quarto/posts/python-pyscript-101.html">https://dylanjcastillo.github.io/blog_quarto/posts/python-pyscript-101.html</a>.
+<a href="https://dylanjcastillo.github.io/blog/posts/python-pyscript-101.html">https://dylanjcastillo.github.io/blog/posts/python-pyscript-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/python-pyscript-101.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/python-pyscript-101.html</guid>
   <pubDate>Wed, 21 Sep 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>How to Use OpenSearch in Python</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/opensearch-python.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/opensearch-python.html</link>
   <description><![CDATA[ 
 
 
@@ -8289,7 +8289,7 @@ font-style: inherit;">False</span>,</span>
 <li><code>**verify_certs**</code>, <code>**ssl_assert_hostname**</code>, and <code>**ssl_show_warn**</code>: The first two security parameters that you’ll set to false, as this is a cluster running locally only used for development purposes. The last parameter prevents the client from raising a warning when initiating the connection with the cluster.</li>
 </ul>
 <p>If everything went well, your output should look like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/opensearch-python/image-4.png" class="img-fluid">Next, you’ll read the data you’ll use in the tutorial.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/opensearch-python/image-4.png" class="img-fluid">Next, you’ll read the data you’ll use in the tutorial.</p>
 </section>
 <section id="read-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="read-the-data">Read the Data</h2>
@@ -8602,7 +8602,7 @@ font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"json"</span>)</span></code></pre></div>
 <p>Your output should look like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/opensearch-python/image-5.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/opensearch-python/image-5.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="search-your-data" class="level2">
@@ -8658,7 +8658,7 @@ font-style: inherit;">"tim burton"</span>}}}},</span>
 <span id="cb9-15">)</span>
 <span id="cb9-16">resp</span></code></pre></div>
 <p>When you run this code, you should get a very long response that looks something like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/opensearch-python/image-6.png" class="img-fluid">There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/opensearch-python/image-6.png" class="img-fluid">There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
 </section>
 <section id="delete-documents-from-the-index" class="level2">
 <h2 class="anchored" data-anchor-id="delete-documents-from-the-index">Delete Documents From the Index</h2>
@@ -8705,22 +8705,22 @@ font-style: inherit;">'movies'</span>)</span></code></pre></div>
   author = {Castillo, Dylan},
   title = {How to {Use} {OpenSearch} in {Python}},
   date = {2022-08-31},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/opensearch-python.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/opensearch-python.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“How to Use OpenSearch in Python.”</span>
-August 31, 2022. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/opensearch-python.html">https://dylanjcastillo.github.io/blog_quarto/posts/opensearch-python.html</a>.
+August 31, 2022. <a href="https://dylanjcastillo.github.io/blog/posts/opensearch-python.html">https://dylanjcastillo.github.io/blog/posts/opensearch-python.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>nlp</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/opensearch-python.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/opensearch-python.html</guid>
   <pubDate>Wed, 31 Aug 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Text Classification Using Python and Scikit-learn</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/text-classification-using-python-and-scikit-learn.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/text-classification-using-python-and-scikit-learn.html</link>
   <description><![CDATA[ 
 
 
@@ -9057,7 +9057,7 @@ font-style: inherit;">print</span>(classification_report(y_test, preds))</span><
 <p>In <strong>lines 1 and 2</strong>, you train a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html">Multinomial Naive Bayes</a> model. This simple probabilistic model is commonly used in cases with discrete features such as word counts.</p>
 <p>Then, in <strong>lines 4 and 5</strong>, you evaluate the model’s results by computing the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_fscore_support.html">precision, recall, and f1 scores</a>.</p>
 <p>After you run the code, you’ll get an output that will look something like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/text-classification-using-python-and-scikit-learn/image-3.png" class="img-fluid">You’ve trained the model and obtained the relevant evaluation metrics. You achieved an 0.83 f1 score, which is not bad!</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/text-classification-using-python-and-scikit-learn/image-3.png" class="img-fluid">You’ve trained the model and obtained the relevant evaluation metrics. You achieved an 0.83 f1 score, which is not bad!</p>
 <p>Next, you’ll learn how to save and load your model so that you can use it for inference.</p>
 </section>
 <section id="saving-and-loading-the-model" class="level2">
@@ -9130,23 +9130,23 @@ font-style: inherit;">=</span> vec_saved.transform(sample_text)</span>
   author = {Castillo, Dylan},
   title = {Text {Classification} {Using} {Python} and {Scikit-learn}},
   date = {2022-08-23},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/text-classification-using-python-and-scikit-learn.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/text-classification-using-python-and-scikit-learn.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“Text Classification Using Python and
-Scikit-Learn.”</span> August 23, 2022. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/text-classification-using-python-and-scikit-learn.html">https://dylanjcastillo.github.io/blog_quarto/posts/text-classification-using-python-and-scikit-learn.html</a>.
+Scikit-Learn.”</span> August 23, 2022. <a href="https://dylanjcastillo.github.io/blog/posts/text-classification-using-python-and-scikit-learn.html">https://dylanjcastillo.github.io/blog/posts/text-classification-using-python-and-scikit-learn.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>ml</category>
   <category>nlp</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/text-classification-using-python-and-scikit-learn.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/text-classification-using-python-and-scikit-learn.html</guid>
   <pubDate>Tue, 23 Aug 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>How to Use Elasticsearch in Python</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/elasticseach-python.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/elasticseach-python.html</link>
   <description><![CDATA[ 
 
 
@@ -9207,7 +9207,7 @@ font-style: inherit;">"http://localhost:9200"</span>)</span>
 <span id="cb3-4">es.info().body</span></code></pre></div>
 <p>This will connect to your local cluster. Make sure to use <code>http</code> instead of <code>https</code>. If you don’t, you’ll get an error as you don’t have a valid SSL/TLS certificate. Note that in production, you’ll want to use <code>https</code>.</p>
 <p>If everything went well, you should see an output similar to mine:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/elasticsearch-python/image-6.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/elasticsearch-python/image-6.png" class="img-fluid"></p>
 <p>Now let’s get some data in your newly created index!</p>
 </section>
 <section id="read-the-dataset" class="level2">
@@ -9515,7 +9515,7 @@ font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"json"</span>)</span></code></pre></div>
 <p>Your output should look like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/elasticsearch-python/image-7.png" class="img-fluid"></p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/elasticsearch-python/image-7.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="search-your-data-using-elasticsearch" class="level2">
@@ -9567,7 +9567,7 @@ font-style: inherit;">"roman polanski"</span>}}}},</span>
 <span id="cb9-13">)</span>
 <span id="cb9-14">resp.body</span></code></pre></div>
 <p>When you run this code, you should get a very long response that looks something like this:</p>
-<p><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/elasticsearch-python/image-8.png" class="img-fluid">Now it’s time for you to try and build your own searches. A good starting point is the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">query DSL documentation</a>.</p>
+<p><img src="https://dylanjcastillo.github.io/blog/posts/images/elasticsearch-python/image-8.png" class="img-fluid">Now it’s time for you to try and build your own searches. A good starting point is the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">query DSL documentation</a>.</p>
 </section>
 <section id="delete-documents-from-the-index" class="level2">
 <h2 class="anchored" data-anchor-id="delete-documents-from-the-index">Delete Documents From the Index</h2>
@@ -9613,22 +9613,22 @@ font-style: inherit;">'movies'</span>)</span></code></pre></div>
   author = {Castillo, Dylan},
   title = {How to {Use} {Elasticsearch} in {Python}},
   date = {2022-08-12},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/elasticseach-python.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/elasticseach-python.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“How to Use Elasticsearch in
-Python.”</span> August 12, 2022. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/elasticseach-python.html">https://dylanjcastillo.github.io/blog_quarto/posts/elasticseach-python.html</a>.
+Python.”</span> August 12, 2022. <a href="https://dylanjcastillo.github.io/blog/posts/elasticseach-python.html">https://dylanjcastillo.github.io/blog/posts/elasticseach-python.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>nlp</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/elasticseach-python.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/elasticseach-python.html</guid>
   <pubDate>Fri, 12 Aug 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Entrepreneurship as a Risk Management Strategy</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/entrepreneurship-as-a-risk-management-strategy.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/entrepreneurship-as-a-risk-management-strategy.html</link>
   <description><![CDATA[ 
 
 
@@ -9687,21 +9687,21 @@ Python.”</span> August 12, 2022. <a href="https://dylanjcastillo.github.io/blo
   author = {Castillo, Dylan},
   title = {Entrepreneurship as a {Risk} {Management} {Strategy}},
   date = {2022-06-17},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/entrepreneurship-as-a-risk-management-strategy.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/entrepreneurship-as-a-risk-management-strategy.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“Entrepreneurship as a Risk Management
-Strategy.”</span> June 17, 2022. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/entrepreneurship-as-a-risk-management-strategy.html">https://dylanjcastillo.github.io/blog_quarto/posts/entrepreneurship-as-a-risk-management-strategy.html</a>.
+Strategy.”</span> June 17, 2022. <a href="https://dylanjcastillo.github.io/blog/posts/entrepreneurship-as-a-risk-management-strategy.html">https://dylanjcastillo.github.io/blog/posts/entrepreneurship-as-a-risk-management-strategy.html</a>.
 </div></div></section></div> ]]></description>
   <category>personal</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/entrepreneurship-as-a-risk-management-strategy.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/entrepreneurship-as-a-risk-management-strategy.html</guid>
   <pubDate>Fri, 17 Jun 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>2021: Personal Snapshot</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/2021-personal-snapshot.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/2021-personal-snapshot.html</link>
   <description><![CDATA[ 
 
 
@@ -9771,21 +9771,21 @@ Strategy.”</span> June 17, 2022. <a href="https://dylanjcastillo.github.io/blo
   author = {Castillo, Dylan},
   title = {2021: {Personal} {Snapshot}},
   date = {2022-01-31},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/2021-personal-snapshot.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/2021-personal-snapshot.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2022. <span>“2021: Personal Snapshot.”</span> January
-31, 2022. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/2021-personal-snapshot.html">https://dylanjcastillo.github.io/blog_quarto/posts/2021-personal-snapshot.html</a>.
+31, 2022. <a href="https://dylanjcastillo.github.io/blog/posts/2021-personal-snapshot.html">https://dylanjcastillo.github.io/blog/posts/2021-personal-snapshot.html</a>.
 </div></div></section></div> ]]></description>
   <category>personal-snapshot</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/2021-personal-snapshot.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/2021-personal-snapshot.html</guid>
   <pubDate>Mon, 31 Jan 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>How to Use GitHub Deploy Keys</title>
   <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylanjcastillo.github.io/blog_quarto/posts/how-to-use-github-deploy-keys.html</link>
+  <link>https://dylanjcastillo.github.io/blog/posts/how-to-use-github-deploy-keys.html</link>
   <description><![CDATA[ 
 
 
@@ -9849,10 +9849,10 @@ Castillo, Dylan. 2022. <span>“2021: Personal Snapshot.”</span> January
 <p>Then select and copy the resulting text from the command line. It should look something like this:</p>
 <div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com</span></code></pre></div>
 <p>‌Next, open your preferred browser and go to the repository with your app’s code on GitHub. Click on <em>Settings</em>, select <em>Deploy keys,</em> and then click on <em>Add deploy key.</em></p>
-<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="img-fluid"></a></p>
+<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylanjcastillo.github.io/blog/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="img-fluid"></a></p>
 <p>Add deploy key on GitHub</p>
 <p>Copy the key in the <em>Key</em> textbox and set a title to the key. You can leave <em>Allow write access</em> unchecked and click on <em>Add key</em>. <em>Allow write access</em> allows you to make changes to the repository using the deploy key. For security reasons, you don’t want to do that in most cases.</p>
-<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylanjcastillo.github.io/blog_quarto/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="img-fluid"></a></p>
+<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylanjcastillo.github.io/blog/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="img-fluid"></a></p>
 <p>Next, you can go back to your server’s terminal and clone your repository. You can do that by running this command:</p>
 <div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1">git clone git@github-YOUR-APP:dylanjcastillo/random.git              </span></code></pre></div>
 <p>This will clone your app’s repository to your server. Please remember to replace <code>github-YOUR-APP</code> by the <code>Host</code> you specified in the SSH config file. Otherwise, it won’t work.</p>
@@ -9876,15 +9876,15 @@ Castillo, Dylan. 2022. <span>“2021: Personal Snapshot.”</span> January
   author = {Castillo, Dylan},
   title = {How to {Use} {GitHub} {Deploy} {Keys}},
   date = {2021-10-07},
-  url = {https://dylanjcastillo.github.io/blog_quarto/posts/how-to-use-github-deploy-keys.html},
+  url = {https://dylanjcastillo.github.io/blog/posts/how-to-use-github-deploy-keys.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2021" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2021. <span>“How to Use GitHub Deploy Keys.”</span>
-October 7, 2021. <a href="https://dylanjcastillo.github.io/blog_quarto/posts/how-to-use-github-deploy-keys.html">https://dylanjcastillo.github.io/blog_quarto/posts/how-to-use-github-deploy-keys.html</a>.
+October 7, 2021. <a href="https://dylanjcastillo.github.io/blog/posts/how-to-use-github-deploy-keys.html">https://dylanjcastillo.github.io/blog/posts/how-to-use-github-deploy-keys.html</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
-  <guid>https://dylanjcastillo.github.io/blog_quarto/posts/how-to-use-github-deploy-keys.html</guid>
+  <guid>https://dylanjcastillo.github.io/blog/posts/how-to-use-github-deploy-keys.html</guid>
   <pubDate>Thu, 07 Oct 2021 00:00:00 GMT</pubDate>
 </item>
 </channel>
