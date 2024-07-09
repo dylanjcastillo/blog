@@ -29,20 +29,22 @@ Hi there 👋, I'm Dylan, the founder of [Iwana Labs](https://iwanalabs.com).
 
 I've been working in AI for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and I like working on [open-source projects](https://github.com/dylanjcastillo). I've delivered projects for large-scale corporations, government agencies, and startups.
 
-I'm currently freelancing as an AI engineer at [REMATIQ](https://rematiq.com) and working on [Namemancer](https://namemancer.com).
+I'm currently freelancing as an AI engineer and working on [Namemancer](https://namemancer.com).
 
 ## Posts
 
-This collection features my longer posts on technical topics. I've also included some personal posts like yearly reviews.
+These are longer posts covering mostly technical topics and a few personal posts such as yearly reviews.
 
 :::{#posts}
 :::
 
 ## Today I Learned (TIL)
 
-Inspired by [Simon Willison](https://til.simonwillison.net/), I've started a collection of short technical posts of things I've learned and think others might find useful.
+I'm a big fan of [Simon Willison's "TIL" posts](https://til.simonwillison.net/), so I copied his idea.
 
-I'm trying to force myself to write more, by reducing the friction of the writing process. And this seems like a good way to do that.
+They're a great way to force yourself to write more often by lowering the bar for what it's worth sharing.
+
+These are short, less polished posts about things I've learned that I think others might find useful.
 
 :::{#today-i-learned}
 :::
