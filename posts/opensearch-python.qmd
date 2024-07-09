@@ -18,6 +18,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 [OpenSearch](https://www.opensearch.org/) is a free and open-source search platform created by Amazon that makes it easy to search and analyze data. Developers use it for search in apps, log analytics, data observability, data ingestion, and more.

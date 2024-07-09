@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 [Elasticsearch](https://www.elastic.co/elasticsearch/) (ES) is a technology used by many companies, including GitHub, Uber, and Facebook. It's not often taught in Data Science courses, but it's something you'll likely come across in your career.

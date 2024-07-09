@@ -20,6 +20,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname 
 ---
 
 Deploying a [FastAPI](https://fastapi.tiangolo.com/) web app to a Virtual Private Server (VPS) is tricky. If you're not familiar with technologies such as NGINX, Gunicorn, and Uvicorn, it can easily overwhelm you. I wrote this tutorial so you won't have to spend as much time on your first deployment as I did.

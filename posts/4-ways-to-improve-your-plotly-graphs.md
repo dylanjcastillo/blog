@@ -20,6 +20,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 These last weeks I've been working on an application using Dash and Plotly. These tools are great if you want to get something out quickly. But, as usual, there's no magical `make_beautiful_graphs` parameter you can set to `True` by default.

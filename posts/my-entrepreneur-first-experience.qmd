@@ -17,6 +17,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 On September 2, 2022, I received an invitation to join the 10th cohort of [Entrepreneur First (EF)](https://www.joinef.com/) in Berlin. Less than a month later, I packed up and moved there, eager to find a cofounder to begin what I hoped would become a billion-dollar company.

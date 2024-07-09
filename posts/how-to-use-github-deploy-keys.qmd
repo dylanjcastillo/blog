@@ -20,6 +20,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 Deployment is more of an art than science. Ask ten developers, and you'll end up with ten different ways to deploy your app. However, there are a few topics on which everyone agrees. One of those is using deploy keys.

@@ -20,6 +20,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 OpenAI has been giving access to users to the [Code Interpreter](https://wgmimedia.com/chatgpt-code-interpreter-plugin/) plugin and people are loving it. I wanted to replicate it outside of ChatGPT, so I created my own (simpler) version, specifically to [analyze and visualize data](https://deepsheet.dylancastillo.co/).

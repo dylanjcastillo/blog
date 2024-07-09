@@ -21,6 +21,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 Text classification is the task of automatically assigning labels to pieces of text, such as articles, blog posts, or reviews. Many businesses use text classification algorithms to save time and money by reducing the amount of manual labor needed to organize and analyze their text data.

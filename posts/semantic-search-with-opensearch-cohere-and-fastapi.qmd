@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 Semantic search is a [hot topic](https://trends.google.com/trends/explore?date=today%205-y&q=semantic%20search) right now. The fast-paced progress of Large Language Models (LLMs), as well as the availability and quality of embeddings, the key technology behind semantic search, have piqued the interest of many people in this field.

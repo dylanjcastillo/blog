@@ -18,7 +18,9 @@ website:
 format:
   html:
     include-in-header:
-      - text: '<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">'
+      - text: |
+          <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+          <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer></script>
     page-layout: "article"
     theme:
       - darkly

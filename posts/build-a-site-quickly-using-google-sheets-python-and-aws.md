@@ -21,6 +21,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 A few days ago, I was looking for courses that were free or discounted due to the COVID-19. I thought that others might be doing the same, so I decided to compile some resources and publish them online.

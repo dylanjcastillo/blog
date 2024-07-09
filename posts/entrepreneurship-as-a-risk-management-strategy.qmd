@@ -18,6 +18,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 Entrepreneurship, contrary to popular belief, is a great risk management strategy. Thoughtful entrepreneurs take on similar risks as employees while getting a chance to win a much larger pot.

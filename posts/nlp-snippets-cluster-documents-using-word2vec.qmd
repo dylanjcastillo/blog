@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 There are more sentiment analysis tutorials online than people doing sentiment analysis in their day jobs. Don't get me wrong. I'm not saying those tutorials aren't useful. I just want to highlight that **supervised learning** receives much more attention than any other Natural Language Processing (NLP) method.

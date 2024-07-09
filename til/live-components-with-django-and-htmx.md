@@ -21,6 +21,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 I discovered [`django-components`](https://github.com/EmilStenstrom/django-components/) late last year and I quickly realized it was the missing piece in my Django + htmx workflow. It made my developer experience so much better, that I even started contributing to it.

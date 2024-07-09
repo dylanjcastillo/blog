@@ -17,6 +17,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 These past few days, I've been playing around with [PyScript](https://pyscript.net/). I built an interactive cheat sheet for [pandas](https://pandas.dylancastillo.co/) and a cookbook of the most popular [Python data visualization](https://dataviz.dylancastillo.co/) libraries.

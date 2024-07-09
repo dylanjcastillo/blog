@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 A few weeks ago, I was working on a Python script to extract books' metadata for a [content-based recommender](https://dylancastillo.co/mind-reading-algorithms-an-introduction-to-recommender-systems/). After a couple of hours, I realized that I needed to make thousands of requests to the Google Books API to get the data. So I thought there had to be a way of speeding up the process.

@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 This is my annual review. It serves two purposes: a deep analysis of the past year and a record of my thoughts at the time of writing.

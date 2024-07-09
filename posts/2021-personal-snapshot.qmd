@@ -19,6 +19,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
+    issue-term: pathname
 ---
 
 When I see pictures from my childhood, I always try to remember _who I was_ at the time the photos were shot. Like, what was going through my mind? What motivated me? What scared me?
