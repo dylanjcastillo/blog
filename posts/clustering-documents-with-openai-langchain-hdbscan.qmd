@@ -54,7 +54,7 @@ python3.10 -m venv .venv
 
 2. Create a `requirements.txt` file that contains the following packages:
 
-````shell
+```shell
 hdbscan
 openai
 pandas
@@ -64,13 +64,14 @@ tiktoken
 notebook
 plotly
 umap-learn
+```
 
 3. Activate the virtual environment and install the packages:
 
 ```shell
 source .venv/bin/activate
 pip3 install -r requirements.txt
-````
+```
 
 4. Create a file called `.env`, and add the your OpenAI key:
 
@@ -204,7 +205,6 @@ def generate_topic_titles():
 
         topic_title = response.choices[0].message.content
         df.loc[df.cluster == c, "cluster_name"] = topic_title
-        # print(f"Cluster {c} - {topic_title}")
 ```
 
 This code takes all the articles per cluster and uses `gpt-3.5-turbo` to generate a relevant topic title from them. Itgoes through each cluster, takes the articles in it, and makes a prompt using that to generate a topic title for that cluster.
