@@ -7,18 +7,18 @@ author-meta: "Dylan Castillo"
 description-meta: "Simple setup for a Django app using Poetry and Docker."
 date-meta: "06/22/2024"
 lightbox: true
-fig-cap-location: margin 
+fig-cap-location: margin
 categories:
-    - til
-    - python
-    - django
+  - til
+  - python
+  - django
 ---
 
-[Pieter Levels](https://levels.io/) makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply [uploading files via FTP](https://news.ycombinator.com/item?id=28838537).  
+[Pieter Levels](https://levels.io/) makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply [uploading files via FTP](https://news.ycombinator.com/item?id=28838537).
 
 If you focus on what your users want and know how to market your product, you can make a lot of money.
 
-Which is why I decided to continue being poor and spend an inordinate amount of time this year improving my deployment process. 
+Which is why I decided to stay poor and spent an inordinate amount of time improving my deployment process.
 
 Who needs money when you can get the satisfaction of that beautiful green check mark after you've run your CI/CD pipeline?
 
@@ -56,7 +56,7 @@ If your project is not structured in a similar way, you might need to adapt the 
 I created a `Dockerfile` that fulfilled this:
 
 1. A base stage with Python 3.10 and Poetry installed.
-2. A builder stage that installs the dependencies. 
+2. A builder stage that installs the dependencies.
 3. A runner stage that copies the virtual environment from the builder stage.
 4. A development stage that runs the entrypoint as a root user.
 5. A production stage that runs the entrypoint as a non-root user.
@@ -112,7 +112,7 @@ ARG group=django
 ARG uid=1000
 ARG gid=1000
 RUN groupadd -g ${gid} ${group}
-RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user} 
+RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user}
 
 # Switch to user
 RUN chown -R ${uid}:${gid} /app
@@ -124,6 +124,7 @@ WORKDIR /app/src
 ENTRYPOINT [ "/app/src/entrypoint.sh" ]
 
 ```
+
 </details>
 
 ## Entrypoint
@@ -148,7 +149,7 @@ If `ENVIRONMENT` is set to `production`, the container will run the production s
 
 ## Docker-compose
 
-Then, I have a docker-compose that lets you run the development and production containers: 
+Then, I have a docker-compose that lets you run the development and production containers:
 
 ```yaml
 services:
@@ -183,7 +184,7 @@ services:
           path: pyproject.toml
 ```
 
-In this `docker-compose`, I use `ENVIRONMENT` to switch between the development and production containers. 
+In this `docker-compose`, I use `ENVIRONMENT` to switch between the development and production containers.
 
 I also use the [Compose Watch](https://docs.docker.com/compose/file-watch/) to reload the container when I make changes to the code and to rebuild the container when I make changes to the `pyproject.toml` file.
 
