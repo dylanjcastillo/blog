@@ -21,7 +21,7 @@
 
 <p><a href="https://levels.io/">Pieter Levels</a> makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply <a href="https://news.ycombinator.com/item?id=28838537">uploading files via FTP</a>.</p>
 <p>If you focus on what your users want and know how to market your product, you can make a lot of money.</p>
-<p>Which is why I decided to continue being poor and spend an inordinate amount of time this year improving my deployment process.</p>
+<p>Which is why I decided to stay poor and spent an inordinate amount of time improving my deployment process.</p>
 <p>Who needs money when you can get the satisfaction of that beautiful green check mark after you’ve run your CI/CD pipeline?</p>
 <p>Anyways…</p>
 <p>These days, I’m using <a href="https://kamal-deploy.org/">kamal</a> to deploy most of my projects.</p>
@@ -309,7 +309,7 @@ font-style: inherit;">-s</span> /bin/sh <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">-m</span> <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">${user}</span> </span>
+font-style: inherit;">${user}</span></span>
 <span id="cb2-47"></span>
 <span id="cb2-48"><span class="co" style="color: #5E5E5E;
 background-color: null;
