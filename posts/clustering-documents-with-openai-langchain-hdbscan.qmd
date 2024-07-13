@@ -1,6 +1,7 @@
 ---
 title: "Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP"
-
+aliases:
+  - /clustering-documents-with-openai-langchain-hdbscan/
 description-meta: "This article will teach you how to cluster text data with LLMs using cutting-edge tools."
 date: "06/09/2023"
 date-modified: last-modified

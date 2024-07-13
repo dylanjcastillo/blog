@@ -1,5 +1,7 @@
 ---
 title: "4 Ways To Improve Your Graphs Using Plotly"
+aliases:
+  - /4-ways-to-improve-your-plotly-graphs/
 description-meta: "Making high-quality data visualizations is a critical skill for Data Scientists. Learn how to get better at it using Plotly's python library."
 date: "05/25/2020"
 date-modified: last-modified

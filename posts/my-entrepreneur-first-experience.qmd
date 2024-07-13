@@ -1,5 +1,7 @@
 ---
 title: "My Experience at Entrepreneur First"
+aliases:
+  - /my-entrepreneur-first-experience/
 description-meta: "This is a personal reflection on my time at Entrepreneur First. I'll explain what it is and how it works, as well as what I liked and didn't like about it. "
 date: "01/20/2023"
 date-modified: last-modified

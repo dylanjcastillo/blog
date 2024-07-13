@@ -1,5 +1,7 @@
 ---
 title: "Fast & Asynchronous In Python: Accelerate Your Requests Using asyncio"
+aliases:
+  - /fast-and-async-in-python-accelerate-your-requests-using-asyncio/
 description-meta: "Speedup your Python code by learning how to make concurrent requests to an API using asyncio and aiohttp."
 date: "03/01/2020"
 date-modified: last-modified

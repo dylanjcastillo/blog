@@ -1,5 +1,7 @@
 ---
 title: "Tips for Standing Out on LinkedIn"
+aliases:
+  - /tips-for-standing-out-on-linkedin/
 description-meta: "Learn how to use LinkedIn to get more and higher quality job opportunities."
 date: "02/17/2023"
 date-modified: last-modified

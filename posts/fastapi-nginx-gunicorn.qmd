@@ -1,5 +1,7 @@
 ---
 title: "How to Securely Deploy a FastAPI app with NGINX and Gunicorn"
+aliases:
+  - /fastapi-nginx-gunicorn/
 description-meta: "In this tutorial, you'll learn how to use NGINX, and Gunicorn+Uvicorn to deploy a FastAPI app, and generate a free SSL certificate for it."
 date: "02/03/2023"
 date-modified: last-modified
@@ -20,7 +22,7 @@ comments:
   utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
-    issue-term: pathname 
+    issue-term: pathname
 ---
 
 Deploying a [FastAPI](https://fastapi.tiangolo.com/) web app to a Virtual Private Server (VPS) is tricky. If you're not familiar with technologies such as NGINX, Gunicorn, and Uvicorn, it can easily overwhelm you. I wrote this tutorial so you won't have to spend as much time on your first deployment as I did.

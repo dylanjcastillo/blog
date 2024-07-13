@@ -1,5 +1,7 @@
 ---
 title: "Use Google Sheets, S3, and Python to Build a Website Quickly"
+aliases:
+  - /build-a-site-quickly-using-google-sheets-python-and-aws/
 description-meta: "We will set up a Python script that reads data from Google Sheets, generates a static site using a predefined template, and deploys it to an S3 bucket."
 date: "04/16/2020"
 date-modified: last-modified
@@ -270,14 +272,14 @@ Now, let's create the S3 bucket and configure our code to access AWS programmati
 
 ```json
 {
-  "Version":"2012-10-17",
-  "Statement":[{
-	"Sid":"PublicReadGetObject",
-        "Effect":"Allow",
-	  "Principal": "*",
-      "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::BUCKET-NAME-HERE/*"
-      ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::BUCKET-NAME-HERE/*"]
     }
   ]
 }

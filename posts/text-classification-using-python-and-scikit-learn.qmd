@@ -1,5 +1,7 @@
 ---
 title: "Text Classification Using Python and Scikit-learn"
+aliases:
+  - /text-classification-using-python-and-scikit-learn/
 description-meta: "This tutorial will show you how to quickly build a text classification model using Python and Scikit-learn."
 date: "08/23/2022"
 date-modified: last-modified

@@ -1,5 +1,7 @@
 ---
 title: "Live Components with Django and htmx"
+aliases:
+  - /live-components-with-django-and-htmx/
 description-meta: "Using Django and htmx to render components through server-sent events."
 date: "01/28/2024"
 date-modified: last-modified
