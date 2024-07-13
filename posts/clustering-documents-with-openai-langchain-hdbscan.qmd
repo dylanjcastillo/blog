@@ -49,13 +49,13 @@ In addition, you'll need an [OpenAI account](beta.openai.com/).
 
 1. Create a virtual environment using `venv`:
 
-```shell
+```bash
 python3.10 -m venv .venv
 ```
 
 2. Create a `requirements.txt` file that contains the following packages:
 
-```shell
+```bash
 hdbscan
 openai
 pandas
@@ -69,14 +69,14 @@ umap-learn
 
 3. Activate the virtual environment and install the packages:
 
-```shell
+```bash
 source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
 4. Create a file called `.env`, and add the your OpenAI key:
 
-```shell
+```bash
 OPENAI_API_KEY=<your key>
 ```
 
