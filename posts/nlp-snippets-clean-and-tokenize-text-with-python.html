@@ -167,15 +167,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link active" data-scroll-target="#table-of-contents">Table of Contents</a></li>
-  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a></li>
+  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link active" data-scroll-target="#how-to-use">How to use</a></li>
   <li><a href="#code-snippets" id="toc-code-snippets" class="nav-link" data-scroll-target="#code-snippets">Code snippets</a>
+  <ul>
+  <li><a href="#cleaning-text" id="toc-cleaning-text" class="nav-link" data-scroll-target="#cleaning-text">Cleaning text</a>
   <ul class="collapse">
-  <li><a href="#cleaning-text" id="toc-cleaning-text" class="nav-link" data-scroll-target="#cleaning-text">Cleaning text</a></li>
-  <li><a href="#nltk" id="toc-nltk" class="nav-link" data-scroll-target="#nltk">NLTK</a></li>
+  <li><a href="#lowercase-text" id="toc-lowercase-text" class="nav-link" data-scroll-target="#lowercase-text">Lowercase text</a></li>
+  <li><a href="#remove-cases-useful-for-caseless-matching" id="toc-remove-cases-useful-for-caseless-matching" class="nav-link" data-scroll-target="#remove-cases-useful-for-caseless-matching">Remove cases (useful for caseless matching)</a></li>
+  <li><a href="#remove-hyperlinks" id="toc-remove-hyperlinks" class="nav-link" data-scroll-target="#remove-hyperlinks">Remove hyperlinks</a></li>
+  <li><a href="#remove-a-tags-but-keep-their-content" id="toc-remove-a-tags-but-keep-their-content" class="nav-link" data-scroll-target="#remove-a-tags-but-keep-their-content">Remove <code>&lt;a&gt;</code> tags but keep their content</a></li>
+  <li><a href="#remove-all-html-tags-but-keep-their-contents" id="toc-remove-all-html-tags-but-keep-their-contents" class="nav-link" data-scroll-target="#remove-all-html-tags-but-keep-their-contents">Remove all HTML tags but keep their contents</a></li>
+  <li><a href="#remove-extra-spaces-tabs-and-line-breaks" id="toc-remove-extra-spaces-tabs-and-line-breaks" class="nav-link" data-scroll-target="#remove-extra-spaces-tabs-and-line-breaks">Remove extra spaces, tabs, and line breaks</a></li>
+  <li><a href="#remove-punctuation" id="toc-remove-punctuation" class="nav-link" data-scroll-target="#remove-punctuation">Remove punctuation</a></li>
+  <li><a href="#remove-numbers" id="toc-remove-numbers" class="nav-link" data-scroll-target="#remove-numbers">Remove numbers</a></li>
+  <li><a href="#remove-digits" id="toc-remove-digits" class="nav-link" data-scroll-target="#remove-digits">Remove digits</a></li>
+  <li><a href="#remove-non-alphabetic-characters" id="toc-remove-non-alphabetic-characters" class="nav-link" data-scroll-target="#remove-non-alphabetic-characters">Remove non-alphabetic characters</a></li>
+  <li><a href="#remove-all-special-characters-and-punctuation" id="toc-remove-all-special-characters-and-punctuation" class="nav-link" data-scroll-target="#remove-all-special-characters-and-punctuation">Remove all special characters and punctuation</a></li>
+  <li><a href="#remove-stopwords-from-a-list" id="toc-remove-stopwords-from-a-list" class="nav-link" data-scroll-target="#remove-stopwords-from-a-list">Remove stopwords from a list</a></li>
+  <li><a href="#remove-short-tokens" id="toc-remove-short-tokens" class="nav-link" data-scroll-target="#remove-short-tokens">Remove short tokens</a></li>
+  <li><a href="#transform-emojis-into-characters" id="toc-transform-emojis-into-characters" class="nav-link" data-scroll-target="#transform-emojis-into-characters">Transform emojis into characters</a></li>
+  <li><a href="#remove-repeated-characters" id="toc-remove-repeated-characters" class="nav-link" data-scroll-target="#remove-repeated-characters">Remove repeated characters</a></li>
+  </ul></li>
+  <li><a href="#nltk" id="toc-nltk" class="nav-link" data-scroll-target="#nltk">NLTK</a>
+  <ul class="collapse">
+  <li><a href="#tokenize-text-using-nltk" id="toc-tokenize-text-using-nltk" class="nav-link" data-scroll-target="#tokenize-text-using-nltk">Tokenize text using NLTK</a></li>
+  <li><a href="#tokenize-tweets-using-nltk" id="toc-tokenize-tweets-using-nltk" class="nav-link" data-scroll-target="#tokenize-tweets-using-nltk">Tokenize tweets using NLTK</a></li>
+  <li><a href="#split-text-into-sentences-using-nltk" id="toc-split-text-into-sentences-using-nltk" class="nav-link" data-scroll-target="#split-text-into-sentences-using-nltk">Split text into sentences using NLTK</a></li>
+  </ul></li>
   <li><a href="#remove-stopwords-using-nltk" id="toc-remove-stopwords-using-nltk" class="nav-link" data-scroll-target="#remove-stopwords-using-nltk">Remove stopwords using NLTK</a></li>
-  <li><a href="#spacy" id="toc-spacy" class="nav-link" data-scroll-target="#spacy">spaCy</a></li>
-  <li><a href="#keras" id="toc-keras" class="nav-link" data-scroll-target="#keras">Keras</a></li>
+  <li><a href="#spacy" id="toc-spacy" class="nav-link" data-scroll-target="#spacy">spaCy</a>
+  <ul class="collapse">
+  <li><a href="#tokenize-text-using-spacy" id="toc-tokenize-text-using-spacy" class="nav-link" data-scroll-target="#tokenize-text-using-spacy">Tokenize text using spaCy</a></li>
+  <li><a href="#split-text-into-sentences-using-spacy" id="toc-split-text-into-sentences-using-spacy" class="nav-link" data-scroll-target="#split-text-into-sentences-using-spacy">Split text into sentences using spaCy</a></li>
+  </ul></li>
+  <li><a href="#keras" id="toc-keras" class="nav-link" data-scroll-target="#keras">Keras</a>
+  <ul class="collapse">
+  <li><a href="#tokenize-text-using-keras" id="toc-tokenize-text-using-keras" class="nav-link" data-scroll-target="#tokenize-text-using-keras">Tokenize text using Keras</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -233,48 +261,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="table-of-contents" class="level2">
-<h2 class="anchored" data-anchor-id="table-of-contents">Table of Contents</h2>
-<ul>
-<li><a href="#how-to-use">How to use</a></li>
-<li><a href="#code-snippets">Code snippets</a>
-<ul>
-<li><a href="#cleaning-text">Cleaning text</a>
-<ul>
-<li><a href="#lowercase-text">Lowercase text</a></li>
-<li><a href="#remove-cases-useful-for-caseless-matching-">Remove cases (useful for caseles matching)</a></li>
-<li><a href="#remove-hyperlinks">Remove hyperlinks</a></li>
-<li><a href="#remove-a-tags-but-keep-its-content">Remove </a><a> tags but keep its content</a></li>
-<li><a href="#remove-all-html-tags-but-keep-their-contents">Remove HTML tags</a></li>
-<li><a href="#remove-extra-spaces-tabs-and-line-breaks">Remove extra spaces, tabs, and line breaks</a></li>
-<li><a href="#remove-punctuation">Remove punctuation</a></li>
-<li><a href="#remove-numbers">Remove numbers</a></li>
-<li><a href="#remove-digits">Remove digits</a></li>
-<li><a href="#remove-non-alphabetic-characters">Remove non-alphabetic characters</a></li>
-<li><a href="#remove-all-special-characters-and-punctuation">Remove all special characters and punctuation</a></li>
-<li><a href="#remove-stopwords-from-a-list">Remove stopwords from a list</a></li>
-<li><a href="#remove-short-tokens">Remove short tokens</a></li>
-<li><a href="#transform-emojis-to-characters">Transform emojis to characters</a></li>
-</ul></li>
-<li><a href="#nltk">NLTK</a>
-<ul>
-<li><a href="#tokenize-text-using-nltk">Tokenize text using NLTK</a></li>
-<li><a href="#tokenize-tweets-using-nltk">Tokenize tweets using NLTK</a></li>
-<li><a href="#split-text-into-sentences-using-nltk">Split text into sentences using NLTK</a></li>
-<li><a href="#remove-stopwords-using-nltk">Remove stopwords using NLTK</a></li>
-</ul></li>
-<li><a href="#spacy">spaCy</a>
-<ul>
-<li><a href="#tokenize-text-using-spacy">Tokenize text using spaCy</a></li>
-<li><a href="#split-text-into-sentences-using-spacy">Split text into sentences using spaCy</a></li>
-</ul></li>
-<li><a href="#keras">Keras</a>
-<ul>
-<li><a href="#tokenize-text-using-keras">Tokenize text using Keras</a></li>
-</ul></li>
-</ul></li>
-</ul>
-<hr>
 <p>Every time I start a new project, I promise to save the most useful code snippets for the future, but I never do.</p>
 <p>The old ways are too compelling. I end up copying code from old projects, looking for the same questions in Stack Overflow, or reviewing the same Kaggle notebooks for the hundredth time. At this point, I don’t know how many times I’ve googled for a variant of “remove extra spaces in a string using Python.”</p>
 <p>So, finally, I’ve decided to compile snippets and small recipes for frequent tasks. I’m starting with Natural Language Processing (NLP) because I’ve been involved in several projects in that area in the last few years.</p>
@@ -286,7 +272,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>This article contains 20 code snippets you can use to clean and tokenize text using Python. I’ll continue adding new ones whenever I find something useful. They’re based on a mix of &nbsp;Stack Overflow answers, books, and my experience.</p>
 <p>In the next section, you can see an example of how to use the code snippets. Then, you can check the snippets on your own and take the ones you need.</p>
-</section>
 <section id="how-to-use" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
 <p>I’d recommend you combine the snippets you need into a function. Then, you can use that function for pre-processing or tokenizing text. If you’re using <strong>pandas</strong>, you can apply that function to a specific column using the <code>.map</code> method of pandas’ <code>Series</code>.</p>
@@ -357,11 +342,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-8"><a href="#cb5-8"></a><span class="co"># Before: Some URLs: https://example.com http://example.io http://exam-ple.com More text</span></span>
 <span id="cb5-9"><a href="#cb5-9"></a><span class="co"># After: Some URLs:    More text</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="remove-tags-but-keep-their-content" class="level4">
-<h4 class="anchored" data-anchor-id="remove-tags-but-keep-their-content">Remove <a> tags but keep their content</a></h4><a>
+<section id="remove-a-tags-but-keep-their-content" class="level4">
+<h4 class="anchored" data-anchor-id="remove-a-tags-but-keep-their-content">Remove <code>&lt;a&gt;</code> tags but keep their content</h4>
 <p>Similar to the previous case, if you’re doing web scrapping, you might often find dealing with tags. In some cases, such as <code>&lt;a&gt;</code>, you may want to remove the tag and its attributes but not its contents (e.g., the text it contains).</p>
 <p>You can use Python’s <code>re</code> for that. Here’s how you’d remove the <code>&lt;a&gt;</code> tag and its attributes while keeping its content:</p>
-</a><div class="sourceCode" id="cb6"><a></a><pre class="sourceCode numberSource python number-lines code-with-copy"><a><code class="sourceCode python"><span id="cb6-1"></span></code></a><code class="sourceCode python"><a href="#cb6-1"></a><span class="im">import</span> re
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> re</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>sample_text <span class="op">=</span> <span class="st">"Here's &lt;a href='https://example.com'&gt; a tag&lt;/a&gt;"</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r"&lt;a[^&gt;]*&gt;(.*?)&lt;/a&gt;"</span>, <span class="vs">r"\1"</span>, sample_text)</span>
@@ -653,12 +638,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   author = {Castillo, Dylan},
   title = {Clean and {Tokenize} {Text} {With} {Python}},
   date = {2020-12-10},
-  url = {https://dylanjcastillo.github.io/blog/posts/nlp-snippets-clean-and-tokenize-text-with-python.html},
+  url = {https://dylancastillo.co/posts/nlp-snippets-clean-and-tokenize-text-with-python.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2020" class="csl-entry quarto-appendix-citeas" role="listitem">
 Castillo, Dylan. 2020. <span>“Clean and Tokenize Text With
-Python.”</span> December 10, 2020. <a href="https://dylanjcastillo.github.io/blog/posts/nlp-snippets-clean-and-tokenize-text-with-python.html">https://dylanjcastillo.github.io/blog/posts/nlp-snippets-clean-and-tokenize-text-with-python.html</a>.
+Python.”</span> December 10, 2020. <a href="https://dylancastillo.co/posts/nlp-snippets-clean-and-tokenize-text-with-python.html">https://dylancastillo.co/posts/nlp-snippets-clean-and-tokenize-text-with-python.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -752,7 +737,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/dylanjcastillo\.github\.io\/blog\/");
+      var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
