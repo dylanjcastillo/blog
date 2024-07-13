@@ -3,6 +3,7 @@ project:
 
 website:
   title: Dylan Castillo
+  site-url: https://dylancastillo.co
   favicon: logo.png
   navbar:
     title: false

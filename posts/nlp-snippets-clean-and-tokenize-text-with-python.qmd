@@ -4,7 +4,7 @@ description-meta: "The first step in a Machine Learning project is cleaning the 
 date: "12/10/2020"
 date-modified: last-modified
 toc: true
-toc-depth: 3
+toc-depth: 4
 categories:
   - python
   - nlp
@@ -19,38 +19,6 @@ comments:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
     issue-term: pathname
----
-
-## Table of Contents
-
-- [How to use](#how-to-use)
-- [Code snippets](#code-snippets)
-  - [Cleaning text](#cleaning-text)
-    - [Lowercase text](#lowercase-text)
-    - [Remove cases (useful for caseles matching)](#remove-cases-useful-for-caseless-matching-)
-    - [Remove hyperlinks](#remove-hyperlinks)
-    - [Remove <a> tags but keep its content](#remove-a-tags-but-keep-its-content)
-    - [Remove HTML tags](#remove-all-html-tags-but-keep-their-contents)
-    - [Remove extra spaces, tabs, and line breaks](#remove-extra-spaces-tabs-and-line-breaks)
-    - [Remove punctuation](#remove-punctuation)
-    - [Remove numbers](#remove-numbers)
-    - [Remove digits](#remove-digits)
-    - [Remove non-alphabetic characters](#remove-non-alphabetic-characters)
-    - [Remove all special characters and punctuation](#remove-all-special-characters-and-punctuation)
-    - [Remove stopwords from a list](#remove-stopwords-from-a-list)
-    - [Remove short tokens](#remove-short-tokens)
-    - [Transform emojis to characters](#transform-emojis-to-characters)
-  - [NLTK](#nltk)
-    - [Tokenize text using NLTK](#tokenize-text-using-nltk)
-    - [Tokenize tweets using NLTK](#tokenize-tweets-using-nltk)
-    - [Split text into sentences using NLTK](#split-text-into-sentences-using-nltk)
-    - [Remove stopwords using NLTK](#remove-stopwords-using-nltk)
-  - [spaCy](#spacy)
-    - [Tokenize text using spaCy](#tokenize-text-using-spacy)
-    - [Split text into sentences using spaCy](#split-text-into-sentences-using-spacy)
-  - [Keras](#keras)
-    - [Tokenize text using Keras](#tokenize-text-using-keras)
-
 ---
 
 Every time I start a new project, I promise to save the most useful code snippets for the future, but I never do.
@@ -158,7 +126,7 @@ print_text(sample_text, clean_text)
 # After: Some URLs:    More text
 ```
 
-#### Remove <a> tags but keep their content
+#### Remove `<a>` tags but keep their content
 
 Similar to the previous case, if you're doing web scrapping, you might often find dealing with tags. In some cases, such as `<a>`, you may want to remove the tag and its attributes but not its contents (e.g., the text it contains).
 
@@ -242,6 +210,7 @@ print_text(sample_text, clean_text)
 # Before: A lot of !!!! .... ,,,, ;;;;;;;?????
 # After: A lot of
 ```
+
 #### Remove numbers
 
 In some cases, you might want to remove numbers from text, when you don't feel they're very informative. You can use a regular expression for that:
@@ -257,6 +226,7 @@ print_text(sample_text, clean_text)
 # Before: Remove these numbers: 1919191 2229292 11.233 22/22/22. But don't remove this one H2O
 # After: Remove these numbers: .//. But don't remove this one H2O
 ```
+
 #### Remove digits
 
 There are cases where you might want to remove digits instead of any number. For instance, when you want to remove numbers but not dates. Using a regular expression gets a bit trickier.
