@@ -271,35 +271,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Start a Jupyter notebook.</li>
 </ol>
 <p>If you’re using <code>venv</code>, then you need to run these commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>git clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
-<span id="cb1-2"><a href="#cb1-2"></a>python3 -m venv venv</span>
-<span id="cb1-3"><a href="#cb1-3"></a>source venv/bin/activate</span>
-<span id="cb1-4"><a href="#cb1-4"></a>pip install -r requirements</span>
-<span id="cb1-5"><a href="#cb1-5"></a>jupyter notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="bu">source</span> venv/bin/activate</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="ex">jupyter</span> notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If you’re using <code>conda</code>, then you need to run these commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>git clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
-<span id="cb2-2"><a href="#cb2-2"></a>conda create --name venv</span>
-<span id="cb2-3"><a href="#cb2-3"></a>conda activate venv</span>
-<span id="cb2-4"><a href="#cb2-4"></a>pip install -r requirements</span>
-<span id="cb2-5"><a href="#cb2-5"></a>jupyter notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">conda</span> create <span class="at">--name</span> venv</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">conda</span> activate venv</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="ex">jupyter</span> notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, open Jupyter Notebook. Then, create a new notebook in the root folder and set its name to <code>clustering_word2vec.ipynb</code>.</p>
 <p>By now, your project structure should look like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>nlp-snippets/</span>
-<span id="cb3-2"><a href="#cb3-2"></a>│</span>
-<span id="cb3-3"><a href="#cb3-3"></a>├── clustering/</span>
-<span id="cb3-4"><a href="#cb3-4"></a>│</span>
-<span id="cb3-5"><a href="#cb3-5"></a>├── data/</span>
-<span id="cb3-6"><a href="#cb3-6"></a>│</span>
-<span id="cb3-7"><a href="#cb3-7"></a>├── ds_utils/</span>
-<span id="cb3-8"><a href="#cb3-8"></a>│</span>
-<span id="cb3-9"><a href="#cb3-9"></a>├── preprocessing/</span>
-<span id="cb3-10"><a href="#cb3-10"></a>│</span>
-<span id="cb3-11"><a href="#cb3-11"></a>├── venv/ # (If you're using venv)</span>
-<span id="cb3-12"><a href="#cb3-12"></a>│</span>
-<span id="cb3-13"><a href="#cb3-13"></a>├── clustering_word2vec.ipynb</span>
-<span id="cb3-14"><a href="#cb3-14"></a>├── LICENSE</span>
-<span id="cb3-15"><a href="#cb3-15"></a>├── README.md</span>
-<span id="cb3-16"><a href="#cb3-16"></a>└── requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">nlp-snippets/</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">│</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">├──</span> clustering/</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="ex">│</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="ex">├──</span> data/</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="ex">│</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="ex">├──</span> ds_utils/</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="ex">│</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="ex">├──</span> preprocessing/</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="ex">│</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="ex">├──</span> venv/ <span class="co"># (If you're using venv)</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="ex">│</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="ex">├──</span> clustering_word2vec.ipynb</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="ex">├──</span> LICENSE</span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="ex">├──</span> README.md</span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="ex">└──</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This is your project’s structure. It includes these directories and files:</p>
 <ul>
 <li><code>clustering/</code>: Examples of clustering text data using bag-of-words, training a word2vec model, and using a pretrained fastText embeddings.</li>
@@ -420,8 +420,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This is how you read and preprocess the data. This code applies the cleaning function you defined earlier, removes duplicates and nulls, and drops irrelevant columns.</p>
 <p>You apply these steps to a new data frame (<code>df</code>). It contains a column with the raw documents called <code>text</code> and another one with the preprocessed documents called <code>tokens</code>. You save the values of those columns into two variables, <code>docs</code> and <code>tokenized_docs</code>, to use in the next code snippets.</p>
 <p>If you execute the two cells you defined, then you should get the following output:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>Original dataframe: (10437, 15)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>Pre-processed dataframe: (9882, 2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">Original</span> dataframe: <span class="er">(</span><span class="ex">10437,</span> 15<span class="kw">)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">Pre-processed</span> dataframe: <span class="er">(</span><span class="ex">9882,</span> 2<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, you’ll create document vectors using Word2Vec.</p>
 </section>
 <section id="generate-document-vectors" class="level3">
@@ -591,22 +591,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You could use metrics like the Silhouette Coefficient for the quantitative evaluation of the number of clusters. This coefficient is an evaluation metric frequently used in problems where ground truth labels are unknown. It’s calculated using the mean intra-cluster distance and the mean nearest-cluster distance and goes from -1 to 1. Well-defined clusters result in positive values of this coefficient, while incorrect clusters will result in negative values. If you’d like to learn more about it, look at <a href="https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient">scikit-learn’s documentation</a>.</p>
 <p>The qualitative part generally requires you to have domain knowledge of the subject matter so you can sense-check your clustering algorithm’s results. In the next section, I’ll show you two approaches you can use to check your results qualitatively.</p>
 <p>After executing the cell you just created, the output should look like this:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a href="#cb15-1"></a>For n_clusters = 50</span>
-<span id="cb15-2"><a href="#cb15-2"></a>Silhouette coefficient: 0.11</span>
-<span id="cb15-3"><a href="#cb15-3"></a>Inertia:3568.342791047967</span>
-<span id="cb15-4"><a href="#cb15-4"></a>Silhouette values:</span>
-<span id="cb15-5"><a href="#cb15-5"></a>    Cluster 29: Size:50 | Avg:0.39 | Min:0.01 | Max: 0.59</span>
-<span id="cb15-6"><a href="#cb15-6"></a>    Cluster 35: Size:30 | Avg:0.34 | Min:0.05 | Max: 0.54</span>
-<span id="cb15-7"><a href="#cb15-7"></a>    Cluster 37: Size:58 | Avg:0.32 | Min:0.09 | Max: 0.51</span>
-<span id="cb15-8"><a href="#cb15-8"></a>    Cluster 39: Size:81 | Avg:0.31 | Min:-0.05 | Max: 0.52</span>
-<span id="cb15-9"><a href="#cb15-9"></a>    Cluster 27: Size:63 | Avg:0.28 | Min:0.02 | Max: 0.46</span>
-<span id="cb15-10"><a href="#cb15-10"></a>    Cluster 6: Size:101 | Avg:0.27 | Min:0.02 | Max: 0.46</span>
-<span id="cb15-11"><a href="#cb15-11"></a>    Cluster 24: Size:120 | Avg:0.26 | Min:-0.04 | Max: 0.46</span>
-<span id="cb15-12"><a href="#cb15-12"></a>    Cluster 49: Size:65 | Avg:0.26 | Min:-0.03 | Max: 0.47</span>
-<span id="cb15-13"><a href="#cb15-13"></a>    Cluster 47: Size:53 | Avg:0.23 | Min:0.01 | Max: 0.45</span>
-<span id="cb15-14"><a href="#cb15-14"></a>    Cluster 22: Size:78 | Avg:0.22 | Min:-0.01 | Max: 0.43</span>
-<span id="cb15-15"><a href="#cb15-15"></a>    Cluster 45: Size:38 | Avg:0.21 | Min:-0.07 | Max: 0.41</span>
-<span id="cb15-16"><a href="#cb15-16"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">For</span> n_clusters = 50</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="ex">Silhouette</span> coefficient: 0.11</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="ex">Inertia:3568.342791047967</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="ex">Silhouette</span> values:</span>
+<span id="cb15-5"><a href="#cb15-5"></a>    <span class="ex">Cluster</span> 29: Size:50 <span class="kw">|</span> <span class="ex">Avg:0.39</span> <span class="kw">|</span> <span class="ex">Min:0.01</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.59</span>
+<span id="cb15-6"><a href="#cb15-6"></a>    <span class="ex">Cluster</span> 35: Size:30 <span class="kw">|</span> <span class="ex">Avg:0.34</span> <span class="kw">|</span> <span class="ex">Min:0.05</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.54</span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="ex">Cluster</span> 37: Size:58 <span class="kw">|</span> <span class="ex">Avg:0.32</span> <span class="kw">|</span> <span class="ex">Min:0.09</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.51</span>
+<span id="cb15-8"><a href="#cb15-8"></a>    <span class="ex">Cluster</span> 39: Size:81 <span class="kw">|</span> <span class="ex">Avg:0.31</span> <span class="kw">|</span> <span class="ex">Min:-0.05</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.52</span>
+<span id="cb15-9"><a href="#cb15-9"></a>    <span class="ex">Cluster</span> 27: Size:63 <span class="kw">|</span> <span class="ex">Avg:0.28</span> <span class="kw">|</span> <span class="ex">Min:0.02</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.46</span>
+<span id="cb15-10"><a href="#cb15-10"></a>    <span class="ex">Cluster</span> 6: Size:101 <span class="kw">|</span> <span class="ex">Avg:0.27</span> <span class="kw">|</span> <span class="ex">Min:0.02</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.46</span>
+<span id="cb15-11"><a href="#cb15-11"></a>    <span class="ex">Cluster</span> 24: Size:120 <span class="kw">|</span> <span class="ex">Avg:0.26</span> <span class="kw">|</span> <span class="ex">Min:-0.04</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.46</span>
+<span id="cb15-12"><a href="#cb15-12"></a>    <span class="ex">Cluster</span> 49: Size:65 <span class="kw">|</span> <span class="ex">Avg:0.26</span> <span class="kw">|</span> <span class="ex">Min:-0.03</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.47</span>
+<span id="cb15-13"><a href="#cb15-13"></a>    <span class="ex">Cluster</span> 47: Size:53 <span class="kw">|</span> <span class="ex">Avg:0.23</span> <span class="kw">|</span> <span class="ex">Min:0.01</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.45</span>
+<span id="cb15-14"><a href="#cb15-14"></a>    <span class="ex">Cluster</span> 22: Size:78 <span class="kw">|</span> <span class="ex">Avg:0.22</span> <span class="kw">|</span> <span class="ex">Min:-0.01</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.43</span>
+<span id="cb15-15"><a href="#cb15-15"></a>    <span class="ex">Cluster</span> 45: Size:38 <span class="kw">|</span> <span class="ex">Avg:0.21</span> <span class="kw">|</span> <span class="ex">Min:-0.07</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.41</span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="ex">...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This is the output of your clustering algorithm. The sizes and Silhouette Coefficients per cluster are the most relevant metrics. The clusters are printed by the value of the Silhouette coefficient in descending order. A higher score means denser – and thus better – clusters. In this case, you can see that clusters 29, 35, and 37 seem to be the top ones.</p>
 <p>Next, you’ll learn how to check what’s in each cluster.</p>
 </section>
@@ -622,9 +622,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-6"><a href="#cb16-6"></a>        tokens_per_cluster <span class="op">+=</span> <span class="ss">f"</span><span class="sc">{</span>t[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> "</span></span>
 <span id="cb16-7"><a href="#cb16-7"></a>    <span class="bu">print</span>(<span class="ss">f"Cluster </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>tokens_per_cluster<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For the top clusters we identified earlier – 29, 35, and 37 – these are the results:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb17-1"><a href="#cb17-1"></a>Cluster 29: noaa sharpie claim assertions forecasters</span>
-<span id="cb17-2"><a href="#cb17-2"></a>Cluster 35: eye lilinow path halts projected</span>
-<span id="cb17-3"><a href="#cb17-3"></a>Cluster 37: cnnpolitics complaint clinton pences whistleblower</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">Cluster</span> 29: noaa sharpie claim assertions forecasters</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="ex">Cluster</span> 35: eye lilinow path halts projected</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="ex">Cluster</span> 37: cnnpolitics complaint clinton pences whistleblower</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, we can do the same analysis with documents instead of tokens. This is how you find the most representative documents for cluster 29:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>test_cluster <span class="op">=</span> <span class="dv">29</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>most_representative_docs <span class="op">=</span> np.argsort(</span>
@@ -634,12 +634,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-6"><a href="#cb18-6"></a>    <span class="bu">print</span>(docs[d])</span>
 <span id="cb18-7"><a href="#cb18-7"></a>    <span class="bu">print</span>(<span class="st">"-------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And these are the 3 most representative documents in that cluster:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb19-1"><a href="#cb19-1"></a>Dorian, Comey and Debra Messing: What Trump tweeted on Labor Day weekend | President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President's more than 120 tweets are any indication, he had more than just the storm on his mind. | Washington (CNN)President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President's more than 120 tweets are any indication, he had more than just the storm on hi… [+3027 chars]</span>
-<span id="cb19-2"><a href="#cb19-2"></a>-------------</span>
-<span id="cb19-3"><a href="#cb19-3"></a>Ross Must Resign If Report He Threatened NOAA Officials Is True: Democrat | As President Donald Trump claimed Hurricane Dorian could hit Alabama, the National Weather Service tweeted to correct the rumors. | Commerce Secretary Wilbur Ross is facing calls to resign over a report alleging that he threatened to fire top officials at NOAA for a tweet disputing President Donald Trump's claim that Hurricane Dorian would hit Alabama.</span>
-<span id="cb19-4"><a href="#cb19-4"></a>"If that story is true, and I don't… [+3828 chars]</span>
-<span id="cb19-5"><a href="#cb19-5"></a>-------------</span>
-<span id="cb19-6"><a href="#cb19-6"></a>Federal weather workers are furious at the NOAA's 'utterly disgusting' statement defending Trump's claim Hurricane Dorian would hit Alabama | Federal weather workers have reacted furiously to the National Oceanic and Atmospheric Administration's (NOAA) defence of US President Donald Trump's repeated assertions that Hurricane Dorian was set to hit Alabama. "Never ever before has their management thr… | Federal weather workers have reacted furiously to the National Oceanic and Atmospheric Administration's (NOAA) defence of US President Donald Trump's repeated assertions that Hurricane Dorian was set to hit Alabama, saying they have been "thrown under the bus… [+3510 chars]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">Dorian,</span> Comey and Debra Messing: What Trump tweeted on Labor Day weekend <span class="kw">|</span> <span class="ex">President</span> Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President<span class="st">'s more than 120 tweets are any indication, he had more than just the storm on his mind. | Washington (CNN)President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President'</span>s more than 120 tweets are any indication, he had more than just the storm on hi… [+3027 chars]</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="ex">-------------</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="ex">Ross</span> Must Resign If Report He Threatened NOAA Officials Is True: Democrat <span class="kw">|</span> <span class="ex">As</span> President Donald Trump claimed Hurricane Dorian could hit Alabama, the National Weather Service tweeted to correct the rumors. <span class="kw">|</span> <span class="ex">Commerce</span> Secretary Wilbur Ross is facing calls to resign over a report alleging that he threatened to fire top officials at NOAA for a tweet disputing President Donald Trump<span class="st">'s claim that Hurricane Dorian would hit Alabama.</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="st">"If that story is true, and I don'</span>t… [+3828 chars]</span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="ex">-------------</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="ex">Federal</span> weather workers are furious at the NOAA<span class="st">'s '</span>utterly disgusting<span class="st">' statement defending Trump'</span>s claim Hurricane Dorian would hit Alabama <span class="kw">|</span> <span class="ex">Federal</span> weather workers have reacted furiously to the National Oceanic and Atmospheric Administration<span class="st">'s (NOAA) defence of US President Donald Trump'</span>s repeated assertions that Hurricane Dorian was set to hit Alabama. <span class="st">"Never ever before has their management thr… | Federal weather workers have reacted furiously to the National Oceanic and Atmospheric Administration's (NOAA) defence of US President Donald Trump's repeated assertions that Hurricane Dorian was set to hit Alabama, saying they have been "</span>thrown under the bus… [+3510 chars]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Most of the results seem to be related to a dispute between Donald Trump and the National Oceanic and Atmospheric Agency (NOAA). It was a famous controversy that people referred to as <a href="https://en.wikipedia.org/wiki/Hurricane_Dorian%E2%80%93Alabama_controversy">Sharpiegate</a>.</p>
 <p>You could also explore other approaches like generating word frequencies per cluster or reviewing random samples of documents per cluster.</p>
 </section>

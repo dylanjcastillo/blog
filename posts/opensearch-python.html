@@ -257,15 +257,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Download the <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">data</a>.</li>
 <li>Create a virtual environment and install the required packages. You can create one with <code>venv</code> by running these commands in the terminal:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>python3 -m venv .venv</span>
-<span id="cb1-2"><a href="#cb1-2"></a>source .venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a>python3 -m pip install pandas==1.5.3 notebook==6.5.3 opensearch-py==2.2.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.5.3 notebook==6.5.3 opensearch-py==2.2.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let’s move on to the next section.</p>
 </section>
 <section id="run-a-local-opensearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="run-a-local-opensearch-cluster">Run a Local OpenSearch Cluster</h2>
 <p>Using Docker is the simplest method for running OpenSearch locally. Run the following command in a terminal to launch a single-node cluster:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>docker run --rm -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:2.6.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 9200:9200 <span class="at">-p</span> 9600:9600 <span class="at">-e</span> <span class="st">"discovery.type=single-node"</span> opensearchproject/opensearch:2.6.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You will see a lot of text on your terminal after running this command. But it’s okay, don’t worry!</p>
 <p>Let me describe what the command mentioned above does:</p>
 <ul>
@@ -416,7 +416,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-15"><a href="#cb9-15"></a>)</span>
 <span id="cb9-16"><a href="#cb9-16"></a>resp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>When you run this code, you should get a very long response that looks something like this:</p>
-<p><img src="images/opensearch-python/image-6.png" class="img-fluid">There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
+<p><img src="images/opensearch-python/image-6.png" class="img-fluid"></p>
+<p>There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
 </section>
 <section id="delete-documents-from-the-index" class="level2">
 <h2 class="anchored" data-anchor-id="delete-documents-from-the-index">Delete Documents From the Index</h2>

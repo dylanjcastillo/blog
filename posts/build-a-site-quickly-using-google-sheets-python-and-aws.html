@@ -274,9 +274,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="code-and-jinja-template" class="level2">
 <h2 class="anchored" data-anchor-id="code-and-jinja-template">Code and Jinja Template</h2>
 <p>First, create a directory called <code>my_pokemon_stats</code> and open a terminal from there. Then, create a virtual environment and install the required packages as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>python3 -m venv venv</span>
-<span id="cb1-2"><a href="#cb1-2"></a>source venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a>pip3 install boto3 gspread jinja2 oauth2client</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> venv/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">pip3</span> install boto3 gspread jinja2 oauth2client</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Create virtual environment and install required libraries</p>
 <p>Next, download and save these two files there: <a href="https://gist.github.com/dylanjcastillo/61018bf4474d388e2936a84368d40d07">template.html</a> and <a href="https://gist.github.com/dylanjcastillo/fbbdcb83694c2334714866340442ce18">site_builder.py</a>. These are the building blocks for generating the site.</p>
 <p><code>template.html</code> is the Jinja template we will use for building the site. It’s an HTML-like file where you can add logic that will be processed in Python and generate the definitive site. This file looks as follows:</p>
@@ -453,18 +453,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Clear <em>Block all public access</em>, choose <em>Save</em>, and confirm. <strong>When you change this anyone on the internet will have access to the contents of this bucket</strong>. That’s what you want when you are publishing a site, however don’t put anything private there!</li>
 <li>Now go to <em>Bucket Policy</em>, replace the bucket name in the policy below, paste it there, and click Save.</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>{</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="st">"Version"</span>:<span class="st">"2012-10-17"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="st">"Statement"</span>:[{</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="st">"Sid"</span>:<span class="st">"PublicReadGetObject"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5"></a>        <span class="st">"Effect"</span>:<span class="st">"Allow"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>      <span class="st">"Principal"</span>: <span class="st">"*"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>      <span class="st">"Action"</span>:[<span class="st">"s3:GetObject"</span>],</span>
-<span id="cb4-8"><a href="#cb4-8"></a>      <span class="st">"Resource"</span>:[<span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>      ]</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    }</span>
-<span id="cb4-11"><a href="#cb4-11"></a>  ]</span>
-<span id="cb4-12"><a href="#cb4-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span><span class="st">"2012-10-17"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span><span class="ot">[</span><span class="fu">{</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="dt">"Sid"</span><span class="fu">:</span><span class="st">"PublicReadGetObject"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="dt">"Effect"</span><span class="fu">:</span><span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>      <span class="dt">"Principal"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>      <span class="dt">"Action"</span><span class="fu">:</span><span class="ot">[</span><span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>      <span class="dt">"Resource"</span><span class="fu">:</span><span class="ot">[</span><span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>      <span class="ot">]</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="fu">}</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="ot">]</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="10" type="1">
 <li>Go to the <code>site_builder.py</code> script. Set the variable <code>AWS_PROFILE</code> variable to the profile name you use for accessing AWS (in a UNIX sytem it should be one of the profiles in <code>~/.aws/credentials</code>).</li>
 </ol>
@@ -477,7 +477,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="closing-words" class="level2">
 <h2 class="anchored" data-anchor-id="closing-words">Closing Words</h2>
 <p>This method is by no means perfect but will help you ship something quickly. I used this strategy to build <a href="https://stayhomeandlearn.org/">stayhomeandlearn.org</a> and it worked quite well. From April 1st until April 16th, the site got over fifteen thousand visitors, which exceeded my most optimistic expectations.</p>
-<p><img src="images/build-a-site-quickly-using-google-sheets-python-and-aws/image-6.png" class="img-fluid">The site is slowly walking towards its death now. However, <strong>this process taught me how important it is to focus on shipping instead of wasting time looking for the perfect tools</strong>. I built the site quickly, people liked it, and after the first day it already had more traffic than any of the side projects I’ve done so far. That thing about perfect being the enemy of good is real.</p>
+<p><a href="images/build-a-site-quickly-using-google-sheets-python-and-aws/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/build-a-site-quickly-using-google-sheets-python-and-aws/image-6.png" class="img-fluid"></a></p>
+<p>The site is slowly walking towards its death now. However, <strong>this process taught me how important it is to focus on shipping instead of wasting time looking for the perfect tools</strong>. I built the site quickly, people liked it, and after the first day it already had more traffic than any of the side projects I’ve done so far. That thing about perfect being the enemy of good is real.</p>
 <p>In my case, I had to add more functionality to the script for styling and deploying purposes. If you are interested, you can take a look at the code in my GitHub repository: <a href="https://github.com/dylanjcastillo/stayhomeandlearn.org" class="uri">https://github.com/dylanjcastillo/stayhomeandlearn.org</a></p>
 <p>[1] G. Bauges, <a href="https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html">Google Spreadsheets and Python</a> (2017)</p>
 <p>[2] V. Drake, H<a href="https://victoria.dev/blog/hosting-your-static-site-with-aws-s3-route-53-and-cloudfront/">osting your static site with AWS S3, Route 53, and CloudFront</a> (2017)</p>
@@ -934,7 +935,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

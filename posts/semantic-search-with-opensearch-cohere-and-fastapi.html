@@ -275,31 +275,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install <a href="https://www.python.org/downloads/">Python 3.11</a>.</li>
 <li>Clone the repository with the sample app:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>git clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
 <li>Go to the root folder of the project and create a virtual environment with the dependencies using <strong>venv and pip:</strong></li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>python3.11 -m venv .venv &amp;&amp; source .venv/bin/activate</span>
-<span id="cb2-2"><a href="#cb2-2"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">python3.11</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Assuming all went smoothly, you should have a virtual environment set up with the required libraries and the following project structure:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>opensearch-cohere-semantic-search</span>
-<span id="cb3-2"><a href="#cb3-2"></a>├── LICENSE</span>
-<span id="cb3-3"><a href="#cb3-3"></a>├── README.md</span>
-<span id="cb3-4"><a href="#cb3-4"></a>├── data</span>
-<span id="cb3-5"><a href="#cb3-5"></a>│   ├── news.csv</span>
-<span id="cb3-6"><a href="#cb3-6"></a>│   ├── news_sample.csv</span>
-<span id="cb3-7"><a href="#cb3-7"></a>│   └── news_sample_with_vectors.csv</span>
-<span id="cb3-8"><a href="#cb3-8"></a>├── notebooks</span>
-<span id="cb3-9"><a href="#cb3-9"></a>│   └── generate_sample.ipynb</span>
-<span id="cb3-10"><a href="#cb3-10"></a>├── requirements.txt</span>
-<span id="cb3-11"><a href="#cb3-11"></a>├── run_opensearch_docker.sh</span>
-<span id="cb3-12"><a href="#cb3-12"></a>└── src</span>
-<span id="cb3-13"><a href="#cb3-13"></a>│   ├── app.py</span>
-<span id="cb3-14"><a href="#cb3-14"></a>│   ├── config.py</span>
-<span id="cb3-15"><a href="#cb3-15"></a>│   ├── indexer.py</span>
-<span id="cb3-16"><a href="#cb3-16"></a>│   └── vectorizer.py</span>
-<span id="cb3-17"><a href="#cb3-17"></a>├── .env-example</span>
-<span id="cb3-18"><a href="#cb3-18"></a>└── .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">opensearch-cohere-semantic-search</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">├──</span> LICENSE</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">├──</span> README.md</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="ex">├──</span> data</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="ex">│</span>   ├── news.csv</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="ex">│</span>   ├── news_sample.csv</span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="ex">│</span>   └── news_sample_with_vectors.csv</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="ex">├──</span> notebooks</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="ex">│</span>   └── generate_sample.ipynb</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="ex">├──</span> requirements.txt</span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="ex">├──</span> run_opensearch_docker.sh</span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="ex">└──</span> src</span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="ex">│</span>   ├── app.py</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="ex">│</span>   ├── config.py</span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="ex">│</span>   ├── indexer.py</span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="ex">│</span>   └── vectorizer.py</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="ex">├──</span> .env-example</span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The project is organized into several key files and directories, as described below</p>
 <ul>
 <li><code>data/</code>: This directory contains the project’s data. It contains the <a href="https://www.kaggle.com/datasets/szymonjanowski/internet-articles-data-with-users-engagement">original dataset</a> downloaded from Kaggle, and a sample, which you’ll use in the tutorial.</li>
@@ -317,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="run-a-local-opensearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="run-a-local-opensearch-cluster">Run a Local OpenSearch Cluster</h2>
 <p>Before we get into the code, you should start a local OpenSearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>sh run_opensearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">sh</span> run_opensearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will launch a local OpenSearch cluster. If everything went well, the terminal will show a long string of text. Keep the terminal open in the background and move on to the next step.</p>
 </section>
 <section id="vectorize-the-articles" class="level2">
@@ -507,8 +507,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Lines 28 to 49</strong> define a<code>**/**search</code> endpoint that accepts a query string parameter. It uses Cohere to generate an embedding from a query and then searches the OpenSearch index for the ten most similar documents. Finally, it formats the results as a user response.</li>
 </ul>
 <p>To run the app, you can use <code>uvicorn app:app --reload</code>. You can test the app by opening your browser, navigating to <code>localhost:8000/docs</code>, and clicking on <code>POST /search</code>:</p>
-<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid">For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
-<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid">That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
+<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid"></p>
+<p>For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
+<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid"></p>
+<p>That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>

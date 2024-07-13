@@ -256,16 +256,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Download the necessary <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">data</a>.</li>
 <li>Create a virtual environment and install the required packages. If you like <code>venv</code>, you can run these commands:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>python3 -m venv .venv</span>
-<span id="cb1-2"><a href="#cb1-2"></a>source .venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a>python3 -m pip install pandas==1.4.3 notebook==6.3.0 elasticsearch==8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 elasticsearch==8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>All good? Let’s continue.</p>
 </section>
 <section id="create-a-local-elasticsearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-local-elasticsearch-cluster">Create a Local Elasticsearch Cluster</h2>
 <p>The easiest way to run Elasticsearch locally is by using docker.</p>
 <p>Open a terminal and run this code to start a single-node ES cluster you can use for local development:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>docker run --rm -p 9200:9200 -p 9300:9300 -e "xpack.security.enabled=false" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 9200:9200 <span class="at">-p</span> 9300:9300 <span class="at">-e</span> <span class="st">"xpack.security.enabled=false"</span> <span class="at">-e</span> <span class="st">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch:8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once you run this command, you’ll see a lot of text on your terminal. But don’t worry, that’s fine!</p>
 <p>This command will start an Elasticsearch cluster in your machine. There are a few things to unpack here:</p>
 <ul>

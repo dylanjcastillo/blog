@@ -353,7 +353,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-10"><a href="#cb9-10"></a>fig <span class="op">=</span> px.scatter(df_umap, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, color<span class="op">=</span><span class="st">'cluster'</span>)</span>
 <span id="cb9-11"><a href="#cb9-11"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should get something similar to this graph:</p>
-<p><img src="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid">This will give you a sense of how good are the clusters generated.</p>
+<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid"></a></p>
+<p>This will give you a sense of how good are the clusters generated.</p>
 </section>
 <section id="create-a-topic-title-per-cluster" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-topic-title-per-cluster">Create a Topic Title per Cluster</h3>
@@ -391,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-3"><a href="#cb11-3"></a>    <span class="bu">print</span>(df.query(<span class="ss">f"cluster == '</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'"</span>).topic_title.values[<span class="dv">0</span>])</span>
 <span id="cb11-4"><a href="#cb11-4"></a>    display(df.query(<span class="ss">f"cluster == '</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'"</span>).drop(columns<span class="op">=</span>[<span class="st">"topic_title"</span>]).head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In my case, running this code produces the following articles and topic titles:</p>
-<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
+<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
 <p>All articles seem to be related to the topic title. Yay!</p>
 </section>
 <section id="conclusion" class="level3">
@@ -851,7 +852,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

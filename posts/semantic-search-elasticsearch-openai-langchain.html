@@ -268,40 +268,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
 <li>Clone the project’s repository:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>git clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="4" type="1">
 <li><p>From the root folder of the project, install the dependencies:</p>
 <ul>
 <li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>poetry config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a>poetry install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>python3.10 -m venv .venv &amp;&amp; source .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Open <code>src/.env-example</code>, add your secret OpenAI key, and save the file as <code>.env</code>.</p></li>
 </ol>
 <p>By now, you’ll have a virtual environment set up with the required libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>semantic-search-elasticsearch-openai-langchain</span>
-<span id="cb4-2"><a href="#cb4-2"></a>├── LICENSE</span>
-<span id="cb4-3"><a href="#cb4-3"></a>├── README.md</span>
-<span id="cb4-4"><a href="#cb4-4"></a>├── poetry.lock</span>
-<span id="cb4-5"><a href="#cb4-5"></a>├── pyproject.toml</span>
-<span id="cb4-6"><a href="#cb4-6"></a>├── requirements.txt</span>
-<span id="cb4-7"><a href="#cb4-7"></a>├── run_elasticsearch.sh</span>
-<span id="cb4-8"><a href="#cb4-8"></a>├── src</span>
-<span id="cb4-9"><a href="#cb4-9"></a>│&nbsp;&nbsp; ├── app.py</span>
-<span id="cb4-10"><a href="#cb4-10"></a>│&nbsp;&nbsp; ├── config.py</span>
-<span id="cb4-11"><a href="#cb4-11"></a>│   ├── data</span>
-<span id="cb4-12"><a href="#cb4-12"></a>│&nbsp;&nbsp; │   └── Marcus_Aurelius_Antoninus...</span>
-<span id="cb4-13"><a href="#cb4-13"></a>│&nbsp;&nbsp; │       ├── index.html</span>
-<span id="cb4-14"><a href="#cb4-14"></a>│&nbsp;&nbsp; │       ├── metadata.opf</span>
-<span id="cb4-15"><a href="#cb4-15"></a>│&nbsp;&nbsp; │       └── style.css</span>
-<span id="cb4-16"><a href="#cb4-16"></a>│&nbsp;&nbsp; ├── indexer.py</span>
-<span id="cb4-17"><a href="#cb4-17"></a>│   └── .env-example</span>
-<span id="cb4-18"><a href="#cb4-18"></a>└── .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">semantic-search-elasticsearch-openai-langchain</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="ex">├──</span> LICENSE</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> poetry.lock</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="ex">├──</span> pyproject.toml</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="ex">├──</span> requirements.txt</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="ex">├──</span> run_elasticsearch.sh</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="ex">├──</span> src</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="ex">│&nbsp;&nbsp;</span> ├── app.py</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="ex">│&nbsp;&nbsp;</span> ├── config.py</span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="ex">│</span>   ├── data</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="ex">│&nbsp;&nbsp;</span> │   └── Marcus_Aurelius_Antoninus...</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="ex">│&nbsp;&nbsp;</span> │       ├── index.html</span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="ex">│&nbsp;&nbsp;</span> │       ├── metadata.opf</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="ex">│&nbsp;&nbsp;</span> │       └── style.css</span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="ex">│&nbsp;&nbsp;</span> ├── indexer.py</span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="ex">│</span>   └── .env-example</span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>These are the most relevant files and directories in the project:</p>
 <ul>
 <li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies and are used by Poetry to create a virtual environment.</li>
@@ -319,7 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="start-a-local-elasticsearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="start-a-local-elasticsearch-cluster">Start a Local Elasticsearch Cluster</h2>
 <p>Before we get into the code, you should start a local Elasticsearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>sh run_elasticsearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sh</span> run_elasticsearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If everything went well, a lengthy text string will appear on the terminal. For the rest of the tutorial, keep this terminal window open in the background.</p>
 </section>
 <section id="split-and-index-the-book" class="level2">
@@ -374,8 +374,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Lines 18 to 25</strong> initialize the embeddings function, create a new index, and index the documents generated by the text splitter. In <code>elasticsearch_url</code>, you specify the port where your application is running locally, and in <code>index_name</code> you specify the name of the index you’ll use. Finally, you print the Elasticsearch client information.</li>
 </ul>
 <p>To run this script, open a terminal, activate the virtual environment, and from <code>src</code> folder of your project, run the following command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a># ../src/</span>
-<span id="cb7-2"><a href="#cb7-2"></a>python indexer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># ../src/</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">python</span> indexer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If everything went well, you should get an output that looks similar to this (but not properly formatted):</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"0e1113eb2915"</span><span class="fu">,</span></span>
@@ -457,10 +457,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Lines 22 to 36</strong> initialize the FastAPI app and define two endpoints. The <code>/</code> endpoint provides users with information on how to use the application. The <code>/ask</code> endpoint takes a user’s question (<code>query</code> parameter) and returns an answer using the previously initialized chain.</li>
 </ul>
 <p>Finally, you can run the app from the terminal (using your virtual environment):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>uvicorn app:app --reload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">uvicorn</span> app:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then, visit <code>http://127.0.0.1:8000/docs</code>, and test <code>/ask</code> by making a question about the book:</p>
-<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid">If everything went well, you should get something like this:</p>
-<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid">That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
+<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid"></p>
+<p>If everything went well, you should get something like this:</p>
+<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid"></p>
+<p>That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
 </section>
 <section id="going-to-production" class="level2">
 <h2 class="anchored" data-anchor-id="going-to-production">Going to Production</h2>

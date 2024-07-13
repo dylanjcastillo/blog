@@ -266,41 +266,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
 <li>Clone the project’s repository:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>git clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="4" type="1">
 <li><p>From the root folder of the project, install the dependencies:</p>
 <ul>
 <li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>poetry config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a>poetry install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>python3.10 -m venv .venv &amp;&amp; source .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Open <code>src/.env-example</code>, add your OpenAI secret key in the corresponding variable, and save the file as <code>.env</code>.</p></li>
 </ol>
 <p>You should now have a virtual environment set up with the necessary libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>chatbot-code-interpreter</span>
-<span id="cb4-2"><a href="#cb4-2"></a>├── LICENSE</span>
-<span id="cb4-3"><a href="#cb4-3"></a>├── README.md</span>
-<span id="cb4-4"><a href="#cb4-4"></a>├── poetry.lock</span>
-<span id="cb4-5"><a href="#cb4-5"></a>├── pyproject.toml</span>
-<span id="cb4-6"><a href="#cb4-6"></a>├── requirements.txt</span>
-<span id="cb4-7"><a href="#cb4-7"></a>├── src</span>
-<span id="cb4-8"><a href="#cb4-8"></a>│   ├── app.py</span>
-<span id="cb4-9"><a href="#cb4-9"></a>│   ├── config.py</span>
-<span id="cb4-10"><a href="#cb4-10"></a>│   ├── prompts</span>
-<span id="cb4-11"><a href="#cb4-11"></a>│   │   ├── system.prompt</span>
-<span id="cb4-12"><a href="#cb4-12"></a>│   │   └── user.prompt</span>
-<span id="cb4-13"><a href="#cb4-13"></a>│   ├── static</span>
-<span id="cb4-14"><a href="#cb4-14"></a>│   │   └── all_stocks.csv</span>
-<span id="cb4-15"><a href="#cb4-15"></a>│   ├── templates</span>
-<span id="cb4-16"><a href="#cb4-16"></a>│   │   └── index.html</span>
-<span id="cb4-17"><a href="#cb4-17"></a>│   ├── utils.py</span>
-<span id="cb4-18"><a href="#cb4-18"></a>│   └── .env-example</span>
-<span id="cb4-19"><a href="#cb4-19"></a>└── .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">chatbot-code-interpreter</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="ex">├──</span> LICENSE</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> poetry.lock</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="ex">├──</span> pyproject.toml</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="ex">├──</span> requirements.txt</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="ex">├──</span> src</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="ex">│</span>   ├── app.py</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="ex">│</span>   ├── config.py</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="ex">│</span>   ├── prompts</span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="ex">│</span>   │   ├── system.prompt</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="ex">│</span>   │   └── user.prompt</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="ex">│</span>   ├── static</span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="ex">│</span>   │   └── all_stocks.csv</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="ex">│</span>   ├── templates</span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="ex">│</span>   │   └── index.html</span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="ex">│</span>   ├── utils.py</span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="ex">│</span>   └── .env-example</span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>These are the most relevant files and directories in the project:</p>
 <ul>
 <li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies. They’re used by Poetry to create a virtual environment.</li>
@@ -501,7 +501,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Lines 57 to 65</strong> set up the Litestar app, incorporating the previously defined routes and the locations of the templates and static files.</li>
 </ul>
 <p>To test the app, <code>cd</code> into <code>src/</code> and run this code in a terminal within the virtual environment:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>litestar run --reload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">litestar</span> run <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If everything goes well, you’ll see an output similar to this one:</p>
 <p><img src="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></p>
 <p>Next, open <code>http://127.0.0.1:8000</code> on your browser. You should see the app’s UI.</p>

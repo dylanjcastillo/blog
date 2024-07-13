@@ -246,13 +246,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>Before we start, you need to install some libraries. The best way to do that is to create a new virtual environment and install the packages there.</p>
 <p>If you’re using <code>venv</code>, run these commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>python3 -m venv .textcl</span>
-<span id="cb1-2"><a href="#cb1-2"></a>source .textcl/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a>python3 -m pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .textcl</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> .textcl/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If you’re using <code>conda</code>, this is how you do it:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>conda create --name textcl</span>
-<span id="cb2-2"><a href="#cb2-2"></a>conda activate textcl</span>
-<span id="cb2-3"><a href="#cb2-3"></a>conda install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">conda</span> create <span class="at">--name</span> textcl</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">conda</span> activate textcl</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">conda</span> install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>That’s it! These commands will create a virtual environment, activate it, and install the required packages.</p>
 <p>Finally, start a Jupyter Notebook session by executing <code>jupyter notebook</code> on the same terminal where you ran the previous commands and create a new notebook.</p>
 </section>
