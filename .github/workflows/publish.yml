@@ -17,9 +17,14 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render and Publish
+      - name: Render blog
         uses: quarto-dev/quarto-actions/publish@v2
+      
+      - name: Publish to Cloudflare
+        uses: cloudflare/pages-action@v1
         with:
-          target: gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: blog
+          directory: "_site"
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
