@@ -261,15 +261,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="add-the-key-to-ssh-config">Add the Key to SSH Config</h2>
 <p>Next, you’ll create an <a href="https://man.openbsd.org/ssh_config.5"><strong>SSH config file</strong></a>. This file allows you to define the instructions required to connect to remote servers using SSH. It’s an easy way to manage multiple servers’ SSH keys or to keep deploy keys of different repositories in the same server.</p>
 <p>You can create and edit the SSH config file by running these commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">touch</span> ~/.ssh/config </span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">chmod</span> 600 ~/.ssh/config </span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">vim</span> ~/.ssh/config <span class="co"># Or: nano ~/.ssh/config </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">touch</span> ~/.ssh/config</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">chmod</span> 600 ~/.ssh/config</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">vim</span> ~/.ssh/config <span class="co"># Or: nano ~/.ssh/config</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>These commands will create an SSH config file, set the correct permissions, and open it using <em>vim</em>. You can also use <em>nano</em> to open the file if you’re unfamiliar with vim’s shortcuts.</p>
 <p>An SSH config file consists of sections specifying the instructions required for each server you’ll connect to. So, in this case, you’ll provide the instructions needed to connect to your repository. For that, copy this text to the file:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">Host</span> github-YOUR-APP </span>
-<span id="cb3-2"><a href="#cb3-2"></a>    <span class="ex">HostName</span> github.com </span>
-<span id="cb3-3"><a href="#cb3-3"></a>    <span class="ex">AddKeysToAgent</span> yes </span>
-<span id="cb3-4"><a href="#cb3-4"></a>    <span class="ex">PreferredAuthentications</span> publickey </span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">Host</span> github-YOUR-APP</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="ex">HostName</span> github.com</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="ex">AddKeysToAgent</span> yes</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="ex">PreferredAuthentications</span> publickey</span>
 <span id="cb3-5"><a href="#cb3-5"></a>    <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>‌In the code snippet above, you provide the settings required to connect to GitHub using the SSH key you just created. You specify the following parameters:</p>
 <ul>
@@ -293,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Copy the key in the <em>Key</em> textbox and set a title to the key. You can leave <em>Allow write access</em> unchecked and click on <em>Add key</em>. <em>Allow write access</em> allows you to make changes to the repository using the deploy key. For security reasons, you don’t want to do that in most cases.</p>
 <p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="img-fluid"></a></p>
 <p>Next, you can go back to your server’s terminal and clone your repository. You can do that by running this command:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git              </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will clone your app’s repository to your server. Please remember to replace <code>github-YOUR-APP</code> by the <code>Host</code> you specified in the SSH config file. Otherwise, it won’t work.</p>
 <p>That’s all!</p>
 </section>
@@ -758,7 +758,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

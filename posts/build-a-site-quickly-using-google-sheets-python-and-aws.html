@@ -454,14 +454,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Now go to <em>Bucket Policy</em>, replace the bucket name in the policy below, paste it there, and click Save.</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">{</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span><span class="st">"2012-10-17"</span><span class="fu">,</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span><span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="dt">"Sid"</span><span class="fu">:</span><span class="st">"PublicReadGetObject"</span><span class="fu">,</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>        <span class="dt">"Effect"</span><span class="fu">:</span><span class="st">"Allow"</span><span class="fu">,</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>      <span class="dt">"Principal"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>      <span class="dt">"Action"</span><span class="fu">:</span><span class="ot">[</span><span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>      <span class="dt">"Resource"</span><span class="fu">:</span><span class="ot">[</span><span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>      <span class="ot">]</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="fu">{</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"PublicReadGetObject"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>      <span class="dt">"Principal"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span><span class="ot">]</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a>    <span class="fu">}</span></span>
 <span id="cb4-11"><a href="#cb4-11"></a>  <span class="ot">]</span></span>
 <span id="cb4-12"><a href="#cb4-12"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -935,7 +935,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","loop":false,"openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","loop":false,"selector":".lightbox","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

@@ -10556,29 +10556,29 @@ font-style: inherit;">"USERNAME@EMAIL.com"</span></span></code></pre></div>
 <p>You can create and edit the SSH config file by running these commands:</p>
 <div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">touch</span> ~/.ssh/config </span>
+font-style: inherit;">touch</span> ~/.ssh/config</span>
 <span id="cb2-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">chmod</span> 600 ~/.ssh/config </span>
+font-style: inherit;">chmod</span> 600 ~/.ssh/config</span>
 <span id="cb2-3"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">vim</span> ~/.ssh/config <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># Or: nano ~/.ssh/config </span></span></code></pre></div>
+font-style: inherit;"># Or: nano ~/.ssh/config</span></span></code></pre></div>
 <p>These commands will create an SSH config file, set the correct permissions, and open it using <em>vim</em>. You can also use <em>nano</em> to open the file if you’re unfamiliar with vim’s shortcuts.</p>
 <p>An SSH config file consists of sections specifying the instructions required for each server you’ll connect to. So, in this case, you’ll provide the instructions needed to connect to your repository. For that, copy this text to the file:</p>
 <div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">Host</span> github-YOUR-APP </span>
+font-style: inherit;">Host</span> github-YOUR-APP</span>
 <span id="cb3-2">    <span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">HostName</span> github.com </span>
+font-style: inherit;">HostName</span> github.com</span>
 <span id="cb3-3">    <span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">AddKeysToAgent</span> yes </span>
+font-style: inherit;">AddKeysToAgent</span> yes</span>
 <span id="cb3-4">    <span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">PreferredAuthentications</span> publickey </span>
+font-style: inherit;">PreferredAuthentications</span> publickey</span>
 <span id="cb3-5">    <span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">IdentityFile</span> ~/.ssh/id_ed25519</span></code></pre></div>
@@ -10610,7 +10610,7 @@ font-style: inherit;">ssh-ed25519</span> AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTE
 <p>Next, you can go back to your server’s terminal and clone your repository. You can do that by running this command:</p>
 <div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git              </span></code></pre></div>
+font-style: inherit;">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git</span></code></pre></div>
 <p>This will clone your app’s repository to your server. Please remember to replace <code>github-YOUR-APP</code> by the <code>Host</code> you specified in the SSH config file. Otherwise, it won’t work.</p>
 <p>That’s all!</p>
 </section>
