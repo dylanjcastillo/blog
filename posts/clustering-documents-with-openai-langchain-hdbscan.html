@@ -258,28 +258,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Create a virtual environment using <code>venv</code>:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>python3.10 -m venv .venv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="2" type="1">
 <li>Create a <code>requirements.txt</code> file that contains the following packages:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>hdbscan</span>
-<span id="cb2-2"><a href="#cb2-2"></a>openai</span>
-<span id="cb2-3"><a href="#cb2-3"></a>pandas</span>
-<span id="cb2-4"><a href="#cb2-4"></a>numpy</span>
-<span id="cb2-5"><a href="#cb2-5"></a>python-dotenv</span>
-<span id="cb2-6"><a href="#cb2-6"></a>tiktoken</span>
-<span id="cb2-7"><a href="#cb2-7"></a>notebook</span>
-<span id="cb2-8"><a href="#cb2-8"></a>plotly</span>
-<span id="cb2-9"><a href="#cb2-9"></a>umap-learn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">hdbscan</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">openai</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">pandas</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="ex">numpy</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="ex">python-dotenv</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="ex">tiktoken</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="ex">notebook</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="ex">plotly</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="ex">umap-learn</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
 <li>Activate the virtual environment and install the packages:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>source .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a>pip3 install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="4" type="1">
 <li>Create a file called <code>.env</code>, and add the your OpenAI key:</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>OPENAI_API_KEY=&lt;your key&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>your <span class="ex">key</span><span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="5" type="1">
 <li>Create an empty notebook file. For the rest of this tutorial, you’ll work on it.</li>
 </ol>
@@ -852,7 +852,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","loop":false,"selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
