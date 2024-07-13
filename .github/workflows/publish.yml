@@ -18,7 +18,7 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render blog
-        uses: quarto-dev/quarto-actions/publish@v2
+        uses: quarto-dev/quarto-actions/render@v2
       
       - name: Publish to Cloudflare
         uses: cloudflare/pages-action@v1
