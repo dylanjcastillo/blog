@@ -65,7 +65,7 @@ This step isn't required, but it's still a good idea to at least skim it. Even m
 
 First, you should make sure your server has the latest software:
 
-```shell
+```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
@@ -76,13 +76,13 @@ These are common commands you'll see when working with Debian-based servers:
 
 Next, you should set up automatic security updates, so that you don't have to do them manually. For that, you'll need to install and enable `unnattended-upgrades`:
 
-```shell
+```bash
 sudo apt install unattended-upgrades
 ```
 
 Once the installation is finished, edit `/etc/apt/apt.conf.d/20auto-upgrades` to include the following lines:
 
-```shell
+```bash
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 APT::Periodic::AutocleanInterval "7";
@@ -96,7 +96,7 @@ These lines configure `unattended-upgrades` so that it runs automatically. Here'
 
 Lastly, edit `/etc/apt/apt.conf.d/50unattended-upgrades` to make sure the system automatically reboots when kernel updates require it:
 
-```shell
+```bash
 Unattended-Upgrade::Automatic-Reboot "true"; # change to true
 ```
 
@@ -108,7 +108,7 @@ Whew! You've now ensured that your system is up to date and will remain so. Next
 
 If your server ever gets hacked, having a non-root user reduces the damage the malicious actor can do. That, [among other reasons](https://askubuntu.com/questions/1127174/purpose-of-creating-non-root-user), justifies the creation of a non-root user.
 
-```shell
+```bash
 sudo adduser fastapi-user # replace fastapi-user with your preferred name
 sudo gpasswd -a fastapi-user sudo # add to sudoers
 su - fastapi-user # login as fastapi-user
@@ -120,7 +120,7 @@ Then, you will set up your server so that you connect to it using an SSH key ins
 
 If you don't already have an SSH key, open a new terminal **on your local machine** and run the following command. Otherwise, skip this step, and move directly to copy your public SSH key.
 
-```shell
+```bash
 ssh-keygen -t ed25519 -C "username@email.com"
 ```
 
@@ -131,13 +131,13 @@ ssh-keygen -t ed25519 -C "username@email.com"
 
 Then, copy your public SSH key by using this command and copying the output:
 
-```shell
+```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
 Go back to the **remote server's** terminal and type in the following commands:
 
-```shell
+```bash
 mkdir ~/.ssh/
 chmod 700 -R ~/.ssh/
 sudo vim ~/.ssh/authorized_keys
@@ -151,13 +151,13 @@ These commands will:
 
 Paste your public SSH key into `authorized_keys`. Save the changes and close the editor. Make sure the changes worked by closing the terminal and logging back into your machine using the following command:
 
-```shell
+```bash
 ssh fastapi-user@your-server-ip
 ```
 
 Once you've tested that it works, you should disable the root login and use password authentication for SSH connections. To do this, you'll have to update the following values in `/etc/ssh/sshd_config` using **vim** (or any other editor) using `sudo` privileges:
 
-```shell
+```bash
 PermitRootLogin no # change to no
 ...
 PasswordAuthentication no # change to no
@@ -175,7 +175,7 @@ Also, you can install [fail2ban](https://www.digitalocean.com/community/tutorial
 
 You will require a few software tools. Begin by running the following commands to install Python:
 
-```shell
+```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt update
 sudo apt install python3.11 python3.11-venv -y
@@ -183,7 +183,7 @@ sudo apt install python3.11 python3.11-venv -y
 
 Then, install **Supervisor** and **NGINX**:
 
-```shell
+```bash
 sudo apt install supervisor nginx -y
 ```
 
@@ -193,7 +193,7 @@ NGINX,as mentioned before, is a popular multifaceted software, that's often used
 
 Enable and start Supervisor:
 
-```shell
+```bash
 sudo systemctl enable supervisor
 sudo systemctl start supervisor
 ```
@@ -204,7 +204,7 @@ sudo systemctl start supervisor
 
 Start by cloning the sample app into `/home/fastapi-user`:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/fastapi-nginx-gunicorn
 ```
 
@@ -212,7 +212,7 @@ This will work with public repositories. If you want to deploy an app from a pri
 
 Next, create a virtual environment and activate it in the project directory:
 
-```shell
+```bash
 cd /home/fastapi-user/fastapi-nginx-gunicorn
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -222,7 +222,7 @@ These commands will change your current location to the project directory, creat
 
 Now, use `pip` to install the libraries specified in `requirements.txt`:
 
-```shell
+```bash
 pip install -r requirements.txt
 ```
 
@@ -230,19 +230,19 @@ This will install the packages in `requirements.txt`: `fastapi`, `gunicorn`, and
 
 Verify that everything went well by running the application:
 
-```shell
+```bash
 uvicorn main:app
 ```
 
 You shouldn't get any errors when you run this command. You can also verify that it's working by opening a new terminal window, connecting to the server, and making a request with `curl`:
 
-```shell
+```bash
 curl http://localhost:8000
 ```
 
 You should get the following response:
 
-```shell
+```bash
 {"message":"It's working!"}
 ```
 
@@ -256,7 +256,7 @@ There are two parts to configuring Gunicorn. First, specifying the configuration
 
 You'll first create a file to define the parameters you'll use when running Gunicorn. For that, create a file called `gunicorn_start` in the project directory:
 
-```shell
+```bash
 vim gunicorn_start
 ```
 
@@ -301,13 +301,13 @@ Here's what you're defining:
 
 Save and close the fine. Then, make it executable by running the following:
 
-```shell
+```bash
 chmod u+x gunicorn_start
 ```
 
 Finally, make a `run` folder in your project directory for the Unix socket file you defined in the `BIND` parameter:
 
-```shell
+```bash
 mkdir run
 ```
 
@@ -317,19 +317,19 @@ When you have multiple servers communicating on the same machine, [using a Unix 
 
 First, create a directory called `logs` in the project directory to store your application's error logs:
 
-```shell
+```bash
 mkdir logs
 ```
 
 Next, create a Supervisor'sconfiguration file by running the following command:
 
-```shell
+```bash
 sudo vim /etc/supervisor/conf.d/fastapi-app.conf
 ```
 
 There copy and paste the following:
 
-```shell
+```bash
 [program:fastapi-app]
 command=/home/fastapi-user/fastapi-nginx-gunicorn/gunicorn_start
 user=fastapi-user
@@ -345,14 +345,14 @@ This configuration file executes the `gunicorn_start` file you created earlier u
 
 Reread Supervisor's configuration file and restart the service by running these commands:
 
-```shell
+```bash
 sudo supervisorctl reread
 sudo supervisorctl update
 ```
 
 Finally, you can check the status of the program by running this command:
 
-```shell
+```bash
 sudo supervisorctl status fastapi-app
 ```
 
@@ -360,7 +360,7 @@ If everything went well, the `fastapi-app` service status should be set to `RUNN
 
 You can also test it by opening a new terminal window, connecting to the server, and issuing a GET request using `curl`:
 
-```shell
+```bash
 curl --unix-socket /home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock localhost
 ```
 
@@ -372,7 +372,7 @@ You should see the following output:
 
 Finally, if you make changes to the code, you can restart the service to apply to changes by running this command:
 
-```shell
+```bash
 sudo supervisorctl restart fastapi-app
 ```
 
@@ -382,7 +382,7 @@ Way to go! You've got an ASGI server running using Gunicorn and Uvicorn. Next, y
 
 Create a new NGINX configuration file for your project:
 
-```shell
+```bash
 sudo vim /etc/nginx/sites-available/fastapi-app
 ```
 
@@ -429,13 +429,13 @@ This is the NGINX configuration file. Here's how it works:
 
 Enable the configuration of your site by creating a symbolic link from the file in `sites-available` into `sites-enabled` by running this command:
 
-```shell
+```bash
 sudo ln -s /etc/nginx/sites-available/fastapi-app /etc/nginx/sites-enabled/
 ```
 
 Test that the configuration file is OK and restart NGINX:
 
-```shell
+```bash
 sudo nginx -t
 sudo systemctl restart nginx
 ```
@@ -452,7 +452,7 @@ You should have your FastAPI app running by now, as well as Gunicorn+Uvicorn as 
 
 If you get a permission error telling you that NGINX cannot access the unix socket, you can add the `www-data` user (which typically is the user running the NGINX processes) to the `fastapi-user` group. You can use the following command:
 
-```shell
+```bash
 sudo usermod -aG fastapi-user www-data
 ```
 
@@ -464,32 +464,32 @@ This only applies if you have a domain for which you want to obtain an SSL certi
 
 If you're using Ubuntu, you can skip this step. Otherwise, you first need to install `snapd`:
 
-```shell
+```bash
 sudo apt install snapd
 ```
 
 Next, make sure you have the latest version available:
 
-```shell
+```bash
 sudo snap install core; sudo snap refresh core
 ```
 
 Install certbot and make sure the `cerbot` command is executable:
 
-```shell
+```bash
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 ```
 
 Next, generate a certificate for your domain interactively by running the following command:
 
-```shell
+```bash
 sudo certbot --nginx
 ```
 
 Finally, Certbot will automatically handle the renewal of your certificate. To test that it works run the following:
 
-```shell
+```bash
 sudo certbot renew --dry-run
 ```
 

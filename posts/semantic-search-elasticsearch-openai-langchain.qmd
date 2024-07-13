@@ -66,23 +66,22 @@ Follow these steps to set up your local environment:
 2. Install [Poetry](https://python-poetry.org/docs/#installation). It's optional but highly recommended.
 3. Clone the project's repository:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain
-
 ```
 
 4. From the root folder of the project, install the dependencies:
 
    - Using **Poetry:** Create the virtual environment in the same directory as the project and install the dependencies:
 
-   ```shell
+   ```bash
    poetry config virtualenvs.in-project true
    poetry install
    ```
 
    - Using **venv and pip:** Create a virtual environment and install the dependencies listed in `requirements.txt`:
 
-   ```shell
+   ```bash
    python3.10 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    ```
@@ -91,7 +90,7 @@ git clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai
 
 By now, you'll have a virtual environment set up with the required libraries and a local copy of the repository. Your project structure should look like this:
 
-```shell
+```bash
 semantic-search-elasticsearch-openai-langchain
 ├── LICENSE
 ├── README.md
@@ -130,7 +129,7 @@ All done! Let's get going.
 
 Before we get into the code, you should start a local Elasticsearch cluster. Open a new terminal, navigate to the project's root folder, and run:
 
-```shell
+```bash
 sh run_elasticsearch_docker.sh
 ```
 
@@ -191,7 +190,7 @@ This code takes Meditations, splits it into text chunks of 1,000 tokens, and the
 
 To run this script, open a terminal, activate the virtual environment, and from `src` folder of your project, run the following command:
 
-```shell
+```bash
 # ../src/
 python indexer.py
 ```
@@ -283,15 +282,19 @@ This code lets the user ask questions about Marcus Aurelius' Meditations and pro
 
 Finally, you can run the app from the terminal (using your virtual environment):
 
-```shell
+```bash
 uvicorn app:app --reload
 ```
 
 Then, visit `http://127.0.0.1:8000/docs`, and test `/ask` by making a question about the book:
 
-![](images/semantic-search-elasticsearch-openai-langchain/image-13.png)If everything went well, you should get something like this:
+![](images/semantic-search-elasticsearch-openai-langchain/image-13.png)
 
-![](images/semantic-search-elasticsearch-openai-langchain/image-14.png)That's it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.
+If everything went well, you should get something like this:
+
+![](images/semantic-search-elasticsearch-openai-langchain/image-14.png)
+
+That's it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.
 
 ## Going to Production
 

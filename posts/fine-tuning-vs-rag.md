@@ -69,7 +69,6 @@ jsonl_data = "\n".join(json.dumps(scenario) for scenario in scenarios)
 
 with open("cities_population.jsonl", "w") as f:
     f.write(jsonl_data)
-
 ```
 
 This code follows the [format](https://platform.openai.com/docs/guides/fine-tuning/example-format) defined by OpenAI for fine-tuning, creating 100 fake cities with random population values.
@@ -106,7 +105,9 @@ This code loads the `OPENAI_API_KEY` to the environment (it should be in an `.en
 
 This will take a few minutes. After it's over, you can try the model by copying the model ID in [Fine-tuning](https://platform.openai.com/finetune):
 
-![](images/fine-tuning-vs-rag/image.png)And running this code:
+![](images/fine-tuning-vs-rag/image.png)
+
+And running this code:
 
 ```python
 response = client.chat.completions.create(
@@ -176,14 +177,17 @@ for i, row in enumerate(data):
     }
     print(i, response_comparison)
     comparisons.append(response_comparison)
-
 ```
 
 This generated a structure as follows with the answers:
 
-```python
-{'response_model_ft': 'City_1 has about 6476472 inhabitants.', 'response_model_rag': 'City_1 has about 1967825 inhabitants.', 'answer': 'City_1 has about 1967825 inhabitants.', 'question': 'What is the population of City_1?'}
-
+```json
+{
+  "response_model_ft": "City_1 has about 6476472 inhabitants.",
+  "response_model_rag": "City_1 has about 1967825 inhabitants.",
+  "answer": "City_1 has about 1967825 inhabitants.",
+  "question": "What is the population of City_1?"
+}
 ```
 
 Then, it was easy to extract the responses and check whether they were correct:
@@ -213,7 +217,6 @@ for comparison in comparisons:
 
 print("Accuracy FT:", correct_ft / len(comparisons))
 print("Accuracy RAG:", correct_rag / len(comparisons))
-
 ```
 
 After running this code with the [data](https://github.com/dylanjcastillo/rag-vs-finetune/blob/master/cities_population.jsonl) I generated earlier, I got these results:

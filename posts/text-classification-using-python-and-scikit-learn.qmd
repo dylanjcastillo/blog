@@ -40,7 +40,7 @@ Before we start, you need to install some libraries. The best way to do that is 
 
 If you're using `venv`, run these commands:
 
-```shell
+```bash
 python3 -m venv .textcl
 source .textcl/bin/activate
 python3 -m pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2
@@ -48,7 +48,7 @@ python3 -m pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn=
 
 If you're using `conda`, this is how you do it:
 
-```shell
+```bash
 conda create --name textcl
 conda activate textcl
 conda install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2

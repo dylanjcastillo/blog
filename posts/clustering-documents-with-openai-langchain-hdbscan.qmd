@@ -172,7 +172,9 @@ fig.show()
 
 You should get something similar to this graph:
 
-![](images/clustering-documents-with-openai-langchain-hdbscan/image.png)This will give you a sense of how good are the clusters generated.
+![](images/clustering-documents-with-openai-langchain-hdbscan/image.png)
+
+This will give you a sense of how good are the clusters generated.
 
 ### Create a Topic Title per Cluster
 

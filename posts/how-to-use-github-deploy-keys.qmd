@@ -50,7 +50,7 @@ A GitHub deploy key is, ultimately, an SSH key. So you'll start by creating an S
 First, connect to your server and open a terminal. Once you're in, create an SSH key by executing the following command:
 
 
-```shell
+```bash
 ssh-keygen -t ed25519 -C "USERNAME@EMAIL.com"
 ```
 
@@ -69,7 +69,7 @@ Next, you'll create an [**SSH config file**](https://man.openbsd.org/ssh_config.
 
 You can create and edit the SSH config file by running these commands:
 
-```shell
+```bash
 touch ~/.ssh/config 
 chmod 600 ~/.ssh/config 
 vim ~/.ssh/config # Or: nano ~/.ssh/config 
@@ -80,7 +80,7 @@ These commands will create an SSH config file, set the correct permissions, and 
 An SSH config file consists of sections specifying the instructions required for each server you'll connect to. So, in this case, you'll provide the instructions needed to connect to your repository. For that, copy this text to the file:
 
 
-```shell
+```bash
 Host github-YOUR-APP 
 	HostName github.com 
     AddKeysToAgent yes 
@@ -103,12 +103,12 @@ That's all you need to do on the server. Next, you'll use your SSH key to create
 First, copy the **public key** from the SSH key you created earlier. The easiest way of doing that is to run:
 
 
-```shell
+```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 Then select and copy the resulting text from the command line. It should look something like this:
 
-```shell
+```bash
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com
 ```
 
@@ -124,7 +124,7 @@ Copy the key in the *Key* textbox and set a title to the key. You can leave *All
 
 Next, you can go back to your server's terminal and clone your repository. You can do that by running this command:
 
-```shell
+```bash
 git clone git@github-YOUR-APP:dylanjcastillo/random.git              
 ```
 This will clone your app's repository to your server. Please remember to replace `github-YOUR-APP` by the `Host` you specified in the SSH config file. Otherwise, it won't work.

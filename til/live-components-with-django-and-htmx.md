@@ -71,7 +71,6 @@ class ClickToLoadTableComponent(component.Component):
         page_obj = paginator.get_page(page)
         context = {"page_obj": page_obj}
         return self.render_to_response(context)
-
 ```
 
 You can use this component in any view using `{% component 'click_to_load' page_obj=page_obj %}` or render it outside of a view by adding it to `urls.py`:
@@ -88,7 +87,6 @@ urlpatterns = [
         name="contacts",
     ),
 ]
-
 ```
 
 Short and sweet, just like the best things in life.
@@ -170,7 +168,6 @@ class NotificationComponent(component.Component):
             streaming_content=self.streaming_response(),
             content_type="text/event-stream",
         )
-
 ```
 
 And you should include this in your `urls.py`:
@@ -186,30 +183,33 @@ urlpatterns = [
         name="stream_notification",
     ),
 ]
-
 ```
 
 Then, you need a simple HTML template to show these notifications. I used the [htmx SSE extension](https://htmx.org/extensions/server-sent-events/) to handle the SSE connection on the client. This was my template:
 
-```python
+```html
 <!-- src/templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Django Live Components</title>
-    </head>
-    <body>
-        <div hx-ext="sse"
-             sse-connect="{% url 'stream_notification' %}"
-             sse-swap="notification"></div>
-        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous">
-        </script>
-        <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Django Live Components</title>
+  </head>
+  <body>
+    <div
+      hx-ext="sse"
+      sse-connect="{% url 'stream_notification' %}"
+      sse-swap="notification"
+    ></div>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+  </body>
 </html>
-
 ```
 
 Finally, you need a script to simulate these server notifications:
@@ -253,7 +253,6 @@ if __name__ == "__main__":
             time.sleep(3)
     except KeyboardInterrupt:
         print("Stopped notification publisher")
-
 ```
 
 You can run Redis on Docker to run this script. It'll start adding notifications to the Redis channel, that you'll see flash on the page.

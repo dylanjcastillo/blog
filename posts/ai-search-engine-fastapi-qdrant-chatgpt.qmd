@@ -65,7 +65,7 @@ Take the following steps to prepare your local environment:
 2. Install [Poetry](https://python-poetry.org/docs/#installation). It's not mandatory but I highly recommend it.
 3. Clone the repository with the sample app:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-chatgpt
 ```
 
@@ -73,14 +73,14 @@ git clone https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-chatgpt
 
    - **Poetry:** Create the virtual environment in the same directory as the project and install the dependencies:
 
-   ```shell
+   ```bash
    poetry config virtualenvs.in-project true
    poetry install
    ```
 
    - **venv and pip:** Create a virtual environment and install the dependencies listed in `requirements.txt`:
 
-   ```shell
+   ```bash
    python3.10 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    ```
@@ -91,7 +91,7 @@ Because PyTorch [does not yet support Python 3.11 in MacOS and Windows](https://
 
 If everything went well, you should have a virtual environment with all of the necessary libraries and a project structure that looks like this:
 
-```shell
+```bash
 ai-search-fastapi-qdrant-gpt3
 │
 ├── README.md
@@ -114,8 +114,6 @@ ai-search-fastapi-qdrant-gpt3
 ├── requirements.txt
 ├── .env-example
 └── .venv/
-
-
 ```
 
 This is your project's structure. Let me explain the purpose of the most important files and directories:
@@ -143,7 +141,7 @@ Create an account at [Qdrant](https://cloud.qdrant.io/), if you don't already ha
 
 Next, paste the host and API key you obtained when you created your cluster into `.env`:
 
-```shell
+```bash
 QDRANT_PORT=6333
 QDRANT_HOST=<your_qdrant_host>
 QDRANT_API_KEY=<your_qdrant_api_key>
@@ -161,7 +159,7 @@ If you don't have an OpenAI account, [create one](https://platform.openai.com/lo
 
 Then, paste the generated key in `.env`:
 
-```shell
+```bash
 QDRANT_PORT=6333
 QDRANT_HOST=<your_qdrant_host>
 QDRANT_API_KEY=<your_qdrant_api_key>
@@ -181,7 +179,7 @@ Here are some useful guidelines to keep in mind when doing so:
 
 Here's a sneak peek at the [data](https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-gpt3/blob/main/data/processed/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe.json) from this tutorial:
 
-```python
+```json
 {
     "book_title": "Meditations by Marcus Aurelius",
     "url": "https://en.wikisource.org/wiki/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe",
@@ -456,9 +454,13 @@ uvicorn main:app --reload
 
 In your browser, navigate to `localhost:8000/docs` to test your `/ask` endpoint:
 
-![](images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png)A successful response will look as follows:
+![](images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png)
 
-![](images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png)That's it! You have a working version of your AI search engine. Next, I'll mention some ideas about deployment.
+A successful response will look as follows:
+
+![](images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png)
+
+That's it! You have a working version of your AI search engine. Next, I'll mention some ideas about deployment.
 
 ## Deploy Your App
 

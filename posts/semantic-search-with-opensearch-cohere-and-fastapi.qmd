@@ -74,20 +74,20 @@ Follow these steps to set up your local environment:
 1. Install [Python 3.11](https://www.python.org/downloads/).
 2. Clone the repository with the sample app:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search
 ```
 
 3. Go to the root folder of the project and create a virtual environment with the dependencies using **venv and pip:**
 
-```shell
+```bash
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
 Assuming all went smoothly, you should have a virtual environment set up with the required libraries and the following project structure:
 
-```shell
+```bash
 opensearch-cohere-semantic-search
 ├── LICENSE
 ├── README.md
@@ -126,7 +126,7 @@ All done! Let's get going.
 
 Before we get into the code, you should start a local OpenSearch cluster. Open a new terminal, navigate to the project's root folder, and run:
 
-```shell
+```bash
 sh run_opensearch_docker.sh
 ```
 
@@ -259,7 +259,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 ```
 
 This code will create a new index in your OpenSearch cluster, and store the vectors and metadata in it. Here's how it works:
@@ -333,7 +332,6 @@ def search(query: str):
     return {
         "response": response,
     }
-
 ```
 
 This code lets users search through the index. It works as follows:
@@ -345,9 +343,13 @@ This code lets users search through the index. It works as follows:
 
 To run the app, you can use `uvicorn app:app --reload`. You can test the app by opening your browser, navigating to `localhost:8000/docs`, and clicking on `POST /search`:
 
-![](images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png)For instance, if you search for "Nicolas Maduro," the current president of Venezuela who is widely regarded as a dictator. You'll get results for articles about authoritarian governments or power abuses:
+![](images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png)
 
-![](images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png)That's it! If you want to know how to deploy this app, check out a [previous article](https://dylancastillo.co/fastapi-nginx-gunicorn/) I wrote.
+For instance, if you search for "Nicolas Maduro," the current president of Venezuela who is widely regarded as a dictator. You'll get results for articles about authoritarian governments or power abuses:
+
+![](images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png)
+
+That's it! If you want to know how to deploy this app, check out a [previous article](https://dylancastillo.co/fastapi-nginx-gunicorn/) I wrote.
 
 ## Conclusion
 

@@ -64,7 +64,7 @@ Before you begin, you must first set up a few things. Follow these steps:
 2. Install [Poetry](https://python-poetry.org/docs/#installation). It's optional but highly recommended.
 3. Clone the project's repository:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/chatbot-code-interpreter
 ```
 
@@ -72,14 +72,14 @@ git clone https://github.com/dylanjcastillo/chatbot-code-interpreter
 
    - Using **Poetry:** Create the virtual environment in the same directory as the project and install the dependencies:
 
-   ```shell
+   ```bash
    poetry config virtualenvs.in-project true
    poetry install
    ```
 
    - Using **venv and pip:** Create a virtual environment and install the dependencies listed in `requirements.txt`:
 
-   ```shell
+   ```bash
    python3.10 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    ```
@@ -88,7 +88,7 @@ git clone https://github.com/dylanjcastillo/chatbot-code-interpreter
 
 You should now have a virtual environment set up with the necessary libraries and a local copy of the repository. Your project structure should look like this:
 
-```shell
+```bash
 chatbot-code-interpreter
 ├── LICENSE
 ├── README.md
@@ -247,7 +247,7 @@ Now, you'll create a simple application that will allow users to make questions 
 
 Take a look at the code in `src/app.py`:
 
-````python
+```python
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -313,8 +313,7 @@ app = Litestar(
         engine=JinjaTemplateEngine, directory=Path("templates")
     ),
 )
-
-````
+```
 
 This code provides users with a straightforward interface, allowing them to interact with the chatbot and ask questions about the dataset. Here's how it works:
 
@@ -326,7 +325,7 @@ This code provides users with a straightforward interface, allowing them to inte
 
 To test the app, `cd` into `src/` and run this code in a terminal within the virtual environment:
 
-```shell
+```bash
 litestar run --reload
 ```
 

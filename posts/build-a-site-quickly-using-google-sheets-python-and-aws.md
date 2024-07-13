@@ -74,7 +74,7 @@ These you'll need to set up or review on your own. I added some links for that p
 
 First, create a directory called `my_pokemon_stats` and open a terminal from there. Then, create a virtual environment and install the required packages as follows:
 
-```shell
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip3 install boto3 gspread jinja2 oauth2client
@@ -235,7 +235,6 @@ if __name__ == "__main__":
     download_data()
     generate_site()
     deploy_site()
-
 ```
 
 The code is structured in 3 functions: `download_sheets`, `generate_site`, and `deploy_site`. We will fill the details for accessing AWS and the Google Sheets API in the next sections.
@@ -269,7 +268,7 @@ Now, let's create the S3 bucket and configure our code to access AWS programmati
 8. Clear _Block all public access_, choose _Save_, and confirm. **When you change this anyone on the internet will have access to the contents of this bucket**. That's what you want when you are publishing a site, however don't put anything private there!
 9. Now go to _Bucket Policy_, replace the bucket name in the policy below, paste it there, and click Save.
 
-```python
+```json
 {
   "Version":"2012-10-17",
   "Statement":[{
@@ -296,7 +295,9 @@ If you want to check the site, go to the endpoint URL (step 6 from the previous 
 
 This method is by no means perfect but will help you ship something quickly. I used this strategy to build [stayhomeandlearn.org](https://stayhomeandlearn.org/) and it worked quite well. From April 1st until April 16th, the site got over fifteen thousand visitors, which exceeded my most optimistic expectations.
 
-![](images/build-a-site-quickly-using-google-sheets-python-and-aws/image-6.png)The site is slowly walking towards its death now. However, **this process taught me how important it is to focus on shipping instead of wasting time looking for the perfect tools**. I built the site quickly, people liked it, and after the first day it already had more traffic than any of the side projects I've done so far. That thing about perfect being the enemy of good is real.
+![](images/build-a-site-quickly-using-google-sheets-python-and-aws/image-6.png)
+
+The site is slowly walking towards its death now. However, **this process taught me how important it is to focus on shipping instead of wasting time looking for the perfect tools**. I built the site quickly, people liked it, and after the first day it already had more traffic than any of the side projects I've done so far. That thing about perfect being the enemy of good is real.
 
 In my case, I had to add more functionality to the script for styling and deploying purposes. If you are interested, you can take a look at the code in my GitHub repository: <https://github.com/dylanjcastillo/stayhomeandlearn.org>
 

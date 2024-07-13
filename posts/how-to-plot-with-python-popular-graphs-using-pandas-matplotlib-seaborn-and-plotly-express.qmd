@@ -120,7 +120,7 @@ If you're working on a Python project, then using a [virtual environment](https:
 
 If you're using `venv`, then run these commands:
 
-```python
+```bash
 python3 -m venv .dataviz
 source .dataviz/bin/activate
 python3 -m pip install pandas==1.2.4 numpy==1.2.0 matplotlib==3.4.2 plotly==4.14.3 seaborn==0.11.1 notebook==6.4.0
@@ -129,7 +129,7 @@ jupyter notebook
 
 If you're using `conda`, then this is how you do it:
 
-```python
+```bash
 conda create --name .dataviz
 conda activate .dataviz
 conda install pandas==1.2.4 numpy==1.19.2 matplotlib==3.4.2 plotly==4.14.3 seaborn==0.11.1 notebook==6.4.0 -y
@@ -169,7 +169,6 @@ import seaborn as sns
 # Set templates
 pio.templates.default = "seaborn"
 plt.style.use("seaborn")
-
 ```
 
 On **lines 1 to 14**, you'll import the required libraries and set up the themes for `matplotlib` and `plotly`. Each library provides you with some useful functionality:
@@ -199,7 +198,6 @@ Take a look at the data by reviewing a sample of rows:
 url = "https://raw.githubusercontent.com/szrlee/Stock-Time-Series-Analysis/master/data/all_stocks_2006-01-01_to_2018-01-01.csv"
 df = pd.read_csv(url)
 df.sample(5)
-
 ```
 
 This code will read the data from the URL you specified and generate a sample of 5 rows from the data. Take a look at the resulting sample:
@@ -231,7 +229,6 @@ df = pd.read_csv(url)
 df = df.loc[df.Name.isin(["AAPL", "JPM", "GOOGL", "AMZN"]), ["Date", "Name", "Close"]]
 df["Date"] = pd.to_datetime(df.Date)
 df.rename(columns={"Close": "Closing Price"}, inplace=True)
-
 ```
 
 This code will prepare the data you'll use in the plots. It works as follows:
@@ -277,7 +274,6 @@ ax.set_title("Stock prices (2006 - 2017)")
 ax.set_ylabel("Closing Price")
 ax.set_xlabel("Date")
 ax.legend(title="Name")
-
 ```
 
 This code creates a line plot. Here are some relevant highlights:
@@ -298,7 +294,6 @@ Here's the code to create a **line plot** with `seaborn`:
 fig, ax = plt.subplots(figsize=(12, 6))
 sns.lineplot(data=df, x="Date", y="Closing Price", hue="Name", ax=ax)
 ax.set_title("Stock Prices (2006 - 2017)")
-
 ```
 
 This code creates a line plot using `seaborn`. Here's what it does:
@@ -319,7 +314,6 @@ fig = px.line(
     df, x="Date", y="Closing Price", color="Name", title="Stock Prices (2006 - 2017)"
 )
 fig.show()
-
 ```
 
 Here's the resulting graph:
@@ -341,7 +335,6 @@ df = pd.read_csv(url)
 df = df.loc[df.Name == "AAPL", ["Date", "Open", "Close"]]
 df["Year"] = pd.to_datetime(df.Date).dt.year
 df = df.query("Year >= 2014").groupby("Year").max().reset_index(drop=False)
-
 ```
 
 This code will prepare the data you'll use in the plots. It works as follows:
@@ -366,7 +359,6 @@ df.plot.bar(
     ylabel="Price in USD",
     title="Max Opening and Closing Prices per Year for AAPL",
 )
-
 ```
 
 This is how you make a grouped bar plot. There's one detail worth mentioning: in the `plot` method, you set the size of the figure using `figsize` and keep the x-axis ticks in a horizontal position by setting `rot=0`.
@@ -396,7 +388,6 @@ ax.set_xticks(x)
 ax.set_xticklabels(df.Year)
 
 ax.legend()
-
 ```
 
 This code will create a grouped bar plot using `matplotlib`. Here's how it works:
@@ -429,7 +420,6 @@ sns.barplot(data=df_long, x="Year", y="Price", hue="Category", ax=ax)
 
 ax.set_title("Max Opening and Closing Prices per Year for AAPL")
 ax.legend(title=None)
-
 ```
 
 This is how you make a grouped bars plot using `seaborn`. There are two details worth mentioning:
@@ -491,7 +481,6 @@ df = (
     .sum()
     .reset_index(drop=False)
 )
-
 ```
 
 This code will help you prepare the data for the plots. It works as follows:
@@ -517,7 +506,6 @@ df_wide.plot.bar(
     title="Trading volume per year for selected shares",
     stacked=True,
 )
-
 ```
 
 There are a few details worth mentioning:
@@ -547,7 +535,6 @@ ax.set_ylabel("Volume (billions of shares)")
 ax.set_xlabel("Year")
 
 ax.legend()
-
 ```
 
 This code will create a stacked bar plot using `matplotlib`. Here's how it works:
@@ -612,7 +599,6 @@ fig = px.bar(
     labels={"Volume": "Volume (billions of shares)"},
 )
 fig.show()
-
 ```
 
 As you can see, making a stacked bars plot using `plotly.express` is straightforward. Just remember to set `barmode="stack"`.
@@ -664,7 +650,6 @@ ax = df_wide.plot.area(
 )
 ax.legend(bbox_to_anchor=(1, 1), loc="upper left")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 This code will make a stacked area plot using `pandas`. There are a few details worth mentioning:
@@ -692,7 +677,6 @@ ax.legend(bbox_to_anchor=(1, 1), loc="upper left")
 
 ax.set_title("Distribution of daily trading volume - 2017")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 - **Line 1:** you use the pivot method to go from a long dataset to a wide one. For this type of chart in `matplotlib`, is better to use a wide dataset.
@@ -740,7 +724,6 @@ df = pd.read_csv(url)
 stocks_filter = ["AAPL", "JPM", "GOOGL", "AMZN", "IBM"]
 df = df.loc[df.Name.isin(stocks_filter), ["Name", "Volume"]]
 df = df.groupby("Name").sum().reset_index()
-
 ```
 
 This code will help you prepare the data for the plots. It works as follows:
@@ -764,7 +747,6 @@ df.set_index("Name").plot.pie(
     pctdistance=0.75,
     title="Distribution of trading volume for selected stocks (2006 - 2017)",
 )
-
 ```
 
 You can use this code to create a pie or donut chart using pandas. Here's how it works:
@@ -793,7 +775,6 @@ ax.pie(
 )
 ax.set_title("Distribution of trading volume for selected stocks (2006 - 2017)")
 ax.legend()
-
 ```
 
 This is code will create a donut chart with `matplotlib`. Here's how it works:
@@ -820,7 +801,6 @@ fig = px.pie(
     title="Distribution of trading volume for selected stocks (2006 - 2017)",
 )
 fig.show()
-
 ```
 
 This code will result in the following graph:
@@ -829,7 +809,7 @@ This code will result in the following graph:
 
 ## How to Make a Histogram
 
-A [histogram](https://chartio.com/learn/charts/histogram-complete-guide/)shows the distribution of a numerical variable using bars. Each bar's height indicates the frequency of a certain range of that numerical variable. You can use a histogram to evaluate attributes such as shape, skew, and outliers of a variable.
+A [histogram](https://chartio.com/learn/charts/histogram-complete-guide/) shows the distribution of a numerical variable using bars. Each bar's height indicates the frequency of a certain range of that numerical variable. You can use a histogram to evaluate attributes such as shape, skew, and outliers of a variable.
 
 In this case, you'll make a histogram with the distribution of closing prices of _GOOGL_ and _AMZN._ Note that plotting a histogram with a single group is trivial, so I chose to create one for multiple groups.
 
@@ -866,7 +846,6 @@ for i, (l, g) in enumerate(df.groupby("Name")):
 ax.legend()
 ax.set_title("Distribution of Closing Prices - GOOGL vs. AMZN")
 ax.set_xlabel("Closing Price")
-
 ```
 
 You use this code to create a histogram with multiple groups. Here's what it does:
@@ -888,7 +867,6 @@ fig, ax = plt.subplots(figsize=(12, 6))
 sns.histplot(data=df, x="Close", hue="Name", ax=ax)
 ax.set_title("Distribution of Closing Prices - GOOGL vs. AMZN")
 ax.set_xlabel("Closing Price")
-
 ```
 
 There's one detail worth mentioning: in the first line, you create a figure and axes objects (the latter you pass to the `histplot` method) and set the size of the plot. The figure is a container for the axes. You use the axes to draw the plot.
@@ -911,7 +889,6 @@ fig = px.histogram(
     barmode="overlay",
 )
 fig.show()
-
 ```
 
 This is the resulting graph:
@@ -936,7 +913,6 @@ df = df.loc[
 ]
 df["Return"] = (df["Close"] - df["Open"]) / df["Open"]
 df_wide = df.pivot(index="Date", columns="Name", values="Return")
-
 ```
 
 In this code snippet, you read and transformed the data. It works as follows:
@@ -957,7 +933,6 @@ ax = df_wide.plot.scatter(
 
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
 ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 This is the resulting graph:
@@ -981,7 +956,6 @@ ax.set_title("Daily returns - GOOGL vs. AMZN")
 
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
 ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 This is the resulting graph:
@@ -1000,7 +974,6 @@ sns.scatterplot(data=df_wide, x="GOOGL", y="AMZN", ax=ax)
 ax.set_title("Daily returns - GOOGL vs AMZN")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
 ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 This is the resulting graph:
@@ -1015,7 +988,6 @@ Here's how you make a **scatter plot** using `plotly.express`:
 fig = px.scatter(df_wide, x="GOOGL", y="AMZN", title="Daily returns - GOOGL vs. AMZN")
 fig.update_layout(yaxis_tickformat="%", xaxis_tickformat="%")
 fig.show()
-
 ```
 
 This is the resulting graph:
@@ -1048,7 +1020,6 @@ df = df.loc[
 ]
 df["Return"] = (df["Close"] - df["Open"]) / df["Open"]
 df["Date"] = pd.to_datetime(df.Date)
-
 ```
 
 This code will help you prepare the data for the plots. It works as follows:
@@ -1070,7 +1041,6 @@ ax = df_wide.boxplot(column=["AMZN", "GOOGL", "IBM", "JPM"])
 
 ax.set_ylabel("Daily returns")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 There are a few details worth mentioning:
@@ -1097,7 +1067,6 @@ ax.boxplot([df_wide[col] for col in stocks], vert=True, autorange=True, labels=s
 
 ax.set_ylabel("Daily returns")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 - **Line 1:** you use the pivot method to transform the dataset from long to wide.
@@ -1118,7 +1087,6 @@ ax = sns.boxplot(x="Name", y="Return", data=df, order=stocks)
 
 ax.set_ylabel("Daily returns")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(1))
-
 ```
 
 There's one detail worth highlighting: on lines 3 and 4, you set the label of the y-axis, and change the format of the ticks of the y-axis to show percentages.
@@ -1134,7 +1102,6 @@ Here's how you make a **box plot** using `plotly.express`:
 ```python
 fig = px.box(df, x="Name", y="Return", category_orders={"Name": stocks})
 fig.show()
-
 ```
 
 This is the resulting graph:

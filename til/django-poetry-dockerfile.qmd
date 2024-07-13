@@ -122,7 +122,6 @@ USER ${uid}:${gid}
 
 WORKDIR /app/src
 ENTRYPOINT [ "/app/src/entrypoint.sh" ]
-
 ```
 
 </details>

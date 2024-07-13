@@ -64,24 +64,22 @@ The code above is a minimal example we'll use as a starting point. Next, I'll sh
 
 1. [Download a copy](https://github.com/pyscript/pyscript/archive/refs/heads/main.zip) of the latest version of PyScript, and add the required files to `head` in your HTML document:
 
-```python
+```html
 <head>
-    ...
-    <link rel="stylesheet" href="path/to/pyscript.css" />
-    <script defer src="path/to/pyscript.js"></script>
+  ...
+  <link rel="stylesheet" href="path/to/pyscript.css" />
+  <script defer src="path/to/pyscript.js"></script>
 </head>
-
 ```
 
 2. Add the CDN version of PyScript's JS and CSS files to `head` in your HTML document:
 
-```python
- <head>
-     ...
-     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
- </head>
-
+```html
+<head>
+  ...
+  <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+  <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
 ```
 
 PyScript is still under heavy development. If you use the second method, your app may break when new versions are released.
@@ -114,7 +112,6 @@ You can run code using the `py-script` tag in two ways:
     <py-script src='path/to/script.py'></pyscript>
     ...
 </body>
-
 ```
 
 The latter is usually preferred to avoid having formatting issues. If you use an HTML auto-formatter, it may break the python code you put inside `py-script`.

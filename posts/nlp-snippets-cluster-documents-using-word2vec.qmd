@@ -66,7 +66,7 @@ To follow along with the tutorial examples, you'll need to download the data and
 
 If you're using `venv`, then you need to run these commands:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/nlp-snippets.git
 python3 -m venv venv
 source venv/bin/activate
@@ -76,7 +76,7 @@ jupyter notebook
 
 If you're using `conda`, then you need to run these commands:
 
-```shell
+```bash
 git clone https://github.com/dylanjcastillo/nlp-snippets.git
 conda create --name venv
 conda activate venv
@@ -88,7 +88,7 @@ Next, open Jupyter Notebook. Then, create a new notebook in the root folder and 
 
 By now, your project structure should look like this:
 
-```shell
+```bash
 nlp-snippets/
 │
 ├── clustering/
@@ -196,7 +196,6 @@ def clean_text(text, tokenizer, stopwords):
     tokens = ["" if t.isdigit() else t for t in tokens]  # Remove digits
     tokens = [t for t in tokens if len(t) > 1]  # Remove short tokens
     return tokens
-
 ```
 
 This code cleans and tokenizes a `text` input, using a predefined `tokenizer` and a list of `stopwords`. It helps you perform these operations:
@@ -246,7 +245,7 @@ You apply these steps to a new data frame (`df`). It contains a column with the 
 
 If you execute the two cells you defined, then you should get the following output:
 
-```shell
+```bash
 Original dataframe: (10437, 15)
 Pre-processed dataframe: (9882, 2)
 ```
@@ -461,7 +460,7 @@ The qualitative part generally requires you to have domain knowledge of the subj
 
 After executing the cell you just created, the output should look like this:
 
-```shell
+```bash
 For n_clusters = 50
 Silhouette coefficient: 0.11
 Inertia:3568.342791047967
@@ -502,7 +501,7 @@ for i in range(50):
 
 For the top clusters we identified earlier – 29, 35, and 37 – these are the results:
 
-```shell
+```bash
 Cluster 29: noaa sharpie claim assertions forecasters
 Cluster 35: eye lilinow path halts projected
 Cluster 37: cnnpolitics complaint clinton pences whistleblower
@@ -522,7 +521,7 @@ for d in most_representative_docs[:3]:
 
 And these are the 3 most representative documents in that cluster:
 
-```shell
+```bash
 Dorian, Comey and Debra Messing: What Trump tweeted on Labor Day weekend | President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President's more than 120 tweets are any indication, he had more than just the storm on his mind. | Washington (CNN)President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President's more than 120 tweets are any indication, he had more than just the storm on hi… [+3027 chars]
 -------------
 Ross Must Resign If Report He Threatened NOAA Officials Is True: Democrat | As President Donald Trump claimed Hurricane Dorian could hit Alabama, the National Weather Service tweeted to correct the rumors. | Commerce Secretary Wilbur Ross is facing calls to resign over a report alleging that he threatened to fire top officials at NOAA for a tweet disputing President Donald Trump's claim that Hurricane Dorian would hit Alabama.
