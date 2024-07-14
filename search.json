@@ -648,7 +648,7 @@
     "href": "til/migrate-blog-from-ghost-to-quarto.html",
     "title": "Migrate blog from Ghost to Quarto",
     "section": "",
-    "text": "When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that Ghost was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.\nI saw myself as the García Márquez of technical writing.\nFast forward five years, and I’ve paid $2,000 for hosting a blog that barely gets 8k visits per month. Plus, I’m forced to write it in an interface that I hate.\nWith that kind of money, I could have funded a moderately extravagant hamster-only summer party.\nNot that I should, but I could.\nYes, I’m not proud of that decision1. So I’m migrating my blog from Ghost to Quarto.\nHere’s what I learned doing it."
+    "text": "When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that Ghost was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.\nI saw myself as the García Márquez of technical writing.\nFast forward five years, and I’ve paid $2,000 for hosting a blog that barely gets 8k visits per month. Plus, I’m forced to write it in an interface that I hate.\nWith that kind of money, I could have funded a moderately extravagant hamster-only summer party.\nNot that I should, but I could.\nYes, I’m not proud of that decision1. So I’m migrating my blog from Ghost to Quarto.\nHere’s a short guide on how to migrate your blog from Ghost to Quarto."
   },
   {
     "objectID": "til/migrate-blog-from-ghost-to-quarto.html#migrate-blog-from-ghost-to-quarto",
