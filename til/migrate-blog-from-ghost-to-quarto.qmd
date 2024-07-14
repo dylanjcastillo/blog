@@ -24,7 +24,7 @@ Not that I should, but I could.
 
 Yes, I'm not proud of that decision^[Choosing Ghost. No regrets about the hypothetical hamster party.]. So I'm migrating my blog from Ghost to Quarto.
 
-Here's what I learned doing it.
+Here's a short guide on how to migrate your blog from Ghost to Quarto.
 
 ## Migrate blog from Ghost to Quarto
 
