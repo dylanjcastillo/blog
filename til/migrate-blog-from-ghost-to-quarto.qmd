@@ -14,9 +14,9 @@ categories:
 
 When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that [Ghost](https://ghost.org/) was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.
 
-I saw myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of technical writing, producing masterpiece after masterpiece.
+I saw myself as the [García Márquez](https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez) of technical writing.
 
-Fast forward five years, and I've paid $1.8k for hosting a blog that barely gets 8k visits per month. Plus, I'm forced to write it in an interface that I hate.
+Fast forward five years, and I've paid $2,000 for hosting a blog that barely gets 8k visits per month. Plus, I'm forced to write it in an interface that I hate.
 
 With that kind of money, I could have funded a moderately extravagant hamster-only summer party.
 
@@ -24,22 +24,31 @@ Not that I should, but I could.
 
 Yes, I'm not proud of that decision^[Choosing Ghost. No regrets about the hypothetical hamster party.]. So I'm migrating my blog from Ghost to Quarto.
 
-Here's how I did it.
+Here's what I learned doing it.
 
 ## Migrate blog from Ghost to Quarto
 
-First, start by downloading a copy of my blog's JSON dump. You can find it in this URL: `<YOUR_BLOG_URL>/ghost/#/settings/migration`.
+### Setting up your blog
+
+First, install [Quarto](https://quarto.org/) and create a blog in an empty repository:
+
+```bash
+quarto create project blog myblog
+```
+
+### Exporting your Ghost's blog content
+
+Downloading a copy of your blog's JSON dump. You can find it in this URL: `<YOUR_BLOG_URL>/ghost/#/settings/migration`.
 
 Then click on `Export`, and click on `Export JSON`.
 
 ![Exporting my blog](images/ghost-export.png)
 
-Second, set up blog with [Quarto](https://quarto.org/).
-
-Third, process the JSON dump to convert posts to Quarto posts. I used this small Python script that did the heavy lifting for me:
+Then, you can process the JSON dump to convert posts to Quarto posts. I used this small Python script that did the heavy lifting for me:
 
 <details>
 <summary> Show the code </summary>
+
 ```python
 import json
 import os
@@ -49,52 +58,55 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
 
+
 BLOG_URL = "https://dylancastillo.co"
 BLOG_JSON_DUMP = "../dylan-castillo.ghost.2024-05-28-10-39-09.json"
 BLOG_AUTHOR_NAME = "Dylan Castillo"
 
+
 def download_images(markdown_content, post_slug):
-soup = BeautifulSoup(markdown_content, "html.parser")
-images = soup.find_all("img")
-if images:
-os.makedirs(post_slug, exist_ok=True)
-for img in images:
-img_url_raw = img["src"]
-img_url = img_url_raw.replace("__GHOST_URL__", BLOG_URL)
-img_name = os.path.basename(img_url)
-response = requests.get(img_url, stream=True)
-if response.status_code == 200:
-print(f"Downloading image: {img_url} to {post_slug}/{img_name}")
-with open(os.path.join(post_slug, img_name), "wb") as f:
-f.write(response.content)
-markdown_content = markdown_content.replace(
-img_url_raw, os.path.join(post_slug, img_name)
-)
-else:
-print(f"Failed to download image: {img_url}")
-return markdown_content
+    soup = BeautifulSoup(markdown_content, "html.parser")
+    images = soup.find_all("img")
+    if images:
+        os.makedirs(post_slug, exist_ok=True)
+        for img in images:
+            img_url_raw = img["src"]
+            img_url = img_url_raw.replace("__GHOST_URL__", BLOG_URL)
+            img_name = os.path.basename(img_url)
+            response = requests.get(img_url, stream=True)
+            if response.status_code == 200:
+                print(f"Downloading image: {img_url} to {post_slug}/{img_name}")
+                with open(os.path.join(post_slug, img_name), "wb") as f:
+                    f.write(response.content)
+                markdown_content = markdown_content.replace(
+                    img_url_raw, os.path.join(post_slug, img_name)
+                )
+            else:
+                print(f"Failed to download image: {img_url}")
+    return markdown_content
+
 
 def process_posts(data):
-posts = data["db"][0]["data"]["posts"]
-for post in posts:
-print("Processing post:", post["title"])
-title = post["title"]
-description = post["custom_excerpt"]
-author = BLOG_AUTHOR_NAME
-date = (
-datetime.strptime(post["published_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
-"%m/%d/%Y"
-)
-if post["published_at"]
-else ""
-)
-date_modified = (
-datetime.strptime(post["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
-"%m/%d/%Y"
-)
-if post["updated_at"]
-else ""
-)
+    posts = data["db"][0]["data"]["posts"]
+    for post in posts:
+        print("Processing post:", post["title"])
+        title = post["title"]
+        description = post["custom_excerpt"]
+        author = BLOG_AUTHOR_NAME
+        date = (
+            datetime.strptime(post["published_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
+                "%m/%d/%Y"
+            )
+            if post["published_at"]
+            else ""
+        )
+        date_modified = (
+            datetime.strptime(post["updated_at"], "%Y-%m-%dT%H:%M:%S.%fZ").strftime(
+                "%m/%d/%Y"
+            )
+            if post["updated_at"]
+            else ""
+        )
 
         # Convert HTML content to Markdown
         markdown_content = download_images(
@@ -109,13 +121,123 @@ else ""
         with open(filename, "w", encoding="utf-8") as file:
             file.write(markdown_content)
 
+
 if __name__ == "__main__":
-with open(BLOG_JSON_DUMP) as file:
-data = json.load(file)
-process_posts(data)
+    with open(BLOG_JSON_DUMP) as file:
+        data = json.load(file)
+    process_posts(data)
 ```
+
 </details>
 
-Feel free to adapt it to your needs.
+When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.
 
-Finally, I manually reviewed the posts, fixed any formatting issues, and published my blog using GitHub Pages.
+### Configuring your blog and posts
+
+Through trial and error, I found some settings that helped me to have a blog with the look and feel I wanted.
+
+Here's some of the things I modified:
+
+1. Minimal website settings:
+
+```{.yml filename="_quarto.yml"}
+website:
+  title: # The title of your blog
+  site-url: # For the RSS feed that noneone will read
+  favicon: # Add a favicon to the blog
+  navbar: # Customize the navbar if you want
+  page-footer: # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit
+```
+
+2. Add custom CSS and JS, and change the looks of your blog:
+
+```{.yml filename="_quarto.yml"}
+format:
+  html:
+    include-in-header:
+      - text: |
+          <link href="<YOUR_CUSTOM_FONT_URL>" rel="stylesheet">
+          <script src="<YOUR_CUSTOM_JS_URL>" defer></script>
+    page-layout: "article"
+    theme: # Pick a theme and customize it in `custom.scss`
+      - <YOUR_THEME>
+      - custom.scss # Add your custom CSS here
+    code-line-numbers: true # Add line numbers to code blocks
+```
+
+3. For each post, I used this front matter:
+
+```{.yml filename="<POST_SLUG>.md"}
+---
+title: "<POST_TITLE>"
+aliases:
+  - /<POST_SLUG>/ # Add an alias to the previous post's URL
+description-meta: "<POST_DESCRIPTION>"
+date: "<POST_DATE>"
+date-modified: last-modified # Automatically set to the last modified date
+toc: true
+toc-depth: 3
+lightbox: true # For images
+fig-cap-location: margin # Captions for images
+categories:
+  - <CATEGORY>
+author:
+  - name: <AUTHOR_NAME>
+    url: <AUTHOR_URL>
+    affiliation: <AUTHOR_AFFILIATION>
+    affiliation-url: <AUTHOR_AFFILIATION_URL>
+citation: true
+comments:
+  utterances: # For comments
+    repo: <YOUR_GITHUB_USERNAME>/<YOUR_GITHUB_REPO>
+    issue-term: pathname
+---
+```
+
+### Deployment using GitHub Pages + GitHub Actions
+
+To deploy the blog, I created a GitHub repository, added the blog's content, updated `.gitignore` to ignore the `/.quarto/` and `/_site/` and updated `_quarto.yml` to only compute code locally (otherwise you'd need a Python kernel running on your GitHub Actions runner):
+
+```{.yml filename="_quarto.yml"}
+execute:
+  freeze: auto
+```
+
+Then I ran this command to automatically generate the workflow `.github/workflows/publish.yml` for me:
+
+```bash
+quarto publish gh-pages
+```
+
+From then on, every time I push changes to the `main` branch, GitHub Actions will automatically render the website with Quarto and update the `gh-pages` branch.
+
+### Using a custom domain
+
+That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the `main` branch, the site would no longer be served from my custom domain (dylancastillo.co).
+
+When you render your website, Quarto recreates the CNAME file in the `gh-pages` branch, which seems to break the custom domain setup in GitHub Pages.
+
+I found a solution in this [discussion](https://github.com/quarto-dev/quarto-cli/discussions/5341) and added a CNAME file to the root of the repository with my custom domain:
+
+```{filename="CNAME"}
+dylancastillo.co
+```
+
+Then, I added this to `_quarto.yml`:
+
+```{.yml filename="_quarto.yml"}
+project:
+  type: website
+  resources: # New
+    - CNAME
+```
+
+And that worked!
+
+## Conclusion
+
+There you go, my friend.
+
+Now you can also break free from Ghost.
+
+See you in the next post.
