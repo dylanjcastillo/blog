@@ -9,7 +9,7 @@
 <link>https://dylancastillo.co/</link>
 <atom:link href="https://dylancastillo.co/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.5.54</generator>
+<generator>quarto-1.5.55</generator>
 <lastBuildDate>Sat, 22 Jun 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>A Dockerfile for a Django app using Poetry</title>
