@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html",
       "/posts/2023-personal-snapshot.html",
       "/posts/clustering-documents-with-openai-langchain-hdbscan.html",
       "/posts/code-interpreter-chatbot-pyodide-langchain-openai.html",

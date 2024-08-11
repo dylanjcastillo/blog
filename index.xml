@@ -9,8 +9,110 @@
 <link>https://dylancastillo.co/</link>
 <atom:link href="https://dylancastillo.co/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.5.55</generator>
-<lastBuildDate>Sat, 22 Jun 2024 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.5.56</generator>
+<lastBuildDate>Fri, 08 Nov 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Create a Kamal-ready VPS on Hetzner using Terraform</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>These days, I deploy all my side projects using Kamal and GitHub Actions on Hetzner. Once you get the hang of it, it’s easy to maintain, fast, and cheap.</p>
+<p>You can run your app with a database (SQLite), caching (Redis), background jobs (Celery), and SSL certificates (Let’s Encrypt) for roughly €5/month. Plus, if you feel the need, you can easily scale up to a more powerful Virtual Private Server (VPS).</p>
+<p>But setting up a VPS with the right configuration takes a bit of time. You have to:</p>
+<ol type="1">
+<li>Manually create the VPS using the UI.</li>
+<li>Create the necessary SSH keys.</li>
+<li>Create and apply the firewall rules.</li>
+<li>Create a new non-root user.</li>
+<li>Install Docker and other necessary software.</li>
+<li>Configure unattended-upgrades.</li>
+<li>Create a directory and set permissions for Let’s Encrypt SSL certificates.</li>
+<li>Reboot the system to apply all changes.</li>
+</ol>
+<p>I already had a small script to do most of these steps, but I wanted to automate it to a single command. So I created a Terraform script to do it for me.</p>
+<p>I took <a href="https://github.com/luizkowalski/terraform-hetzner">terraform-hetzner</a> and modified it to work with a single VPS instance. My updated version is available <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">here</a>.</p>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
+<p>First, set up an <a href="https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/">API key</a> with <strong>read and write</strong> permissions in Hetzner Cloud.</p>
+<p>Second, install <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">terraform</a>.</p>
+<p>Third, clone the repo:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">git</span> clone https://github.com/dylanjcastillo/terraform-kamal-single-vps</span></code></pre></div>
+<p>Fourth, create a <code>terraform.tfvars</code> file with the following variables:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource hcl number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1">hetzner_api_key = "your-api-key"</span>
+<span id="cb2-2">ssh_vps_root_key = "&lt;your-ssh-root-public-key&gt;"</span>
+<span id="cb2-3">ssh_vps_kamal_key = "&lt;your-ssh-kamal-public-key&gt;"</span></code></pre></div>
+<p>The <code>ssh_vps_root_key</code> and <code>ssh_vps_kamal_key</code> are the public keys for the root and kamal users, respectively. You can generate them with the <code>make generate-ssh-key USER_NAME=root</code> or <code>make generate-ssh-key USER_NAME=kamal</code> commands I added to the repo.</p>
+<p>Store your SSH keys in a secure location. You’ll need them to access the VPS.</p>
+</section>
+<section id="run-the-script" class="level2">
+<h2 class="anchored" data-anchor-id="run-the-script">Run the script</h2>
+<p>Once the <code>terraform.tfvars</code> file is set up, you can see what changes will be applied with the following command:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">terraform</span> plan</span></code></pre></div>
+<p>This will show in detail what changes will be applied to create a Kamal-ready VPS. If you’re happy with it, you can apply the changes with the following command:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">terraform</span> apply</span></code></pre></div>
+<p>This will create a VPS with the following configuration:</p>
+<ul>
+<li>Ubuntu 22.04 LTS</li>
+<li>2 VCPU</li>
+<li>2 GB RAM</li>
+<li>40 GB SSD</li>
+</ul>
+<p>It’ll cost you roughly €5/month and will be located in Nuremberg (Germany).</p>
+<p>In addition, after the VPS is created, it will automatically:</p>
+<ul>
+<li>Create a non-root user (kamal) with sudo privileges.</li>
+<li>Install the required software (Git, Docker, curl, etc.)</li>
+<li>Create a directory for Let’s Encrypt SSL certificates.</li>
+<li>Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.</li>
+<li>Create a directory for the database (SQLite) and the cache (Redis) (/db/ and /data/)</li>
+</ul>
+</section>
+<section id="customizing-the-script" class="level2">
+<h2 class="anchored" data-anchor-id="customizing-the-script">Customizing the script</h2>
+<p>You can customize the script to fit your needs. Here are a couple of things you can change:</p>
+<section id="change-the-software-to-install" class="level3">
+<h3 class="anchored" data-anchor-id="change-the-software-to-install">Change the software to install</h3>
+<p>If you want to change the software to install, you can modify the <code>packages</code> section in <code>cloudinit/vps.yml</code>.</p>
+</section>
+<section id="run-other-commands-after-the-vps-is-created" class="level3">
+<h3 class="anchored" data-anchor-id="run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</h3>
+<p>If you want to run other commands after the VPS is created, you can add them to the <code>runcmd</code> section in the <code>cloudinit/vps.yml</code> file.</p>
+</section>
+<section id="use-already-existing-firewall-rules" class="level3">
+<h3 class="anchored" data-anchor-id="use-already-existing-firewall-rules">Use already existing firewall rules</h3>
+<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. I’ve left an example of how to attach an existing firewall rule to the VPS.</p>
+</section>
+<section id="use-a-different-server-type-operating-system-or-region" class="level3">
+<h3 class="anchored" data-anchor-id="use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</h3>
+<p>If you want to use a different server type, operating system, or region, you can modify the <code>server_type</code>, <code>region</code>, <code>operating_system</code> variables in <code>variables.tf</code>.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This script is a great way to create a Kamal-ready VPS on Hetzner using Terraform. It’s easy to maintain, fast, and cheap.</p>
+<p>All the code is available in the <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">repo</a>.</p>
+<p>Hope you find this useful!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>kamal</category>
+  <category>hetzner</category>
+  <category>terraform</category>
+  <guid>https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</guid>
+  <pubDate>Fri, 08 Nov 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>A Dockerfile for a Django app using Poetry</title>
   <link>https://dylancastillo.co/til/django-poetry-dockerfile.html</link>
@@ -11033,143 +11135,6 @@ Castillo, Dylan. 2022. <span>“2021: Personal Snapshot.”</span> January
   <category>personal-snapshot</category>
   <guid>https://dylancastillo.co/posts/2021-personal-snapshot.html</guid>
   <pubDate>Mon, 31 Jan 2022 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>How to Use GitHub Deploy Keys</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Deployment is more of an art than science. Ask ten developers, and you’ll end up with ten different ways to deploy your app. However, there are a few topics on which everyone agrees. One of those is using deploy keys.</p>
-<p>A <a href="https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys">GitHub deploy key</a> is an SSH key that gives read –and optionally write– access to a single repository on GitHub. It makes it easy to pull your app’s code to a server automatically.</p>
-<p>With a deploy key, you just connect to your server, do a <code>git fetch</code>, and you’re done! Forget about connecting with an SFTP and uploading your files manually.</p>
-<p>This tutorial will show you how to use GitHub deploy keys in your next project. Let’s get started!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>If you’re planning on using deploy keys, I suppose you have something to deploy, right? 🤔</p>
-<p>Before you continue with the next sections, make sure that:</p>
-<ol type="1">
-<li>You have a repository with your app’s code on GitHub.</li>
-<li>You have access to a Linux server with <a href="https://git-scm.com/">git</a> installed.</li>
-</ol>
-<p>If so, continue to the next section.</p>
-</section>
-<section id="create-an-ssh-key-on-your-server" class="level2">
-<h2 class="anchored" data-anchor-id="create-an-ssh-key-on-your-server">Create an SSH Key on Your Server</h2>
-<p>A GitHub deploy key is, ultimately, an SSH key. So you’ll start by creating an SSH key on your server.</p>
-<p>First, connect to your server and open a terminal. Once you’re in, create an SSH key by executing the following command:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh-keygen</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-t</span> ed25519 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-C</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"USERNAME@EMAIL.com"</span></span></code></pre></div>
-<p>‌This command will create and store an SSH key. You use two parameters:</p>
-<ol type="1">
-<li><code>-t ed25519</code> to specify which algorithm to use to generate the key. You chose &nbsp;<a href="https://ed25519.cr.yp.to/">ED25519</a>, a very secure and efficient algorithm.</li>
-<li><code>-C USERNAME@EMAIL.com</code> to append your email as a comment at the end of the key. Make sure to replace <code>USERNAME@EMAIL.com</code> with your actual email.</li>
-</ol>
-<p>You can learn more about these parameters <a href="https://manpages.ubuntu.com/manpages/xenial/man1/ssh-keygen.1.html">here</a>. But don’t worry, you don’t need to know much more to use GitHub deploy keys.</p>
-<p>After running the command, you’ll get a couple of questions asking you to specify a path and set a passphrase for the key. You can save the key at the default path and skip setting a passphrase. So just hit <em>Enter</em> when prompted.</p>
-</section>
-<section id="add-the-key-to-ssh-config" class="level2">
-<h2 class="anchored" data-anchor-id="add-the-key-to-ssh-config">Add the Key to SSH Config</h2>
-<p>Next, you’ll create an <a href="https://man.openbsd.org/ssh_config.5"><strong>SSH config file</strong></a>. This file allows you to define the instructions required to connect to remote servers using SSH. It’s an easy way to manage multiple servers’ SSH keys or to keep deploy keys of different repositories in the same server.</p>
-<p>You can create and edit the SSH config file by running these commands:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">touch</span> ~/.ssh/config</span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> 600 ~/.ssh/config</span>
-<span id="cb2-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">vim</span> ~/.ssh/config <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Or: nano ~/.ssh/config</span></span></code></pre></div>
-<p>These commands will create an SSH config file, set the correct permissions, and open it using <em>vim</em>. You can also use <em>nano</em> to open the file if you’re unfamiliar with vim’s shortcuts.</p>
-<p>An SSH config file consists of sections specifying the instructions required for each server you’ll connect to. So, in this case, you’ll provide the instructions needed to connect to your repository. For that, copy this text to the file:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Host</span> github-YOUR-APP</span>
-<span id="cb3-2">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">HostName</span> github.com</span>
-<span id="cb3-3">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">AddKeysToAgent</span> yes</span>
-<span id="cb3-4">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">PreferredAuthentications</span> publickey</span>
-<span id="cb3-5">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">IdentityFile</span> ~/.ssh/id_ed25519</span></code></pre></div>
-<p>‌In the code snippet above, you provide the settings required to connect to GitHub using the SSH key you just created. You specify the following parameters:</p>
-<ul>
-<li><strong>Host:</strong> the name you’ll use in the terminal when referring to this server. Choose a name that’s easy to remember.</li>
-<li><strong>HostName:</strong> the real hostname that you’ll connect to. In this case, <a href="https://github.com">github.com</a>.</li>
-<li><strong>AddKeysToAgent:</strong> specifies if it should add the private key to the <code>ssh-agent</code>.</li>
-<li><strong>PreferredAuthentications:</strong> order in which the client tries authentication methods. In this case, you only use your <code>publickey</code>.</li>
-<li><strong>IdentityFile:</strong> specifies a file from which the key is read. You need to specify the name of the <strong>private key</strong> you generated earlier. If you used the default name, it should be <code>~/.ssh/id_ed25519</code>.</li>
-</ul>
-<p>That’s all you need to do on the server. Next, you’ll use your SSH key to create a deploy key on GitHub.</p>
-</section>
-<section id="create-a-deploy-key-on-github" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-deploy-key-on-github">Create a Deploy Key on GitHub</h2>
-<p>First, copy the <strong>public key</strong> from the SSH key you created earlier. The easiest way of doing that is to run:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span> ~/.ssh/id_ed25519.pub</span></code></pre></div>
-<p>Then select and copy the resulting text from the command line. It should look something like this:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ssh-ed25519</span> AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com</span></code></pre></div>
-<p>‌Next, open your preferred browser and go to the repository with your app’s code on GitHub. Click on <em>Settings</em>, select <em>Deploy keys,</em> and then click on <em>Add deploy key.</em></p>
-<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="img-fluid"></a></p>
-<p>Add deploy key on GitHub</p>
-<p>Copy the key in the <em>Key</em> textbox and set a title to the key. You can leave <em>Allow write access</em> unchecked and click on <em>Add key</em>. <em>Allow write access</em> allows you to make changes to the repository using the deploy key. For security reasons, you don’t want to do that in most cases.</p>
-<p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="img-fluid"></a></p>
-<p>Next, you can go back to your server’s terminal and clone your repository. You can do that by running this command:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git</span></code></pre></div>
-<p>This will clone your app’s repository to your server. Please remember to replace <code>github-YOUR-APP</code> by the <code>Host</code> you specified in the SSH config file. Otherwise, it won’t work.</p>
-<p>That’s all!</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This tutorial showed you how to create and use GitHub deploy keys. Using a deploy key will save you time and provide you with a safer way to deploy your app.</p>
-<p>In this tutorial, you’ve learned:</p>
-<ul>
-<li>How to <strong>create an SSH key</strong> on your server.</li>
-<li>What an <strong>SSH config file</strong> is and how to use it.</li>
-<li>How to <strong>add a deploy key</strong> to your GitHub repository.</li>
-</ul>
-<p>If you have any questions or feedback, let me know in the comments!</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2021,
-  author = {Castillo, Dylan},
-  title = {How to {Use} {GitHub} {Deploy} {Keys}},
-  date = {2021-10-07},
-  url = {https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2021" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2021. <span>“How to Use GitHub Deploy Keys.”</span>
-October 7, 2021. <a href="https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html">https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <guid>https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html</guid>
-  <pubDate>Thu, 07 Oct 2021 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

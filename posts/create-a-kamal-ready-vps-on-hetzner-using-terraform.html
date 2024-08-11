@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2023-01-20">
-<meta name="description" content="This is a personal reflection on my time at Entrepreneur First. I’ll explain what it is and how it works, as well as what I liked and didn’t like about it.">
+<meta name="dcterms.date" content="2024-11-08">
+<meta name="description" content="A guide to create a Kamal-ready VPS on Hetzner using Terraform">
 
-<title>My Experience at Entrepreneur First – Dylan Castillo</title>
+<title>Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -133,14 +167,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#whats-entrepreneur-first" id="toc-whats-entrepreneur-first" class="nav-link active" data-scroll-target="#whats-entrepreneur-first">What’s Entrepreneur First?</a></li>
-  <li><a href="#hows-the-application-process" id="toc-hows-the-application-process" class="nav-link" data-scroll-target="#hows-the-application-process">How’s the Application Process?</a></li>
-  <li><a href="#whats-the-structure-of-the-program" id="toc-whats-the-structure-of-the-program" class="nav-link" data-scroll-target="#whats-the-structure-of-the-program">What’s the Structure of the Program?</a></li>
-  <li><a href="#what-i-liked-about-entrepreneur-first" id="toc-what-i-liked-about-entrepreneur-first" class="nav-link" data-scroll-target="#what-i-liked-about-entrepreneur-first">What I liked about Entrepreneur First</a></li>
-  <li><a href="#what-i-didnt-like-about-entrepreneur-first" id="toc-what-i-didnt-like-about-entrepreneur-first" class="nav-link" data-scroll-target="#what-i-didnt-like-about-entrepreneur-first">What I didn’t like about Entrepreneur First</a></li>
-  <li><a href="#whats-next-for-me" id="toc-whats-next-for-me" class="nav-link" data-scroll-target="#whats-next-for-me">What’s next for me?</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a></li>
+  <li><a href="#run-the-script" id="toc-run-the-script" class="nav-link" data-scroll-target="#run-the-script">Run the script</a></li>
+  <li><a href="#customizing-the-script" id="toc-customizing-the-script" class="nav-link" data-scroll-target="#customizing-the-script">Customizing the script</a>
+  <ul class="collapse">
+  <li><a href="#change-the-software-to-install" id="toc-change-the-software-to-install" class="nav-link" data-scroll-target="#change-the-software-to-install">Change the software to install</a></li>
+  <li><a href="#run-other-commands-after-the-vps-is-created" id="toc-run-other-commands-after-the-vps-is-created" class="nav-link" data-scroll-target="#run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</a></li>
+  <li><a href="#use-already-existing-firewall-rules" id="toc-use-already-existing-firewall-rules" class="nav-link" data-scroll-target="#use-already-existing-firewall-rules">Use already existing firewall rules</a></li>
+  <li><a href="#use-a-different-server-type-operating-system-or-region" id="toc-use-a-different-server-type-operating-system-or-region" class="nav-link" data-scroll-target="#use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</a></li>
+  </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#addendum-how-to-prepare-for-the-interview-at-ef" id="toc-addendum-how-to-prepare-for-the-interview-at-ef" class="nav-link" data-scroll-target="#addendum-how-to-prepare-for-the-interview-at-ef">Addendum: How to Prepare for the Interview at EF?</a></li>
   </ul>
 </nav>
     </div>
@@ -149,9 +185,11 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">My Experience at Entrepreneur First</h1>
+<h1 class="title">Create a Kamal-ready VPS on Hetzner using Terraform</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">personal</div>
+    <div class="quarto-category">kamal</div>
+    <div class="quarto-category">hetzner</div>
+    <div class="quarto-category">terraform</div>
   </div>
   </div>
 
@@ -178,7 +216,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 20, 2023</p>
+      <p class="date">November 8, 2024</p>
     </div>
   </div>
   
@@ -196,101 +234,87 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>On September 2, 2022, I received an invitation to join the 10th cohort of <a href="https://www.joinef.com/">Entrepreneur First (EF)</a> in Berlin. Less than a month later, I packed up and moved there, eager to find a cofounder to begin what I hoped would become a billion-dollar company.</p>
-<p>Over the past three months, I’ve poured countless hours into brainstorming with other founders, talking to over a hundred potential customers, and honing our pitch for investors. Last week, my cofounder and I had the opportunity to present our idea to EF’s Investment Committee (IC). Unfortunately, they informed us today that they’ve decided not to invest in our team.</p>
-<p>I’m writing this to reflect on my experience during these past three months. I’ll provide some background on what EF is and how it works, and then delve into what I liked and didn’t like about it. If you’re considering participating in Entrepreneur First, I hope this article will help you make an informed decision.</p>
-<section id="whats-entrepreneur-first" class="level2">
-<h2 class="anchored" data-anchor-id="whats-entrepreneur-first">What’s Entrepreneur First?</h2>
-<p>EF is a global organization that helps talented individuals start companies. They provide funding, mentorship, and resources to individuals with the potential to become successful tech entrepreneurs. EF focuses on assisting individuals with technical and business backgrounds in forming teams and building startups from the ground up. It has programs in Singapore, India, the United Kingdom, Canada, Germany, and France.</p>
-<p>The program connects you with a group of roughly 50 individuals who have the ambition, urgency, and skills required to build a startup. You receive a stipend of 2,000€ per month for the first three months, but you have to work on the program full-time in return. This will allow you to solely focus on finding your cofounder and developing your idea. In our cohort, most participants had recently quit their jobs or finished their studies (usually PhDs) before joining.</p>
-<p>If your team does well in the first three months, you may be eligible for an initial investment of £80,000 (as of January 2023).</p>
+<p>These days, I deploy all my side projects using Kamal and GitHub Actions on Hetzner. Once you get the hang of it, it’s easy to maintain, fast, and cheap.</p>
+<p>You can run your app with a database (SQLite), caching (Redis), background jobs (Celery), and SSL certificates (Let’s Encrypt) for roughly €5/month. Plus, if you feel the need, you can easily scale up to a more powerful Virtual Private Server (VPS).</p>
+<p>But setting up a VPS with the right configuration takes a bit of time. You have to:</p>
+<ol type="1">
+<li>Manually create the VPS using the UI.</li>
+<li>Create the necessary SSH keys.</li>
+<li>Create and apply the firewall rules.</li>
+<li>Create a new non-root user.</li>
+<li>Install Docker and other necessary software.</li>
+<li>Configure unattended-upgrades.</li>
+<li>Create a directory and set permissions for Let’s Encrypt SSL certificates.</li>
+<li>Reboot the system to apply all changes.</li>
+</ol>
+<p>I already had a small script to do most of these steps, but I wanted to automate it to a single command. So I created a Terraform script to do it for me.</p>
+<p>I took <a href="https://github.com/luizkowalski/terraform-hetzner">terraform-hetzner</a> and modified it to work with a single VPS instance. My updated version is available <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">here</a>.</p>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
+<p>First, set up an <a href="https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/">API key</a> with <strong>read and write</strong> permissions in Hetzner Cloud.</p>
+<p>Second, install <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">terraform</a>.</p>
+<p>Third, clone the repo:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/terraform-kamal-single-vps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Fourth, create a <code>terraform.tfvars</code> file with the following variables:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource hcl number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>hetzner_api_key = "your-api-key"</span>
+<span id="cb2-2"><a href="#cb2-2"></a>ssh_vps_root_key = "&lt;your-ssh-root-public-key&gt;"</span>
+<span id="cb2-3"><a href="#cb2-3"></a>ssh_vps_kamal_key = "&lt;your-ssh-kamal-public-key&gt;"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>ssh_vps_root_key</code> and <code>ssh_vps_kamal_key</code> are the public keys for the root and kamal users, respectively. You can generate them with the <code>make generate-ssh-key USER_NAME=root</code> or <code>make generate-ssh-key USER_NAME=kamal</code> commands I added to the repo.</p>
+<p>Store your SSH keys in a secure location. You’ll need them to access the VPS.</p>
 </section>
-<section id="hows-the-application-process" class="level2">
-<h2 class="anchored" data-anchor-id="hows-the-application-process">How’s the Application Process?</h2>
-<p>The application process is pretty simple. One of EF’s recruiters contacted me on LinkedIn and asked if I wanted to join the program. Then he asked me to fill out an application. Most of the questions on the form were about why I wanted to join the program and why I would be a good fit for it. Then, I interviewed with the Berlin program’s general manager and the recruiter who had contacted me.</p>
-<p>I could have done a better job in the interview because I ended up rambling through some of the questions. But I was still able to pique people’s interest when I described some of the strategies I used to get more than 100,000 users to play <a href="https://fastflood.dylancastillo.co/">Fast Flood</a> when I launched it. Overall, it was a positive experience, and I got in.</p>
-<p>After talking with other participants, I found that the process was similar for everyone. The only difference appears to be the number of interviews you might do, which ranged from one to three. If you know someone from a previous cohort, you should definitely ask for a referral, as it will probably increase your chances of getting in.</p>
-</section>
-<section id="whats-the-structure-of-the-program" class="level2">
-<h2 class="anchored" data-anchor-id="whats-the-structure-of-the-program">What’s the Structure of the Program?</h2>
-<p>The program is split into two parts. <em>Form</em>, which lasts three months and culminates with you pitching your idea to IC, and <em>Launch</em>, which lasts six months and is only available if you are selected for funding after IC. Since I just finished Form and cannot access Launch, I will only talk about that part of the program in this article.</p>
-<p>Form is meant to help you find a cofounder, come up with ideas, and get customer feedback on them. During the first eight weeks of this phase, most of your time should be spent looking for the right cofounder. If, after this period, you’re not on a team, you have to leave the program, but you’ll still get your full stipend.</p>
-<p>During this time, you mostly do one of two things: participate in a sort of speed-dating event for entrepreneurs or test your idea with customers. Once the Form phase is over, you’ll only be working on your company.</p>
-<p>The speed-dating contest consists of you talking to potential cofounders about business ideas (aka ideation sessions) to see if there’s anything you both want to work on. If you feel there’s a “match” with another cofounder, then you can team up and work on your idea. If you later realize you weren’t a good fit, you can split up and go back to the pool of sole founders to find another cofounder.</p>
-<p>When working in a team, most of the time is spent on three main tasks. The first task is to reach out to potential customers through your personal network, LinkedIn, and other platforms to understand their pain points and determine if your idea addresses them. The second task is to process feedback from customer interviews to update your hypotheses about the business. The third task is to make sure that the team is aiming for a big market, that the company has some way to defend itself, and that any other important factors are taken into account so that the company can be successful in the future.</p>
-<p>During the first few weeks of Form, you could also choose to attend several workshops about entrepreneurship and new businesses. We also had a few regular activities:</p>
+<section id="run-the-script" class="level2">
+<h2 class="anchored" data-anchor-id="run-the-script">Run the script</h2>
+<p>Once the <code>terraform.tfvars</code> file is set up, you can see what changes will be applied with the following command:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">terraform</span> plan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will show in detail what changes will be applied to create a Kamal-ready VPS. If you’re happy with it, you can apply the changes with the following command:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">terraform</span> apply</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a VPS with the following configuration:</p>
 <ul>
-<li><strong>Weekly check-ins with your venture partner and venture developer:</strong> You get feedback on your idea and provide progress updates. In my case, the venture partner was a previous EF founder who sold his company to Twitter, and the venture developer was an expert in product development. Both provided very useful feedback throughout the program.</li>
-<li><strong>Weekly check-in with your Form representative:</strong> You can ask questions about the program and talk about how you feel as the program progresses.</li>
-<li><strong>Bi-weekly Friday pitches:</strong> You present your idea to the rest of the teams and receive feedback.</li>
-<li><strong>Weekly social drinks:</strong> You drink beer and talk with other people :)</li>
+<li>Ubuntu 22.04 LTS</li>
+<li>2 VCPU</li>
+<li>2 GB RAM</li>
+<li>40 GB SSD</li>
 </ul>
-<p>As you get closer to IC, you also get invited to other meetings to provide you with more feedback. For IC, you’re asked to provide a pitch video, a slide deck, and a product demo. For the funding decision, they will also look at what your venture partner and developer say about you, as well as what the local EF staff says.</p>
-<p>In our cohort, many participants tried working with multiple teams before finding the right fit. I tried three teams. In total, 49 teams were formed (h/t <a href="https://www.linkedin.com/in/simon-farshid/">Simon Farshid</a> for tracking this), and 13 teams presented their ideas to IC. Roughly half of the participants were not in teams by the end of the Form phase.</p>
+<p>It’ll cost you roughly €5/month and will be located in Nuremberg (Germany).</p>
+<p>In addition, after the VPS is created, it will automatically:</p>
+<ul>
+<li>Create a non-root user (kamal) with sudo privileges.</li>
+<li>Install the required software (Git, Docker, curl, etc.)</li>
+<li>Create a directory for Let’s Encrypt SSL certificates.</li>
+<li>Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.</li>
+<li>Create a directory for the database (SQLite) and the cache (Redis) (/db/ and /data/)</li>
+</ul>
 </section>
-<section id="what-i-liked-about-entrepreneur-first" class="level2">
-<h2 class="anchored" data-anchor-id="what-i-liked-about-entrepreneur-first">What I liked about Entrepreneur First</h2>
-<p>By now, you should have a good idea of what to expect during the program. Now, let me tell you what I liked about EF:</p>
-<ol type="1">
-<li><strong>The people:</strong> The best thing about the program is the connections you make. You join a group of highly skilled people who are eager to start their own businesses. As my career progressed, I learned that not many people wanted that, so it was great to meet so many like-minded people. I’ve also made a few good friends during the program!</li>
-<li><strong>Pressure to talk to customers:</strong> There’s a lot of emphasis on talking to customers throughout the program, and I really appreciated that. This forced me to step outside of my comfort zone because I didn’t feel as comfortable reaching out to so many people before.</li>
-<li><strong>Revealed preferences:</strong> I wasn’t expecting many people to drop out of the program before it finished, but it happened. Many people realize they don’t want to start a business after all. Even though there are ups and downs, I’ve never doubted my desire to start a business, so I was happy to find another data point that I’m on the right track. Overall, I believe this is a low-risk way for people to figure out if they really want to start a business.</li>
-<li><strong>EF’s network:</strong> EF alumni have interesting positions in top companies and startups. They’re also very open to chatting. It’s great to know that you’re a short message away from talking to people with relevant positions in successful companies.</li>
-</ol>
-<p>Overall, I see many positive sides to the EF experience.</p>
+<section id="customizing-the-script" class="level2">
+<h2 class="anchored" data-anchor-id="customizing-the-script">Customizing the script</h2>
+<p>You can customize the script to fit your needs. Here are a couple of things you can change:</p>
+<section id="change-the-software-to-install" class="level3">
+<h3 class="anchored" data-anchor-id="change-the-software-to-install">Change the software to install</h3>
+<p>If you want to change the software to install, you can modify the <code>packages</code> section in <code>cloudinit/vps.yml</code>.</p>
 </section>
-<section id="what-i-didnt-like-about-entrepreneur-first" class="level2">
-<h2 class="anchored" data-anchor-id="what-i-didnt-like-about-entrepreneur-first">What I didn’t like about Entrepreneur First</h2>
-<p>While my experience with EF was mostly positive, there were a few areas that I felt could have been improved. I noticed a few things that seemed to make it more difficult to focus on building a company, even though they were intended to help.</p>
-<p>These are some of the things I didn’t like:</p>
-<ol type="1">
-<li><strong>Too much overhead:</strong> By the end of Form, I felt like we had too many unnecessary meetings. I often wondered if it would make sense to combine a few of those meetings to reduce the time it takes. For example, we had two separate meetings with our venture partner and developer, to essentially discuss the same topic. Why not combine those two meetings into one?</li>
-<li><strong>The Entrepreneur Game:</strong> I had the impression that EF wanted us to believe they had everything figured out and that there was a clear path to building a unicorn that we simply had to follow. It was kind of a game, and all we had to do to win was complete all the levels (e.g., find a counterintuitive belief on which to base your company, do 20 customer interviews per week, etc.). Why would most businesses fail if there was such a simple formula for success? The devil is in the details, and I think that founders who do well do so because they keep on grinding for a long time on a good problem space rather than because they find a foolproof recipe or framework. All frameworks for building startups are limited because the real world is opaque and the small, difficult-to-understand details are what matter most.</li>
-<li><strong>Check-ins should not be pitches.</strong> You get “graded” after the check-ins, which creates an incentive to turn those check-ins into pitching sessions. People have fewer incentives to ask difficult questions, as that may cast them in a negative light. Also, this wasn’t communicated clearly from the beginning.</li>
-</ol>
-<p>Despite these issues, I still believe that the EF staff works hard and has the challenging task of serving an audience with a high bar. They are trying to help entrepreneurs build successful companies.</p>
+<section id="run-other-commands-after-the-vps-is-created" class="level3">
+<h3 class="anchored" data-anchor-id="run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</h3>
+<p>If you want to run other commands after the VPS is created, you can add them to the <code>runcmd</code> section in the <code>cloudinit/vps.yml</code> file.</p>
 </section>
-<section id="whats-next-for-me" class="level2">
-<h2 class="anchored" data-anchor-id="whats-next-for-me">What’s next for me?</h2>
-<p>Even though I didn’t reach the goal I set for myself when I joined EF, I’ve learned a lot and met some great people in the last three months. I will move forward with building a company but want to make sure that I use the lessons learned during the program. I’ll take a few days to reflect on the best path forward.</p>
-<p>The past three months have been hectic, but I’ve realized that I often fell into the trap of simply “playing the game” of being an entrepreneur rather than focusing on creating something people truly wanted. I don’t plan on making that mistake again.</p>
+<section id="use-already-existing-firewall-rules" class="level3">
+<h3 class="anchored" data-anchor-id="use-already-existing-firewall-rules">Use already existing firewall rules</h3>
+<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. I’ve left an example of how to attach an existing firewall rule to the VPS.</p>
+</section>
+<section id="use-a-different-server-type-operating-system-or-region" class="level3">
+<h3 class="anchored" data-anchor-id="use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</h3>
+<p>If you want to use a different server type, operating system, or region, you can modify the <code>server_type</code>, <code>region</code>, <code>operating_system</code> variables in <code>variables.tf</code>.</p>
+</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>If I knew what I know now, would I have done the program? Definitely.</p>
-<p>Even though there were things I didn’t like about it, I learned a lot during the past three months. I liked my time with EF, and I would recommend it to anyone who wants to start a venture-backed business.</p>
-<p>There are always ways to make things better, but I know that the EF team is working very hard to create the best program possible. I have nothing but gratitude for the EF team and everyone I met through the program. This experience made me better.</p>
-</section>
-<section id="addendum-how-to-prepare-for-the-interview-at-ef" class="level2">
-<h2 class="anchored" data-anchor-id="addendum-how-to-prepare-for-the-interview-at-ef">Addendum: How to Prepare for the Interview at EF?</h2>
-<p>A few people have asked me on LinkedIn about what’s the best way to prepare for the interview at EF. Here’s my advice:</p>
-<ol type="1">
-<li>Prepare a 1-min pitch that explains who you are and why you want to start a company with EF.</li>
-<li>Think about your previous experience and projects, figure out what are the most interesting parts of them, and practice breaking them down to others in a compelling way (focusing on their business impact).</li>
-<li>Have good answers to the following questions:
-<ol type="1">
-<li>Why do you want to start a company?</li>
-<li>Why are you the right person to start a company with EF?</li>
-<li>How is X going to change in the future? What’d be the impact of those changes? (replace X with your field of expertise)</li>
-<li>What would you do if EF doesn’t work out?</li>
-</ol></li>
-</ol>
-<p>Hope this is useful!</p>
+<p>This script is a great way to create a Kamal-ready VPS on Hetzner using Terraform. It’s easy to maintain, fast, and cheap.</p>
+<p>All the code is available in the <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">repo</a>.</p>
+<p>Hope you find this useful!</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {My {Experience} at {Entrepreneur} {First}},
-  date = {2023-01-20},
-  url = {https://dylancastillo.co/posts/my-entrepreneur-first-experience.html},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2023. <span>“My Experience at Entrepreneur
-First.”</span> January 20, 2023. <a href="https://dylancastillo.co/posts/my-entrepreneur-first-experience.html">https://dylancastillo.co/posts/my-entrepreneur-first-experience.html</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -710,8 +734,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">
