@@ -1,0 +1,127 @@
+---
+title: "Create a Kamal-ready VPS on Hetzner using Terraform"
+date: "11/08/2024"
+date-modified: last-modified
+description-meta: "A guide to create a Kamal-ready VPS on Hetzner using Terraform"
+toc: true
+toc-depth: 3
+lightbox: true
+fig-cap-location: margin
+categories:
+  - kamal
+  - hetzner
+  - terraform
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+    citation: true
+    comments:
+    utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
+---
+
+These days, I deploy all my side projects using Kamal and GitHub Actions on Hetzner. Once you get the hang of it, it's easy to maintain, fast, and cheap.
+
+You can run your app with a database (SQLite), caching (Redis), background jobs (Celery), and SSL certificates (Let's Encrypt) for roughly €5/month. Plus, if you feel the need, you can easily scale up to a more powerful Virtual Private Server (VPS).
+
+But setting up a VPS with the right configuration takes a bit of time. You have to:
+
+1. Manually create the VPS using the UI.
+2. Create the necessary SSH keys.
+3. Create and apply the firewall rules.
+4. Create a new non-root user.
+5. Install Docker and other necessary software.
+6. Configure unattended-upgrades.
+7. Create a directory and set permissions for Let's Encrypt SSL certificates.
+8. Reboot the system to apply all changes.
+
+I already had a small script to do most of these steps, but I wanted to automate it to a single command. So I created a Terraform script to do it for me.
+
+I took [terraform-hetzner](https://github.com/luizkowalski/terraform-hetzner) and modified it to work with a single VPS instance. My updated version is available [here](https://github.com/dylanjcastillo/terraform-kamal-single-vps).
+
+## Set up
+
+First, set up an [API key](https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/) with **read and write** permissions in Hetzner Cloud.
+
+Second, install [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
+
+Third, clone the repo:
+
+```bash
+git clone https://github.com/dylanjcastillo/terraform-kamal-single-vps
+```
+
+Fourth, create a `terraform.tfvars` file with the following variables:
+
+```hcl
+hetzner_api_key = "your-api-key"
+ssh_vps_root_key = "<your-ssh-root-public-key>"
+ssh_vps_kamal_key = "<your-ssh-kamal-public-key>"
+```
+
+The `ssh_vps_root_key` and `ssh_vps_kamal_key` are the public keys for the root and kamal users, respectively. You can generate them with the `make generate-ssh-key USER_NAME=root` or `make generate-ssh-key USER_NAME=kamal` commands I added to the repo.
+
+Store your SSH keys in a secure location. You'll need them to access the VPS.
+
+## Run the script
+
+Once the `terraform.tfvars` file is set up, you can see what changes will be applied with the following command:
+
+```bash
+terraform plan
+```
+
+This will show in detail what changes will be applied to create a Kamal-ready VPS. If you're happy with it, you can apply the changes with the following command:
+
+```bash
+terraform apply
+```
+
+This will create a VPS with the following configuration:
+
+- Ubuntu 22.04 LTS
+- 2 VCPU
+- 2 GB RAM
+- 40 GB SSD
+
+It'll cost you roughly €5/month and will be located in Nuremberg (Germany).
+
+In addition, after the VPS is created, it will automatically:
+
+- Create a non-root user (kamal) with sudo privileges.
+- Install the required software (Git, Docker, curl, etc.)
+- Create a directory for Let's Encrypt SSL certificates.
+- Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.
+- Create a directory for the database (SQLite) and the cache (Redis) (/db/ and /data/)
+
+## Customizing the script
+
+You can customize the script to fit your needs. Here are a couple of things you can change:
+
+### Change the software to install
+
+If you want to change the software to install, you can modify the `packages` section in `cloudinit/vps.yml`.
+
+### Run other commands after the VPS is created
+
+If you want to run other commands after the VPS is created, you can add them to the `runcmd` section in the `cloudinit/vps.yml` file.
+
+### Use already existing firewall rules
+
+If you want to use already existing firewall rules, you can modify how the firewalls are attached in `cloud.tf`. I've left an example of how to attach an existing firewall rule to the VPS.
+
+### Use a different server type, operating system, or region
+
+If you want to use a different server type, operating system, or region, you can modify the `server_type`, `region`, `operating_system` variables in `variables.tf`.
+
+## Conclusion
+
+This script is a great way to create a Kamal-ready VPS on Hetzner using Terraform. It's easy to maintain, fast, and cheap.
+
+All the code is available in the [repo](https://github.com/dylanjcastillo/terraform-kamal-single-vps).
+
+Hope you find this useful!
