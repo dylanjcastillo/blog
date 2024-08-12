@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2022-01-31">
-<meta name="description" content="An annual review of 2021. I took a look at what went well in 2021 and what I should change for 2022.">
+<meta name="dcterms.date" content="08/12/2024">
+<meta name="description" content="Quick fix for the ‘No such file or directory: ’python’’ error in macOS.">
 
-<title>2021: Personal Snapshot – Dylan Castillo</title>
+<title>Fixing missing ‘python’ error in macOS – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -128,62 +162,34 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#what-went-well" id="toc-what-went-well" class="nav-link active" data-scroll-target="#what-went-well">What Went Well?</a></li>
-  <li><a href="#what-should-i-change" id="toc-what-should-i-change" class="nav-link" data-scroll-target="#what-should-i-change">What Should I Change?</a></li>
-  <li><a href="#what-do-i-believe-in" id="toc-what-do-i-believe-in" class="nav-link" data-scroll-target="#what-do-i-believe-in">What do I Believe In?</a></li>
-  <li><a href="#looking-ahead" id="toc-looking-ahead" class="nav-link" data-scroll-target="#looking-ahead">Looking Ahead</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">2021: Personal Snapshot</h1>
+<h1 class="title">Fixing missing ‘python’ error in macOS</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">personal-snapshot</div>
+    <div class="quarto-category">til</div>
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">poetry</div>
   </div>
   </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Author</div>
-  <div class="quarto-title-meta-heading">Affiliation</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            <a href="https://iwanalabs.com">
-            Iwana Labs
-            </a>
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 31, 2022</p>
+      <p class="date">August 12, 2024</p>
     </div>
   </div>
   
-    <div>
-    <div class="quarto-title-meta-heading">Modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">August 12, 2024</p>
-    </div>
-  </div>
     
   </div>
   
@@ -192,77 +198,21 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>When I see pictures from my childhood, I always try to remember <em>who I was</em> at the time the photos were shot. Like, what was going through my mind? What motivated me? What scared me?</p>
-<p>Remembering that is harder than it sounds. Pictures often help you recall sounds, smells, and emotions. But they don’t work well if you’re trying to recollect the inner workings of your mind.</p>
-<p>There may not be a perfect way to remember how you felt at a certain period in your life. But I’ve found that reading things I’ve written in the past serves as a good substitute. After all, it’s easier to find out what was on your mind from reading your journal than it is to do so from looking at a random photo of you and your cousins.</p>
-<p>This blog is pretty recent, so I don’t have much to refer to here. But when I was a teenager, I hung out in various online forums and wrote short stories and poems on text files. So if I want to remember Dylan from high school, I reread my posts, stories, and poems from that time.</p>
-<p>Many of those online forums have since died, and I’ve lost most of those text files due to faulty backups. That got me thinking that I had to find a better way to store those <em>snapshots</em> of myself.</p>
-<p>So, for the foreseeable future, I’ve decided to write a <em>Personal Snapshot</em> of the year in my blog at the end of each year. It’s a yearly review that keeps a record of <em>who I was</em> when I wrote it. I’m hoping to get a few laughs out of this in a decade.</p>
-<p>If it’s me rereading this, welcome back. This is Dylan from 2021.</p>
-<section id="what-went-well" class="level2">
-<h2 class="anchored" data-anchor-id="what-went-well">What Went Well?</h2>
-<p>Despite all the chaos due to COVID-19, I had a great year and achieved multiple goals I had set for myself.</p>
-<p>First, I’m a freelancer now. In mid-2019, I began to consider this option. My first actions included adding random people on LinkedIn and informing them that I intended to work as a freelancer. That was as useless as it sounds!</p>
-<p>This year, I took a more systematic approach. I focused on contacting recruiters and managers hiring contractors and was more persistent throughout the process. I even went after contracts that seemed out of reach, asked past colleagues for referrals, and asked to reconsider when I got “no” for an answer.</p>
-<p>This change resulted in two freelancing contracts (European Commission and Deliveroo) and a teaching gig at <a href="https://nuclio.school/?lang=en">Nuclio</a>. It took a long time to get the first contract, but now I’m always getting new opportunities. Needless to say, I’m delighted.</p>
-<p>To be honest, my day-to-day as a freelancer hasn’t changed much compared to when I was a full-time employee. But that’s expected, considering that I’m still selling my time rather than a product. I hope to change that soon.</p>
-<p>Second, I’m earning more and saving more. I hadn’t begun freelancing sooner because I didn’t want to compete for 10$/h jobs on Upwork or Fiverr. I would only leave my full-time job if I could secure a freelancing contract that allowed me to save money at a similar or higher rate than I did as an employee.</p>
-<p>This year, I negotiated good contracts, which increased my income and, as a result, my savings rate. All in all, I had three sources of revenue this year (in order of importance): Freelancing, cashing out a bit of crypto, and the teaching gig.</p>
-<p>Third, a great relationship became a great team. This year my wife made a breakthrough in her career, which she had been fighting for over the last four years. It was tough, but we learned how to work together as a team in the process.</p>
-<p>I became her part-time coach, cheerleader, and teammate throughout this time. I attempted to provide as much help as possible, as she studied 12 to 14 hours each day for about a year. We spent hours debating techniques, going over practice tests, and experimenting with slight tweaks to her prep system. It was well worth the effort!</p>
-<p>It was one of those times when someone else accomplishes something, but you’re so involved in the process that you feel like you’ve achieved it as well.</p>
-<p>That got me thinking that good relationships are made of independent individuals who love and trust each other. But, just as important, is that they’ve decided to row in the same direction and work as a team to achieve their goals. That’s how I see us.</p>
-<p>Fourth, I took good care of my mental health. I’ve found that practicing Stoic precepts (such as daily journaling, negative visualization, and reminding myself that I cannot control most events in my life), and exercising regularly have made me happier. I still have bad days, but very few compared to previous years.</p>
-<p>Fifth, it’s been a good year for my family. My parents and sister are in good health, stay active, and have access to quality healthcare. Each family faces unique hurdles when they emigrate from Venezuela. Still, I’m pleased with how it’s going for us thus far.</p>
-</section>
-<section id="what-should-i-change" class="level2">
-<h2 class="anchored" data-anchor-id="what-should-i-change">What Should I Change?</h2>
-<p>For the last couple of years, life has been comfortable enough that I haven’t needed to push my boundaries. That’s no good.</p>
-<p>First, I need to change my approach if I want to achieve financial freedom. I don’t want to spend the next forty years of my life working for someone else five days per week while <em>enjoying freedom</em> on weeknights and weekends. So I need to find a way to disentangle my income from my time, sooner rather than later.</p>
-<p>Although freelancing was the first step in that direction, I am still selling my time. So next, I’d like to start selling a product, such as an ebook or a course. To do so, I need an audience willing to pay for it.</p>
-<p>I studied people who’ve grown their online audiences quickly. With no exceptions, they did it by sharing high-quality content on social media on a regular basis. So I need to get off my butt and post regularly on social media.</p>
-<p>Second, I must push myself out of my comfort zone. “What doesn’t kill me makes me stronger,” as Nietzsche famously said, should be complemented by the also valid “What keeps me cozy makes me weaker.”</p>
-<p>I feel that I’ve been too cozy the past few years, and I wasn’t taking enough risks. If this keeps up, I’ll be a boring old man with few stories to tell my grandchildren.</p>
-<p>The problem is that society wants you to follow its <em>standard</em> script when you reach adulthood: find a job, get married, have kids, get a mortgage, buy a car, have a couple of midlife crises, possibly get divorced, and then retire at 65 to tend to your garden.</p>
-<p>That’s not the life I want to live. Ask yourself, if that was a book, would you read it?</p>
-<p>Most people wouldn’t put a few hours to read such a book. They won’t mind, though, spending their entire lives living that by that script.</p>
-<p>One thing that a happy life and a good book have in common is that their foundation is a good story. Staying in your lane and following society’s script is a certain way to write a story that no one wants to read, including yourself.</p>
-<p>You’re the hero of your own story. Heroes don’t spend their lives binge-watching Netflix or scrolling through social media. They face challenges and grow as a result of that.</p>
-<p>That’s my goal for next year: grow by stepping out of my comfort zone.</p>
-<p>What exactly will I be doing? You’ll need to follow my blog to learn more 😉</p>
-</section>
-<section id="what-do-i-believe-in" class="level2">
-<h2 class="anchored" data-anchor-id="what-do-i-believe-in">What do I Believe In?</h2>
-<p>Finally, I thought it’d be interesting to keep track of my beliefs, to see how they change over time. Some of these are mental frameworks, others are random thoughts.</p>
-<p>Here’s a non-exhaustive list of them:</p>
-<ul>
-<li><strong>Stoicism is the OG of mind hacks.</strong> Cognitive Behavioral Therapy, the leading technique of psychotherapy, is <a href="https://medium.com/stoicism-philosophy-as-a-way-of-life/stoic-philosophy-as-a-cognitive-behavioral-therapy-597fbeba786a">deeply influenced by Stoicism</a>. My mental health has greatly improved as a result of following Stoic teachings. Others could benefit as well, so here are two good places to start: <a href="https://www.amazon.com/Enchiridion-Epictetus/dp/152156034X">Enchiridion</a> or <a href="https://www.amazon.com/Guide-Good-Life-Ancient-Stoic/dp/0195374614">A Guide to the Good Life</a>.</li>
-<li><strong>Comfort kills.</strong> At a micro-level, make your life <em>harder</em>, by doing things such as taking cold showers, fasting, and exercising every day. At a macro-level, do what scares you and excites you at the same time. When it comes to determining what will help you grow, trust your instincts.</li>
-<li><strong>Don’t discuss nutrition and vaccines.</strong> Add them to Religion, and Politics. Everyone has a very personal opinion on these topics. There’s no point in discussing them with friends.</li>
-<li><strong>The 80/20 of Data Science.</strong> Data Scientists like to build models, but most of the value comes from transforming raw data into useful insights for the business. That means setting up pipelines, generating reports, and building dashboards.</li>
-<li><strong>The 80/20 of staying healthy.</strong> Avoid ultra-processed foods, sugar, and vegetable oils. Eat foods that have been around for a long time. Exercise regularly, doing Strength Training and some sort of cardio.</li>
-</ul>
-</section>
-<section id="looking-ahead" class="level2">
-<h2 class="anchored" data-anchor-id="looking-ahead">Looking Ahead</h2>
-<p>I have high hopes for 2022. I’m eager to work on decoupling my income from my time and putting more time into my personal growth.</p>
-<p>I hope to see you around!</p>
-<p><em>Thanks to María, Caryn, Christine, Georgia, and Mack for their feedback on this piece.</em></p>
+<p>After the last macOS update, I started getting the following error when trying to run <code>poetry install</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>[Errno 2] No such file or directory: 'python'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I went through GitHub issues, StackOverflow questions, and blog posts, but none of the suggested solutions worked.</p>
+<p>Finally, I found the solution somewhat hidden in this <a href="https://mac.install.guide/python/brew">blog post</a>.</p>
+<p>So, what’s the fix?</p>
+<p>🥁 🥁 🥁</p>
+<p>Just add the following line to your <code>.zshrc</code> file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">brew</span> <span class="at">--prefix</span> python<span class="va">)</span><span class="st">/libexec/bin:</span><span class="va">$PATH</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This gets the installation prefix for <code>python</code> installed via Homebrew (e.g.&nbsp;<code>/opt/homebrew/opt/python@3.12</code>), gets the <code>libexec/bin</code> directory, and adds it to the PATH.</p>
+<p>In that <code>libexec/bin</code>, there’s a <code>python</code> executable that gets called when you run <code>python</code> in the terminal.</p>
+<p>That’s all. Hope that helps!</p>
 
 
-</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2022,
-  author = {Castillo, Dylan},
-  title = {2021: {Personal} {Snapshot}},
-  date = {2022-01-31},
-  url = {https://dylancastillo.co/posts/2021-personal-snapshot.html},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2022. <span>“2021: Personal Snapshot.”</span> January
-31, 2022. <a href="https://dylancastillo.co/posts/2021-personal-snapshot.html">https://dylancastillo.co/posts/2021-personal-snapshot.html</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -682,8 +632,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">
