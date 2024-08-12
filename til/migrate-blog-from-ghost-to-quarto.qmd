@@ -219,7 +219,7 @@ When you render your website, Quarto recreates the CNAME file in the `gh-pages` 
 
 I found a solution in this [discussion](https://github.com/quarto-dev/quarto-cli/discussions/5341) and added a CNAME file to the root of the repository with my custom domain:
 
-```{filename="CNAME"}
+```{.txt filename="CNAME"}
 dylancastillo.co
 ```
 
