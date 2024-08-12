@@ -1,6 +1,6 @@
 ---
 title: "Create a Kamal-ready VPS on Hetzner using Terraform"
-date: "11/08/2024"
+date: "08/11/2024"
 date-modified: last-modified
 description-meta: "A guide to create a Kamal-ready VPS on Hetzner using Terraform"
 toc: true

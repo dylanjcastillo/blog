@@ -1,0 +1,41 @@
+---
+title: "Fixing missing 'python' error in macOS"
+date: "08/12/2024"
+toc: true
+toc-depth: 3
+author-meta: "Dylan Castillo"
+description-meta: "Quick fix for the 'No such file or directory: 'python'' error in macOS."
+date-meta: "08/12/2024"
+lightbox: true
+fig-cap-location: margin
+categories:
+  - til
+  - python
+  - poetry
+---
+
+After the last macOS update, I started getting the following error when trying to run `poetry install`:
+
+```shell
+[Errno 2] No such file or directory: 'python'
+```
+
+I went through GitHub issues, StackOverflow questions, and blog posts, but none of the suggested solutions worked.
+
+Finally, I found the solution somewhat hidden in this [blog post](https://mac.install.guide/python/brew).
+
+So, what's the fix?
+
+🥁 🥁 🥁
+
+Just add the following line to your `.zshrc` file:
+
+```bash
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+```
+
+This gets the installation prefix for `python` installed via Homebrew (e.g. `/opt/homebrew/opt/python@3.12`), gets the `libexec/bin` directory, and adds it to the PATH.
+
+In that `libexec/bin`, there's a `python` executable that gets called when you run `python` in the terminal.
+
+That's all. Hope that helps!
