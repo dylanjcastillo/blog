@@ -887,14 +887,14 @@ font-style: inherit;"> pyproject.toml</span></span></code></pre></div>
   <pubDate>Sat, 22 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Migrate blog from Ghost to Quarto</title>
+  <title>Migrate a blog from Ghost to Quarto</title>
   <link>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</link>
   <description><![CDATA[ 
 
 
 
 
-<p>When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that <a href="https://ghost.org/">Ghost</a> was my best choice because I needed a powerful tool for all those millions of visitors my blog would get.</p>
+<p>When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that <a href="https://ghost.org/">Ghost</a> was the best choice because I needed a powerful tool for all those millions of visitors my blog would get.</p>
 <p>I saw myself as the <a href="https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez">García Márquez</a> of technical writing.</p>
 <p>Fast forward five years, and I’ve paid $2,000 for hosting a blog that barely gets 8k visits per month. Plus, I’m forced to write it in an interface that I hate.</p>
 <p>With that kind of money, I could have funded a moderately extravagant hamster-only summer party.</p>
