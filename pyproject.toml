@@ -9,6 +9,9 @@ readme = "README.md"
 python = "^3.10"
 notebook = "^7.2.0"
 openai = "^1.30.5"
+google-generativeai = "^0.7.2"
+numpy = "^2.1.0"
+pandas = "^2.2.2"
 
 
 [build-system]
