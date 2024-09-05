@@ -163,7 +163,7 @@ Getting Alacritty to work with Zellij took me a while to figure out. But luckily
 
 ```yaml
 [shell]
-     program = "/opt/homebrew/opt/bin/zellij"
+     program = "/opt/homebrew/bin/zellij"
 ```
 
 ## Installing Neovim and LazyVim
