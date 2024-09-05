@@ -339,7 +339,7 @@ Show the code
 <h3 class="anchored" data-anchor-id="making-zellij-play-nice-with-alacritty">Making Zellij play nice with Alacritty</h3>
 <p>Getting Alacritty to work with Zellij took me a while to figure out. But luckily it’s as simple as adding the full path to the <code>zellij</code> binary in the <code>~/.config/alacritty/alacritty.toml</code> file.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">[</span><span class="at">shell</span><span class="kw">]</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="at">     program = "/opt/homebrew/opt/bin/zellij"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="at">     program = "/opt/homebrew/bin/zellij"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="installing-neovim-and-lazyvim" class="level2">
@@ -866,7 +866,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"openEffect":"zoom","descPosition":"bottom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
