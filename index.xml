@@ -21,17 +21,17 @@
 
 
 <p>Most people think of <a href="https://arxiv.org/abs/2301.00234">In-Context Learning (ICL)</a> — the ability of LLMs to learn from examples provided in the context — only as a component of RAG applications.</p>
-<p>I used to think of it that way too. Until I recently found out that Multimodal Large Language Models (MLLMs) with ICL can be used to more traditional ML tasks like image classification.</p>
+<p>I used to think of it that way too. Until I recently found out that Multimodal Large Language Models (MLLMs) with ICL can be used to perform more traditional ML tasks such as image classification.</p>
 <p>I was skeptical at first, but was surprised to see that it worked pretty well both in the literature (see <a href="https://arxiv.org/abs/2405.09798">here</a> and <a href="https://arxiv.org/abs/2403.07407">here</a>) and in my own experiments.</p>
 <p>You shouldn’t expect state-of-the-art results with it, but it can often give you pretty good results with very little effort and data.</p>
-<p>In this tutorial, you’ll see how to use ICL to classify images using Gemini Flash 1.5.</p>
+<p>In this tutorial, I’ll show you how to use ICL to classify images using Gemini Flash 1.5.</p>
 <section id="why-gemini-flash-1.5" class="level2">
 <h2 class="anchored" data-anchor-id="why-gemini-flash-1.5">Why Gemini Flash 1.5?</h2>
-<p>You can use any MLLM for this task, but I like Gemini Flash 1.5 because:</p>
+<p>You can use any MLLM for this task, but I chose Gemini Flash 1.5 because:</p>
 <ol type="1">
-<li>It’s cheaper than <a href="https://ai.google.dev/pricing">Gemini Pro 1.5</a>, <a href="https://platform.openai.com/pricing">GPT-4o</a>, and <a href="https://docs.anthropic.com/en/docs/build-with-claude/vision#calculate-image-costs">Sonnet 3.5</a>. For an image of 512x512 pixels, Gemini Flash 1.5 is 50x cheaper than Gemini Pro 1.5, 5x to 16x cheaper than GPT-4o, and 26x cheaper than Sonnet 3.5<sup>1</sup>.</li>
+<li>It’s cheaper than <a href="https://ai.google.dev/pricing">Gemini Pro 1.5</a>, <a href="https://platform.openai.com/pricing">GPT-4o</a>, and <a href="https://docs.anthropic.com/en/docs/build-with-claude/vision#calculate-image-costs">Sonnet 3.5</a>. For an image of <em>512x512</em> pixels, Gemini Flash 1.5 is 50x cheaper than Gemini Pro 1.5, 5x to 16x cheaper than GPT-4o, and 26x cheaper than Sonnet 3.5<sup>1</sup>.</li>
 <li>It lets you use up to 3,000 images per request. By trial and error, I found that GPT-4o seems to have a hard limit at 250 images per request and Sonnet 3.5’s documentation mentions a limit of 20 images per request.</li>
-<li>It works well enough for this task. If you really want to squeeze the last bit of performance out of your model, you can use a bigger model, but for the purposes of this tutorial, Gemini Flash 1.5 will do just fine.</li>
+<li>It works well. If you really want to squeeze the last bit of performance out of your model, you can use a bigger model, but for the purposes of this tutorial, Gemini Flash 1.5 will do just fine.</li>
 </ol>
 <p>Regardless of the model you choose, this tutorial will be a good starting point for you to classify images using ICL.</p>
 </section>
@@ -39,7 +39,7 @@
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>To follow this tutorial you’ll need to:</p>
 <ol type="1">
-<li>Sign up and generate an API key in <a href="https://aistudio.google.com/app/apikey">Google AI Studio</a></li>
+<li>Sign up and generate an API key in <a href="https://aistudio.google.com/app/apikey">Google AI Studio</a>.</li>
 <li>Set the API key as an environment variable called <code>GEMINI_API_KEY</code>.</li>
 <li>Download <a href="https://www.kaggle.com/datasets/gpiosenka/butterfly-images40-species?resource=download">this dataset</a> and save it to <code>data/</code>.</li>
 <li>Create a virtual environment and install the requirements:</li>
@@ -58,11 +58,8 @@ font-style: inherit;">pip</span> install pandas numpy scikit-learn google-genera
 </section>
 <section id="set-up" class="level2">
 <h2 class="anchored" data-anchor-id="set-up">Set up</h2>
-</section>
-<section id="import-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="import-libraries">Import libraries</h2>
 <p>As usual, you start by importing the necessary libraries:</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> json</span>
@@ -124,7 +121,7 @@ font-style: inherit;">42</span>)</span></code></pre></div>
 <li><code>sklearn</code> for calculating performance metrics</li>
 </ul>
 <p>Then, you’ll need to configure the Gemini API client with your API key:</p>
-<div id="cell-10" class="cell" data-execution_count="3">
+<div id="cell-9" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">genai.configure(api_key<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>os.environ[<span class="st" style="color: #20794D;
@@ -139,7 +136,7 @@ font-style: inherit;">"GEMINI_API_KEY"</span>])</span></code></pre></div>
 <p>Training, in this context, means the process of providing the model with a set of images and asking it to learn from them at inference time. So it’s not training in the traditional sense of updating the model’s weights.</p>
 <p>You’ll grab a random selection of <code>n_images_icl</code> images per class from the training set and use them to provide context to the model when making predictions on the test set. To measure the performance, you’ll use all the available images from those classes in the testing set.</p>
 <p>This function will do just that:</p>
-<div id="cell-14" class="cell" data-execution_count="4">
+<div id="cell-13" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -313,7 +310,7 @@ font-weight: bold;
 font-style: inherit;">return</span> df_train, df_test</span></code></pre></div>
 </div>
 <p>Now you can read the data and create the datasets (using 15 classes and 1 image per class in the context):</p>
-<div id="cell-16" class="cell" data-execution_count="5">
+<div id="cell-15" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">DATA_DIR <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
@@ -368,7 +365,7 @@ font-style: inherit;">1</span>)</span></code></pre></div>
 <section id="prompt" class="level3">
 <h3 class="anchored" data-anchor-id="prompt">Prompt</h3>
 <p>First, you’ll start by defining a simple system prompt that will tell the model how to classify the images:</p>
-<div id="cell-21" class="cell" data-execution_count="6">
+<div id="cell-20" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">CLASSIFIER_SYSTEM_PROMPT <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
@@ -553,7 +550,7 @@ Note
 <section id="model" class="level3">
 <h3 class="anchored" data-anchor-id="model">Model</h3>
 <p>Then, you can define and configure the model:</p>
-<div id="cell-25" class="cell" data-execution_count="7">
+<div id="cell-24" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">generation_config <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {</span>
@@ -599,7 +596,7 @@ font-style: inherit;">=</span>generation_config</span>
 <section id="building-the-context" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-context">Building the context</h3>
 <p>Gemini has its own way of building the context or messages you pass to it. You can use these functions for that:</p>
-<div id="cell-29" class="cell" data-execution_count="8">
+<div id="cell-28" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -657,7 +654,7 @@ font-style: inherit;">=</span> create_context_images_message(df_train)</span></c
 <p>First, you’ll create a message with the context images and their corresponding labels. This is the “training” part of ICL.</p>
 <p>In <code>create_context_images_message</code>, you’re iterating over the training dataset, grouping the images by class and appending the images and labels to the messages list.</p>
 <p>The resulting message will look something like this:</p>
-<div id="cell-31" class="cell" data-execution_count="9">
+<div id="cell-30" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">context_images_message[:<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span></code></pre></div>
@@ -671,7 +668,7 @@ font-style: inherit;">5</span>]</span></code></pre></div>
 </div>
 <p>Then, you’ll create a message with the input images. This are the images for which the model will generate predictions.</p>
 <p>Simlar to the context images message, you’re iterating over the test dataset and appending the images to the messages list.</p>
-<div id="cell-33" class="cell" data-execution_count="10">
+<div id="cell-32" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -733,7 +730,7 @@ background-color: null;
 font-style: inherit;">=</span> create_input_images_message(df_test)</span></code></pre></div>
 </div>
 <p>The resulting message will look something like this:</p>
-<div id="cell-35" class="cell" data-execution_count="11">
+<div id="cell-34" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">input_images_message[:<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span></code></pre></div>
@@ -749,7 +746,7 @@ font-style: inherit;">5</span>]</span></code></pre></div>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
 <p>Now, you can combine the context images message and the input images message to create the contents you’ll pass to the model:</p>
-<div id="cell-38" class="cell" data-execution_count="12">
+<div id="cell-37" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">contents <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> context_images_message <span class="op" style="color: #5E5E5E;
@@ -767,7 +764,7 @@ background-color: null;
 font-style: inherit;">=</span> json.loads(response.text)</span></code></pre></div>
 </div>
 <p>It’ll take a few seconds to run. But after that you’ll have a JSON response with the model’s predictions:</p>
-<div id="cell-40" class="cell" data-execution_count="13">
+<div id="cell-39" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1">response_json[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"output"</span>][:<span class="dv" style="color: #AD0000;
@@ -780,7 +777,7 @@ font-style: inherit;">3</span>]</span></code></pre></div>
 </div>
 </div>
 <p>Then you can calculate the accuracy and F1-score:</p>
-<div id="cell-42" class="cell" data-execution_count="14">
+<div id="cell-41" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -847,7 +844,7 @@ F1-score: 0.7229</code></pre>
 <section id="using-3-images-per-class-in-the-context" class="level4">
 <h4 class="anchored" data-anchor-id="using-3-images-per-class-in-the-context">Using 3 images per class in the context</h4>
 <p>One quick way to improve the performance of the model is to use more images per class in the context. Try with 5 images per class:</p>
-<div id="cell-46" class="cell" data-execution_count="18">
+<div id="cell-45" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">df_train, df_test <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op" style="color: #5E5E5E;
@@ -927,15 +924,14 @@ F1-score: 0.9013</code></pre>
 </section>
 <section id="data-leakage-and-baseline-performance" class="level3">
 <h3 class="anchored" data-anchor-id="data-leakage-and-baseline-performance">Data leakage and baseline performance</h3>
-<p>But before we finish, let’s address the elephant in the room: data leakage.</p>
 <p>You might be thinking, “MLLMs have been trained on a lot of data, so they already know a lot of the images in the dataset, which means that these results are inflated”.</p>
 <p>Which is a good point, and for that purpose I’ve done two things:</p>
 <ol type="1">
 <li>Anonymize the names of the classes (e.g., <code>class_0</code> instead of <code>Sleepy Orange</code>), so that the model doesn’t have any information about the actual labels.</li>
-<li>Run a quick experiment using a zero-shot model (i.e., without providing any context images) to see the model’s performance.</li>
+<li>Run a quick experiment using a zero-shot model (i.e., without providing any context images) without anonymizing the labels to see the model’s performance.</li>
 </ol>
-<p>Here’s the code for the zero-shot baseline:</p>
-<div id="cell-49" class="cell" data-execution_count="16">
+<p>Here’s the code for the zero-shot baseline and the results:</p>
+<div id="cell-48" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1">possible_labels <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
