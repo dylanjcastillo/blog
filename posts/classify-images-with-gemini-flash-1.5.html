@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2024-09-08">
+<meta name="description" content="Learn how to use In-Context Learning (ICL) to classify images using Gemini Flash 1.5">
+
+<title>Classifying images with Gemini Flash 1.5 – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-gemini-flash-1.5" id="toc-why-gemini-flash-1.5" class="nav-link active" data-scroll-target="#why-gemini-flash-1.5">Why Gemini Flash 1.5?</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set up</a></li>
+  <li><a href="#import-libraries" id="toc-import-libraries" class="nav-link" data-scroll-target="#import-libraries">Import libraries</a></li>
+  <li><a href="#read-data" id="toc-read-data" class="nav-link" data-scroll-target="#read-data">Read data</a></li>
+  <li><a href="#gemini-flash-1.5" id="toc-gemini-flash-1.5" class="nav-link" data-scroll-target="#gemini-flash-1.5">Gemini Flash 1.5</a>
+  <ul class="collapse">
+  <li><a href="#prompt" id="toc-prompt" class="nav-link" data-scroll-target="#prompt">Prompt</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#building-the-context" id="toc-building-the-context" class="nav-link" data-scroll-target="#building-the-context">Building the context</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#data-leakage-and-baseline-performance" id="toc-data-leakage-and-baseline-performance" class="nav-link" data-scroll-target="#data-leakage-and-baseline-performance">Data leakage and baseline performance</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Classifying images with Gemini Flash 1.5</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">mllms</div>
+    <div class="quarto-category">in-context-learning</div>
+    <div class="quarto-category">gemini</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 8, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 8, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Most people think of <a href="https://arxiv.org/abs/2301.00234">In-Context Learning (ICL)</a> — the ability of LLMs to learn from examples provided in the context — only as a component of RAG applications.</p>
+<p>I used to think of it that way too. Until I recently found out that Multimodal Large Language Models (MLLMs) with ICL can be used to more traditional ML tasks like image classification (fixed set)</p>
+<p>I was skeptical at first, but I was pleasantly surprised to see that it worked pretty well in the literature (see <a href="https://arxiv.org/abs/2405.09798">here</a> and <a href="https://arxiv.org/abs/2403.07407">here</a>) and in my own experiments.</p>
+<p>You shouldn’t expect state-of-the-art results with it, but it can often give you pretty good results with very little effort and data.</p>
+<p>In this tutorial, you’ll see how to use ICL to classify images using Gemini Flash 1.5.</p>
+<section id="why-gemini-flash-1.5" class="level2">
+<h2 class="anchored" data-anchor-id="why-gemini-flash-1.5">Why Gemini Flash 1.5?</h2>
+<p>You can use any MLLM for this task, but I like Gemini Flash 1.5 because:</p>
+<ol type="1">
+<li>It’s cheaper than <a href="https://ai.google.dev/pricing">Gemini Pro 1.5</a>, <a href="https://platform.openai.com/pricing">GPT-4o</a>, and <a href="https://docs.anthropic.com/en/docs/build-with-claude/vision#calculate-image-costs">Sonnet 3.5</a>. For an image of 512x512 pixels, Gemini Flash 1.5 is 50x cheaper than Gemini Pro 1.5, 5x to 16x cheaper than GPT-4o, and 26x cheaper than Sonnet 3.5<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</li>
+<li>It lets you use up to 3,000 images per request. By trial and error, I found that GPT-4o seems to have a hard limit at 250 images per request and Sonnet 3.5’s documentation mentions a limit of 20 images per request.</li>
+<li>It works well enough for this task. If you really want to squeeze the last bit of performance out of your model, you can use a bigger model, but for the purposes of this tutorial, Gemini Flash 1.5 will do just fine.</li>
+</ol>
+<p>Regardless of the model you choose, this tutorial will be a good starting point for you to classify images using ICL.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To follow this tutorial you’ll need to:</p>
+<ol type="1">
+<li>Sign up and generate an API key in <a href="https://aistudio.google.com/app/apikey">Google AI Studio</a></li>
+<li>Set the API key as an environment variable called <code>GEMINI_API_KEY</code>.</li>
+<li>Download <a href="https://www.kaggle.com/datasets/gpiosenka/butterfly-images40-species?resource=download">this dataset</a> and save it to <code>data/</code>.</li>
+<li>Create a virtual environment and install the requirements:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> venv/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">pip</span> install pandas numpy scikit-learn google-generativeai pillow</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
+</section>
+<section id="import-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="import-libraries">Import libraries</h2>
+<p>As usual, you start by importing the necessary libraries:</p>
+<div id="cell-8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> json</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> warnings</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> google.generativeai <span class="im">as</span> genai</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, f1_score</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-12"><a href="#cb2-12"></a></span>
+<span id="cb2-13"><a href="#cb2-13"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In addition to the usual popular libraries (e.g.&nbsp;<code>pandas</code>, <code>sklearn</code>), you’ll need:</p>
+<ul>
+<li><code>google.generativeai</code> for interacting with the Gemini API</li>
+<li><code>PIL</code> for handling images</li>
+<li><code>sklearn</code> for calculating performance metrics</li>
+</ul>
+<p>Then, you’ll need to configure the Gemini API client with your API key:</p>
+<div id="cell-10" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>genai.configure(api_key<span class="op">=</span>os.environ[<span class="st">"GEMINI_API_KEY"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will take the <code>GEMINI_API_KEY</code> environment variable and use it to authenticate your requests to the Gemini API.</p>
+</section>
+<section id="read-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-data">Read data</h2>
+<p>To do a fair evaluation of the performance of the model, you’ll split the dataset into training and testing sets.</p>
+<p>Training, in this context, means the process of providing the model with a set of images and asking it to learn from them at inference time. So it’s not training in the traditional sense of updating the model’s weights.</p>
+<p>You’ll grab a random selection of <code>n_images_icl</code> images per class from the training set and use them to provide context to the model when making predictions on the test set. To measure the performance, you’ll use all the available images from those classes in the testing set.</p>
+<p>This function will do just that:</p>
+<div id="cell-14" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> create_datasets(train_dir, test_dir, selected_classes, n_images_icl<span class="op">=</span><span class="dv">3</span>):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    train_data <span class="op">=</span> []</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    test_data <span class="op">=</span> []</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="cf">for</span> class_id, class_name <span class="kw">in</span> <span class="bu">enumerate</span>(selected_classes):</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        train_class_dir <span class="op">=</span> train_dir <span class="op">/</span> class_name</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        test_class_dir <span class="op">=</span> test_dir <span class="op">/</span> class_name</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>        <span class="cf">if</span> <span class="kw">not</span> train_class_dir.is_dir() <span class="kw">or</span> <span class="kw">not</span> test_class_dir.is_dir():</span>
+<span id="cb4-10"><a href="#cb4-10"></a>            <span class="cf">continue</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a>        <span class="co"># Train dataset</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>        train_image_files <span class="op">=</span> <span class="bu">list</span>(train_class_dir.glob(<span class="st">"*.jpg"</span>))</span>
+<span id="cb4-14"><a href="#cb4-14"></a>        selected_train_images <span class="op">=</span> np.random.choice(</span>
+<span id="cb4-15"><a href="#cb4-15"></a>            train_image_files,</span>
+<span id="cb4-16"><a href="#cb4-16"></a>            size<span class="op">=</span><span class="bu">min</span>(n_images_icl, <span class="bu">len</span>(train_image_files)),</span>
+<span id="cb4-17"><a href="#cb4-17"></a>            replace<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-18"><a href="#cb4-18"></a>        )</span>
+<span id="cb4-19"><a href="#cb4-19"></a>        <span class="cf">for</span> img_path <span class="kw">in</span> selected_train_images:</span>
+<span id="cb4-20"><a href="#cb4-20"></a>            train_data.append(</span>
+<span id="cb4-21"><a href="#cb4-21"></a>                {</span>
+<span id="cb4-22"><a href="#cb4-22"></a>                    <span class="st">"image_path"</span>: <span class="bu">str</span>(img_path),</span>
+<span id="cb4-23"><a href="#cb4-23"></a>                    <span class="st">"class_id"</span>: <span class="ss">f"class_</span><span class="sc">{</span>class_id<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24"></a>                    <span class="st">"class_name"</span>: class_name,</span>
+<span id="cb4-25"><a href="#cb4-25"></a>                }</span>
+<span id="cb4-26"><a href="#cb4-26"></a>            )</span>
+<span id="cb4-27"><a href="#cb4-27"></a></span>
+<span id="cb4-28"><a href="#cb4-28"></a>        <span class="co"># Test dataset</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a>        test_image_files <span class="op">=</span> <span class="bu">list</span>(test_class_dir.glob(<span class="st">"*.jpg"</span>))</span>
+<span id="cb4-30"><a href="#cb4-30"></a>        <span class="cf">for</span> img_path <span class="kw">in</span> test_image_files:</span>
+<span id="cb4-31"><a href="#cb4-31"></a>            test_data.append(</span>
+<span id="cb4-32"><a href="#cb4-32"></a>                {</span>
+<span id="cb4-33"><a href="#cb4-33"></a>                    <span class="st">"image_path"</span>: <span class="bu">str</span>(img_path),</span>
+<span id="cb4-34"><a href="#cb4-34"></a>                    <span class="st">"class_id"</span>: <span class="ss">f"class_</span><span class="sc">{</span>class_id<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb4-35"><a href="#cb4-35"></a>                    <span class="st">"class_name"</span>: class_name,</span>
+<span id="cb4-36"><a href="#cb4-36"></a>                }</span>
+<span id="cb4-37"><a href="#cb4-37"></a>            )</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a>    df_train <span class="op">=</span> pd.DataFrame(train_data)</span>
+<span id="cb4-40"><a href="#cb4-40"></a>    df_test <span class="op">=</span> pd.DataFrame(test_data).sample(frac<span class="op">=</span><span class="dv">1</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-41"><a href="#cb4-41"></a></span>
+<span id="cb4-42"><a href="#cb4-42"></a>    <span class="cf">return</span> df_train, df_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now you can read the data and create the datasets (using 15 classes and 1 image per class in the context):</p>
+<div id="cell-16" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>DATA_DIR <span class="op">=</span> <span class="st">"../data/"</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>TRAIN_DIR <span class="op">=</span> Path(DATA_DIR) <span class="op">/</span> <span class="st">"train"</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>TEST_DIR <span class="op">=</span> Path(DATA_DIR) <span class="op">/</span> <span class="st">"test"</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>all_classes <span class="op">=</span> <span class="bu">list</span>(os.listdir(TRAIN_DIR))</span>
+<span id="cb5-6"><a href="#cb5-6"></a>selected_classes <span class="op">=</span> np.random.choice(all_classes, size<span class="op">=</span><span class="dv">15</span>, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>df_train, df_test <span class="op">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op">=</span>selected_classes, n_images_icl<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gemini-flash-1.5" class="level2">
+<h2 class="anchored" data-anchor-id="gemini-flash-1.5">Gemini Flash 1.5</h2>
+<p>Next, you’ll need to put together all the pieces you’ll need to generate a response from the model.</p>
+<section id="prompt" class="level3">
+<h3 class="anchored" data-anchor-id="prompt">Prompt</h3>
+<p>First, you’ll start by defining a simple system prompt that will tell the model how to classify the images:</p>
+<div id="cell-21" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>CLASSIFIER_SYSTEM_PROMPT <span class="op">=</span> <span class="st">"""You are an expert lepidopterist.</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">Your task is to classify images of butterflies into one of the provided labels.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="st">Provide your output as a JSON object using this format:</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="st">{</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="st">    "number_of_labeled_images": &lt;integer&gt;,</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="st">    "output": [</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="st">        {</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="st">            "image_id": &lt;image id, integer, starts at 0&gt;,</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="st">            "confidence": &lt;number between 0 and 10, the higher the more confident, integer&gt;,</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="st">            "label": &lt;label of the correct butterfly species, string&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="st">        }, </span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="st">        ...</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="st">    ]</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="st">}</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="st">## Guidelines</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="st">- ALWAYS produce valid JSON.</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="st">- Generate ONLY a single prediction per input image.</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="st">- The `number_of_labeled_images` MUST be the same as the number of input images.</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="st">This is an example of a valid output:</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="st">```</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="st">{</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="st">  "number_of_labeled_images": 5,</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="st">  "output": [</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="st">      {</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="st">        "image_id": 0,</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="st">        "confidence": 10,</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="st">        "correct_label": "class_B"</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="st">      },</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="st">      {</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="st">        "image_id": 1,</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="st">        "confidence": 9,</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="st">        "correct_label": "class_C"</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="st">      },</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="st">      {</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="st">        "image_id": 2,</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="st">        "confidence": 4,</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="st">        "correct_label": "class_A"</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="st">      },</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="st">      {</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a><span class="st">        "image_id": 3,</span></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="st">        "confidence": 2,</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a><span class="st">        "correct_label": "class_B"</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a><span class="st">      },</span></span>
+<span id="cb6-50"><a href="#cb6-50"></a><span class="st">      {</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="st">        "image_id": 4,</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="st">        "confidence": 10,</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="st">        "correct_label": "class_C"</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="st">      }</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="st">  ]</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a><span class="st">}</span></span>
+<span id="cb6-57"><a href="#cb6-57"></a><span class="st">```</span></span>
+<span id="cb6-58"><a href="#cb6-58"></a><span class="st">"""</span>.strip()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This prompt explains the task to the model: you’re providing it with a set of labels with corresponding images, and a set of images that should be classified into one of those labels. The model needs to output a single label for each image.</p>
+<p>I included an additional field called <code>number_of_labeled_images</code> because I noticed that the model would often “forget” to include all the labels in the output, and this was a simple way to ensure that it did so.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fun fact: I didn’t know that <em>lepidopterist</em> was a word until I wrote this prompt.</p>
+</div>
+</div>
+</section>
+<section id="model" class="level3">
+<h3 class="anchored" data-anchor-id="model">Model</h3>
+<p>Then, you can define and configure the model:</p>
+<div id="cell-25" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>generation_config <span class="op">=</span> {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="st">"temperature"</span>: <span class="dv">1</span>,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="st">"max_output_tokens"</span>: <span class="dv">8192</span>,</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="st">"response_mime_type"</span>: <span class="st">"application/json"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6"></a>classification_model <span class="op">=</span> genai.GenerativeModel(</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="st">"gemini-1.5-flash"</span>, </span>
+<span id="cb7-8"><a href="#cb7-8"></a>    system_instruction<span class="op">=</span>CLASSIFIER_SYSTEM_PROMPT, </span>
+<span id="cb7-9"><a href="#cb7-9"></a>    generation_config<span class="op">=</span>generation_config</span>
+<span id="cb7-10"><a href="#cb7-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This does a few things:</p>
+<ul>
+<li>It sets the temperature to 1, which controls the randomness of the model’s output.</li>
+<li>It sets the max_output_tokens to 8192, which is the maximum number of tokens the model can output.</li>
+<li>It sets the response_mime_type to “application/json”, which tells the model to output JSON.</li>
+<li>It sets the system_instruction to the prompt you defined earlier.</li>
+<li>It uses <code>gemini-1.5-flash</code> as the model.</li>
+</ul>
+</section>
+<section id="building-the-context" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-context">Building the context</h3>
+<p>Gemini has its own way of building the context or messages you pass to it. You can use these functions for that:</p>
+<div id="cell-29" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> create_context_images_message(df):</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    messages <span class="op">=</span> [<span class="st">"Possible labels:"</span>]</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    grouped <span class="op">=</span> df.groupby(<span class="st">'class_id'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">for</span> class_id, group <span class="kw">in</span> grouped:</span>
+<span id="cb8-5"><a href="#cb8-5"></a>        <span class="cf">for</span> _, row <span class="kw">in</span> group.iterrows():</span>
+<span id="cb8-6"><a href="#cb8-6"></a>            base64_img <span class="op">=</span> Image.<span class="bu">open</span>(row[<span class="st">"image_path"</span>])</span>
+<span id="cb8-7"><a href="#cb8-7"></a>            messages.append(base64_img)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>        messages.append(<span class="ss">f"label: </span><span class="sc">{</span>class_id<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="cf">return</span> messages</span>
+<span id="cb8-10"><a href="#cb8-10"></a>    </span>
+<span id="cb8-11"><a href="#cb8-11"></a>context_images_message <span class="op">=</span> create_context_images_message(df_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>First, you’ll create a message with the context images and their corresponding labels. This is the “training” part of ICL.</p>
+<p>In <code>create_context_images_message</code>, you’re iterating over the training dataset, grouping the images by class and appending the images and labels to the messages list.</p>
+<p>The resulting message will look something like this:</p>
+<div id="cell-31" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>context_images_message[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>['Possible labels:',
+ &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=224x224&gt;,
+ 'label: class_0',
+ &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=224x224&gt;,
+ 'label: class_1']</code></pre>
+</div>
+</div>
+<p>Then, you’ll create a message with the input images. This are the images for which the model will generate predictions.</p>
+<p>Simlar to the context images message, you’re iterating over the test dataset and appending the images to the messages list.</p>
+<div id="cell-33" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> create_input_images_message(df):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    messages <span class="op">=</span> [<span class="st">"Input images:"</span>]</span>
+<span id="cb11-3"><a href="#cb11-3"></a>    <span class="cf">for</span> i, image_path <span class="kw">in</span> <span class="bu">enumerate</span>(df.image_path):</span>
+<span id="cb11-4"><a href="#cb11-4"></a>        base64_img <span class="op">=</span> Image.<span class="bu">open</span>(image_path)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>        image_message <span class="op">=</span> [</span>
+<span id="cb11-6"><a href="#cb11-6"></a>            base64_img,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>            <span class="ss">f"input_image_id: </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8"></a>        ]</span>
+<span id="cb11-9"><a href="#cb11-9"></a>        messages.extend(image_message)</span>
+<span id="cb11-10"><a href="#cb11-10"></a>    messages.append(<span class="ss">f"Please correctly classify all </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> images."</span>)</span>
+<span id="cb11-11"><a href="#cb11-11"></a>    <span class="cf">return</span> messages</span>
+<span id="cb11-12"><a href="#cb11-12"></a></span>
+<span id="cb11-13"><a href="#cb11-13"></a>input_images_message <span class="op">=</span> create_input_images_message(df_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The resulting message will look something like this:</p>
+<div id="cell-35" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>input_images_message[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>['Input images:',
+ &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=224x224&gt;,
+ 'input_image_id: 0',
+ &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=224x224&gt;,
+ 'input_image_id: 1']</code></pre>
+</div>
+</div>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>Now, you can combine the context images message and the input images message to create the contents you’ll pass to the model:</p>
+<div id="cell-38" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>contents <span class="op">=</span> context_images_message <span class="op">+</span> input_images_message</span>
+<span id="cb14-2"><a href="#cb14-2"></a>response <span class="op">=</span> classification_model.generate_content(</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    contents<span class="op">=</span>contents</span>
+<span id="cb14-4"><a href="#cb14-4"></a>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>response_json <span class="op">=</span> json.loads(response.text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It’ll take a few seconds to run. But after that you’ll have a JSON response with the model’s predictions:</p>
+<div id="cell-40" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>response_json[<span class="st">"output"</span>][:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>[{'image_id': 0, 'confidence': 10, 'label': 'class_7'},
+ {'image_id': 1, 'confidence': 10, 'label': 'class_2'},
+ {'image_id': 2, 'confidence': 10, 'label': 'class_4'}]</code></pre>
+</div>
+</div>
+<p>Then you can calculate the accuracy and F1-score:</p>
+<div id="cell-42" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">def</span> calculate_metrics(df_test, response_json):</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    predictions <span class="op">=</span> [item[<span class="st">'label'</span>] <span class="cf">for</span> item <span class="kw">in</span> response_json[<span class="st">'output'</span>]]</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    accuracy <span class="op">=</span> accuracy_score(df_test.class_id, predictions)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    f1 <span class="op">=</span> f1_score(df_test.class_id, predictions, average<span class="op">=</span><span class="st">'weighted'</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="cf">return</span> accuracy, f1</span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a>accuracy, f1 <span class="op">=</span> calculate_metrics(df_test, response_json)</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="bu">print</span>(<span class="ss">f"F1-score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy: 0.7333
+F1-score: 0.7229</code></pre>
+</div>
+</div>
+<p>Using a single image in the context per class, you should get an accuracy around 82% and F1-score around 77%. Which isn’t bad, but you can probably do better.</p>
+<section id="using-3-images-per-class-in-the-context" class="level4">
+<h4 class="anchored" data-anchor-id="using-3-images-per-class-in-the-context">Using 3 images per class in the context</h4>
+<p>One quick way to improve the performance of the model is to use more images per class in the context. Try with 5 images per class:</p>
+<div id="cell-46" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>df_train, df_test <span class="op">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op">=</span>selected_classes, n_images_icl<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co"># Create the context and input messages</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>context_images_message <span class="op">=</span> create_context_images_message(df_train)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>input_images_message <span class="op">=</span> create_input_images_message(df_test)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>contents <span class="op">=</span> context_images_message <span class="op">+</span> input_images_message</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># Generate the response</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a>response <span class="op">=</span> classification_model.generate_content(</span>
+<span id="cb19-11"><a href="#cb19-11"></a>    contents<span class="op">=</span>contents</span>
+<span id="cb19-12"><a href="#cb19-12"></a>)</span>
+<span id="cb19-13"><a href="#cb19-13"></a>response_json <span class="op">=</span> json.loads(response.text)</span>
+<span id="cb19-14"><a href="#cb19-14"></a></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co"># Calculate the metrics</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a>accuracy, f1 <span class="op">=</span> calculate_metrics(df_test, response_json)</span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="bu">print</span>(<span class="ss">f"F1-score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy: 0.9067
+F1-score: 0.9013</code></pre>
+</div>
+</div>
+<p>With this change, you should get an accuracy and F1-score around 90%.</p>
+<p>Not bad for something that you’ve built in less than 10 minutes!</p>
+</section>
+</section>
+<section id="data-leakage-and-baseline-performance" class="level3">
+<h3 class="anchored" data-anchor-id="data-leakage-and-baseline-performance">Data leakage and baseline performance</h3>
+<p>But before we finish, let’s address the elephant in the room: data leakage.</p>
+<p>You might be thinking, “MLLMs have been trained on a lot of data, so they already know a lot of the images in the dataset, which means that these results are inflated”.</p>
+<p>Which is a good point, and for that purpose I’ve done two things:</p>
+<ol type="1">
+<li>Anonymize the names of the classes (e.g., <code>class_0</code> instead of <code>Sleepy Orange</code>), so that the model doesn’t have any information about the actual labels.</li>
+<li>Run a quick experiment using a zero-shot model (i.e., without providing any context images) to see the model’s performance.</li>
+</ol>
+<p>Here’s the code for the zero-shot baseline:</p>
+<div id="cell-49" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>possible_labels <span class="op">=</span> <span class="st">"Possible labels: "</span> <span class="op">+</span> <span class="st">", "</span>.join(df_train.class_name.unique().tolist())</span>
+<span id="cb21-2"><a href="#cb21-2"></a>class_name_to_id <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(df_train[<span class="st">'class_name'</span>], df_train[<span class="st">'class_id'</span>]))</span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a>response <span class="op">=</span> classification_model.generate_content(</span>
+<span id="cb21-5"><a href="#cb21-5"></a>    contents<span class="op">=</span>[possible_labels] <span class="op">+</span> input_images_message</span>
+<span id="cb21-6"><a href="#cb21-6"></a>)</span>
+<span id="cb21-7"><a href="#cb21-7"></a>response_json <span class="op">=</span> json.loads(response.text)</span>
+<span id="cb21-8"><a href="#cb21-8"></a></span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="cf">for</span> item <span class="kw">in</span> response_json[<span class="st">"output"</span>]:</span>
+<span id="cb21-10"><a href="#cb21-10"></a>    item[<span class="st">'label'</span>] <span class="op">=</span> class_name_to_id.get(item[<span class="st">'label'</span>], item[<span class="st">'label'</span>])</span>
+<span id="cb21-11"><a href="#cb21-11"></a></span>
+<span id="cb21-12"><a href="#cb21-12"></a>accuracy, f1 <span class="op">=</span> calculate_metrics(df_test, response_json)</span>
+<span id="cb21-13"><a href="#cb21-13"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="bu">print</span>(<span class="ss">f"F1-score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy: 0.4800
+F1-score: 0.4619</code></pre>
+</div>
+</div>
+<p>You should achieve a 48% accuracy and a 46% F1-score. Both significantly higher than the 6.66% you’d expect from random guessing, but still far from the 90%+ accuracy you obtained earlier.</p>
+<p>These results demonstrate that ICL can indeed enhance the model’s performance.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>That’s all!</p>
+<p>You’ve just used Gemini Flash 1.5 and ICL to classify images. I still find it amazing that without any “real” training and with just a few minutes of work, you can achieve pretty good results in a non-trivial image classification task.</p>
+<p>This a mostly unexplored area, so there’s a lot of room for trying out different ideas and seeing what works best. This tutorial is just a starting point.</p>
+<p>Hope you found it useful! Let me know if you have any questions in the comments below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Estimated costs as of September 8, 2024:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Cost (512x512 image)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gemini Flash 1.5</td>
+<td>$0.000039</td>
+</tr>
+<tr class="even">
+<td>Gemini Pro 1.5</td>
+<td>$0.0018</td>
+</tr>
+<tr class="odd">
+<td>GPT-4o</td>
+<td>$0.000213 - $0.000638</td>
+</tr>
+<tr class="even">
+<td>Sonnet 3.5</td>
+<td>$0.001047</td>
+</tr>
+</tbody>
+</table>
+<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

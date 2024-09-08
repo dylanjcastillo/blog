@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/classify-images-with-gemini-flash-1.5.html",
       "/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html",
       "/posts/2023-personal-snapshot.html",
       "/posts/clustering-documents-with-openai-langchain-hdbscan.html",
