@@ -17,8 +17,8 @@ author:
     affiliation: Iwana Labs
     affiliation-url: https://iwanalabs.com
     citation: true
-    comments:
-    utterances:
+comments:
+  utterances:
     repo: dylanjcastillo/blog_comments
     theme: dark-blue
     issue-term: pathname

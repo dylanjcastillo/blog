@@ -12,6 +12,11 @@ categories:
   - til
   - python
   - poetry
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
 ---
 
 After the last macOS update, I started getting the following error when trying to run `poetry install`:

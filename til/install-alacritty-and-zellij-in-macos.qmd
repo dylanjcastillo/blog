@@ -13,6 +13,11 @@ categories:
   - alacritty
   - zellij
   - neovim
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
 ---
 
 Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.

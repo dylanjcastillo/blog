@@ -12,6 +12,11 @@ categories:
   - til
   - python
   - django
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
 ---
 
 [Pieter Levels](https://levels.io/) makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply [uploading files via FTP](https://news.ycombinator.com/item?id=28838537).
