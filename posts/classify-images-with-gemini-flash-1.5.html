@@ -173,8 +173,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#read-data" id="toc-read-data" class="nav-link" data-scroll-target="#read-data">Read data</a></li>
   <li><a href="#gemini-flash-1.5" id="toc-gemini-flash-1.5" class="nav-link" data-scroll-target="#gemini-flash-1.5">Gemini Flash 1.5</a>
   <ul class="collapse">
-  <li><a href="#prompt" id="toc-prompt" class="nav-link" data-scroll-target="#prompt">Prompt</a></li>
-  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#define-prompt" id="toc-define-prompt" class="nav-link" data-scroll-target="#define-prompt">Define prompt</a></li>
+  <li><a href="#configure-model" id="toc-configure-model" class="nav-link" data-scroll-target="#configure-model">Configure model</a></li>
   <li><a href="#building-the-context" id="toc-building-the-context" class="nav-link" data-scroll-target="#building-the-context">Building the context</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#data-leakage-and-baseline-performance" id="toc-data-leakage-and-baseline-performance" class="nav-link" data-scroll-target="#data-leakage-and-baseline-performance">Data leakage and baseline performance</a></li>
@@ -226,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 8, 2024</p>
+      <p class="date-modified">September 9, 2024</p>
     </div>
   </div>
     
@@ -299,10 +299,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="read-data" class="level2">
 <h2 class="anchored" data-anchor-id="read-data">Read data</h2>
-<p>To do a fair evaluation of the performance of the model, you’ll split the dataset into training and testing sets.</p>
-<p>Training, in this context, means the process of providing the model with a set of images and asking it to learn from them at inference time. So it’s not training in the traditional sense of updating the model’s weights.</p>
-<p>You’ll grab a random selection of <code>n_images_icl</code> images per class from the training set and use them to provide context to the model when making predictions on the test set. To measure the performance, you’ll use all the available images from those classes in the testing set.</p>
-<p>This function will do just that:</p>
+<p>To do a fair evaluation of the performance of the model, you should split the dataset into a training and a testing sets.</p>
+<p>Training, in this case, means the process of providing the model with a set of images and asking it to learn from them at inference time. So it’s not training in the traditional sense of updating the model’s weights.</p>
+<p>For that, you’ll grab a random selection of <code>n_images_icl</code> images per class from the training set and use them in the model’s context. To measure the performance, you’ll use all the available images from those classes in the testing set.</p>
+<p>This function will help you create the datasets:</p>
 <div id="cell-13" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> create_datasets(train_dir, test_dir, selected_classes, n_images_icl<span class="op">=</span><span class="dv">3</span>):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    train_data <span class="op">=</span> []</span>
@@ -347,7 +347,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-41"><a href="#cb4-41"></a></span>
 <span id="cb4-42"><a href="#cb4-42"></a>    <span class="cf">return</span> df_train, df_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now you can read the data and create the datasets (using 15 classes and 1 image per class in the context):</p>
+<p>Now you can read the data and create the datasets. Start with 15 different classes and 1 image per class in the context:</p>
 <div id="cell-15" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>DATA_DIR <span class="op">=</span> <span class="st">"../data/"</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>TRAIN_DIR <span class="op">=</span> Path(DATA_DIR) <span class="op">/</span> <span class="st">"train"</span></span>
@@ -361,10 +361,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="gemini-flash-1.5" class="level2">
 <h2 class="anchored" data-anchor-id="gemini-flash-1.5">Gemini Flash 1.5</h2>
-<p>Next, you’ll need to put together all the pieces you’ll need to generate a response from the model.</p>
-<section id="prompt" class="level3">
-<h3 class="anchored" data-anchor-id="prompt">Prompt</h3>
-<p>First, you’ll start by defining a simple system prompt that will tell the model how to classify the images:</p>
+<p>Next, you need to put together all the pieces to generate a response from the model.</p>
+<section id="define-prompt" class="level3">
+<h3 class="anchored" data-anchor-id="define-prompt">Define prompt</h3>
+<p>First, you should start by defining a simple system prompt that will tell the model how to classify the images:</p>
 <div id="cell-20" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>CLASSIFIER_SYSTEM_PROMPT <span class="op">=</span> <span class="st">"""You are an expert lepidopterist.</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
@@ -441,8 +441,8 @@ Note
 </div>
 </div>
 </section>
-<section id="model" class="level3">
-<h3 class="anchored" data-anchor-id="model">Model</h3>
+<section id="configure-model" class="level3">
+<h3 class="anchored" data-anchor-id="configure-model">Configure model</h3>
 <p>Then, you can define and configure the model:</p>
 <div id="cell-24" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>generation_config <span class="op">=</span> {</span>
@@ -458,16 +458,18 @@ Note
 </div>
 <p>This does a few things:</p>
 <ul>
-<li>It sets the temperature to 1, which controls the randomness of the model’s output.</li>
-<li>It sets the max_output_tokens to 8192, which is the maximum number of tokens the model can output.</li>
-<li>It sets the response_mime_type to “application/json”, which tells the model to output JSON.</li>
-<li>It sets the system_instruction to the prompt you defined earlier.</li>
+<li>It sets <code>temperature</code> to 1, which controls the randomness of the model’s output.</li>
+<li>It sets <code>max_output_tokens</code> to 8192, which is the maximum number of tokens the model can output.</li>
+<li>It sets <code>response_mime_type</code> to “application/json”, which tells the model to output JSON.</li>
+<li>It sets <code>system_instruction</code> to the prompt you defined earlier.</li>
 <li>It uses <code>gemini-1.5-flash</code> as the model.</li>
 </ul>
 </section>
 <section id="building-the-context" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-context">Building the context</h3>
-<p>Gemini has its own way of building the context or messages you pass to it. You can use these functions for that:</p>
+<p>Gemini has a slightly different way of building the messages (or context) you pass to it.</p>
+<p>Most providers have adjusted their API to match OpenAI’s <code>messages</code> format. Gemini, however, uses a simple list of strings and media files (if you’re including images).</p>
+<p>You can use these functions for that:</p>
 <div id="cell-28" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> create_context_images_message(df):</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    messages <span class="op">=</span> [<span class="st">"Possible labels:"</span>]</span>
@@ -542,7 +544,7 @@ Note
  {'image_id': 2, 'confidence': 10, 'label': 'class_4'}]</code></pre>
 </div>
 </div>
-<p>Then you can calculate the accuracy and F1-score:</p>
+<p>Then, you can calculate the accuracy and F1-score to evaluate the model’s performance:</p>
 <div id="cell-41" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">def</span> calculate_metrics(df_test, response_json):</span>
 <span id="cb17-2"><a href="#cb17-2"></a>    predictions <span class="op">=</span> [item[<span class="st">'label'</span>] <span class="cf">for</span> item <span class="kw">in</span> response_json[<span class="st">'output'</span>]]</span>
@@ -558,9 +560,10 @@ Note
 F1-score: 0.7229</code></pre>
 </div>
 </div>
-<p>Using a single image in the context per class, you should get an accuracy around 82% and F1-score around 77%. Which isn’t bad, but you can probably do better.</p>
-<section id="using-3-images-per-class-in-the-context" class="level4">
-<h4 class="anchored" data-anchor-id="using-3-images-per-class-in-the-context">Using 3 images per class in the context</h4>
+<p>Using a single image in the context per class, you should get an accuracy around 73% and F1-score around 72%.</p>
+<p>Not bad, but you can probably do better.</p>
+<section id="using-5-images-per-class-in-the-context" class="level4">
+<h4 class="anchored" data-anchor-id="using-5-images-per-class-in-the-context">Using 5 images per class in the context</h4>
 <p>One quick way to improve the performance of the model is to use more images per class in the context. Try with 5 images per class:</p>
 <div id="cell-45" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>df_train, df_test <span class="op">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op">=</span>selected_classes, n_images_icl<span class="op">=</span><span class="dv">5</span>)</span>
@@ -570,24 +573,23 @@ F1-score: 0.7229</code></pre>
 <span id="cb19-5"><a href="#cb19-5"></a>input_images_message <span class="op">=</span> create_input_images_message(df_test)</span>
 <span id="cb19-6"><a href="#cb19-6"></a>contents <span class="op">=</span> context_images_message <span class="op">+</span> input_images_message</span>
 <span id="cb19-7"><a href="#cb19-7"></a></span>
-<span id="cb19-8"><a href="#cb19-8"></a></span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># Generate the response</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a>response <span class="op">=</span> classification_model.generate_content(</span>
-<span id="cb19-11"><a href="#cb19-11"></a>    contents<span class="op">=</span>contents</span>
-<span id="cb19-12"><a href="#cb19-12"></a>)</span>
-<span id="cb19-13"><a href="#cb19-13"></a>response_json <span class="op">=</span> json.loads(response.text)</span>
-<span id="cb19-14"><a href="#cb19-14"></a></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="co"># Calculate the metrics</span></span>
-<span id="cb19-16"><a href="#cb19-16"></a>accuracy, f1 <span class="op">=</span> calculate_metrics(df_test, response_json)</span>
-<span id="cb19-17"><a href="#cb19-17"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb19-18"><a href="#cb19-18"></a><span class="bu">print</span>(<span class="ss">f"F1-score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co"># Generate the response</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>response <span class="op">=</span> classification_model.generate_content(</span>
+<span id="cb19-10"><a href="#cb19-10"></a>    contents<span class="op">=</span>contents</span>
+<span id="cb19-11"><a href="#cb19-11"></a>)</span>
+<span id="cb19-12"><a href="#cb19-12"></a>response_json <span class="op">=</span> json.loads(response.text)</span>
+<span id="cb19-13"><a href="#cb19-13"></a></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co"># Calculate the metrics</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a>accuracy, f1 <span class="op">=</span> calculate_metrics(df_test, response_json)</span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="bu">print</span>(<span class="ss">f"F1-score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 0.9067
 F1-score: 0.9013</code></pre>
 </div>
 </div>
 <p>With this change, you should get an accuracy and F1-score around 90%.</p>
-<p>Not bad for something that you’ve built in less than 10 minutes!</p>
+<p>Nice gains in performance for such a small change!</p>
 </section>
 </section>
 <section id="data-leakage-and-baseline-performance" class="level3">
