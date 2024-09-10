@@ -1066,8 +1066,7 @@ F1-score: 0.4619</code></pre>
 <li id="fn2"><p>That is, without providing any context images.↩︎</p></li>
 </ol>
 </section></div> ]]></description>
-  <category>mllms</category>
-  <category>in-context-learning</category>
+  <category>llm</category>
   <category>gemini</category>
   <guid>https://dylancastillo.co/posts/classify-images-with-gemini-flash-1.5.html</guid>
   <pubDate>Sun, 08 Sep 2024 00:00:00 GMT</pubDate>
