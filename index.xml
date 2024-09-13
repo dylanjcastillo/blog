@@ -2838,8 +2838,8 @@ font-style: inherit;">---</span></span></code></pre></div>
 </section>
 <section id="deployment-using-github-pages-github-actions" class="level3">
 <h3 class="anchored" data-anchor-id="deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</h3>
-<p>Quarto offers multiple deployment options. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed, so I went with GitHub Pages combined with GitHub Actions.</p>
-<p>To deploy the blog, I created a GitHub repository (https://github.com/dylanjcastillo/blog), added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
+<p>Quarto offers multiple <a href="https://quarto.org/docs/publishing/">deployment options</a>. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed. I went with GitHub Pages combined with GitHub Actions.</p>
+<p>To deploy the blog, I created a <a href="https://github.com/dylanjcastillo/blog">GitHub repository</a>, added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
@@ -4569,7 +4569,7 @@ Castillo, Dylan. 2024. <span>“2023: Personal Snapshot.”</span> January
 
 <p>In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.</p>
 <p>While older methods are still relevant, if I had to cluster text data today, I’d start with OpenAI or Cohere’s embeddings. It’s faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.</p>
-<p>I haven’t seen many tutorials on this topic, so I wrote one. In this tutorial, I’ll show you how to cluster news articles using OpenAI embeddings, LangChain, and HDBSCAN.</p>
+<p>I haven’t seen many tutorials on this topic, so I wrote one. In this tutorial, I’ll show you how to cluster news articles using OpenAI embeddings, and HDBSCAN.</p>
 <p>Let’s get to it!</p>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
