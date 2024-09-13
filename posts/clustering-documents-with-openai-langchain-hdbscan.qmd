@@ -31,7 +31,7 @@ In the past, the most common way to cluster documents was by building vectors wi
 
 While older methods are still relevant, if I had to cluster text data today, I'd start with OpenAI or Cohere's embeddings. It's faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.
 
-I haven't seen many tutorials on this topic, so I wrote one. In this tutorial, I'll show you how to cluster news articles using OpenAI embeddings, LangChain, and HDBSCAN.
+I haven't seen many tutorials on this topic, so I wrote one. In this tutorial, I'll show you how to cluster news articles using OpenAI embeddings, and HDBSCAN.
 
 Let's get to it!
 
