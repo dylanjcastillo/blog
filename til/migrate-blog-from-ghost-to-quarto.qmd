@@ -43,13 +43,17 @@ quarto create project blog myblog
 
 ### Exporting your Ghost's blog content
 
-Downloading a copy of your blog's JSON dump. You can find it in this URL: `<YOUR_BLOG_URL>/ghost/#/settings/migration`.
+First, you must download a copy of your.
 
-Then click on `Export`, and click on `Export JSON`.
+Adjust this URL and run it in your browser: `<YOUR_BLOG_URL>/ghost/#/settings/migration`.
 
 ![Exporting my blog](images/ghost-export.png)
 
-Then, you can process the JSON dump to convert posts to Quarto posts. I used this small Python script that did the heavy lifting for me:
+Once you're in the export page, click on `Export`, and click on `Export JSON`.
+
+This will generate a JSON file with all the posts and pages in your blog. You'll need to process it to convert your posts to Quarto posts.
+
+I used this small Python script that did the heavy lifting for me:
 
 <details>
 <summary> Show the code </summary>
@@ -137,24 +141,24 @@ if __name__ == "__main__":
 
 When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.
 
-### Configuring your blog and posts
+### Customizing your blog
 
-Through trial and error, I found some settings that helped me to have a blog with the look and feel I wanted.
+Through trial and error, I found some settings that helped me customize the look and feel of my blog.
 
-Here's some of the things I modified:
+Here are some of the things I modified:
 
-1. Minimal website settings:
+1. Added RSS, favicon, and customized the navbar:
 
 ```{.yml filename="_quarto.yml"}
 website:
   title: # The title of your blog
-  site-url: # For the RSS feed that noneone will read
+  site-url: # For the RSS feed that no one will read
   favicon: # Add a favicon to the blog
   navbar: # Customize the navbar if you want
   page-footer: # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit
 ```
 
-2. Add custom CSS and JS, and change the looks of your blog:
+2. Added custom CSS and JS and a custom theme:
 
 ```{.yml filename="_quarto.yml"}
 format:
@@ -199,9 +203,15 @@ comments:
 ---
 ```
 
+See my [settings](https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml) for an example and a recent post [source](https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd) for reference.
+
+I also added a custom `custom.scss` file to modify some Bootstrap styles.
+
 ### Deployment using GitHub Pages + GitHub Actions
 
-To deploy the blog, I created a GitHub repository, added the blog's content, updated `.gitignore` to ignore the `/.quarto/` and `/_site/` and updated `_quarto.yml` to only compute code locally (otherwise you'd need a Python kernel running on your GitHub Actions runner):
+Quarto offers multiple deployment options. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed, so I went with GitHub Pages combined with GitHub Actions.
+
+To deploy the blog, I created a GitHub repository (https://github.com/dylanjcastillo/blog), added the blog's content, updated `.gitignore` to ignore the `/.quarto/` and `/_site/` and updated `_quarto.yml` to only compute code locally (otherwise you'd need a Python kernel running on your GitHub Actions runner):
 
 ```{.yml filename="_quarto.yml"}
 execute:
@@ -214,11 +224,11 @@ Then I ran this command to automatically generate the workflow `.github/workflow
 quarto publish gh-pages
 ```
 
-From then on, every time I push changes to the `main` branch, GitHub Actions will automatically render the website with Quarto and update the `gh-pages` branch.
+Since then, every time I push changes to the `main` branch, GitHub Actions automatically renders the website and updates the `gh-pages` branch.
 
 ### Using a custom domain
 
-That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the `main` branch, the site would no longer be served from my custom domain (dylancastillo.co).
+That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the `main` branch, the site would no longer be served from my custom domain [dylancastillo.co](https://dylancastillo.co).
 
 When you render your website, Quarto recreates the CNAME file in the `gh-pages` branch, which seems to break the custom domain setup in GitHub Pages.
 
