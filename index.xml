@@ -1972,15 +1972,17 @@ font-style: inherit;">quarto</span> create project blog myblog</span></code></pr
 </section>
 <section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</h3>
-<p>Downloading a copy of your blog’s JSON dump. You can find it in this URL: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
-<p>Then click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
+<p>First, you must download a copy of your.</p>
+<p>Adjust this URL and run it in your browser: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="https://dylancastillo.co/til/images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
 <figcaption class="margin-caption">Exporting my blog</figcaption>
 </figure>
 </div>
-<p>Then, you can process the JSON dump to convert posts to Quarto posts. I used this small Python script that did the heavy lifting for me:</p>
+<p>Once you’re in the export page, click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
+<p>This will generate a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
+<p>I used this small Python script that did the heavy lifting for me:</p>
 <details>
 <summary>
 Show the code
@@ -2434,12 +2436,12 @@ font-style: inherit;">file</span>)</span>
 </details>
 <p>When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.</p>
 </section>
-<section id="configuring-your-blog-and-posts" class="level3">
-<h3 class="anchored" data-anchor-id="configuring-your-blog-and-posts">Configuring your blog and posts</h3>
-<p>Through trial and error, I found some settings that helped me to have a blog with the look and feel I wanted.</p>
-<p>Here’s some of the things I modified:</p>
+<section id="customizing-your-blog" class="level3">
+<h3 class="anchored" data-anchor-id="customizing-your-blog">Customizing your blog</h3>
+<p>Through trial and error, I found some settings that helped me customize the look and feel of my blog.</p>
+<p>Here are some of the things I modified:</p>
 <ol type="1">
-<li>Minimal website settings:</li>
+<li>Added RSS, favicon, and customized the navbar:</li>
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -2470,7 +2472,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"> # For the RSS feed that noneone will read</span></span>
+font-style: inherit;"> # For the RSS feed that no one will read</span></span>
 <span id="cb3-4"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
@@ -2503,7 +2505,7 @@ background-color: null;
 font-style: inherit;"> # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit</span></span></code></pre></div>
 </div>
 <ol start="2" type="1">
-<li>Add custom CSS and JS, and change the looks of your blog:</li>
+<li>Added custom CSS and JS and a custom theme:</li>
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -2824,10 +2826,13 @@ font-style: inherit;"> pathname</span></span>
 background-color: null;
 font-style: inherit;">---</span></span></code></pre></div>
 </div>
+<p>See my <a href="https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml">settings</a> for an example and a recent post <a href="https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd">source</a> for reference.</p>
+<p>I also added a custom <code>custom.scss</code> file to modify some Bootstrap styles.</p>
 </section>
 <section id="deployment-using-github-pages-github-actions" class="level3">
 <h3 class="anchored" data-anchor-id="deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</h3>
-<p>To deploy the blog, I created a GitHub repository, added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
+<p>Quarto offers multiple deployment options. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed, so I went with GitHub Pages combined with GitHub Actions.</p>
+<p>To deploy the blog, I created a GitHub repository (https://github.com/dylanjcastillo/blog), added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
@@ -2853,11 +2858,11 @@ font-style: inherit;"> auto</span></span></code></pre></div>
 <div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">quarto</span> publish gh-pages</span></code></pre></div>
-<p>From then on, every time I push changes to the <code>main</code> branch, GitHub Actions will automatically render the website with Quarto and update the <code>gh-pages</code> branch.</p>
+<p>Since then, every time I push changes to the <code>main</code> branch, GitHub Actions automatically renders the website and updates the <code>gh-pages</code> branch.</p>
 </section>
 <section id="using-a-custom-domain" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-custom-domain">Using a custom domain</h3>
-<p>That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the <code>main</code> branch, the site would no longer be served from my custom domain (dylancastillo.co).</p>
+<p>That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the <code>main</code> branch, the site would no longer be served from my custom domain <a href="https://dylancastillo.co">dylancastillo.co</a>.</p>
 <p>When you render your website, Quarto recreates the CNAME file in the <code>gh-pages</code> branch, which seems to break the custom domain setup in GitHub Pages.</p>
 <p>I found a solution in this <a href="https://github.com/quarto-dev/quarto-cli/discussions/5341">discussion</a> and added a CNAME file to the root of the repository with my custom domain:</p>
 <div class="code-with-filename">

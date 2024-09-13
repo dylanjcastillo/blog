@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#setting-up-your-blog" id="toc-setting-up-your-blog" class="nav-link" data-scroll-target="#setting-up-your-blog">Setting up your blog</a></li>
   <li><a href="#exporting-your-ghosts-blog-content" id="toc-exporting-your-ghosts-blog-content" class="nav-link" data-scroll-target="#exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</a></li>
-  <li><a href="#configuring-your-blog-and-posts" id="toc-configuring-your-blog-and-posts" class="nav-link" data-scroll-target="#configuring-your-blog-and-posts">Configuring your blog and posts</a></li>
+  <li><a href="#customizing-your-blog" id="toc-customizing-your-blog" class="nav-link" data-scroll-target="#customizing-your-blog">Customizing your blog</a></li>
   <li><a href="#deployment-using-github-pages-github-actions" id="toc-deployment-using-github-pages-github-actions" class="nav-link" data-scroll-target="#deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</a></li>
   <li><a href="#using-a-custom-domain" id="toc-using-a-custom-domain" class="nav-link" data-scroll-target="#using-a-custom-domain">Using a custom domain</a></li>
   </ul></li>
@@ -208,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 10, 2024</p>
+      <p class="date-modified">September 13, 2024</p>
     </div>
   </div>
     
@@ -235,15 +235,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</h3>
-<p>Downloading a copy of your blog’s JSON dump. You can find it in this URL: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
-<p>Then click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
+<p>First, you must download a copy of your.</p>
+<p>Adjust this URL and run it in your browser: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
 <figcaption class="margin-caption">Exporting my blog</figcaption>
 </figure>
 </div>
-<p>Then, you can process the JSON dump to convert posts to Quarto posts. I used this small Python script that did the heavy lifting for me:</p>
+<p>Once you’re in the export page, click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
+<p>This will generate a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
+<p>I used this small Python script that did the heavy lifting for me:</p>
 <details>
 <summary>
 Show the code
@@ -327,12 +329,12 @@ Show the code
 </details>
 <p>When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.</p>
 </section>
-<section id="configuring-your-blog-and-posts" class="level3">
-<h3 class="anchored" data-anchor-id="configuring-your-blog-and-posts">Configuring your blog and posts</h3>
-<p>Through trial and error, I found some settings that helped me to have a blog with the look and feel I wanted.</p>
-<p>Here’s some of the things I modified:</p>
+<section id="customizing-your-blog" class="level3">
+<h3 class="anchored" data-anchor-id="customizing-your-blog">Customizing your blog</h3>
+<p>Through trial and error, I found some settings that helped me customize the look and feel of my blog.</p>
+<p>Here are some of the things I modified:</p>
 <ol type="1">
-<li>Minimal website settings:</li>
+<li>Added RSS, favicon, and customized the navbar:</li>
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -340,13 +342,13 @@ Show the code
 </div>
 <div class="sourceCode" id="cb3" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">website</span><span class="kw">:</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="co"> # The title of your blog</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="at">  </span><span class="fu">site-url</span><span class="kw">:</span><span class="co"> # For the RSS feed that noneone will read</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="at">  </span><span class="fu">site-url</span><span class="kw">:</span><span class="co"> # For the RSS feed that no one will read</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="at">  </span><span class="fu">favicon</span><span class="kw">:</span><span class="co"> # Add a favicon to the blog</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="at">  </span><span class="fu">navbar</span><span class="kw">:</span><span class="co"> # Customize the navbar if you want</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="at">  </span><span class="fu">page-footer</span><span class="kw">:</span><span class="co"> # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
-<li>Add custom CSS and JS, and change the looks of your blog:</li>
+<li>Added custom CSS and JS and a custom theme:</li>
 </ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -396,10 +398,13 @@ Show the code
 <span id="cb5-23"><a href="#cb5-23"></a><span class="at">    </span><span class="fu">issue-term</span><span class="kw">:</span><span class="at"> pathname</span></span>
 <span id="cb5-24"><a href="#cb5-24"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>See my <a href="https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml">settings</a> for an example and a recent post <a href="https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd">source</a> for reference.</p>
+<p>I also added a custom <code>custom.scss</code> file to modify some Bootstrap styles.</p>
 </section>
 <section id="deployment-using-github-pages-github-actions" class="level3">
 <h3 class="anchored" data-anchor-id="deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</h3>
-<p>To deploy the blog, I created a GitHub repository, added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
+<p>Quarto offers multiple deployment options. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed, so I went with GitHub Pages combined with GitHub Actions.</p>
+<p>To deploy the blog, I created a GitHub repository (https://github.com/dylanjcastillo/blog), added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
@@ -409,11 +414,11 @@ Show the code
 </div>
 <p>Then I ran this command to automatically generate the workflow <code>.github/workflows/publish.yml</code> for me:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">quarto</span> publish gh-pages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>From then on, every time I push changes to the <code>main</code> branch, GitHub Actions will automatically render the website with Quarto and update the <code>gh-pages</code> branch.</p>
+<p>Since then, every time I push changes to the <code>main</code> branch, GitHub Actions automatically renders the website and updates the <code>gh-pages</code> branch.</p>
 </section>
 <section id="using-a-custom-domain" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-custom-domain">Using a custom domain</h3>
-<p>That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the <code>main</code> branch, the site would no longer be served from my custom domain (dylancastillo.co).</p>
+<p>That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the <code>main</code> branch, the site would no longer be served from my custom domain <a href="https://dylancastillo.co">dylancastillo.co</a>.</p>
 <p>When you render your website, Quarto recreates the CNAME file in the <code>gh-pages</code> branch, which seems to break the custom domain setup in GitHub Pages.</p>
 <p>I found a solution in this <a href="https://github.com/quarto-dev/quarto-cli/discussions/5341">discussion</a> and added a CNAME file to the root of the repository with my custom domain:</p>
 <div class="code-with-filename">
@@ -887,7 +892,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
