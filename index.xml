@@ -2834,7 +2834,7 @@ background-color: null;
 font-style: inherit;">---</span></span></code></pre></div>
 </div>
 <p>See my <a href="https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml">settings</a> for an example and a recent post <a href="https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd">source</a> for reference.</p>
-<p>I also added a custom <code>custom.scss</code> file to modify some Bootstrap styles.</p>
+<p>For the CSS, I copied <a href="https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/formats/html/bootstrap/themes/darkly.scss">darkly</a> and created a custom <code>custom.scss</code> file to modify some Bootstrap styles. I just changed some colors and a couple of styles to make the blog look closer to my Ghost theme. It was super easy.</p>
 </section>
 <section id="deployment-using-github-pages-github-actions" class="level3">
 <h3 class="anchored" data-anchor-id="deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</h3>
