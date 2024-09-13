@@ -207,7 +207,7 @@ comments:
 
 See my [settings](https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml) for an example and a recent post [source](https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd) for reference.
 
-I also added a custom `custom.scss` file to modify some Bootstrap styles.
+For the CSS, I copied [darkly](https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/formats/html/bootstrap/themes/darkly.scss) and created a custom `custom.scss` file to modify some Bootstrap styles. I just changed some colors and a couple of styles to make the blog look closer to my Ghost theme. It was super easy.
 
 ### Deployment using GitHub Pages + GitHub Actions
 
