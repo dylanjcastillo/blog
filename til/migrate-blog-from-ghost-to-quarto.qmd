@@ -211,9 +211,9 @@ For the CSS, I copied [darkly](https://github.com/quarto-dev/quarto-cli/blob/mai
 
 ### Deployment using GitHub Pages + GitHub Actions
 
-Quarto offers multiple deployment options. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed, so I went with GitHub Pages combined with GitHub Actions.
+Quarto offers multiple [deployment options](https://quarto.org/docs/publishing/). I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed. I went with GitHub Pages combined with GitHub Actions.
 
-To deploy the blog, I created a GitHub repository (https://github.com/dylanjcastillo/blog), added the blog's content, updated `.gitignore` to ignore the `/.quarto/` and `/_site/` and updated `_quarto.yml` to only compute code locally (otherwise you'd need a Python kernel running on your GitHub Actions runner):
+To deploy the blog, I created a [GitHub repository](https://github.com/dylanjcastillo/blog), added the blog's content, updated `.gitignore` to ignore the `/.quarto/` and `/_site/` and updated `_quarto.yml` to only compute code locally (otherwise you'd need a Python kernel running on your GitHub Actions runner):
 
 ```{.yml filename="_quarto.yml"}
 execute:
