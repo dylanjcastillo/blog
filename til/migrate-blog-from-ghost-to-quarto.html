@@ -232,20 +232,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="setting-up-your-blog">Setting up your blog</h3>
 <p>First, install <a href="https://quarto.org/">Quarto</a> and create a blog in an empty repository:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">quarto</span> create project blog myblog</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The resulting <code>myblog</code> folder will contain the barebones configuration for a Quarto blog and a <code>posts</code> folder with some example posts. You can remove those posts. Later on, you’ll add your own.</p>
 </section>
 <section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</h3>
-<p>First, you must download a copy of your.</p>
-<p>Adjust this URL and run it in your browser: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
+<p>Then, you need to download a copy of your Ghost’s blog content.</p>
+<p>Go to <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code> and click on <code>Export</code>, then <code>Export JSON</code>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
 <figcaption class="margin-caption">Exporting my blog</figcaption>
 </figure>
 </div>
-<p>Once you’re in the export page, click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
-<p>This will generate a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
-<p>I used this small Python script that did the heavy lifting for me:</p>
+<p>This is pretty obvious, but remember to replace <code>&lt;YOUR_BLOG_URL&gt;</code> with your blog’s URL.</p>
+<p>You’ll get a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
+<p>This small Python script did the heavy lifting for me:</p>
 <details>
 <summary>
 Show the code
@@ -259,9 +260,9 @@ Show the code
 <span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> markdownify <span class="im">import</span> markdownify <span class="im">as</span> md</span>
 <span id="cb2-8"><a href="#cb2-8"></a></span>
 <span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>BLOG_URL <span class="op">=</span> <span class="st">"https://dylancastillo.co"</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>BLOG_JSON_DUMP <span class="op">=</span> <span class="st">"../dylan-castillo.ghost.2024-05-28-10-39-09.json"</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>BLOG_AUTHOR_NAME <span class="op">=</span> <span class="st">"Dylan Castillo"</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>BLOG_URL <span class="op">=</span> <span class="st">"https://dylancastillo.co"</span> <span class="co"># Replace with your blog's URL</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>BLOG_JSON_DUMP <span class="op">=</span> <span class="st">"./dylan-castillo.ghost.2024-05-28-10-39-09.json"</span> <span class="co"># Replace with the path to the JSON file you downloaded</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>BLOG_AUTHOR_NAME <span class="op">=</span> <span class="st">"Dylan Castillo"</span> <span class="co"># Replace with your name</span></span>
 <span id="cb2-13"><a href="#cb2-13"></a></span>
 <span id="cb2-14"><a href="#cb2-14"></a></span>
 <span id="cb2-15"><a href="#cb2-15"></a><span class="kw">def</span> download_images(markdown_content, post_slug):</span>
@@ -892,7 +893,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom","loop":false,"selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

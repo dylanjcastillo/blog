@@ -1969,20 +1969,21 @@ font-style: inherit;"> pyproject.toml</span></span></code></pre></div>
 <div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">quarto</span> create project blog myblog</span></code></pre></div>
+<p>The resulting <code>myblog</code> folder will contain the barebones configuration for a Quarto blog and a <code>posts</code> folder with some example posts. You can remove those posts. Later on, you’ll add your own.</p>
 </section>
 <section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</h3>
-<p>First, you must download a copy of your.</p>
-<p>Adjust this URL and run it in your browser: <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code>.</p>
+<p>Then, you need to download a copy of your Ghost’s blog content.</p>
+<p>Go to <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code> and click on <code>Export</code>, then <code>Export JSON</code>.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
 <p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="https://dylancastillo.co/til/images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
 <figcaption class="margin-caption">Exporting my blog</figcaption>
 </figure>
 </div>
-<p>Once you’re in the export page, click on <code>Export</code>, and click on <code>Export JSON</code>.</p>
-<p>This will generate a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
-<p>I used this small Python script that did the heavy lifting for me:</p>
+<p>This is pretty obvious, but remember to replace <code>&lt;YOUR_BLOG_URL&gt;</code> with your blog’s URL.</p>
+<p>You’ll get a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
+<p>This small Python script did the heavy lifting for me:</p>
 <details>
 <summary>
 Show the code
@@ -2020,17 +2021,23 @@ font-style: inherit;">as</span> md</span>
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"https://dylancastillo.co"</span></span>
+font-style: inherit;">"https://dylancastillo.co"</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Replace with your blog's URL</span></span>
 <span id="cb2-11">BLOG_JSON_DUMP <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"../dylan-castillo.ghost.2024-05-28-10-39-09.json"</span></span>
+font-style: inherit;">"./dylan-castillo.ghost.2024-05-28-10-39-09.json"</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Replace with the path to the JSON file you downloaded</span></span>
 <span id="cb2-12">BLOG_AUTHOR_NAME <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"Dylan Castillo"</span></span>
+font-style: inherit;">"Dylan Castillo"</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Replace with your name</span></span>
 <span id="cb2-13"></span>
 <span id="cb2-14"></span>
 <span id="cb2-15"><span class="kw" style="color: #003B4F;
