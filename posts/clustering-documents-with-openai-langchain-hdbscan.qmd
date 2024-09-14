@@ -29,7 +29,7 @@ comments:
 
 In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.
 
-While older methods are still relevant, if I had to cluster text data today, I'd start with OpenAI or Cohere's embeddings. It's faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.
+While older methods are still relevant, if I had to cluster text data today, I'd start using the OpenAI or Cohere (embeddings and generation) APIs. It's faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.
 
 I haven't seen many tutorials on this topic, so I wrote one. In this tutorial, I'll show you how to cluster news articles using OpenAI embeddings, and HDBSCAN.
 
