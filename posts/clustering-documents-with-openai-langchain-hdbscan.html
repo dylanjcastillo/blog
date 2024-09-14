@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 13, 2024</p>
+      <p class="date-modified">September 14, 2024</p>
     </div>
   </div>
     
@@ -240,7 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.</p>
-<p>While older methods are still relevant, if I had to cluster text data today, I’d start with OpenAI or Cohere’s embeddings. It’s faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.</p>
+<p>While older methods are still relevant, if I had to cluster text data today, I’d start using the OpenAI or Cohere (embeddings and generation) APIs. It’s faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.</p>
 <p>I haven’t seen many tutorials on this topic, so I wrote one. In this tutorial, I’ll show you how to cluster news articles using OpenAI embeddings, and HDBSCAN.</p>
 <p>Let’s get to it!</p>
 <section id="prerequisites" class="level2">
@@ -852,7 +852,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
