@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2024-09-15">
+<meta name="description" content="A guide to deploy a Django app with Kamal, AWS ECR, and Github Actions">
+
+<title>Deploying a Django app with Kamal, AWS ECR, and Github Actions – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#prepare-the-vps-for-kamal" id="toc-prepare-the-vps-for-kamal" class="nav-link" data-scroll-target="#prepare-the-vps-for-kamal">Prepare the VPS for Kamal</a></li>
+  <li><a href="#create-a-dockerfile-for-your-app" id="toc-create-a-dockerfile-for-your-app" class="nav-link" data-scroll-target="#create-a-dockerfile-for-your-app">Create a Dockerfile for your app</a>
+  <ul class="collapse">
+  <li><a href="#dockerfile" id="toc-dockerfile" class="nav-link" data-scroll-target="#dockerfile">Dockerfile</a></li>
+  <li><a href="#entrypoint.sh-script" id="toc-entrypoint.sh-script" class="nav-link" data-scroll-target="#entrypoint.sh-script"><code>entrypoint.sh</code> script</a></li>
+  </ul></li>
+  <li><a href="#configure-an-ecr-registry-in-aws" id="toc-configure-an-ecr-registry-in-aws" class="nav-link" data-scroll-target="#configure-an-ecr-registry-in-aws">Configure an ECR registry in AWS</a></li>
+  <li><a href="#set-up-kamal-in-your-project" id="toc-set-up-kamal-in-your-project" class="nav-link" data-scroll-target="#set-up-kamal-in-your-project">Set up Kamal in your project</a>
+  <ul class="collapse">
+  <li><a href="#test-the-configuration-locally" id="toc-test-the-configuration-locally" class="nav-link" data-scroll-target="#test-the-configuration-locally">Test the configuration locally</a></li>
+  </ul></li>
+  <li><a href="#automate-the-deployment-with-github-actions" id="toc-automate-the-deployment-with-github-actions" class="nav-link" data-scroll-target="#automate-the-deployment-with-github-actions">Automate the deployment with Github Actions</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Deploying a Django app with Kamal, AWS ECR, and Github Actions</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">django</div>
+    <div class="quarto-category">kamal</div>
+    <div class="quarto-category">aws</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 15, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 15, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Every other night, my wife wakes me up to tell me I’m muttering unintelligible phrases in my sleep: “restart nginx,” “the SSL certificate failed to validate,” or “how do I exit vim?”</p>
+<p>I still suffer from PTSD from the days of manually deploying web apps. But since switching to Kamal, I’ve been sleeping like a baby<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Kamal is sort of a lightweight version of <a href="https://kubernetes.io/">Kubernetes</a> that you can use to deploy containerized apps to a <a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a>. It has a bit of a learning curve, but once you get the hang of it, it’ll take you less than 5 minutes to get an app in production with a CI/CD pipeline.</p>
+<p>A single push to main, and that green GitHub Actions checkmark confirms that your 2-pixel padding change is live for the world to admire.</p>
+<p>In this tutorial, I’ll walk you through the process of deploying a Django app with Kamal, AWS ECR, and Github Actions.</p>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To make the most of this tutorial, you should:</p>
+<ul>
+<li>Have an <a href="https://aws.amazon.com/">AWS</a> account and <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
+<li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
+<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>.</li>
+<li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
+<li>Have a VPS with Ubuntu ready to host your app.</li>
+</ul>
+<p>Ideally, you should also have a Django project ready to deploy. But if you don’t have one, you can use this sample <a href="https://github.com/dylanjcastillo/django-kamal-aws-gha-example">Django project</a> for the tutorial.</p>
+</section>
+<section id="prepare-the-vps-for-kamal" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-the-vps-for-kamal">Prepare the VPS for Kamal</h2>
+<p>At a minimum, you’ll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called <code>kamal</code> that can sudo. That user should have a 1000 <code>UID</code> and <code>GID</code>.</p>
+<p>I have a <a href="https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html">terraform script</a> that will take care of this for you if you’re using Hetzner.</p>
+<p>But if you’d like to do it manually, you can run these commands on your VPS’s terminal:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Install docker, curl, and git, and snapd</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">apt-get</span> update</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">apt-get</span> install <span class="at">-y</span> docker.io curl git snapd</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Start and enable the docker service</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="ex">systemctl</span> start docker</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="ex">systemctl</span> enable docker</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Create a non-root user called kamal</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="ex">useradd</span> <span class="at">-m</span> <span class="at">-s</span> /bin/bash <span class="at">-u</span> 1000 kamal</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="ex">usermod</span> <span class="at">-aG</span> sudo kamal</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="bu">echo</span> <span class="st">"kamal ALL=(ALL) NOPASSWD:ALL"</span> <span class="op">&gt;&gt;</span> /etc/sudoers.d/kamal</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># SSH key to login as kamal user</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="fu">mkdir</span> <span class="at">-p</span> /home/kamal/.ssh</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="bu">echo</span> <span class="st">"&lt;YOUR_PUBLIC_SSH_KEY&gt;"</span> <span class="op">&gt;&gt;</span> /home/kamal/.ssh/authorized_keys</span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">chmod</span> 700 /home/kamal/.ssh</span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">chmod</span> 600 /home/kamal/.ssh/authorized_keys</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="fu">chown</span> <span class="at">-R</span> kamal:kamal /home/kamal/.ssh</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co"># Disable root login</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'/PermitRootLogin/d'</span> /etc/ssh/sshd_config</span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="bu">echo</span> <span class="st">"PermitRootLogin no"</span> <span class="op">&gt;&gt;</span> /etc/ssh/sshd_config</span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="ex">systemctl</span> restart sshd</span>
+<span id="cb1-25"><a href="#cb1-25"></a></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co"># Add the kamal user to the docker group</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="ex">usermod</span> <span class="at">-aG</span> docker kamal</span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="ex">docker</span> network create <span class="at">--driver</span> bridge kamal_network <span class="co"># this is only required if you're planning to run SQLite or redis on the same VPS</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="co"># Create a folder for the Let's Encrypt ACME JSON</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="fu">mkdir</span> <span class="at">-p</span> /letsencrypt <span class="kw">&amp;&amp;</span> <span class="fu">touch</span> /letsencrypt/acme.json <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 600 /letsencrypt/acme.json</span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="fu">chown</span> <span class="at">-R</span> kamal:kamal /letsencrypt</span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="co"># Create a folder for the SQLite database (skip this if you're using a different database)</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a><span class="fu">mkdir</span> <span class="at">-p</span> /db</span>
+<span id="cb1-36"><a href="#cb1-36"></a><span class="fu">chown</span> <span class="at">-R</span> 1000:1000 /db</span>
+<span id="cb1-37"><a href="#cb1-37"></a></span>
+<span id="cb1-38"><a href="#cb1-38"></a><span class="co"># Create a folder for the redis data (skip this if you're not using redis)</span></span>
+<span id="cb1-39"><a href="#cb1-39"></a><span class="fu">mkdir</span> <span class="at">-p</span> /data</span>
+<span id="cb1-40"><a href="#cb1-40"></a><span class="fu">chown</span> <span class="at">-R</span> 1000:1000 /data</span>
+<span id="cb1-41"><a href="#cb1-41"></a></span>
+<span id="cb1-42"><a href="#cb1-42"></a><span class="ex">reboot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This assumes that you’re using a root user to connect to your server and that there isn’t a non-root user with <code>UID</code> 1000 already. Otherwise, adjust the commands accordingly.</p>
+<p>These commands will:</p>
+<ol type="1">
+<li>Install docker, curl, git, and snapd</li>
+<li>Start and enable the docker service</li>
+<li>Create a non-root user called kamal</li>
+<li>Remove the root login</li>
+<li>Add the kamal user to the docker group</li>
+<li>Create a bridge network for Traefik, SQLite, and redis</li>
+<li>Create a folder for the Let’s Encrypt ACME JSON</li>
+<li>Make the Let’s Encrypt ACME JSON folder writable by the kamal user</li>
+<li>Create a folder for the SQLite database and redis data</li>
+<li>Make the SQLite database and redis data folders writable by the kamal user</li>
+<li>Restart the server</li>
+</ol>
+<p>If you’re not using SQLite or redis, you can skip the database and redis data folder steps.</p>
+</section>
+<section id="create-a-dockerfile-for-your-app" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dockerfile-for-your-app">Create a Dockerfile for your app</h2>
+<p>Kamal is meant to deploy containerized apps, so you’ll need to have a Dockerfile for your app. I also recommend using an <code>entrypoint.sh</code> script to run the application.</p>
+<section id="dockerfile" class="level3">
+<h3 class="anchored" data-anchor-id="dockerfile">Dockerfile</h3>
+<p>Here’s the Dockerfile I’m using for my projects. You can use this as a template and adjust it to your needs.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Dockerfile</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="Dockerfile"><pre class="sourceCode numberSource dockerfile number-lines code-with-copy"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">FROM</span> python:3.10-slim <span class="kw">AS</span> base</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">ENV</span> POETRY_HOME=/opt/poetry</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">ENV</span> POETRY_VERSION=1.8.3</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">ENV</span> PATH=${POETRY_HOME}/bin:${PATH}</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">--no-install-recommends</span> <span class="at">-y</span> <span class="dt">\</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    curl <span class="dt">\</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> clean <span class="dt">\</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="kw">RUN</span> <span class="ex">curl</span> <span class="at">-sSL</span> https://install.python-poetry.org <span class="kw">|</span> <span class="ex">python3</span> <span class="at">-</span> <span class="kw">&amp;&amp;</span> <span class="ex">poetry</span> <span class="at">--version</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">FROM</span> base <span class="kw">AS</span> builder</span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="kw">COPY</span> poetry.lock pyproject.toml ./</span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="kw">RUN</span> <span class="ex">poetry</span> config virtualenvs.in-project true <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a>    <span class="ex">poetry</span> install <span class="at">--only</span> main <span class="at">--no-interaction</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="kw">FROM</span> base <span class="kw">AS</span> runner</span>
+<span id="cb2-25"><a href="#cb2-25"></a></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /app/.venv/ /app/.venv/</span>
+<span id="cb2-28"><a href="#cb2-28"></a></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="kw">COPY</span> . /app</span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /data /db</span>
+<span id="cb2-31"><a href="#cb2-31"></a></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/src/entrypoint.sh</span>
+<span id="cb2-33"><a href="#cb2-33"></a></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="kw">FROM</span> runner <span class="kw">AS</span> production</span>
+<span id="cb2-35"><a href="#cb2-35"></a></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="kw">EXPOSE</span> 8000</span>
+<span id="cb2-37"><a href="#cb2-37"></a></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="kw">ARG</span> user=django</span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="kw">ARG</span> group=django</span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="kw">ARG</span> uid=1000</span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="kw">ARG</span> gid=1000</span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="kw">RUN</span> <span class="ex">groupadd</span> <span class="at">-g</span> <span class="va">${gid}</span> <span class="va">${group}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a>    <span class="ex">useradd</span> <span class="at">-u</span> <span class="va">${uid}</span> <span class="at">-g</span> <span class="va">${group}</span> <span class="at">-s</span> /bin/sh <span class="at">-m</span> <span class="va">${user}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a>    <span class="fu">chown</span> <span class="at">-R</span> <span class="va">${uid}</span>:<span class="va">${gid}</span> /app /data /db</span>
+<span id="cb2-45"><a href="#cb2-45"></a></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="kw">USER</span> ${uid}:${gid}</span>
+<span id="cb2-47"><a href="#cb2-47"></a></span>
+<span id="cb2-48"><a href="#cb2-48"></a><span class="kw">WORKDIR</span> /app/src</span>
+<span id="cb2-49"><a href="#cb2-49"></a><span class="kw">CMD</span> [ <span class="st">"/app/src/entrypoint.sh"</span> , <span class="st">"app"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is a multi-stage Dockerfile that:</p>
+<ol type="1">
+<li>Installs poetry and sets up the virtual environment</li>
+<li>Creates the user <code>django</code> with the <code>UID</code> and <code>GID</code> 1000 and runs the application with that user. It’s important that this user has the same <code>UID</code> and <code>GID</code> as the owner of the folders outside the container. Otherwise, you’ll have issues with <a href="https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca">file permissions</a> and the app won’t persist data.</li>
+<li>Exposes port 8000 and runs the application by executing the <code>entrypoint.sh</code> script. By exposing the port, Kamal will automatically detect that that is the port the app runs on and <a href="https://github.com/basecamp/kamal/issues/58">will use that to set up the reverse proxy</a>.</li>
+</ol>
+<p>Feel free to adjust this Dockerfile to your needs. If you are not planning on using redis or a SQLite database in your same VPS, you can remove those parts from the Dockerfile.</p>
+</section>
+<section id="entrypoint.sh-script" class="level3">
+<h3 class="anchored" data-anchor-id="entrypoint.sh-script"><code>entrypoint.sh</code> script</h3>
+<p>I use an <code>entrypoint.sh</code> script to run the application because that makes it easier to collect static files, run migrations when the container starts, and also running commands in the container.</p>
+<p>Here’s an example of a simple <code>entrypoint.sh</code> script:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>entrypoint.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="entrypoint.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"app"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="bu">echo</span> <span class="st">"Collecting static files"</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="ex">poetry</span> run python manage.py collectstatic <span class="at">--clear</span> <span class="at">--noinput</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="bu">echo</span> <span class="st">"Running migrations"</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="ex">poetry</span> run python manage.py migrate</span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a>    <span class="bu">echo</span> <span class="st">"Running in production mode"</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    <span class="bu">exec</span> poetry run gunicorn <span class="at">-c</span> gunicorn.conf.py</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="cf">else</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="bu">exec</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="cf">fi</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This script just collects static files, runs migrations, and starts the Gunicorn server with the configuration in the <code>gunicorn.conf.py</code> file. You can add or remove commands to the script as needed.</p>
+</section>
+</section>
+<section id="configure-an-ecr-registry-in-aws" class="level2">
+<h2 class="anchored" data-anchor-id="configure-an-ecr-registry-in-aws">Configure an ECR registry in AWS</h2>
+<p>Next, you’ll need a place to push and pull your Docker images. I like using AWS, so that’s what I’ll show you how to do. If you prefer other services, take a look at the instructions for other registries in the <a href="https://kamal-deploy.org/docs/configuration/docker-registry/">Kamal documentation</a>.</p>
+<p>Log in to the <a href="https://aws.amazon.com/console/">AWS Management Console</a> and go to Amazon ECR. Click on <code>Create repository</code> and set a name for your repository.</p>
+<p>Then, create a new IAM user in your AWS account by going to Services &gt; IAM &gt; Users &gt; Add user.</p>
+<p>Instead of using a predefined policy, create a new one with the following JSON and attach it to the user:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="fu">{</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"ListImagesInRepository"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"ecr:ListImages"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>        <span class="st">"arn:aws:ecr:&lt;REGION&gt;:&lt;ACCOUNT_ID&gt;:repository/&lt;REPOSITORY_NAME&gt;"</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>      <span class="ot">]</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="fu">{</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"GetAuthorizationToken"</span><span class="fu">,</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"ecr:GetAuthorizationToken"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="st">"*"</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="fu">{</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"ManageRepositoryContents"</span><span class="fu">,</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>        <span class="st">"ecr:BatchCheckLayerAvailability"</span><span class="ot">,</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>        <span class="st">"ecr:GetDownloadUrlForLayer"</span><span class="ot">,</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>        <span class="st">"ecr:GetRepositoryPolicy"</span><span class="ot">,</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>        <span class="st">"ecr:DescribeRepositories"</span><span class="ot">,</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>        <span class="st">"ecr:ListImages"</span><span class="ot">,</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a>        <span class="st">"ecr:DescribeImages"</span><span class="ot">,</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>        <span class="st">"ecr:BatchGetImage"</span><span class="ot">,</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a>        <span class="st">"ecr:InitiateLayerUpload"</span><span class="ot">,</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>        <span class="st">"ecr:UploadLayerPart"</span><span class="ot">,</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a>        <span class="st">"ecr:CompleteLayerUpload"</span><span class="ot">,</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a>        <span class="st">"ecr:PutImage"</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>      <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>        <span class="st">"arn:aws:ecr:&lt;REGION&gt;:&lt;ACCOUNT_ID&gt;:repository/&lt;REPOSITORY_NAME&gt;"</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>      <span class="ot">]</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="fu">}</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>  <span class="ot">]</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This policy allows the user to list, get, and manage the ECR repository you created earlier and get the authorization token to push and pull the image. You will need to replace the <code>&lt;REGION&gt;</code>, <code>&lt;ACCOUNT_ID&gt;</code>, and <code>&lt;REPOSITORY_NAME&gt;</code> with the values for your repository.</p>
+<p>Next, select the user you created and go to Security credentials &gt; Access keys &gt; Create access key. Download the CSV file and keep it in a secure location.</p>
+<p>You will use those credentials in your Github Actions pipeline to push and pull the image from the ECR registry.</p>
+</section>
+<section id="set-up-kamal-in-your-project" class="level2">
+<h2 class="anchored" data-anchor-id="set-up-kamal-in-your-project">Set up Kamal in your project</h2>
+<p>Open your Django project in your favorite code editor. Create a folder called <code>deploy</code> in the root directory. Then go into the folder and initialize Kamal:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">kamal</span> init</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create two folders (<code>.kamal/</code> and <code>config/</code>) and an <code>.env</code> file. Inside <code>config/</code>, you’ll find a <code>deploy.yml</code> file. This is where you’ll provide the instructions for Kamal to build and deploy your app.</p>
+<p>You can use the following <code>deploy.yml</code> file as a template for your Django app:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>deploy.yml</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="deploy.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">service</span><span class="kw">:</span><span class="at"> &lt;YOUR_SERVICE_NAME&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;YOUR_IMAGE_NAME&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="fu">ssh</span><span class="kw">:</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="at">  </span><span class="fu">user</span><span class="kw">:</span><span class="at"> kamal</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="at">  </span><span class="fu">secret</span><span class="kw">:</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="at">    </span><span class="kw">-</span><span class="at"> DJANGO_SECRET_KEY</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="fu">traefik</span><span class="kw">:</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="at">  </span><span class="fu">options</span><span class="kw">:</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="at">    </span><span class="fu">publish</span><span class="kw">:</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"443:443"</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="at">    </span><span class="fu">volume</span><span class="kw">:</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"/letsencrypt/:/letsencrypt/"</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="at">    </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="at">    </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="at">  </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="at">    </span><span class="fu">entryPoints.web.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":80"</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="at">    </span><span class="fu">entryPoints.websecure.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":443"</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.to</span><span class="kw">:</span><span class="at"> websecure</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.scheme</span><span class="kw">:</span><span class="at"> https</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entrypoint.permanent</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.email</span><span class="kw">:</span><span class="at"> </span><span class="st">"&lt;YOUR_EMAIL&gt;"</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.storage</span><span class="kw">:</span><span class="at"> </span><span class="st">"/letsencrypt/acme.json"</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint</span><span class="kw">:</span><span class="at"> web</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="fu">servers</span><span class="kw">:</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="at">  </span><span class="fu">web</span><span class="kw">:</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="at">    </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="at">      </span><span class="kw">-</span><span class="at"> &lt;YOUR_VPS_IP&gt;</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8000</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="at">    </span><span class="fu">options</span><span class="kw">:</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="at">      </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="at">    </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.entrypoints</span><span class="kw">:</span><span class="at"> websecure</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.rule</span><span class="kw">:</span><span class="at"> Host(`&lt;YOUR_DOMAIN&gt;`)</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls.certresolver</span><span class="kw">:</span><span class="at"> letsencrypt</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="fu">accessories</span><span class="kw">:</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a><span class="at">  </span><span class="fu">redis</span><span class="kw">:</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> redis:7.0</span></span>
+<span id="cb6-50"><a href="#cb6-50"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="at">      </span><span class="kw">-</span><span class="at"> web</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="at">    </span><span class="fu">cmd</span><span class="kw">:</span><span class="at"> --maxmemory 200m --maxmemory-policy allkeys-lru</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/redis/data:/data/redis</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="at">    </span><span class="fu">options</span><span class="kw">:</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 250m</span></span>
+<span id="cb6-57"><a href="#cb6-57"></a><span class="at">      </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
+<span id="cb6-58"><a href="#cb6-58"></a></span>
+<span id="cb6-59"><a href="#cb6-59"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb6-60"><a href="#cb6-60"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"/db/:/app/db/"</span></span>
+<span id="cb6-61"><a href="#cb6-61"></a></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="fu">registry</span><span class="kw">:</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="at">  </span><span class="fu">server</span><span class="kw">:</span><span class="at"> &lt;YOUR_AWS_ECR_URL&gt;</span><span class="co"> # e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com</span></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="at">  </span><span class="fu">username</span><span class="kw">:</span><span class="at"> AWS</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a><span class="at">  </span><span class="fu">password</span><span class="kw">:</span></span>
+<span id="cb6-66"><a href="#cb6-66"></a><span class="at">    </span><span class="kw">-</span><span class="at"> KAMAL_REGISTRY_PASSWORD</span></span>
+<span id="cb6-67"><a href="#cb6-67"></a></span>
+<span id="cb6-68"><a href="#cb6-68"></a><span class="fu">builder</span><span class="kw">:</span></span>
+<span id="cb6-69"><a href="#cb6-69"></a><span class="at">  </span><span class="fu">dockerfile</span><span class="kw">:</span><span class="at"> </span><span class="st">"../Dockerfile"</span></span>
+<span id="cb6-70"><a href="#cb6-70"></a><span class="at">  </span><span class="fu">context</span><span class="kw">:</span><span class="at"> </span><span class="st">"../"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will set up a reverse proxy using Traefik (with automatic SSL certificates using Let’s Encrypt), a Redis database, and a volume for the SQLite database. Remember to replace the placeholders with your own values.</p>
+<section id="test-the-configuration-locally" class="level3">
+<h3 class="anchored" data-anchor-id="test-the-configuration-locally">Test the configuration locally</h3>
+<p>To test it locally, first, you’ll have to define the required environment variables in the <code>.env</code> file, such as the Django secret key, OpenAI API key, and any other secrets you need.</p>
+<p>You’ll also need to get a temporary password for the ECR registry. You can get this password by running the following command:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">aws</span> ecr get-login-password <span class="at">--region</span> <span class="op">&lt;</span>YOUR_REGION<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should copy the output of this command and paste it in the <code>KAMAL_REGISTRY_PASSWORD</code> field in the <code>.env</code> file.</p>
+<p>Then, run the following command to deploy your application to your VPS:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">kamal</span> env push</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="ex">kamal</span> deploy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The first command will push the environment variables to the VPS. The second command will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
+<p>After a few minutes, your app should be live at <code>https://&lt;YOUR_DOMAIN&gt;</code>.</p>
+<p>If you see any errors, there are two things you can do:</p>
+<ol type="1">
+<li>Run <code>kamal app logs</code> to see the logs of the app.</li>
+<li>Open a terminal in the container by running <code>kamal app exec -it bash</code>.</li>
+</ol>
+<p>This is how I usually debug the app.</p>
+</section>
+</section>
+<section id="automate-the-deployment-with-github-actions" class="level2">
+<h2 class="anchored" data-anchor-id="automate-the-deployment-with-github-actions">Automate the deployment with Github Actions</h2>
+<p>Now that you have a working deployment process in your local environment, you can automate the deployment with Github Actions.</p>
+<p>Create a new file in the <code>.github/workflows</code> folder called <code>deploy.yml</code> and add the following code:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Deploy webapp to VPS</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">concurrency</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="at">  </span><span class="fu">group</span><span class="kw">:</span><span class="at"> ${{ github.workflow }}-${{ github.ref }}</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="at">  </span><span class="fu">cancel-in-progress</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"main"</span><span class="kw">]</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="at">  </span><span class="fu">deploy</span><span class="kw">:</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Checkout</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> webfactory/ssh-agent@v0.7.0</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="at">          </span><span class="fu">ssh-private-key</span><span class="kw">:</span><span class="at"> ${{ secrets.VPS_SSH_PRIVATE_KEY }}</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Set up Ruby and install kamal</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> ruby/setup-ruby@v1</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="at">          </span><span class="fu">ruby-version</span><span class="kw">:</span><span class="at"> </span><span class="fl">3.2.2</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> gem install kamal</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Configure AWS credentials</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> aws-actions/configure-aws-credentials@v4</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="at">          </span><span class="fu">aws-access-key-id</span><span class="kw">:</span><span class="at"> ${{ secrets.AWS_ACCESS_KEY_ID_ECR }}</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="at">          </span><span class="fu">aws-secret-access-key</span><span class="kw">:</span><span class="at"> ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="at">          </span><span class="fu">aws-region</span><span class="kw">:</span><span class="at"> us-east-1</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="at">          </span><span class="fu">mask-aws-account-id</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co"> # otherwise the mask will hide your account ID and cause errors in the deployment</span></span>
+<span id="cb9-36"><a href="#cb9-36"></a></span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Login to AWS ECR</span></span>
+<span id="cb9-38"><a href="#cb9-38"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> login-ecr</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> aws-actions/amazon-ecr-login@v2</span></span>
+<span id="cb9-40"><a href="#cb9-40"></a></span>
+<span id="cb9-41"><a href="#cb9-41"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Set up Docker Buildx for cache</span></span>
+<span id="cb9-42"><a href="#cb9-42"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> docker/setup-buildx-action@v3</span></span>
+<span id="cb9-43"><a href="#cb9-43"></a></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Expose GitHub Runtime for cache</span></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> crazy-max/ghaction-github-runtime@v3</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a></span>
+<span id="cb9-47"><a href="#cb9-47"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Create .env file</span></span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb9-49"><a href="#cb9-49"></a>          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
+<span id="cb9-50"><a href="#cb9-50"></a>          touch .env</span>
+<span id="cb9-51"><a href="#cb9-51"></a>          echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_&lt;YOUR_ACCOUNT_ID&gt;_dkr_ecr_&lt;YOUR_REGION&gt;_amazonaws_com }}" &gt;&gt; .env</span>
+<span id="cb9-52"><a href="#cb9-52"></a>          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" &gt;&gt; .env</span>
+<span id="cb9-53"><a href="#cb9-53"></a>          # if you have other secrets, add them here</span>
+<span id="cb9-54"><a href="#cb9-54"></a>          cat .env</span>
+<span id="cb9-55"><a href="#cb9-55"></a></span>
+<span id="cb9-56"><a href="#cb9-56"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Kamal Deploy</span></span>
+<span id="cb9-57"><a href="#cb9-57"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> kamal-deploy</span></span>
+<span id="cb9-58"><a href="#cb9-58"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb9-59"><a href="#cb9-59"></a>          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
+<span id="cb9-60"><a href="#cb9-60"></a>          kamal lock release</span>
+<span id="cb9-61"><a href="#cb9-61"></a>          kamal env push</span>
+<span id="cb9-62"><a href="#cb9-62"></a>          kamal deploy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This workflow will:</p>
+<ol type="1">
+<li>Checkout the code</li>
+<li>Set up the Ruby environment and install Kamal</li>
+<li>Configure the AWS credentials</li>
+<li>Login to the AWS ECR registry</li>
+<li>Set up Docker Buildx for cache</li>
+<li>Expose GitHub Runtime for cache</li>
+<li>Create the <code>.env</code> file</li>
+<li>Run Kamal deploy</li>
+</ol>
+<p>It will run everytime you make a push to the main branch or by manually triggering the workflow. It’ll cancel any in-progress runs to avoid conflicts.</p>
+<p>Also, before you push your code to the repository, you’ll need to add the following secrets to the repository:</p>
+<ul>
+<li><code>VPS_SSH_PRIVATE_KEY</code>: The private key to connect to your VPS</li>
+<li><code>AWS_ACCESS_KEY_ID_ECR</code>: The access key ID for the AWS ECR registry</li>
+<li><code>AWS_SECRET_ACCESS_KEY_ECR</code>: The secret access key for the AWS ECR registry</li>
+<li><code>DJANGO_SECRET_KEY</code>: The Django secret key</li>
+</ul>
+<p>Finally, to speed up the deployment, add these options to the <code>builder</code> section of the <code>deploy.yml</code> file:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">builder</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="at">  </span><span class="fu">dockerfile</span><span class="kw">:</span><span class="at"> </span><span class="st">"../Dockerfile"</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="at">  </span><span class="fu">context</span><span class="kw">:</span><span class="at"> </span><span class="st">"../"</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="at">  </span><span class="fu">multiarch</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co"> # new</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="at">  </span><span class="fu">cache</span><span class="kw">:</span><span class="co"> # new</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> gha</span><span class="co"> # new</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will enable the Docker Buildx cache for the build process in Github Actions. You can set <code>multiarch</code> to <code>false</code> if your CI pipeline shares the same architecture as your VPS, which was the case for me.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>You now have a fully automated deployment pipeline for your Django app. A push to the <code>main</code> branch will trigger the workflow, which will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
+<p>Break free from the tyranny of manual deployments and expensive cloud services. Sleep like a baby and let Kamal handle your deployments.</p>
+<p>If you have any questions or feedback, please feel free to leave a comment below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>crying and sh*tting my diapers?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

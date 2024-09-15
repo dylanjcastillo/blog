@@ -1,11 +1,8 @@
 [
   {
-    "listing": "/projects.html",
-    "items": []
-  },
-  {
     "listing": "/index.html",
     "items": [
+      "/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html",
       "/posts/classify-images-with-gemini-flash-1.5.html",
       "/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html",
       "/posts/2023-personal-snapshot.html",
@@ -37,5 +34,9 @@
       "/til/install-alacritty-and-zellij-in-macos.html",
       "/til/live-components-with-django-and-htmx.html"
     ]
+  },
+  {
+    "listing": "/projects.html",
+    "items": []
   }
 ]
