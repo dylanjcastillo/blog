@@ -1,0 +1,500 @@
+---
+title: "Deploying a Django app with Kamal, AWS ECR, and Github Actions"
+date: "09/15/2024"
+date-modified: last-modified
+description-meta: "A guide to deploy a Django app with Kamal, AWS ECR, and Github Actions"
+toc: true
+toc-depth: 3
+lightbox: true
+fig-cap-location: margin
+categories:
+  - django
+  - kamal
+  - aws
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+    citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
+---
+
+Every other night, my wife wakes me up to tell me I'm muttering unintelligible phrases in my sleep: "restart nginx," "the SSL certificate failed to validate," or "how do I exit vim?"
+
+I still suffer from PTSD from the days of manually deploying web apps. But since switching to Kamal, I've been sleeping like a baby^[crying and sh*tting my diapers?].
+
+Kamal is sort of a lightweight version of [Kubernetes](https://kubernetes.io/) that you can use to deploy containerized apps to a [VPS](https://en.wikipedia.org/wiki/Virtual_private_server). It has a bit of a learning curve, but once you get the hang of it, it'll take you less than 5 minutes to get an app in production with a CI/CD pipeline.
+
+A single push to main, and that green GitHub Actions checkmark confirms that your 2-pixel padding change is live for the world to admire.
+
+In this tutorial, I'll walk you through the process of deploying a Django app with Kamal, AWS ECR, and Github Actions.
+
+## Prerequisites
+
+To make the most of this tutorial, you should:
+
+- Have an [AWS](https://aws.amazon.com/) account and [CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed.
+- Be comfortable with [Docker](https://www.docker.com/).
+- Have a basic understanding of [Kamal](https://kamal-deploy.org/).
+- Have a basic understanding of [Github Actions](https://docs.github.com/en/actions).
+- Have a VPS with Ubuntu ready to host your app.
+
+Ideally, you should also have a Django project ready to deploy. But if you don't have one, you can use this sample [Django project](https://github.com/dylanjcastillo/django-kamal-aws-gha-example) for the tutorial.
+
+## Prepare the VPS for Kamal
+
+At a minimum, you'll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called `kamal` that can sudo. That user should have a 1000 `UID` and `GID`.
+
+I have a [terraform script](https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html) that will take care of this for you if you're using Hetzner.
+
+But if you'd like to do it manually, you can run these commands on your VPS's terminal:
+
+```bash
+# Install docker, curl, and git, and snapd
+apt-get update
+apt-get install -y docker.io curl git snapd
+
+# Start and enable the docker service
+systemctl start docker
+systemctl enable docker
+
+# Create a non-root user called kamal
+useradd -m -s /bin/bash -u 1000 kamal
+usermod -aG sudo kamal
+echo "kamal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/kamal
+
+# SSH key to login as kamal user
+mkdir -p /home/kamal/.ssh
+echo "<YOUR_PUBLIC_SSH_KEY>" >> /home/kamal/.ssh/authorized_keys
+chmod 700 /home/kamal/.ssh
+chmod 600 /home/kamal/.ssh/authorized_keys
+chown -R kamal:kamal /home/kamal/.ssh
+
+# Disable root login
+sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+systemctl restart sshd
+
+# Add the kamal user to the docker group
+usermod -aG docker kamal
+docker network create --driver bridge kamal_network # this is only required if you're planning to run SQLite or redis on the same VPS
+
+# Create a folder for the Let's Encrypt ACME JSON
+mkdir -p /letsencrypt && touch /letsencrypt/acme.json && chmod 600 /letsencrypt/acme.json
+chown -R kamal:kamal /letsencrypt
+
+# Create a folder for the SQLite database (skip this if you're using a different database)
+mkdir -p /db
+chown -R 1000:1000 /db
+
+# Create a folder for the redis data (skip this if you're not using redis)
+mkdir -p /data
+chown -R 1000:1000 /data
+
+reboot
+```
+
+This assumes that you're using a root user to connect to your server and that there isn't a non-root user with `UID` 1000 already. Otherwise, adjust the commands accordingly.
+
+These commands will:
+
+1. Install docker, curl, git, and snapd
+2. Start and enable the docker service
+3. Create a non-root user called kamal
+4. Remove the root login
+5. Add the kamal user to the docker group
+6. Create a bridge network for Traefik, SQLite, and redis
+7. Create a folder for the Let's Encrypt ACME JSON
+8. Make the Let's Encrypt ACME JSON folder writable by the kamal user
+9. Create a folder for the SQLite database and redis data
+10. Make the SQLite database and redis data folders writable by the kamal user
+11. Restart the server
+
+If you're not using SQLite or redis, you can skip the database and redis data folder steps.
+
+## Create a Dockerfile for your app
+
+Kamal is meant to deploy containerized apps, so you'll need to have a Dockerfile for your app. I also recommend using an `entrypoint.sh` script to run the application.
+
+### Dockerfile
+
+Here's the Dockerfile I'm using for my projects. You can use this as a template and adjust it to your needs.
+
+```{.dockerfile filename='Dockerfile'}
+FROM python:3.10-slim AS base
+
+ENV POETRY_HOME=/opt/poetry
+ENV POETRY_VERSION=1.8.3
+ENV PATH=${POETRY_HOME}/bin:${PATH}
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 - && poetry --version
+
+FROM base AS builder
+
+WORKDIR /app
+
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry config virtualenvs.in-project true && \
+    poetry install --only main --no-interaction
+
+FROM base AS runner
+
+WORKDIR /app
+COPY --from=builder /app/.venv/ /app/.venv/
+
+COPY . /app
+RUN mkdir -p /data /db
+
+RUN chmod +x /app/src/entrypoint.sh
+
+FROM runner AS production
+
+EXPOSE 8000
+
+ARG user=django
+ARG group=django
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g ${gid} ${group} && \
+    useradd -u ${uid} -g ${group} -s /bin/sh -m ${user} && \
+    chown -R ${uid}:${gid} /app /data /db
+
+USER ${uid}:${gid}
+
+WORKDIR /app/src
+CMD [ "/app/src/entrypoint.sh" , "app"]
+```
+
+This is a multi-stage Dockerfile that:
+
+1. Installs poetry and sets up the virtual environment
+2. Creates the user `django` with the `UID` and `GID` 1000 and runs the application with that user. It's important that this user has the same `UID` and `GID` as the owner of the folders outside the container. Otherwise, you'll have issues with [file permissions](https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca) and the app won't persist data.
+3. Exposes port 8000 and runs the application by executing the `entrypoint.sh` script. By exposing the port, Kamal will automatically detect that that is the port the app runs on and [will use that to set up the reverse proxy](https://github.com/basecamp/kamal/issues/58).
+
+Feel free to adjust this Dockerfile to your needs. If you are not planning on using redis or a SQLite database in your same VPS, you can remove those parts from the Dockerfile.
+
+### `entrypoint.sh` script
+
+I use an `entrypoint.sh` script to run the application because that makes it easier to collect static files, run migrations when the container starts, and also running commands in the container.
+
+Here's an example of a simple `entrypoint.sh` script:
+
+```{.bash filename='entrypoint.sh'}
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "app" ]; then
+    echo "Collecting static files"
+    poetry run python manage.py collectstatic --clear --noinput
+
+    echo "Running migrations"
+    poetry run python manage.py migrate
+
+    echo "Running in production mode"
+    exec poetry run gunicorn -c gunicorn.conf.py
+else
+    exec "$@"
+fi
+```
+
+This script just collects static files, runs migrations, and starts the Gunicorn server with the configuration in the `gunicorn.conf.py` file. You can add or remove commands to the script as needed.
+
+## Configure an ECR registry in AWS
+
+Next, you'll need a place to push and pull your Docker images. I like using AWS, so that's what I'll show you how to do. If you prefer other services, take a look at the instructions for other registries in the [Kamal documentation](https://kamal-deploy.org/docs/configuration/docker-registry/).
+
+Log in to the [AWS Management Console](https://aws.amazon.com/console/) and go to Amazon ECR. Click on `Create repository` and set a name for your repository.
+
+Then, create a new IAM user in your AWS account by going to Services > IAM > Users > Add user.
+
+Instead of using a predefined policy, create a new one with the following JSON and attach it to the user:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListImagesInRepository",
+      "Effect": "Allow",
+      "Action": ["ecr:ListImages"],
+      "Resource": [
+        "arn:aws:ecr:<REGION>:<ACCOUNT_ID>:repository/<REPOSITORY_NAME>"
+      ]
+    },
+    {
+      "Sid": "GetAuthorizationToken",
+      "Effect": "Allow",
+      "Action": ["ecr:GetAuthorizationToken"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ManageRepositoryContents",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:DescribeRepositories",
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:BatchGetImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage"
+      ],
+      "Resource": [
+        "arn:aws:ecr:<REGION>:<ACCOUNT_ID>:repository/<REPOSITORY_NAME>"
+      ]
+    }
+  ]
+}
+```
+
+This policy allows the user to list, get, and manage the ECR repository you created earlier and get the authorization token to push and pull the image. You will need to replace the `<REGION>`, `<ACCOUNT_ID>`, and `<REPOSITORY_NAME>` with the values for your repository.
+
+Next, select the user you created and go to Security credentials > Access keys > Create access key. Download the CSV file and keep it in a secure location.
+
+You will use those credentials in your Github Actions pipeline to push and pull the image from the ECR registry.
+
+## Set up Kamal in your project
+
+Open your Django project in your favorite code editor. Create a folder called `deploy` in the root directory. Then go into the folder and initialize Kamal:
+
+```bash
+kamal init
+```
+
+This will create two folders (`.kamal/` and `config/`) and an `.env` file. Inside `config/`, you'll find a `deploy.yml` file. This is where you'll provide the instructions for Kamal to build and deploy your app.
+
+You can use the following `deploy.yml` file as a template for your Django app:
+
+```{.yml filename='deploy.yml'}
+
+service: <YOUR_SERVICE_NAME>
+
+image: <YOUR_IMAGE_NAME>
+
+ssh:
+  user: kamal
+
+env:
+  secret:
+    - DJANGO_SECRET_KEY
+
+traefik:
+  options:
+    publish:
+      - "443:443"
+    volume:
+      - "/letsencrypt/:/letsencrypt/"
+    memory: 500m
+    network: kamal_network
+  args:
+    entryPoints.web.address: ":80"
+    entryPoints.websecure.address: ":443"
+    entryPoints.web.http.redirections.entryPoint.to: websecure
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+    certificatesResolvers.letsencrypt.acme.email: "<YOUR_EMAIL>"
+    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
+    certificatesResolvers.letsencrypt.acme.httpchallenge: true
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+
+servers:
+  web:
+    hosts:
+      - <YOUR_VPS_IP>
+    healthcheck:
+      port: 8000
+      interval: 5s
+    options:
+      network: kamal_network
+    labels:
+      traefik.http.routers.app.tls: true
+      traefik.http.routers.app.entrypoints: websecure
+      traefik.http.routers.app.rule: Host(`<YOUR_DOMAIN>`)
+      traefik.http.routers.app.tls.certresolver: letsencrypt
+
+accessories:
+  redis:
+    image: redis:7.0
+    roles:
+      - web
+    cmd: --maxmemory 200m --maxmemory-policy allkeys-lru
+    volumes:
+      - /var/redis/data:/data/redis
+    options:
+      memory: 250m
+      network: kamal_network
+
+volumes:
+  - "/db/:/app/db/"
+
+registry:
+  server: <YOUR_AWS_ECR_URL> # e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com
+  username: AWS
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  dockerfile: "../Dockerfile"
+  context: "../"
+```
+
+This will set up a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume for the SQLite database. Remember to replace the placeholders with your own values.
+
+### Test the configuration locally
+
+To test it locally, first, you'll have to define the required environment variables in the `.env` file, such as the Django secret key, OpenAI API key, and any other secrets you need.
+
+You'll also need to get a temporary password for the ECR registry. You can get this password by running the following command:
+
+```bash
+aws ecr get-login-password --region <YOUR_REGION>
+```
+
+You should copy the output of this command and paste it in the `KAMAL_REGISTRY_PASSWORD` field in the `.env` file.
+
+Then, run the following command to deploy your application to your VPS:
+
+```bash
+kamal env push
+kamal deploy
+```
+
+The first command will push the environment variables to the VPS. The second command will build the Docker image, push it to the ECR registry, and deploy it to your VPS.
+
+After a few minutes, your app should be live at `https://<YOUR_DOMAIN>`.
+
+If you see any errors, there are two things you can do:
+
+1. Run `kamal app logs` to see the logs of the app.
+2. Open a terminal in the container by running `kamal app exec -it bash`.
+
+This is how I usually debug the app.
+
+## Automate the deployment with Github Actions
+
+Now that you have a working deployment process in your local environment, you can automate the deployment with Github Actions.
+
+Create a new file in the `.github/workflows` folder called `deploy.yml` and add the following code:
+
+```yml
+name: Deploy webapp to VPS
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: Set up Ruby and install kamal
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - run: gem install kamal
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ECR }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}
+          aws-region: us-east-1
+          mask-aws-account-id: false # otherwise the mask will hide your account ID and cause errors in the deployment
+
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx for cache
+        uses: docker/setup-buildx-action@v3
+
+      - name: Expose GitHub Runtime for cache
+        uses: crazy-max/ghaction-github-runtime@v3
+
+      - name: Create .env file
+        run: |
+          cd <YOUR_PROJECT_ROOT>/deploy
+          touch .env
+          echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_<YOUR_ACCOUNT_ID>_dkr_ecr_<YOUR_REGION>_amazonaws_com }}" >> .env
+          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+          # if you have other secrets, add them here
+          cat .env
+
+      - name: Kamal Deploy
+        id: kamal-deploy
+        run: |
+          cd <YOUR_PROJECT_ROOT>/deploy
+          kamal lock release
+          kamal env push
+          kamal deploy
+```
+
+This workflow will:
+
+1. Checkout the code
+2. Set up the Ruby environment and install Kamal
+3. Configure the AWS credentials
+4. Login to the AWS ECR registry
+5. Set up Docker Buildx for cache
+6. Expose GitHub Runtime for cache
+7. Create the `.env` file
+8. Run Kamal deploy
+
+It will run everytime you make a push to the main branch or by manually triggering the workflow. It'll cancel any in-progress runs to avoid conflicts.
+
+Also, before you push your code to the repository, you'll need to add the following secrets to the repository:
+
+- `VPS_SSH_PRIVATE_KEY`: The private key to connect to your VPS
+- `AWS_ACCESS_KEY_ID_ECR`: The access key ID for the AWS ECR registry
+- `AWS_SECRET_ACCESS_KEY_ECR`: The secret access key for the AWS ECR registry
+- `DJANGO_SECRET_KEY`: The Django secret key
+
+Finally, to speed up the deployment, add these options to the `builder` section of the `deploy.yml` file:
+
+```yml
+builder:
+  dockerfile: "../Dockerfile"
+  context: "../"
+  multiarch: false # new
+  cache: # new
+    type: gha # new
+```
+
+This will enable the Docker Buildx cache for the build process in Github Actions. You can set `multiarch` to `false` if your CI pipeline shares the same architecture as your VPS, which was the case for me.
+
+## Conclusion
+
+You now have a fully automated deployment pipeline for your Django app. A push to the `main` branch will trigger the workflow, which will build the Docker image, push it to the ECR registry, and deploy it to your VPS.
+
+Break free from the tyranny of manual deployments and expensive cloud services. Sleep like a baby and let Kamal handle your deployments.
+
+If you have any questions or feedback, please feel free to leave a comment below.
