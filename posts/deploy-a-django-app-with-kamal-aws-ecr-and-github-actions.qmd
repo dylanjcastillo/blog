@@ -82,7 +82,7 @@ systemctl restart sshd
 
 # Add the kamal user to the docker group
 usermod -aG docker kamal
-docker network create --driver bridge kamal_network # this is only required if you're planning to run SQLite or redis on the same VPS
+docker network create --driver bridge kamal_network
 
 # Create a folder for the Let's Encrypt ACME JSON
 mkdir -p /letsencrypt && touch /letsencrypt/acme.json && chmod 600 /letsencrypt/acme.json
@@ -101,6 +101,12 @@ reboot
 
 This assumes that you're using a root user to connect to your server and that there isn't a non-root user with `UID` 1000 already. Otherwise, adjust the commands accordingly.
 
+Also, if you don't have a public SSH key for the "Add SSH key" step, you can generate one with the following command:
+
+```bash
+ssh-keygen -t ed25519 -C "your-email@example.com"
+```
+
 These commands will:
 
 1. Install docker, curl, git, and snapd
@@ -116,6 +122,15 @@ These commands will:
 11. Restart the server
 
 If you're not using SQLite or redis, you can skip the database and redis data folder steps.
+
+Finally, configure the SSH key in your local `.ssh/config` file so you can login as the kamal user without using the root account.
+
+```
+Host kamal
+  HostName <YOUR_VPS_IP>
+  User kamal
+  IdentityFile ~/.ssh/<YOUR_PRIVATE_SSH_KEY>
+```
 
 ## Create a Dockerfile for your app
 
@@ -181,7 +196,7 @@ This is a multi-stage Dockerfile that:
 
 1. Installs poetry and sets up the virtual environment
 2. Creates the user `django` with the `UID` and `GID` 1000 and runs the application with that user. It's important that this user has the same `UID` and `GID` as the owner of the folders outside the container. Otherwise, you'll have issues with [file permissions](https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca) and the app won't persist data.
-3. Exposes port 8000 and runs the application by executing the `entrypoint.sh` script. By exposing the port, Kamal will automatically detect that that is the port the app runs on and [will use that to set up the reverse proxy](https://github.com/basecamp/kamal/issues/58).
+3. Exposes port 8000 and runs the application by executing the `entrypoint.sh` script. By exposing the port, Kamal will automatically detect that is the port the app runs on and [will use that to set up the reverse proxy](https://github.com/basecamp/kamal/issues/58).
 
 Feel free to adjust this Dockerfile to your needs. If you are not planning on using redis or a SQLite database in your same VPS, you can remove those parts from the Dockerfile.
 
@@ -355,7 +370,7 @@ builder:
   context: "../"
 ```
 
-This will set up a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume for the SQLite database. Remember to replace the placeholders with your own values.
+This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume to persist the SQLite database. Remember to replace the placeholders with your own values.
 
 ### Test the configuration locally
 
