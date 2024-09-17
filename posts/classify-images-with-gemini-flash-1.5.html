@@ -225,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 16, 2024</p>
+      <p class="date-modified">September 17, 2024</p>
     </div>
   </div>
     
@@ -275,14 +275,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> google.generativeai <span class="im">as</span> genai</span>
 <span id="cb2-6"><a href="#cb2-6"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, f1_score</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
-<span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, f1_score</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In addition to the usual popular libraries (e.g.&nbsp;<code>pandas</code>, <code>sklearn</code>), you’ll need:</p>
 <ul>
@@ -345,8 +344,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-41"><a href="#cb4-41"></a></span>
 <span id="cb4-42"><a href="#cb4-42"></a>    <span class="cf">return</span> df_train, df_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This function will get a random selection of <code>n_images_icl</code> images per class from the <code>train/</code> folder (that you’ll later use in the model’s context). For the testing set, which you’ll use to measure the model’s performance, you’ll use all the available images in the <code>test/</code> folder from those classes.</p>
-<p>Now you can read the data and create the datasets. For this tutorial, you’ll select 15 different classes and 1 image per class for the context:</p>
+<p>This function will get a random selection of <code>n_images_icl</code> images per class from the <code>train</code> folder (that you’ll later use in the model’s context). For the testing set, which you’ll use to measure the model’s performance, you’ll use all the available images in the <code>test</code> folder from those classes.</p>
+<p>To keep things simple, you’ll start by selecting 15 different classes and 1 image per class for the context (i.e., <code>n_images_icl=1</code>)</p>
 <div id="cell-15" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>DATA_DIR <span class="op">=</span> <span class="st">"../data/"</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>TRAIN_DIR <span class="op">=</span> Path(DATA_DIR) <span class="op">/</span> <span class="st">"train"</span></span>
@@ -357,14 +356,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-7"><a href="#cb5-7"></a></span>
 <span id="cb5-8"><a href="#cb5-8"></a>df_train, df_test <span class="op">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op">=</span>selected_classes, n_images_icl<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>There will be 15 classes with 1 image in the training set and 15 classes with 5 images in the testing set.</p>
 </section>
 <section id="gemini-flash-1.5" class="level2">
 <h2 class="anchored" data-anchor-id="gemini-flash-1.5">Gemini Flash 1.5</h2>
 <p>Next, you’ll need to define a system prompt and configure the model to use it.</p>
 <section id="define-prompt" class="level3">
 <h3 class="anchored" data-anchor-id="define-prompt">Define prompt</h3>
-<p>First, you should start by defining a simple system prompt that will tell the model how to classify the images:</p>
-<div id="cell-20" class="cell" data-execution_count="6">
+<p>You’ll use a system prompt that will tell the model how to classify the images and the format you want the output to be in:</p>
+<div id="cell-21" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>CLASSIFIER_SYSTEM_PROMPT <span class="op">=</span> <span class="st">"""You are an expert lepidopterist.</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="st">Your task is to classify images of butterflies into one of the provided labels.</span></span>
@@ -443,7 +443,7 @@ Note
 <section id="configure-model" class="level3">
 <h3 class="anchored" data-anchor-id="configure-model">Configure model</h3>
 <p>Then, you can define and configure the model:</p>
-<div id="cell-24" class="cell" data-execution_count="7">
+<div id="cell-25" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>generation_config <span class="op">=</span> {</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="st">"temperature"</span>: <span class="dv">1</span>,</span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="st">"max_output_tokens"</span>: <span class="dv">8192</span>,</span>
@@ -455,21 +455,20 @@ Note
 <span id="cb7-9"><a href="#cb7-9"></a>    generation_config<span class="op">=</span>generation_config</span>
 <span id="cb7-10"><a href="#cb7-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This does a few things:</p>
+<p>This sets up the model with the following configuration:</p>
 <ul>
-<li>It sets <code>temperature</code> to 1, which controls the randomness of the model’s output.</li>
-<li>It sets <code>max_output_tokens</code> to 8192, which is the maximum number of tokens the model can output.</li>
-<li>It sets <code>response_mime_type</code> to “application/json”, which tells the model to output JSON.</li>
-<li>It sets <code>system_instruction</code> to the prompt you defined earlier.</li>
-<li>It uses <code>gemini-1.5-flash</code> as the model.</li>
+<li><code>temperature=1</code>: Controls the randomness of the model’s output.</li>
+<li><code>max_output_tokens=8192</code>: The maximum number of tokens the model can generate.</li>
+<li><code>response_mime_type="application/json"</code>: Tells the model to produce JSON.</li>
 </ul>
+<p>It also sets the <code>system_instruction</code> using the prompt you defined earlier and uses <code>gemini-1.5-flash</code> as the model.</p>
 </section>
 <section id="building-the-context" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-context">Building the context</h3>
-<p>Gemini has a slightly different way of building the messages (or context) you pass to it.</p>
-<p>Most providers have adjusted their API to match OpenAI’s <code>messages</code> format. Gemini, however, uses a simple list of strings and media files (if you’re including images).</p>
+<p>Gemini has a slightly different way of building the messages (context) used by the model.</p>
+<p>Most providers have adjusted their API to match OpenAI’s <code>messages</code> format. Gemini, however, uses a list of strings and media files (if you’re including images).</p>
 <p>You can use these functions for that:</p>
-<div id="cell-28" class="cell" data-execution_count="8">
+<div id="cell-29" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> create_context_images_message(df):</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    messages <span class="op">=</span> [<span class="st">"Possible labels:"</span>]</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    grouped <span class="op">=</span> df.groupby(<span class="st">'class_id'</span>)</span>
@@ -485,7 +484,7 @@ Note
 <p>First, you’ll create a message with the context images and their corresponding labels. This is the “training” part of ICL.</p>
 <p>In <code>create_context_images_message</code>, you’re iterating over the training dataset, grouping the images by class and appending the images and labels to the messages list.</p>
 <p>The resulting message will look something like this:</p>
-<div id="cell-30" class="cell" data-execution_count="9">
+<div id="cell-31" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>context_images_message[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>['Possible labels:',
@@ -495,9 +494,10 @@ Note
  'label: class_1']</code></pre>
 </div>
 </div>
+<p>You might have noticed that instead of the actual names of the classes, you’re using <code>class_0</code>, <code>class_1</code>, etc. This is because I want to make the model prediction as “fair” as possible, see the <a href="#data-leakage-and-baseline-performance">baseline performance</a> section for more details.</p>
 <p>Then, you’ll create a message with the input images. This are the images for which the model will generate predictions.</p>
 <p>Simlar to the context images message, you’re iterating over the test dataset and appending the images to the messages list.</p>
-<div id="cell-32" class="cell" data-execution_count="10">
+<div id="cell-33" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> create_input_images_message(df):</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    messages <span class="op">=</span> [<span class="st">"Input images:"</span>]</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    <span class="cf">for</span> i, image_path <span class="kw">in</span> <span class="bu">enumerate</span>(df.image_path):</span>
@@ -513,7 +513,7 @@ Note
 <span id="cb11-13"><a href="#cb11-13"></a>input_images_message <span class="op">=</span> create_input_images_message(df_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The resulting message will look something like this:</p>
-<div id="cell-34" class="cell" data-execution_count="11">
+<div id="cell-35" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>input_images_message[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>['Input images:',
@@ -527,7 +527,7 @@ Note
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
 <p>Now, you can combine the context images message and the input images message to create the contents you’ll pass to the model:</p>
-<div id="cell-37" class="cell" data-execution_count="12">
+<div id="cell-38" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>contents <span class="op">=</span> context_images_message <span class="op">+</span> input_images_message</span>
 <span id="cb14-2"><a href="#cb14-2"></a>response <span class="op">=</span> classification_model.generate_content(</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    contents<span class="op">=</span>contents</span>
@@ -535,7 +535,7 @@ Note
 <span id="cb14-5"><a href="#cb14-5"></a>response_json <span class="op">=</span> json.loads(response.text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It’ll take a few seconds to run. But after that you’ll have a JSON response with the model’s predictions:</p>
-<div id="cell-39" class="cell" data-execution_count="13">
+<div id="cell-40" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>response_json[<span class="st">"output"</span>][:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>[{'image_id': 0, 'confidence': 10, 'label': 'class_7'},
@@ -544,7 +544,7 @@ Note
 </div>
 </div>
 <p>Then, you can calculate the accuracy and F1-score to evaluate the model’s performance:</p>
-<div id="cell-41" class="cell" data-execution_count="14">
+<div id="cell-42" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">def</span> calculate_metrics(df_test, response_json):</span>
 <span id="cb17-2"><a href="#cb17-2"></a>    predictions <span class="op">=</span> [item[<span class="st">'label'</span>] <span class="cf">for</span> item <span class="kw">in</span> response_json[<span class="st">'output'</span>]]</span>
 <span id="cb17-3"><a href="#cb17-3"></a>    accuracy <span class="op">=</span> accuracy_score(df_test.class_id, predictions)</span>
@@ -564,7 +564,7 @@ F1-score: 0.7229</code></pre>
 <section id="using-5-images-per-class-in-the-context" class="level4">
 <h4 class="anchored" data-anchor-id="using-5-images-per-class-in-the-context">Using 5 images per class in the context</h4>
 <p>One quick way to improve the performance of the model is to use more images per class in the context. Try with 5 images per class:</p>
-<div id="cell-45" class="cell" data-execution_count="18">
+<div id="cell-46" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>df_train, df_test <span class="op">=</span> create_datasets(TRAIN_DIR, TEST_DIR, selected_classes<span class="op">=</span>selected_classes, n_images_icl<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb19-2"><a href="#cb19-2"></a></span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="co"># Create the context and input messages</span></span>
@@ -600,7 +600,7 @@ F1-score: 0.9013</code></pre>
 <li>Run a quick experiment using a zero-shot<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> model without anonymizing the labels to see the model’s performance.</li>
 </ol>
 <p>Here’s the code for the zero-shot baseline and the results:</p>
-<div id="cell-48" class="cell" data-execution_count="16">
+<div id="cell-49" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>possible_labels <span class="op">=</span> <span class="st">"Possible labels: "</span> <span class="op">+</span> <span class="st">", "</span>.join(df_train.class_name.unique().tolist())</span>
 <span id="cb21-2"><a href="#cb21-2"></a>class_name_to_id <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(df_train[<span class="st">'class_name'</span>], df_train[<span class="st">'class_id'</span>]))</span>
 <span id="cb21-3"><a href="#cb21-3"></a></span>
