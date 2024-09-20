@@ -223,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 17, 2024</p>
+      <p class="date-modified">September 20, 2024</p>
     </div>
   </div>
     
@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Install the required software (Git, Docker, curl, etc.)</li>
 <li>Create a directory for Let’s Encrypt SSL certificates.</li>
 <li>Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.</li>
-<li>Create a directory for the database (SQLite) and the cache (Redis) (/db/ and /data/)</li>
+<li>Create a directory for the database (SQLite) and the cache (Redis) (<code>db/</code> and <code>data/</code>)</li>
 </ul>
 </section>
 <section id="customizing-the-script" class="level2">
@@ -298,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="use-already-existing-firewall-rules" class="level3">
 <h3 class="anchored" data-anchor-id="use-already-existing-firewall-rules">Use already existing firewall rules</h3>
-<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. I’ve left an example of how to attach an existing firewall rule to the VPS.</p>
+<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. Take a look at <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps/blob/4a1a6edafc1c9e927f20906298ccd083718bc97e/cloud.tf#L72C1-L91C4">this section</a> of <code>cloud.tf</code>.</p>
 </section>
 <section id="use-a-different-server-type-operating-system-or-region" class="level3">
 <h3 class="anchored" data-anchor-id="use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</h3>
