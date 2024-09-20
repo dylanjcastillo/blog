@@ -38,7 +38,7 @@ In this tutorial, I'll walk you through the process of deploying a Django app wi
 
 To make the most of this tutorial, you should:
 
-- Have an [AWS](https://aws.amazon.com/) account and [CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed.
+- Have an [AWS](https://aws.amazon.com/) account and its [CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed.
 - Be comfortable with [Docker](https://www.docker.com/).
 - Have a basic understanding of [Kamal](https://kamal-deploy.org/).
 - Have a basic understanding of [Github Actions](https://docs.github.com/en/actions).

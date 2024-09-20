@@ -96,7 +96,7 @@ In addition, after the VPS is created, it will automatically:
 - Install the required software (Git, Docker, curl, etc.)
 - Create a directory for Let's Encrypt SSL certificates.
 - Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.
-- Create a directory for the database (SQLite) and the cache (Redis) (/db/ and /data/)
+- Create a directory for the database (SQLite) and the cache (Redis) (`db/` and `data/`)
 
 ## Customizing the script
 
@@ -112,7 +112,7 @@ If you want to run other commands after the VPS is created, you can add them to 
 
 ### Use already existing firewall rules
 
-If you want to use already existing firewall rules, you can modify how the firewalls are attached in `cloud.tf`. I've left an example of how to attach an existing firewall rule to the VPS.
+If you want to use already existing firewall rules, you can modify how the firewalls are attached in `cloud.tf`. Take a look at [this section](https://github.com/dylanjcastillo/terraform-kamal-single-vps/blob/4a1a6edafc1c9e927f20906298ccd083718bc97e/cloud.tf#L72C1-L91C4) of `cloud.tf`.
 
 ### Use a different server type, operating system, or region
 
