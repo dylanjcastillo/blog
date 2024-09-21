@@ -1,14 +1,14 @@
 ---
-title: "Deploying a Django app with Kamal, AWS ECR, and Github Actions"
-date: "09/15/2024"
+title: "Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions"
+date: "09/21/2024"
 date-modified: last-modified
-description-meta: "A guide to deploy a Django app with Kamal, AWS ECR, and Github Actions"
+description-meta: "A guide to deploying a FastAPI app with Kamal, AWS ECR, and Github Actions"
 toc: true
 toc-depth: 3
 lightbox: true
 fig-cap-location: margin
 categories:
-  - django
+  - fastapi
   - kamal
   - aws
 author:
@@ -24,35 +24,30 @@ comments:
     issue-term: pathname
 ---
 
-Every other night, my wife wakes me up to tell me I'm muttering unintelligible phrases in my sleep: "restart nginx," "the SSL certificate failed to validate," or "how do I exit vim?"
+Kamal is a simpler alternative to [Kubernetes](https://kubernetes.io/) that you can use to deploy containerized apps to a [VPS](https://en.wikipedia.org/wiki/Virtual_private_server). I've used to deploy many apps based on FastAPI, Django, or Express.
 
-I still suffer from PTSD from the days of manually deploying web apps. But since switching to Kamal, I've been sleeping like a baby^[crying and sh*tting my diapers?].
+Once you get the hang of it, it'll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the _main_ branch.
 
-Kamal is sort of a lightweight version of [Kubernetes](https://kubernetes.io/) that you can use to deploy containerized apps to a [VPS](https://en.wikipedia.org/wiki/Virtual_private_server). It has a bit of a learning curve, but once you get the hang of it, it'll take you less than 5 minutes to get an app in production with a CI/CD pipeline.
-
-A single push to main, and that green GitHub Actions checkmark confirms that your 2-pixel padding change is live for the world to admire.
-
-In this tutorial, I'll walk you through the process of deploying a Django app with Kamal, AWS ECR, and Github Actions.
+In this tutorial, I'll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions.
 
 ## Prerequisites
 
 To make the most of this tutorial, you should:
 
+- Have a [FastAPI](https://fastapi.tiangolo.com/) app ready to deploy.
 - Have an [AWS](https://aws.amazon.com/) account and its [CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed.
 - Be comfortable with [Docker](https://www.docker.com/).
 - Have a basic understanding of [Kamal](https://kamal-deploy.org/).
 - Have a basic understanding of [Github Actions](https://docs.github.com/en/actions).
 - Have a VPS with Ubuntu ready to host your app.
 
-Ideally, you should also have a Django project ready to deploy. But if you don't have one, you can use this sample [Django project](https://github.com/dylanjcastillo/django-kamal-aws-gha-example) for the tutorial.
+## Prepare your VPS
 
-## Prepare the VPS for Kamal
+You'll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called `kamal` that can sudo. You should also set the `UID` and `GID` of the user to 1000.
 
-At a minimum, you'll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called `kamal` that can sudo. That user should have a 1000 `UID` and `GID`.
+If you're using Hetzner, you can use my [terraform script](https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html) to prepare the VPS.
 
-I have a [terraform script](https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html) that will take care of this for you if you're using Hetzner.
-
-But if you'd like to do it manually, you can run these commands on your VPS's terminal:
+Otherwise, you can run these commands on your VPS's terminal:
 
 ```bash
 # Install docker, curl, and git, and snapd
@@ -68,9 +63,9 @@ useradd -m -s /bin/bash -u 1000 kamal
 usermod -aG sudo kamal
 echo "kamal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/kamal
 
-# SSH key to login as kamal user
+# Add SSH key to login as kamal user
 mkdir -p /home/kamal/.ssh
-echo "<YOUR_PUBLIC_SSH_KEY>" >> /home/kamal/.ssh/authorized_keys
+echo "<YOUR_PUBLIC_SSH_KEY>" >> /home/kamal/.ssh/authorized_keys # you need a public key to login as the kamal user
 chmod 700 /home/kamal/.ssh
 chmod 600 /home/kamal/.ssh/authorized_keys
 chown -R kamal:kamal /home/kamal/.ssh
@@ -88,18 +83,10 @@ docker network create --driver bridge kamal_network
 mkdir -p /letsencrypt && touch /letsencrypt/acme.json && chmod 600 /letsencrypt/acme.json
 chown -R kamal:kamal /letsencrypt
 
-# Create a folder for the SQLite database (skip this if you're using a different database)
-mkdir -p /db
-chown -R 1000:1000 /db
-
-# Create a folder for the redis data (skip this if you're not using redis)
-mkdir -p /data
-chown -R 1000:1000 /data
-
 reboot
 ```
 
-This assumes that you're using a root user to connect to your server and that there isn't a non-root user with `UID` 1000 already. Otherwise, adjust the commands accordingly.
+To run these commands, you need to login as root. This assumes that there isn't already a non-root user with `UID` 1000. Otherwise, you'll have to adjust the commands accordingly.
 
 Also, if you don't have a public SSH key for the "Add SSH key" step, you can generate one with the following command:
 
@@ -109,19 +96,15 @@ ssh-keygen -t ed25519 -C "your-email@example.com"
 
 These commands will:
 
-1. Install docker, curl, git, and snapd
+1. Install docker, curl, and git
 2. Start and enable the docker service
 3. Create a non-root user called kamal
-4. Remove the root login
-5. Add the kamal user to the docker group
-6. Create a bridge network for Traefik, SQLite, and redis
-7. Create a folder for the Let's Encrypt ACME JSON
+4. Disable root login
+5. Add the kamal user to the docker group (this allows the user to run docker without needing to use `sudo`)
+6. Create a Docker bridge network for Traefik
+7. Create a folder for the Let's Encrypt ACME JSON file
 8. Make the Let's Encrypt ACME JSON folder writable by the kamal user
-9. Create a folder for the SQLite database and redis data
-10. Make the SQLite database and redis data folders writable by the kamal user
-11. Restart the server
-
-If you're not using SQLite or redis, you can skip the database and redis data folder steps.
+9. Restart the server
 
 Finally, configure the SSH key in your local `.ssh/config` file so you can login as the kamal user without using the root account.
 
@@ -132,9 +115,9 @@ Host kamal
   IdentityFile ~/.ssh/<YOUR_PRIVATE_SSH_KEY>
 ```
 
-## Create a Dockerfile for your app
+## Create a Dockerfile for your FastAPI app
 
-Kamal is meant to deploy containerized apps, so you'll need to have a Dockerfile for your app. I also recommend using an `entrypoint.sh` script to run the application.
+Kamal works with containerized apps, so you'll need to have a Dockerfile. I also recommend using an `entrypoint.sh` script to run the application, because that also allows you to run commands in the container.
 
 ### Dockerfile
 
@@ -170,35 +153,34 @@ WORKDIR /app
 COPY --from=builder /app/.venv/ /app/.venv/
 
 COPY . /app
-RUN mkdir -p /data /db
 
-RUN chmod +x /app/src/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 FROM runner AS production
 
 EXPOSE 8000
 
-ARG user=django
-ARG group=django
+ARG user=kamal
+ARG group=kamal
 ARG uid=1000
 ARG gid=1000
 RUN groupadd -g ${gid} ${group} && \
     useradd -u ${uid} -g ${group} -s /bin/sh -m ${user} && \
-    chown -R ${uid}:${gid} /app /data /db
+    chown -R ${uid}:${gid} /app
 
 USER ${uid}:${gid}
 
-WORKDIR /app/src
-CMD [ "/app/src/entrypoint.sh" , "app"]
+WORKDIR /app
+CMD [ "/app/entrypoint.sh" , "app"]
 ```
 
-This is a multi-stage Dockerfile that:
+This multi-stage Dockerfile does the following:
 
 1. Installs poetry and sets up the virtual environment
-2. Creates the user `django` with the `UID` and `GID` 1000 and runs the application with that user. It's important that this user has the same `UID` and `GID` as the owner of the folders outside the container. Otherwise, you'll have issues with [file permissions](https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca) and the app won't persist data.
-3. Exposes port 8000 and runs the application by executing the `entrypoint.sh` script. By exposing the port, Kamal will automatically detect that is the port the app runs on and [will use that to set up the reverse proxy](https://github.com/basecamp/kamal/issues/58).
+2. Creates the user `kamal` with the `UID` and `GID` 1000 and runs the application with that user.
+3. Exposes port 8000 and runs the application by executing the `entrypoint.sh` script. Kamal automatically detects that is the port the app runs on and [will use that to set up the reverse proxy](https://github.com/basecamp/kamal/issues/58).
 
-Feel free to adjust this Dockerfile to your needs. If you are not planning on using redis or a SQLite database in your same VPS, you can remove those parts from the Dockerfile.
+Feel free to adjust this Dockerfile to your needs.
 
 ### `entrypoint.sh` script
 
@@ -213,29 +195,23 @@ set -e
 
 if [ "$1" = "app" ]; then
     echo "Collecting static files"
-    poetry run python manage.py collectstatic --clear --noinput
-
-    echo "Running migrations"
-    poetry run python manage.py migrate
-
-    echo "Running in production mode"
     exec poetry run gunicorn -c gunicorn.conf.py
 else
     exec "$@"
 fi
 ```
 
-This script just collects static files, runs migrations, and starts the Gunicorn server with the configuration in the `gunicorn.conf.py` file. You can add or remove commands to the script as needed.
+This script starts the `gunicorn` server with `uvicorn` workers and some sensible defaults. It also allows you to pass other arguments to the script, which is useful if you want to run other commands in the container. You can add or remove commands to the script as needed.
 
 ## Configure an ECR registry in AWS
 
-Next, you'll need a place to push and pull your Docker images. I like using AWS, so that's what I'll show you how to do. If you prefer other services, take a look at the instructions for other registries in the [Kamal documentation](https://kamal-deploy.org/docs/configuration/docker-registry/).
+Next, you'll need a place to push and pull your Docker images. I use [AWS ECR](https://aws.amazon.com/ecr/), so that's what I'll show you how to do here. Kamal also supports [other registries](https://kamal-deploy.org/docs/configuration/docker-registry/).
 
 Log in to the [AWS Management Console](https://aws.amazon.com/console/) and go to Amazon ECR. Click on `Create repository` and set a name for your repository.
 
 Then, create a new IAM user in your AWS account by going to Services > IAM > Users > Add user.
 
-Instead of using a predefined policy, create a new one with the following JSON and attach it to the user:
+During the process you'll have to assign a permissions to the user. You can create a new policy with the following content and attach it to the user:
 
 ```json
 {
@@ -279,15 +255,15 @@ Instead of using a predefined policy, create a new one with the following JSON a
 }
 ```
 
-This policy allows the user to list, get, and manage the ECR repository you created earlier and get the authorization token to push and pull the image. You will need to replace the `<REGION>`, `<ACCOUNT_ID>`, and `<REPOSITORY_NAME>` with the values for your repository.
+This policy enables users to list, access, and manage the ECR repository they have previously created, as well as obtain an authorization token necessary for pushing and pulling images. You must replace `<REGION>`, `<ACCOUNT_ID>`, and `<REPOSITORY_NAME>` with the specific details of your own repository.
 
-Next, select the user you created and go to Security credentials > Access keys > Create access key. Download the CSV file and keep it in a secure location.
+Then, select the user you created and navigate to Security credentials > Access keys > Create access key. Download the generated CSV file and store it in a secure location.
 
-You will use those credentials in your Github Actions pipeline to push and pull the image from the ECR registry.
+The GitHub Actions workflow will use these credentials for pushing and pulling images from the ECR registry.
 
 ## Set up Kamal in your project
 
-Open your Django project in your favorite code editor. Create a folder called `deploy` in the root directory. Then go into the folder and initialize Kamal:
+Open your FastAPI project in your favorite code editor. Create a folder called `deploy` in the root directory. Then go into the folder and initialize Kamal:
 
 ```bash
 kamal init
@@ -295,20 +271,19 @@ kamal init
 
 This will create two folders (`.kamal/` and `config/`) and an `.env` file. Inside `config/`, you'll find a `deploy.yml` file. This is where you'll provide the instructions for Kamal to build and deploy your app.
 
-You can use the following `deploy.yml` file as a template for your Django app:
+You can use the following `deploy.yml` file as a template for your FastAPI app:
 
 ```{.yml filename='deploy.yml'}
+service: example
 
-service: <YOUR_SERVICE_NAME>
-
-image: <YOUR_IMAGE_NAME>
+image: example
 
 ssh:
   user: kamal
 
 env:
   secret:
-    - DJANGO_SECRET_KEY
+    - FASTAPI_ENV
 
 traefik:
   options:
@@ -317,14 +292,14 @@ traefik:
     volume:
       - "/letsencrypt/:/letsencrypt/"
     memory: 500m
-    network: kamal_network
+    network: private_network
   args:
     entryPoints.web.address: ":80"
     entryPoints.websecure.address: ":443"
     entryPoints.web.http.redirections.entryPoint.to: websecure
     entryPoints.web.http.redirections.entryPoint.scheme: https
     entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "<YOUR_EMAIL>"
+    certificatesResolvers.letsencrypt.acme.email: <YOUR_EMAIL>"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
@@ -332,35 +307,20 @@ traefik:
 servers:
   web:
     hosts:
-      - <YOUR_VPS_IP>
+      - 128.140.0.209
     healthcheck:
       port: 8000
       interval: 5s
     options:
-      network: kamal_network
+      network: private_network
     labels:
       traefik.http.routers.app.tls: true
       traefik.http.routers.app.entrypoints: websecure
       traefik.http.routers.app.rule: Host(`<YOUR_DOMAIN>`)
       traefik.http.routers.app.tls.certresolver: letsencrypt
 
-accessories:
-  redis:
-    image: redis:7.0
-    roles:
-      - web
-    cmd: --maxmemory 200m --maxmemory-policy allkeys-lru
-    volumes:
-      - /var/redis/data:/data/redis
-    options:
-      memory: 250m
-      network: kamal_network
-
-volumes:
-  - "/db/:/app/db/"
-
 registry:
-  server: <YOUR_AWS_ECR_URL> # e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com
+  server: <account_id>.dkr.ecr.<region>.amazonaws.com
   username: AWS
   password:
     - KAMAL_REGISTRY_PASSWORD
@@ -368,17 +328,19 @@ registry:
 builder:
   dockerfile: "../Dockerfile"
   context: "../"
+  multiarch: false
+  cache:
+    type: gha
+
 ```
 
-This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume to persist the SQLite database. It will also do a healthcheck on `/up` on port `8000`.
-
-Remember to replace the placeholders with your own values.
+This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt). Remember to replace the placeholders with your own values. It will also do a healthcheck on `/up` on port 8000.
 
 ### Test the configuration locally
 
-To test it locally, first, you'll have to define the required environment variables in the `.env` file, such as the Django secret key, OpenAI API key, and any other secrets you need.
+To test it locally, first, you must define the required environment variables in `.env`, such as keys for AI services, email providers, etc.
 
-You'll also need to get a temporary password for the ECR registry. You can get this password by running the following command:
+You'll also need to get a temporary password to authenticate into the ECR registry. You can get this password by running the following command from your terminal:
 
 ```bash
 aws ecr get-login-password --region <YOUR_REGION>
@@ -397,7 +359,7 @@ The first command will push the environment variables to the VPS. The second com
 
 After a few minutes, your app should be live at `https://<YOUR_DOMAIN>`.
 
-If you see any errors, there are two things you can do:
+If you see any errors, you can:
 
 1. Run `kamal app logs` to see the logs of the app.
 2. Open a terminal in the container by running `kamal app exec -it bash`.
@@ -406,12 +368,12 @@ This is how I usually debug the app.
 
 ## Automate the deployment with Github Actions
 
-Now that you have a working deployment process in your local environment, you can automate the deployment with Github Actions.
+Now that you have a working deployment process in your local environment, you can set up your CI/CD pipeline using GitHub Actions.
 
 Create a new file in the `.github/workflows` folder called `deploy.yml` and add the following code:
 
 ```yml
-name: Deploy webapp to VPS
+name: Deploy FastAPI app to VPS
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -462,7 +424,6 @@ jobs:
           cd <YOUR_PROJECT_ROOT>/deploy
           touch .env
           echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_<YOUR_ACCOUNT_ID>_dkr_ecr_<YOUR_REGION>_amazonaws_com }}" >> .env
-          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" >> .env
           # if you have other secrets, add them here
           cat .env
 
@@ -493,7 +454,6 @@ Also, before you push your code to the repository, you'll need to add the follow
 - `VPS_SSH_PRIVATE_KEY`: The private key to connect to your VPS
 - `AWS_ACCESS_KEY_ID_ECR`: The access key ID for the AWS ECR registry
 - `AWS_SECRET_ACCESS_KEY_ECR`: The secret access key for the AWS ECR registry
-- `DJANGO_SECRET_KEY`: The Django secret key
 
 Finally, to speed up the deployment, add these options to the `builder` section of the `deploy.yml` file:
 
@@ -510,7 +470,7 @@ This will enable the Docker Buildx cache for the build process in Github Actions
 
 ## Conclusion
 
-You now have a fully automated deployment pipeline for your Django app. A push to the `main` branch will trigger the workflow, which will build the Docker image, push it to the ECR registry, and deploy it to your VPS.
+You now have a fully automated deployment pipeline for your FastAPI app. A push to the `main` branch will trigger the workflow, that will build the Docker image, push it to the ECR registry, and deploy it to your VPS.
 
 Break free from the tyranny of manual deployments and expensive cloud services. Sleep like a baby and let Kamal handle your deployments.
 
