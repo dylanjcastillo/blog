@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2024-09-15">
-<meta name="description" content="A guide to deploy a Django app with Kamal, AWS ECR, and Github Actions">
+<meta name="dcterms.date" content="2024-09-21">
+<meta name="description" content="A guide to deploying a FastAPI app with Kamal, AWS ECR, and Github Actions">
 
-<title>Deploying a Django app with Kamal, AWS ECR, and Github Actions – Dylan Castillo</title>
+<title>Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -168,8 +168,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#prepare-the-vps-for-kamal" id="toc-prepare-the-vps-for-kamal" class="nav-link" data-scroll-target="#prepare-the-vps-for-kamal">Prepare the VPS for Kamal</a></li>
-  <li><a href="#create-a-dockerfile-for-your-app" id="toc-create-a-dockerfile-for-your-app" class="nav-link" data-scroll-target="#create-a-dockerfile-for-your-app">Create a Dockerfile for your app</a>
+  <li><a href="#prepare-your-vps" id="toc-prepare-your-vps" class="nav-link" data-scroll-target="#prepare-your-vps">Prepare your VPS</a></li>
+  <li><a href="#create-a-dockerfile-for-your-fastapi-app" id="toc-create-a-dockerfile-for-your-fastapi-app" class="nav-link" data-scroll-target="#create-a-dockerfile-for-your-fastapi-app">Create a Dockerfile for your FastAPI app</a>
   <ul class="collapse">
   <li><a href="#dockerfile" id="toc-dockerfile" class="nav-link" data-scroll-target="#dockerfile">Dockerfile</a></li>
   <li><a href="#entrypoint.sh-script" id="toc-entrypoint.sh-script" class="nav-link" data-scroll-target="#entrypoint.sh-script"><code>entrypoint.sh</code> script</a></li>
@@ -189,9 +189,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deploying a Django app with Kamal, AWS ECR, and Github Actions</h1>
+<h1 class="title">Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">django</div>
+    <div class="quarto-category">fastapi</div>
     <div class="quarto-category">kamal</div>
     <div class="quarto-category">aws</div>
   </div>
@@ -220,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 15, 2024</p>
+      <p class="date">September 21, 2024</p>
     </div>
   </div>
   
@@ -238,28 +238,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Every other night, my wife wakes me up to tell me I’m muttering unintelligible phrases in my sleep: “restart nginx,” “the SSL certificate failed to validate,” or “how do I exit vim?”</p>
-<p>I still suffer from PTSD from the days of manually deploying web apps. But since switching to Kamal, I’ve been sleeping like a baby<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>Kamal is sort of a lightweight version of <a href="https://kubernetes.io/">Kubernetes</a> that you can use to deploy containerized apps to a <a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a>. It has a bit of a learning curve, but once you get the hang of it, it’ll take you less than 5 minutes to get an app in production with a CI/CD pipeline.</p>
-<p>A single push to main, and that green GitHub Actions checkmark confirms that your 2-pixel padding change is live for the world to admire.</p>
-<p>In this tutorial, I’ll walk you through the process of deploying a Django app with Kamal, AWS ECR, and Github Actions.</p>
+<p>Kamal is a simpler alternative to <a href="https://kubernetes.io/">Kubernetes</a> that you can use to deploy containerized apps to a <a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a>. I’ve used to deploy many apps based on FastAPI, Django, or Express.</p>
+<p>Once you get the hang of it, it’ll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the <em>main</em> branch.</p>
+<p>In this tutorial, I’ll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions.</p>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>To make the most of this tutorial, you should:</p>
 <ul>
+<li>Have a <a href="https://fastapi.tiangolo.com/">FastAPI</a> app ready to deploy.</li>
 <li>Have an <a href="https://aws.amazon.com/">AWS</a> account and its <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
 <li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
 <li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>.</li>
 <li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
 <li>Have a VPS with Ubuntu ready to host your app.</li>
 </ul>
-<p>Ideally, you should also have a Django project ready to deploy. But if you don’t have one, you can use this sample <a href="https://github.com/dylanjcastillo/django-kamal-aws-gha-example">Django project</a> for the tutorial.</p>
 </section>
-<section id="prepare-the-vps-for-kamal" class="level2">
-<h2 class="anchored" data-anchor-id="prepare-the-vps-for-kamal">Prepare the VPS for Kamal</h2>
-<p>At a minimum, you’ll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called <code>kamal</code> that can sudo. That user should have a 1000 <code>UID</code> and <code>GID</code>.</p>
-<p>I have a <a href="https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html">terraform script</a> that will take care of this for you if you’re using Hetzner.</p>
-<p>But if you’d like to do it manually, you can run these commands on your VPS’s terminal:</p>
+<section id="prepare-your-vps" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-your-vps">Prepare your VPS</h2>
+<p>You’ll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called <code>kamal</code> that can sudo. You should also set the <code>UID</code> and <code>GID</code> of the user to 1000.</p>
+<p>If you’re using Hetzner, you can use my <a href="https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html">terraform script</a> to prepare the VPS.</p>
+<p>Otherwise, you can run these commands on your VPS’s terminal:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Install docker, curl, and git, and snapd</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ex">apt-get</span> update</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="ex">apt-get</span> install <span class="at">-y</span> docker.io curl git snapd</span>
@@ -273,9 +271,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-11"><a href="#cb1-11"></a><span class="ex">usermod</span> <span class="at">-aG</span> sudo kamal</span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="bu">echo</span> <span class="st">"kamal ALL=(ALL) NOPASSWD:ALL"</span> <span class="op">&gt;&gt;</span> /etc/sudoers.d/kamal</span>
 <span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># SSH key to login as kamal user</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># Add SSH key to login as kamal user</span></span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="fu">mkdir</span> <span class="at">-p</span> /home/kamal/.ssh</span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="bu">echo</span> <span class="st">"&lt;YOUR_PUBLIC_SSH_KEY&gt;"</span> <span class="op">&gt;&gt;</span> /home/kamal/.ssh/authorized_keys</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="bu">echo</span> <span class="st">"&lt;YOUR_PUBLIC_SSH_KEY&gt;"</span> <span class="op">&gt;&gt;</span> /home/kamal/.ssh/authorized_keys <span class="co"># you need a public key to login as the kamal user</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a><span class="fu">chmod</span> 700 /home/kamal/.ssh</span>
 <span id="cb1-18"><a href="#cb1-18"></a><span class="fu">chmod</span> 600 /home/kamal/.ssh/authorized_keys</span>
 <span id="cb1-19"><a href="#cb1-19"></a><span class="fu">chown</span> <span class="at">-R</span> kamal:kamal /home/kamal/.ssh</span>
@@ -293,42 +291,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-31"><a href="#cb1-31"></a><span class="fu">mkdir</span> <span class="at">-p</span> /letsencrypt <span class="kw">&amp;&amp;</span> <span class="fu">touch</span> /letsencrypt/acme.json <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 600 /letsencrypt/acme.json</span>
 <span id="cb1-32"><a href="#cb1-32"></a><span class="fu">chown</span> <span class="at">-R</span> kamal:kamal /letsencrypt</span>
 <span id="cb1-33"><a href="#cb1-33"></a></span>
-<span id="cb1-34"><a href="#cb1-34"></a><span class="co"># Create a folder for the SQLite database (skip this if you're using a different database)</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="fu">mkdir</span> <span class="at">-p</span> /db</span>
-<span id="cb1-36"><a href="#cb1-36"></a><span class="fu">chown</span> <span class="at">-R</span> 1000:1000 /db</span>
-<span id="cb1-37"><a href="#cb1-37"></a></span>
-<span id="cb1-38"><a href="#cb1-38"></a><span class="co"># Create a folder for the redis data (skip this if you're not using redis)</span></span>
-<span id="cb1-39"><a href="#cb1-39"></a><span class="fu">mkdir</span> <span class="at">-p</span> /data</span>
-<span id="cb1-40"><a href="#cb1-40"></a><span class="fu">chown</span> <span class="at">-R</span> 1000:1000 /data</span>
-<span id="cb1-41"><a href="#cb1-41"></a></span>
-<span id="cb1-42"><a href="#cb1-42"></a><span class="ex">reboot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This assumes that you’re using a root user to connect to your server and that there isn’t a non-root user with <code>UID</code> 1000 already. Otherwise, adjust the commands accordingly.</p>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="ex">reboot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To run these commands, you need to login as root. This assumes that there isn’t already a non-root user with <code>UID</code> 1000. Otherwise, you’ll have to adjust the commands accordingly.</p>
 <p>Also, if you don’t have a public SSH key for the “Add SSH key” step, you can generate one with the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your-email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>These commands will:</p>
 <ol type="1">
-<li>Install docker, curl, git, and snapd</li>
+<li>Install docker, curl, and git</li>
 <li>Start and enable the docker service</li>
 <li>Create a non-root user called kamal</li>
-<li>Remove the root login</li>
-<li>Add the kamal user to the docker group</li>
-<li>Create a bridge network for Traefik, SQLite, and redis</li>
-<li>Create a folder for the Let’s Encrypt ACME JSON</li>
+<li>Disable root login</li>
+<li>Add the kamal user to the docker group (this allows the user to run docker without needing to use <code>sudo</code>)</li>
+<li>Create a Docker bridge network for Traefik</li>
+<li>Create a folder for the Let’s Encrypt ACME JSON file</li>
 <li>Make the Let’s Encrypt ACME JSON folder writable by the kamal user</li>
-<li>Create a folder for the SQLite database and redis data</li>
-<li>Make the SQLite database and redis data folders writable by the kamal user</li>
 <li>Restart the server</li>
 </ol>
-<p>If you’re not using SQLite or redis, you can skip the database and redis data folder steps.</p>
 <p>Finally, configure the SSH key in your local <code>.ssh/config</code> file so you can login as the kamal user without using the root account.</p>
 <pre><code>Host kamal
   HostName &lt;YOUR_VPS_IP&gt;
   User kamal
   IdentityFile ~/.ssh/&lt;YOUR_PRIVATE_SSH_KEY&gt;</code></pre>
 </section>
-<section id="create-a-dockerfile-for-your-app" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-dockerfile-for-your-app">Create a Dockerfile for your app</h2>
-<p>Kamal is meant to deploy containerized apps, so you’ll need to have a Dockerfile for your app. I also recommend using an <code>entrypoint.sh</code> script to run the application.</p>
+<section id="create-a-dockerfile-for-your-fastapi-app" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dockerfile-for-your-fastapi-app">Create a Dockerfile for your FastAPI app</h2>
+<p>Kamal works with containerized apps, so you’ll need to have a Dockerfile. I also recommend using an <code>entrypoint.sh</code> script to run the application, because that also allows you to run commands in the container.</p>
 <section id="dockerfile" class="level3">
 <h3 class="anchored" data-anchor-id="dockerfile">Dockerfile</h3>
 <p>Here’s the Dockerfile I’m using for my projects. You can use this as a template and adjust it to your needs.</p>
@@ -365,34 +352,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-27"><a href="#cb4-27"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /app/.venv/ /app/.venv/</span>
 <span id="cb4-28"><a href="#cb4-28"></a></span>
 <span id="cb4-29"><a href="#cb4-29"></a><span class="kw">COPY</span> . /app</span>
-<span id="cb4-30"><a href="#cb4-30"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /data /db</span>
-<span id="cb4-31"><a href="#cb4-31"></a></span>
-<span id="cb4-32"><a href="#cb4-32"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/src/entrypoint.sh</span>
-<span id="cb4-33"><a href="#cb4-33"></a></span>
-<span id="cb4-34"><a href="#cb4-34"></a><span class="kw">FROM</span> runner <span class="kw">AS</span> production</span>
-<span id="cb4-35"><a href="#cb4-35"></a></span>
-<span id="cb4-36"><a href="#cb4-36"></a><span class="kw">EXPOSE</span> 8000</span>
-<span id="cb4-37"><a href="#cb4-37"></a></span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="kw">ARG</span> user=django</span>
-<span id="cb4-39"><a href="#cb4-39"></a><span class="kw">ARG</span> group=django</span>
-<span id="cb4-40"><a href="#cb4-40"></a><span class="kw">ARG</span> uid=1000</span>
-<span id="cb4-41"><a href="#cb4-41"></a><span class="kw">ARG</span> gid=1000</span>
-<span id="cb4-42"><a href="#cb4-42"></a><span class="kw">RUN</span> <span class="ex">groupadd</span> <span class="at">-g</span> <span class="va">${gid}</span> <span class="va">${group}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
-<span id="cb4-43"><a href="#cb4-43"></a>    <span class="ex">useradd</span> <span class="at">-u</span> <span class="va">${uid}</span> <span class="at">-g</span> <span class="va">${group}</span> <span class="at">-s</span> /bin/sh <span class="at">-m</span> <span class="va">${user}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
-<span id="cb4-44"><a href="#cb4-44"></a>    <span class="fu">chown</span> <span class="at">-R</span> <span class="va">${uid}</span>:<span class="va">${gid}</span> /app /data /db</span>
-<span id="cb4-45"><a href="#cb4-45"></a></span>
-<span id="cb4-46"><a href="#cb4-46"></a><span class="kw">USER</span> ${uid}:${gid}</span>
-<span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="kw">WORKDIR</span> /app/src</span>
-<span id="cb4-49"><a href="#cb4-49"></a><span class="kw">CMD</span> [ <span class="st">"/app/src/entrypoint.sh"</span> , <span class="st">"app"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/entrypoint.sh</span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="kw">FROM</span> runner <span class="kw">AS</span> production</span>
+<span id="cb4-34"><a href="#cb4-34"></a></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="kw">EXPOSE</span> 8000</span>
+<span id="cb4-36"><a href="#cb4-36"></a></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="kw">ARG</span> user=kamal</span>
+<span id="cb4-38"><a href="#cb4-38"></a><span class="kw">ARG</span> group=kamal</span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="kw">ARG</span> uid=1000</span>
+<span id="cb4-40"><a href="#cb4-40"></a><span class="kw">ARG</span> gid=1000</span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="kw">RUN</span> <span class="ex">groupadd</span> <span class="at">-g</span> <span class="va">${gid}</span> <span class="va">${group}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>    <span class="ex">useradd</span> <span class="at">-u</span> <span class="va">${uid}</span> <span class="at">-g</span> <span class="va">${group}</span> <span class="at">-s</span> /bin/sh <span class="at">-m</span> <span class="va">${user}</span> <span class="kw">&amp;&amp;</span> <span class="dt">\</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a>    <span class="fu">chown</span> <span class="at">-R</span> <span class="va">${uid}</span>:<span class="va">${gid}</span> /app</span>
+<span id="cb4-44"><a href="#cb4-44"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="kw">USER</span> ${uid}:${gid}</span>
+<span id="cb4-46"><a href="#cb4-46"></a></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="kw">CMD</span> [ <span class="st">"/app/entrypoint.sh"</span> , <span class="st">"app"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This is a multi-stage Dockerfile that:</p>
+<p>This multi-stage Dockerfile does the following:</p>
 <ol type="1">
 <li>Installs poetry and sets up the virtual environment</li>
-<li>Creates the user <code>django</code> with the <code>UID</code> and <code>GID</code> 1000 and runs the application with that user. It’s important that this user has the same <code>UID</code> and <code>GID</code> as the owner of the folders outside the container. Otherwise, you’ll have issues with <a href="https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca">file permissions</a> and the app won’t persist data.</li>
-<li>Exposes port 8000 and runs the application by executing the <code>entrypoint.sh</code> script. By exposing the port, Kamal will automatically detect that is the port the app runs on and <a href="https://github.com/basecamp/kamal/issues/58">will use that to set up the reverse proxy</a>.</li>
+<li>Creates the user <code>kamal</code> with the <code>UID</code> and <code>GID</code> 1000 and runs the application with that user.</li>
+<li>Exposes port 8000 and runs the application by executing the <code>entrypoint.sh</code> script. Kamal automatically detects that is the port the app runs on and <a href="https://github.com/basecamp/kamal/issues/58">will use that to set up the reverse proxy</a>.</li>
 </ol>
-<p>Feel free to adjust this Dockerfile to your needs. If you are not planning on using redis or a SQLite database in your same VPS, you can remove those parts from the Dockerfile.</p>
+<p>Feel free to adjust this Dockerfile to your needs.</p>
 </section>
 <section id="entrypoint.sh-script" class="level3">
 <h3 class="anchored" data-anchor-id="entrypoint.sh-script"><code>entrypoint.sh</code> script</h3>
@@ -408,26 +394,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-4"><a href="#cb5-4"></a></span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"app"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>    <span class="bu">echo</span> <span class="st">"Collecting static files"</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="ex">poetry</span> run python manage.py collectstatic <span class="at">--clear</span> <span class="at">--noinput</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="bu">echo</span> <span class="st">"Running migrations"</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>    <span class="ex">poetry</span> run python manage.py migrate</span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="bu">echo</span> <span class="st">"Running in production mode"</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>    <span class="bu">exec</span> poetry run gunicorn <span class="at">-c</span> gunicorn.conf.py</span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="cf">else</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a>    <span class="bu">exec</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="cf">fi</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="bu">exec</span> poetry run gunicorn <span class="at">-c</span> gunicorn.conf.py</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="cf">else</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="bu">exec</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="cf">fi</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This script just collects static files, runs migrations, and starts the Gunicorn server with the configuration in the <code>gunicorn.conf.py</code> file. You can add or remove commands to the script as needed.</p>
+<p>This script starts the <code>gunicorn</code> server with <code>uvicorn</code> workers and some sensible defaults. It also allows you to pass other arguments to the script, which is useful if you want to run other commands in the container. You can add or remove commands to the script as needed.</p>
 </section>
 </section>
 <section id="configure-an-ecr-registry-in-aws" class="level2">
 <h2 class="anchored" data-anchor-id="configure-an-ecr-registry-in-aws">Configure an ECR registry in AWS</h2>
-<p>Next, you’ll need a place to push and pull your Docker images. I like using AWS, so that’s what I’ll show you how to do. If you prefer other services, take a look at the instructions for other registries in the <a href="https://kamal-deploy.org/docs/configuration/docker-registry/">Kamal documentation</a>.</p>
+<p>Next, you’ll need a place to push and pull your Docker images. I use <a href="https://aws.amazon.com/ecr/">AWS ECR</a>, so that’s what I’ll show you how to do here. Kamal also supports <a href="https://kamal-deploy.org/docs/configuration/docker-registry/">other registries</a>.</p>
 <p>Log in to the <a href="https://aws.amazon.com/console/">AWS Management Console</a> and go to Amazon ECR. Click on <code>Create repository</code> and set a name for your repository.</p>
 <p>Then, create a new IAM user in your AWS account by going to Services &gt; IAM &gt; Users &gt; Add user.</p>
-<p>Instead of using a predefined policy, create a new one with the following JSON and attach it to the user:</p>
+<p>During the process you’ll have to assign a permissions to the user. You can create a new policy with the following content and attach it to the user:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">{</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
@@ -467,97 +447,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-37"><a href="#cb6-37"></a>    <span class="fu">}</span></span>
 <span id="cb6-38"><a href="#cb6-38"></a>  <span class="ot">]</span></span>
 <span id="cb6-39"><a href="#cb6-39"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This policy allows the user to list, get, and manage the ECR repository you created earlier and get the authorization token to push and pull the image. You will need to replace the <code>&lt;REGION&gt;</code>, <code>&lt;ACCOUNT_ID&gt;</code>, and <code>&lt;REPOSITORY_NAME&gt;</code> with the values for your repository.</p>
-<p>Next, select the user you created and go to Security credentials &gt; Access keys &gt; Create access key. Download the CSV file and keep it in a secure location.</p>
-<p>You will use those credentials in your Github Actions pipeline to push and pull the image from the ECR registry.</p>
+<p>This policy enables users to list, access, and manage the ECR repository they have previously created, as well as obtain an authorization token necessary for pushing and pulling images. You must replace <code>&lt;REGION&gt;</code>, <code>&lt;ACCOUNT_ID&gt;</code>, and <code>&lt;REPOSITORY_NAME&gt;</code> with the specific details of your own repository.</p>
+<p>Then, select the user you created and navigate to Security credentials &gt; Access keys &gt; Create access key. Download the generated CSV file and store it in a secure location.</p>
+<p>The GitHub Actions workflow will use these credentials for pushing and pulling images from the ECR registry.</p>
 </section>
 <section id="set-up-kamal-in-your-project" class="level2">
 <h2 class="anchored" data-anchor-id="set-up-kamal-in-your-project">Set up Kamal in your project</h2>
-<p>Open your Django project in your favorite code editor. Create a folder called <code>deploy</code> in the root directory. Then go into the folder and initialize Kamal:</p>
+<p>Open your FastAPI project in your favorite code editor. Create a folder called <code>deploy</code> in the root directory. Then go into the folder and initialize Kamal:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">kamal</span> init</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will create two folders (<code>.kamal/</code> and <code>config/</code>) and an <code>.env</code> file. Inside <code>config/</code>, you’ll find a <code>deploy.yml</code> file. This is where you’ll provide the instructions for Kamal to build and deploy your app.</p>
-<p>You can use the following <code>deploy.yml</code> file as a template for your Django app:</p>
+<p>You can use the following <code>deploy.yml</code> file as a template for your FastAPI app:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>deploy.yml</strong></pre>
 </div>
-<div class="sourceCode" id="cb8" data-filename="deploy.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">service</span><span class="kw">:</span><span class="at"> &lt;YOUR_SERVICE_NAME&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;YOUR_IMAGE_NAME&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="fu">ssh</span><span class="kw">:</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="at">  </span><span class="fu">user</span><span class="kw">:</span><span class="at"> kamal</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="at">  </span><span class="fu">secret</span><span class="kw">:</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="at">    </span><span class="kw">-</span><span class="at"> DJANGO_SECRET_KEY</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="fu">traefik</span><span class="kw">:</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="at">  </span><span class="fu">options</span><span class="kw">:</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="at">    </span><span class="fu">publish</span><span class="kw">:</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"443:443"</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="at">    </span><span class="fu">volume</span><span class="kw">:</span></span>
-<span id="cb8-18"><a href="#cb8-18"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"/letsencrypt/:/letsencrypt/"</span></span>
-<span id="cb8-19"><a href="#cb8-19"></a><span class="at">    </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 500m</span></span>
-<span id="cb8-20"><a href="#cb8-20"></a><span class="at">    </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
-<span id="cb8-21"><a href="#cb8-21"></a><span class="at">  </span><span class="fu">args</span><span class="kw">:</span></span>
-<span id="cb8-22"><a href="#cb8-22"></a><span class="at">    </span><span class="fu">entryPoints.web.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":80"</span></span>
-<span id="cb8-23"><a href="#cb8-23"></a><span class="at">    </span><span class="fu">entryPoints.websecure.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":443"</span></span>
-<span id="cb8-24"><a href="#cb8-24"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.to</span><span class="kw">:</span><span class="at"> websecure</span></span>
-<span id="cb8-25"><a href="#cb8-25"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.scheme</span><span class="kw">:</span><span class="at"> https</span></span>
-<span id="cb8-26"><a href="#cb8-26"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entrypoint.permanent</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb8-27"><a href="#cb8-27"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.email</span><span class="kw">:</span><span class="at"> </span><span class="st">"&lt;YOUR_EMAIL&gt;"</span></span>
-<span id="cb8-28"><a href="#cb8-28"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.storage</span><span class="kw">:</span><span class="at"> </span><span class="st">"/letsencrypt/acme.json"</span></span>
-<span id="cb8-29"><a href="#cb8-29"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb8-30"><a href="#cb8-30"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint</span><span class="kw">:</span><span class="at"> web</span></span>
-<span id="cb8-31"><a href="#cb8-31"></a></span>
-<span id="cb8-32"><a href="#cb8-32"></a><span class="fu">servers</span><span class="kw">:</span></span>
-<span id="cb8-33"><a href="#cb8-33"></a><span class="at">  </span><span class="fu">web</span><span class="kw">:</span></span>
-<span id="cb8-34"><a href="#cb8-34"></a><span class="at">    </span><span class="fu">hosts</span><span class="kw">:</span></span>
-<span id="cb8-35"><a href="#cb8-35"></a><span class="at">      </span><span class="kw">-</span><span class="at"> &lt;YOUR_VPS_IP&gt;</span></span>
-<span id="cb8-36"><a href="#cb8-36"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
-<span id="cb8-37"><a href="#cb8-37"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8000</span></span>
-<span id="cb8-38"><a href="#cb8-38"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 5s</span></span>
-<span id="cb8-39"><a href="#cb8-39"></a><span class="at">    </span><span class="fu">options</span><span class="kw">:</span></span>
-<span id="cb8-40"><a href="#cb8-40"></a><span class="at">      </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
-<span id="cb8-41"><a href="#cb8-41"></a><span class="at">    </span><span class="fu">labels</span><span class="kw">:</span></span>
-<span id="cb8-42"><a href="#cb8-42"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb8-43"><a href="#cb8-43"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.entrypoints</span><span class="kw">:</span><span class="at"> websecure</span></span>
-<span id="cb8-44"><a href="#cb8-44"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.rule</span><span class="kw">:</span><span class="at"> Host(`&lt;YOUR_DOMAIN&gt;`)</span></span>
-<span id="cb8-45"><a href="#cb8-45"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls.certresolver</span><span class="kw">:</span><span class="at"> letsencrypt</span></span>
-<span id="cb8-46"><a href="#cb8-46"></a></span>
-<span id="cb8-47"><a href="#cb8-47"></a><span class="fu">accessories</span><span class="kw">:</span></span>
-<span id="cb8-48"><a href="#cb8-48"></a><span class="at">  </span><span class="fu">redis</span><span class="kw">:</span></span>
-<span id="cb8-49"><a href="#cb8-49"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> redis:7.0</span></span>
-<span id="cb8-50"><a href="#cb8-50"></a><span class="at">    </span><span class="fu">roles</span><span class="kw">:</span></span>
-<span id="cb8-51"><a href="#cb8-51"></a><span class="at">      </span><span class="kw">-</span><span class="at"> web</span></span>
-<span id="cb8-52"><a href="#cb8-52"></a><span class="at">    </span><span class="fu">cmd</span><span class="kw">:</span><span class="at"> --maxmemory 200m --maxmemory-policy allkeys-lru</span></span>
-<span id="cb8-53"><a href="#cb8-53"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb8-54"><a href="#cb8-54"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/redis/data:/data/redis</span></span>
-<span id="cb8-55"><a href="#cb8-55"></a><span class="at">    </span><span class="fu">options</span><span class="kw">:</span></span>
-<span id="cb8-56"><a href="#cb8-56"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 250m</span></span>
-<span id="cb8-57"><a href="#cb8-57"></a><span class="at">      </span><span class="fu">network</span><span class="kw">:</span><span class="at"> kamal_network</span></span>
-<span id="cb8-58"><a href="#cb8-58"></a></span>
-<span id="cb8-59"><a href="#cb8-59"></a><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb8-60"><a href="#cb8-60"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"/db/:/app/db/"</span></span>
-<span id="cb8-61"><a href="#cb8-61"></a></span>
-<span id="cb8-62"><a href="#cb8-62"></a><span class="fu">registry</span><span class="kw">:</span></span>
-<span id="cb8-63"><a href="#cb8-63"></a><span class="at">  </span><span class="fu">server</span><span class="kw">:</span><span class="at"> &lt;YOUR_AWS_ECR_URL&gt;</span><span class="co"> # e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com</span></span>
-<span id="cb8-64"><a href="#cb8-64"></a><span class="at">  </span><span class="fu">username</span><span class="kw">:</span><span class="at"> AWS</span></span>
-<span id="cb8-65"><a href="#cb8-65"></a><span class="at">  </span><span class="fu">password</span><span class="kw">:</span></span>
-<span id="cb8-66"><a href="#cb8-66"></a><span class="at">    </span><span class="kw">-</span><span class="at"> KAMAL_REGISTRY_PASSWORD</span></span>
-<span id="cb8-67"><a href="#cb8-67"></a></span>
-<span id="cb8-68"><a href="#cb8-68"></a><span class="fu">builder</span><span class="kw">:</span></span>
-<span id="cb8-69"><a href="#cb8-69"></a><span class="at">  </span><span class="fu">dockerfile</span><span class="kw">:</span><span class="at"> </span><span class="st">"../Dockerfile"</span></span>
-<span id="cb8-70"><a href="#cb8-70"></a><span class="at">  </span><span class="fu">context</span><span class="kw">:</span><span class="at"> </span><span class="st">"../"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8" data-filename="deploy.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">service</span><span class="kw">:</span><span class="at"> example</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> example</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">ssh</span><span class="kw">:</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="at">  </span><span class="fu">user</span><span class="kw">:</span><span class="at"> kamal</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="at">  </span><span class="fu">secret</span><span class="kw">:</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="at">    </span><span class="kw">-</span><span class="at"> FASTAPI_ENV</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="fu">traefik</span><span class="kw">:</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="at">  </span><span class="fu">options</span><span class="kw">:</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="at">    </span><span class="fu">publish</span><span class="kw">:</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"443:443"</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="at">    </span><span class="fu">volume</span><span class="kw">:</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"/letsencrypt/:/letsencrypt/"</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="at">    </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> 500m</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="at">    </span><span class="fu">network</span><span class="kw">:</span><span class="at"> private_network</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="at">  </span><span class="fu">args</span><span class="kw">:</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="at">    </span><span class="fu">entryPoints.web.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":80"</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="at">    </span><span class="fu">entryPoints.websecure.address</span><span class="kw">:</span><span class="at"> </span><span class="st">":443"</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.to</span><span class="kw">:</span><span class="at"> websecure</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entryPoint.scheme</span><span class="kw">:</span><span class="at"> https</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="at">    </span><span class="fu">entryPoints.web.http.redirections.entrypoint.permanent</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.email</span><span class="kw">:</span><span class="at"> &lt;YOUR_EMAIL&gt;"</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.storage</span><span class="kw">:</span><span class="at"> </span><span class="st">"/letsencrypt/acme.json"</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="at">    </span><span class="fu">certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint</span><span class="kw">:</span><span class="at"> web</span></span>
+<span id="cb8-30"><a href="#cb8-30"></a></span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="fu">servers</span><span class="kw">:</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="at">  </span><span class="fu">web</span><span class="kw">:</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="at">    </span><span class="fu">hosts</span><span class="kw">:</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fl">128.140.0.209</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8000</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="at">    </span><span class="fu">options</span><span class="kw">:</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a><span class="at">      </span><span class="fu">network</span><span class="kw">:</span><span class="at"> private_network</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a><span class="at">    </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.entrypoints</span><span class="kw">:</span><span class="at"> websecure</span></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.rule</span><span class="kw">:</span><span class="at"> Host(`&lt;YOUR_DOMAIN&gt;`)</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="at">      </span><span class="fu">traefik.http.routers.app.tls.certresolver</span><span class="kw">:</span><span class="at"> letsencrypt</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="fu">registry</span><span class="kw">:</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="at">  </span><span class="fu">server</span><span class="kw">:</span><span class="at"> &lt;account_id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com</span></span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="at">  </span><span class="fu">username</span><span class="kw">:</span><span class="at"> AWS</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a><span class="at">  </span><span class="fu">password</span><span class="kw">:</span></span>
+<span id="cb8-50"><a href="#cb8-50"></a><span class="at">    </span><span class="kw">-</span><span class="at"> KAMAL_REGISTRY_PASSWORD</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a></span>
+<span id="cb8-52"><a href="#cb8-52"></a><span class="fu">builder</span><span class="kw">:</span></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="at">  </span><span class="fu">dockerfile</span><span class="kw">:</span><span class="at"> </span><span class="st">"../Dockerfile"</span></span>
+<span id="cb8-54"><a href="#cb8-54"></a><span class="at">  </span><span class="fu">context</span><span class="kw">:</span><span class="at"> </span><span class="st">"../"</span></span>
+<span id="cb8-55"><a href="#cb8-55"></a><span class="at">  </span><span class="fu">multiarch</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb8-56"><a href="#cb8-56"></a><span class="at">  </span><span class="fu">cache</span><span class="kw">:</span></span>
+<span id="cb8-57"><a href="#cb8-57"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> gha</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let’s Encrypt), a Redis database, and a volume to persist the SQLite database. It will also do a healthcheck on <code>/up</code> on port <code>8000</code>.</p>
-<p>Remember to replace the placeholders with your own values.</p>
+<p>This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let’s Encrypt). Remember to replace the placeholders with your own values. It will also do a healthcheck on <code>/up</code> on port 8000.</p>
 <section id="test-the-configuration-locally" class="level3">
 <h3 class="anchored" data-anchor-id="test-the-configuration-locally">Test the configuration locally</h3>
-<p>To test it locally, first, you’ll have to define the required environment variables in the <code>.env</code> file, such as the Django secret key, OpenAI API key, and any other secrets you need.</p>
-<p>You’ll also need to get a temporary password for the ECR registry. You can get this password by running the following command:</p>
+<p>To test it locally, first, you must define the required environment variables in <code>.env</code>, such as keys for AI services, email providers, etc.</p>
+<p>You’ll also need to get a temporary password to authenticate into the ECR registry. You can get this password by running the following command from your terminal:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">aws</span> ecr get-login-password <span class="at">--region</span> <span class="op">&lt;</span>YOUR_REGION<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should copy the output of this command and paste it in the <code>KAMAL_REGISTRY_PASSWORD</code> field in the <code>.env</code> file.</p>
 <p>Then, run the following command to deploy your application to your VPS:</p>
@@ -565,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-2"><a href="#cb10-2"></a><span class="ex">kamal</span> deploy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The first command will push the environment variables to the VPS. The second command will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
 <p>After a few minutes, your app should be live at <code>https://&lt;YOUR_DOMAIN&gt;</code>.</p>
-<p>If you see any errors, there are two things you can do:</p>
+<p>If you see any errors, you can:</p>
 <ol type="1">
 <li>Run <code>kamal app logs</code> to see the logs of the app.</li>
 <li>Open a terminal in the container by running <code>kamal app exec -it bash</code>.</li>
@@ -575,9 +541,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="automate-the-deployment-with-github-actions" class="level2">
 <h2 class="anchored" data-anchor-id="automate-the-deployment-with-github-actions">Automate the deployment with Github Actions</h2>
-<p>Now that you have a working deployment process in your local environment, you can automate the deployment with Github Actions.</p>
+<p>Now that you have a working deployment process in your local environment, you can set up your CI/CD pipeline using GitHub Actions.</p>
 <p>Create a new file in the <code>.github/workflows</code> folder called <code>deploy.yml</code> and add the following code:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Deploy webapp to VPS</span></span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Deploy FastAPI app to VPS</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="fu">concurrency</span><span class="kw">:</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="at">  </span><span class="fu">group</span><span class="kw">:</span><span class="at"> ${{ github.workflow }}-${{ github.ref }}</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="at">  </span><span class="fu">cancel-in-progress</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
@@ -628,17 +594,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-49"><a href="#cb11-49"></a>          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
 <span id="cb11-50"><a href="#cb11-50"></a>          touch .env</span>
 <span id="cb11-51"><a href="#cb11-51"></a>          echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_&lt;YOUR_ACCOUNT_ID&gt;_dkr_ecr_&lt;YOUR_REGION&gt;_amazonaws_com }}" &gt;&gt; .env</span>
-<span id="cb11-52"><a href="#cb11-52"></a>          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" &gt;&gt; .env</span>
-<span id="cb11-53"><a href="#cb11-53"></a>          # if you have other secrets, add them here</span>
-<span id="cb11-54"><a href="#cb11-54"></a>          cat .env</span>
-<span id="cb11-55"><a href="#cb11-55"></a></span>
-<span id="cb11-56"><a href="#cb11-56"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Kamal Deploy</span></span>
-<span id="cb11-57"><a href="#cb11-57"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> kamal-deploy</span></span>
-<span id="cb11-58"><a href="#cb11-58"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb11-59"><a href="#cb11-59"></a>          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
-<span id="cb11-60"><a href="#cb11-60"></a>          kamal lock release</span>
-<span id="cb11-61"><a href="#cb11-61"></a>          kamal env push</span>
-<span id="cb11-62"><a href="#cb11-62"></a>          kamal deploy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-52"><a href="#cb11-52"></a>          # if you have other secrets, add them here</span>
+<span id="cb11-53"><a href="#cb11-53"></a>          cat .env</span>
+<span id="cb11-54"><a href="#cb11-54"></a></span>
+<span id="cb11-55"><a href="#cb11-55"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Kamal Deploy</span></span>
+<span id="cb11-56"><a href="#cb11-56"></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> kamal-deploy</span></span>
+<span id="cb11-57"><a href="#cb11-57"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb11-58"><a href="#cb11-58"></a>          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
+<span id="cb11-59"><a href="#cb11-59"></a>          kamal lock release</span>
+<span id="cb11-60"><a href="#cb11-60"></a>          kamal env push</span>
+<span id="cb11-61"><a href="#cb11-61"></a>          kamal deploy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This workflow will:</p>
 <ol type="1">
 <li>Checkout the code</li>
@@ -656,7 +621,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>VPS_SSH_PRIVATE_KEY</code>: The private key to connect to your VPS</li>
 <li><code>AWS_ACCESS_KEY_ID_ECR</code>: The access key ID for the AWS ECR registry</li>
 <li><code>AWS_SECRET_ACCESS_KEY_ECR</code>: The secret access key for the AWS ECR registry</li>
-<li><code>DJANGO_SECRET_KEY</code>: The Django secret key</li>
 </ul>
 <p>Finally, to speed up the deployment, add these options to the <code>builder</code> section of the <code>deploy.yml</code> file:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">builder</span><span class="kw">:</span></span>
@@ -669,30 +633,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>You now have a fully automated deployment pipeline for your Django app. A push to the <code>main</code> branch will trigger the workflow, which will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
+<p>You now have a fully automated deployment pipeline for your FastAPI app. A push to the <code>main</code> branch will trigger the workflow, that will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
 <p>Break free from the tyranny of manual deployments and expensive cloud services. Sleep like a baby and let Kamal handle your deployments.</p>
 <p>If you have any questions or feedback, please feel free to leave a comment below.</p>
 
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>crying and sh*tting my diapers?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
   author = {Castillo, Dylan},
-  title = {Deploying a {Django} App with {Kamal,} {AWS} {ECR,} and
+  title = {Deploying a {FastAPI} App with {Kamal,} {AWS} {ECR,} and
     {Github} {Actions}},
-  date = {2024-09-15},
-  url = {https://dylancastillo.co/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html},
+  date = {2024-09-21},
+  url = {https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2024. <span>“Deploying a Django App with Kamal, AWS
-ECR, and Github Actions.”</span> September 15, 2024. <a href="https://dylancastillo.co/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html">https://dylancastillo.co/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html</a>.
+Castillo, Dylan. 2024. <span>“Deploying a FastAPI App with Kamal, AWS
+ECR, and Github Actions.”</span> September 21, 2024. <a href="https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html">https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
