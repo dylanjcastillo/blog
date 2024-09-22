@@ -1173,7 +1173,7 @@
     "href": "posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html",
     "title": "Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions",
     "section": "",
-    "text": "Kamal is a simpler alternative to Kubernetes that you can use to deploy containerized apps to a VPS. I’ve used to deploy many apps based on FastAPI, Django, or Express.\nOnce you get the hang of it, it’ll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the main branch.\nIn this tutorial, I’ll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions."
+    "text": "These days whenever I use Kamal to deploy my FastAPI (or Django) projects. Kamal is a simpler alternative to Kubernetes that you can use to deploy containerized apps to a VPS.\nOnce you get the hang of it, it’ll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the main branch.\nIn this tutorial, I’ll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions."
   },
   {
     "objectID": "posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html#prerequisites",
