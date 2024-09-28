@@ -24,7 +24,7 @@ comments:
     issue-term: pathname
 ---
 
-Kamal is a simpler alternative to [Kubernetes](https://kubernetes.io/) that you can use to deploy containerized apps to a [VPS](https://en.wikipedia.org/wiki/Virtual_private_server). I've used to deploy many apps based on FastAPI, Django, or Express.
+These days I use Kamal to deploy my FastAPI (or Django) projects. Kamal is a simpler alternative to [Kubernetes](https://kubernetes.io/) that you can use to deploy containerized apps to a [VPS](https://en.wikipedia.org/wiki/Virtual_private_server).
 
 Once you get the hang of it, it'll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the _main_ branch.
 
