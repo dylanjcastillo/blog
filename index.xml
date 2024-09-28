@@ -30,7 +30,7 @@
 <li>Have a <a href="https://fastapi.tiangolo.com/">FastAPI</a> app ready to deploy.</li>
 <li>Have an <a href="https://aws.amazon.com/">AWS</a> account and its <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
 <li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
-<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>.</li>
+<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>. You’ll need to install version <code>1.9.0</code> for this tutorial.</li>
 <li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
 <li>Have a VPS with Ubuntu ready to host your app.</li>
 </ul>
@@ -1533,7 +1533,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;"> gem install kamal</span></span>
+font-style: inherit;"> gem install kamal -v 1.9.0</span></span>
 <span id="cb11-28"></span>
 <span id="cb11-29"><span class="at" style="color: #657422;
 background-color: null;
@@ -1901,7 +1901,7 @@ ECR, and Github Actions.”</span> September 21, 2024. <a href="https://dylancas
 <ul>
 <li>Have an <a href="https://aws.amazon.com/">AWS</a> account and its <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
 <li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
-<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>.</li>
+<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>. You’ll need to install version <code>1.9.0</code> for this tutorial.</li>
 <li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
 <li>Have a VPS with Ubuntu ready to host your app.</li>
 </ul>
@@ -3550,7 +3550,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;"> gem install kamal</span></span>
+font-style: inherit;"> gem install kamal -v 1.9.0</span></span>
 <span id="cb11-28"></span>
 <span id="cb11-29"><span class="at" style="color: #657422;
 background-color: null;

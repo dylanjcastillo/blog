@@ -227,7 +227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 22, 2024</p>
+      <p class="date-modified">September 28, 2024</p>
     </div>
   </div>
     
@@ -248,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Have a <a href="https://fastapi.tiangolo.com/">FastAPI</a> app ready to deploy.</li>
 <li>Have an <a href="https://aws.amazon.com/">AWS</a> account and its <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
 <li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
-<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>.</li>
+<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>. You’ll need to install version <code>1.9.0</code> for this tutorial.</li>
 <li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
 <li>Have a VPS with Ubuntu ready to host your app.</li>
 </ul>
@@ -569,7 +569,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-24"><a href="#cb11-24"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> ruby/setup-ruby@v1</span></span>
 <span id="cb11-25"><a href="#cb11-25"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb11-26"><a href="#cb11-26"></a><span class="at">          </span><span class="fu">ruby-version</span><span class="kw">:</span><span class="at"> </span><span class="fl">3.2.2</span></span>
-<span id="cb11-27"><a href="#cb11-27"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> gem install kamal</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> gem install kamal -v 1.9.0</span></span>
 <span id="cb11-28"><a href="#cb11-28"></a></span>
 <span id="cb11-29"><a href="#cb11-29"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Configure AWS credentials</span></span>
 <span id="cb11-30"><a href="#cb11-30"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> aws-actions/configure-aws-credentials@v4</span></span>
