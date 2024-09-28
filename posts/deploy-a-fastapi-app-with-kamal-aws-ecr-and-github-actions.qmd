@@ -37,7 +37,7 @@ To make the most of this tutorial, you should:
 - Have a [FastAPI](https://fastapi.tiangolo.com/) app ready to deploy.
 - Have an [AWS](https://aws.amazon.com/) account and its [CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed.
 - Be comfortable with [Docker](https://www.docker.com/).
-- Have a basic understanding of [Kamal](https://kamal-deploy.org/).
+- Have a basic understanding of [Kamal](https://kamal-deploy.org/). You'll need to install version `1.9.0` for this tutorial.
 - Have a basic understanding of [Github Actions](https://docs.github.com/en/actions).
 - Have a VPS with Ubuntu ready to host your app.
 
@@ -399,7 +399,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
-      - run: gem install kamal
+      - run: gem install kamal -v 1.9.0
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
