@@ -56,10 +56,10 @@ font-style: inherit;">"</span></span>
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseFormatA(BaseModel):</span>
-<span id="cb1-8">    answer: <span class="bu" style="color: null;
+<span id="cb1-8">    reasoning: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb1-9">    reasoning: <span class="bu" style="color: null;
+<span id="cb1-9">    answer: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
 <span id="cb1-10"></span>
@@ -67,10 +67,10 @@ font-style: inherit;">str</span></span>
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseFormatB(BaseModel):</span>
-<span id="cb1-12">    reasoning: <span class="bu" style="color: null;
+<span id="cb1-12">    answer: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb1-13">    answer: <span class="bu" style="color: null;
+<span id="cb1-13">    reasoning: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span></code></pre></div>
 <p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
