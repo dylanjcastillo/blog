@@ -74,7 +74,7 @@ font-style: inherit;">str</span></span>
 background-color: null;
 font-style: inherit;">str</span></span></code></pre></div>
 <p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
-<p>No? Well, you’re in luck! Let’s run some experiments to find out.</p>
+<p>Not sure? Well, you’re in luck! Let’s run some experiments to find out.</p>
 <section id="set-up-the-environment" class="level2">
 <h2 class="anchored" data-anchor-id="set-up-the-environment">Set up the environment</h2>
 <p>First, start by importing the necessary libraries:</p>
