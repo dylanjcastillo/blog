@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2024-11-09">
+<meta name="description" content="How the order of fields in your response model can impact the quality of the responses you get from an LLM.">
+
+<title>Structured outputs: don’t put the cart before the horse – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/dylanjcastillo"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#set-up-the-environment" id="toc-set-up-the-environment" class="nav-link active" data-scroll-target="#set-up-the-environment">Set up the environment</a></li>
+  <li><a href="#running-the-experiment" id="toc-running-the-experiment" class="nav-link" data-scroll-target="#running-the-experiment">Running the experiment</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Structured outputs: don’t put the cart before the horse</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">openai</div>
+    <div class="quarto-category">pydantic</div>
+    <div class="quarto-category">python</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 9, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">November 9, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Not long ago, we couldn’t reliably ask LLMs to provide a response using a specific format. Building tools that used LLM outputs was painful.</p>
+<p>Eventually, first through <a href="https://platform.openai.com/docs/guides/function-calling">function calling</a> and then through <a href="https://platform.openai.com/docs/guides/structured-outputs">structured outputs</a>, we could instruct LLMs to respond in specific formats<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. So, extracting information from LLM outputs in a reliable way stopped being a problem.</p>
+<p>But then I started noticing that structured outputs were not always the <a href="https://arxiv.org/abs/2408.02442">silver bullet</a> people think they are. Defining response formats adds a sort of safety net, and people often forget that underneath, they’re still dealing with an LLM. Setting up a Pydantic model for your API calls is not the same as setting up a Pydantic model for your LLM outputs.</p>
+<p>For example, take the following question from the <a href="https://huggingface.co/datasets/livebench/reasoning">LiveBench</a> dataset:</p>
+<blockquote class="blockquote">
+<p>Suppose I have a physical, solid, equilateral triangle, and I make two cuts. The two cuts are from two parallel lines, and both cuts pass through the interior of the triangle. How many pieces are there after the cuts? Think step by step, and then put your answer in <strong>bold</strong> as a single integer (for example, <strong>0</strong>). If you don’t know, guess.</p>
+</blockquote>
+<p>Let’s say I write a simple system prompt and two Pydantic models to format the responses:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>system_prompt <span class="op">=</span> (</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    answer: <span class="bu">str</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    reasoning: <span class="bu">str</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    reasoning: <span class="bu">str</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>    answer: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
+<p>No? Well, you’re in luck! Let’s run some experiments to find out.</p>
+<section id="set-up-the-environment" class="level2">
+<h2 class="anchored" data-anchor-id="set-up-the-environment">Set up the environment</h2>
+<p>First, start by importing the necessary libraries:</p>
+<div id="cell-5" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> json</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> asyncio <span class="im">import</span> Semaphore</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> langsmith <span class="im">import</span> traceable</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="im">from</span> openai <span class="im">import</span> AsyncOpenAI</span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb2-15"><a href="#cb2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-17"><a href="#cb2-17"></a></span>
+<span id="cb2-18"><a href="#cb2-18"></a>load_dotenv()</span>
+<span id="cb2-19"><a href="#cb2-19"></a></span>
+<span id="cb2-20"><a href="#cb2-20"></a>client <span class="op">=</span> wrap_openai(AsyncOpenAI())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/57df6d66-505d-4bae-a54b-91d6954e5344/runs">runs</a>.</p>
+<p>To run the experiment, you need some data. I ended up using a subset of the <a href="https://huggingface.co/datasets/livebench/reasoning">reasoning questions</a> from LiveBench. You can download it and save it in the <code>data</code> directory.</p>
+<p>Then, you can read it into a pandas <code>DataFrame</code>:</p>
+<div id="cell-7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>data_dir <span class="op">=</span> Path().absolute().parent <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"live_bench"</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>reasoning_dir <span class="op">=</span> data_dir <span class="op">/</span> <span class="st">"reasoning"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>live_bench_json <span class="op">=</span> reasoning_dir <span class="op">/</span> <span class="st">"question.jsonl"</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>df <span class="op">=</span> (</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    pd.read_json(live_bench_json, lines<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    .query(<span class="st">"livebench_release_date == '2024-07-26'"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    .assign(</span>
+<span id="cb3-9"><a href="#cb3-9"></a>        turns_str<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>], </span>
+<span id="cb3-10"><a href="#cb3-10"></a>        expects_integer<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>].<span class="bu">str</span>.contains(<span class="st">"integer"</span>, case<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    )</span>
+<span id="cb3-12"><a href="#cb3-12"></a>    .reset_index()</span>
+<span id="cb3-13"><a href="#cb3-13"></a>    .rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"data_point_id"</span>})</span>
+<span id="cb3-14"><a href="#cb3-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, define the system prompt and the Pydantic models you’ll use to format the responses:</p>
+<div id="cell-9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>system_prompt_template <span class="op">=</span> (</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    reasoning: <span class="bu">str</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    answer: <span class="bu">str</span> </span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    answer: <span class="bu">str</span> </span>
+<span id="cb4-13"><a href="#cb4-13"></a>    reasoning: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the system prompt you send to the LLM, you’ll replace <code>{response_format}</code> with the JSON schema of the response format you want to use.</p>
+<p>Then, let’s define a few helper functions to run the experiment:</p>
+<div id="cell-11" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> validate_response(response_json, response_format):</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    response_dict <span class="op">=</span> json.loads(response_json)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    expected_keys <span class="op">=</span> <span class="bu">list</span>(response_format.model_json_schema()[<span class="st">"properties"</span>].keys())</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    actual_keys <span class="op">=</span> <span class="bu">list</span>(response_dict.keys())</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="cf">if</span> actual_keys <span class="op">!=</span> expected_keys:</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Response keys </span><span class="sc">{</span>actual_keys<span class="sc">}</span><span class="ss"> do not match expected keys </span><span class="sc">{</span>expected_keys<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> response_format.model_validate_json(response_json)</span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="at">@traceable</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="cf">async</span> <span class="kw">def</span> process_row(</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    row: pd.Series, </span>
+<span id="cb5-12"><a href="#cb5-12"></a>    response_format: ResponseFormatA <span class="op">|</span> ResponseFormatB, </span>
+<span id="cb5-13"><a href="#cb5-13"></a>    semaphore: Semaphore</span>
+<span id="cb5-14"><a href="#cb5-14"></a>) <span class="op">-&gt;</span> ResponseFormatA <span class="op">|</span> ResponseFormatB:</span>
+<span id="cb5-15"><a href="#cb5-15"></a>    system_prompt <span class="op">=</span> system_prompt_template.<span class="bu">format</span>(</span>
+<span id="cb5-16"><a href="#cb5-16"></a>        response_format<span class="op">=</span>response_format.model_json_schema()</span>
+<span id="cb5-17"><a href="#cb5-17"></a>    )</span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="cf">async</span> <span class="cf">with</span> semaphore:</span>
+<span id="cb5-19"><a href="#cb5-19"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb5-20"><a href="#cb5-20"></a>            <span class="cf">try</span>:</span>
+<span id="cb5-21"><a href="#cb5-21"></a>                response <span class="op">=</span> <span class="cf">await</span> client.chat.completions.create(</span>
+<span id="cb5-22"><a href="#cb5-22"></a>                    model<span class="op">=</span><span class="st">"gpt-4o"</span>, </span>
+<span id="cb5-23"><a href="#cb5-23"></a>                    messages<span class="op">=</span>[</span>
+<span id="cb5-24"><a href="#cb5-24"></a>                        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: system_prompt},</span>
+<span id="cb5-25"><a href="#cb5-25"></a>                        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="ss">f"Question:</span><span class="ch">\n</span><span class="sc">{</span>row<span class="sc">.</span>turns_str<span class="sc">}</span><span class="ss">"</span>}</span>
+<span id="cb5-26"><a href="#cb5-26"></a>                    ],</span>
+<span id="cb5-27"><a href="#cb5-27"></a>                    response_format<span class="op">=</span>{<span class="st">"type"</span>: <span class="st">"json_object"</span>}</span>
+<span id="cb5-28"><a href="#cb5-28"></a>                )</span>
+<span id="cb5-29"><a href="#cb5-29"></a>                response_json <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb5-30"><a href="#cb5-30"></a>                <span class="cf">return</span> validate_response(response_json, response_format)</span>
+<span id="cb5-31"><a href="#cb5-31"></a>            <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb5-32"><a href="#cb5-32"></a>                <span class="cf">pass</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Failed to generate a valid response"</span>)</span>
+<span id="cb5-34"><a href="#cb5-34"></a></span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="at">@traceable</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a><span class="cf">async</span> <span class="kw">def</span> main(df, response_format, concurrency: <span class="bu">int</span> <span class="op">=</span> <span class="dv">30</span>):</span>
+<span id="cb5-37"><a href="#cb5-37"></a>    semaphore <span class="op">=</span> Semaphore(concurrency)</span>
+<span id="cb5-38"><a href="#cb5-38"></a>    tasks <span class="op">=</span> [process_row(row, response_format, semaphore) <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows()]</span>
+<span id="cb5-39"><a href="#cb5-39"></a>    responses <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb5-40"><a href="#cb5-40"></a></span>
+<span id="cb5-41"><a href="#cb5-41"></a>    <span class="cf">return</span> responses</span>
+<span id="cb5-42"><a href="#cb5-42"></a></span>
+<span id="cb5-43"><a href="#cb5-43"></a><span class="kw">def</span> extract_answer(answer):</span>
+<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).strip(<span class="st">"**"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this code, <code>validate_response</code> is used to check if the response is valid (i.e.&nbsp;it matches the JSON schema in the same order). If it is, it returns the response. Otherwise, it raises an exception.</p>
+<p><code>extract_answer</code> is used to remove ** from the answer if it exists in the response. Some of the questions in the LiveBench dataset included instructions to put the answer in bold, which is why we need to remove it.</p>
+<p><code>process_row</code> is used to process a single row of the DataFrame. It sends the system prompt to the LLM and validates the response. It includes a simple retry mechanism in case the validation fails. Each run is tracked in LangSmith.</p>
+<p>Finally, <code>main</code> is used to run the experiment. It runs the <code>process_row</code> function concurrently for each row in the DataFrame.</p>
+</section>
+<section id="running-the-experiment" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-experiment">Running the experiment</h2>
+<p>Now, you can run the experiment using the two response formats:</p>
+<div id="cell-14" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>n_runs <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>df_runs <span class="op">=</span> []</span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="cf">for</span> run <span class="kw">in</span> <span class="bu">range</span>(n_runs):</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    <span class="bu">print</span>(<span class="ss">f"Run </span><span class="sc">{</span>run <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n_runs<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    df_copy <span class="op">=</span> df.copy()</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8"></a>    responses_A <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatA))</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    df_copy[<span class="st">"raw_answer_A"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_A]</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    df_copy[<span class="st">"response_A"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_A"</span>].<span class="bu">apply</span>(extract_answer)</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    df_copy[<span class="st">"is_correct_A"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_A"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb6-12"><a href="#cb6-12"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13"></a>    responses_B <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatB))</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    df_copy[<span class="st">"raw_answer_B"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_B]</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    df_copy[<span class="st">"response_B"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_B"</span>].<span class="bu">apply</span>(extract_answer)</span>
+<span id="cb6-16"><a href="#cb6-16"></a>    df_copy[<span class="st">"is_correct_B"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_B"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb6-17"><a href="#cb6-17"></a>    </span>
+<span id="cb6-18"><a href="#cb6-18"></a>    df_copy[<span class="st">"run"</span>] <span class="op">=</span> run</span>
+<span id="cb6-19"><a href="#cb6-19"></a>    df_run <span class="op">=</span> df_copy[[<span class="st">"data_point_id"</span>, <span class="st">"ground_truth"</span>, <span class="st">"is_correct_A"</span>, <span class="st">"is_correct_B"</span>, <span class="st">"run"</span>]]</span>
+<span id="cb6-20"><a href="#cb6-20"></a>    </span>
+<span id="cb6-21"><a href="#cb6-21"></a>    df_runs.append(df_run)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We run the experiment multiple times with the same inputs to account for the randomness in the LLM’s responses. Ideally, we should run it more than three times, but I’m poor. So, we’ll just do it 3 times.</p>
+<div id="cell-16" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>df_all_runs <span class="op">=</span> pd.concat(df_runs, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>n_bootstraps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>bootstrap_accuracies_A <span class="op">=</span> []</span>
+<span id="cb7-5"><a href="#cb7-5"></a>bootstrap_accuracies_B <span class="op">=</span> []</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>data_point_ids <span class="op">=</span> df_all_runs[<span class="st">'data_point_id'</span>].unique()</span>
+<span id="cb7-8"><a href="#cb7-8"></a>n_data_points <span class="op">=</span> <span class="bu">len</span>(data_point_ids)</span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a>grouped_A <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_A'</span>]</span>
+<span id="cb7-11"><a href="#cb7-11"></a>grouped_B <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_B'</span>]</span>
+<span id="cb7-12"><a href="#cb7-12"></a></span>
+<span id="cb7-13"><a href="#cb7-13"></a>df_correct_counts_A <span class="op">=</span> grouped_A.<span class="bu">sum</span>()</span>
+<span id="cb7-14"><a href="#cb7-14"></a>df_total_counts_A <span class="op">=</span> grouped_A.count()</span>
+<span id="cb7-15"><a href="#cb7-15"></a>df_correct_counts_B <span class="op">=</span> grouped_B.<span class="bu">sum</span>()</span>
+<span id="cb7-16"><a href="#cb7-16"></a>df_total_counts_B <span class="op">=</span> grouped_B.count()</span>
+<span id="cb7-17"><a href="#cb7-17"></a></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_bootstraps):</span>
+<span id="cb7-19"><a href="#cb7-19"></a>    sampled_ids <span class="op">=</span> np.random.choice(data_point_ids, size<span class="op">=</span>n_data_points, replace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-20"><a href="#cb7-20"></a>    sampled_counts <span class="op">=</span> pd.Series(sampled_ids).value_counts()</span>
+<span id="cb7-21"><a href="#cb7-21"></a>    counts_index <span class="op">=</span> sampled_counts.index</span>
+<span id="cb7-22"><a href="#cb7-22"></a>    </span>
+<span id="cb7-23"><a href="#cb7-23"></a>    total_correct_counts_A <span class="op">=</span> (df_correct_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-24"><a href="#cb7-24"></a>    total_observations_A <span class="op">=</span> (df_total_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-25"><a href="#cb7-25"></a>    mean_accuracy_A <span class="op">=</span> total_correct_counts_A <span class="op">/</span> total_observations_A</span>
+<span id="cb7-26"><a href="#cb7-26"></a>    bootstrap_accuracies_A.append(mean_accuracy_A)</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    </span>
+<span id="cb7-28"><a href="#cb7-28"></a>    total_correct_counts_B <span class="op">=</span> (df_correct_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-29"><a href="#cb7-29"></a>    total_observations_B <span class="op">=</span> (df_total_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-30"><a href="#cb7-30"></a>    mean_accuracy_B <span class="op">=</span> total_correct_counts_B <span class="op">/</span> total_observations_B</span>
+<span id="cb7-31"><a href="#cb7-31"></a>    bootstrap_accuracies_B.append(mean_accuracy_B)</span>
+<span id="cb7-32"><a href="#cb7-32"></a></span>
+<span id="cb7-33"><a href="#cb7-33"></a>ci_A <span class="op">=</span> np.percentile(bootstrap_accuracies_A, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
+<span id="cb7-34"><a href="#cb7-34"></a>ci_B <span class="op">=</span> np.percentile(bootstrap_accuracies_B, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
+<span id="cb7-35"><a href="#cb7-35"></a></span>
+<span id="cb7-36"><a href="#cb7-36"></a>mean_accuracy_A <span class="op">=</span> df_all_runs[<span class="st">'is_correct_A'</span>].mean()</span>
+<span id="cb7-37"><a href="#cb7-37"></a>mean_accuracy_B <span class="op">=</span> df_all_runs[<span class="st">'is_correct_B'</span>].mean()</span>
+<span id="cb7-38"><a href="#cb7-38"></a></span>
+<span id="cb7-39"><a href="#cb7-39"></a><span class="bu">print</span>(</span>
+<span id="cb7-40"><a href="#cb7-40"></a>    <span class="ss">f"Response format A - Mean: </span><span class="sc">{</span>mean_accuracy_A <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_A[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_A[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
+<span id="cb7-41"><a href="#cb7-41"></a>)</span>
+<span id="cb7-42"><a href="#cb7-42"></a><span class="bu">print</span>(</span>
+<span id="cb7-43"><a href="#cb7-43"></a>    <span class="ss">f"Response format B - Mean: </span><span class="sc">{</span>mean_accuracy_B <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_B[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_B[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
+<span id="cb7-44"><a href="#cb7-44"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, you can build bootstrap confidence intervals for the accuracies of the two response formats. Given that I’m asking the LLM the same question multiple times, I went with an approach called <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5965657/">cluster bootstrapping</a>, which accounts for the fact that the data points are not independent.</p>
+<p>It should take a few minutes to run. Once it’s done, you should see output like the following:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Response Format</th>
+<th>Mean (95% CI)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>46.67% (34.67% – 58.67%)</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>30.67% (20.67% – 41.33%)</td>
+</tr>
+</tbody>
+</table>
+<p>These results suggest that the order of the fields in the JSON schema does matter.</p>
+<p>But if you’re still unsure, you can perform a t-test to see if the two response formats are statistically different:</p>
+<div id="cell-18" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>accuracies_A <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_A'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>accuracies_B <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_B'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>mean_accuracies_A <span class="op">=</span> accuracies_A.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>mean_accuracies_B <span class="op">=</span> accuracies_B.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>t_stat, p_value <span class="op">=</span> stats.ttest_rel(mean_accuracies_A, mean_accuracies_B, alternative<span class="op">=</span><span class="st">'greater'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I got a p-value &lt;0.001, meaning I can reject the null hypothesis that the two response formats are the same.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Based on the results of the experiment, we can safely say that <code>ResponseFormatA</code> is better than <code>ResponseFormatB</code>.</p>
+<p>But why?</p>
+<p>In this case, it’s simple.</p>
+<p>These response formats are meant to help the LLM reason step by step to arrive at the answer. This is known as <a href="https://en.wikipedia.org/wiki/Chain_of_thought_reasoning">chain of thought reasoning</a>. However, for it to work, we need the LLM to first provide us with the reasoning of how it arrived at the answer and then the answer.</p>
+<p>In <code>ResponseFormatB</code>, we defined our Pydantic model with the answer first and the reasoning second. This means that the LLM will give us the answer first, and then adjust the reasoning to match that answer. <code>ResponseFormatA</code> does the opposite, which is why it performs better.</p>
+<p>So, to summarize, when using structured outputs, don’t put the cart before the horse.</p>
+<p>That’s all! Let me know if you have any questions in the comments.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m referring to OpenAI models here. Open weight models allowed this using <a href="https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md">grammars</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
+  author = {Castillo, Dylan},
+  title = {Structured Outputs: Don’t Put the Cart Before the Horse},
+  date = {2024-11-09},
+  url = {https://dylancastillo.co/posts/llm-pydantic-order-matters.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2024. <span>“Structured Outputs: Don’t Put the Cart
+Before the Horse.”</span> November 9, 2024. <a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">https://dylancastillo.co/posts/llm-pydantic-order-matters.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/llm-pydantic-order-matters.html",
       "/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html",
       "/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html",
       "/posts/classify-images-with-gemini-flash-1.5.html",

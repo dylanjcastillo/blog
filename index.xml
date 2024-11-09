@@ -10,7 +10,1035 @@
 <atom:link href="https://dylancastillo.co/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 21 Sep 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 09 Nov 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Structured outputs: don’t put the cart before the horse</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/llm-pydantic-order-matters.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Not long ago, we couldn’t reliably ask LLMs to provide a response using a specific format. Building tools that used LLM outputs was painful.</p>
+<p>Eventually, first through <a href="https://platform.openai.com/docs/guides/function-calling">function calling</a> and then through <a href="https://platform.openai.com/docs/guides/structured-outputs">structured outputs</a>, we could instruct LLMs to respond in specific formats<sup>1</sup>. So, extracting information from LLM outputs in a reliable way stopped being a problem.</p>
+<p>But then I started noticing that structured outputs were not always the <a href="https://arxiv.org/abs/2408.02442">silver bullet</a> people think they are. Defining response formats adds a sort of safety net, and people often forget that underneath, they’re still dealing with an LLM. Setting up a Pydantic model for your API calls is not the same as setting up a Pydantic model for your LLM outputs.</p>
+<p>For example, take the following question from the <a href="https://huggingface.co/datasets/livebench/reasoning">LiveBench</a> dataset:</p>
+<blockquote class="blockquote">
+<p>Suppose I have a physical, solid, equilateral triangle, and I make two cuts. The two cuts are from two parallel lines, and both cuts pass through the interior of the triangle. How many pieces are there after the cuts? Think step by step, and then put your answer in <strong>bold</strong> as a single integer (for example, <strong>0</strong>). If you don’t know, guess.</p>
+</blockquote>
+<p>Let’s say I write a simple system prompt and two Pydantic models to format the responses:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1">system_prompt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb1-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb1-3">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">You will use this JSON schema for your response:"</span></span>
+<span id="cb1-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{response_format}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb1-5">)</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb1-8">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb1-9">    reasoning: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb1-10"></span>
+<span id="cb1-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb1-12">    reasoning: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb1-13">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span></code></pre></div>
+<p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
+<p>No? Well, you’re in luck! Let’s run some experiments to find out.</p>
+<section id="set-up-the-environment" class="level2">
+<h2 class="anchored" data-anchor-id="set-up-the-environment">Set up the environment</h2>
+<p>First, start by importing the necessary libraries:</p>
+<div id="cell-5" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> asyncio</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> json</span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> asyncio <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Semaphore</span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Path</span>
+<span id="cb2-6"></span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb2-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-10"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> traceable</span>
+<span id="cb2-11"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith.wrappers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> wrap_openai</span>
+<span id="cb2-12"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> AsyncOpenAI</span>
+<span id="cb2-13"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel</span>
+<span id="cb2-14"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> scipy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> stats</span>
+<span id="cb2-15"></span>
+<span id="cb2-16">np.random.seed(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>)</span>
+<span id="cb2-17"></span>
+<span id="cb2-18">load_dotenv()</span>
+<span id="cb2-19"></span>
+<span id="cb2-20">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> wrap_openai(AsyncOpenAI())</span></code></pre></div>
+</div>
+<p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/57df6d66-505d-4bae-a54b-91d6954e5344/runs">runs</a>.</p>
+<p>To run the experiment, you need some data. I ended up using a subset of the <a href="https://huggingface.co/datasets/livebench/reasoning">reasoning questions</a> from LiveBench. You can download it and save it in the <code>data</code> directory.</p>
+<p>Then, you can read it into a pandas <code>DataFrame</code>:</p>
+<div id="cell-7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">data_dir <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Path().absolute().parent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"live_bench"</span></span>
+<span id="cb3-2">reasoning_dir <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> data_dir <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reasoning"</span></span>
+<span id="cb3-3">live_bench_json <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> reasoning_dir <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question.jsonl"</span></span>
+<span id="cb3-4"></span>
+<span id="cb3-5">df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb3-6">    pd.read_json(live_bench_json, lines<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb3-7">    .query(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"livebench_release_date == '2024-07-26'"</span>)</span>
+<span id="cb3-8">    .assign(</span>
+<span id="cb3-9">        turns_str<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">lambda</span> x: x.turns.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>], </span>
+<span id="cb3-10">        expects_integer<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">lambda</span> x: x.turns.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>.contains(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"integer"</span>, case<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb3-11">    )</span>
+<span id="cb3-12">    .reset_index()</span>
+<span id="cb3-13">    .rename(columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"index"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data_point_id"</span>})</span>
+<span id="cb3-14">)</span></code></pre></div>
+</div>
+<p>Next, define the system prompt and the Pydantic models you’ll use to format the responses:</p>
+<div id="cell-9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">system_prompt_template <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb4-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb4-3">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">You will use this JSON schema for your response:"</span></span>
+<span id="cb4-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{response_format}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb4-5">)</span>
+<span id="cb4-6"></span>
+<span id="cb4-7"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb4-8">    reasoning: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb4-9">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> </span>
+<span id="cb4-10"></span>
+<span id="cb4-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb4-12">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> </span>
+<span id="cb4-13">    reasoning: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span></code></pre></div>
+</div>
+<p>In the system prompt you send to the LLM, you’ll replace <code>{response_format}</code> with the JSON schema of the response format you want to use.</p>
+<p>Then, let’s define a few helper functions to run the experiment:</p>
+<div id="cell-11" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> validate_response(response_json, response_format):</span>
+<span id="cb5-2">    response_dict <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.loads(response_json)</span>
+<span id="cb5-3">    expected_keys <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(response_format.model_json_schema()[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"properties"</span>].keys())</span>
+<span id="cb5-4">    actual_keys <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(response_dict.keys())</span>
+<span id="cb5-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> actual_keys <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> expected_keys:</span>
+<span id="cb5-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">raise</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ValueError</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Response keys </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>actual_keys<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> do not match expected keys </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>expected_keys<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response_format.model_validate_json(response_json)</span>
+<span id="cb5-8"></span>
+<span id="cb5-9"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb5-10"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> process_row(</span>
+<span id="cb5-11">    row: pd.Series, </span>
+<span id="cb5-12">    response_format: ResponseFormatA <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|</span> ResponseFormatB, </span>
+<span id="cb5-13">    semaphore: Semaphore</span>
+<span id="cb5-14">) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> ResponseFormatA <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|</span> ResponseFormatB:</span>
+<span id="cb5-15">    system_prompt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> system_prompt_template.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(</span>
+<span id="cb5-16">        response_format<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>response_format.model_json_schema()</span>
+<span id="cb5-17">    )</span>
+<span id="cb5-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">async</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> semaphore:</span>
+<span id="cb5-19">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>):</span>
+<span id="cb5-20">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb5-21">                response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">await</span> client.chat.completions.create(</span>
+<span id="cb5-22">                    model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4o"</span>, </span>
+<span id="cb5-23">                    messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[</span>
+<span id="cb5-24">                        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: system_prompt},</span>
+<span id="cb5-25">                        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Question:</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>row<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>turns_str<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>}</span>
+<span id="cb5-26">                    ],</span>
+<span id="cb5-27">                    response_format<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"json_object"</span>}</span>
+<span id="cb5-28">                )</span>
+<span id="cb5-29">                response_json <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].message.content</span>
+<span id="cb5-30">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> validate_response(response_json, response_format)</span>
+<span id="cb5-31">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span>:</span>
+<span id="cb5-32">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">pass</span></span>
+<span id="cb5-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">raise</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Failed to generate a valid response"</span>)</span>
+<span id="cb5-34"></span>
+<span id="cb5-35"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb5-36"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> main(df, response_format, concurrency: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>):</span>
+<span id="cb5-37">    semaphore <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Semaphore(concurrency)</span>
+<span id="cb5-38">    tasks <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [process_row(row, response_format, semaphore) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _, row <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> df.iterrows()]</span>
+<span id="cb5-39">    responses <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">await</span> asyncio.gather(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>tasks)</span>
+<span id="cb5-40"></span>
+<span id="cb5-41">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> responses</span>
+<span id="cb5-42"></span>
+<span id="cb5-43"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> extract_answer(answer):</span>
+<span id="cb5-44">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(answer).strip(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"**"</span>)</span></code></pre></div>
+</div>
+<p>In this code, <code>validate_response</code> is used to check if the response is valid (i.e.&nbsp;it matches the JSON schema in the same order). If it is, it returns the response. Otherwise, it raises an exception.</p>
+<p><code>extract_answer</code> is used to remove ** from the answer if it exists in the response. Some of the questions in the LiveBench dataset included instructions to put the answer in bold, which is why we need to remove it.</p>
+<p><code>process_row</code> is used to process a single row of the DataFrame. It sends the system prompt to the LLM and validates the response. It includes a simple retry mechanism in case the validation fails. Each run is tracked in LangSmith.</p>
+<p>Finally, <code>main</code> is used to run the experiment. It runs the <code>process_row</code> function concurrently for each row in the DataFrame.</p>
+</section>
+<section id="running-the-experiment" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-experiment">Running the experiment</h2>
+<p>Now, you can run the experiment using the two response formats:</p>
+<div id="cell-14" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">n_runs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb6-2">df_runs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb6-3"></span>
+<span id="cb6-4"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> run <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(n_runs):</span>
+<span id="cb6-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Run </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>run <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>n_runs<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb6-6">    df_copy <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df.copy()</span>
+<span id="cb6-7">    </span>
+<span id="cb6-8">    responses_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> asyncio.run(main(df_copy, ResponseFormatA))</span>
+<span id="cb6-9">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"raw_answer_A"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [r.answer <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> r <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> responses_A]</span>
+<span id="cb6-10">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"response_A"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"raw_answer_A"</span>].<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>(extract_answer)</span>
+<span id="cb6-11">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"is_correct_A"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"response_A"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ground_truth"</span>]).astype(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>)</span>
+<span id="cb6-12">    </span>
+<span id="cb6-13">    responses_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> asyncio.run(main(df_copy, ResponseFormatB))</span>
+<span id="cb6-14">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"raw_answer_B"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [r.answer <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> r <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> responses_B]</span>
+<span id="cb6-15">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"response_B"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"raw_answer_B"</span>].<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>(extract_answer)</span>
+<span id="cb6-16">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"is_correct_B"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"response_B"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ground_truth"</span>]).astype(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>)</span>
+<span id="cb6-17">    </span>
+<span id="cb6-18">    df_copy[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"run"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run</span>
+<span id="cb6-19">    df_run <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_copy[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data_point_id"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ground_truth"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"is_correct_A"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"is_correct_B"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"run"</span>]]</span>
+<span id="cb6-20">    </span>
+<span id="cb6-21">    df_runs.append(df_run)</span></code></pre></div>
+</div>
+<p>We run the experiment multiple times with the same inputs to account for the randomness in the LLM’s responses. Ideally, we should run it more than three times, but I’m poor. So, we’ll just do it 3 times.</p>
+<div id="cell-16" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">df_all_runs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.concat(df_runs, ignore_index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb7-2"></span>
+<span id="cb7-3">n_bootstraps <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span></span>
+<span id="cb7-4">bootstrap_accuracies_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb7-5">bootstrap_accuracies_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb7-6"></span>
+<span id="cb7-7">data_point_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'data_point_id'</span>].unique()</span>
+<span id="cb7-8">n_data_points <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(data_point_ids)</span>
+<span id="cb7-9"></span>
+<span id="cb7-10">grouped_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs.groupby(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'data_point_id'</span>)[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_A'</span>]</span>
+<span id="cb7-11">grouped_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs.groupby(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'data_point_id'</span>)[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_B'</span>]</span>
+<span id="cb7-12"></span>
+<span id="cb7-13">df_correct_counts_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> grouped_A.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-14">df_total_counts_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> grouped_A.count()</span>
+<span id="cb7-15">df_correct_counts_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> grouped_B.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-16">df_total_counts_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> grouped_B.count()</span>
+<span id="cb7-17"></span>
+<span id="cb7-18"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(n_bootstraps):</span>
+<span id="cb7-19">    sampled_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.random.choice(data_point_ids, size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>n_data_points, replace<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb7-20">    sampled_counts <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.Series(sampled_ids).value_counts()</span>
+<span id="cb7-21">    counts_index <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sampled_counts.index</span>
+<span id="cb7-22">    </span>
+<span id="cb7-23">    total_correct_counts_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_correct_counts_A.loc[counts_index] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> sampled_counts).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-24">    total_observations_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_total_counts_A.loc[counts_index] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> sampled_counts).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-25">    mean_accuracy_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> total_correct_counts_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> total_observations_A</span>
+<span id="cb7-26">    bootstrap_accuracies_A.append(mean_accuracy_A)</span>
+<span id="cb7-27">    </span>
+<span id="cb7-28">    total_correct_counts_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_correct_counts_B.loc[counts_index] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> sampled_counts).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-29">    total_observations_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (df_total_counts_B.loc[counts_index] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> sampled_counts).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span>
+<span id="cb7-30">    mean_accuracy_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> total_correct_counts_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> total_observations_B</span>
+<span id="cb7-31">    bootstrap_accuracies_B.append(mean_accuracy_B)</span>
+<span id="cb7-32"></span>
+<span id="cb7-33">ci_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.percentile(bootstrap_accuracies_A, [<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.5</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">97.5</span>])</span>
+<span id="cb7-34">ci_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.percentile(bootstrap_accuracies_B, [<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.5</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">97.5</span>])</span>
+<span id="cb7-35"></span>
+<span id="cb7-36">mean_accuracy_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_A'</span>].mean()</span>
+<span id="cb7-37">mean_accuracy_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_B'</span>].mean()</span>
+<span id="cb7-38"></span>
+<span id="cb7-39"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(</span>
+<span id="cb7-40">    <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Response format A - Mean: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>mean_accuracy_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">% CI: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ci_A[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">% - </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ci_A[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">%"</span></span>
+<span id="cb7-41">)</span>
+<span id="cb7-42"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(</span>
+<span id="cb7-43">    <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Response format B - Mean: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>mean_accuracy_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">% CI: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ci_B[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">% - </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ci_B[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">%"</span></span>
+<span id="cb7-44">)</span></code></pre></div>
+</div>
+<p>Then, you can build bootstrap confidence intervals for the accuracies of the two response formats. Given that I’m asking the LLM the same question multiple times, I went with an approach called <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5965657/">cluster bootstrapping</a>, which accounts for the fact that the data points are not independent.</p>
+<p>It should take a few minutes to run. Once it’s done, you should see output like the following:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Response Format</th>
+<th>Mean (95% CI)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>46.67% (34.67% – 58.67%)</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>30.67% (20.67% – 41.33%)</td>
+</tr>
+</tbody>
+</table>
+<p>These results suggest that the order of the fields in the JSON schema does matter.</p>
+<p>But if you’re still unsure, you can perform a t-test to see if the two response formats are statistically different:</p>
+<div id="cell-18" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">accuracies_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs.pivot(index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'data_point_id'</span>, columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'run'</span>, values<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_A'</span>)</span>
+<span id="cb8-2">accuracies_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_all_runs.pivot(index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'data_point_id'</span>, columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'run'</span>, values<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'is_correct_B'</span>)</span>
+<span id="cb8-3"></span>
+<span id="cb8-4">mean_accuracies_A <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> accuracies_A.mean(axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb8-5">mean_accuracies_B <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> accuracies_B.mean(axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb8-6"></span>
+<span id="cb8-7">t_stat, p_value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> stats.ttest_rel(mean_accuracies_A, mean_accuracies_B, alternative<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'greater'</span>)</span>
+<span id="cb8-8"></span>
+<span id="cb8-9"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"t-statistic: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>t_stat<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">, p-value: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>p_value<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+</div>
+<p>I got a p-value &lt;0.001, meaning I can reject the null hypothesis that the two response formats are the same.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Based on the results of the experiment, we can safely say that <code>ResponseFormatA</code> is better than <code>ResponseFormatB</code>.</p>
+<p>But why?</p>
+<p>In this case, it’s simple.</p>
+<p>These response formats are meant to help the LLM reason step by step to arrive at the answer. This is known as <a href="https://en.wikipedia.org/wiki/Chain_of_thought_reasoning">chain of thought reasoning</a>. However, for it to work, we need the LLM to first provide us with the reasoning of how it arrived at the answer and then the answer.</p>
+<p>In <code>ResponseFormatB</code>, we defined our Pydantic model with the answer first and the reasoning second. This means that the LLM will give us the answer first, and then adjust the reasoning to match that answer. <code>ResponseFormatA</code> does the opposite, which is why it performs better.</p>
+<p>So, to summarize, when using structured outputs, don’t put the cart before the horse.</p>
+<p>That’s all! Let me know if you have any questions in the comments.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m referring to OpenAI models here. Open weight models allowed this using <a href="https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md">grammars</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
+  author = {Castillo, Dylan},
+  title = {Structured Outputs: Don’t Put the Cart Before the Horse},
+  date = {2024-11-09},
+  url = {https://dylancastillo.co/posts/llm-pydantic-order-matters.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2024. <span>“Structured Outputs: Don’t Put the Cart
+Before the Horse.”</span> November 9, 2024. <a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">https://dylancastillo.co/posts/llm-pydantic-order-matters.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>openai</category>
+  <category>pydantic</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/llm-pydantic-order-matters.html</guid>
+  <pubDate>Sat, 09 Nov 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -14482,564 +15510,6 @@ Castillo, Dylan. 2022. <span>“PyScript 101.”</span> September 21, 2022.
   <category>python</category>
   <guid>https://dylancastillo.co/posts/python-pyscript-101.html</guid>
   <pubDate>Wed, 21 Sep 2022 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>How to Use OpenSearch in Python</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/opensearch-python.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://www.opensearch.org/">OpenSearch</a> is a free and open-source search platform created by Amazon that makes it easy to search and analyze data. Developers use it for search in apps, log analytics, data observability, data ingestion, and more.</p>
-<p>OpenSearch began with a lot of controversy. It is a fork of Elasticsearch and Kibana that was created in January 2021 due to a change in the license of <a href="https://elastic.co/">Elastic’s</a> products. Elastic changed its policy because it believed <a href="https://www.elastic.co/what-is/opensearch">AWS was not using its products fairly</a>. Both companies faced <a href="https://news.ycombinator.com/item?id=25776657">significant</a> <a href="https://news.ycombinator.com/item?id=25833781">backlash</a> as a result of this event.</p>
-<p>Following this conflict, AWS stopped providing clusters with the most recent version of Elasticsearch. The most recent version available is 7.10. Since then, OpenSearch has been the default option (currently on version 1.3).</p>
-<p>Given the prevalence of AWS in many industries, it’s likely that you’ll end up using OpenSearch at some point. If you work in data, you should familiarize yourself with this technology.</p>
-<p>Many data scientists struggle to set up a local environment or understand how to interact with OpenSearch in Python, and there aren’t many resources available to help. This is why I created this tutorial.</p>
-<p>You’ll learn how to:</p>
-<ul>
-<li>Set up an OpenSearch cluster on your machine using docker</li>
-<li>Create, interact, and delete an index</li>
-<li>Store and search your data</li>
-</ul>
-<p>Let’s get to it!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>Before you begin, a few things must be in place. Follow these steps:</p>
-<ol type="1">
-<li>Install Docker.</li>
-<li>Download the <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">data</a>.</li>
-<li>Create a virtual environment and install the required packages. You can create one with <code>venv</code> by running these commands in the terminal:</li>
-</ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv</span>
-<span id="cb1-2"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span>
-<span id="cb1-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> pip install pandas==1.5.3 notebook==6.5.3 opensearch-py==2.2.0</span></code></pre></div>
-<p>Let’s move on to the next section.</p>
-</section>
-<section id="run-a-local-opensearch-cluster" class="level2">
-<h2 class="anchored" data-anchor-id="run-a-local-opensearch-cluster">Run a Local OpenSearch Cluster</h2>
-<p>Using Docker is the simplest method for running OpenSearch locally. Run the following command in a terminal to launch a single-node cluster:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">docker</span> run <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--rm</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> 9200:9200 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> 9600:9600 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-e</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"discovery.type=single-node"</span> opensearchproject/opensearch:2.6.0</span></code></pre></div>
-<p>You will see a lot of text on your terminal after running this command. But it’s okay, don’t worry!</p>
-<p>Let me describe what the command mentioned above does:</p>
-<ul>
-<li><code>**docker run**</code><strong>:</strong> It’s the command you use to run an image inside -a container.</li>
-<li><code>**--rm**</code><strong>:</strong> This flag instructs Docker to clear the container’s contents and file system after it shuts down.</li>
-<li><code>**-p 9200:9200 -p 9600:9600**</code> <strong>:</strong> This instructs Docker to open specific ports on the container’s network interface.</li>
-<li><code>**-e "discovery.type=single-node"**</code><strong>:</strong> This instructs Docker to set up a cluster using a single node.</li>
-</ul>
-</section>
-<section id="connect-to-your-cluster" class="level2">
-<h2 class="anchored" data-anchor-id="connect-to-your-cluster">Connect to Your Cluster</h2>
-<p>Create a new Jupyter Notebook, and run the following code, to connect to your newly created OpenSearch cluster.</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> opensearchpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenSearch</span>
-<span id="cb3-2"></span>
-<span id="cb3-3">client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenSearch(</span>
-<span id="cb3-4">    hosts <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [{<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"host"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"localhost"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"port"</span>: <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9200</span>}],</span>
-<span id="cb3-5">    http_auth <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>),</span>
-<span id="cb3-6">    use_ssl <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb3-7">    verify_certs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb3-8">    ssl_assert_hostname <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb3-9">    ssl_show_warn <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb3-10">)</span>
-<span id="cb3-11">client.info()</span></code></pre></div>
-<p>This will connect to your local cluster. You specify the following parameters:</p>
-<ul>
-<li><code>**hosts = [{"host": "localhost", "port": 9200}]**</code><strong>:</strong> this tells OpenSearch to connect to the cluster running in your local machine in port 9200.</li>
-<li><code>**http_auth = ("admin", "admin")**</code><strong>:</strong> this provides the username and password to use when connecting to the cluster. You’ll use <code>admin</code> for both as this is only for local development.</li>
-<li><strong><code>use_ssl=True</code>:</strong> this tells the client to use an SSL connection. OpenSearch’s docker images use SSL connections by default, so <a href="https://github.com/opensearch-project/opensearch-py/issues/193">you’ll need to set this to <code>True</code></a> even if you’re using self signed certificates.</li>
-<li><code>**verify_certs**</code>, <code>**ssl_assert_hostname**</code>, and <code>**ssl_show_warn**</code>: The first two security parameters that you’ll set to false, as this is a cluster running locally only used for development purposes. The last parameter prevents the client from raising a warning when initiating the connection with the cluster.</li>
-</ul>
-<p>If everything went well, your output should look like this:</p>
-<p><img src="https://dylancastillo.co/posts/images/opensearch-python/image-4.png" class="img-fluid">Next, you’ll read the data you’ll use in the tutorial.</p>
-</section>
-<section id="read-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="read-the-data">Read the Data</h2>
-<p>You’ll use pandas to read the dataset and get a sample of 5,000 observations. Feel free to use <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">dataset</a> if you want to, but not that if you do, it’ll take longer to index the data.</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> pd</span>
-<span id="cb4-2"></span>
-<span id="cb4-3">df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (</span>
-<span id="cb4-4">    pd.read_csv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wiki_movie_plots_deduped.csv"</span>)</span>
-<span id="cb4-5">    .dropna()</span>
-<span id="cb4-6">    .sample(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5000</span>, random_state<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>)</span>
-<span id="cb4-7">    .reset_index(drop<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span>
-<span id="cb4-8">)</span></code></pre></div>
-<p>Next, let’s create an index to store your data.</p>
-</section>
-<section id="create-an-index" class="level2">
-<h2 class="anchored" data-anchor-id="create-an-index">Create an Index</h2>
-<p>OpenSearch stores and represents your data using a data structure known as an <strong>inverted index</strong>. This data structure identifies the documents in which each unique word appears.</p>
-<p>This inverted index is why OpenSearch can form very quick full-text searches.</p>
-<p>To index documents, you must first create an index. Here’s how you do it:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">body <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb5-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mappings"</span>:{</span>
-<span id="cb5-3">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"properties"</span>: {</span>
-<span id="cb5-4">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"english"</span>},</span>
-<span id="cb5-5">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ethnicity"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"standard"</span>},</span>
-<span id="cb5-6">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"director"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"standard"</span>},</span>
-<span id="cb5-7">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cast"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"standard"</span>},</span>
-<span id="cb5-8">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"genre"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"standard"</span>},</span>
-<span id="cb5-9">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"plot"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"analyzer"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"english"</span>},</span>
-<span id="cb5-10">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"year"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"integer"</span>},</span>
-<span id="cb5-11">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wiki_page"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"keyword"</span>}</span>
-<span id="cb5-12">        }</span>
-<span id="cb5-13">    }</span>
-<span id="cb5-14">}</span>
-<span id="cb5-15">response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> client.indices.create(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>, body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>body)</span></code></pre></div>
-<p>This code will create a new index called <code>movies</code> using the cluster you set up earlier.</p>
-<p><strong>Lines 1 to 14</strong> define the request’s body, specifying configuration settings used when the index is created. The <a href="https://opensearch.org/docs/1.3/opensearch/mappings/">mapping</a>, which tells the index how to store the documents, is the only specified setting in this case.</p>
-<p>There are two ways to map data fields in OpenSearch: <strong>dynamic mapping</strong> and <strong>explicit mapping</strong>. With dynamic mapping, the engine automatically detects the data type for each field. With explicit mapping, you manually define the data type for each field. In this example, you’ll use the latter.</p>
-<p>Now you’ll start adding data to your index.</p>
-</section>
-<section id="add-data-to-your-index" class="level2">
-<h2 class="anchored" data-anchor-id="add-data-to-your-index">Add Data to Your Index</h2>
-<p>There are two ways to add data to an index: <a href="https://opensearch.org/docs/latest/opensearch/index-data/"><code>client.index()</code></a> and <a href="https://opensearch.org/docs/latest/opensearch/rest-api/document-apis/bulk/"><code>bulk()</code></a>. <code>client.index()</code> lets you add one item at a time while <code>bulk()</code> lets you add multiple items simultaneously.</p>
-<p>You can use any of the two methods to add data to your index:</p>
-<section id="using-client.index" class="level3">
-<h3 class="anchored" data-anchor-id="using-client.index">Using <code>client.index()</code></h3>
-<p>Here’s how you use <code>client.index()</code> to index your data:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i, row <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> df.iterrows():</span>
-<span id="cb6-2">    body <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb6-3">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Title"</span>],</span>
-<span id="cb6-4">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ethnicity"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Origin/Ethnicity"</span>],</span>
-<span id="cb6-5">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"director"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Director"</span>],</span>
-<span id="cb6-6">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cast"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Cast"</span>],</span>
-<span id="cb6-7">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"genre"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Genre"</span>],</span>
-<span id="cb6-8">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"plot"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Plot"</span>],</span>
-<span id="cb6-9">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"year"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Release Year"</span>],</span>
-<span id="cb6-10">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wiki_page"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Wiki Page"</span>]</span>
-<span id="cb6-11">    }</span>
-<span id="cb6-12">    client.index(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>, <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>i, body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>body)</span></code></pre></div>
-<p>This code iterates through the rows of the dataset you read earlier and indexes the relevant information from each row using <code>client.index()</code>. You use three parameters of that method:</p>
-<ul>
-<li><code>index="movies"</code>: this tells OpenSearch which index to use to store the data, as you can have multiple indexes in a cluster.</li>
-<li><code>id=i</code>: this is the document’s identifier when you add it to the index. In this case, you set it to be the row number.</li>
-<li><code>document=doc</code>: this tells the engine what information it should store.</li>
-</ul>
-</section>
-<section id="using-bulk" class="level3">
-<h3 class="anchored" data-anchor-id="using-bulk">Using <code>bulk()</code></h3>
-<p>Here’s how you use <code>bulk()</code> to store your data:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> opensearchpy.helpers <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> bulk</span>
-<span id="cb7-2"></span>
-<span id="cb7-3">bulk_data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb7-4"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i,row <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> df.iterrows():</span>
-<span id="cb7-5">    bulk_data.append(</span>
-<span id="cb7-6">        {</span>
-<span id="cb7-7">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_index"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>,</span>
-<span id="cb7-8">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_id"</span>: i,</span>
-<span id="cb7-9">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_source"</span>: {</span>
-<span id="cb7-10">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Title"</span>],</span>
-<span id="cb7-11">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ethnicity"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Origin/Ethnicity"</span>],</span>
-<span id="cb7-12">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"director"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Director"</span>],</span>
-<span id="cb7-13">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cast"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Cast"</span>],</span>
-<span id="cb7-14">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"genre"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Genre"</span>],</span>
-<span id="cb7-15">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"plot"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Plot"</span>],</span>
-<span id="cb7-16">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"year"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Release Year"</span>],</span>
-<span id="cb7-17">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wiki_page"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Wiki Page"</span>],</span>
-<span id="cb7-18">            }</span>
-<span id="cb7-19">        }</span>
-<span id="cb7-20">    )</span>
-<span id="cb7-21">bulk(client, bulk_data)</span></code></pre></div>
-<p><code>bulk()</code> requires the same information as <code>client.index()</code>: the index’s name, the document’s ID, and the document itself. But instead of adding each item one by one, you must create a list of dictionaries with all the documents you want to add to the index. Then, you pass this information and the client to <code>bulk()</code>.</p>
-<p>After you add the data, you can make sure it worked by counting the number of items in the index:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">client.indices.refresh(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>)</span>
-<span id="cb8-2">client.cat.count(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>, <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">format</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"json"</span>)</span></code></pre></div>
-<p>Your output should look like this:</p>
-<p><img src="https://dylancastillo.co/posts/images/opensearch-python/image-5.png" class="img-fluid"></p>
-</section>
-</section>
-<section id="search-your-data" class="level2">
-<h2 class="anchored" data-anchor-id="search-your-data">Search Your Data</h2>
-<p>Finally, you’ll want to start running searches using your index. OpenSearch comes with a <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">query domain-specific Language</a> (DSL) that lets you tailor your searches to your needs.</p>
-<p>Here’s an example of a search that looks for movies starring Jack Nicholson but whose director isn’t Tim Burton:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">resp <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> client.search(</span>
-<span id="cb9-2">    index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>,</span>
-<span id="cb9-3">    body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>{</span>
-<span id="cb9-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span>: {</span>
-<span id="cb9-5">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"bool"</span>: {</span>
-<span id="cb9-6">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"must"</span>: {</span>
-<span id="cb9-7">                    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"match_phrase"</span>: {</span>
-<span id="cb9-8">                        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cast"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jack nicholson"</span>,</span>
-<span id="cb9-9">                    }</span>
-<span id="cb9-10">                },</span>
-<span id="cb9-11">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"filter"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"bool"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"must_not"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"match_phrase"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"director"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"tim burton"</span>}}}},</span>
-<span id="cb9-12">            },</span>
-<span id="cb9-13">        },</span>
-<span id="cb9-14">    }</span>
-<span id="cb9-15">)</span>
-<span id="cb9-16">resp</span></code></pre></div>
-<p>When you run this code, you should get a very long response that looks something like this:</p>
-<p><img src="https://dylancastillo.co/posts/images/opensearch-python/image-6.png" class="img-fluid"></p>
-<p>There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
-</section>
-<section id="delete-documents-from-the-index" class="level2">
-<h2 class="anchored" data-anchor-id="delete-documents-from-the-index">Delete Documents From the Index</h2>
-<p>You can use the following code to remove documents from the index:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">client.delete(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"movies"</span>, <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2500"</span>)</span></code></pre></div>
-<p>The code above will delete the document with ID 2500 from the index <em>movies</em>.</p>
-</section>
-<section id="delete-an-index" class="level2">
-<h2 class="anchored" data-anchor-id="delete-an-index">Delete an Index</h2>
-<p>Finally, if, for whatever reason, you’d like to delete an index (and all of its documents), here’s how you do it:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">client.indices.delete(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'movies'</span>)</span></code></pre></div>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This tutorial taught you the basics of OpenSearch and how to use it in Python. OpenSearch is now the default offering in AWS, so if you’re a data professional, you should familiarize yourself with it.</p>
-<p>In this tutorial, you’ve learned:</p>
-<ul>
-<li>How to <strong>set up a local OpenSearch cluster</strong></li>
-<li>How to <strong>create an index</strong> and store data in it</li>
-<li>How to <strong>search your data</strong> using OpenSearch</li>
-<li>How to <strong>delete documents and an index</strong></li>
-</ul>
-<p>If you have any questions or feedback, let me know in the comments!</p>
-<p>All the code for this tutorial is <a href="https://github.com/dylanjcastillo/random/blob/main/opensearch.ipynb">available on GitHub</a>.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2022,
-  author = {Castillo, Dylan},
-  title = {How to {Use} {OpenSearch} in {Python}},
-  date = {2022-08-31},
-  url = {https://dylancastillo.co/posts/opensearch-python.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2022. <span>“How to Use OpenSearch in Python.”</span>
-August 31, 2022. <a href="https://dylancastillo.co/posts/opensearch-python.html">https://dylancastillo.co/posts/opensearch-python.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>nlp</category>
-  <guid>https://dylancastillo.co/posts/opensearch-python.html</guid>
-  <pubDate>Wed, 31 Aug 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
