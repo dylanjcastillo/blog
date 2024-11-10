@@ -364,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-41"><a href="#cb5-41"></a>    <span class="cf">return</span> responses</span>
 <span id="cb5-42"><a href="#cb5-42"></a></span>
 <span id="cb5-43"><a href="#cb5-43"></a><span class="kw">def</span> extract_answer(answer):</span>
-<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).strip(<span class="st">"**"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).replace(<span class="st">"**"</span>, <span class="st">""</span>).strip()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In this code, <code>validate_response</code> is used to check if the response is valid (i.e.&nbsp;it matches the JSON schema in the same order). If it is, it returns the response. Otherwise, it raises an exception.</p>
 <p><code>extract_answer</code> is used to remove ** from the answer if it exists in the response. Some of the questions in the LiveBench dataset included instructions to put the answer in bold, which is why we need to remove it.</p>
@@ -450,17 +450,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th>Response Format</th>
-<th>Mean (95% CI)</th>
+<th>Accuracy (95% CI)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>A</td>
-<td>46.67% (34.67% – 58.67%)</td>
+<td>46.67% (35.33% – 58.00%)</td>
 </tr>
 <tr class="even">
 <td>B</td>
-<td>30.67% (20.67% – 41.33%)</td>
+<td>33.33% (22.67% – 44.67%)</td>
 </tr>
 </tbody>
 </table>
@@ -477,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-8"><a href="#cb8-8"></a></span>
 <span id="cb8-9"><a href="#cb8-9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I got a p-value &lt;0.001, meaning I can reject the null hypothesis that the two response formats are the same.</p>
+<p>I got a p-value &lt;0.01, meaning I can reject the null hypothesis that the two response formats are the same.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
