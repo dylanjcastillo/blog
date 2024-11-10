@@ -152,7 +152,7 @@ font-style: inherit;">42</span>)</span>
 background-color: null;
 font-style: inherit;">=</span> wrap_openai(AsyncOpenAI())</span></code></pre></div>
 </div>
-<p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/57df6d66-505d-4bae-a54b-91d6954e5344/runs">runs</a>.</p>
+<p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/11545ceb-70d3-4213-9f05-89891586b809/r?runtab=0">runs</a>.</p>
 <p>To run the experiment, you need some data. I ended up using a subset of the <a href="https://huggingface.co/datasets/livebench/reasoning">reasoning questions</a> from LiveBench. You can download it and save it in the <code>data</code> directory.</p>
 <p>Then, you can read it into a pandas <code>DataFrame</code>:</p>
 <div id="cell-7" class="cell" data-execution_count="3">
