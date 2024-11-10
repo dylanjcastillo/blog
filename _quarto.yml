@@ -7,6 +7,9 @@ website:
   title: Dylan Castillo
   site-url: https://dylancastillo.co
   favicon: logo.png
+  open-graph: true
+  twitter-card:
+    site: "@dylanjcastillo"
   navbar:
     title: false
     left:
