@@ -1010,7 +1010,8 @@ font-style: inherit;">"</span>)</span></code></pre></div>
 <p>But why?</p>
 <p>In this case, it’s simple.</p>
 <p>These response formats are meant to help the LLM reason step by step to arrive at the answer. This is known as <a href="https://en.wikipedia.org/wiki/Chain_of_thought_reasoning">chain of thought reasoning</a>. However, for it to work, we need the LLM to first provide us with the reasoning of how it arrived at the answer and then the answer.</p>
-<p>In <code>ResponseFormatB</code>, we defined our Pydantic model with the answer first and the reasoning second. This means that the LLM will give us the answer first, and then adjust the reasoning to match that answer. <code>ResponseFormatA</code> does the opposite, which is why it performs better.</p>
+<p>In <code>ResponseFormatA</code>, we defined our Pydantic model with the reasoning first and the answer second. This means that the LLM will give us the reasoning first, and then provide the answer. Which is exactly what we want.</p>
+<p><code>ResponseFormatB</code> works in the opposite way. This means that the LLM will give us the answer first, and then provide the reasoning. So our chain of thought reasoning becomes a <a href="https://www.promptingguide.ai/techniques/zeroshot">zero-shot prompt</a>. In this case, the reasoning is a byproduct of the answer.</p>
 <p>So, to summarize, when using structured outputs, don’t put the cart before the horse.</p>
 <p>That’s all! Let me know if you have any questions in the comments.</p>
 
