@@ -235,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Not long ago, we couldn’t reliably ask LLMs to provide a response using a specific format. Building tools that used LLM outputs was painful.</p>
+<p>Not long ago, you couldn’t reliably ask an LLM to provide you with a response using a specific format. Building tools that used LLM outputs was painful.</p>
 <p>Then, through <a href="https://platform.openai.com/docs/guides/function-calling">function calling</a> and <a href="https://platform.openai.com/docs/guides/structured-outputs">structured outputs</a>, we could instruct LLMs to respond in specific formats<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. So, extracting information from LLM outputs stopped being a problem.</p>
 <p>But then I started noticing that structured outputs might not always be the <a href="https://arxiv.org/abs/2408.02442">silver bullet</a> people think they are. The rigidness of a Pydantic model can make you forget that underneath, you’re still dealing with an LLM. Setting up a response model for your API calls is not the same as setting up a response model for your LLM outputs.</p>
 <p>For example, take the following question from the <a href="https://huggingface.co/datasets/livebench/reasoning">LiveBench</a> dataset:</p>
