@@ -224,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 14, 2024</p>
+      <p class="date-modified">November 15, 2024</p>
     </div>
   </div>
     
@@ -237,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>Not long ago, you couldn’t reliably ask an LLM to provide you with a response using a specific format. Building tools that used LLM outputs was painful.</p>
 <p>Then, through <a href="https://platform.openai.com/docs/guides/function-calling">function calling</a> and <a href="https://platform.openai.com/docs/guides/structured-outputs">structured outputs</a>, we could instruct LLMs to respond in specific formats<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. So, extracting information from LLM outputs stopped being a problem.</p>
-<p>But then I started noticing that structured outputs might not always be the <a href="https://arxiv.org/abs/2408.02442">silver bullet</a> people think they are. The rigidness of a Pydantic model can make you forget that underneath, you’re still dealing with an LLM. Setting up a response model for your API calls is not the same as setting up a response model for your LLM outputs.</p>
+<p>But then I started noticing that structured outputs also had their <a href="https://arxiv.org/abs/2408.02442">own set</a> <a href="https://arxiv.org/abs/2403.06988">of problems</a>. Most importantly, the apparent rigidity of a Pydantic model can make you forget that underneath, you’re still dealing with an LLM. Setting up a response model for your API calls is not the same as setting up a response model for your LLM outputs.</p>
 <p>For example, take the following question from the <a href="https://huggingface.co/datasets/livebench/reasoning">LiveBench</a> dataset:</p>
 <blockquote class="blockquote">
 <p>Suppose I have a physical, solid, equilateral triangle, and I make two cuts. The two cuts are from two parallel lines, and both cuts pass through the interior of the triangle. How many pieces are there after the cuts? Think step by step, and then put your answer in <strong>bold</strong> as a single integer (for example, <strong>0</strong>). If you don’t know, guess.</p>
@@ -445,7 +445,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-44"><a href="#cb7-44"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, you can build bootstrap confidence intervals for the accuracies of the two response formats. Given that I’m asking the LLM the same question multiple times, I went with an approach called <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5965657/">cluster bootstrapping</a>, which accounts for the fact that the data points are not independent.</p>
-<p>It should take a few minutes to run. Once it’s done, you should see output like the following:</p>
+<p>It should take a few seconds to run. Once it’s done, you should see output like the following:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
