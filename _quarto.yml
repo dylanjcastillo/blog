@@ -20,12 +20,12 @@ website:
       - text: "About"
         href: about.qmd
     right:
-      - icon: github
+      - text: "{{< iconify fa6-brands github >}}"
         href: https://github.com/dylanjcastillo
-      - icon: linkedin
+      - text: "{{< iconify fa6-brands linkedin >}}"
         href: https://www.linkedin.com/in/dylanjcastillo/
-      - icon: twitter
-        href: https://twitter.com/dylanjcastillo
+      - text: "{{< iconify fa6-brands bluesky >}}"
+        href: https://bsky.app/profile/dylancastillo.co
   page-footer: "Copyright 2024, Dylan Castillo"
 
 format:
