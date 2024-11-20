@@ -3,7 +3,7 @@ title: "About"
 aliases:
   - /about/
   - /author/dylan/
-image: profile_b&w.png
+image: profile_pic.png
 about:
   template: jolla
   links:
