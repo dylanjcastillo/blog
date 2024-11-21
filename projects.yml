@@ -76,14 +76,14 @@
     A web app that helps physicians prepare for the Spanish medical residence entry exam. I made it to help my wife prepare for the exam while learning more about Django.
 
 - title: "Anchoring"
-  path: 
+  path: https://www.reddit.com/r/cogsci/comments/jq91ne/im_replicating_an_experiment_in_cognitive_science/
   date: 2023-06-22
   categories: [cognitive science]
   description: |
     Another cognitive science experiment. The instructions were lengthier and a bit confusing, so it got less traction than the the 2-4-6 task.
 
 - title: "The 2-4-6 Task"
-  path:
+  path: https://www.reddit.com/r/BehavioralEconomics/comments/jmloh5/i_ran_an_experiment_on_how_we_make_decisions_here/
   date: 2023-06-22
   categories: [cognitive science]
   description: |
