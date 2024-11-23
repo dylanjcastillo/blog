@@ -6,7 +6,7 @@ project:
 website:
   title: Dylan Castillo
   site-url: https://dylancastillo.co
-  favicon: logo.png
+  favicon: logo.webp
   open-graph: true
   twitter-card:
     site: "@dylanjcastillo"
