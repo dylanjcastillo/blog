@@ -10,7 +10,266 @@
 <atom:link href="https://dylancastillo.co/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 09 Nov 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 23 Nov 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Transform any image to WebP from the terminal</title>
+  <link>https://dylancastillo.co/til/transforming-images-to-webp.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I was annoyed by the file size of my photo in the <a href="https://dylanjcastillo.com/about/">About page</a>, because it was slowing down the page load.</p>
+<p>Is it important? No.</p>
+<p>Don’t I have better things to do on a Saturday afternoon? Yes.</p>
+<p>But it’s like going to bed with the closet door open—you know there’s nothing in there, but you just can’t shake the feeling that the devil (or <a href="https://es.wikipedia.org/wiki/Diosdado_Cabello">Diosdado Cabello</a>) might jump out and kill you in your sleep unless you get up and shut it.</p>
+<p>So I got o1-mini to write a simple script for me, and thought others might find it useful.</p>
+<p>Here it is:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"> img2webp()</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">{</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Check if the input file is provided or if help is requested</span></span>
+<span id="cb1-4">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">[[</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$#</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-lt</span> 1 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$1</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--help"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$1</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"-h"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">]];</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb1-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Usage: img2webp input_image [quality]"</span></span>
+<span id="cb1-6">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"  input_image: Path to the input image file"</span></span>
+<span id="cb1-7">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"  quality: Quality of the output WebP image (0-100, default is 80)"</span></span>
+<span id="cb1-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-9">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb1-10"></span>
+<span id="cb1-11">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">local</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">input</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$1</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb1-12">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">local</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">quality</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:-</span>80<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Default quality is 80 if not specified</span></span>
+<span id="cb1-13">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">local</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">output</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${input</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span>.<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">*</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.webp"</span></span>
+<span id="cb1-14"></span>
+<span id="cb1-15">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Convert the image to WebP using ffmpeg</span></span>
+<span id="cb1-16">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">ffmpeg</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-i</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$input</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-qscale:v</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$quality</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$output</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb1-17"></span>
+<span id="cb1-18">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Check if the conversion was successful</span></span>
+<span id="cb1-19">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">[[</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$?</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-eq</span> 0 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">]];</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb1-20">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Successfully converted '</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$input</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' to '</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$output</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' with quality </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$quality</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">."</span></span>
+<span id="cb1-21">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span></span>
+<span id="cb1-22">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Failed to convert '</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$input</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' to WebP."</span></span>
+<span id="cb1-23">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-24">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb1-25"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">}</span></span></code></pre></div>
+<p>If you’re using MacOS, you first need to install <code>ffmpeg</code> using Homebrew:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">brew</span> install ffmpeg</span></code></pre></div>
+<p>Then you can add it to your <code>.zshrc</code> and use it by running <code>img2webp &lt;path_to_image&gt; [quality]</code>.</p>
+<p>Just as reference, keeping the same quality, I decreased my profile picture from 234KB to 36KB by just changing from PNG to WebP.</p>
+<p>Hope you found this useful.</p>
+
+
+
+ ]]></description>
+  <category>til</category>
+  <category>webp</category>
+  <category>bash</category>
+  <category>ffmpeg</category>
+  <guid>https://dylancastillo.co/til/transforming-images-to-webp.html</guid>
+  <pubDate>Sat, 23 Nov 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Structured outputs: don’t put the cart before the horse</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -14780,739 +15039,6 @@ First.”</span> January 20, 2023. <a href="https://dylancastillo.co/posts/my-en
   <category>personal</category>
   <guid>https://dylancastillo.co/posts/my-entrepreneur-first-experience.html</guid>
   <pubDate>Fri, 20 Jan 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>PyScript 101</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/python-pyscript-101.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>These past few days, I’ve been playing around with <a href="https://pyscript.net/">PyScript</a>. I built an interactive cheat sheet for <a href="https://pandas.dylancastillo.co/">pandas</a> and a cookbook of the most popular <a href="https://dataviz.dylancastillo.co/">Python data visualization</a> libraries.</p>
-<p>I’ve learned a few things about how it works, so I thought of putting together these notes in case others may find them useful. This article covers the minimum you should know about PyScript to build a simple web app with it.</p>
-<p>I deliberately left out topics that I didn’t find as useful or interesting. But if you want a more detailed introduction, you should read <a href="https://realpython.com/pyscript-python-in-browser/">this</a> great tutorial from Real Python.</p>
-<p>Let’s get to it!</p>
-<section id="whats-pyscript" class="level2">
-<h2 class="anchored" data-anchor-id="whats-pyscript">What’s PyScript?</h2>
-<p>PyScript is a framework that lets users create Python applications in the browser. It’s built on top of Pyodide, a CPython port to WebAssembly (WASM).</p>
-<p>PyScript’s main selling point is that you no longer need a server to use Python and its extensive number of libraries when building a web app. You can plug in PyScript, make a few adjustments, and use many Python libraries in your web app.</p>
-<p>People often compare PyScript with <a href="https://realpython.com/python-dash/">Dash</a> and <a href="https://streamlit.io/">Streamlit</a>. But PyScript works quite differently. It operates on the client side, so no server is required. You could host a web app that uses PyScript for free using services like GitHub Pages.</p>
-<p>Dash and Streamlit, on the other hand, require a server, making apps built with these libraries more difficult to deploy and usually more expensive. Furthermore, the server bears the majority of the computational load.</p>
-</section>
-<section id="how-to-use-pyscript" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-use-pyscript">How to Use PyScript</h2>
-<p>The good thing about PyScript is that there isn’t any installation required. You just need to add it to the <code>head</code> of your HTML file.</p>
-<p>I’ll assume you have a file named <code>index.html</code> with this content for this and the following sections:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;!</span>DOCTYPE html<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-2"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>html lang<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"en"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-3">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>head<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-4">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>meta charset<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"UTF-8"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-5">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>meta http<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>equiv<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"X-UA-Compatible"</span> content<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"IE=edge"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-6">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>meta name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"viewport"</span> content<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"width=device-width, initial-scale=1.0"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-7">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>title<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>My Awesome app<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!&lt;/</span>title<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-8">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;/</span>head<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-9"></span>
-<span id="cb1-10">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-11"></span>
-<span id="cb1-12">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;/</span>body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb1-13"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;/</span>html<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>The code above is a minimal example we’ll use as a starting point. Next, I’ll show you how to use PyScript. You can do it in two ways:</p>
-<ol type="1">
-<li><a href="https://github.com/pyscript/pyscript/archive/refs/heads/main.zip">Download a copy</a> of the latest version of PyScript, and add the required files to <code>head</code> in your HTML document:</li>
-</ol>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb2-2">  ...</span>
-<span id="cb2-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">link</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> rel</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stylesheet"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> href</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"path/to/pyscript.css"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb2-4">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> defer src</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"path/to/pyscript.js"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb2-5"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<ol start="2" type="1">
-<li>Add the CDN version of PyScript’s JS and CSS files to <code>head</code> in your HTML document:</li>
-</ol>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb3-2">  ...</span>
-<span id="cb3-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">link</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> rel</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stylesheet"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> href</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://pyscript.net/latest/pyscript.css"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb3-4">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> defer src</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://pyscript.net/latest/pyscript.js"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb3-5"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>PyScript is still under heavy development. If you use the second method, your app may break when new versions are released.</p>
-<p>To test your changes locally, use <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> if you like working with VS Code or try any of <a href="https://stackoverflow.com/questions/38497334/how-to-run-html-file-on-localhost">these methods</a> if you prefer other code editors.</p>
-</section>
-<section id="how-to-run-python-code-in-pyscript" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-run-python-code-in-pyscript">How to Run Python Code in PyScript</h2>
-<p>There are two ways to run Python code in PyScript: using <code>py-script</code> and <code>py-repl</code> tags. These elements inside go inside <code>body</code> in your HTML document.</p>
-<section id="py-script" class="level3">
-<h3 class="anchored" data-anchor-id="py-script"><code>py-script</code></h3>
-<p>You can run code using the <code>py-script</code> tag in two ways:</p>
-<ol type="1">
-<li>Wrap your code with a <code>py-script</code> tag.</li>
-</ol>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb4-2">  ...</span>
-<span id="cb4-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>print("Hello, world!")<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb4-4">  ...</span>
-<span id="cb4-5"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<ol start="2" type="1">
-<li>Load an external script using the <code>src</code> attribute from the <code>py-script</code> tag:</li>
-</ol>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-2">    ...</span>
-<span id="cb5-3">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> src</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'path/to/script.py'</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pyscript</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-4">    ...</span>
-<span id="cb5-5"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>The latter is usually preferred to avoid having formatting issues. If you use an HTML auto-formatter, it may break the python code you put inside <code>py-script</code>.</p>
-</section>
-<section id="py-repl" class="level3">
-<h3 class="anchored" data-anchor-id="py-repl"><code>py-repl</code></h3>
-<p>You can also run code using an interactive interpreter, usually known as read–eval–print loop (REPL). Using a REPL makes it feel like you’re running code in a Jupyter notebook.</p>
-<p>You can create a REPL with PyScript using the <code>py-repl</code> tag as follows:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb6-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb6-2">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-repl</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>print("Hello, world!")<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-repl</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb6-3"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>If you try using multiple <code>py-script</code> and <code>py-repl</code> in the same page, you may find some unexpected behavior in the output. I came across <a href="https://github.com/pyscript/pyscript/issues/758#issuecomment-1244091704">two</a> <a href="https://github.com/pyscript/pyscript/issues/735">issues</a> related to this but it looks like they’ll get fixed soon.</p>
-</section>
-</section>
-<section id="how-to-import-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-import-libraries">How to Import Libraries</h2>
-<p>You can make Python libraries available in your environment when your app loads by specifying them in the <code>py-env</code> tag as follows:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb7-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb7-2">  ...</span>
-<span id="cb7-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-env</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span> - numpy - pandas - seaborn <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-env</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb7-4"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>Or you can load them programmatically using <code>micropip</code>:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb8-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb8-2">  async def main(): await micropip.install(["numpy", "pandas", "seaborn]) await</span>
-<span id="cb8-3">  loop.run_until_complete(main())</span>
-<span id="cb8-4"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-</section>
-<section id="how-to-interact-with-html-elements" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-interact-with-html-elements">How to Interact With HTML Elements</h2>
-<p>PyScript automatically imports a few things from JavaScript’s global namespace into your Python environment. This means that you can use use these elements without having to import them beforehand. The most important ones are <code>window</code>, <code>document</code>, and <code>console</code>.</p>
-<p><code>window</code>, and <code>document</code>, let you read and make changes to elements from the Document Object Model (DOM). While <code>console</code> lets you interact with your browser’s integrated console.</p>
-<p>For example, you could use <code>document</code> to select a specific element from the DOM:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb9-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb9-2">  ...</span>
-<span id="cb9-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb9-4">    # Select an element using its ID document.getElementById("input-code") #</span>
-<span id="cb9-5">    Select an element using its class document.querySelector(".table")</span>
-<span id="cb9-6">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb9-7">  ...</span>
-<span id="cb9-8"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>Or use<code>document</code> to read attributes from elements and make changes to them, and print information using <code>console</code>:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb10-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-2">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ul</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"users-list"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-3">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Dylan<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-4">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>John<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-5">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Paul<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-6">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Jane<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">li</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-7">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ul</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-8">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-9">    users = ["Dylan", "John", "Jane"] ul = document.querySelectorAll("ul &gt; li")</span>
-<span id="cb10-10">    for li in ul: if li.innerHTML not in users: console.log(li.innerHTML)</span>
-<span id="cb10-11">    li.remove()</span>
-<span id="cb10-12">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb10-13"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>You could also make your Python code react to changes in the DOM. But that requires some magic to work because the web browser cannot natively handle Python functions when an event such as a click on a button happens.</p>
-<p>For those cases, Pyodide lets you create proxies that bridge Python functions and JavaScript callbacks. You could use <code>create_proxy</code> to make your Python code react to changes as follows:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb11-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb11-2">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">input</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> type</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> name</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"input-text"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb11-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">button</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> type</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"submit"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"button-submit"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> for</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"input-text"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Submit!<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">button</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb11-4">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">div</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text-length"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">div</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb11-5">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb11-6">    from pyodide import create_proxy input_button =</span>
-<span id="cb11-7">    document.getElementById("button-submit") def get_text_length(x):</span>
-<span id="cb11-8">    document.getElementById("text-length").innerHTML =</span>
-<span id="cb11-9">    len(document.getElementById("input-text").value)</span>
-<span id="cb11-10">    input_button.addEventListener("click", create_proxy(get_text_length))</span>
-<span id="cb11-11">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">py-script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb11-12"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>The code lets the user input a text and run the <code>get_text_length</code> Python function, after he or she clicks on the button on the screen. This function calculates the length of the text that the user entered.</p>
-<p>Finally, it’s worth mentioning that PyScript also provides you with the <code>[Element](https://realpython.com/pyscript-python-in-browser/#pyscripts-adapter-for-javascript-proxy)</code> class. It’s a basic interface that lets you select elements by ID and do certain operations on them. I found it a bit limited, which is why I didn’t cover it in this section.</p>
-</section>
-<section id="other-topics" class="level2">
-<h2 class="anchored" data-anchor-id="other-topics">Other Topics</h2>
-<p>There are many topics I didn’t cover in this article. So I wanted to provide some resources additional resources I’ve found useful:</p>
-<ul>
-<li><strong>PyScript visual components:</strong> PyScript provides a few elements you can use to build the UI of your web app. The <a href="https://realpython.com/pyscript-python-in-browser/#exploring-pyscripts-visual-components">Real Python tutorial</a> covers them.</li>
-<li><strong>Accessing the file system:</strong> Accessing files is a bit tricky. John Hanley made very <a href="https://www.jhanley.com/blog/pyscript-files-and-file-systems-part-1/">detailed</a> <a href="https://www.jhanley.com/blog/pyscript-files-and-file-systems-part-2/">tutorials</a> about this topic.</li>
-<li><strong>PyScript and plotly:</strong> Getting plotly graphs to work with PyScript is tricky. This <a href="https://medium.com/technofile/how-to-use-ploty-with-pyscript-578d3b287293">article</a> explains how to do it.</li>
-<li><strong>Hosting PyScript:</strong> If you don’t need to store data from your users in a server, you can simply host a static page. The easiest way to do that is using <a href="https://pages.github.com/">GitHub Pages</a>. That’s what I’ve used in my projects.</li>
-</ul>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>PyScript is an experimental Python framework that lets you run Python on the web browser. This article covers the basics of PyScript, and will show you how to:</p>
-<ul>
-<li>Use PyScript on a web page</li>
-<li>Run Python code using PyScript</li>
-<li>Interact with the DOM using PyScript</li>
-</ul>
-<p>If you have any questions or feedback, let me know in the comments!</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2022,
-  author = {Castillo, Dylan},
-  title = {PyScript 101},
-  date = {2022-09-21},
-  url = {https://dylancastillo.co/posts/python-pyscript-101.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2022. <span>“PyScript 101.”</span> September 21, 2022.
-<a href="https://dylancastillo.co/posts/python-pyscript-101.html">https://dylancastillo.co/posts/python-pyscript-101.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <guid>https://dylancastillo.co/posts/python-pyscript-101.html</guid>
-  <pubDate>Wed, 21 Sep 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2022-06-17">
-<meta name="description" content="Entrepreneurship, contrary to popular belief, is a great risk management strategy. Here I explain why.">
+<meta name="dcterms.date" content="2024-11-23">
+<meta name="description" content="A simple bash function to transform images to webp.">
 
-<title>Entrepreneurship as a Risk Management Strategy – Dylan Castillo</title>
+<title>Transform any image to WebP from the terminal – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -75,16 +109,16 @@ ul.task-list li input[type="checkbox"] {
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Entrepreneurship as a Risk Management Strategy – Dylan Castillo">
+<meta property="og:title" content="Transform any image to WebP from the terminal – Dylan Castillo">
 <meta property="og:description" content="">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Entrepreneurship as a Risk Management Strategy – Dylan Castillo">
+<meta name="twitter:title" content="Transform any image to WebP from the terminal – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -133,60 +167,33 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#the-plan" id="toc-the-plan" class="nav-link active" data-scroll-target="#the-plan">The Plan</a></li>
-  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Entrepreneurship as a Risk Management Strategy</h1>
+<h1 class="title">Transform any image to WebP from the terminal</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">personal</div>
+    <div class="quarto-category">til</div>
+    <div class="quarto-category">webp</div>
+    <div class="quarto-category">bash</div>
+    <div class="quarto-category">ffmpeg</div>
   </div>
   </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Author</div>
-  <div class="quarto-title-meta-heading">Affiliation</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            <a href="https://iwanalabs.com">
-            Iwana Labs
-            </a>
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 17, 2022</p>
+      <p class="date">November 23, 2024</p>
     </div>
   </div>
   
-    <div>
-    <div class="quarto-title-meta-heading">Modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 23, 2024</p>
-    </div>
-  </div>
     
   </div>
   
@@ -195,66 +202,46 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Entrepreneurship, contrary to popular belief, is a great risk management strategy. Thoughtful entrepreneurs take on similar risks as employees while getting a chance to win a much larger pot.</p>
-<p>Also, it’s more fun!</p>
-<p>If you’ve ever read a book about how to start a business, you’ll know that most business failures can be attributed to a few factors:</p>
-<ol type="1">
-<li>You made a product nobody wants.</li>
-<li>You are operating in a bad market.</li>
-<li>You ran out of money before you could fix 1 or 2.</li>
-</ol>
-<p>As a result, avoiding those mistakes should be your number one priority. This will increase your chances of success and ensure you stay in the entrepreneurship game long enough to give yourself a fair chance of winning.</p>
-<p>You don’t have to have those three things perfectly covered before you begin. Along the way, you could learn how to build products and pick the right market.</p>
-<p>But one thing is certain, starting a business without a financial safety net is like going to a pistol duel with a nail clipper. It might work, and stories will be written about you if you succeed, but there’s a good chance you’ll get your brains blown out.</p>
-<p>Once you’ve taken steps to improve your odds of success and ensured that failure won’t mean financial ruin, there’s little downside to “taking the risk” of starting your own business. Allow me to explain.</p>
-<p>Let’s start with a favorable scenario. You start a business, and it succeeds. In the best case, you could reap most of the financial benefits because you own most of the company’s equity. This could mean life-changing money. While if you’re an employee at a successful company, you either own very little equity or none at all. Only extremely rare circumstances, such as being an early employee in a tech unicorn, could result in comparable results.</p>
-<p>Therefore, starting your own business will put you in a better position to build wealth than working for someone else. It is no surprise that surveys of wealthy citizens reveal that <a href="https://www.nytimes.com/2022/05/14/opinion/sunday/rich-happiness-big-data.html">most of them make their income from businesses, not salaries.</a></p>
-<p>Consider the inverse scenario. You are the owner of a failing business. Suppose you funded your business with your savings rather than debt. In that case, the worst-case scenario is that you’ll lose some of your savings and the time you’ve invested in the company. But, since, in any case, you’ll likely work thirty to forty years of your life, getting out of the rat race for a few years and using some of your savings before retirement won’t make a huge difference in the end result.</p>
-<p>Furthermore, you would’ve gained valuable skills you can use in your next ventures or in a regular job. You could go back to full-time employment and potentially earn more money than before!</p>
-<p>Think about what would happen to an employee in the same situation (a failing business). That’s when you most need job security, but also the time when many learn that it doesn’t exist. A company fighting for survival will not hesitate to let you go (ask <a href="https://www.wsj.com/articles/crypto-exchange-coinbase-to-lay-off-18-of-staff-11655211069">Coinbase</a>). In the best-case scenario, you’ll be overworked because you’ll take on the work of those who were let go. In the worst-case scenario, you’ll have to return to the job market and look for another job, just like the failed entrepreneur.</p>
-<p>In conclusion, if all goes well, the advantages of being an entrepreneur far outweigh the benefits of being an employee. If things don’t go as planned, being an entrepreneur is just slightly worse than being an employee. With similar risk profiles, entrepreneurship produces better results. Not bad, is it?</p>
-<p>Allow me to clarify. This article isn’t intended to convince you to start your own business. I’m writing it because these were some of the factors I considered before embarking on my entrepreneurial journey.</p>
-<p>Right now, I’m in the early stages. Read on if you’d like to learn more.</p>
-<section id="the-plan" class="level2">
-<h2 class="anchored" data-anchor-id="the-plan">The Plan</h2>
-<p>I had considered starting my own business for a long time but didn’t feel prepared. Also, I didn’t have enough savings and worried that not having a job would risk my family’s wellbeing.</p>
-<p>In 2019, I devised a strategy to get into a position where I could devote all my time to building a business. First, I’d maximize my savings rate and learn as much as possible about businesses until I had at least one year worth of savings. Then, I’d take time away from work to build a business.</p>
-<p>I thought a good starting point could be freelancing for companies outside of Spain. That would allow me to learn the ins and outs of running a one-man business and save money at a higher rate compared to full-time employment or freelancing with local companies.</p>
-<p>Last year, I landed my first freelancing contract at the <a href="https://ec.europa.eu/info/index_en">European Commission</a>, and, a few months later, at <a href="https://deliveroo.co.uk/">Deliveroo</a>. I’ll finish my contract with Deliveroo next month and have saved enough money to take time away from work.</p>
-<p>In addition to freelancing, I also spent a lot of time learning about businesses. I read, listened to podcasts, and consumed any useful material I could find. More importantly, I created a few small products, launched them, and talked to users.</p>
-<p>I haven’t decided for how long I will be away from work. Most likely, I’ll start with 6 months and will correct course depending on my burn rate, inflation, and whether I feel I’m progressing toward my goal.</p>
-<p>Regarding business ideas, I’ll concentrate on projects that could help me decouple the amount of time I work from how much money I make. That is, I’ll either build products or develop <a href="https://neilpatel.com/blog/productized-services/">productized services</a>.</p>
-<p>I have a list of +45 ideas that I’ve started keeping since I devised this plan. Most suck. But these are the ones I’ve shortlisted to tackle in the short-term:</p>
-<ul>
-<li><strong>Fast Flood:</strong> I built a small game called <a href="https://fastflood.dylancastillo.co/#open-modal">Fast Flood</a>. It got good traction, and I even got a low five-figure offer for it. I have a few improvements that I’d like to try, and I hope, later on, to sell it for more.</li>
-<li><strong>2X your salary using LinkedIn course:</strong> In the last 6 years, I’ve increased my income by 30% on average every year. I have an okayish educational background but have found good-paying jobs at international organizations, a top-tier consulting firm, and a top-tech European company. I believe I can help other Data scientists learn how to use LinkedIn to make more money and find better jobs.</li>
-<li><strong>Data Visualization with Python course:</strong> I teach a course about Data Science at <a href="https://nuclio.school/">Nuclio Digital School</a>. I’ve received pretty positive feedback, so I believe I could build an online course and sell it through Gumroad or Udemy.</li>
-<li><strong>Career coaching for Data scientists:</strong> Instead of doing a course, I would personally help Data scientists get a higher-paying jobs or help them get into freelancing. I’d charge them a variable fee depending on the salary I help them achieve. There’s already at least one <a href="https://talently.tech/">startup</a> doing that.</li>
-<li><strong>Grammarly + Quillbot in Spanish:</strong> Grammarly is a $10bn company. There might be <a href="https://www.internetworldstats.com/stats7.htm">364 million Spanish speakers</a> users on the internet. I believe there’s a market for a tool that helps you write better in that language.</li>
-</ul>
-<p>I’ll work on these ideas in the order listed and &nbsp;dedicate up to a month to each of them. If they don’t get any traction, I’ll move on to the next one. It’s also possible that, along the way, I replace some of them with more promising ideas.</p>
-<p>Also, I recently received some leads for projects that I believe could become productized services. So I’m going to make some time for that in parallel, while working in the other ideas.</p>
-</section>
-<section id="whats-next" class="level2">
-<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
-<p>This week I’m starting with Fast Flood. I already have a list of improvements I want to make, so I will focus on that for now.</p>
-<p>You can follow my updates on <a href="https://twitter.com/dylanjcastillo">Twitter</a> and <a href="https://www.linkedin.com/in/dylanjcastillo/">LinkedIn</a>.</p>
-<p><em>Thanks to Luis for his feedback on this piece.</em></p>
+<p>I was annoyed by the file size of my photo in the <a href="https://dylanjcastillo.com/about/">About page</a>, because it was slowing down the page load.</p>
+<p>Is it important? No.</p>
+<p>Don’t I have better things to do on a Saturday afternoon? Yes.</p>
+<p>But it’s like going to bed with the closet door open—you know there’s nothing in there, but you just can’t shake the feeling that the devil (or <a href="https://es.wikipedia.org/wiki/Diosdado_Cabello">Diosdado Cabello</a>) might jump out and kill you in your sleep unless you get up and shut it.</p>
+<p>So I got o1-mini to write a simple script for me, and thought others might find it useful.</p>
+<p>Here it is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">function</span><span class="fu"> img2webp()</span> <span class="kw">{</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="co"># Check if the input file is provided or if help is requested</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="cf">if</span> <span class="kw">[[</span> <span class="va">$#</span> <span class="ot">-lt</span> 1 <span class="kw">||</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">==</span> <span class="st">"--help"</span> <span class="kw">||</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">==</span> <span class="st">"-h"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="bu">echo</span> <span class="st">"Usage: img2webp input_image [quality]"</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="bu">echo</span> <span class="st">"  input_image: Path to the input image file"</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="bu">echo</span> <span class="st">"  quality: Quality of the output WebP image (0-100, default is 80)"</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="cf">fi</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>  <span class="bu">local</span> <span class="va">input</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="bu">local</span> <span class="va">quality</span><span class="op">=</span><span class="st">"</span><span class="va">${2</span><span class="op">:-</span>80<span class="va">}</span><span class="st">"</span>  <span class="co"># Default quality is 80 if not specified</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>  <span class="bu">local</span> <span class="va">output</span><span class="op">=</span><span class="st">"</span><span class="va">${input</span><span class="op">%</span>.<span class="pp">*</span><span class="va">}</span><span class="st">.webp"</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="co"># Convert the image to WebP using ffmpeg</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>  <span class="ex">ffmpeg</span> <span class="at">-i</span> <span class="st">"</span><span class="va">$input</span><span class="st">"</span> <span class="at">-qscale:v</span> <span class="st">"</span><span class="va">$quality</span><span class="st">"</span> <span class="st">"</span><span class="va">$output</span><span class="st">"</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a>  <span class="co"># Check if the conversion was successful</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a>  <span class="cf">if</span> <span class="kw">[[</span> <span class="va">$?</span> <span class="ot">-eq</span> 0 <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>    <span class="bu">echo</span> <span class="st">"Successfully converted '</span><span class="va">$input</span><span class="st">' to '</span><span class="va">$output</span><span class="st">' with quality </span><span class="va">$quality</span><span class="st">."</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>  <span class="cf">else</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="bu">echo</span> <span class="st">"Failed to convert '</span><span class="va">$input</span><span class="st">' to WebP."</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a>    <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a>  <span class="cf">fi</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you’re using MacOS, you first need to install <code>ffmpeg</code> using Homebrew:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">brew</span> install ffmpeg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then you can add it to your <code>.zshrc</code> and use it by running <code>img2webp &lt;path_to_image&gt; [quality]</code>.</p>
+<p>Just as reference, keeping the same quality, I decreased my profile picture from 234KB to 36KB by just changing from PNG to WebP.</p>
+<p>Hope you found this useful.</p>
 
 
-</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2022,
-  author = {Castillo, Dylan},
-  title = {Entrepreneurship as a {Risk} {Management} {Strategy}},
-  date = {2022-06-17},
-  url = {https://dylancastillo.co/posts/entrepreneurship-as-a-risk-management-strategy.html},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2022" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2022. <span>“Entrepreneurship as a Risk Management
-Strategy.”</span> June 17, 2022. <a href="https://dylancastillo.co/posts/entrepreneurship-as-a-risk-management-strategy.html">https://dylancastillo.co/posts/entrepreneurship-as-a-risk-management-strategy.html</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
