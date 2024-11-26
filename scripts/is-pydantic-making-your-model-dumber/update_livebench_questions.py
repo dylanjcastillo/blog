@@ -74,7 +74,7 @@ def process_math_questions():
         df_math.turns_str.str.strip()
         .str.replace(
             r" Please put your final answer in a $\\boxed{}$.",
-            "Please think step by step and provide your answer at the end.",
+            "Please think step by step out loud and provide your answer at the end.",
         )
         .str.replace(
             "If you cannot determine the correct multiple-choice answer, take your best guess.",
@@ -82,11 +82,11 @@ def process_math_questions():
         )
         .str.replace(
             "Please think step by step, and then display the answer at the very end of your response.",
-            "Please think step by step, and the provide your answer at the end.",
+            "Please think step by step out loud and provide your answer at the end.",
         )
         .str.replace(
             "Once you have your answer, please duplicate that letter five times in a single string. For example, if the answer is F, then write FFFFF.",
-            "Please think step by step and provide your answer as a single letter (e.g., F or A).",
+            "Please think step by step out loud and provide your answer as a single letter (e.g., F or A). Don't include any other text except a single letter in your answer.",
         )
         .str.replace(
             """Your final answer should be STRICTLY in the format:
@@ -94,10 +94,11 @@ def process_math_questions():
 <Detailed reasoning>
 
 Answer: <comma separated list of numbers representing expression identifiers>""",
-            "Please think step by step and provide your answer as a comma separated list of numbers representing expression identifiers.",
+            "Please think step by step out loud and provide your answer as a comma separated list of numbers representing expression identifiers (e.g., 1,2,3). Don't include any other text except a comma separated list of numbers in your answer.",
         )
         .str.replace(
-            "Remember to have the three digits as the last part of the response.", ""
+            "Remember to have the three digits as the last part of the response.",
+            "Your answer should not include any other text except the three digits.",
         )
         .str.strip()
     )
