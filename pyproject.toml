@@ -10,13 +10,16 @@ package-mode = false
 python = "^3.10"
 notebook = "^7.2.0"
 openai = "^1.30.5"
-google-generativeai = "^0.7.2"
+google-generativeai = "^0.8.2"
 numpy = "^2.1.0"
 pandas = "^2.2.2"
 python-dotenv = "^1.0.1"
 scikit-learn = "^1.5.1"
 pillow = "^10.4.0"
-instructor = "^1.6.4"
+instructor = {extras = ["google-generativeai"], version = "^1.7.0"}
+datasets = "^3.1.0"
+langsmith = "^0.1.147"
+jsonref = "^1.1.0"
 
 
 [build-system]
