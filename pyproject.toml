@@ -20,6 +20,7 @@ instructor = {extras = ["google-generativeai"], version = "^1.7.0"}
 datasets = "^3.1.0"
 langsmith = "^0.1.147"
 jsonref = "^1.1.0"
+modal = "^0.67.15"
 
 
 [build-system]
