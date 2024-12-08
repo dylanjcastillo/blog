@@ -9,6 +9,11 @@
 <link>https://dylancastillo.co/</link>
 <atom:link href="https://dylancastillo.co/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
+<image>
+<url>https://dylancastillo.co/social_media_card.webp</url>
+<title>Dylan Castillo</title>
+<link>https://dylancastillo.co/</link>
+</image>
 <generator>quarto-1.6.39</generator>
 <lastBuildDate>Sun, 08 Dec 2024 00:00:00 GMT</lastBuildDate>
 <item>
