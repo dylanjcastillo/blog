@@ -45,7 +45,7 @@ So I decided to:
 2.  Replicate the same tasks using a proprietary model _GPT-4o-mini_.
 3.  Test results on a broader set of tasks such as [LiveBench](https://livebench.ai/).
 
-This article presents the results of the first two steps. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/extras/say-what-you-mean-sometimes).
+This article presents the results of the first two steps. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/_extras/say-what-you-mean-sometimes).
 
 ## Results
 
