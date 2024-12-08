@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2024-08-11">
-<meta name="description" content="A guide to create a Kamal-ready VPS on Hetzner using Terraform">
 
-<title>Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo</title>
+<title>Setup – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,61 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../logo.webp" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
-<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.webp" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,16 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo">
-<meta property="og:description" content="">
+<meta property="og:title" content="Setup – Dylan Castillo">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo">
-<meta name="twitter:description" content="">
+<meta name="twitter:title" content="Setup – Dylan Castillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -131,15 +92,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../projects.html"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -167,70 +128,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a></li>
-  <li><a href="#run-the-script" id="toc-run-the-script" class="nav-link" data-scroll-target="#run-the-script">Run the script</a></li>
-  <li><a href="#customizing-the-script" id="toc-customizing-the-script" class="nav-link" data-scroll-target="#customizing-the-script">Customizing the script</a>
-  <ul class="collapse">
-  <li><a href="#change-the-software-to-install" id="toc-change-the-software-to-install" class="nav-link" data-scroll-target="#change-the-software-to-install">Change the software to install</a></li>
-  <li><a href="#run-other-commands-after-the-vps-is-created" id="toc-run-other-commands-after-the-vps-is-created" class="nav-link" data-scroll-target="#run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</a></li>
-  <li><a href="#use-already-existing-firewall-rules" id="toc-use-already-existing-firewall-rules" class="nav-link" data-scroll-target="#use-already-existing-firewall-rules">Use already existing firewall rules</a></li>
-  <li><a href="#use-a-different-server-type-operating-system-or-region" id="toc-use-a-different-server-type-operating-system-or-region" class="nav-link" data-scroll-target="#use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Create a Kamal-ready VPS on Hetzner using Terraform</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">kamal</div>
-    <div class="quarto-category">hetzner</div>
-    <div class="quarto-category">terraform</div>
-  </div>
-  </div>
+<h1 class="title">Setup</h1>
+</div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Author</div>
-  <div class="quarto-title-meta-heading">Affiliation</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            <a href="https://iwanalabs.com">
-            Iwana Labs
-            </a>
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 11, 2024</p>
-    </div>
-  </div>
+    
   
-    <div>
-    <div class="quarto-title-meta-heading">Modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
-    </div>
-  </div>
     
   </div>
   
@@ -239,84 +151,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>These days, I deploy all my side projects using Kamal and GitHub Actions on Hetzner. Once you get the hang of it, it’s easy to maintain, fast, and cheap.</p>
-<p>You can run your app with a database (SQLite), caching (Redis), background jobs (Celery), and SSL certificates (Let’s Encrypt) for roughly €5/month. Plus, if you feel the need, you can easily scale up to a more powerful Virtual Private Server (VPS).</p>
-<p>But setting up a VPS with the right configuration takes a bit of time. You have to:</p>
-<ol type="1">
-<li>Manually create the VPS using the UI.</li>
-<li>Create the necessary SSH keys.</li>
-<li>Create and apply the firewall rules.</li>
-<li>Create a new non-root user.</li>
-<li>Install Docker and other necessary software.</li>
-<li>Configure unattended-upgrades.</li>
-<li>Create a directory and set permissions for Let’s Encrypt SSL certificates.</li>
-<li>Reboot the system to apply all changes.</li>
-</ol>
-<p>I already had a small script to do most of these steps, but I wanted to automate it to a single command. So I created a Terraform script to do it for me.</p>
-<p>I took <a href="https://github.com/luizkowalski/terraform-hetzner">terraform-hetzner</a> and modified it to work with a single VPS instance. My updated version is available <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">here</a>.</p>
-<section id="set-up" class="level2">
-<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
-<p>First, set up an <a href="https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/">API key</a> with <strong>read and write</strong> permissions in Hetzner Cloud.</p>
-<p>Second, install <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">terraform</a>.</p>
-<p>Third, clone the repo:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/terraform-kamal-single-vps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Fourth, create a <code>terraform.tfvars</code> file with the following variables:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource hcl number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>hetzner_api_key = "your-api-key"</span>
-<span id="cb2-2"><a href="#cb2-2"></a>ssh_vps_root_key = "&lt;your-ssh-root-public-key&gt;"</span>
-<span id="cb2-3"><a href="#cb2-3"></a>ssh_vps_kamal_key = "&lt;your-ssh-kamal-public-key&gt;"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The <code>ssh_vps_root_key</code> and <code>ssh_vps_kamal_key</code> are the public keys for the root and kamal users, respectively. You can generate them with the <code>make generate-ssh-key USER_NAME=root</code> or <code>make generate-ssh-key USER_NAME=kamal</code> commands I added to the repo.</p>
-<p>Store your SSH keys in a secure location. You’ll need them to access the VPS.</p>
+<section id="gsm8k" class="level2">
+<h2 class="anchored" data-anchor-id="gsm8k">GSM8K</h2>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
 </section>
-<section id="run-the-script" class="level2">
-<h2 class="anchored" data-anchor-id="run-the-script">Run the script</h2>
-<p>Once the <code>terraform.tfvars</code> file is set up, you can see what changes will be applied with the following command:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">terraform</span> plan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will show in detail what changes will be applied to create a Kamal-ready VPS. If you’re happy with it, you can apply the changes with the following command:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">terraform</span> apply</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create a VPS with the following configuration:</p>
-<ul>
-<li>Ubuntu 22.04 LTS</li>
-<li>2 VCPU</li>
-<li>2 GB RAM</li>
-<li>40 GB SSD</li>
-</ul>
-<p>It’ll cost you roughly €5/month and will be located in Nuremberg (Germany).</p>
-<p>In addition, after the VPS is created, it will automatically:</p>
-<ul>
-<li>Create a non-root user (kamal) with sudo privileges.</li>
-<li>Install the required software (Git, Docker, curl, etc.)</li>
-<li>Create a directory for Let’s Encrypt SSL certificates.</li>
-<li>Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.</li>
-<li>Create a directory for the database (SQLite) and the cache (Redis) (<code>db/</code> and <code>data/</code>)</li>
-</ul>
+<section id="zero-shot" class="level3">
+<h3 class="anchored" data-anchor-id="zero-shot">Zero-shot</h3>
 </section>
-<section id="customizing-the-script" class="level2">
-<h2 class="anchored" data-anchor-id="customizing-the-script">Customizing the script</h2>
-<p>You can customize the script to fit your needs. Here are a couple of things you can change:</p>
-<section id="change-the-software-to-install" class="level3">
-<h3 class="anchored" data-anchor-id="change-the-software-to-install">Change the software to install</h3>
-<p>If you want to change the software to install, you can modify the <code>packages</code> section in <code>cloudinit/vps.yml</code>.</p>
-</section>
-<section id="run-other-commands-after-the-vps-is-created" class="level3">
-<h3 class="anchored" data-anchor-id="run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</h3>
-<p>If you want to run other commands after the VPS is created, you can add them to the <code>runcmd</code> section in the <code>cloudinit/vps.yml</code> file.</p>
-</section>
-<section id="use-already-existing-firewall-rules" class="level3">
-<h3 class="anchored" data-anchor-id="use-already-existing-firewall-rules">Use already existing firewall rules</h3>
-<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. Take a look at <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps/blob/4a1a6edafc1c9e927f20906298ccd083718bc97e/cloud.tf#L72C1-L91C4">this section</a> of <code>cloud.tf</code>.</p>
-</section>
-<section id="use-a-different-server-type-operating-system-or-region" class="level3">
-<h3 class="anchored" data-anchor-id="use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</h3>
-<p>If you want to use a different server type, operating system, or region, you can modify the <code>server_type</code>, <code>region</code>, <code>operating_system</code> variables in <code>variables.tf</code>.</p>
+<section id="few-shot" class="level3">
+<h3 class="anchored" data-anchor-id="few-shot">Few-shot</h3>
 </section>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This script is a great way to create a Kamal-ready VPS on Hetzner using Terraform. It’s easy to maintain, fast, and cheap.</p>
-<p>All the code is available in the <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">repo</a>.</p>
-<p>Hope you find this useful!</p>
+<section id="last-letter" class="level2">
+<h2 class="anchored" data-anchor-id="last-letter">Last Letter</h2>
+<section id="setup-1" class="level3">
+<h3 class="anchored" data-anchor-id="setup-1">Setup</h3>
+</section>
+<section id="zero-shot-1" class="level3">
+<h3 class="anchored" data-anchor-id="zero-shot-1">Zero-shot</h3>
+</section>
+<section id="few-shot-1" class="level3">
+<h3 class="anchored" data-anchor-id="few-shot-1">Few-shot</h3>
+</section>
+</section>
+<section id="shuffled-objects" class="level2">
+<h2 class="anchored" data-anchor-id="shuffled-objects">Shuffled Objects</h2>
+<section id="setup-2" class="level3">
+<h3 class="anchored" data-anchor-id="setup-2">Setup</h3>
+</section>
+<section id="zero-shot-2" class="level3">
+<h3 class="anchored" data-anchor-id="zero-shot-2">Zero-shot</h3>
+</section>
+<section id="few-shot-2" class="level3">
+<h3 class="anchored" data-anchor-id="few-shot-2">Few-shot</h3>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -736,8 +607,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">
