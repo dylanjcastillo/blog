@@ -152,7 +152,7 @@ Below are the results, including the original results from Tam et al. for compar
 |                 | **Me (3-shot)** | 92.00  | 94.67   | 90.00         | 93.33           |
 | **Shuffle Obj** | **Tam et al.**  | 82.85  | 81.46   | 76.43         | 81.77           |
 |                 | **Me (0-shot)** | 95.12  | 79.67   | 81.71         | 89.84           |
-|                 | **Me (3-shot)** | 93.09  | 67.89   | 61.79         | 67.89           |
+|                 | **Me (3-shot)** | 92.68  | 69.51   | 62.60         | 65.85           |
 
 _NL_ stands for "Natural Language", which would correspond to the _Unstructured_ method in the previous table.
 
@@ -164,13 +164,13 @@ _JSON-Schema_ is the closest equivalent to **Structured** as referenced in the p
 
 In this case, I allowed for 3 retries in the case of parsing errors. I allowed for this because function calling had high error rates in the zero-shot prompting scenario.
 
-These retries primarily affected **FRI** results in the **GSM8K** and **Last Letter** datasets. But, since the other structured methods outperformed them, this adjustment does not alter the overall conclusions. The other methods maintained error rates of <0.5% in **GSM8K** and 0% in **Last Letter** and **Shuffle Object**.
+These retries primarily affected **FRI** results. This might make the comparisons in **Last Letter** biased in favor of structured outputs (**FRI** was the best method in this case). But since **JSON-Schema** also outperformed **NL** in this case, this adjustment does not alter the overall conclusions. The other methods maintained error rates of <0.5% in **GSM8K** and 0% in **Last Letter** and **Shuffle Object**.
 
 I used slightly different parsing functions for **Unstructured** and **Structured** outputs. The **Unstructured** parser was more lenient, removing commas and periods at the end of responses. But I believe this remains a fair comparison given that in the **Structured** cases you provide a JSON schema which is more informative.
 
 ### Analyzing the results
 
-Similar to what the .txt team found, you can see that after adjusting the prompts, the performance of structured outputs increases substantially compared to Tam et al.
+Similar to what the .txt team found, after adjusting the prompts, the performance of structured outputs increases substantially compared to Tam et al.
 
 Except for _NL_ in **GSM8k** and _FRI_ in **Last Letter**, I was able to improve all the metrics for both unstructured and structured outputs using a 0-shot prompt. For 3-shot prompts, I improved **GSM8k** and **Last Letter** across all methods, and _NL_ in **Shuffle Object**.
 
