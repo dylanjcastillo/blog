@@ -1,0 +1,70 @@
+---
+title: "Transform any image to WebP from the terminal"
+date: "11/23/2024"
+author-meta: "Dylan Castillo"
+description-meta: "A simple bash function to transform images to webp."
+lightbox: true
+fig-cap-location: margin
+categories:
+  - til
+  - webp
+  - bash
+  - ffmpeg
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
+---
+
+I was annoyed by the file size of my photo in the [About page](https://dylanjcastillo.com/about/), because it was slowing down the page load.
+
+Is it important? No.
+
+Don't I have better things to do on a Saturday afternoon? Yes.
+
+But it's like going to bed with the closet door open—you know there's nothing in there, but you just can't shake the feeling that the devil (or [Diosdado Cabello](https://es.wikipedia.org/wiki/Diosdado_Cabello)) might jump out and kill you in your sleep unless you get up and shut it.
+
+So I got o1-mini to write a simple script for me, and thought others might find it useful.
+
+Here it is:
+
+```bash
+function img2webp() {
+
+  # Check if the input file is provided or if help is requested
+  if [[ $# -lt 1 || "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: img2webp input_image [quality]"
+    echo "  input_image: Path to the input image file"
+    echo "  quality: Quality of the output WebP image (0-100, default is 80)"
+    return 1
+  fi
+
+  local input="$1"
+  local quality="${2:-80}"  # Default quality is 80 if not specified
+  local output="${input%.*}.webp"
+
+  # Convert the image to WebP using ffmpeg
+  ffmpeg -i "$input" -qscale:v "$quality" "$output"
+
+  # Check if the conversion was successful
+  if [[ $? -eq 0 ]]; then
+    echo "Successfully converted '$input' to '$output' with quality $quality."
+  else
+    echo "Failed to convert '$input' to WebP."
+    return 1
+  fi
+}
+```
+
+If you're using MacOS, you first need to install `ffmpeg` using Homebrew:
+
+```bash
+brew install ffmpeg
+```
+
+Then you can add it to your `.zshrc` and use it by running `img2webp <path_to_image> [quality]`.
+
+Just as reference, keeping the same quality, I decreased my profile picture from 234KB to 36KB by just changing from PNG to WebP.
+
+Hope you found this useful.
