@@ -43,13 +43,13 @@ So I decided to:
 2. Replicate the same tasks using a proprietary model _GPT-4o-mini_.
 3. Test results on a broader set of tasks such as [LiveBench](https://livebench.ai/).
 
-This article presents the results of the first two steps.
+This article presents the results of the first two steps. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/extras/say-what-you-mean-sometimes).
 
 ## Results
 
 In essence, Tam et al.’s conclusions about structured outputs might still hold, even if they did not properly test for it.
 
-.txt's rebuttal is also correct, and shows that structured outputs are as good or better than unstructured outputs at least for _LLaMA3-8B-Instruct_. But the same results did not hold for _GPT-4o-mini_.
+.txt's rebuttal is also correct, and shows that structured outputs are as good or better than unstructured outputs for _LLaMA3-8B-Instruct_. But the same results did not hold for _GPT-4o-mini_.
 
 For **GSM8K** and **Last Letter**, structured and unstructured methods scored similarly using _GPT-4o-mini_. But for **Shuffle Object**, unstructured outputs clearly surpassed a structured format.
 
@@ -164,9 +164,9 @@ _JSON-Schema_ is the closest equivalent to **Structured** as referenced in the p
 
 In this case, I allowed for 3 retries in the case of parsing errors. I allowed for this because function calling had high error rates in the zero-shot prompting scenario.
 
-These retries primarily affected **FRI** results in the **GSM8K** and **Last Letter** datasets. But, since the other structured methods outperformed them, this adjustment does not alter the overall conclusions. The alternative methods maintained error rates of <0.5% in **GSM8K** and 0% in **Last Letter** and **Shuffle Object**.
+These retries primarily affected **FRI** results in the **GSM8K** and **Last Letter** datasets. But, since the other structured methods outperformed them, this adjustment does not alter the overall conclusions. The other methods maintained error rates of <0.5% in **GSM8K** and 0% in **Last Letter** and **Shuffle Object**.
 
-I used slightly different parsing functions for **Unstructured** and **Structured** outputs. The **Unstructured** parser was more lenient, removing commas and periods at the end of responses. But I believe this remains a fair comparison given that in the **Structured** cases you provide a schema which is more informative.
+I used slightly different parsing functions for **Unstructured** and **Structured** outputs. The **Unstructured** parser was more lenient, removing commas and periods at the end of responses. But I believe this remains a fair comparison given that in the **Structured** cases you provide a JSON schema which is more informative.
 
 ### Analyzing the results
 
@@ -174,11 +174,11 @@ Similar to what the .txt team found, you can see that after adjusting the prompt
 
 Except for _NL_ in **GSM8k** and _FRI_ in **Last Letter**, I was able to improve all the metrics for both unstructured and structured outputs using a 0-shot prompt. For 3-shot prompts, I improved **GSM8k** and **Last Letter** across all methods, and _NL_ in **Shuffle Object**.
 
-**GSM8k** and **Last Letter** show very similar results between unstructured and structured outputs. I don't believe there's enough evidence to say that structured outputs are better than unstructured outputs in these cases.
+For **GSM8k** and **Last Letter**, the results were very similar between unstructured and structured outputs. There was a slight edge for unstructured outputs in **GSM8k** and for structured outputs in **Last Letter**. In these cases, it’s not clear that one approach definitively outperforms the other.
 
-On the other hand, **Shuffle Object** shows a clear advantage for unstructured outputs over structured outputs. I wasn't expecting this. But, even after adjusting the prompts, I couldn't reduce the gap between the two methods.
+On the other hand, **Shuffle Object** shows a clear advantage for unstructured outputs over structured outputs. This was unexpected, and even after adjusting the prompts, I couldn’t narrow the gap that much.
 
-So, even though Tam et al. had issues in their study, their conclusion seems to hold. There are cases where unstructured outputs are better than structured outputs.
+In the end, despite the issues in Tam et al.’s study, their conclusion appears to hold: there are scenarios where unstructured outputs are indeed better than structured ones.
 
 :::{.callout-note}
 In **GSM8k** and **Last Letter**, 3-shot prompting actually hurt performance. This is in line with [other analyses](https://python.useinstructor.com/blog/2024/09/26/bad-schemas-could-break-your-llm-structured-outputs/?h=bad+sc#modes-and-models). I will dive deeper into this in a future article.
@@ -196,6 +196,6 @@ In most cases, structured outputs will likely have similar performance to unstru
 
 In the particular case of **Shuffle Object** with _GPT-4o-mini_, it's possible that by continuing improving the prompts, you could reduce the gap between the two methods. Or that this might not occur in bigger, more capable models. Still, the key point remains: in this particular scenario, using a fairly popular model with reasonable prompts, there is a significant difference in performance between structured and unstructured outputs.
 
-I don’t think unstructured outputs are inherently better or worse than structured outputs across the board. It likely depends on your task and the model you're using. You will need to test for yourself and find if there's a difference, and if so, which one performs better.
+I don’t think unstructured outputs are inherently better or worse than structured outputs across the board. It likely depends on your task, the model you're using, and your prompt engineering skills. You will need to test for yourself and find if there's a difference, and if so, which one performs better.
 
 So, yes, feel free to say what you mean... sometimes.
