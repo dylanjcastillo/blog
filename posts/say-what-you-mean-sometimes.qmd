@@ -1,0 +1,201 @@
+---
+title: "Say What You Mean... Sometimes"
+date: "12/06/2024"
+date-modified: last-modified
+description-meta: "A look at the impact of structured outputs on the performance of LLMs."
+toc: true
+toc-depth: 3
+lightbox: true
+fig-cap-location: margin
+categories:
+  - llm
+  - openai
+  - pydantic
+  - python
+author:
+  - name: Dylan Castillo
+    url: https://dylancastillo.co
+    affiliation: Iwana Labs
+    affiliation-url: https://iwanalabs.com
+citation: true
+comments:
+  utterances:
+    repo: dylanjcastillo/blog_comments
+    theme: dark-blue
+    issue-term: pathname
+---
+
+When I read [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) by Tam et al. I thought they raised an interesting question: does constraining LLM outputs to structured formats impact the quality of their responses?
+
+In both the original study and their recent update, Tam et al. concluded that is the case. They found that "structured generation constraints significantly impact LLM performance across various tasks".
+
+But the study had major flaws. The [.txt](https://dottxt.co/) team wrote a very compelling [rebuttal](https://dottxt.co/blog/let-me-speak-freely) to the paper. For _Llama-3-8B-Instruct_, they demonstrate that Tam, et al. results were mostly due to poor prompting, unfair comparisons and the improper use of an "AI parser" rather than the use of structured outputs.
+
+The .txt team was right but it still left me wondering how well their results generalize. They focused on a single model^[With this setup. They've also [shared results](https://blog.dottxt.co/performance-gsm8k.html) of other open-weight models using a different setup.], which represents a small fraction of the LLMs powering applications in production today. Open-weight models offer more flexibility on how to _structure_ your output, such as using specific [regex expressions](https://dottxt-ai.github.io/outlines/latest/reference/generation/regex/). Proprietary models lack this. Right now, JSON is the only structured output format guaranteed to work across most popular providers.
+
+Given this constraint, would the .txt team’s results still hold?
+
+Plus, both studies focused on tasks that might not be a good proxy for the full range of tasks people use LLMs for. Would the rebuttal results be different in settings outside of simple reasoning tasks?
+
+So I decided to:
+
+1. Replicate the results from .txt's rebuttal using _LLaMA3-8B-Instruct_.
+2. Replicate the same tasks using a proprietary model _GPT-4o-mini_.
+3. Test results on a broader set of tasks such as [LiveBench](https://livebench.ai/).
+
+This article presents the results of the first two steps.
+
+## Results
+
+In essence, Tam et al.’s conclusions about structured outputs might still hold, even if they did not properly test for it.
+
+.txt's rebuttal is also correct, and shows that structured outputs are as good or better than unstructured outputs at least for _LLaMA3-8B-Instruct_. But the same results did not hold for _GPT-4o-mini_.
+
+For **GSM8K** and **Last Letter**, structured and unstructured methods scored similarly using _GPT-4o-mini_. But for **Shuffle Object**, unstructured outputs clearly surpassed a structured format.
+
+## Study design
+
+Tam et al. evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate reasoning tasks and accuracy to evaluate classification tasks. They ran the experiments using the following models:
+
+1. **Proprietary models**: _gpt-3.5-turbo-0125_, _claude-3-haiku-20240307_, _gemini-1.5-flash_, and _gpt-4o-mini-2024-07-18_.
+2. **Open-weight models**: _LLaMA3-8B-Instruct_, and _Gemma-2-9B-Instruct_.
+
+.txt used a similar setup, but only focused on the reasoning tasks and evaluating _LLaMA3-8B-Instruct_. They did not include classification tasks because Tam et al. observed that structured outputs resulted in better performance in these tasks, so there was no need to test for it.
+
+I also believe that structured outputs are better for classification tasks. So, I excluded them from my analysis as well.
+
+The reasoning tasks were:
+
+1. [GSM8K](https://huggingface.co/datasets/openai/gsm8k): A dataset from of grade school math word problems.
+2. [Last Letter](https://huggingface.co/datasets/ChilleD/LastLetterConcat): A dataset of simple word puzzles that require concatening the last letters of a list of names.
+3. [Shuffle Object](https://github.com/google/BIG-bench/tree/main/bigbench/benchmark_tasks/tracking_shuffled_objects): A dataset that requires reasoning about the state of a system after a sequence of shuffling operations.
+
+This article will focus on replicating the results from .txt's rebuttal on these tasks and evaluating the same tasks using a proprietary model.
+
+## Replicating .txt's rebuttal
+
+.txt made it very easy to reproduce their results by sharing their [code on Github](https://github.com/dottxt-ai/demos/tree/main/say-what-you-mean). I just set up a machine at [Modal](https://modal.com/) and ran the code.
+
+While going through the code, I noticed some small issues with the prompts. So I decided to tweak them a bit.
+
+Below are .txt's original results compared to mine, after the prompt adjustments:
+
+| Task               | Unstructured (.txt) | Structured (.txt) | Unstructured (Me, 3-shot) | Structured (Me, 3-shot) |
+| ------------------ | ------------------- | ----------------- | ------------------------- | ----------------------- |
+| **GSM8K**          | 77.18               | 77.79             | 79.98                     | 79.45                   |
+| **Last Letter**    | 73.33               | 77.33             | 74.00                     | 78.00                   |
+| **Shuffle Object** | 40.72               | 44.35             | 42.68                     | 43.90                   |
+
+Except for **Structured** in the **Shuffle Object** task, I was able to improve all the metrics. In **GSM8K's** case, even reversing .txt's result, with **Unstructured** outperforming **Structured** by a small margin.
+
+But I don't think this matters much.
+
+Their conclusion still holds: structured outputs are either as good as or better than unstructured outputs, in the tasks considered.
+
+I'll explain the prompt changes I made below, so that you can judge for yourself if they make sense.
+
+### Formatting few-shot examples
+
+In the **GSM8K** and **Last Letter** tasks, the few-shot prompt for both unstructured and structured used examples formatted as JSON objects and asked the LLM to produce the output in the same format, from which the answer was extracted.
+
+That felt unfair. Even though you're not formally constraining the LLM to produce a JSON object, you're still asking it to format its response in somewhat unnatural way.
+
+I adjusted the prompts to be as similar as possible for both unstructured and structured outputs while still trying to get the most out of each approach.
+
+For example, in **GSM8K**, the unstructured prompt is:
+
+> You are an expert in solving grade school math tasks. You will be presented with a grade-school math word problem and be asked to solve it.
+> You will always respond in the following format:
+>
+> <str, reasoning about the answer>
+>
+> ANSWER: <int, final answer>
+>
+> First, provide your step by step reasoning. Then, in ANSWER, provide an integer that corresponds to the correct answer to the question. Don't include any other text in ANSWER.
+
+And the structured prompt is:
+
+> You are an expert in solving grade school math tasks. You will be presented with a grade-school math word problem and be asked to solve it.
+> You will always respond in the following format:
+>
+> {"reasoning": <str, reasoning about the answer>, "answer": <int, final answer>}
+>
+> First, provide your step by step reasoning in the "reasoning" field. Then, in the "answer" field, provide an integer that corresponds to the correct answer to the question. Don't include any other text in the "answer" field.
+
+Finally, for all the tasks, I used a 3-shot prompt.
+
+### Clarifying the task
+
+I also tried to make the prompts clearer. The description of the task in the original **Last Letter** prompt was:
+
+> You are an expert in solving simple word puzzles using reasoning steps. Your specific task is going to be to take a list of 4 names and reason about the last letter of each ., then you will concatenate those letters into a word.
+
+I changed it to:
+
+> You are an expert in solving word puzzles. Your specific task is going to be to take a list of 4 names, get the last letter of each and concatenate these letters into a word.
+
+The original prompt was reasonable, but I thought the new version was clearer. Through trial and error, I've learned that when working with LLMs, it's best to be as clear and direct as possible.
+
+## Evaluating GPT-4o-mini
+
+Using the same setup as before, I ran the same tasks with `gpt-4o-mini-2024-07-18`.
+
+Below are the results, including the original results from Tam et al. for comparison:
+
+| **Task**        | **Method**      | **NL** | **FRI** | **JSON-Mode** | **JSON-Schema** |
+| --------------- | --------------- | ------ | ------- | ------------- | --------------- |
+| **GSM8K**       | **Tam et al.**  | 94.57  | 87.17   | 86.95         | 91.71           |
+|                 | **Me (0-shot)** | 94.31  | 92.12   | 93.33         | 93.48           |
+|                 | **Me (3-shot)** | 93.86  | 92.72   | 93.25         | 92.95           |
+| **Last Letter** | **Tam et al.**  | 83.11  | 84.73   | 76.00         | 86.07           |
+|                 | **Me (0-shot)** | 87.33  | 88.00   | 90.00         | 87.33           |
+|                 | **Me (3-shot)** | 92.00  | 94.67   | 90.00         | 93.33           |
+| **Shuffle Obj** | **Tam et al.**  | 82.85  | 81.46   | 76.43         | 81.77           |
+|                 | **Me (0-shot)** | 95.12  | 79.67   | 81.71         | 89.84           |
+|                 | **Me (3-shot)** | 93.09  | 67.89   | 61.79         | 67.89           |
+
+_NL_ stands for "Natural Language", which would correspond to the _Unstructured_ method in the previous table.
+
+_FRI_ stands for "Format Restricting Instructions", which is a JSON generated through the OpenAI's [function calling](https://platform.openai.com/docs/guides/function-calling). _JSON-Mode_ is a JSON generated through the OpenAI's [JSON mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode). _JSON-Schema_ is a JSON generated using [constrained decoding](https://openai.com/index/introducing-structured-outputs-in-the-api/).
+
+_JSON-Schema_ is the closest equivalent to **Structured** as referenced in the previous table. But, in real-life applications, you don't really care about how the output was generated. You just want to get the output in the format you want. So, for the sake of comparison, I will consider the three other methods equivalent to **Structured** as well.
+
+### Adjusting for proprietary models
+
+In this case, I allowed for 3 retries in the case of parsing errors. I allowed for this because function calling had high error rates in the zero-shot prompting scenario.
+
+These retries primarily affected **FRI** results in the **GSM8K** and **Last Letter** datasets. But, since the other structured methods outperformed them, this adjustment does not alter the overall conclusions. The alternative methods maintained error rates of <0.5% in **GSM8K** and 0% in **Last Letter** and **Shuffle Object**.
+
+I used slightly different parsing functions for **Unstructured** and **Structured** outputs. The **Unstructured** parser was more lenient, removing commas and periods at the end of responses. But I believe this remains a fair comparison given that in the **Structured** cases you provide a schema which is more informative.
+
+### Analyzing the results
+
+Similar to what the .txt team found, you can see that after adjusting the prompts, the performance of structured outputs increases substantially compared to Tam et al.
+
+Except for _NL_ in **GSM8k** and _FRI_ in **Last Letter**, I was able to improve all the metrics for both unstructured and structured outputs using a 0-shot prompt. For 3-shot prompts, I improved **GSM8k** and **Last Letter** across all methods, and _NL_ in **Shuffle Object**.
+
+**GSM8k** and **Last Letter** show very similar results between unstructured and structured outputs. I don't believe there's enough evidence to say that structured outputs are better than unstructured outputs in these cases.
+
+On the other hand, **Shuffle Object** shows a clear advantage for unstructured outputs over structured outputs. I wasn't expecting this. But, even after adjusting the prompts, I couldn't reduce the gap between the two methods.
+
+So, even though Tam et al. had issues in their study, their conclusion seems to hold. There are cases where unstructured outputs are better than structured outputs.
+
+:::{.callout-note}
+In **GSM8k** and **Last Letter**, 3-shot prompting actually hurt performance. This is in line with [other analyses](https://python.useinstructor.com/blog/2024/09/26/bad-schemas-could-break-your-llm-structured-outputs/?h=bad+sc#modes-and-models). I will dive deeper into this in a future article.
+:::
+
+## Conclusion
+
+If you're a developer, you'll be pleased to know that the answer to wether you should use structured or unstructured outputs is: [it depends](https://www.reddit.com/r/orlybooks/comments/50meb5/it_depends/).
+
+I love using structured outputs in my daily work, because it makes it easier to work with the output of LLMs. I always encourage clients who aren't using them yet to give it a try.
+
+But, until there's sufficient evidence in favor of one approach over the other, it's best to test yourself what works best for your specific use case. Don't rely on posts from random people on the internet. Run your own [evals](https://hamel.dev/blog/posts/evals/) and see for yourself.
+
+In most cases, structured outputs will likely have similar performance to unstructured outputs. But, by blindly assuming that structured outputs will always be as good or better, you might be missing out on easy performance gains. This is especially true in cases where you're not generating complex structured outputs.
+
+In the particular case of **Shuffle Object** with _GPT-4o-mini_, it's possible that by continuing improving the prompts, you could reduce the gap between the two methods. Or that this might not occur in bigger, more capable models. Still, the key point remains: in this particular scenario, using a fairly popular model with reasonable prompts, there is a significant difference in performance between structured and unstructured outputs.
+
+I don’t think unstructured outputs are inherently better or worse than structured outputs across the board. It likely depends on your task and the model you're using. You will need to test for yourself and find if there's a difference, and if so, which one performs better.
+
+So, yes, feel free to say what you mean... sometimes.
