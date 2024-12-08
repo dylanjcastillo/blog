@@ -3,9 +3,16 @@ title: "About"
 aliases:
   - /about/
   - /author/dylan/
-image: profile_pic.webp
 about:
   template: jolla
+  image: profile_pic.webp
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/dylanjcastillo
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/dylanjcastillo/
 ---
 
 I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've worked in the AI & ML space for almost a decade.
@@ -16,4 +23,4 @@ In my free time, I like working on random side projects (open source, personal, 
 
 Every once in a while, I write about topics I'm interested in. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
 
-If you're interested in working with me or just want to chat, feel free to reach out to me at [dylan@iwanalabs.com](mailto:dylan@iwanalabs.com) or connect with me on [LinkedIn](https://linkedin.com/in/dylanjcastillo/).
+If you're interested in working with me or just want to chat, feel free to reach out to me at [dylan@iwanalabs.com](mailto:dylan@iwanalabs.com).
