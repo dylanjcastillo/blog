@@ -1,28 +1,12 @@
 ---
 title: "Say What You Mean... Sometimes"
 date: "12/08/2024"
-date-modified: last-modified
 description-meta: "A look at the impact of structured outputs on the performance of LLMs."
-toc: true
-toc-depth: 3
-lightbox: true
-fig-cap-location: margin
 categories:
   - llm
   - openai
   - pydantic
   - python
-author:
-  - name: Dylan Castillo
-    url: https://dylancastillo.co
-    affiliation: Iwana Labs
-    affiliation-url: https://iwanalabs.com
-citation: true
-comments:
-  utterances:
-    repo: dylanjcastillo/blog_comments
-    theme: dark-blue
-    issue-term: pathname
 ---
 
 When I read [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) by Tam et al. I thought they raised an interesting question: does constraining LLM outputs to structured formats impact the quality of their responses?
@@ -49,15 +33,18 @@ This article presents the results of the first two steps. All the code is availa
 
 ## Results
 
-If you're short on time, here are the main results:
+If you're short on time, here are the key findings:
 
 1. Tam et al.’s conclusions about structured outputs might still hold, even if they did not properly test for it. There are cases where structured outputs perform worse than unstructured outputs.
-2. .txt's rebuttal is correct, and shows that structured outputs are as good or better than unstructured outputs for _LLaMA3-8B-Instruct_. But the same approach does not hold for _GPT-4o-mini_ (and possibly other models).
+2. .txt's rebuttal is accurate. It shows that structured outputs are as good or better than unstructured outputs for _LLaMA3-8B-Instruct_. But the same approach does not hold for _GPT-4o-mini_ (and possibly other models).
 
-In the figure below you can see the results for _GPT-4o-mini_, using .txt's fixes to the prompts and additional improvements I implemented.
+The figure below shows the results for _GPT-4o-mini_ using .txt's prompt fixes, along with additional improvements I made.
 
 ```{python}
+#| label: fig-gpt-4o-mini-best
+#| fig-cap: "Overall results for GPT-4o-mini."
 #| echo: false
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -104,10 +91,12 @@ fig.update_layout(
     ),
     yaxis=dict(
         title='Score (%)',
-        range=[0, 105]
+        range=[0, 105],
+        fixedrange=True  # Prevent y-axis zooming
     ),
     xaxis=dict(
-        title='Task'
+        title='Task',
+        fixedrange=True  # Prevent x-axis zooming
     ),
     legend=dict(
         orientation='h',
@@ -117,7 +106,25 @@ fig.update_layout(
         x=0.5
     ),
     showlegend=True,
-    modebar_remove=['zoom', 'pan', 'select', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d']
+    modebar=dict(
+        remove=["autoScale2d", "autoscale",
+            "editInChartStudio", "editinchartstudio",
+            "hoverCompareCartesian", "hovercompare", "lasso",
+            "lasso2d", "orbitRotation", "orbitrotation", "pan",
+            "pan2d", "pan3d", "reset", "resetCameraDefault3d",
+            "resetCameraLastSave3d", "resetGeo",
+            "resetSankeyGroup", "resetScale2d", "resetViewMap",
+            "resetViewMapbox", "resetViews", "resetcameradefault",
+            "resetcameralastsave", "resetsankeygroup",
+            "resetscale", "resetview", "resetviews", "select",
+            "select2d", "sendDataToCloud", "senddatatocloud",
+            "tableRotation", "tablerotation", "toImage",
+            "toggleHover", "toggleSpikelines", "togglehover",
+            "togglespikelines", "toimage", "zoom", "zoom2d",
+            "zoom3d", "zoomIn2d", "zoomInGeo", "zoomInMap",
+            "zoomInMapbox", "zoomOut2d", "zoomOutGeo",
+            "zoomOutMap", "zoomOutMapbox", "zoomin", "zoomout"],
+    )
 )
 
 fig.show()
@@ -129,12 +136,12 @@ The rest of the article will explain the approach I took to get these results.
 
 ## Study design
 
-Tam et al. evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate reasoning tasks and accuracy to evaluate classification tasks. They ran the experiments using the following models:
+Tam et al. evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate the reasoning tasks and accuracy to evaluate the classification tasks. They ran the experiments using the following models:
 
 1.  **Proprietary models**: _gpt-3.5-turbo-0125_, _claude-3-haiku-20240307_, _gemini-1.5-flash_, and _gpt-4o-mini-2024-07-18_.
 2.  **Open-weight models**: _LLaMA3-8B-Instruct_, and _Gemma-2-9B-Instruct_.
 
-.txt used a similar setup, but only focused on the reasoning tasks and evaluating _LLaMA3-8B-Instruct_. They did not include classification tasks because Tam et al. observed that structured outputs resulted in better performance in these tasks, so there was no need to test for it.
+.txt used a similar setup, but only focused on the reasoning tasks using _LLaMA3-8B-Instruct_. They did not include classification tasks because Tam et al. observed that structured outputs resulted in better performance in these tasks, so there was no need to test for it.
 
 I also believe that structured outputs are better for classification tasks. So, I excluded them from my analysis as well.
 
@@ -144,7 +151,7 @@ The reasoning tasks were:
 2.  [Last Letter](https://huggingface.co/datasets/ChilleD/LastLetterConcat): A dataset of simple word puzzles that require concatening the last letters of a list of names.
 3.  [Shuffled Objects](https://github.com/google/BIG-bench/tree/main/bigbench/benchmark_tasks/tracking_shuffled_objects): A dataset that requires reasoning about the state of a system after a sequence of shuffling operations.
 
-This article will focus on replicating the results from .txt's rebuttal on these tasks and evaluating the same tasks using a proprietary model.
+The rest of the article details the process of replicating .txt's rebuttal on these tasks and evaluating the same tasks using _GPT-4o-mini_.
 
 ## Replicating .txt's rebuttal
 
@@ -154,41 +161,43 @@ While going through the code, I noticed some small issues with the prompts. So I
 
 Below are .txt's original results compared to mine, after the prompt adjustments:
 
-```{=html}
-<table>
-  <tr>
-    <th rowspan="2"><strong>Task</strong></th>
-    <th colspan="2"><strong>.txt</strong></th>
-    <th colspan="2"><strong>Me, 3-shot</strong></th>
-  </tr>
-  <tr>
-    <th><strong>Unstructured</strong></th>
-    <th><strong>Structured</strong></th>
-    <th><strong>Unstructured</strong></th>
-    <th><strong>Structured</strong></th>
-  </tr>
-  <tr>
-    <td><strong>GSM8K</strong></td>
-    <td>77.18</td>
-    <td>77.79</td>
-    <td>79.98</td>
-    <td>79.45</td>
-  </tr>
-  <tr>
-    <td><strong>Last Letter</strong></td>
-    <td>73.33</td>
-    <td>77.33</td>
-    <td>74.00</td>
-    <td>78.00</td>
-  </tr>
-  <tr>
-    <td><strong>Shuffled Objects</strong></td>
-    <td>40.72</td>
-    <td>44.35</td>
-    <td>42.68</td>
-    <td>43.90</td>
-  </tr>
-</table>
+```{python}
+#| label: tbl-llama-3-8b-instruct
+#| tbl-cap: "Results for LLaMA3-8B-Instruct."
+#| echo: false
+
+import pandas as pd
+
+# Create data
+data = {
+    'Task': ['GSM8K', 'Last Letter', 'Shuffled Objects']
+}
+
+# Create multi-level columns
+columns = pd.MultiIndex.from_product([
+    ['.txt', 'me, 3-shot'],
+    ['Unstructured', 'Structured']
+])
+
+# Create values
+values = [
+    [77.18, 77.79, 79.98, 79.45],
+    [73.33, 77.33, 74.00, 78.00],
+    [40.72, 44.35, 42.68, 43.90]
+]
+
+# Create DataFrame with multi-level columns
+df = pd.DataFrame(values, columns=columns)
+df.insert(0, 'Task', data['Task'])
+
+# Create table with custom formatting
+table = (
+  df.style
+    .format(precision=2)
+    .hide(axis='index')
+)
+
+table
 ```
 
 Except for **Structured** in the **Shuffled Objects** task, I was able to improve all the metrics. In **GSM8K's** case, even reversing .txt's result, with **Unstructured** outperforming **Structured** by a small margin.
@@ -245,19 +254,57 @@ The original prompt was reasonable, but I thought the new version was clearer. T
 
 Using the same setup as before, I ran the same tasks with `gpt-4o-mini-2024-07-18`.
 
-Below are the results, including the original results from Tam et al. for comparison:
+In the table below, you can see the results, including the original results from Tam et al. for comparison:
 
-| **Task**          | **Method**      | **NL** | **FRI** | **JSON-Mode** | **JSON-Schema** |
-| ----------------- | --------------- | ------ | ------- | ------------- | --------------- |
-| **GSM8K**         | **Tam et al.**  | 94.57  | 87.17   | 86.95         | 91.71           |
-|                   | **Me (0-shot)** | 94.31  | 92.12   | 93.33         | 93.48           |
-|                   | **Me (3-shot)** | 93.86  | 92.72   | 93.25         | 92.95           |
-| **Last Letter**   | **Tam et al.**  | 83.11  | 84.73   | 76.00         | 86.07           |
-|                   | **Me (0-shot)** | 87.33  | 88.00   | 90.00         | 87.33           |
-|                   | **Me (3-shot)** | 92.00  | 94.67   | 90.00         | 93.33           |
-| **Shuffled Obj.** | **Tam et al.**  | 82.85  | 81.46   | 76.43         | 81.77           |
-|                   | **Me (0-shot)** | 95.12  | 79.67   | 81.71         | 89.84           |
-|                   | **Me (3-shot)** | 92.68  | 69.51   | 62.60         | 65.85           |
+```{python}
+#| label: tbl-gpt-4o-mini
+#| tbl-cap: "Results for GPT-4o-mini."
+#| echo: false
+
+import pandas as pd
+
+# Define MultiIndex for Task and Method
+index = pd.MultiIndex.from_product(
+    [['GSM8K', 'Last Letter', 'Shuffled Obj.'],
+     ['Tam et al.', 'Me, 0-shot', 'Me, 3-shot']],
+    names=['Task', 'Method']
+)
+
+# Data without explicit Task and Method columns
+data = {
+    'NL': [
+        94.57, 94.31, 93.86,
+        83.11, 87.33, 92.00,
+        82.85, 95.12, 92.68
+    ],
+    'FRI': [
+        87.17, 92.12, 92.72,
+        84.73, 88.00, 94.67,
+        81.46, 79.67, 69.51
+    ],
+    'JSON-Mode': [
+        86.95, 93.33, 93.25,
+        76.00, 90.00, 90.00,
+        76.43, 81.71, 62.60
+    ],
+    'JSON-Schema': [
+        91.71, 93.48, 92.95,
+        86.07, 87.33, 93.33,
+        81.77, 89.84, 65.85
+    ]
+}
+
+# Create DataFrame with MultiIndex
+df = pd.DataFrame(data, index=index)
+
+# Style the DataFrame
+table = (
+  df.style
+    .format(precision=2)
+)
+
+table
+```
 
 _NL_ stands for "Natural Language", which would correspond to the _Unstructured_ method in the previous table.
 
@@ -299,6 +346,6 @@ That said, until there's strong evidence favoring one approach over the other, t
 
 I expect that in most cases, structured outputs will have similar performance to unstructured outputs. But, if you blindly assume that structured outputs are always equal to or better than unstructured ones, you might be missing out on easy performance gains.
 
-Take the example of **Shuffled Objects** with _GPT-4o-mini_. You could potentially reduce the gap between the two methods by continuing improving the prompts or by switching to a more powerful model. But the effort and/or costs might outweigh the benefits compared to simply using unstructured outputs.
+Take the example of **Shuffled Objects** with _GPT-4o-mini_. You could potentially reduce the gap between the two methods by continuing improving the prompts or by switching to a more powerful model. But the costs, in terms of time and effort, might outweigh the benefits compared to simply using unstructured outputs.
 
-I don’t think unstructured outputs are inherently better or worse than structured outputs across the board. The right choice depends on your task, the model, and your prompt engineering skills. Test for yourself to determine if a difference exists, and if it does, decide which option works best for you.
+This works both ways. Unstructured outputs aren’t inherently better or worse than structured ones. The right choice depends on your task, the model, and your prompt engineering skills. Test for yourself to determine if a difference exists, and if it does, decide which option works best for you.

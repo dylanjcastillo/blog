@@ -13,10 +13,7 @@ toc-depth: 3
 
 # Lightbox
 lightbox: true
-
-# Figures and tables captions
 fig-cap-location: margin
-tbl-cap-location: margin
 
 # Date modified
 date-modified: last-modified

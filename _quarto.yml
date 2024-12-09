@@ -11,6 +11,7 @@ website:
   open-graph: true
   twitter-card:
     site: "@dylanjcastillo"
+    creator: "@dylanjcastillo"
   navbar:
     title: false
     left:
