@@ -78,6 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -118,6 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:title" content="Build an AI Search Engine Using FastAPI, Qdrant, and ChatGPT – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:image-height" content="331">
 <meta name="twitter:image-width" content="688">
@@ -237,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
+      <p class="date-modified">December 9, 2024</p>
     </div>
   </div>
     
@@ -272,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Search:</strong> This consists of a backend service that processes the user’s query, vectorizes it, finds vectors in the index that are the most similar to it, and then calls OpenAI’s API to generate a summarized answer for the user.</li>
 </ol>
 <p>Here’s a visual representation of how the parts of the application you’ll build in this tutorial fit together:</p>
-<p><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png" class="img-fluid"></p>
+<p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-8.png" class="img-fluid"></a></p>
 <p>That’s all. Let’s continue!</p>
 </section>
 <section id="set-up-your-local-environment" class="level2">
@@ -352,7 +356,7 @@ Note
 <section id="qdrant" class="level3">
 <h3 class="anchored" data-anchor-id="qdrant">Qdrant</h3>
 <p>Create an account at <a href="https://cloud.qdrant.io/">Qdrant</a>, if you don’t already have one. Then, on your account page go to <em>Clusters &gt; Create,</em> and create a cluster of 1GB of RAM, 0.5 vCPU, and 20GB Disk. Qdrant has a generous free tier, and it’s free to run a cluster with those specifications.</p>
-<p><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="img-fluid"></p>
+<p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="img-fluid"></a></p>
 <p>Next, paste the host and API key you obtained when you created your cluster into <code>.env</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="va">QDRANT_HOST</span><span class="op">=&lt;</span>your_qdrant_host<span class="op">&gt;</span></span>
@@ -363,7 +367,7 @@ Note
 <section id="openai" class="level3">
 <h3 class="anchored" data-anchor-id="openai">OpenAI</h3>
 <p>If you don’t have an OpenAI account, <a href="https://platform.openai.com/login">create one</a>. After that, go to <em>Manage account &gt; API keys &gt; &nbsp;+ Create new secret key.</em></p>
-<p><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="img-fluid"></p>
+<p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="img-fluid"></a></p>
 <p>Then, paste the generated key in <code>.env</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="va">QDRANT_HOST</span><span class="op">=&lt;</span>your_qdrant_host<span class="op">&gt;</span></span>
@@ -614,9 +618,9 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <p>If you want to test it locally, type the following command into a terminal (inside the project’s virtual environment):</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>uvicorn main:app <span class="op">--</span><span class="bu">reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In your browser, navigate to <code>localhost:8000/docs</code> to test your <code>/ask</code> endpoint:</p>
-<p><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="img-fluid"></p>
+<p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="img-fluid"></a></p>
 <p>A successful response will look as follows:</p>
-<p><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png" class="img-fluid"></p>
+<p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-6.png" class="img-fluid"></a></p>
 <p>That’s it! You have a working version of your AI search engine. Next, I’ll mention some ideas about deployment.</p>
 </section>
 <section id="deploy-your-app" class="level2">
@@ -1088,6 +1092,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -78,6 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -116,6 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:title" content="Semantic Search with OpenSearch, Cohere, and FastAPI – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi/image.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -229,7 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
+      <p class="date-modified">December 9, 2024</p>
     </div>
   </div>
     
@@ -271,7 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Search client:</strong> This is a FastAPI-based backend service that processes the user’s query, vectorizes it, and searches the vector database for the most similar vectors.</li>
 </ol>
 <p>Here’s a diagram of all the components:</p>
-<p><img src="semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="img-fluid"></p>
+<p><a href="semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="img-fluid"></a></p>
 <p>Architecture diagram</p>
 <p>Next, you’ll set up your local environment to run the project.</p>
 </section>
@@ -514,9 +518,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Lines 28 to 49</strong> define a<code>**/**search</code> endpoint that accepts a query string parameter. It uses Cohere to generate an embedding from a query and then searches the OpenSearch index for the ten most similar documents. Finally, it formats the results as a user response.</li>
 </ul>
 <p>To run the app, you can use <code>uvicorn app:app --reload</code>. You can test the app by opening your browser, navigating to <code>localhost:8000/docs</code>, and clicking on <code>POST /search</code>:</p>
-<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid"></p>
+<p><a href="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid"></a></p>
 <p>For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
-<p><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid"></p>
+<p><a href="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid"></a></p>
 <p>That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
 </section>
 <section id="conclusion" class="level2">
@@ -978,6 +982,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

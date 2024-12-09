@@ -78,6 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -118,6 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:title" content="Semantic Search with Elasticsearch, OpenAI, and LangChain – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/images/semantic-search-elasticsearch-openai-langchain/image-12.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:image-height" content="438">
 <meta name="twitter:image-width" content="771">
@@ -232,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
+      <p class="date-modified">December 9, 2024</p>
     </div>
   </div>
     
@@ -267,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Search app:</strong> This is a backend service that uses the user’s search term, generates an embedding from it, and then looks for the most similar embeddings in the vector database.</li>
 </ol>
 <p>Here’s a diagram of this architecture:</p>
-<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="img-fluid"></p>
+<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="img-fluid"></a></p>
 <p>If you’ve read my previous <a href="https://dylancastillo.co/semantic-search-with-opensearch-cohere-and-fastapi/">tutorial</a> on semantic search, you might have noticed that the <strong>vectorizer</strong> isn’t part of this architecture. I’m purposely skipping it because <code>langchain</code> takes care of that part for you, so you can have the indexer and vectorizer in the same place.</p>
 <p>Next, you’ll set up your local environment.</p>
 </section>
@@ -470,9 +474,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Finally, you can run the app from the terminal (using your virtual environment):</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">uvicorn</span> app:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then, visit <code>http://127.0.0.1:8000/docs</code>, and test <code>/ask</code> by making a question about the book:</p>
-<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid"></p>
+<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid"></a></p>
 <p>If everything went well, you should get something like this:</p>
-<p><img src="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid"></p>
+<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid"></a></p>
 <p>That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
 </section>
 <section id="going-to-production" class="level2">
@@ -946,6 +950,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

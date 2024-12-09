@@ -44,6 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,6 +85,7 @@ ul.task-list li input[type="checkbox"] {
 <meta name="twitter:title" content="Mind-reading Algorithms: An Introduction to Recommender Systems – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/social_media_card.webp">
+<meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -152,7 +156,7 @@ ul.task-list li input[type="checkbox"] {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -192,7 +196,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
+      <p class="date-modified">December 9, 2024</p>
     </div>
   </div>
     
@@ -227,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
 <p>So far, this article is not helping in rehabilitating the Recommendation Systems’ image. But my goal is to focus on their positive side. Recommenders provide us with a valuable service: enable decision-making by decreasing uncertainty over choices. Furthermore, as we will see in the next sections, in a digital world of endless options, this is not an easy task.</p>
 <p>Through this article I try to share an intuitive idea on the <em>What, Why,</em> and <em>How</em> of Recommenders. I am not aiming to cover implementation nor technical details. So beware if that is what you are looking for.</p>
 <p>In a nutshell, if you need to explain what is a recommender to your boss, this article might help. Conversely, if you need to build a recommender for your boss, this article might help to distract him while you search for other articles!</p>
-<section id="recommendation-systems-101" class="level2">
+<section id="recommendation-systems-101" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="recommendation-systems-101">Recommendation Systems 101</h2>
 <p>A <em>Recommendation System</em> or a <em>Recommender</em> is a set of techniques used for suggesting users the most suitable items based on their needs. This definition sounds simple, yet it conceals many details.</p>
 <p>In the context of recommenders, an item is a very <em>malleable</em> idea. It could go from movies or songs in entertainment applications to possible love or mating partners in a dating app. Based on the items’ qualities, the recommender tries to guess which items are the most suitable to suggest to a given user. Thus, if you have a history of watching action movies, it’s fair to assume that you’ll prefer movies like Fast &amp; Furious than the latest romantic drama on Netflix.</p>
@@ -236,17 +240,17 @@ ul.task-list li input[type="checkbox"] {
 <p>For this article, I deliberately chose a definition of Recommender Systems that was not limited <em>to software</em> or <em>computer systems.</em> That is because these systems are not technical matters that only big technology companies can build. Moreover, they are not limited to the digital world or even to human affairs.</p>
 <p>Hunter-gatherers civilizations needed to recommend to others the best foraging places for their survival. Kings had panels of ministers for suggesting courses of action in essential areas of government. Even in the animal kingdom, ants leave traces behind to suggest to others in the colony the best routes towards food⁷.</p>
 <p>It’s in recent times that the use of Recommender Systems has extended to a wide range of digital services. In applications where the number of choices was excessive, it became necessary. The research into such systems started at Duke University in the seventies. Yet, it took two decades for the arrival of the first known software-based Recommender System, <em>Tapestry</em>. It was developed at Xerox Palo Alto Research Center (PARC) and published in the journal <em>Communications of the ACM</em> in 1992⁸.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://cdn-images-1.medium.com/max/1600/0*c_f2nyGpu-fzK8CL.png" class="img-fluid figure-img"></p>
-<figcaption>Xerox PARC researchers</figcaption>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="https://cdn-images-1.medium.com/max/1600/0*c_f2nyGpu-fzK8CL.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Xerox PARC researchers"><img src="https://cdn-images-1.medium.com/max/1600/0*c_f2nyGpu-fzK8CL.png" class="img-fluid figure-img" alt="Xerox PARC researchers"></a></p>
+<figcaption class="margin-caption">Xerox PARC researchers</figcaption>
 </figure>
 </div>
 <p>Xerox PARC researchers during an informal meeting⁹. Probably complaining about all the cat images filling their inboxes.</p>
 <p>Using <em>Tapestry</em>, the Xerox PARC’s researchers, tried to handle all the unnecessary documents they were receiving due to the increasing use of electronic mail. This system employed people’s collaboration to tag documents based on their reactions. Then, those tags were used to create personal filters that reduced the amount of incoming documents per user. For instance, Alice could create filters to only receive documents tagged as <em>Funny</em> by Bob and Joe, and to receive documents tagged as <em>Important</em> from Mary¹⁰.</p>
 <p>But how does an algorithm which started as a filter for documents became so rooted in our present-day digital services? That is what we will go through in the next section.</p>
 <p>For the sake of simplicity, from now on we will focus solely on software-based Recommenders and will refer to them using the broad terms <em>Recommendation Systems, Recommender Systems, and</em> <em>Recommenders</em>.</p>
-<section id="the-problems-with-small-bookshelves-and-infinite-bookshelves" class="level3">
+<section id="the-problems-with-small-bookshelves-and-infinite-bookshelves" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-problems-with-small-bookshelves-and-infinite-bookshelves">The Problems with Small Bookshelves and Infinite Bookshelves</h3>
 <p>Imagine you are about to open a bookstore in your town. It feels like a terrible idea now that Amazon dominates the market. Even so, nobody will stop your entrepreneurial drive. You’ve already signed a lease for a small but well-located place and are also planning on offering your signature espresso to customers.</p>
 <p>A while ago, you received catalogs of books from a few publishing houses, and today you need to decide which books will fill the shelves. But, as you read through the first catalog, making a decision feels more and more daunting.</p>
@@ -269,10 +273,10 @@ ul.task-list li input[type="checkbox"] {
 <p>There is a middle road between providing all possible choices to a user or generic choices to all users. It is possible to provide a few but well-thought suggestions to each user by using a recommender.</p>
 <p>For that, you do not need to care about the popularity of books. You could match each customers’ interests with books’ attributes as genre, length, and author. For instance, you might find that a few customers would react better to The Lightbringer series instead of the Game of Thrones (GoT). In an online bookstore, that is something you can and need to care for. In a physical store, those same customers will most likely need to settle with the GoT series.</p>
 <p>The difference in which customers demands are met in the online and physical world is referred to as <em>The Long Tail</em>. The figure below is a visual aid to understanding this phenomenon. Each bar on the horizontal axis represents an item. These bars are ordered in a decreasing manner by popularity (represented in the vertical axis).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://cdn-images-1.medium.com/max/1600/0*5qA_30vNGQt9lKMa.png" class="img-fluid figure-img"></p>
-<figcaption>The Long Tail phenomenon</figcaption>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="https://cdn-images-1.medium.com/max/1600/0*5qA_30vNGQt9lKMa.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The Long Tail phenomenon"><img src="https://cdn-images-1.medium.com/max/1600/0*5qA_30vNGQt9lKMa.png" class="img-fluid figure-img" alt="The Long Tail phenomenon"></a></p>
+<figcaption class="margin-caption">The Long Tail phenomenon</figcaption>
 </figure>
 </div>
 <p>The Long Tail. Physical stores define what they show to users by their shelf space limitations. Online stores use Recommenders to define what to&nbsp;show.</p>
@@ -787,6 +791,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

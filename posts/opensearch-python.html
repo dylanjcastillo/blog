@@ -78,6 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-a4c2714d643bba16a42772a6f5e54e5d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -118,6 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="twitter:title" content="How to Use OpenSearch in Python – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/images/opensearch-python/image-4.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:image-height" content="468">
 <meta name="twitter:image-width" content="1220">
@@ -237,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">December 8, 2024</p>
+      <p class="date-modified">December 9, 2024</p>
     </div>
   </div>
     
@@ -403,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>client.indices.refresh(index<span class="op">=</span><span class="st">"movies"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>client.cat.count(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Your output should look like this:</p>
-<p><img src="images/opensearch-python/image-5.png" class="img-fluid"></p>
+<p><a href="images/opensearch-python/image-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/opensearch-python/image-5.png" class="img-fluid"></a></p>
 </section>
 </section>
 <section id="search-your-data" class="level2">
@@ -427,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-15"><a href="#cb9-15"></a>)</span>
 <span id="cb9-16"><a href="#cb9-16"></a>resp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>When you run this code, you should get a very long response that looks something like this:</p>
-<p><img src="images/opensearch-python/image-6.png" class="img-fluid"></p>
+<p><a href="images/opensearch-python/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/opensearch-python/image-6.png" class="img-fluid"></a></p>
 <p>There are many ways to tailor your search queries. To learn more about it, check out the <a href="https://opensearch.org/docs/latest/opensearch/query-dsl/index/">official documentation</a>.</p>
 </section>
 <section id="delete-documents-from-the-index" class="level2">
@@ -901,6 +905,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
