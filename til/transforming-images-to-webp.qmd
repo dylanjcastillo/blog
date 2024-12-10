@@ -1,20 +1,12 @@
 ---
 title: "Transform any image to WebP from the terminal"
 date: "11/23/2024"
-author-meta: "Dylan Castillo"
 description-meta: "A simple bash function to transform images to webp."
-lightbox: true
-fig-cap-location: margin
 categories:
   - til
   - webp
   - bash
   - ffmpeg
-comments:
-  utterances:
-    repo: dylanjcastillo/blog_comments
-    theme: dark-blue
-    issue-term: pathname
 ---
 
 I was annoyed by the file size of my photo in the [About page](https://dylanjcastillo.com/about/), because it was slowing down the page load.

@@ -1,23 +1,12 @@
 ---
 title: "Installing Alacritty, Zellij, and Neovim in macOS"
 date: "06/08/2024"
-toc: true
-toc-depth: 3
-author-meta: "Dylan Castillo"
 description-meta: "Tips on installing Alacritty, Zellij, and Neovim in macOS."
-date-meta: "06/08/2024"
-lightbox: true
-fig-cap-location: margin
 categories:
   - til
   - alacritty
   - zellij
   - neovim
-comments:
-  utterances:
-    repo: dylanjcastillo/blog_comments
-    theme: dark-blue
-    issue-term: pathname
 ---
 
 Ever since I saw [The Matrix](https://www.youtube.com/watch?v=8wU8k2kDaTo), I've wanted to be a hacker.

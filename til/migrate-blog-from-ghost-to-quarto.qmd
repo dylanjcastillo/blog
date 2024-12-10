@@ -1,20 +1,10 @@
 ---
 title: "Migrate a blog from Ghost to Quarto"
 date: "06/16/2024"
-date-modified: last-modified
 description-meta: "How to migrate a blog from Ghost to Quarto."
-lightbox: true
-fig-cap-location: margin
-toc: true
-toc-depth: 3
 categories:
   - til
   - quarto
-comments:
-  utterances:
-    repo: dylanjcastillo/blog_comments
-    theme: dark-blue
-    issue-term: pathname
 ---
 
 When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that [Ghost](https://ghost.org/) was the best choice because I needed a powerful tool for all those millions of visitors my blog would get.

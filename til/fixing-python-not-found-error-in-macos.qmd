@@ -1,22 +1,11 @@
 ---
 title: "Fixing missing 'python' error in macOS"
 date: "08/12/2024"
-toc: true
-toc-depth: 3
-author-meta: "Dylan Castillo"
 description-meta: "Quick fix for the 'No such file or directory: 'python'' error in macOS."
-date-meta: "08/12/2024"
-lightbox: true
-fig-cap-location: margin
 categories:
   - til
   - python
   - poetry
-comments:
-  utterances:
-    repo: dylanjcastillo/blog_comments
-    theme: dark-blue
-    issue-term: pathname
 ---
 
 After the last macOS update, I started getting the following error when trying to run `poetry install`:
