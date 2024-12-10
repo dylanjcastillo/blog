@@ -1,5 +1,5 @@
 ---
-title: "Say What You Mean... Sometimes"
+title: "Structured outputs can hurt the performance of LLMs"
 date: "12/08/2024"
 description-meta: "A look at the impact of structured outputs on the performance of LLMs."
 categories:
