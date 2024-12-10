@@ -1,3 +1,10 @@
+- title: "Sofia"
+  path: https://youtube.com/shorts/ggcesOkcvrQ
+  date: 2024-12-10
+  categories: [React, Next.js, TailwindCSS]
+  description: |
+    A digital companion for your grandma.
+
 - title: "AItheneum"
   path: https://aitheneum.iwanalabs.com/
   date: 2023-06-22

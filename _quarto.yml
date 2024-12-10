@@ -6,8 +6,8 @@ project:
 website:
   title: Dylan Castillo
   site-url: https://dylancastillo.co
-  image: social_media_card.webp
-  favicon: logo.webp
+  image: images/social_media_card.webp
+  favicon: images/logo.webp
   open-graph: true
   twitter-card:
     site: "@dylanjcastillo"
