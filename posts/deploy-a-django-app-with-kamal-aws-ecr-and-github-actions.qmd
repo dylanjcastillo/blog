@@ -34,6 +34,8 @@ A single push to main, and that green GitHub Actions checkmark confirms that you
 
 In this tutorial, I'll walk you through the process of deploying a Django app with Kamal, AWS ECR, and Github Actions.
 
+You can find the code for this tutorial in [this repository](https://github.com/dylanjcastillo/django-kamal-aws-gha-example).
+
 ## Prerequisites
 
 To make the most of this tutorial, you should:

@@ -30,6 +30,8 @@ Once you get the hang of it, it'll only take you a few minutes to set up a CI/CD
 
 In this tutorial, I'll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions.
 
+You can find the code for this tutorial in [this repository](https://github.com/dylanjcastillo/fastapi-kamal-aws-gha-example).
+
 ## Prerequisites
 
 To make the most of this tutorial, you should:
