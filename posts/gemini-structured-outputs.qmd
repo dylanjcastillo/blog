@@ -1,0 +1,32 @@
+---
+title: "A big problem with Gemini's structured outputs"
+date: "12/25/2024"
+description-meta: "Gemini's structured outputs might be hurting your AI product's performance."
+categories:
+  - llm
+  - gemini
+  - pydantic
+  - python
+---
+
+I recently published a [blog post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html) about how structured outputs can hurt the performance of LLMs.
+
+At first, I planned to include _Gemini 1.5 Flash_ as it was one of the models considered in [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) (LMSF) that allowed for constrained decoding.
+
+But I was getting such poor results that I decided to exclude it from the analysis. I thought I was doing something wrong.
+
+After a bit of tinkering, I got it to work. But along the way, I discovered a serious flaw in Gemini's structured outputs.
+
+In this article, I'll discuss what I found.
+
+## Results
+
+These are the key findings:
+
+1. Gemini's function calling and structured outputs do not preserve the order of keys in the provided schema. Function calling generates keys in a seemingly random order, while constrained decoding arranges them alphabetically.
+2. If you don't account for the key order issue, structured outputs will lead to a drop in performance on chain-of-thought reasoning.
+3. After fixing the prompt issues in LMSF and addressing the key order problem, I found that Gemini's structured outputs can hurt performance on certain tasks. This aligns with my findings for _gpt-4o-mini_.
+
+The figure below shows the results for _Gemini 1.5 Flash_ comparing structured outputs to unstructured outputs.
+
+
