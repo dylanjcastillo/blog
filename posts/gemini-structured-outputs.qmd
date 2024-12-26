@@ -9,6 +9,10 @@ categories:
   - python
 ---
 
+Most companies I've worked with are using some form of structured outputs^[By this I mean any approach that adheres to a JSON schema when working with LLMs, not only constrained decoding.] when working with LLMs.
+
+By structured generation, I mean that the model generates a JSON schema that matches the expected output. There are multiple
+
 I recently published a [blog post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html) about how structured outputs can hurt the performance of LLMs.
 
 At first, I planned to include _Gemini 1.5 Flash_ as it was one of the models considered in [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) (LMSF) that allowed for constrained decoding.
@@ -23,10 +27,186 @@ In this article, I'll discuss what I found.
 
 These are the key findings:
 
-1. Gemini's function calling and structured outputs do not preserve the order of keys in the provided schema. Function calling generates keys in a seemingly random order, while constrained decoding arranges them alphabetically.
-2. If you don't account for the key order issue, structured outputs will lead to a drop in performance on chain-of-thought reasoning.
-3. After fixing the prompt issues in LMSF and addressing the key order problem, I found that Gemini's structured outputs can hurt performance on certain tasks. This aligns with my findings for _gpt-4o-mini_.
+1. Gemini's structured outputs are as good as the unstructured outputs, assuming that by structured outputs you don't strictly mean controlled decoding.
+2. Gemini's function calling and controlled decoding do not preserve the order of keys in the provided schema in Gemini's [Generative AI Python SDK](https://ai.google.dev/). Function calling generates keys in a seemingly random order, while controlled decoding arranges them alphabetically prior to generation.
+3. If you don't account for the key order issue, structured outputs will lead to a drop in performance on chain-of-thought reasoning. You should not use Gemini's function calling for chain-of-thought reasoning.
 
 The figure below shows the results for _Gemini 1.5 Flash_ comparing structured outputs to unstructured outputs.
 
+```{python}
+#| label: fig-gemini-flash-best
+#| fig-cap: "Best results for Gemini 1.5 Flash."
+#| echo: false
 
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Data
+tasks = ['GSM8k', 'Last Letter', 'Shuffled Objects']
+natural_language = [94.84, 82.67, 97.15]
+json_prompt = [94.16, 82.00, 98.37]
+json_schema = [93.63, 81.33, 86.18]
+
+# Create figure
+fig = go.Figure()
+
+# Add bars
+fig.add_trace(go.Bar(
+    x=tasks,
+    y=natural_language,
+    name='Unstructured',
+    text=natural_language,
+    textposition='outside',
+    texttemplate='%{text:.2f}%',
+    textfont=dict(size=10),
+    hoverinfo='skip'
+))
+fig.add_trace(go.Bar(
+    x=tasks,
+    y=json_schema,
+    name='JSON-Schema',
+    text=json_schema,
+    textposition='outside',
+    texttemplate='%{text:.2f}%',
+    textfont=dict(size=10),
+    hoverinfo='skip',
+))
+fig.add_trace(go.Bar(
+    x=tasks,
+    y=json_prompt,
+    name='JSON-Prompt',
+    text=json_prompt,
+    textposition='outside',
+    texttemplate='%{text:.2f}%',
+    textfont=dict(size=10),
+    hoverinfo='skip',
+))
+
+
+# Update layout
+fig.update_layout(
+    template='plotly_dark',
+    barmode='group',
+    height=400,  # Increased height to accommodate legend
+    margin=dict(
+        l=50,
+        r=50,
+        t=50,
+        b=50,  # Reduced bottom margin
+        pad=10
+    ),
+    yaxis=dict(
+        title='Score (%)',
+        range=[0, 105],
+        fixedrange=True  # Prevent y-axis zooming
+    ),
+    xaxis=dict(
+        title='Task',
+        fixedrange=True  # Prevent x-axis zooming
+    ),
+    legend=dict(
+        orientation='h',
+        yanchor='bottom',
+        y=1.05,  # Moved legend above plot
+        xanchor='center',
+        x=0.5
+    ),
+    showlegend=True,
+    modebar=dict(
+        remove=["autoScale2d", "autoscale",
+            "editInChartStudio", "editinchartstudio",
+            "hoverCompareCartesian", "hovercompare", "lasso",
+            "lasso2d", "orbitRotation", "orbitrotation", "pan",
+            "pan2d", "pan3d", "reset", "resetCameraDefault3d",
+            "resetCameraLastSave3d", "resetGeo",
+            "resetSankeyGroup", "resetScale2d", "resetViewMap",
+            "resetViewMapbox", "resetViews", "resetcameradefault",
+            "resetcameralastsave", "resetsankeygroup",
+            "resetscale", "resetview", "resetviews", "select",
+            "select2d", "sendDataToCloud", "senddatatocloud",
+            "tableRotation", "tablerotation", "toImage",
+            "toggleHover", "toggleSpikelines", "togglehover",
+            "togglespikelines", "toimage", "zoom", "zoom2d",
+            "zoom3d", "zoomIn2d", "zoomInGeo", "zoomInMap",
+            "zoomInMapbox", "zoomOut2d", "zoomOutGeo",
+            "zoomOutMap", "zoomOutMapbox", "zoomin", "zoomout"],
+    )
+)
+
+fig.show()
+```
+
+The figure above shows the results for _Gemini 1.5 Flash_ comparing structured outputs to unstructured outputs. Compared to the most performing method to generate structured outputs, there doesn't seem to be a performance drop when using Gemini's structured outputs.
+
+## How Gemini's structured outputs work
+
+Gemini has three ways of generating structured outputs:
+
+1. [**Forced function calling**](https://ai.google.dev/gemini-api/tutorials/extract_structured_data): You force the model to call a "function" and that makes the model generate a JSON schema that matches the function's arguments.
+2. [**Schema in prompt**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-prompt): You include a JSON schema in the prompt, specify `mime_type='application/json'` and the model generates a response that matches the schema.
+3. [**Schema in model configuration**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-config): You provide a JSON schema in the model configuration, specify `mime_type='application/json'` in the request and the model generates a response that matches the schema.
+
+Of these three methods, only the third one clearly uses [controlled generation](https://developers.googleblog.com/en/mastering-controlled-generation-with-gemini-15-schema-adherence/). I don't really know how the first two methods work.
+
+## Evaluating Gemini 1.5 Flash
+
+In [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html) to LMSF, they showed that Tam et al. results are mostly due to poor prompting and an unfair comparison. I also expanded on that in my previous [analysis](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html) of GPT-4o-mini's structured outputs.
+
+I applied the same improvements to the prompts from Tam et al. to Gemini's structured outputs and got the results shown in the table below.
+
+```{python}
+#| label: tbl-gemini-1.5-flash
+#| tbl-cap: "Results for Gemini 1.5 Flash."
+#| echo: false
+
+import pandas as pd
+
+# Define MultiIndex for Task and Method
+index = pd.MultiIndex.from_product(
+    [['GSM8K', 'Last Letter', 'Shuffled Obj.'],
+     ['Tam et al.', 'Me, 0-shot', 'Me, 3-shot']],
+    names=['Task', 'Method']
+)
+
+# Data without explicit Task and Method columns
+data = {
+    'NL': [
+        89.33, 93.71, 94.84,
+        65.45, 82.67, 80.00,
+        58.21, 97.15, 92.68
+    ],
+    'JSON-Prompt': [
+        pd.NA, 93.78, 94.16,
+        pd.NA, 80.00, 82.00,
+        pd.NA, 92.28, 98.37
+    ],
+    'JSON-Schema': [
+        89.21, 93.03, 93.63,
+        77.02, 81.33, 80.67,
+        65.07, 86.18, 84.96
+    ]
+}
+
+# Create DataFrame with MultiIndex
+df = pd.DataFrame(data, index=index)
+
+# Style the DataFrame
+table = (
+  df.style
+    .format(precision=2)
+)
+
+table
+```
+
+_NL_ stands for "Natural Language", which would correspond to the _Unstructured_ method in the previous table.
+
+_FRI_ stands for "Format Restricting Instructions", which is a JSON generated through the OpenAI's [function calling](https://platform.openai.com/docs/guides/function-calling). _JSON-Mode_ is a JSON generated through the OpenAI's [JSON mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode). _JSON-Schema_ is a JSON generated using [constrained decoding](https://openai.com/index/introducing-structured-outputs-in-the-api/).
+
+_JSON-Schema_ is the closest equivalent to **Structured** as referenced in the previous table. But, in real-life applications, you don't really care about how the output was generated. You just want to get the output in the format you want. So, for the sake of comparison, I will consider the three other methods equivalent to **Structured** as well.
+
+I was able to improve all the metrics for both unstructured and structured outputs using a 0-shot prompt and 3-shot prompts.
+
+https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output
+
+## Conclusion
