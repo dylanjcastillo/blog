@@ -1,7 +1,7 @@
 ---
 title: "A big problem with Gemini's structured outputs"
-date: "12/25/2024"
-description-meta: "Gemini's structured outputs might be hurting your AI product's performance."
+date: "12/27/2024"
+description-meta: "Be careful with Gemini's function calling for chain-of-thought reasoning."
 categories:
   - llm
   - gemini
@@ -21,17 +21,18 @@ But I was getting such poor results that I decided to exclude it from the analys
 
 After a bit of tinkering, I got it to work. But along the way, I discovered a serious flaw in Gemini's structured outputs.
 
-In this article, I'll discuss what I found.
+In this article, I'll walk you through the process of re-evaluating the benchmarks using _Gemini 1.5 Flash_ and show you what I found.
 
 ## Results
 
-These are the key findings:
+For those who don't want to read the whole article, here are my key findings:
 
-1. Gemini's structured outputs are as good as the unstructured outputs, assuming that by structured outputs you don't strictly mean controlled decoding.
-2. Gemini's function calling and controlled decoding do not preserve the order of keys in the provided schema in Gemini's [Generative AI Python SDK](https://ai.google.dev/). Function calling generates keys in a seemingly random order, while controlled decoding arranges them alphabetically prior to generation.
-3. If you don't account for the key order issue, structured outputs will lead to a drop in performance on chain-of-thought reasoning. You should not use Gemini's function calling for chain-of-thought reasoning.
+1. Gemini's structured outputs perform on par with unstructured outputs on the benchmarks considered.^[Assuming “structured outputs” refers to any method that generates output adhering to a JSON schema, not just constrained decoding.]
+2. When constrained decoding is used specifically, Gemini’s structured outputs show a performance drop compared to unstructured outputs in most of the benchmarks considered.
+3. The order of keys specified in the schema will not be preserved when using Gemini's function calling or controlled decoding through the [Generative AI Python SDK](https://ai.google.dev/). If you rely on chain-of-thought reasoning and don't account for key order, this will invalidate it.
+4. There is no obvious way to fix this issue in Gemini's function calling.
 
-The figure below shows the results for _Gemini 1.5 Flash_ comparing structured outputs to unstructured outputs.
+The figure below shows the overall results for _Gemini 1.5 Flash_:
 
 ```{python}
 #| label: fig-gemini-flash-best
@@ -54,7 +55,7 @@ fig = go.Figure()
 fig.add_trace(go.Bar(
     x=tasks,
     y=natural_language,
-    name='Unstructured',
+    name='Natural Language',
     text=natural_language,
     textposition='outside',
     texttemplate='%{text:.2f}%',
@@ -136,23 +137,78 @@ fig.update_layout(
 fig.show()
 ```
 
-The figure above shows the results for _Gemini 1.5 Flash_ comparing structured outputs to unstructured outputs. Compared to the most performing method to generate structured outputs, there doesn't seem to be a performance drop when using Gemini's structured outputs.
+The figure above compares the performance of Gemini's structured outputs to unstructured outputs. **NL** from _Natural Language_ means the model writes the output in a free-form manner. In contrast, **JSON-Prompt** and **JSON-Schema** involve structured outputs that follow a predefined JSON schema.
 
-## How Gemini's structured outputs work
+For **JSON-Prompt**, the JSON schema is included in the prompt, instructing the model to generate JSON formatted output based on its MIME type configuration. **JSON-Schema** works similarly, but the schema is set directly in the model's configuration instead of being included in the prompt.
+
+When considering both **JSON-Prompt** and **JSON-Schema**, Gemini's structured outputs perform comparably to its unstructured outputs. However, with **JSON-Schema** alone (using constrained decoding), performance drops slightly compared to unstructured outputs. This difference is evident in the _Shuffled Objects_ task, where **NL** achieved a score of 97.15%, while **JSON-Schema** scored 86.18%.
+
+## Study design
+
+Tam et al. evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate the reasoning tasks and accuracy to evaluate the classification tasks. They ran the experiments using the following models:
+
+1.  **Proprietary models**: _gpt-3.5-turbo-0125_, _claude-3-haiku-20240307_, _gemini-1.5-flash_, and _gpt-4o-mini-2024-07-18_.
+2.  **Open-weight models**: _LLaMA3-8B-Instruct_, and _Gemma-2-9B-Instruct_.
+
+They found that structured outputs performed better in classification tasks. I also believe this is the case, so I excluded those tasks from my analysis.
+
+The reasoning tasks were:
+
+1.  [GSM8K](https://huggingface.co/datasets/openai/gsm8k): A dataset from of grade school math word problems.
+2.  [Last Letter](https://huggingface.co/datasets/ChilleD/LastLetterConcat): A dataset of simple word puzzles that require concatening the last letters of a list of names.
+3.  [Shuffled Objects](https://github.com/google/BIG-bench/tree/main/bigbench/benchmark_tasks/tracking_shuffled_objects): A dataset that requires reasoning about the state of a system after a sequence of shuffling operations.
+
+The rest of the article details the process of re-evaluating these benchmarks using _Gemini-1.5-Flash_, after fixing the issues identified in [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html) and my [own analysis](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html).
+
+## Generating structured outputs with Gemini
 
 Gemini has three ways of generating structured outputs:
 
-1. [**Forced function calling**](https://ai.google.dev/gemini-api/tutorials/extract_structured_data): You force the model to call a "function" and that makes the model generate a JSON schema that matches the function's arguments.
-2. [**Schema in prompt**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-prompt): You include a JSON schema in the prompt, specify `mime_type='application/json'` and the model generates a response that matches the schema.
-3. [**Schema in model configuration**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-config): You provide a JSON schema in the model configuration, specify `mime_type='application/json'` in the request and the model generates a response that matches the schema.
+1. [**Forced function calling (FC)**](https://ai.google.dev/gemini-api/tutorials/extract_structured_data): You force the model to call a "function" and that makes the model generate a JSON schema that matches the function's arguments.
+2. [**Schema in prompt (JSON-Prompt)**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-prompt): You include a JSON schema in the prompt, specify `mime_type='application/json'` and the model generates a response that matches the schema.
+3. [**Schema in model configuration (JSON-Schema)**](https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-config): You provide a JSON schema in the model configuration, specify `mime_type='application/json'` in the request and the model generates a response that matches the schema. This is the only method that seems to use [controlled generation](https://developers.googleblog.com/en/mastering-controlled-generation-with-gemini-15-schema-adherence/).
 
-Of these three methods, only the third one clearly uses [controlled generation](https://developers.googleblog.com/en/mastering-controlled-generation-with-gemini-15-schema-adherence/). I don't really know how the first two methods work.
+I've included _JSON-Prompt_ and _JSON-Schema_ in the analysis, but had to exclude _FC_ because it's not possible to use it for chain-of-thought reasoning (I'll explain why later).
+
+## Figuring out Gemini's flawed structured outputs
+
+When running the three benchmarks, I quickly ran into a big performance issue with _FC_ and _JSON-Schema_. In all tasks, they had double digits performance drops compared to _NL_.
+
+This didn't make a lot of sense, so I started investigating.
+
+I was using the following response schema for all structured outputs:
+
+```python
+class Response(BaseModel):
+    reasoning: str
+    answer: str
+```
+
+The prompts were similar to the one below, adjusted according to the task:
+
+> You are an expert in solving grade school math tasks. You will be presented with a grade-school math word problem and be asked to solve it.
+>
+> You will always respond with JSON matching the following schema:
+>
+> [RESPONSE_SCHEMA]
+>
+> First, provide your step by step reasoning in the "reasoning" field. Then, in the "answer" field, provide your final answer. Don't include any other text in the "answer" field.
+
+After a bit of tinkering with the schema, I realized that the reason for the performance drop in _JSON-Schema_ was that the keys used in the schema were reversed when generating the response. In LMSF, Tam et al. mention in passing that _JSON-Schema_ did not produce valid JSON, for the same reason.
+
+After trying out different naming conventions, I realized that the order of the keys in the schema is sorted alphabetically before the response is generated. In a test that checked 100 randomly generated schemas, all of the resulting responses had the keys sorted alphabetically. That's not good.
+
+In the Vertex AI documentation, it says that there is a `propertyOrdering` parameter that can be used to control the order of the keys but this doesn't seem to work with the Generative AI Python SDK. This is a [known](https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3) [issue](https://github.com/google-gemini/generative-ai-python/issues/533).
+
+Without a proper way to control the order of the keys, I had to make sure to use keys that allow for chain-of-thought reasoning using a workaround: provide names to the keys that are alphabetically ordered in the way that I intend the model to use them. So instead of `reasoning` and `answer`, I used `reasoning` and `solution`.
+
+But _FC_ was a different story. I couldn't find a pattern in the order of the keys. It seems random and I couldn't find an obvious way to control it. So, I decided to exclude this method from the analysis.
 
 ## Evaluating Gemini 1.5 Flash
 
-In [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html) to LMSF, they showed that Tam et al. results are mostly due to poor prompting and an unfair comparison. I also expanded on that in my previous [analysis](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html) of GPT-4o-mini's structured outputs.
+After applying the key ordering workaround, and [additional improvements](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#replicating-.txts-rebuttal.html) discussed in my analysis of GPT-4o-mini's structured outputs, I recomputed the benchmarks.
 
-I applied the same improvements to the prompts from Tam et al. to Gemini's structured outputs and got the results shown in the table below.
+The table below shows the results for Gemini 1.5 Flash compared to the original results from Tam et al.
 
 ```{python}
 #| label: tbl-gemini-1.5-flash
@@ -176,14 +232,14 @@ data = {
         58.21, 97.15, 92.68
     ],
     'JSON-Prompt': [
-        pd.NA, 93.78, 94.16,
-        pd.NA, 80.00, 82.00,
-        pd.NA, 92.28, 98.37
+        89.21, 93.78, 94.16,
+        77.02, 80.00, 82.00,
+        65.07, 92.28, 98.37
     ],
     'JSON-Schema': [
-        89.21, 93.03, 93.63,
-        77.02, 81.33, 80.67,
-        65.07, 86.18, 84.96
+        47.78, 93.03, 93.63,
+        0.67, 81.33, 80.67,
+        pd.NA, 86.18, 84.96
     ]
 }
 
@@ -193,20 +249,24 @@ df = pd.DataFrame(data, index=index)
 # Style the DataFrame
 table = (
   df.style
-    .format(precision=2)
+    .format(precision=2, na_rep='N/A')
 )
 
 table
 ```
 
-_NL_ stands for "Natural Language", which would correspond to the _Unstructured_ method in the previous table.
+Using a 0-shot prompt and 3-shot prompts, I was able to improve all the metrics for the methods Tam et al. used for their benchmarks.
 
-_FRI_ stands for "Format Restricting Instructions", which is a JSON generated through the OpenAI's [function calling](https://platform.openai.com/docs/guides/function-calling). _JSON-Mode_ is a JSON generated through the OpenAI's [JSON mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode). _JSON-Schema_ is a JSON generated using [constrained decoding](https://openai.com/index/introducing-structured-outputs-in-the-api/).
+_NL_ and _JSON-Prompt_ behave similarly, without a clear winner between them. Each method getting a slight edge over the other in 3 of the tasks. On the other hand, _JSON-Schema_ performed worst than _NL_ in 5 out of 6 tasks. Plus, in _Shuffled Objects_, it did so with a gap of more than 10pp: 97.15% for _NL_ vs 86.18% for _JSON-Schema_.
 
-_JSON-Schema_ is the closest equivalent to **Structured** as referenced in the previous table. But, in real-life applications, you don't really care about how the output was generated. You just want to get the output in the format you want. So, for the sake of comparison, I will consider the three other methods equivalent to **Structured** as well.
+Depending on how you look at it, Tam et al's conclusion might hold. Taking their same interpretation of what "structured outputs" means, the conclusion does not hold. In this case, there's no significant difference in performance between structured and unstructured outputs.
 
-I was able to improve all the metrics for both unstructured and structured outputs using a 0-shot prompt and 3-shot prompts.
+However, if you take the interpretation that "structured outputs" is only when using constrained decoding, then the conclusion does hold. In this case, there is a significant difference in performance between structured and unstructured outputs.
 
-https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output
+## Conclusion and recommendations
 
-## Conclusion
+Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are mixed. Which reaffirms my belief that rather than relying on a random post on the internet, you should test things for yourself.
+
+Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something you need to be aware of.
+
+This is a long ass post and sadly all I can tell you is what you likely presume from the beginning: run your own evals and decide for yourself.
