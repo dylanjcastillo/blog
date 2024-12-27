@@ -15,7 +15,261 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.6.39</generator>
-<lastBuildDate>Sun, 08 Dec 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 27 Dec 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Evaluating the performance of Gemini’s structured outputs</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/gemini-structured-outputs.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Most companies I’ve worked with are using some form of structured outputs when working with LLMs. But very few of them have actually tested if going with structured outputs has made a difference in performance compared to unstructured outputs.</p>
+<p>After reading <a href="https://arxiv.org/abs/2408.02442">Let Me Speak Freely?</a> and <a href="https://blog.dottxt.co/say-what-you-mean.html">.txt’s rebuttal</a>, I decided to run some benchmarks myself using popular proprietary models. This is a key component of my job, so I need to make sure the advice I give to clients is backed by data.</p>
+<p>I’ve already published results for <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html"><em>GPT-4o-mini</em></a>. Now, I’m applying the same benchmarks to <em>Gemini 1.5 Flash</em> to see how it measures up.</p>
+<p>Let’s dive in.</p>
+<section id="results" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>For those who don’t want to read the whole article, here are my key findings:</p>
+<ol type="1">
+<li>Gemini’s structured outputs perform on par with unstructured outputs on the benchmarks considered.<sup>1</sup></li>
+<li>When constrained decoding is used specifically, Gemini’s structured outputs perform worse than unstructured outputs in the tasks considered.</li>
+<li>The order of the keys specified in the schema will not be preserved when using Gemini’s function calling or constrained decoding through the <a href="https://ai.google.dev/">Generative AI Python SDK</a>. If you rely on chain-of-thought reasoning and don’t account for key order, this will invalidate it.</li>
+<li>There is no obvious way to fix this issue in Gemini’s function calling. During constrained decoding, the model will reorder the keys alphabetically, so you should name the keys in a way that preserves the chain-of-thought reasoning.</li>
+</ol>
+<p>The figure below shows the overall results for <em>Gemini 1.5 Flash</em>:</p>
+<div id="cell-fig-gemini-flash-best" class="cell page-columns page-full" data-execution_count="1">
+<div id="fig-gemini-flash-best" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-gemini-flash-best-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>                            <div id="13121c0f-5414-436b-a9a6-9373010cb31f" class="plotly-graph-div" style="height:400px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("13121c0f-5414-436b-a9a6-9373010cb31f")) {                    Plotly.newPlot(                        "13121c0f-5414-436b-a9a6-9373010cb31f",                        [{"hoverinfo":"skip","name":"Natural Language","text":["94.84","82.67","97.15"],"textfont":{"size":10},"textposition":"outside","texttemplate":"%{text:.2f}%","x":["GSM8k","Last Letter","Shuffled Objects"],"y":[94.84,82.67,97.15],"type":"bar"},{"hoverinfo":"skip","name":"JSON-Schema","text":["93.63","81.33","86.18"],"textfont":{"size":10},"textposition":"outside","texttemplate":"%{text:.2f}%","x":["GSM8k","Last Letter","Shuffled Objects"],"y":[93.63,81.33,86.18],"type":"bar"},{"hoverinfo":"skip","name":"JSON-Prompt","text":["94.16","82.0","98.37"],"textfont":{"size":10},"textposition":"outside","texttemplate":"%{text:.2f}%","x":["GSM8k","Last Letter","Shuffled Objects"],"y":[94.16,82.0,98.37],"type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"margin":{"l":50,"r":50,"t":50,"b":50,"pad":10},"yaxis":{"title":{"text":"Score (%)"},"range":[0,105],"fixedrange":true},"xaxis":{"title":{"text":"Task"},"fixedrange":true},"legend":{"orientation":"h","yanchor":"bottom","y":1.05,"xanchor":"center","x":0.5},"modebar":{"remove":["autoScale2d","autoscale","editInChartStudio","editinchartstudio","hoverCompareCartesian","hovercompare","lasso","lasso2d","orbitRotation","orbitrotation","pan","pan2d","pan3d","reset","resetCameraDefault3d","resetCameraLastSave3d","resetGeo","resetSankeyGroup","resetScale2d","resetViewMap","resetViewMapbox","resetViews","resetcameradefault","resetcameralastsave","resetsankeygroup","resetscale","resetview","resetviews","select","select2d","sendDataToCloud","senddatatocloud","tableRotation","tablerotation","toImage","toggleHover","toggleSpikelines","togglehover","togglespikelines","toimage","zoom","zoom2d","zoom3d","zoomIn2d","zoomInGeo","zoomInMap","zoomInMapbox","zoomOut2d","zoomOutGeo","zoomOutMap","zoomOutMapbox","zoomin","zoomout"]},"barmode":"group","height":400,"showlegend":true},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('13121c0f-5414-436b-a9a6-9373010cb31f');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-gemini-flash-best-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Best results for Gemini 1.5 Flash.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The figure above compares the performance of Gemini’s structured outputs to unstructured outputs. <strong>NL</strong> from <em>Natural Language</em> means the model writes the output in a free-form manner. In contrast, <strong>JSON-Prompt</strong> and <strong>JSON-Schema</strong> involve structured outputs that follow a predefined JSON schema.</p>
+<p>For <strong>JSON-Prompt</strong>, the JSON schema is included in the prompt, instructing the model to generate JSON formatted output based on its MIME type configuration. <strong>JSON-Schema</strong> works similarly, but the schema is set directly in the model’s configuration instead of being included in the prompt.</p>
+<p>When considering both <strong>JSON-Prompt</strong> and <strong>JSON-Schema</strong>, Gemini’s structured outputs perform comparably to its unstructured outputs. However, with <strong>JSON-Schema</strong> alone (i.e., constrained decoding), performance drops compared to unstructured outputs. This difference is most evident in the <em>Shuffled Objects</em> task, where <strong>NL</strong> achieved a score of 97.15%, while <strong>JSON-Schema</strong> scored 86.18%.</p>
+</section>
+<section id="study-design" class="level2">
+<h2 class="anchored" data-anchor-id="study-design">Study design</h2>
+<p>In Let Me Speak Freely?, Tam et al.&nbsp;evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate the reasoning tasks and accuracy to evaluate the classification tasks. They ran the experiments using the following models:</p>
+<ol type="1">
+<li><strong>Proprietary models</strong>: <em>gpt-3.5-turbo-0125</em>, <em>claude-3-haiku-20240307</em>, <em>gemini-1.5-flash</em>, and <em>gpt-4o-mini-2024-07-18</em>.</li>
+<li><strong>Open-weight models</strong>: <em>LLaMA3-8B-Instruct</em>, and <em>Gemma-2-9B-Instruct</em>.</li>
+</ol>
+<p>They found that structured outputs performed better in classification tasks. I also believe this is the case, so I excluded those tasks from my analysis.</p>
+<p>The reasoning tasks were:</p>
+<ol type="1">
+<li><a href="https://huggingface.co/datasets/openai/gsm8k">GSM8K</a>: A dataset from of grade school math word problems.</li>
+<li><a href="https://huggingface.co/datasets/ChilleD/LastLetterConcat">Last Letter</a>: A dataset of simple word puzzles that require concatening the last letters of a list of names.</li>
+<li><a href="https://github.com/google/BIG-bench/tree/main/bigbench/benchmark_tasks/tracking_shuffled_objects">Shuffled Objects</a>: A dataset that requires reasoning about the state of a system after a sequence of shuffling operations.</li>
+</ol>
+<p>The rest of the article details the process of re-evaluating these benchmarks using <em>Gemini-1.5-Flash</em>, after fixing the issues identified in <a href="https://blog.dottxt.co/say-what-you-mean.html">.txt’s rebuttal</a> and my <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">own analysis</a>.</p>
+</section>
+<section id="generating-structured-outputs-with-gemini" class="level2">
+<h2 class="anchored" data-anchor-id="generating-structured-outputs-with-gemini">Generating structured outputs with Gemini</h2>
+<p>Gemini has three ways of generating structured outputs:</p>
+<ol type="1">
+<li><a href="https://ai.google.dev/gemini-api/tutorials/extract_structured_data"><strong>Forced function calling (FC)</strong></a>: You force the model to call a “function” and that makes the model generate a JSON schema that matches the function’s arguments.</li>
+<li><a href="https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-prompt"><strong>Schema in prompt (JSON-Prompt)</strong></a>: You include a JSON schema in the prompt, specify <code>mime_type='application/json'</code> and the model generates a response that matches the schema.</li>
+<li><a href="https://ai.google.dev/gemini-api/docs/structured-output?lang=python#supply-schema-in-config"><strong>Schema in model configuration (JSON-Schema)</strong></a>: You provide a JSON schema in the model configuration, specify <code>mime_type='application/json'</code> in the request and the model generates a response that matches the schema. This is the only method that seems to use <a href="https://developers.googleblog.com/en/mastering-controlled-generation-with-gemini-15-schema-adherence/">controlled generation</a>.</li>
+</ol>
+<p>I’ve included <em>JSON-Prompt</em> and <em>JSON-Schema</em> in the analysis, but had to exclude <em>FC</em> because it’s not possible to use it for chain-of-thought reasoning (I’ll explain why later).</p>
+</section>
+<section id="figuring-out-geminis-flawed-structured-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="figuring-out-geminis-flawed-structured-outputs">Figuring out Gemini’s flawed structured outputs</h2>
+<p>When running the three benchmarks, I quickly ran into a big performance issue with <em>FC</em> and <em>JSON-Schema</em>. In all tasks, both showed double-digit performance drops compared to NL.</p>
+<p>This didn’t make a lot of sense, so I started investigating.</p>
+<p>I was using the following response schema for all structured outputs:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Response(BaseModel):</span>
+<span id="cb1-2">    reasoning: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb1-3">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span></code></pre></div>
+<p>The prompts were similar to the one below, adjusted according to the task:</p>
+<blockquote class="blockquote">
+<p>You are an expert in solving grade school math tasks. You will be presented with a grade-school math word problem and be asked to solve it.</p>
+<p>You will always respond with JSON matching the following schema:</p>
+<p>[RESPONSE_SCHEMA]</p>
+<p>First, provide your step by step reasoning in the “reasoning” field. Then, in the “answer” field, provide your final answer. Don’t include any other text in the “answer” field.</p>
+</blockquote>
+<p>After a bit of tinkering with the schema, I realized that the performance drop in <em>JSON-Schema</em> was due to the keys in the schema being reversed when generating the response. Tam et al.&nbsp;mentioned briefly in Let Me Speak Freely? that <em>JSON-Schema</em> responses failed to produce valid JSON due to this exact problem, so they excluded it from their analysis.</p>
+<p>Through testing, I found that the order of the keys in the schema gets sorted alphabetically before the response is generated. To confirm this, I ran a test with 100 randomly generated schemas. Every resulting response had its keys sorted alphabetically, so it’s clear this is by design.</p>
+<p>The Vertex AI documentation mentions a <code>propertyOrdering</code> parameter, which should allow control over the order of keys. However, this feature <a href="https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3">doesn’t appear</a> <a href="https://github.com/google-gemini/generative-ai-python/issues/533">to work</a> with the Generative AI Python SDK.</p>
+<p>Since I couldn’t directly control the key order, I resorted to a quick workaround. I named the keys in a way that forced the desired order alphabetically. Instead of using <code>reasoning</code> and <code>answer</code>, I used <code>reasoning</code> and <code>solution</code>. This preserved the chain-of-thought reasoning in the responses, and resolved the performance drop in <em>JSON-Schema</em>.</p>
+<p><em>FC</em> was a different story. Unlike <em>JSON-Schema</em>, the order of the keys seemed random, and I couldn’t find a clear pattern or a reliable way to control it. Due to this issue, I decided to exclude <em>FC</em> from the analysis.</p>
+</section>
+<section id="evaluating-gemini-1.5-flash" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evaluating-gemini-1.5-flash">Evaluating Gemini 1.5 Flash</h2>
+<p>After applying the key ordering workaround, and <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#replicating-.txts-rebuttal.html">additional improvements</a> discussed in my analysis of GPT-4o-mini’s structured outputs, I recomputed the benchmarks.</p>
+<p>The table below shows the results for Gemini 1.5 Flash compared to the original results from Tam et al.</p>
+<div class="cell page-columns page-full" data-execution_count="2">
+<div id="tbl-gemini-1.5-flash" class="cell quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-execution_count="2">
+<figure class="quarto-float quarto-float-tbl figure page-columns page-full">
+<div aria-describedby="tbl-gemini-1.5-flash-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="14">
+<style type="text/css">
+</style>
+
+<table id="T_2ae2d" class="do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_2ae2d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">NL</th>
+<th id="T_2ae2d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">JSON-Prompt</th>
+<th id="T_2ae2d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">JSON-Schema</th>
+</tr>
+<tr class="even">
+<th class="index_name level0" data-quarto-table-cell-role="th">Task</th>
+<th class="index_name level1" data-quarto-table-cell-role="th">Method</th>
+<th class="blank col0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col1" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col2" data-quarto-table-cell-role="th">&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="3" id="T_2ae2d_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">GSM8K</td>
+<td id="T_2ae2d_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">Tam et al.</td>
+<td id="T_2ae2d_row0_col0" class="data row0 col0">89.33</td>
+<td id="T_2ae2d_row0_col1" class="data row0 col1">89.21</td>
+<td id="T_2ae2d_row0_col2" class="data row0 col2">47.78</td>
+</tr>
+<tr class="even">
+<td id="T_2ae2d_level1_row1" class="row_heading level1 row1" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<td id="T_2ae2d_row1_col0" class="data row1 col0">93.71</td>
+<td id="T_2ae2d_row1_col1" class="data row1 col1">93.78</td>
+<td id="T_2ae2d_row1_col2" class="data row1 col2">93.03</td>
+</tr>
+<tr class="odd">
+<td id="T_2ae2d_level1_row2" class="row_heading level1 row2" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<td id="T_2ae2d_row2_col0" class="data row2 col0">94.84</td>
+<td id="T_2ae2d_row2_col1" class="data row2 col1">94.16</td>
+<td id="T_2ae2d_row2_col2" class="data row2 col2">93.63</td>
+</tr>
+<tr class="even">
+<td rowspan="3" id="T_2ae2d_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Last Letter</td>
+<td id="T_2ae2d_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">Tam et al.</td>
+<td id="T_2ae2d_row3_col0" class="data row3 col0">65.45</td>
+<td id="T_2ae2d_row3_col1" class="data row3 col1">77.02</td>
+<td id="T_2ae2d_row3_col2" class="data row3 col2">0.67</td>
+</tr>
+<tr class="odd">
+<td id="T_2ae2d_level1_row4" class="row_heading level1 row4" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<td id="T_2ae2d_row4_col0" class="data row4 col0">82.67</td>
+<td id="T_2ae2d_row4_col1" class="data row4 col1">80.00</td>
+<td id="T_2ae2d_row4_col2" class="data row4 col2">81.33</td>
+</tr>
+<tr class="even">
+<td id="T_2ae2d_level1_row5" class="row_heading level1 row5" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<td id="T_2ae2d_row5_col0" class="data row5 col0">80.00</td>
+<td id="T_2ae2d_row5_col1" class="data row5 col1">82.00</td>
+<td id="T_2ae2d_row5_col2" class="data row5 col2">80.67</td>
+</tr>
+<tr class="odd">
+<td rowspan="3" id="T_2ae2d_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Shuffled Obj.</td>
+<td id="T_2ae2d_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">Tam et al.</td>
+<td id="T_2ae2d_row6_col0" class="data row6 col0">58.21</td>
+<td id="T_2ae2d_row6_col1" class="data row6 col1">65.07</td>
+<td id="T_2ae2d_row6_col2" class="data row6 col2">N/A</td>
+</tr>
+<tr class="even">
+<td id="T_2ae2d_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<td id="T_2ae2d_row7_col0" class="data row7 col0">97.15</td>
+<td id="T_2ae2d_row7_col1" class="data row7 col1">92.28</td>
+<td id="T_2ae2d_row7_col2" class="data row7 col2">86.18</td>
+</tr>
+<tr class="odd">
+<td id="T_2ae2d_level1_row8" class="row_heading level1 row8" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<td id="T_2ae2d_row8_col0" class="data row8 col0">92.68</td>
+<td id="T_2ae2d_row8_col1" class="data row8 col1">98.37</td>
+<td id="T_2ae2d_row8_col2" class="data row8 col2">84.96</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-tbl margin-caption" id="tbl-gemini-1.5-flash-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Results for Gemini 1.5 Flash.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Using a 0-shot prompt and 3-shot prompts, I was able to improve all the metrics for the methods Tam et al.&nbsp;used for their benchmarks.</p>
+<p><em>NL</em> and <em>JSON-Prompt</em> behave similarly, without a clear winner between them. Each method got a slight edge over the other in 3 of the tasks. On the other hand, <em>JSON-Schema</em> performed worst than <em>NL</em> in 5 out of 6 tasks. Plus, in <em>Shuffled Objects</em>, it did so with a gap of more than 10pp: 97.15% for <em>NL</em> vs.&nbsp;86.18% for <em>JSON-Schema</em>.</p>
+<p>Tam et al.&nbsp;interpreted structured outputs as any method that “involves providing output in standardized formats like JSON or XML through format restriction.” Using this interpretation to analyze the results, there is no performance gap between structured and unstructured outputs. This contradicts the study’s original claim.</p>
+<p>But if you take the common interpretation that constrained decoding is the only form of structured generation, then the study’s original conclusion still applies: there is indeed a significant performance gap between structured and unstructured outputs.</p>
+<p>So, yes, it depends.</p>
+</section>
+<section id="conclusion-and-recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-and-recommendations">Conclusion and recommendations</h2>
+<p>Similar to my <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">previous post</a>, the results are also mixed for Gemini 1.5 Flash. Structured outputs perform on par with unstructured outputs. But only if you’re taking the less rigid interpretation of “structured outputs”. Otherwise, there’s a difference in performance.</p>
+<p>But you shouldn’t be disappointed by these results. This only reinforces my position that you shouldn’t blindly trust random posts or papers. If you want to improve your LLM workflows, you need to test things for yourself.</p>
+<p>Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that’s something you need to be aware of.</p>
+<p>It sucks when the answer is “it depends”, but that’s better than a false sense of security. So, run your own evals, and choose the approach that works best for your task.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
+  author = {Castillo, Dylan},
+  title = {Evaluating the Performance of {Gemini’s} Structured Outputs},
+  date = {2024-12-27},
+  url = {https://dylancastillo.co/posts/gemini-structured-outputs.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2024. <span>“Evaluating the Performance of Gemini’s
+Structured Outputs.”</span> December 27, 2024. <a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">https://dylancastillo.co/posts/gemini-structured-outputs.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>gemini</category>
+  <category>pydantic</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/gemini-structured-outputs.html</guid>
+  <pubDate>Fri, 27 Dec 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Structured outputs can hurt the performance of LLMs</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -14589,788 +14843,6 @@ February 17, 2023. <a href="https://dylancastillo.co/posts/tips-for-standing-out
   <category>productivity</category>
   <guid>https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</guid>
   <pubDate>Fri, 17 Feb 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>How to Securely Deploy a FastAPI app with NGINX and Gunicorn</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Deploying a <a href="https://fastapi.tiangolo.com/">FastAPI</a> web app to a Virtual Private Server (VPS) is tricky. If you’re not familiar with technologies such as NGINX, Gunicorn, and Uvicorn, it can easily overwhelm you. I wrote this tutorial so you won’t have to spend as much time on your first deployment as I did.</p>
-<p>FastAPI is one of the most popular Python libraries for developing APIs, thanks to its performance and ease of use. If you’re using machine learning models in your web app, it’s likely the go-to tool for you.</p>
-<p><a href="https://www.nginx.com/">NGINX</a> , <a href="https://gunicorn.org/">Gunicorn</a>, and <a href="https://www.uvicorn.org/">Uvicorn</a> are battle-tested technologies that are frequently used as a reverse proxy and ASGI server when deploying Python web apps. If you’re familiar with Django or Flask, you’ve probably heard about some of them before.</p>
-<p>In this tutorial, I’ll show you how to combine these tools to deploy a FastAPI web app. You will:</p>
-<ul>
-<li>Learn the basics about FastAPI, NGINX, Gunicorn, and Uvicorn.</li>
-<li>Set up Gunicorn + Uvicorn as an ASGI server.</li>
-<li>Configure NGINX as a reverse proxy server.</li>
-<li>Generate a free SSL certificate for your app using Let’s Encrypt.</li>
-</ul>
-<p>Let’s get to it!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<ul>
-<li>You should have access to a Debian-based VPS. I will use Ubuntu 20.04.</li>
-<li>You should be familiar with basic shell commands, such as <code>sudo</code>, <code>mkdir</code>, or <code>cd</code>.</li>
-<li>You should know how to <a href="https://stackoverflow.com/a/11828573">exit</a> vim 😜</li>
-</ul>
-</section>
-<section id="tech-stack" class="level2">
-<h2 class="anchored" data-anchor-id="tech-stack">Tech Stack</h2>
-<p>Before we go any further, I’ll give you a quick rundown of the technologies you’ll be using:</p>
-<ul>
-<li><strong>FastAPI</strong> is one of the most popular Python frameworks for building APIs.<br>
-It’s built on top of <a href="https://www.starlette.io/">Starlette</a> and <a href="https://docs.pydantic.dev/">Pydantic</a> and uses standard Python type hints. It’s loved by developers because of it is performant, easy to learn, and provides a great developer experience.</li>
-<li><strong>Gunicorn</strong> is a popular web server used to deploy Python web apps. Typically, it’s used as a WSGI server, but it’s possible to combine it with Uvicorn to work as an ASGI server.</li>
-<li><strong>Uvicorn</strong> is an ASGI web server implementation for Python. It’s the recommended web server for Starlette and FastAPI.</li>
-<li><strong>NGINX</strong> is an open-source tool with many uses. It started out as a web server but can now be used as a reverse proxy server, a load balancer, and more.<br>
-NGINX is often used as a reverse proxy in front of the app’s web server when working with Python web frameworks.</li>
-</ul>
-<p>Now, let’s get to the interesting part!</p>
-</section>
-<section id="optional-step-1-secure-your-server" class="level2">
-<h2 class="anchored" data-anchor-id="optional-step-1-secure-your-server">(Optional) Step 1: Secure Your Server</h2>
-<p>This step isn’t required, but it’s still a good idea to at least skim it. Even more so if you’re not sure what you’re doing. This will make your application more secure.</p>
-<section id="enable-automatic-updates" class="level3">
-<h3 class="anchored" data-anchor-id="enable-automatic-updates">Enable Automatic Updates</h3>
-<p>First, you should make sure your server has the latest software:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt update <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt upgrade <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span></span></code></pre></div>
-<p>These are common commands you’ll see when working with Debian-based servers:</p>
-<ul>
-<li><code>sudo apt update</code> updates the package list index on the user’s system.</li>
-<li><code>sudo apt upgrade</code> upgrades the installed packages to their latest versions. You provide the <code>-y</code> flag to proceed with the installation without requiring confirmation.</li>
-</ul>
-<p>Next, you should set up automatic security updates, so that you don’t have to do them manually. For that, you’ll need to install and enable <code>unnattended-upgrades</code>:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install unattended-upgrades</span></code></pre></div>
-<p>Once the installation is finished, edit <code>/etc/apt/apt.conf.d/20auto-upgrades</code> to include the following lines:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">APT::Periodic::Update-Package-Lists</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"1"</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">APT::Periodic::Unattended-Upgrade</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"1"</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb3-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">APT::Periodic::AutocleanInterval</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"7"</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span></code></pre></div>
-<p>These lines configure <code>unattended-upgrades</code> so that it runs automatically. Here’s what they do:</p>
-<ul>
-<li><code>APT::Periodic::Update-Package-Lists "1"</code> means that the list of packages will be automatically updated every day.</li>
-<li><code>APT::Periodic::Unattended-Upgrade "1"</code> means that the system will be updated to the latest version of the packages without the user having to intervene.</li>
-<li><code>"APT::Periodic::AutocleanInterval "7"</code> means that the auto-clean operation, which gets rid of old and unnecessary package files, will run once a week.</li>
-</ul>
-<p>Lastly, edit <code>/etc/apt/apt.conf.d/50unattended-upgrades</code> to make sure the system automatically reboots when kernel updates require it:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Unattended-Upgrade::Automatic-Reboot</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"true"</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># change to true</span></span></code></pre></div>
-<p>You can also configure your system to send emails when there are issues with the upgrades. If you want to do that, take a look at <a href="https://www.cyberciti.biz/faq/ubuntu-enable-setup-automatic-unattended-security-updates/">this</a> article.</p>
-<p>Whew! You’ve now ensured that your system is up to date and will remain so. Next, you’ll create a user to make sure you don’t give your app more permissions than it needs to run.</p>
-</section>
-<section id="create-a-non-root-user" class="level3">
-<h3 class="anchored" data-anchor-id="create-a-non-root-user">Create a Non-root User</h3>
-<p>If your server ever gets hacked, having a non-root user reduces the damage the malicious actor can do. That, <a href="https://askubuntu.com/questions/1127174/purpose-of-creating-non-root-user">among other reasons</a>, justifies the creation of a non-root user.</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> adduser fastapi-user <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># replace fastapi-user with your preferred name</span></span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> gpasswd <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-a</span> fastapi-user sudo <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># add to sudoers</span></span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">su</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> fastapi-user <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># login as fastapi-user</span></span></code></pre></div>
-<p>These commands will create a user name <code>fastapi-user</code>, add it to the <code>sudo</code> group (which contains all users with root privileges), and then log in as that user.</p>
-<p>Then, you will set up your server so that you connect to it using an SSH key instead of a password. It’s safer and faster, so you have nothing to lose.</p>
-<p>If you don’t already have an SSH key, open a new terminal <strong>on your local machine</strong> and run the following command. Otherwise, skip this step, and move directly to copy your public SSH key.</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh-keygen</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-t</span> ed25519 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-C</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"username@email.com"</span></span></code></pre></div>
-<p>‌This command will create and store an SSH key in your local machine. You employ two parameters:</p>
-<ol type="1">
-<li><code>-t ed25519</code> to specify which algorithm to use to generate the key. You went with <a href="https://ed25519.cr.yp.to/">ED25519</a>, which is a very safe and efficient algorithm.</li>
-<li><code>-C username@email.com</code> to append your email as a comment at the end of the key. Make sure to replace <code>username@email.com</code> it with your actual email.</li>
-</ol>
-<p>Then, copy your public SSH key by using this command and copying the output:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span> ~/.ssh/id_ed25519.pub</span></code></pre></div>
-<p>Go back to the <strong>remote server’s</strong> terminal and type in the following commands:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> ~/.ssh/</span>
-<span id="cb8-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> 700 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> ~/.ssh/</span>
-<span id="cb8-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> vim ~/.ssh/authorized_keys</span></code></pre></div>
-<p>These commands will:</p>
-<ol type="1">
-<li>Create a <code>.ssh</code> directory</li>
-<li>Set the necessary permissions (the owner of <code>.ssh/</code> has full read, write, and execute permissions, but other users and groups shouldn’t).</li>
-<li>Open <code>authorized_keys</code> with an editor</li>
-</ol>
-<p>Paste your public SSH key into <code>authorized_keys</code>. Save the changes and close the editor. Make sure the changes worked by closing the terminal and logging back into your machine using the following command:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh</span> fastapi-user@your-server-ip</span></code></pre></div>
-<p>Once you’ve tested that it works, you should disable the root login and use password authentication for SSH connections. To do this, you’ll have to update the following values in <code>/etc/ssh/sshd_config</code> using <strong>vim</strong> (or any other editor) using <code>sudo</code> privileges:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">PermitRootLogin</span> no <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># change to no</span></span>
-<span id="cb10-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">...</span></span>
-<span id="cb10-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">PasswordAuthentication</span> no <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># change to no</span></span></code></pre></div>
-<p>These modifications will prohibit users from logging in as <code>root</code> and also disable the option of authenticating using a password rather than an SSH key.</p>
-</section>
-<section id="other-security-measures" class="level3">
-<h3 class="anchored" data-anchor-id="other-security-measures">Other Security Measures</h3>
-<p>Most cloud providers offer firewall services, but if yours doesn’t, you should <a href="https://www.linode.com/docs/guides/configure-firewall-with-ufw/">configure one</a> and only allow incoming traffic to the necessary ports: 80, 443, and 22.</p>
-<p>Also, you can install <a href="https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-20-04">fail2ban</a> to prevent brute-force authentication attacks. To learn more about the best practices to secure a Linux server, check out <a href="https://www.linode.com/docs/guides/set-up-and-secure/">this guide</a> from Linode.</p>
-</section>
-</section>
-<section id="step-2-install-software-tools" class="level2">
-<h2 class="anchored" data-anchor-id="step-2-install-software-tools">Step 2: Install Software Tools</h2>
-<p>You will require a few software tools. Begin by running the following commands to install Python:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
-<span id="cb11-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt update</span>
-<span id="cb11-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install python3.11 python3.11-venv <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span></span></code></pre></div>
-<p>Then, install <strong>Supervisor</strong> and <strong>NGINX</strong>:</p>
-<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install supervisor nginx <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span></span></code></pre></div>
-<p>Supervisor is a process control system for Unix-like operating systems, including Linux. It’s intended to monitor and manage the processes of programs, ensuring that they are always running and restarting them if they crash or shut down.</p>
-<p>NGINX,as mentioned before, is a popular multifaceted software, that’s often used as a reverse proxy when deploying web applications.</p>
-<p>Enable and start Supervisor:</p>
-<div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> systemctl enable supervisor</span>
-<span id="cb13-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> systemctl start supervisor</span></code></pre></div>
-<p><code>enable</code> will make sure Supervisor starts on boot, and <code>start</code> will start Supervisor right away.</p>
-</section>
-<section id="step-3-set-up-your-fastapi-app" class="level2">
-<h2 class="anchored" data-anchor-id="step-3-set-up-your-fastapi-app">Step 3: Set Up Your FastAPI App</h2>
-<p>Start by cloning the sample app into <code>/home/fastapi-user</code>:</p>
-<div class="sourceCode" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone https://github.com/dylanjcastillo/fastapi-nginx-gunicorn</span></code></pre></div>
-<p>This will work with public repositories. If you want to deploy an app from a private GitHub repository, you should set up a <a href="https://dylancastillo.co/how-to-use-github-deploy-keys/">GitHub deploy key</a> and clone the repository using it.</p>
-<p>Next, create a virtual environment and activate it in the project directory:</p>
-<div class="sourceCode" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">cd</span> /home/fastapi-user/fastapi-nginx-gunicorn</span>
-<span id="cb15-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3.11</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv</span>
-<span id="cb15-3"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span></code></pre></div>
-<p>These commands will change your current location to the project directory, create a virtual environment in it, and activate it. From now on, you should see a <code>(.venv)</code> prefix in your command line.</p>
-<p>Now, use <code>pip</code> to install the libraries specified in <code>requirements.txt</code>:</p>
-<div class="sourceCode" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pip</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-r</span> requirements.txt</span></code></pre></div>
-<p>This will install the packages in <code>requirements.txt</code>: <code>fastapi</code>, <code>gunicorn</code>, and <code>uvicorn</code>, in your current virtual environment.</p>
-<p>Verify that everything went well by running the application:</p>
-<div class="sourceCode" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">uvicorn</span> main:app</span></code></pre></div>
-<p>You shouldn’t get any errors when you run this command. You can also verify that it’s working by opening a new terminal window, connecting to the server, and making a request with <code>curl</code>:</p>
-<div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">curl</span> http://localhost:8000</span></code></pre></div>
-<p>You should get the following response:</p>
-<div class="sourceCode" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">{</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"message"</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">:</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"It's working!"</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>You’re halfway there. You got your FastAPI app running, next you’ll configure Gunicorn to serve as a WSGI server.</p>
-</section>
-<section id="step-4-configure-gunicorn" class="level2">
-<h2 class="anchored" data-anchor-id="step-4-configure-gunicorn">Step 4: Configure Gunicorn</h2>
-<p>There are two parts to configuring Gunicorn. First, specifying the configuration requirements of <code>gunicorn</code>. Second, setting up a <strong>Supervisor</strong> program to run it.</p>
-<section id="set-up-gunicorn" class="level3">
-<h3 class="anchored" data-anchor-id="set-up-gunicorn">Set Up Gunicorn</h3>
-<p>You’ll first create a file to define the parameters you’ll use when running Gunicorn. For that, create a file called <code>gunicorn_start</code> in the project directory:</p>
-<div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">vim</span> gunicorn_start</span></code></pre></div>
-<p>Then, add the following content to it:</p>
-<div class="sourceCode" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#!/bin/bash</span></span>
-<span id="cb21-2"></span>
-<span id="cb21-3"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">NAME</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>fastapi-app</span>
-<span id="cb21-4"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">DIR</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/home/fastapi-user/fastapi-nginx-gunicorn</span>
-<span id="cb21-5"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">USER</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>fastapi-user</span>
-<span id="cb21-6"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">GROUP</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>fastapi-user</span>
-<span id="cb21-7"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">WORKERS</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>3</span>
-<span id="cb21-8"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">WORKER_CLASS</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>uvicorn.workers.UvicornWorker</span>
-<span id="cb21-9"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">VENV</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$DIR</span>/.venv/bin/activate</span>
-<span id="cb21-10"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">BIND</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>unix:<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$DIR</span>/run/gunicorn.sock</span>
-<span id="cb21-11"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">LOG_LEVEL</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>error</span>
-<span id="cb21-12"></span>
-<span id="cb21-13"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">cd</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$DIR</span></span>
-<span id="cb21-14"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$VENV</span></span>
-<span id="cb21-15"></span>
-<span id="cb21-16"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">exec</span> gunicorn main:app <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-17">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--name</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$NAME</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-18">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--workers</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$WORKERS</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-19">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--worker-class</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$WORKER_CLASS</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-20">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--user</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$USER</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-21">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--group</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$GROUP</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-22">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--bind</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$BIND</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-23">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--log-level</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$LOG_LEVEL</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb21-24">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--log-file</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>-</span></code></pre></div>
-<p>Here’s what you’re defining:</p>
-<ul>
-<li><strong>Line 1</strong> indicates that the script is to be run by the bash shell.</li>
-<li><strong>Lines 3 to 11</strong> specify the configuration options that you’ll pass to Gunicorn. Most parameters are self-explanatory, except for <code>WORKERS</code>, <code>WORKER_CLASS</code>, and <code>BIND</code>:
-<ul>
-<li><strong><code>WORKERS</code>:</strong> defines the number of workers that Gunicorn will use, it’s usually recommended to use the number of CPU cores + 1.</li>
-<li><strong><code>WORKER_CLASS</code>:</strong> type of worker used. In this case, you specify Uvicorn workers, which allows you to <a href="https://fastapi.tiangolo.com/deployment/server-workers/#gunicorn-with-uvicorn-workers">use it as an ASGI server</a>.</li>
-<li><strong><code>BIND</code>:</strong> Specifies the <a href="https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html">server socket</a> that Gunicorn binds to.</li>
-</ul></li>
-<li><strong>Lines 13 and 14</strong> change the location to the project directory and activate the virtual environment.</li>
-<li><strong>Lines 16 to 24</strong> run Gunicorn with the specified parameters.</li>
-</ul>
-<p>Save and close the fine. Then, make it executable by running the following:</p>
-<div class="sourceCode" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> u+x gunicorn_start</span></code></pre></div>
-<p>Finally, make a <code>run</code> folder in your project directory for the Unix socket file you defined in the <code>BIND</code> parameter:</p>
-<div class="sourceCode" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> run</span></code></pre></div>
-<p>When you have multiple servers communicating on the same machine, <a href="https://stackoverflow.com/questions/19916016/gunicorn-nginx-server-via-socket-or-proxy">using a Unix socket file is better</a>.</p>
-</section>
-<section id="configure-supervisor" class="level3">
-<h3 class="anchored" data-anchor-id="configure-supervisor">Configure <strong>Supervisor</strong></h3>
-<p>First, create a directory called <code>logs</code> in the project directory to store your application’s error logs:</p>
-<div class="sourceCode" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> logs</span></code></pre></div>
-<p>Next, create a Supervisor’sconfiguration file by running the following command:</p>
-<div class="sourceCode" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> vim /etc/supervisor/conf.d/fastapi-app.conf</span></code></pre></div>
-<p>There copy and paste the following:</p>
-<div class="sourceCode" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[program:fastapi-app]</span></span>
-<span id="cb26-2"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">command</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/home/fastapi-user/fastapi-nginx-gunicorn/gunicorn_start</span>
-<span id="cb26-3"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">user</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>fastapi-user</span>
-<span id="cb26-4"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">autostart</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>true</span>
-<span id="cb26-5"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">autorestart</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>true</span>
-<span id="cb26-6"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">redirect_stderr</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>true</span>
-<span id="cb26-7"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">stdout_logfile</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/home/fastapi-user/fastapi-nginx-gunicorn/logs/gunicorn-error.log</span></code></pre></div>
-<p>This configuration file runs the file you created earlier, <code>gunicorn_start</code>, using the <code>fastapi-user</code>. Supervisor will start the application anytime the server starts, and will also restart it if it fails.</p>
-<p>This configuration file executes the <code>gunicorn_start</code> file you created earlier using <code>fastapi-user</code> as the user. Supervisor will launch the application whenever the server boots up and will restart it if the application fails. The errors are logged into <code>gunicorn-error.log</code> in <code>logs</code> in the project directory.</p>
-<p>Reread Supervisor’s configuration file and restart the service by running these commands:</p>
-<div class="sourceCode" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> supervisorctl reread</span>
-<span id="cb27-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> supervisorctl update</span></code></pre></div>
-<p>Finally, you can check the status of the program by running this command:</p>
-<div class="sourceCode" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> supervisorctl status fastapi-app</span></code></pre></div>
-<p>If everything went well, the <code>fastapi-app</code> service status should be set to <code>RUNNING</code>.</p>
-<p>You can also test it by opening a new terminal window, connecting to the server, and issuing a GET request using <code>curl</code>:</p>
-<div class="sourceCode" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">curl</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--unix-socket</span> /home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock localhost</span></code></pre></div>
-<p>You should see the following output:</p>
-<div class="sourceCode" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb30-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"message"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"It's working!"</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>Finally, if you make changes to the code, you can restart the service to apply to changes by running this command:</p>
-<div class="sourceCode" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> supervisorctl restart fastapi-app</span></code></pre></div>
-<p>Way to go! You’ve got an ASGI server running using Gunicorn and Uvicorn. Next, you’ll set up a reverse proxy server using NGINX.</p>
-</section>
-</section>
-<section id="step-5-configure-nginx" class="level2">
-<h2 class="anchored" data-anchor-id="step-5-configure-nginx">Step 5: Configure NGINX</h2>
-<p>Create a new NGINX configuration file for your project:</p>
-<div class="sourceCode" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> vim /etc/nginx/sites-available/fastapi-app</span></code></pre></div>
-<p>Open the NGINX configuration file and paste the following content:</p>
-<div class="sourceCode" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">upstream</span> app_server {</span>
-<span id="cb33-2">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">server</span> unix:/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock fail_timeout=0<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-3"><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb33-4"></span>
-<span id="cb33-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">server</span> {</span>
-<span id="cb33-6">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">listen</span> 80<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-7"></span>
-<span id="cb33-8">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># add here the ip address of your server</span></span>
-<span id="cb33-9">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># or a domain pointing to that ip (like example.com or www.example.com)</span></span>
-<span id="cb33-10">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">server_name</span> XXXX<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-11"></span>
-<span id="cb33-12">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">keepalive_timeout</span> 5<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-13">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">client_max_body_size</span> 4G<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-14"></span>
-<span id="cb33-15">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">access_log</span> /home/fastapi-user/fastapi-nginx-gunicorn/logs/nginx-access.log<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-16">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">error_log</span> /home/fastapi-user/fastapi-nginx-gunicorn/logs/nginx-error.log<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-17"></span>
-<span id="cb33-18">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">location</span> / {</span>
-<span id="cb33-19">        <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">proxy_set_header</span> X-Forwarded-For <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$proxy_add_x_forwarded_for</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-20">        <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">proxy_set_header</span> Host <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$http_host</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-21">        <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">proxy_redirect</span> off<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-22"></span>
-<span id="cb33-23">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">!-f</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$request_filename</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">{</span></span>
-<span id="cb33-24">            <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">proxy_pass</span> http://app_server<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-25">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">break</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span></span>
-<span id="cb33-26">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">}</span></span>
-<span id="cb33-27">    <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb33-28"><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>This is the NGINX configuration file. Here’s how it works:</p>
-<ul>
-<li><strong>Lines 1 to 3</strong> define a cluster of servers called <code>app_server</code> that NGINX will proxy requests to. The requests are redirected to the Unix socket file located at <code>/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock</code>. Setting <code>fail_timeout=0</code> tells NGINX not to consider the server as failed even if it does not respond.</li>
-<li><strong>Lines 1 to 5</strong> define the configuration for the virtual server that NGINX will use to serve requests. In this case, it listens on port 80. Replace XXXX by the IP or the site’s name.</li>
-<li><strong>Lines 12 and 13</strong> specify <code>keepalive_timeout</code> to set the maximum amount of time that a client can keep a persistent connection open, and <code>client_max_body_size</code> to set a limit to size of the client request body that NGINX will allow.</li>
-<li><strong>Lines 15 and 16</strong> specify the locations where NGINX will write its access and error logs.</li>
-<li><strong>Lines 18 to 27</strong> defines how NGINX will handle requests to the root directory <code>/</code>. You provide some specifications to handle headers, and set a directive to proxy the requests to the <code>app_server</code> you defined earlier.</li>
-</ul>
-<p>Enable the configuration of your site by creating a symbolic link from the file in <code>sites-available</code> into <code>sites-enabled</code> by running this command:</p>
-<div class="sourceCode" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> ln <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> /etc/nginx/sites-available/fastapi-app /etc/nginx/sites-enabled/</span></code></pre></div>
-<p>Test that the configuration file is OK and restart NGINX:</p>
-<div class="sourceCode" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> nginx <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-t</span></span>
-<span id="cb35-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> systemctl restart nginx</span></code></pre></div>
-<p>If everything went well, now you should be able to make a GET request successfully to the IP of your server from your browser or using <code>curl</code>. Once again, you should see the following output:</p>
-<div class="sourceCode" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb36-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"message"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"It's working!"</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>You should have your FastAPI app running by now, as well as Gunicorn+Uvicorn as an ASGI server and NGINX in front of them as a reverse proxy.</p>
-<section id="permissions-error" class="level3">
-<h3 class="anchored" data-anchor-id="permissions-error">Permissions Error</h3>
-<p>If you get a permission error telling you that NGINX cannot access the unix socket, you can add the <code>www-data</code> user (which typically is the user running the NGINX processes) to the <code>fastapi-user</code> group. You can use the following command:</p>
-<div class="sourceCode" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> usermod <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-aG</span> fastapi-user www-data</span></code></pre></div>
-<p>Good job! If you haven’t bought a domain name for your API, you can stop reading here. If you have one, proceed to the next step to obtain an SSL certificate and enable HTTPS.</p>
-</section>
-</section>
-<section id="optional-step-6-obtain-a-free-ssl-certificate-using-certbot" class="level2">
-<h2 class="anchored" data-anchor-id="optional-step-6-obtain-a-free-ssl-certificate-using-certbot">(Optional) Step 6: Obtain a Free SSL Certificate Using Certbot</h2>
-<p>This only applies if you have a domain for which you want to obtain an SSL certificate.</p>
-<p>If you’re using Ubuntu, you can skip this step. Otherwise, you first need to install <code>snapd</code>:</p>
-<div class="sourceCode" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install snapd</span></code></pre></div>
-<p>Next, make sure you have the latest version available:</p>
-<div class="sourceCode" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> snap install core<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> snap refresh core</span></code></pre></div>
-<p>Install certbot and make sure the <code>cerbot</code> command is executable:</p>
-<div class="sourceCode" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> snap install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--classic</span> certbot</span>
-<span id="cb40-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> ln <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> /snap/bin/certbot /usr/bin/certbot</span></code></pre></div>
-<p>Next, generate a certificate for your domain interactively by running the following command:</p>
-<div class="sourceCode" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> certbot <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--nginx</span></span></code></pre></div>
-<p>Finally, Certbot will automatically handle the renewal of your certificate. To test that it works run the following:</p>
-<div class="sourceCode" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> certbot renew <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--dry-run</span></span></code></pre></div>
-<p>If it worked as expected, you should see a <code>Congratulations, all simulated renewals succeeded...</code> message.</p>
-<p>If everything went well, you should be able to make a successful get request using HTTPS.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s all there is to it! This tutorial showed you how to use NGINX, Gunicorn, and Uvicorn to deploy a FastAPI application. FastAPI is one of the most popular Python web frameworks. It’s become the go-to option for deploying machine learning-powered web apps, so becoming acquainted with it is a wise career move.</p>
-<p>In this article you’ve learned:</p>
-<ul>
-<li>Why and when should you use FastAPI, NGINX, Gunicorn, and Uvicorn.</li>
-<li>How to <strong>set up Gunicorn+Uvicorn as an ASGI server</strong>.</li>
-<li>How to <strong>use Supervisor to run Gunicorn.</strong></li>
-<li>How to <strong>configure NGINX and generate a free SSL certificate using certbot.</strong></li>
-</ul>
-<p>If you have any questions or feedback, let me know in the comments!</p>
-<p>All the code for this tutorial is <a href="https://github.com/dylanjcastillo/fastapi-nginx-gunicorn">available on GitHub</a>.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {How to {Securely} {Deploy} a {FastAPI} App with {NGINX} and
-    {Gunicorn}},
-  date = {2023-02-03},
-  url = {https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“How to Securely Deploy a FastAPI App with
-NGINX and Gunicorn.”</span> February 3, 2023. <a href="https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html">https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>web</category>
-  <guid>https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html</guid>
-  <pubDate>Fri, 03 Feb 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
