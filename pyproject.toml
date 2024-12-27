@@ -10,13 +10,11 @@ package-mode = false
 python = "^3.12"
 notebook = "^7.2.0"
 openai = "^1.30.5"
-google-generativeai = "^0.8.2"
 numpy = "^2.1.0"
 pandas = "^2.2.2"
 python-dotenv = "^1.0.1"
 scikit-learn = "^1.5.1"
 pillow = "^10.4.0"
-instructor = {extras = ["google-generativeai"], version = "^1.7.0"}
 datasets = "^3.1.0"
 langsmith = "^0.1.147"
 jsonref = "^1.1.0"
@@ -24,6 +22,8 @@ modal = "^0.67.15"
 plotly = "^5.24.1"
 jupyter = "^1.1.1"
 quarto-cli = "^1.6.37"
+google-generativeai = "^0.8.3"
+instructor = {extras = ["google-generativeai"], version = "^1.7.0"}
 
 
 [tool.poetry.group.dev.dependencies]
