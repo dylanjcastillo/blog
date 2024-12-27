@@ -1,7 +1,7 @@
 ---
-title: "A big problem with Gemini's structured outputs"
+title: "Evaluating the performance of Gemini's structured outputs"
 date: "12/27/2024"
-description-meta: "Be careful with Gemini's function calling for chain-of-thought reasoning."
+description-meta: "Is there a performance gap between structured and unstructured outputs when using Gemini 1.5 Flash? Let's find out."
 categories:
   - llm
   - gemini
