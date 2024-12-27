@@ -172,7 +172,7 @@ I've included _JSON-Prompt_ and _JSON-Schema_ in the analysis, but had to exclud
 
 ## Figuring out Gemini's flawed structured outputs
 
-When running the three benchmarks, I quickly ran into a big performance issue with _FC_ and _JSON-Schema_. In all tasks, they had double digits performance drops compared to _NL_.
+When running the three benchmarks, I quickly ran into a big performance issue with _FC_ and _JSON-Schema_. In all tasks, both showed double-digit performance drops compared to NL.
 
 This didn't make a lot of sense, so I started investigating.
 
@@ -194,15 +194,15 @@ The prompts were similar to the one below, adjusted according to the task:
 >
 > First, provide your step by step reasoning in the "reasoning" field. Then, in the "answer" field, provide your final answer. Don't include any other text in the "answer" field.
 
-After a bit of tinkering with the schema, I realized that the reason for the performance drop in _JSON-Schema_ was that the keys used in the schema were reversed when generating the response. In LMSF, Tam et al. mention in passing that _JSON-Schema_ did not produce valid JSON, for the same reason.
+After a bit of tinkering with the schema, I realized that the performance drop in _JSON-Schema_ was due to the keys in the schema being reversed when generating the response. Tam et al. mentioned briefly in LMSF that _JSON-Schema_ responses failed to produce valid JSON due to this exact problem, so they excluded it from their analysis.
 
-After trying out different naming conventions, I realized that the order of the keys in the schema is sorted alphabetically before the response is generated. In a test that checked 100 randomly generated schemas, all of the resulting responses had the keys sorted alphabetically. That's not good.
+Through testing, I found that the order of the keys in the schema gets sorted alphabetically before the response is generated. To confirm this, I ran a test with 100 randomly generated schemas. Every resulting response had its keys sorted alphabetically. That's not good.
 
-In the Vertex AI documentation, it says that there is a `propertyOrdering` parameter that can be used to control the order of the keys but this doesn't seem to work with the Generative AI Python SDK. This is a [known](https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3) [issue](https://github.com/google-gemini/generative-ai-python/issues/533).
+The Vertex AI documentation mentions a `propertyOrdering` parameter, which should allow control over the order of keys. However, this feature [doesn’t appear](https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3) [to work](https://github.com/google-gemini/generative-ai-python/issues/533) with the Generative AI Python SDK.
 
-Without a proper way to control the order of the keys, I had to make sure to use keys that allow for chain-of-thought reasoning using a workaround: provide names to the keys that are alphabetically ordered in the way that I intend the model to use them. So instead of `reasoning` and `answer`, I used `reasoning` and `solution`.
+Since I couldn’t directly control the key order, I resorted to a quick hack. I named the keys in a way that forced the desired order alphabetically. Instead of using `reasoning` and `answer`, I used `reasoning` and `solution`. This preserved the chain-of-thought reasoning in the responses, and resolved the performance drop in _JSON-Schema_.
 
-But _FC_ was a different story. I couldn't find a pattern in the order of the keys. It seems random and I couldn't find an obvious way to control it. So, I decided to exclude this method from the analysis.
+_FC_ was a different story. Unlike _JSON-Schema_, the order of the keys seemed random, and I couldn’t find a clear pattern or a reliable way to control it. Due to this issue, I decided to exclude _FC_ from the analysis.
 
 ## Evaluating Gemini 1.5 Flash
 
@@ -265,8 +265,10 @@ However, if you take the interpretation that "structured outputs" is only when u
 
 ## Conclusion and recommendations
 
-Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are mixed. Which reaffirms my belief that rather than relying on a random post on the internet, you should test things for yourself.
+Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), these results are mixed. Depending on how you interpret "structured outputs", you might find that there's no significant difference in performance between structured and unstructured outputs or that there is.
+
+This only reinforces my position that you shouldn’t blindly trust random posts or papers. If you want to improve your LLM workflows, you need to test things for yourself.
 
 Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something you need to be aware of.
 
-This is a long ass post and sadly all I can tell you is what you likely presume from the beginning: run your own evals and decide for yourself.
+This is a long ass post and sadly all I can tell you is what you likely presume from the beginning: run your own evals, then choose the approach that works best for your task.
