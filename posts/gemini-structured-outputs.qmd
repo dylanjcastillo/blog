@@ -193,7 +193,7 @@ I eventually realized that the performance drop in _JSON-Schema_ was due to the 
 
 I didn't want to exclude it from the analysis, so I started looking for a way to control the order of the keys in the schema. I found that the order of the keys in the schema gets sorted alphabetically before the response is generated. To confirm this, I ran a test with 100 randomly generated schemas. Every resulting output had its keys sorted alphabetically, so it's clear this is not by chance.
 
-I also found that the Vertex AI documentation mentions a `propertyOrdering` parameter, which should allow control over the order of keys. However, this feature [doesn’t appear](https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3) [to work](https://github.com/google-gemini/generative-ai-python/issues/533) with the Generative AI Python SDK.
+I also found that the Vertex AI documentation mentions a [`propertyOrdering`](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output) parameter, which should allow control over the order of keys. However, this feature [doesn’t appear](https://discuss.ai.google.dev/t/issue-with-key-ordering-in-controlled-generation-on-gemini-1-5/41737/3) [to work](https://github.com/google-gemini/generative-ai-python/issues/533) with the Generative AI Python SDK.
 
 Unable to use the `propertyOrdering` parameter, I resorted to a quick workaround: I named the keys in a way that forced the desired order alphabetically. Instead of using `reasoning` and `answer`, I used `reasoning` and `solution`. This preserved the chain-of-thought reasoning in the responses, and resolved the performance drop in _JSON-Schema_.
 
