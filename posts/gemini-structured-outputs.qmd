@@ -260,7 +260,7 @@ But if you take the also common interpretation that constrained decoding is the 
 
 Weird, I know. But that's the way it is.
 
-## Conclusion and recommendations
+## Conclusion
 
 Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are also mixed for Gemini 1.5 Flash.
 
