@@ -15,7 +15,7 @@ After reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt
 
 I found that for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), structured outputs could decrease performance in some tasks. So I was curious to see if the same was true for _Gemini 1.5 Flash_.
 
-In this article, I'll share the results of running the same benchmarks for _Gemini 1.5 Flash_ and a few interesting things I learned about the Gemini API along the way.
+In this article, I'll share the results of running the same benchmarks for _Gemini 1.5 Flash_ and a few interesting things I learned about the Gemini API along the way. I've got good, bad, and ugly news for you.
 
 You can find the code in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
@@ -23,10 +23,9 @@ You can find the code in this [GitHub repository](https://github.com/dylanjcasti
 
 If you're in a hurry, here are my key findings:
 
-1. Gemini's structured outputs performed on par with unstructured outputs.^[Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.]
-2. When testing constrained decoding specifically, Gemini’s structured outputs performed worse than unstructured outputs.
-3. Function calling and constrained decoding have a big problem: the order of the keys specified in the schema is not preserved when using the [Generative AI Python SDK](https://ai.google.dev/). This will likely break chain-of-thought reasoning in your applications.
-4. For constrained decoding, the model will reorder the keys alphabetically, so a quick fix is to name the keys in a way that preserves the chain-of-thought reasoning. I couldn't find a way to fix this issue in Gemini's function calling.
+1. The good news: Gemini's structured outputs performed on par with unstructured outputs.^[Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.]
+2. The bad news: This only holds for the less rigid interpretation of "structured outputs". When testing constrained decoding specifically, Gemini’s structured outputs performed worse than unstructured outputs.
+3. The ugly news: Function calling and constrained decoding have a big design flaw. The order of the keys specified in the schema is not preserved when using the [Generative AI Python SDK](https://ai.google.dev/). This will break chain-of-thought reasoning in your applications unless you use a workaround (that only works for constrained decoding).
 
 The figure below shows the overall results for _Gemini 1.5 Flash_:
 
@@ -263,7 +262,9 @@ Weird, I know. But that's the way it is.
 
 ## Conclusion and recommendations
 
-Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are also mixed for Gemini 1.5 Flash. Structured outputs perform on par with unstructured outputs. But only if you take the less rigid interpretation of "structured outputs".
+Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are also mixed for Gemini 1.5 Flash.
+
+The good news is that structured outputs perform on par with unstructured ones. The bad news is that this only holds if you adopt a more flexible definition of “structured outputs.” And the ugly news is that they have a major issue in how they handle the order of keys in the schema you provide to the model.
 
 You shouldn't be disappointed by these results. In my case, it only reinforces my position that you shouldn’t blindly trust random posts or papers on the internet. If you want to improve your LLM workflows, you need to test things for yourself.
 
