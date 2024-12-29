@@ -1,7 +1,7 @@
 ---
-title: "Evaluating the performance of Gemini's structured outputs"
+title: "The good, the bad, and the ugly of Gemini's structured outputs"
 date: "12/27/2024"
-description-meta: "Is there a performance gap between structured and unstructured outputs when using Gemini 1.5 Flash? Let's find out."
+description-meta: "This article will go over Gemini's structured outputs and how they compare to unstructured outputs."
 categories:
   - llm
   - gemini
@@ -9,13 +9,13 @@ categories:
   - python
 ---
 
-Most companies I've worked with are using some form of structured outputs when working with LLMs. But very few of them have actually tested if going with structured outputs has made a difference in performance compared to unstructured outputs.
+Because structured outputs made my life so much easier when working with LLMs, it took me a long time to realize that maybe they could be hurting the performance of my applications.
 
 After reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I decided to run some benchmarks myself using popular proprietary models.
 
-I’ve already published results for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html). Now, I’m applying the same benchmarks to _Gemini 1.5 Flash_ to see how it measures up.
+I found that for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), structured outputs could decrease performance in some tasks. So I was curious to see if the same was true for _Gemini 1.5 Flash_.
 
-In this article, I'll share the results and a few things I learned while running the benchmarks.
+In this article, I'll share the results of running the same benchmarks for _Gemini 1.5 Flash_ and a few interesting things I learned about the Gemini API along the way.
 
 You can find the code in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
@@ -265,7 +265,7 @@ Weird, I know. But that's the way it is.
 
 Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are also mixed for Gemini 1.5 Flash. Structured outputs perform on par with unstructured outputs. But only if you take the less rigid interpretation of "structured outputs".
 
-Either way, you shouldn't be disappointed by these results. This only reinforces my position that you shouldn’t blindly trust random posts or papers. If you want to improve your LLM workflows, you need to test things for yourself.
+You shouldn't be disappointed by these results. In my case, it only reinforces my position that you shouldn’t blindly trust random posts or papers on the internet. If you want to improve your LLM workflows, you need to test things for yourself.
 
 Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something you need to be aware of.
 
