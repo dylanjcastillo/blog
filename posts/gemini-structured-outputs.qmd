@@ -9,13 +9,13 @@ categories:
   - python
 ---
 
-Because structured outputs made my life so much easier when working with LLMs, it took me a long time to realize that maybe they could be hurting the performance of my applications.
+I've been using structured outputs in my LLM workflows for a while now. They make my life so much easier when working with LLMs that I really wanted to believe they didn't have any impact on performance. For a long time, I simply actively ignored that possibility.
 
-After reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I decided to run some benchmarks myself using popular proprietary models.
+But after reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I decided to run some benchmarks myself using popular proprietary models.
 
-I found that for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), structured outputs could decrease performance in some tasks. So I was curious to see if the same was true for _Gemini 1.5 Flash_.
+I found that for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), structured outputs could decrease performance in some tasks. So I was curious to see if the same was true for _Gemini 1.5 Flash_. The answer is not so straightforward.
 
-In this article, I'll share the results of running the same benchmarks for _Gemini 1.5 Flash_ and a few interesting things I learned about the Gemini SDK along the way. I've got good, bad, and ugly news for you.
+In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs. I'll also discuss some unexpected findings I learned about the Gemini SDK along the way.
 
 You can find the code in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
