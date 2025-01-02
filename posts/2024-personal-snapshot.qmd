@@ -1,0 +1,43 @@
+---
+title: "2024: Personal Snapshot"
+date: "01/05/2024"
+description-meta: "My annual review of 2024. I analyze what went well in 2024 and what I should change for 2025."
+---
+
+This is my annual review. I use it as a way to reflect on the past year and record who I am at the time of writing.
+
+It's more for me than for you, but I hope you find it interesting.
+
+If it's me rereading this, welcome back. This is Dylan from 2024.
+
+## What went well?
+
+This year, I wrote code 322 days out of 365. It's a 16% increase from last year. That's a lot of code and a lot of learning. I'm happy with that.
+
+Financially, I doubled my revenue from last year. I worked on 9 different projects this year with 7 clients. My biggest client represented 33% of my revenue.
+
+I'm moving in the right direction but I also want to step away from daily billing towards a fixed price model or value-based pricing, as my current model doesn't scale well. Right now, 25% of my revenue comes from fixed price projects the rest is daily.
+
+Value-based pricing is the dream, but I've found it a lot more challenging, because:
+
+On the one hand, your client:
+
+1. Needs to have a painful, well-defined and quantifiable problem.
+2. Needs to have a large budget to solve the problem.
+
+On the other hand, you:
+
+1. Need to have the expertise to solve that specific problem.
+2. Need to have credibility and access to the client.
+
+Say, for example, you're an expert in optimizing RAG pipelines for a specific industry. 
+
+## What didn't go well?
+
+In my last personal snapshot, I said that I wanted to do more stand-up comedy and start making videos about technical topics. I did neither.
+
+But I feel at peace with that. Stand-up comedy has been one of the funniest hobbies I've ever had. But it really takes a lot of time to get good at it, and this year I decided that I had to focus on the things that would move the needle for me.
+
+Earlier this year, my wife and I were living at an unsustainable pace. Eventually, this took a toll on our health. So I realized that I needed to prioritize the things that were most important to me.
+
+## What are the plans for next year?
