@@ -21,7 +21,7 @@ In this article, I'll share the results from running various benchmarks for _Gem
 
 If you're in a hurry, here are my key findings:
 
-- **The good**: Gemini's structured outputs performed on par with unstructured outputs.^[Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.]
+- **The good**: Overall, Gemini's structured outputs performed on par with unstructured outputs.^[Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.]
 - **The bad**: This only holds for the less rigid interpretation of "structured outputs". When testing constrained decoding specifically, Gemini’s structured outputs performed worse than unstructured outputs.
 - **The ugly**: Function calling and constrained decoding have a big design flaw. The order of the keys specified in the schema is not preserved when using the [Generative AI Python SDK](https://ai.google.dev/). This will break chain-of-thought reasoning in your applications unless you use a workaround (that only works for constrained decoding).
 
