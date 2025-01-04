@@ -9,15 +9,13 @@ categories:
   - python
 ---
 
-I've been using structured outputs in my LLM workflows for a while now. They make my life so much easier when working with LLMs that I really wanted to believe they didn't have any impact on performance. For a long time, I simply actively ignored that possibility.
+I've always wanted to believe that structured outputs don't have any impact on the performance of LLMs. For a long time, I actively ignored any suggestion they might.
 
-But after reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I decided to run some benchmarks myself using popular proprietary models.
+But after reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I decided to run some benchmarks myself using popular proprietary models. I started with [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), and found that structured outputs could indeed decrease performance in some tasks.
 
-I found that for [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), structured outputs could decrease performance in some tasks. So I was curious to see if the same was true for _Gemini 1.5 Flash_. The answer is not so straightforward.
+I was also curious to see if the same was true for _Gemini 1.5 Flash_. The answer is not so straightforward. Plus, I found some unexpected behaviors of Gemini's Generative AI SDK.
 
-In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs. I'll also discuss some unexpected findings I learned about the Gemini SDK along the way.
-
-You can find the code in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
+In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs and the learnings I had along the way. You can find the full code to run the benchmarks yourself in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
 ## Results (TLDR)
 
@@ -266,10 +264,10 @@ Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-s
 
 The good news is that structured outputs perform on par with unstructured ones. The bad news is that this only holds if you adopt a more flexible definition of “structured outputs.” And the ugly news is that they have a major issue in how they handle the order of keys in the schema you provide to the model.
 
-You shouldn't be disappointed by these results. In my case, it only reinforces my position that you shouldn’t blindly trust random posts or papers on the internet. If you want to improve your LLM workflows, you need to test things for yourself.
+But you shouldn't be disappointed. For me, it only reinforces the idea that you shouldn’t blindly trust random posts or papers on arXiv. If you want to improve your LLM workflows, you need to test things for yourself.
 
-Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something you need to be aware of.
+Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something I need to keep in mind.
 
-It sucks when the answer is "it depends", but that's better than a false sense of security. So, run your own evals, and choose the approach that works best for your task.
+So, this long post is just a reminder to run your own evals and choose the approach that works best for you.
 
-If you want to run the benchmarks yourself, you can find the code in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
+You can find the code to replicate my results in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
