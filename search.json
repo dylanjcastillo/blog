@@ -641,7 +641,7 @@
     "href": "posts/gemini-structured-outputs.html#structured-outputs-101",
     "title": "The good, the bad, and the ugly of Gemini’s structured outputs",
     "section": "Structured outputs 101",
-    "text": "Structured outputs 101\nIn case you’re not familiar with the concept, structured outputs are a group of methods that “ensure that the model outputs adhere to a specific structure”2. In Open weight models, a “structure” can mean anything from a JSON schema to a specific regex pattern. With proprietary models, it usually means a JSON schema.\nIn its less rigid interpretation, this includes any method that can generate LLM outputs adhering to a structured format, such as prompting, function calling, JSON mode, or constrained decoding.\nIn its more rigid interpretation, this includes only constrained decoding, as it is the only method that will guarantee the output adheres to the schema you provide."
+    "text": "Structured outputs 101\nIn case you’re not familiar with the concept, structured outputs are a group of methods that “ensure that the model outputs adhere to a specific structure”. In Open weight models, a structure” can mean anything from a JSON schema to a specific regex pattern. With proprietary models, it usually means a JSON schema.\nIn its less rigid interpretation, this includes any method that can generate LLM outputs adhering to a structured format, such as prompting, function calling, JSON mode, or constrained decoding.\nIn its more rigid interpretation, this includes only constrained decoding, as it is the only method that will guarantee the output adheres to the schema you provide."
   },
   {
     "objectID": "posts/gemini-structured-outputs.html#study-design",
@@ -683,7 +683,7 @@
     "href": "posts/gemini-structured-outputs.html#footnotes",
     "title": "The good, the bad, and the ugly of Gemini’s structured outputs",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nAssuming the less rigid interpretation of “structured outputs”.↩︎\n“We Need Structured Output”: Towards User-centered Constraints on Large Language Model Output↩︎"
+    "text": "Footnotes\n\n\nAssuming the less rigid interpretation of “structured outputs”.↩︎"
   },
   {
     "objectID": "posts/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.html",
