@@ -140,7 +140,7 @@ When considering both **JSON-Prompt** and **JSON-Schema**, Gemini's structured o
 
 ## Structured outputs 101
 
-In case you're not familiar with the concept, structured outputs are a group of methods that "ensure that the model outputs adhere to a specific structure"^[[“We Need Structured Output”: Towards User-centered Constraints on Large Language Model Output](https://arxiv.org/abs/2404.07362)]. In Open weight models, a "structure" can mean anything from a JSON schema to a specific regex pattern. With proprietary models, it usually means a JSON schema.
+In case you're not familiar with the concept, structured outputs are a group of methods that ["ensure that the model outputs adhere to a specific structure"](https://arxiv.org/abs/2404.07362). In Open weight models, a _structure_ can mean anything from a JSON schema to a specific regex pattern. With proprietary models, it usually means a JSON schema.
 
 In its less rigid interpretation, this includes any method that can generate LLM outputs adhering to a structured format, such as prompting, [function calling](https://platform.openai.com/docs/guides/function-calling), [JSON mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode), or [constrained decoding](https://openai.com/index/introducing-structured-outputs-in-the-api/).
 
