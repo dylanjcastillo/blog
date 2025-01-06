@@ -9,11 +9,11 @@ categories:
   - python
 ---
 
-For a long time, I didn't pay much attention to the idea that structured outputs could have an impact on the performance of LLMs. But after reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I started to question my stance.
+For a long time, I didn't pay much attention to the idea that structured outputs could have an impact on the performance of LLMs. But after reading [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) and [.txt's rebuttal](https://blog.dottxt.co/say-what-you-mean.html), I started to question my assumptions.
 
-I decided to run some benchmarks myself using popular proprietary models, starting with [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html). It turned out that structured outputs did, in fact, decrease performance on some tasks.
+I decided to run some benchmarks myself using popular proprietary models, starting with [_GPT-4o-mini_](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html). During my analysis, I found that structured outputs did, in fact, decrease performance on some tasks.
 
-After that, I was curious to see if the same was true for _Gemini 1.5 Flash_. This time, I found that the answer wasn't so straightforward. Plus, I ran into some suprising issues with Gemini's Generative AI SDK.
+After that, I was curious to see if the same was true for _Gemini 1.5 Flash_. This time, the answer wasn't so straightforward, which is why I decided to write a separate post about it. In the process, I ran into an issue in Gemini's Generative AI SDK that can break your application if you're not careful.
 
 In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs and the learnings I had along the way. You can find the full code to run the benchmarks in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
@@ -21,7 +21,7 @@ In this article, I'll share the results from running various benchmarks for _Gem
 
 If you're in a hurry, here are my key findings:
 
-- **The good**: Overall, Gemini's structured outputs performed on par with unstructured outputs.^[Assuming “structured outputs” refers to any method that generates LLM output adhering to a JSON schema.]
+- **The good**: Overall, Gemini's structured outputs performed on par with unstructured outputs.^[Assuming the less rigid interpretation of "structured outputs".]
 - **The bad**: This only holds for the less rigid interpretation of "structured outputs". When testing constrained decoding specifically, Gemini’s structured outputs performed worse than unstructured outputs.
 - **The ugly**: Function calling and constrained decoding have a big design flaw. The order of the keys specified in the schema is not preserved when using the [Generative AI Python SDK](https://ai.google.dev/). This will break chain-of-thought reasoning in your applications unless you use a workaround (that only works for constrained decoding).
 
@@ -136,6 +136,14 @@ For **JSON-Prompt**, the JSON schema is included in the prompt, instructing the 
 
 When considering both **JSON-Prompt** and **JSON-Schema**, Gemini's structured outputs performed comparably to unstructured outputs. However, with **JSON-Schema** alone (i.e., constrained decoding), performance drops compared to unstructured outputs. This difference is most evident in the _Shuffled Objects_ task, where **NL** achieved a score of 97.15%, while **JSON-Schema** scored 86.18%.
 
+## Structured outputs 101
+
+In case you're not familiar with the concept, structured outputs are a group of methods that "ensure that the model outputs adhere to a specific structure"^[[“We Need Structured Output”: Towards User-centered Constraints on Large Language Model Output](https://arxiv.org/abs/2404.07362)]. In Open weight models, a "structure" can mean anything from a JSON schema to a specific regex pattern. With proprietary models, it usually means a JSON schema.
+
+In its less rigid interpretation, this includes any method that can generate LLM outputs adhering to a structured format, such as prompting, [function calling](https://platform.openai.com/docs/guides/function-calling), [JSON mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode), or [constrained decoding](https://openai.com/index/introducing-structured-outputs-in-the-api/).
+
+In its more rigid interpretation, this includes only constrained decoding, as it is the only method that will guarantee the output adheres to the schema you provide.
+
 ## Study design
 
 In Let Me Speak Freely?, Tam et al. evaluated structured and unstructured outputs across three reasoning tasks and six classification tasks. They used exact match to evaluate the reasoning tasks and accuracy to evaluate the classification tasks. They ran the experiments using the following models:
@@ -153,7 +161,7 @@ I excluded the classification tasks because I believe structured outputs perform
 
 The rest of the article details the process of re-evaluating these benchmarks using _Gemini-1.5-Flash_.
 
-## Generating structured outputs with Gemini
+## Structured outputs with Gemini
 
 Gemini has three ways of generating structured outputs:
 
@@ -163,7 +171,7 @@ Gemini has three ways of generating structured outputs:
 
 I've included _JSON-Prompt_ and _JSON-Schema_ in the analysis, but had to exclude _FC_ because it's not possible to use it for chain-of-thought reasoning, which is a requirement for the benchmarks.
 
-## Figuring out Gemini's flawed structured outputs
+## Issues with Gemini's structured outputs
 
 When running the three benchmarks, I quickly ran into a performance issue with _FC_ and _JSON-Schema_. In all tasks, both showed double-digit performance drops compared to _NL_.
 
@@ -197,9 +205,9 @@ Unable to use the `propertyOrdering` parameter, I resorted to a quick workaround
 
 But _FC_ was a different story. Unlike _JSON-Schema_, the order of the keys follow a less predictable pattern, and I couldn’t find a way to control it. So I decided to exclude _FC_ from the analysis.
 
-## Evaluating Gemini 1.5 Flash
+## Benchmarks of Gemini 1.5 Flash
 
-After applying the key ordering workaround, and [additional improvements](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#replicating-.txts-rebuttal.html) discussed in my analysis of GPT-4o-mini's structured outputs, I recomputed the benchmarks.
+After applying the key ordering workaround, and additional improvements discussed in my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#replicating-.txts-rebuttal.html), I recomputed the benchmarks.
 
 The table below shows the results for Gemini 1.5 Flash compared to the original results from Tam et al.
 
@@ -250,9 +258,9 @@ table
 
 Using a 0-shot prompt and 3-shot prompts, I was able to improve all the metrics on the tasks and methods Tam et al. used for their benchmarks. Which is great!
 
-_NL_ and _JSON-Prompt_ behave similarly, without a clear winner between them. Each method got a slight edge over the other half the time. On the other hand, _JSON-Schema_ performed worst than _NL_ in 5 out of 6 tasks. Plus, in _Shuffled Objects_, it did so with a gap of more than 10 percentage points: 97.15% for _NL_ vs. 86.18% for _JSON-Schema_.
+_NL_ and _JSON-Prompt_ are tied, without a clear winner between them. Each method got a slight edge over in 3 out of 6 tasks. On the other hand, _JSON-Schema_ performed worst than _NL_ in 5 out of 6 tasks. Plus, in _Shuffled Objects_, it did so with a gap of more than 10 percentage points: 97.15% for _NL_ vs. 86.18% for _JSON-Schema_.
 
-Tam et al. defined structured outputs as any method that "involves providing output in standardized formats like JSON or XML through format restriction." Using this definition, the results show no performance gap between structured and unstructured outputs. This directly contradicts the study's original claim.
+Tam et al. defined structured outputs as any method that "involves providing output in standardized formats like JSON or XML through format restriction." which is in line with the less rigid interpretation of structured outputs. Using this definition, the results show no performance gap between structured and unstructured outputs. This directly contradicts the study's original claim.
 
 But if you take the also common interpretation that constrained decoding is the only form of structured generation, then the study's original conclusion still applies: there is indeed a significant performance gap between structured and unstructured outputs.
 
@@ -260,14 +268,17 @@ Weird, I know. But that's the way it is.
 
 ## Conclusion
 
-Similar to my [previous post](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html), the results are also mixed for Gemini 1.5 Flash.
+Results are mixed for Gemini 1.5 Flash.
 
-The good news is that structured outputs perform on par with unstructured ones. The bad news is that this only holds if you adopt a more flexible definition of “structured outputs.” And the ugly news is that they have a major issue in how they handle the order of keys in the schema you provide to the model.
+The good news is that structured outputs perform on par with unstructured ones. The bad news is that this only holds if you adopt the more flexible definition of “structured outputs.” And the ugly news is that Gemini's Generative AI SDK has a major issue in how it handles the order of keys in the provided schema.
 
-But you shouldn't be disappointed. For me, it only reinforces the idea that you shouldn’t blindly trust random posts or papers on arXiv. If you want to improve your LLM workflows, you need to test things for yourself.
+Based on the results, I'd suggest the following when using Gemini:
 
-Structured outputs are great. They make my life easier when working with LLMs. But there are tasks where they might perform worse (or better!) than unstructured outputs, and that's something I need to keep in mind.
+1. Avoid FC for any tasks that require chain-of-thought reasoning.
+2. Default to JSON-Prompt over JSON-Schema for reasoning tasks.
 
-So, this long post is just a reminder to run your own evals and choose the approach that works best for you.
+Finally, I want to emphasize that I love working with structured outputs. They save a lot of time. But I know there are tasks where they might perform worse (or better!) than unstructured outputs. There's not enough evidence to support one or the other, so what I should just run my own evals and decide based on that.
+
+That's the real takeaway: run your own evals and choose the approach that works best for you. Don't blindly trust random posts online.
 
 You can find the code to replicate my results in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
