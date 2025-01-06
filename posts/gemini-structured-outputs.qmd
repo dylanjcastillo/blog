@@ -15,7 +15,9 @@ I decided to run some benchmarks myself using popular proprietary models, starti
 
 After that, I was curious to see if the same was true for _Gemini 1.5 Flash_. This time, the answer wasn't so straightforward, which is why I decided to write a separate post about it. In the process, I ran into an issue in Gemini's Generative AI SDK that can break your application if you're not careful.
 
-In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs and the learnings I had along the way. You can find the full code to run the benchmarks in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
+In this article, I'll share the results from running various benchmarks for _Gemini 1.5 Flash_ comparing structured and unstructured outputs and the learnings I had along the way.
+
+You can find the full code to run the benchmarks in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
 
 ## Results (TLDR)
 
