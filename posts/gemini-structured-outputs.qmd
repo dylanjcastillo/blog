@@ -21,6 +21,10 @@ You can find the full code to run the benchmarks in this [GitHub repository](htt
 
 ## Results (TLDR)
 
+::: {.callout-note}
+Google recently released a new [Python SDK for Gemini](https://github.com/googleapis/python-genai), which seems to address the automatically sorting keys issue.
+:::
+
 If you're in a hurry, here are my key findings:
 
 - **The good**: Overall, Gemini's structured outputs performed on par with unstructured outputs.^[Assuming the less rigid interpretation of "structured outputs".]
