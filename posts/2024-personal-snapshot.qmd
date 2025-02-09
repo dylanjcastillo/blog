@@ -4,17 +4,54 @@ date: "01/05/2024"
 description-meta: "My annual review of 2024. I analyze what went well in 2024 and what I should change for 2025."
 ---
 
-This is my annual review. I use it as a way to reflect on the past year and record who I am at the time of writing.
+This is my annual review. I use it as a way to reflect on the past year and get a snapshot of "who I am" at the time of writing.
 
 It's more for me than for you, but I hope you find it interesting.
 
 If it's me rereading this, welcome back. This is Dylan from 2024.
 
-## What went well?
+I've structured the previous snapshots in things that went well and things that didn't go well. This year, I'm going to try something different.
+
+I'm going to write things in a chronological order, and I'll try to write about 10 things I did this year.
+
+## Early 2024
+
+In my last personal snapshot, I said that I was going to focus on building a consulting practice and doing more stand up comedy. I did both half-heartedly.
+
+I thought of an [idea](https://aitheneum.iwanalabs.com/) that I thought that could help go into the product route, so during January and February I spent most of my time building a prototype, while I was negotiating with potential clients.
+
+My idea, AItheneum^[yes, I know, what a terrible name.], was a tool to help people read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.
+
+It was a fun project to work on, but it wasn't really solving anyone's problem. It was a vitamin, not a painkiller. And I knew it from the start.
+
+By the time I released it, I immediately knew that I essentially wasted 2 months of my time.
+
+In parallel, I was doing open mics almost every week. That was one of the most fun things I've ever done, even if I almost threw up every time I went on stage.
+
+But stand up comedy has a few downsides:
+
+1. If you want to be good at stand up, you need to write everyday. I tried, but that often take time from focusing on my long term goals.
+2. Open mics take a lot of time. To practice an 8 minute set, I'd often have to dedicate 1.5 hours of commuting + 1 hour of show (during which I did my 8 minutes).
+3. Open mics are during weekday evenings, which isn't great if you want to keep a healthy schedule.
+
+Even then, I didn't really decided to stop until we had a health situation at home that made me reconsider my priorities. For the first months of the year my wife and I were living at an unsustainable pace. At some point, this broke down and we had to take a step back.
+
+# Mid 2024
 
 This year, I wrote code 322 days out of 365. It's a 16% increase from last year. That's a lot of code and a lot of learning. I'm happy with that.
 
-Financially, I doubled my revenue from last year. I worked on 9 different projects this year with 7 clients. My biggest client represented 33% of my revenue.
+Financially, I doubled my revenue from last year. I worked on 9 different projects this year with 7 clients. My biggest client represented 33% of my revenue. That's an improvement from last year, where 68% of my revenue came from a single client.
+
+I also did more sales this year. I wrote quite a few proposals, and now feel quite comfortable writing them. I'm also getting better at selling my services.
+
+In terms of excercise, this year I did:
+
+- 112 strength training sessions (approx. 2.2 sessions per week)
+- 3,488 minutes of cardio (approx. 60 minutes per week)
+
+In the second half of the year I started being more disciplined about the strength training, and I'm happy with the results.
+
+This roughly translates to 60 minutes of cardio per week. It's not a lot, but I'm happy that at least I was consistent with it.
 
 I'm moving in the right direction but I also want to step away from daily billing towards a fixed price model or value-based pricing, as my current model doesn't scale well. Right now, 25% of my revenue comes from fixed price projects the rest is daily.
 
@@ -30,11 +67,9 @@ On the other hand, you:
 1. Need to have the expertise to solve that specific problem.
 2. Need to have credibility and access to the client.
 
-Say, for example, you're an expert in optimizing RAG pipelines for a specific industry. 
+Say, for example, you're an expert in optimizing RAG pipelines for a specific industry.
 
 ## What didn't go well?
-
-In my last personal snapshot, I said that I wanted to do more stand-up comedy and start making videos about technical topics. I did neither.
 
 But I feel at peace with that. Stand-up comedy has been one of the funniest hobbies I've ever had. But it really takes a lot of time to get good at it, and this year I decided that I had to focus on the things that would move the needle for me.
 
