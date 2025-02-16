@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2024-08-11">
-<meta name="description" content="A guide to create a Kamal-ready VPS on Hetzner using Terraform">
+<meta name="dcterms.date" content="2025-01-05">
+<meta name="description" content="My annual review of 2024. I analyze what went well in 2024 and what I should change for 2025.">
 
-<title>Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo</title>
+<title>2024: Personal Snapshot – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,40 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -78,6 +44,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-ae853c3ebf3e379b3ce4995fdc763be4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,15 +78,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo">
+<meta property="og:title" content="2024: Personal Snapshot – Dylan Castillo">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/2024-personal-snapshot/aitheneum.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Create a Kamal-ready VPS on Hetzner using Terraform – Dylan Castillo">
+<meta property="og:image:alt" content="AItheneum sucked, but at least I got some cool AI book cover images.">
+<meta name="twitter:title" content="2024: Personal Snapshot – Dylan Castillo">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/2024-personal-snapshot/aitheneum.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:image:alt" content="AItheneum sucked, but at least I got some cool AI book cover images.">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -175,16 +146,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a></li>
-  <li><a href="#run-the-script" id="toc-run-the-script" class="nav-link" data-scroll-target="#run-the-script">Run the script</a></li>
-  <li><a href="#customizing-the-script" id="toc-customizing-the-script" class="nav-link" data-scroll-target="#customizing-the-script">Customizing the script</a>
-  <ul class="collapse">
-  <li><a href="#change-the-software-to-install" id="toc-change-the-software-to-install" class="nav-link" data-scroll-target="#change-the-software-to-install">Change the software to install</a></li>
-  <li><a href="#run-other-commands-after-the-vps-is-created" id="toc-run-other-commands-after-the-vps-is-created" class="nav-link" data-scroll-target="#run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</a></li>
-  <li><a href="#use-already-existing-firewall-rules" id="toc-use-already-existing-firewall-rules" class="nav-link" data-scroll-target="#use-already-existing-firewall-rules">Use already existing firewall rules</a></li>
-  <li><a href="#use-a-different-server-type-operating-system-or-region" id="toc-use-a-different-server-type-operating-system-or-region" class="nav-link" data-scroll-target="#use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#early-2024" id="toc-early-2024" class="nav-link active" data-scroll-target="#early-2024">Early 2024</a></li>
+  <li><a href="#mid-2024" id="toc-mid-2024" class="nav-link" data-scroll-target="#mid-2024">Mid 2024</a></li>
+  <li><a href="#late-2024" id="toc-late-2024" class="nav-link" data-scroll-target="#late-2024">Late 2024</a></li>
+  <li><a href="#stats-photos" id="toc-stats-photos" class="nav-link" data-scroll-target="#stats-photos">Stats &amp; Photos</a></li>
+  <li><a href="#lessons-learned" id="toc-lessons-learned" class="nav-link" data-scroll-target="#lessons-learned">Lessons Learned</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -193,17 +160,12 @@ Subscribe to my newsletter
 </button>
 </div></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Create a Kamal-ready VPS on Hetzner using Terraform</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">kamal</div>
-    <div class="quarto-category">hetzner</div>
-    <div class="quarto-category">terraform</div>
-  </div>
-  </div>
+<h1 class="title">2024: Personal Snapshot</h1>
+</div>
 
 
 <div class="quarto-title-meta-author">
@@ -228,7 +190,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 11, 2024</p>
+      <p class="date">January 5, 2025</p>
     </div>
   </div>
   
@@ -246,96 +208,116 @@ Subscribe to my newsletter
 </header>
 
 
-<p>These days, I deploy all my side projects using Kamal and GitHub Actions on Hetzner. Once you get the hang of it, it’s easy to maintain, fast, and cheap.</p>
-<p>You can run your app with a database (SQLite), caching (Redis), background jobs (Celery), and SSL certificates (Let’s Encrypt) for roughly €5/month. Plus, if you feel the need, you can easily scale up to a more powerful Virtual Private Server (VPS).</p>
-<p>But setting up a VPS with the right configuration takes a bit of time. You have to:</p>
+<p>This is my annual review. I use it as a way to reflect on the past year and get a snapshot of “who I am” at the time of writing.</p>
+<p>If it’s me rereading this, welcome back. This is Dylan from 2024.</p>
+<p>In previous snapshots, I listed what went well and what didn’t. This year, I’m trying something new: a chronological approach. 2024 went through three clear distinct phases, and I found easier to reflect on each one.</p>
+<section id="early-2024" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="early-2024">Early 2024</h2>
+<p>This was my “I’ll do anything but build a consulting practice” phase.</p>
+<p>In my last snapshot, I said that I was going to focus on building a consulting practice in 2024. Then I came up with a new product idea 😅 and spent a big chunk of the first two months of the year building a prototype.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/2024-personal-snapshot/aitheneum.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="AItheneum sucked, but at least I got some cool AI book cover images."><img src="images/2024-personal-snapshot/aitheneum.webp" class="img-fluid figure-img" alt="AItheneum sucked, but at least I got some cool AI book cover images."></a></p>
+<figcaption class="margin-caption">AItheneum sucked, but at least I got some cool AI book cover images.</figcaption>
+</figure>
+</div>
+<p><a href="https://aitheneum.iwanalabs.com/">AItheneum</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is a tool that helps you read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.</p>
+<p>I had fun working on it, but it wasn’t really solving anyone’s problem. It was a vitamin, not a painkiller. By the time I released it, it was clear nobody cared about it (not even me!).</p>
+<p>During this time, I was also half-assing talking to potential clients for freelance work and doing cold outreach to get clients. This had OK results, but I definitely didn’t put enough effort into it.</p>
+<p>Later in the year, after reading Alex Hormozi’s <a href="https://www.amazon.com/100M-Leads-Strangers-Stuff-Acquisition-com-ebook/dp/B0CFDR3TYV">100M Leads</a>, I realized that cold outreach at this stage was mostly a waste of time. When you’re just starting out, you should rely on warm introductions or referrals. If you haven’t built credibility yet, you’ll waste a lot of time trying to convince strangers to work with you.</p>
+<p>When it comes to work, I essentially spent the first two months of the year focusing on the wrong things.</p>
+<p>However, on a more positive note, I was also doing open mic sets almost every week. I had a lot of fun performing stand-up comedy, even though I bombed a few times.</p>
+<p>After a few months, I eventually realized it wasn’t sustainable:</p>
 <ol type="1">
-<li>Manually create the VPS using the UI.</li>
-<li>Create the necessary SSH keys.</li>
-<li>Create and apply the firewall rules.</li>
-<li>Create a new non-root user.</li>
-<li>Install Docker and other necessary software.</li>
-<li>Configure unattended-upgrades.</li>
-<li>Create a directory and set permissions for Let’s Encrypt SSL certificates.</li>
-<li>Reboot the system to apply all changes.</li>
+<li>To get good at stand-up, you have to make time for it. That means writing everyday, and performing as often as possible.</li>
+<li>Open mics take a lot of time. To practice an 8 minute set, I’d often have to commute for 1 hour and stay for 1-2 hours of show (during which I did my 8 minutes).</li>
+<li>As a beginner, you’ll only get spots during weekday evenings. Which isn’t great if you want to get enough sleep to be productive the next day.</li>
 </ol>
-<p>I already had a small script to do most of these steps, but I wanted to automate it to a single command. So I created a Terraform script to do it for me.</p>
-<p>I took <a href="https://github.com/luizkowalski/terraform-hetzner">terraform-hetzner</a> and modified it to work with a single VPS instance. My updated version is available <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">here</a>.</p>
-<section id="set-up" class="level2">
-<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
-<p>First, set up an <a href="https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/">API key</a> with <strong>read and write</strong> permissions in Hetzner Cloud.</p>
-<p>Second, install <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">terraform</a>.</p>
-<p>Third, clone the repo:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/terraform-kamal-single-vps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Fourth, create a <code>terraform.tfvars</code> file with the following variables:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource hcl number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>hetzner_api_key = "your-api-key"</span>
-<span id="cb2-2"><a href="#cb2-2"></a>ssh_vps_root_key = "&lt;your-ssh-root-public-key&gt;"</span>
-<span id="cb2-3"><a href="#cb2-3"></a>ssh_vps_kamal_key = "&lt;your-ssh-kamal-public-key&gt;"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The <code>ssh_vps_root_key</code> and <code>ssh_vps_kamal_key</code> are the public keys for the root and kamal users, respectively. You can generate them with the <code>make generate-ssh-key USER_NAME=root</code> or <code>make generate-ssh-key USER_NAME=kamal</code> commands I added to the repo.</p>
-<p>Store your SSH keys in a secure location. You’ll need them to access the VPS.</p>
+<p>Even so, I didn’t fully decide to quit until we had a health crisis at home. My wife and I weren’t prioritizing our health in the first months of the year, and it took its toll.</p>
+<p>Stand-up was fun, but it was distracting me from more important things. So I stopped.</p>
+<p>I’m not sad or regretful about it, I’m happy that I’ve tried it and that I’ve learned that it’s not what I want to do right now. I’d love to return to it in the future, once I have less pressing things to focus on.</p>
+<p>That was the highlight of this phase: choosing what I want to focus on.</p>
 </section>
-<section id="run-the-script" class="level2">
-<h2 class="anchored" data-anchor-id="run-the-script">Run the script</h2>
-<p>Once the <code>terraform.tfvars</code> file is set up, you can see what changes will be applied with the following command:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">terraform</span> plan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will show in detail what changes will be applied to create a Kamal-ready VPS. If you’re happy with it, you can apply the changes with the following command:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">terraform</span> apply</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create a VPS with the following configuration:</p>
+<section id="mid-2024" class="level2">
+<h2 class="anchored" data-anchor-id="mid-2024">Mid 2024</h2>
+<p>This was the “work, learn, and build better habits” phase.</p>
+<p>I worked with a couple of clients on AI projects in the legal, construction, and CPG industries. I also started blogging again.</p>
+<p>I often worked 12 hours days. I stopped going to the gym and switched to home workouts. I rarely went to social events. Life went by fast. Remembering it feels like a blur.</p>
+<p>It was intense. A few times, I felt very close to having a mental breakdown. I learned a lot about my own limits.</p>
+<p>I also met some clients in person. While I’m a fan of remote work, seeing people face to face felt great. Being in the same room makes you more empathetic toward the people you’re working with.</p>
+<p>The biggest lesson during this phase was that you can get a lot done if you deliberately choose to increase the intensity you put into things.</p>
+</section>
+<section id="late-2024" class="level2">
+<h2 class="anchored" data-anchor-id="late-2024">Late 2024</h2>
+<p>This was the “What should I do in 2025?” phase.</p>
+<p>The last few months were still intense, but less focused. I was working with clients while also making time to think about the future.</p>
+<p>I did more sales outreach, managed multiple projects, and kept writing blog posts. I also traveled to Venezuela for the first time in eight years, which was both wonderful and unsettling. Once you get used to life in a developed country, it’s easy to forget how challenging daily life can be elsewhere.</p>
+<p>During this time, I started going through more academic research and refreshing my <a href="https://mathacademy.com/">math skills</a>.</p>
+<p>The highlight of this phase was debunking a popular post about using <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured Outputs in LLMs</a>.</p>
+</section>
+<section id="stats-photos" class="level2">
+<h2 class="anchored" data-anchor-id="stats-photos">Stats &amp; Photos</h2>
+<p>Here are the stats for the year:</p>
 <ul>
-<li>Ubuntu 22.04 LTS</li>
-<li>2 VCPU</li>
-<li>2 GB RAM</li>
-<li>40 GB SSD</li>
-</ul>
-<p>It’ll cost you roughly €5/month and will be located in Nuremberg (Germany).</p>
-<p>In addition, after the VPS is created, it will automatically:</p>
+<li><strong>💻 Code</strong>: I committed code on 322 out of 365 days (+16% from last year).</li>
+<li><strong>💰 Financials</strong>:
 <ul>
-<li>Create a non-root user (kamal) with sudo privileges.</li>
-<li>Install the required software (Git, Docker, curl, etc.)</li>
-<li>Create a directory for Let’s Encrypt SSL certificates.</li>
-<li>Create a firewall rule to allow HTTP, HTTPS, and SSH traffic.</li>
-<li>Create a directory for the database (SQLite) and the cache (Redis) (<code>db/</code> and <code>data/</code>)</li>
+<li>Highest revenue so far (+100% from last year).</li>
+<li>66% of my revenue comes from time-based billing (daily, hourly).</li>
+<li>My biggest client represented 33% of my revenue.</li>
+</ul></li>
+<li><strong>📝 Sales</strong>:
+<ul>
+<li>I worked on 9 projects with 7 different clients.</li>
+<li>I wrote 6 proposals.</li>
+<li>I got 3 new clients.</li>
+</ul></li>
+<li><strong>💪 Health &amp; Fitness</strong>:
+<ul>
+<li>112 strength training sessions (approx. 2.2 sessions/week).</li>
+<li>3,488 minutes of cardio (approx. 60 minutes/week).</li>
+<li>VO2 max: 46 ml/kg/min.</li>
+<li>RHR: 57 bpm.</li>
+</ul></li>
 </ul>
+<p>You can see relevant photos from the year <a href="https://www.icloud.com/sharedalbum/#B2KJtdOXmuIo602">here</a>.</p>
 </section>
-<section id="customizing-the-script" class="level2">
-<h2 class="anchored" data-anchor-id="customizing-the-script">Customizing the script</h2>
-<p>You can customize the script to fit your needs. Here are a couple of things you can change:</p>
-<section id="change-the-software-to-install" class="level3">
-<h3 class="anchored" data-anchor-id="change-the-software-to-install">Change the software to install</h3>
-<p>If you want to change the software to install, you can modify the <code>packages</code> section in <code>cloudinit/vps.yml</code>.</p>
+<section id="lessons-learned" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-learned">Lessons Learned</h2>
+<p>The biggest three key takeaways I got from 2024 are: focus, intensity, and action.</p>
+<p><strong>Focus</strong> is about figuring out what are the right things to prioritize. It’s easy to say that, but it’s hard to do. Life is full of distractions, and it’s easy to get lost in the noise. Focus on the things that matter to you, specially the ones that will help you on your way regardless of their outcome.</p>
+<p>If I dedicate more time to writing technical posts, I learn through the act of writing the posts, but also I get clients that are interested in my posts. The same with sales: I might not get a client from a sales call, but I learn a lot about the process and get better at it.</p>
+<p><strong>Intensity</strong> is about working hard. This year I handled more work than ever. My brain fought back, at times I was anxious, depressed, out of energy, and struggling with focus. But, eventually, my brain understood that there was no way out, and things got better. My brain stopped fighting back and started working for me.</p>
+<p>It’s not fun and it’s not pretty. It’s uncomfortable and it’s hard. But it’s worth it.</p>
+<p><strong>Action</strong> is about staying in motion. It’s better to be too busy than too idle. When you’re busy, you learn a lot, you need to prioritize, and you end up becoming more creative as you often need to deliver under pressure.</p>
+<p>I was afraid of being “too busy”. I thought it was going to prevent me from focusing on the right things. But I eventually realized that it was the other way around. The more I was busy, the more I learned and the better I got at what I was doing, which freed up time for the things I really wanted to do.</p>
+<p>Being busy made me more productive.</p>
 </section>
-<section id="run-other-commands-after-the-vps-is-created" class="level3">
-<h3 class="anchored" data-anchor-id="run-other-commands-after-the-vps-is-created">Run other commands after the VPS is created</h3>
-<p>If you want to run other commands after the VPS is created, you can add them to the <code>runcmd</code> section in the <code>cloudinit/vps.yml</code> file.</p>
-</section>
-<section id="use-already-existing-firewall-rules" class="level3">
-<h3 class="anchored" data-anchor-id="use-already-existing-firewall-rules">Use already existing firewall rules</h3>
-<p>If you want to use already existing firewall rules, you can modify how the firewalls are attached in <code>cloud.tf</code>. Take a look at <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps/blob/4a1a6edafc1c9e927f20906298ccd083718bc97e/cloud.tf#L72C1-L91C4">this section</a> of <code>cloud.tf</code>.</p>
-</section>
-<section id="use-a-different-server-type-operating-system-or-region" class="level3">
-<h3 class="anchored" data-anchor-id="use-a-different-server-type-operating-system-or-region">Use a different server type, operating system, or region</h3>
-<p>If you want to use a different server type, operating system, or region, you can modify the <code>server_type</code>, <code>region</code>, <code>operating_system</code> variables in <code>variables.tf</code>.</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This script is a great way to create a Kamal-ready VPS on Hetzner using Terraform. It’s easy to maintain, fast, and cheap.</p>
-<p>All the code is available in the <a href="https://github.com/dylanjcastillo/terraform-kamal-single-vps">repo</a>.</p>
-<p>Hope you find this useful!</p>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
+<p>I’ve realized I’m not great at predicting what I’ll want to do, nor am I a great planner.</p>
+<p>Right now, my biggest priority is growing my consulting practice. I also have a painkiller product idea that I’ve been slowly working on. If I find enough traction, I’ll pivot to it. But until then, my focus is on consulting.</p>
+<p>The only thing I’m sure is that I’ll keep myself busy.</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan and Castillo, Dylan},
-  title = {Create a {Kamal-ready} {VPS} on {Hetzner} Using {Terraform}},
-  date = {2024-08-11},
-  url = {https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html},
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>yes, I know, what a terrible name.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {2024: {Personal} {Snapshot}},
+  date = {2025-01-05},
+  url = {https://dylancastillo.co/posts/2024-personal-snapshot.html},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan, and Dylan Castillo. 2024. <span>“Create a Kamal-Ready
-VPS on Hetzner Using Terraform.”</span> August 11, 2024. <a href="https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html">https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“2024: Personal Snapshot.”</span> January
+5, 2025. <a href="https://dylancastillo.co/posts/2024-personal-snapshot.html">https://dylancastillo.co/posts/2024-personal-snapshot.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -770,6 +752,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

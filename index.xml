@@ -15,7 +15,130 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.6.40</generator>
-<lastBuildDate>Fri, 27 Dec 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 05 Jan 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>2024: Personal Snapshot</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/2024-personal-snapshot.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This is my annual review. I use it as a way to reflect on the past year and get a snapshot of “who I am” at the time of writing.</p>
+<p>If it’s me rereading this, welcome back. This is Dylan from 2024.</p>
+<p>In previous snapshots, I listed what went well and what didn’t. This year, I’m trying something new: a chronological approach. 2024 went through three clear distinct phases, and I found easier to reflect on each one.</p>
+<section id="early-2024" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="early-2024">Early 2024</h2>
+<p>This was my “I’ll do anything but build a consulting practice” phase.</p>
+<p>In my last snapshot, I said that I was going to focus on building a consulting practice in 2024. Then I came up with a new product idea 😅 and spent a big chunk of the first two months of the year building a prototype.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/2024-personal-snapshot/aitheneum.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="AItheneum sucked, but at least I got some cool AI book cover images."><img src="https://dylancastillo.co/posts/images/2024-personal-snapshot/aitheneum.webp" class="img-fluid figure-img" alt="AItheneum sucked, but at least I got some cool AI book cover images."></a></p>
+<figcaption class="margin-caption">AItheneum sucked, but at least I got some cool AI book cover images.</figcaption>
+</figure>
+</div>
+<p><a href="https://aitheneum.iwanalabs.com/">AItheneum</a><sup>1</sup> is a tool that helps you read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.</p>
+<p>I had fun working on it, but it wasn’t really solving anyone’s problem. It was a vitamin, not a painkiller. By the time I released it, it was clear nobody cared about it (not even me!).</p>
+<p>During this time, I was also half-assing talking to potential clients for freelance work and doing cold outreach to get clients. This had OK results, but I definitely didn’t put enough effort into it.</p>
+<p>Later in the year, after reading Alex Hormozi’s <a href="https://www.amazon.com/100M-Leads-Strangers-Stuff-Acquisition-com-ebook/dp/B0CFDR3TYV">100M Leads</a>, I realized that cold outreach at this stage was mostly a waste of time. When you’re just starting out, you should rely on warm introductions or referrals. If you haven’t built credibility yet, you’ll waste a lot of time trying to convince strangers to work with you.</p>
+<p>When it comes to work, I essentially spent the first two months of the year focusing on the wrong things.</p>
+<p>However, on a more positive note, I was also doing open mic sets almost every week. I had a lot of fun performing stand-up comedy, even though I bombed a few times.</p>
+<p>After a few months, I eventually realized it wasn’t sustainable:</p>
+<ol type="1">
+<li>To get good at stand-up, you have to make time for it. That means writing everyday, and performing as often as possible.</li>
+<li>Open mics take a lot of time. To practice an 8 minute set, I’d often have to commute for 1 hour and stay for 1-2 hours of show (during which I did my 8 minutes).</li>
+<li>As a beginner, you’ll only get spots during weekday evenings. Which isn’t great if you want to get enough sleep to be productive the next day.</li>
+</ol>
+<p>Even so, I didn’t fully decide to quit until we had a health crisis at home. My wife and I weren’t prioritizing our health in the first months of the year, and it took its toll.</p>
+<p>Stand-up was fun, but it was distracting me from more important things. So I stopped.</p>
+<p>I’m not sad or regretful about it, I’m happy that I’ve tried it and that I’ve learned that it’s not what I want to do right now. I’d love to return to it in the future, once I have less pressing things to focus on.</p>
+<p>That was the highlight of this phase: choosing what I want to focus on.</p>
+</section>
+<section id="mid-2024" class="level2">
+<h2 class="anchored" data-anchor-id="mid-2024">Mid 2024</h2>
+<p>This was the “work, learn, and build better habits” phase.</p>
+<p>I worked with a couple of clients on AI projects in the legal, construction, and CPG industries. I also started blogging again.</p>
+<p>I often worked 12 hours days. I stopped going to the gym and switched to home workouts. I rarely went to social events. Life went by fast. Remembering it feels like a blur.</p>
+<p>It was intense. A few times, I felt very close to having a mental breakdown. I learned a lot about my own limits.</p>
+<p>I also met some clients in person. While I’m a fan of remote work, seeing people face to face felt great. Being in the same room makes you more empathetic toward the people you’re working with.</p>
+<p>The biggest lesson during this phase was that you can get a lot done if you deliberately choose to increase the intensity you put into things.</p>
+</section>
+<section id="late-2024" class="level2">
+<h2 class="anchored" data-anchor-id="late-2024">Late 2024</h2>
+<p>This was the “What should I do in 2025?” phase.</p>
+<p>The last few months were still intense, but less focused. I was working with clients while also making time to think about the future.</p>
+<p>I did more sales outreach, managed multiple projects, and kept writing blog posts. I also traveled to Venezuela for the first time in eight years, which was both wonderful and unsettling. Once you get used to life in a developed country, it’s easy to forget how challenging daily life can be elsewhere.</p>
+<p>During this time, I started going through more academic research and refreshing my <a href="https://mathacademy.com/">math skills</a>.</p>
+<p>The highlight of this phase was debunking a popular post about using <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured Outputs in LLMs</a>.</p>
+</section>
+<section id="stats-photos" class="level2">
+<h2 class="anchored" data-anchor-id="stats-photos">Stats &amp; Photos</h2>
+<p>Here are the stats for the year:</p>
+<ul>
+<li><strong>💻 Code</strong>: I committed code on 322 out of 365 days (+16% from last year).</li>
+<li><strong>💰 Financials</strong>:
+<ul>
+<li>Highest revenue so far (+100% from last year).</li>
+<li>66% of my revenue comes from time-based billing (daily, hourly).</li>
+<li>My biggest client represented 33% of my revenue.</li>
+</ul></li>
+<li><strong>📝 Sales</strong>:
+<ul>
+<li>I worked on 9 projects with 7 different clients.</li>
+<li>I wrote 6 proposals.</li>
+<li>I got 3 new clients.</li>
+</ul></li>
+<li><strong>💪 Health &amp; Fitness</strong>:
+<ul>
+<li>112 strength training sessions (approx. 2.2 sessions/week).</li>
+<li>3,488 minutes of cardio (approx. 60 minutes/week).</li>
+<li>VO2 max: 46 ml/kg/min.</li>
+<li>RHR: 57 bpm.</li>
+</ul></li>
+</ul>
+<p>You can see relevant photos from the year <a href="https://www.icloud.com/sharedalbum/#B2KJtdOXmuIo602">here</a>.</p>
+</section>
+<section id="lessons-learned" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-learned">Lessons Learned</h2>
+<p>The biggest three key takeaways I got from 2024 are: focus, intensity, and action.</p>
+<p><strong>Focus</strong> is about figuring out what are the right things to prioritize. It’s easy to say that, but it’s hard to do. Life is full of distractions, and it’s easy to get lost in the noise. Focus on the things that matter to you, specially the ones that will help you on your way regardless of their outcome.</p>
+<p>If I dedicate more time to writing technical posts, I learn through the act of writing the posts, but also I get clients that are interested in my posts. The same with sales: I might not get a client from a sales call, but I learn a lot about the process and get better at it.</p>
+<p><strong>Intensity</strong> is about working hard. This year I handled more work than ever. My brain fought back, at times I was anxious, depressed, out of energy, and struggling with focus. But, eventually, my brain understood that there was no way out, and things got better. My brain stopped fighting back and started working for me.</p>
+<p>It’s not fun and it’s not pretty. It’s uncomfortable and it’s hard. But it’s worth it.</p>
+<p><strong>Action</strong> is about staying in motion. It’s better to be too busy than too idle. When you’re busy, you learn a lot, you need to prioritize, and you end up becoming more creative as you often need to deliver under pressure.</p>
+<p>I was afraid of being “too busy”. I thought it was going to prevent me from focusing on the right things. But I eventually realized that it was the other way around. The more I was busy, the more I learned and the better I got at what I was doing, which freed up time for the things I really wanted to do.</p>
+<p>Being busy made me more productive.</p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
+<p>I’ve realized I’m not great at predicting what I’ll want to do, nor am I a great planner.</p>
+<p>Right now, my biggest priority is growing my consulting practice. I also have a painkiller product idea that I’ve been slowly working on. If I find enough traction, I’ll pivot to it. But until then, my focus is on consulting.</p>
+<p>The only thing I’m sure is that I’ll keep myself busy.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>yes, I know, what a terrible name.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {2024: {Personal} {Snapshot}},
+  date = {2025-01-05},
+  url = {https://dylancastillo.co/posts/2024-personal-snapshot.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“2024: Personal Snapshot.”</span> January
+5, 2025. <a href="https://dylancastillo.co/posts/2024-personal-snapshot.html">https://dylancastillo.co/posts/2024-personal-snapshot.html</a>.
+</div></div></section></div> ]]></description>
+  <guid>https://dylancastillo.co/posts/2024-personal-snapshot.html</guid>
+  <pubDate>Sun, 05 Jan 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>The good, the bad, and the ugly of Gemini’s structured outputs</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -14724,151 +14847,6 @@ Qdrant, and ChatGPT.”</span> March 3, 2023. <a href="https://dylancastillo.co/
   <category>openai</category>
   <guid>https://dylancastillo.co/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</guid>
   <pubDate>Fri, 03 Mar 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Tips for Standing Out on LinkedIn</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>A few months ago I wrote a <a href="https://www.reddit.com/r/datascience/comments/vzmcc2/some_ideas_to_improve_your_linkedin_profile/">post</a> that blew up on <a href="https://www.reddit.com/r/datascience/">r/datascience</a> about how to make your LinkedIn profile stand out when searching for a job.</p>
-<p>Since then, the economic situation has worsened. We’re now on the verge of an economic downturn, more than <a href="https://layoffs.fyi/">100,000 people have been laid off</a> from tech companies this year, and investors are warning founders of <a href="https://techcrunch.com/2022/05/19/yc-advises-founders-to-plan-for-the-worst/">tough times ahead</a>, so I’ve decided to expand on that original post.</p>
-<p>This isn’t a post about how to get thousands of followers, nor how to become the most popular LinkedIn <a href="https://www.youtube.com/shorts/IHt9PJM8Md8">influencer</a>. It’s about how to use LinkedIn to get more and better quality job opportunities.</p>
-<p>It comes from reading many papers about LinkedIn’s search and ranking algorithms, learning about LinkedIn Recruiter, and making lots of mistakes while working on <a href="https://linkedin.com/in/dylanjcastillo/">my own profile</a>.</p>
-<p>Let’s get to it!</p>
-<section id="finding-a-great-job" class="level2">
-<h2 class="anchored" data-anchor-id="finding-a-great-job">Finding a (Great) Job</h2>
-<p>There are two ways to find a good job: <a href="https://sive.rs/gethired">obsess over a few companies</a> or play the numbers game. On the plus side, the former will increase your chances of landing your dream job, while the latter will likely lead to a better financial outcome. On the other hand, the former is riskier because it places all of your eggs in one or a few baskets, whereas the latter may not lead to the job you were hoping for.</p>
-<p>In this article, I’ll focus on the second strategy as that’s the one I’ve focused on in my career. I never had a dream job in mind because I’ve always wanted to start my own business and the financial aspect was also important to me, so I prioritized learning relevant skills as well as a good salary. Despite not having a “dream job,” I was able to work at cool places like the Boston Consulting Group, Deliveroo, and the Olympics. I’ve also successfully transitioned into full-time freelancing in a very competitive industry.</p>
-<p>However, this does not imply that the approach I took is the best one. Everyone has different preferences and should choose a strategy based on what they want to optimize for.</p>
-</section>
-<section id="playing-the-numbers-game" class="level2">
-<h2 class="anchored" data-anchor-id="playing-the-numbers-game">Playing the Numbers Game</h2>
-<p>The numbers game in job hunting consists of increasing the number of relevant job opportunities that you can access. It is not simply applying to as many job openings as possible.</p>
-<p>Your goal is to obtain as many relevant opportunities as possible by actively seeking them or by making your profile appealing to hiring managers and recruiters. Those who apply for jobs mindlessly are not following this strategy correctly. They’re just wasting their time.</p>
-<p>You should think of your job search as a three-part funnel:</p>
-<ol type="1">
-<li>Leads (job opportunities)</li>
-<li>Interviews</li>
-<li>Offers</li>
-</ol>
-<p>I will cover the first part of the funnel, <em>Leads</em>, and a will provide you with some tips for the second, <em>Interviews</em>. For the first part, the advice comes from my own experience, and the research I’ve done about LinkedIn’s algorithms. For the second part, the advice is mostly based on my own experience.</p>
-<p>You’ll need to focus on two things to increase the number of relevant job opportunities or “qualified leads”: <strong>inbound</strong> and <strong>outbound</strong> <strong>leads</strong>.</p>
-<section id="inbound-leads" class="level3">
-<h3 class="anchored" data-anchor-id="inbound-leads">Inbound Leads</h3>
-<p>Inbound leads are those that come to you without your intervention. Typically, recruiters and hiring managers connect with you on LinkedIn or send you InMail messages.</p>
-<p>Recruiters use <a href="https://business.linkedin.com/talent-solutions/recruiter">LinkedIn Recruiter</a> to find candidates. They can search for terms such as “Data Scientist” and define filters like &nbsp;“has worked at Google” when looking for candidates.</p>
-<p>After a query is defined, LinkedIn Recruiter uses what they call a <a href="https://arxiv.org/pdf/1809.06473.pdf"><strong>talent search algorithm</strong></a>. It works in two stages:</p>
-<ol type="1">
-<li><strong>Search:</strong> It searches the network and defines a set of a few thousand candidates who meet the recruiter’s search criteria.</li>
-<li><strong>Rank:</strong> It provides the recruiter with a list of candidates ranked by how well they fit the search term and how likely they are to respond.</li>
-</ol>
-<p>That’s all. If you want to get more job opportunities, you must figure out how to increase your chances of appearing in step 1 and ranking higher during step 2.</p>
-<p>Fortunately, LinkedIn has released tons of research on its talent search algorithm. It’s not difficult to imagine what will help you stand out from the crowd. Here’s what I’ve found more impactful:</p>
-<ol type="1">
-<li><strong>Use relevant keywords in your profile.</strong> You won’t show up in the results if your profile doesn’t include search terms that recruiters use to find candidates. Examine the keywords used in the job descriptions for the positions you’re interested in, and make sure you have them in your profile.</li>
-<li><strong>Reply to recruiters.</strong> People often don’t reply to recruiters when they’re not interested in the job opportunity. But the <a href="https://arxiv.org/abs/1809.06473">algorithm</a> prioritizes those who are likely to respond over those who are not. Even if it’s just to say no, respond to recruiters!</li>
-<li><strong>Engage with the brands you’re interested in on LinkedIn.</strong> Recruiters <a href="https://youtu.be/S6mVwmCHShk?t=50">can narrow down their search</a> to candidates who have interacted with the brand or have connections who work for that company. If you’re particularly interested in a company, follow their profile, interact with their content, and add connections who work there.</li>
-<li><strong>Expand your network.</strong> <a href="https://business.linkedin.com/talent-solutions/recruiter-lite">LinkedIn Recruiter Lite</a>, a cheaper version of LinkedIn Recruiter, only lets users reach out to candidates up to their third-degree network. This means that the fewer connections you have, the less likely it is a recruiter can contact you.</li>
-<li><strong>Increase your influence.</strong> If you create engaging content, have a large number of visitors to your profile, or receive endorsements and recommendations, you will <a href="https://arxiv.org/abs/1602.04572">rank higher</a>. As a general rule, try to write useful content on a regular basis and solicit recommendations from relevant contacts. LinkedIn’s <a href="https://www.linkedin.com/sales/ssi">Social Selling Index</a> is a good proxy for how well you’re positioning yourself.</li>
-<li><strong>Get a good photo.</strong> This is based on my personal experience. But I believe people are more likely to contact you if your photo looks somewhat professional.</li>
-</ol>
-<p>None of these concepts are revolutionary, but most people overlook them when creating their profiles. LinkedIn’s goal is to match recruiters with the best possible candidates. So your job is to figure out what recruiters are searching for and how to best match that.</p>
-<p>Furthermore, even if recruiters or hiring managers do not pay for LinkedIn Recruiter and instead use the standard search service, the suggestions above will still help you improve your profile.</p>
-</section>
-<section id="outbound-leads" class="level3">
-<h3 class="anchored" data-anchor-id="outbound-leads">Outbound Leads</h3>
-<p>Outbound opportunities are the ones you apply to. Usually, that means applying for jobs on LinkedIn under the <a href="https://www.linkedin.com/jobs/">Jobs</a> tab.</p>
-<p>This takes time and has a very low ROI if not done correctly. I’ve discovered that the following increases its effectiveness:</p>
-<ol type="1">
-<li>Set up <a href="https://www.linkedin.com/learning/linkedin-quick-tips-2022/set-up-job-alerts">alerts</a> for roles you’re interested in.</li>
-<li>Don’t apply for jobs posted more than a week ago.</li>
-<li>Prioritize jobs for which you can contact the poster or someone in a relevant position within the company. In those cases, send them a personalized message expressing your interest. The best way to accomplish this is to connect with them and add a note to the connection request.</li>
-<li>Change your CV to fit the position you’re applying for. Read the job’s requirements and try to highlight the parts of your work history that match them.</li>
-</ol>
-<p>Finally, many opportunities are built through real-world connections, so reach out to people outside of LinkedIn, join relevant communities, and attend meetups.</p>
-</section>
-</section>
-<section id="interviewing-101" class="level2">
-<h2 class="anchored" data-anchor-id="interviewing-101">Interviewing 101</h2>
-<p>It is usually simple to figure out how to prepare for an interview. The difficult part is carrying out the plan.</p>
-<p>I’ve only worked as a Data Scientist and ML Engineer, so I can’t offer advice for interviews outside of those roles. Here are some examples of things that help you get better results for interviews for those roles.</p>
-<section id="general-advice" class="level3">
-<h3 class="anchored" data-anchor-id="general-advice">General Advice</h3>
-<p>You should do the following for any kind of interview:</p>
-<ol type="1">
-<li><strong>Research the company and the role.</strong> You should know what the company does, its competitors, and recent news. You should also think about what the role you’re applying for entails. Also, use <a href="glassdoor.com">Glassdoor</a>, <a href="reddit.com/">Reddit</a>, or ask other people to find out what questions they typically ask during interviews.</li>
-<li><strong>Review the projects you’ve worked on.</strong> Make sure that you know the ins and outs of each one and have an elevator pitch for each of them. You’d be surprised how many people are rejected because they don’t fully understand key details in the projects they’ve worked on or can’t clearly explain what they did.</li>
-<li><strong>Be assertive.</strong> One of the worst places to sell yourself short is during an interview. While it’s obvious that lying during interviews is bad (and you will be caught sooner or later), not expressing confidence is equally bad.<br>
-Consider how many people are willing to lie to get a job; if you sell yourself short, you give dishonest people a better chance of winning.</li>
-<li><strong>See the interview as a conversation of equals.</strong> If you’ve mastered the technical bits, the only big obstacle in an interview is the mindset. They’re seeing if you’re a good fit, but you’re also seeing if they are a good fit. Don’t treat it like an exam.</li>
-<li><strong>Don’t take rejections personally.</strong> Some interviews will go well, others won’t. Sometimes you’re to blame, and other times it’s due to circumstances beyond your control. When you fail an interview, consider why it didn’t go well, use the feedback to improve your next interview and move on.</li>
-</ol>
-<p>In a nutshell, know yourself, know what you’re interviewing for, and be assertive.</p>
-</section>
-<section id="behavioral-interview" class="level3">
-<h3 class="anchored" data-anchor-id="behavioral-interview">Behavioral interview</h3>
-<p>These questions are opportunities to sell yourself, so make sure you have good responses. It simply takes practice.</p>
-<p>Here’s what you should do:</p>
-<ol type="1">
-<li>Make a list of 10-15 commonly asked questions (you can start <a href="https://hbr.org/2021/11/10-common-job-interview-questions-and-how-to-answer-them">here</a>)</li>
-<li>Record yourself answering those questions. For questions like “Give me an example when you did…” or “Tell me about a situation when you…” use the <a href="https://www.rightattitudes.com/2008/07/15/star-technique-answer-interview-questions/">STAR</a> framework.</li>
-<li>See the recordings, give yourself honest feedback, and repeat the process.</li>
-<li>Try practicing with a friend or colleague, and ask them for feedback.</li>
-</ol>
-<p>Let me say it again: practice these questions! You should make sure you get these “easy” points during an interview.</p>
-</section>
-<section id="technical-interview" class="level3">
-<h3 class="anchored" data-anchor-id="technical-interview">Technical interview</h3>
-<p>Technical interviews aren’t usually a great measure of your skills, so don’t base your identity on how you do in them. They are like tests, and all you have to do to pass them is study. And if you don’t pass, it’s not the end of the world; you’ll have more chances elsewhere.</p>
-<p>Here’s what you should do to prepare at the very least:</p>
-<ol type="1">
-<li>Research how the company and team conduct technical interviews.</li>
-<li>Examine the job description to determine the most important topics to research.</li>
-<li>Practice questions in the programming languages used in the team on <a href="https://www.hackerrank.com/">HackerRank</a> or similar.</li>
-<li>Use <a href="https://apps.ankiweb.net/">Anki</a> or another Spaced Repetition System (SRS) to practice key topics you might need to cover. Ideally, make your own cards using your favorite book on the topic.</li>
-</ol>
-</section>
-<section id="take-home-challenge" class="level3">
-<h3 class="anchored" data-anchor-id="take-home-challenge">Take-home Challenge</h3>
-<p>These are hard to practice because every company does them their own way. If you’re a Data Scientist or ML Engineer, you can go to <a href="https://www.kaggle.com/">Kaggle</a>, find a dataset that looks interesting to you, come up with some interesting questions, and then answer them. Or building a small ML model for a specific purpose.</p>
-<p><em>Bonus points:</em> Make sure your projects look nice, write a README explaining what you did, and put all that on GitHub. Also, write short posts on LinkedIn and share your projects.</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s it! By now, you should have a good sense of how LinkedIn works and how you can use it to get more opportunities your way.</p>
-<p>If you’re interested in learning more about the technical aspects of how the LinkedIn search works, they’ve published a lot of useful material you can check:</p>
-<ul>
-<li><a href="https://arxiv.org/pdf/1602.04572.pdf">Personalized Expertise Search at LinkedIn</a></li>
-<li><a href="https://arxiv.org/pdf/1809.06473.pdf">Towards Deep and Representation Learning for Talent Search at LinkedIn</a></li>
-<li><a href="https://arxiv.org/pdf/1809.06481.pdf">Talent Search and Recommendation Systems at LinkedIn: Practical Challenges and Lessons Learned</a></li>
-<li><a href="https://arxiv.org/pdf/2108.13300.pdf">Deep Natural Language Processing For LinkedIn Search</a></li>
-<li><a href="https://arxiv.org/pdf/1709.00653.pdf">From Query-By-Keyword to Query-By-Example: LinkedIn Talent Search Approach</a></li>
-<li><a href="https://arxiv.org/pdf/2008.02460.pdf">DeText: A Deep Text Ranking Framework with BERT</a></li>
-</ul>
-<p>I hope you find this useful. If you have any questions <a href="https://www.linkedin.com/">reach out</a>!</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {Tips for {Standing} {Out} on {LinkedIn}},
-  date = {2023-02-17},
-  url = {https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“Tips for Standing Out on LinkedIn.”</span>
-February 17, 2023. <a href="https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html">https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</a>.
-</div></div></section></div> ]]></description>
-  <category>productivity</category>
-  <guid>https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</guid>
-  <pubDate>Fri, 17 Feb 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
