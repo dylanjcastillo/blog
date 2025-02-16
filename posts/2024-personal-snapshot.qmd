@@ -6,73 +6,95 @@ description-meta: "My annual review of 2024. I analyze what went well in 2024 an
 
 This is my annual review. I use it as a way to reflect on the past year and get a snapshot of "who I am" at the time of writing.
 
-It's more for me than for you, but I hope you find it interesting.
-
 If it's me rereading this, welcome back. This is Dylan from 2024.
 
-I've structured the previous snapshots in things that went well and things that didn't go well. This year, I'm going to try something different.
-
-I'm going to write things in a chronological order, and I'll try to write about 10 things I did this year.
+In previous snapshots, I listed what went well and what didn't. This year, I'm trying something new: a chronological approach. I feel 2024 went through three clear distinct phases.
 
 ## Early 2024
 
-In my last personal snapshot, I said that I was going to focus on building a consulting practice and doing more stand up comedy. I did both half-heartedly.
+This was my "I'll do anything but build a consulting practice" phase.
 
-I thought of an [idea](https://aitheneum.iwanalabs.com/) that I thought that could help go into the product route, so during January and February I spent most of my time building a prototype, while I was negotiating with potential clients.
+In my last snapshot, I said that I was going to focus on building a consulting practice in 2024. Then I came up with a new product idea 😅 and spent the first two months of the year building a prototype.
 
-My idea, AItheneum^[yes, I know, what a terrible name.], was a tool to help people read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.
+[AItheneum^[yes, I know, what a terrible name.]](https://aitheneum.iwanalabs.com/) is a tool that helps you read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.
 
-It was a fun project to work on, but it wasn't really solving anyone's problem. It was a vitamin, not a painkiller. And I knew it from the start.
+I had fun working on it, but it wasn't really solving anyone's problem. It was a vitamin, not a painkiller. By the time I released it, it was clear nobody cared about it (not even me).
 
-By the time I released it, I immediately knew that I essentially wasted 2 months of my time.
+During this time, I was also half-assing talking to potential clients for freelance work and doing cold outreach to get clients. This had OK results, but I definitely didn't put enough effort into it.
 
-In parallel, I was doing open mics almost every week. That was one of the most fun things I've ever done, even if I almost threw up every time I went on stage.
+This wasn't obvious at the time, but as I learned later, cold outreach at this stage of the game is a waste of time. When you're getting started, you should be asking for warm introductions or referrals. If you haven't built credibility yet, you're going to waste a lot of time trying to convince strangers to work with you.
 
-But stand up comedy has a few downsides:
+On a brighter note, I was doing sets at open mics almost every week. This was the highlight of this phase.
 
-1. If you want to be good at stand up, you need to write everyday. I tried, but that often take time from focusing on my long term goals.
-2. Open mics take a lot of time. To practice an 8 minute set, I'd often have to dedicate 1.5 hours of commuting + 1 hour of show (during which I did my 8 minutes).
-3. Open mics are during weekday evenings, which isn't great if you want to keep a healthy schedule.
+I had an amazing time performing stand up, even though I bombed a few times. But I realized that it wasn't sutainable:
 
-Even then, I didn't really decided to stop until we had a health situation at home that made me reconsider my priorities. For the first months of the year my wife and I were living at an unsustainable pace. At some point, this broke down and we had to take a step back.
+1. To get good at it, you have to make time for it. That means writing everyday, and performing as often as possible.
+2. Open mics take a lot of time. To practice an 8 minute set, I'd often have to commute for 1 hour and stay for 1-2 hours of show (during which I did my 8 minutes).
+3. As a beginner, you'll only get spots during weekday evenings. Which isn't great if you want to get enough sleep to be productive the next day.
 
-# Mid 2024
+Even so, I didn’t fully decide to quit until we had a health crisis at home. My wife and I weren’t prioritizing our health in the first months of the year, and it took its toll.
 
-This year, I wrote code 322 days out of 365. It's a 16% increase from last year. That's a lot of code and a lot of learning. I'm happy with that.
+Stand up was fun, but it was distracting me from more important things. So I stopped.
 
-Financially, I doubled my revenue from last year. I worked on 9 different projects this year with 7 clients. My biggest client represented 33% of my revenue. That's an improvement from last year, where 68% of my revenue came from a single client.
+I’d love to return to it in the future, once I have less pressing things to focus on.
 
-I also did more sales this year. I wrote quite a few proposals, and now feel quite comfortable writing them. I'm also getting better at selling my services.
+## Mid 2024
 
-In terms of excercise, this year I did:
+This was the "work, learn, and build better habits" phase.
 
-- 112 strength training sessions (approx. 2.2 sessions per week)
-- 3,488 minutes of cardio (approx. 60 minutes per week)
+I worked with a couple of clients on AI projects, in the legal, construction, and CPG industries. Plus, I started writing blog posts again.
 
-In the second half of the year I started being more disciplined about the strength training, and I'm happy with the results.
+I often worked 12 hours days. I stopped going to the gym and switched to home workouts. I rarely went to social events.
 
-This roughly translates to 60 minutes of cardio per week. It's not a lot, but I'm happy that at least I was consistent with it.
+This was intense. A few times, I felt very close to having a mental breakdown. I learned a lot about my own limits.
 
-I'm moving in the right direction but I also want to step away from daily billing towards a fixed price model or value-based pricing, as my current model doesn't scale well. Right now, 25% of my revenue comes from fixed price projects the rest is daily.
+My biggest takeaway was that you can get a lot done if you deliberately choose to increase the intensity you put into things.
 
-Value-based pricing is the dream, but I've found it a lot more challenging, because:
+A highlight of this period was meeting some clients in person. Even though I’m a fan of remote work, getting everyone in the same room felt great. There's something about being in the same room that makes you more empathetic toward the people you're working with.
 
-On the one hand, your client:
+## Late 2024
 
-1. Needs to have a painful, well-defined and quantifiable problem.
-2. Needs to have a large budget to solve the problem.
+This was the "What should I do in 2025?" phase.
 
-On the other hand, you:
+The last months of the year were intense but less focused. I was still working with clients, but I also had more time to think about the future.
 
-1. Need to have the expertise to solve that specific problem.
-2. Need to have credibility and access to the client.
+I did more sales during this time, and managed multiple projects in parallel. I also continued writing blog posts.
 
-Say, for example, you're an expert in optimizing RAG pipelines for a specific industry.
+I traveled to Venezuela for the first time in 8 years, which was both wonderful and jarring. Once you get used to living in a developed country, it’s easy to forget how challenging daily life can be for so many people.
 
-## What didn't go well?
+I also decided to read more academic research and refresh my [math skills](https://mathacademy.com/). The highlight of this phase was debunking a fairly popular post about the use of [Structured Ouputs in LLMs](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html).
 
-But I feel at peace with that. Stand-up comedy has been one of the funniest hobbies I've ever had. But it really takes a lot of time to get good at it, and this year I decided that I had to focus on the things that would move the needle for me.
+## Stats & photos
 
-Earlier this year, my wife and I were living at an unsustainable pace. Eventually, this took a toll on our health. So I realized that I needed to prioritize the things that were most important to me.
+These are the stats for the year:
 
-## What are the plans for next year?
+- 💻 Code: I committed code 322 days out of 365 (+16% from last year).
+- 💰 Financials:
+  - Highest revenue so far (+100% from last year).
+  - 66% of my revenue comes from time-based billing (daily, hourly, etc.).
+  - My biggest client represented 33% of my revenue.
+- 📝 Sales:
+  - I worked on 9 projects with 7 different clients.
+  - I wrote 6 proposals.
+  - I got 3 new clients.
+- 💪 Exercise:
+  - 112 strength training sessions (approx. 2.2 sessions per week)
+  - 3,488 minutes of cardio (approx. 60 minutes per week)
+
+You can see relevant photos from the year [here]().
+
+## Lessons learned
+
+Until this year, I thought that having a strong social media presence was key to getting more clients. But I was wrong.
+
+I worked with 7 clients this year. They were either previous clients or referrals. I'm now a believer of the power of warm introductions. I still post on social media, but I no longer prioritize it. I believe there are higher leverage things I can do to get more clients.
+
+I also learned that it's better to be too busy than too free. When you're busy, you learn a lot, you need to prioritize, and you end up becoming more creative as you often need to deliver under pressure.
+
+Being "too busy" has taught me that I can do a lot more with less.
+
+## What's next?
+
+I've realized that I'm not a great predictor of what I want to do. I'm also not a great planner.
+
+Right now, my biggest priority is to grow my consulting practice. I also have a painkiller product idea that I've been slowly building. I'm not putting much effort into it right now, but I believe it has potential.
