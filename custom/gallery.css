@@ -1,0 +1,152 @@
+/* gallery.css */
+
+.custom-gallery-container {
+  position: relative;
+  max-width: 600px; /* Adjust as needed */
+  max-height: 400px; /* Restrict height to fit better in text flow */
+  margin: 0 auto; /* Center on the page */
+  text-align: center; /* Center the buttons and caption */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; /* Prevent image from spilling out */
+}
+
+.gallery-image {
+  max-width: 100%;
+  max-height: 400px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  border: 1px solid #ccc;
+}
+
+.gallery-caption {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.gallery-btn {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.gallery-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* New styles for overlay gallery */
+.gallery-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery-overlay.active {
+  display: flex;
+}
+
+.gallery-overlay-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  margin: auto;
+  padding: 0 80px; /* Make space for the buttons */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery-overlay .gallery-image {
+  max-height: 80vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border: none;
+}
+
+.gallery-overlay .gallery-caption {
+  color: white;
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.gallery-overlay .gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gallery-overlay .prev-btn {
+  left: 0;
+}
+
+.gallery-overlay .next-btn {
+  right: 0;
+}
+
+.gallery-overlay .close-btn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  width: auto;
+  height: auto;
+}
+
+.open-gallery-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s;
+}
+
+.open-gallery-btn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.gallery-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  z-index: 1;
+}
