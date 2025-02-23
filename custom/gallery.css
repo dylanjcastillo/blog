@@ -4,7 +4,7 @@
   position: relative;
   max-width: 600px; /* Adjust as needed */
   max-height: 400px; /* Restrict height to fit better in text flow */
-  margin: 0 auto; /* Center on the page */
+  margin: 0 auto 1rem auto; /* Center on the page */
   text-align: center; /* Center the buttons and caption */
   display: flex;
   flex-direction: column;
