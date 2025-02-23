@@ -90,9 +90,10 @@ The highlight of this phase was debunking a popular post about using [Structured
 
 Here are the stats for the year:
 
-- **💻 Code**: I committed code on 322 out of 365 days (+16% from last year).
+- **💻 Code**: I committed code on 322 out of 365 days.
 - **💰 Financials**:
-  - Highest revenue so far (+100% from last year).
+  - Revenue increased by 100% from last year. Best year so far.
+  - Costs increased by 155% from last year.
   - 66% of my revenue comes from time-based billing (daily, hourly).
   - My biggest client represented 33% of my revenue.
 - **📝 Sales**:
