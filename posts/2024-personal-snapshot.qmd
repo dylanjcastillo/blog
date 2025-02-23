@@ -24,21 +24,27 @@ This was my "I'll do anything but build a consulting practice" phase.
 
 In my last snapshot, I said that I was going to focus on building a consulting practice in 2024. Then I came up with a new product idea 😅 and spent a big chunk of the first two months of the year building a prototype.
 
-![AItheneum sucked, but at least I got some cool AI book cover images.](images/2024-personal-snapshot/aitheneum.webp)
+![At least I generated some cool AI book covers.](images/2024-personal-snapshot/aitheneum.webp)
 
 [AItheneum^[yes, I know, what a terrible name.]](https://aitheneum.iwanalabs.com/) is a tool that helps you read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.
 
 I had fun working on it, but it wasn't really solving anyone's problem. It was a vitamin, not a painkiller. By the time I released it, it was clear nobody cared about it (not even me!).
 
-During this time, I was also half-assing talking to potential clients for freelance work and doing cold outreach to get clients. This had OK results, but I definitely didn't put enough effort into it.
+During this time, I was also contributing to [django-components](https://github.com/django-components/django-components) and half-assing talking to potential clients for freelance work and doing cold outreach to get clients. The former was fun, the latter wasn't.
 
 Later in the year, after reading Alex Hormozi's [100M Leads](https://www.amazon.com/100M-Leads-Strangers-Stuff-Acquisition-com-ebook/dp/B0CFDR3TYV), I realized that cold outreach at this stage was mostly a waste of time. When you're just starting out, you should rely on warm introductions or referrals. If you haven't built credibility yet, you'll waste a lot of time trying to convince strangers to work with you.
 
-When it comes to work, I essentially spent the first two months of the year focusing on the wrong things.
+I essentially spent the first two months of the year focusing on the wrong things.
 
-However, on a more positive note, I was also doing open mic sets almost every week. I had a lot of fun performing stand-up comedy, even though I bombed a few times.
+On a more positive note, I was also doing open mic sets almost every week. I'm not saying this was "right" or "good", but I had a lot of fun performing stand-up comedy.
 
-After a few months, I eventually realized it wasn't sustainable:
+As you might expect, I bombed a few times. But I also had a few good sets. A professional (but not famous) comedian even invited me to open for him at a show in a nearby city. I didn't go, but it was flattering.
+
+One thing that surprised me about stand-up comedy is how scientific it is. Your joke is a hypothesis about what your audience will find funny. You test it by performing it in front of people. If it doesn't work, you adjust it and test it again. You do this over and over until you find something that works.
+
+The other thing I liked about it is that it's very meritocratic. If you're funny, you'll get laughs. There's no way to fake it. It's very easy to figure out who's good and who's not. You might not like someone's style, but if they're good you cannot deny it.
+
+However, after a few months, I realized it wasn't sustainable:
 
 1. To get good at stand-up, you have to make time for it. That means writing everyday, and performing as often as possible.
 2. Open mics take a lot of time. To practice an 8 minute set, I'd often have to commute for 1 hour and stay for 1-2 hours of show (during which I did my 8 minutes).
@@ -62,7 +68,7 @@ I often worked 12 hours days. I stopped going to the gym and switched to home wo
 
 It was intense. A few times, I felt very close to having a mental breakdown. I learned a lot about my own limits.
 
-I also met some clients in person. While I'm a fan of remote work, seeing people face to face felt great. Being in the same room makes you more empathetic toward the people you're working with.
+I also met some clients in person. While I'm a fan of remote work, seeing people face to face makes you more empathetic toward the people you're working with.
 
 The biggest lesson during this phase was that you can get a lot done if you deliberately choose to increase the intensity you put into things.
 
@@ -76,7 +82,7 @@ I did more sales outreach, managed multiple projects, and kept writing blog post
 
 During this time, I started going through more academic research and refreshing my [math skills](https://mathacademy.com/).
 
-The highlight of this phase was debunking a popular post about using [Structured Outputs in LLMs](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html).
+The highlight of this phase was debunking a popular post about using [Structured Outputs in LLMs](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html) and fixing a security vulnerability in a [Python package](https://github.com/instructor-ai/instructor/pull/1168) that gets more than 1M downloads per month.
 
 ## Stats & Photos
 
@@ -97,7 +103,7 @@ Here are the stats for the year:
   - VO2 max: 46 ml/kg/min.
   - RHR: 57 bpm.
 
-Here are some photos from the year:
+These are some photos from the year:
 
 <div class="custom-gallery-container" 
      data-images='[
@@ -138,17 +144,19 @@ I don't like taking pictures, but looking back, I regret not capturing more key 
 
 The biggest three key takeaways I got from 2024 are: focus, intensity, and action.
 
-**Focus** is about figuring out what are the right things to prioritize. It's easy to say that, but it's hard to do. Life is full of distractions, and it's easy to get lost in the noise. Focus on the things that matter to you, specially the ones that will help you on your way regardless of their outcome.
+**Focus** is about figuring out what are the right things to prioritize. It's easy to say that, but it's hard to do. Life is full of distractions, and it's easy to get lost in the noise.
 
-If I dedicate more time to writing technical posts, I learn through the act of writing the posts, but also I get clients that are interested in my posts. The same with sales: I might not get a client from a sales call, but I learn a lot about the process and get better at it.
+When picking priorities, I've found one heuristic that works well: when I'm not sure what to do, I prioritize things that will help me on my way regardless of their outcome.
 
-**Intensity** is about working hard. This year I handled more work than ever. My brain fought back, at times I was anxious, depressed, out of energy, and struggling with focus. But, eventually, my brain understood that there was no way out, and things got better. My brain stopped fighting back and started working for me.
+For example, if I dedicate more time to writing technical posts, I learn through the act of writing the posts, but also I get clients that are interested in my posts. The same with sales: I might not get a client from a sales call, but I learn a lot about the process and get better at it.
 
-It's not fun and it's not pretty. It's uncomfortable and it's hard. But it's worth it.
+**Intensity** is about working hard and taking ownership. This year I handled more work than ever. My brain fought back. At times I felt anxious, depressed, out of energy, and unable to focus. But, eventually, my brain understood that there was no way out. I wasn't going to back down. Then, it stopped fighting back and started working for me.
+
+It's not pretty. It's uncomfortable and it's hard. But it's worth it.
 
 **Action** is about staying in motion. It's better to be too busy than too idle. When you're busy, you learn a lot, you need to prioritize, and you end up becoming more creative as you often need to deliver under pressure.
 
-I was afraid of being "too busy". I thought it was going to prevent me from focusing on the right things. But I eventually realized that it was the other way around. The more I was busy, the more I learned and the better I got at what I was doing, which freed up time for the things I really wanted to do.
+I was afraid of being "too busy". I thought it was going to prevent me from focusing on the right things. But I eventually realized that it was the other way around. The busier I was, the more I learned and the better I got at what I was doing, which freed up time for the things I really wanted to do.
 
 Being busy made me more productive.
 
@@ -156,6 +164,6 @@ Being busy made me more productive.
 
 I've realized I'm not great at predicting what I'll want to do, nor am I a great planner.
 
-Right now, my biggest priority is growing my consulting practice. I also have a painkiller product idea that I've been slowly working on. If I find enough traction, I'll pivot to it. But until then, my focus is on consulting.
+Right now, my biggest priority is growing my consulting practice. I also finally found a painkiller product idea that I've been slowly working on. If I find enough traction, I'll pivot to it. But until then, my focus is on consulting.
 
 The only thing I'm sure is that I'll keep myself busy.
