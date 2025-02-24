@@ -31,10 +31,10 @@
 
 .gallery-btn {
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   font-size: 1.5rem;
   border-radius: 50%;
   display: flex;
@@ -42,6 +42,8 @@
   justify-content: center;
   color: white;
   transition: background-color 0.3s;
+  padding: 8px;
+  z-index: 1000;
 }
 
 .gallery-btn:hover {
@@ -96,6 +98,19 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-overlay .gallery-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
 }
 
 .gallery-overlay .prev-btn {
@@ -149,4 +164,24 @@
   border-radius: 4px;
   font-size: 1.1rem;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .gallery-overlay .gallery-btn {
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+  }
+  
+  .gallery-overlay .prev-btn {
+    left: 8px;
+  }
+  
+  .gallery-overlay .next-btn {
+    right: 8px;
+  }
+  
+  .gallery-overlay-content {
+    padding: 0 50px;
+  }
 }
