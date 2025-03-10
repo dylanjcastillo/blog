@@ -100,15 +100,18 @@ My father-in-law also moved with us for this part of the year. It was a big chan
 
 Here are the stats for the year:
 
-- **💻 Code**: I committed code on 322 out of 365 days.
+- **💻 Code and blogging**:
+  - I committed code on 322 out of 365 days.
+  - I wrote 14 blog posts.
 - **💰 Financials**:
-  - Revenue doubled from last year. Historically my best year.
+  - Revenue doubled from last year. So far, my best year.
   - Costs increased by 155% from last year.
   - 66% of my revenue comes from time-based billing (daily, hourly).
   - My biggest client represented 33% of my revenue.
 - **📝 Sales**:
   - I worked on 9 projects with 7 different clients.
   - I got 3 new clients.
+  - Success rate of proposals: 67%.
 - **💪 Health & Fitness**:
   - 112 strength training sessions (2.2 sessions/week).
   - 3,488 minutes of cardio (~60 minutes/week).
