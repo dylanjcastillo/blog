@@ -9289,7 +9289,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">[</span><span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">shell</span><span class="kw" style="color: #003B4F;
+font-style: inherit;">terminal.shell</span><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">]</span></span>
