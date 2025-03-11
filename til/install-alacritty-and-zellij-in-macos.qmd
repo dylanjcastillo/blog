@@ -156,7 +156,7 @@ Is One Half Dark the same as One Dark? I don't really know. I like to live dange
 Getting Alacritty to work with Zellij took me a while to figure out. But luckily it's as simple as adding the full path to the `zellij` binary in the `~/.config/alacritty/alacritty.toml` file.
 
 ```yaml
-[shell]
+[terminal.shell]
      program = "/opt/homebrew/bin/zellij"
 ```
 
