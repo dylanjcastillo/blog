@@ -1,3 +1,10 @@
+- title: "Are you a good estimator?"
+  path: https://estimator.dylancastillo.co/
+  date: 2025-04-18
+  categories: [React, Next.js, TailwindCSS]
+  description: |
+    A fun experiment to see if you're a good estimator. It was featured in [Financial Times](https://archive.is/qDc0v).
+
 - title: "Sofia"
   path: https://youtube.com/shorts/ggcesOkcvrQ
   date: 2024-12-10
@@ -45,7 +52,7 @@
   date: 2023-06-22
   categories: [GPT-3]
   description: |
-    A GPT3-based stoic philosopher who gives you life advice based on Seneca's writings. It also gives you the sources it used to answer your questions.
+    A GPT-based stoic philosopher who gives you life advice based on Seneca's writings. It also gives you the sources it used to answer your questions. It was featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence).
 
 - title: "Shell Genie"
   path: https://github.com/dylanjcastillo/shell-genie
