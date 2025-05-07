@@ -1,3 +1,10 @@
+- title: "King of the Prompt"
+  path: https://king.dylancastillo.co/
+  date: 2025-05-07
+  categories: [GPT-4.1, OpenAI, React, Next.js, TailwindCSS]
+  description: |
+    A fun game to see if you're a good prompt engineer.
+
 - title: "Are you a good estimator?"
   path: https://estimator.dylancastillo.co/
   date: 2025-04-18
