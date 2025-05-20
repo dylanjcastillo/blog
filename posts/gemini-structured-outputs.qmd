@@ -283,8 +283,6 @@ Based on the results, I'd suggest the following when using Gemini:
 1. Avoid FC for any tasks that require chain-of-thought reasoning.
 2. Default to JSON-Prompt over JSON-Schema for reasoning tasks.
 
-Finally, I want to emphasize that I love working with structured outputs. They save a lot of time. But I know there are tasks where they might perform worse (or better!) than unstructured outputs. There's not enough evidence to support one or the other, so what I should just run my own evals and decide based on that.
-
-That's the real takeaway: run your own evals and choose the approach that works best for you. Don't blindly trust random posts online.
+Finally, I want to emphasize that I love working with structured outputs. They save a lot of time. But I know there are tasks where they might perform worse (or better!) than unstructured outputs. There's not enough evidence to support one or the other, so the best advice I can give is to run your own evals. Don't blindly trust random posts online.
 
 You can find the code to replicate my results in this [GitHub repository](https://github.com/dylanjcastillo/blog/tree/main/_extras/gemini-structured-outputs).
