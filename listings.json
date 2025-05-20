@@ -1,9 +1,5 @@
 [
   {
-    "listing": "/projects.html",
-    "items": []
-  },
-  {
     "listing": "/index.html",
     "items": [
       "/posts/2024-personal-snapshot.html",
@@ -44,5 +40,9 @@
       "/til/install-alacritty-and-zellij-in-macos.html",
       "/til/live-components-with-django-and-htmx.html"
     ]
+  },
+  {
+    "listing": "/projects.html",
+    "items": []
   }
 ]
