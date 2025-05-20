@@ -19,17 +19,12 @@ I liked the rebuttal but it still left me wondering how well their results gener
 
 [^1]: Although, they've also [shared results](https://blog.dottxt.co/performance-gsm8k.html) of other open-weight models using a different setup.
 
-Given this constraint, would the .txt team’s results still hold?
-
-Plus, both the original study and the rebuttal focused on tasks that might not be a good proxy for the full range of tasks people use LLMs for. Would the rebuttal results be different in settings outside of simple reasoning tasks?
-
-So I decided to:
+Given this constraint, I wondered if .txt’s results would still hold. So I decided to:
 
 1.  Replicate the results from .txt's rebuttal using _LLaMA3-8B-Instruct_.
 2.  Replicate the same tasks using a proprietary model _GPT-4o-mini_.
-3.  Test results on a broader set of tasks such as [LiveBench](https://livebench.ai/).
 
-This article presents the results of the first two steps. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/_extras/say-what-you-mean-sometimes).
+This article presents the results of these two analyses. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/_extras/say-what-you-mean-sometimes).
 
 ## Results
 
