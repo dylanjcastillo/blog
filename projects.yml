@@ -1,3 +1,10 @@
+- title: "econagents"
+  path: github.com/IBEX-TUDelft/econagents
+  date: 2025-05-23
+  categories: [Python, OpenAI, Ollama]
+  description: |
+    Python library that lets you simulate economic experiments using LLMs.
+
 - title: "King of the Prompt"
   path: https://king.dylancastillo.co/
   date: 2025-05-07
