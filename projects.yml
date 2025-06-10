@@ -34,11 +34,11 @@
     A collection of classic books enhanced with AI to make them easier to read and understand.
 
 - title: "Django HTMX Components"
-  path: https://dhc.iwanalabs.com/
+  path: https://github.com/iwanalabs/django-htmx-components/
   date: 2023-06-22
   categories: [Django, HTMX]
   description: |
-    An [open-source](https://github.com/iwanalabs/django-htmx-components/) collection of components built with Django and HTMX that you can copy and paste into your projects.
+    An collection of components and UI patterns built with Django and HTMX that you can copy and paste into your projects.
 
 - title: "lystinct"
   path: https://www.reddit.com/r/RealEstateTechnology/comments/17p0nm6/i_made_an_app_that_helps_you_write_real_estate/
