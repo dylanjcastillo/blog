@@ -118,7 +118,7 @@
     A fun [cognitive science experiment](https://en.wikipedia.org/wiki/Peter_Cathcart_Wason#Wason_and_the_2-4-6_Task) designed by Peter Wason in the 1970s. It sparked some [insightful discussions](https://www.reddit.com/r/SampleSize/comments/jhrnt8/casual_im_trying_to_replicate_a_famous_experiment/) on reddit. Try it yourself before reading about it!
 
 - title: "Polituits"
-  path: http://polituits.com/
+  path: https://github.com/dylanjcastillo/twitter-sentiment-tracker
   date: 2023-06-22
   categories: [sentiment analysis, Twitter]
   description: |
