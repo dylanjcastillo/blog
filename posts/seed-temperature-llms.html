@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2027-01-06">
+<meta name="description" content="What are temperature and seed, and how do they affect the output of an LLM?">
+
+<title>Controlling randomness in LLMs: Temperature and Seed – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-367037fdfe0f341aec79426c22b5edce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Controlling randomness in LLMs: Temperature and Seed – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta name="twitter:title" content="Controlling randomness in LLMs: Temperature and Seed – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:github" aria-label="Icon github from fa6-brands Iconify.design set." title="Icon github from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/dylancastillo.co"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:bluesky" aria-label="Icon bluesky from fa6-brands Iconify.design set." title="Icon bluesky from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-llms-generate-text" id="toc-how-llms-generate-text" class="nav-link active" data-scroll-target="#how-llms-generate-text">How LLMs generate text</a></li>
+  <li><a href="#temperature" id="toc-temperature" class="nav-link" data-scroll-target="#temperature">Temperature</a></li>
+  <li><a href="#seed" id="toc-seed" class="nav-link" data-scroll-target="#seed">Seed</a></li>
+  <li><a href="#top-k-and-top-p" id="toc-top-k-and-top-p" class="nav-link" data-scroll-target="#top-k-and-top-p"><code>top-k</code> and <code>top-p</code></a>
+  <ul class="collapse">
+  <li><a href="#top-k" id="toc-top-k" class="nav-link" data-scroll-target="#top-k">top-k</a></li>
+  <li><a href="#top-p" id="toc-top-p" class="nav-link" data-scroll-target="#top-p">top-p</a></li>
+  </ul></li>
+  <li><a href="#seed-and-temperature-in-practice" id="toc-seed-and-temperature-in-practice" class="nav-link" data-scroll-target="#seed-and-temperature-in-practice">Seed and temperature in practice</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Controlling randomness in LLMs: Temperature and Seed</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">openai</div>
+    <div class="quarto-category">python</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 6, 2027</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">June 25, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Temperature and seed are commonly used parameters when interacting with Large Language Models (LLMs). They’re also a source of confusion for many people. In this post, I’ll show you what they are and how they work.</p>
+<p>Temperature is a parameter that controls the randomness of the output by scaling the logits of the tokens before applying the softmax function. Seed is also a parameter that controls the randomness of how the model selects tokens during text generation. It sets the initial state of the random number generator, which is then used for the sampling of the tokens during the generation process.</p>
+<p>Temperature is available for most providers, while seed is only available for <a href="https://openai.com/api/">OpenAI</a> and open-weight models (that I know of).</p>
+<p>Let’s get started.</p>
+<section id="how-llms-generate-text" class="level2">
+<h2 class="anchored" data-anchor-id="how-llms-generate-text">How LLMs generate text</h2>
+<p>To understand how seed and temperature work, we first need to understand how LLMs generate text. Provided with a prompt, a model uses what’s called a <a href="https://huggingface.co/docs/transformers/en/generation_strategies">decoding strategy</a> to generate the next token.</p>
+<p>There are many strategies, but for this post, we’ll focus on just two: <strong>greedy search</strong> and <strong>sampling</strong>.</p>
+<p>In <strong>greedy search</strong>, the model picks the token with the highest probability at each step. In <strong>sampling</strong>, the model picks a token based on the probability distribution of the tokens in the vocabulary. In both cases, the model will calculate the probability of each token in the vocabulary<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, and use that to pick the next token. Let’s see an example.</p>
+<p>Take the following prompt:</p>
+<blockquote class="blockquote">
+<p>What’s the favorite dish of Chuck Norris?</p>
+</blockquote>
+<p>These might be the top 5 most likely next tokens:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rank</th>
+<th>Token</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>‘Dynamite’</td>
+<td>0.5823</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>‘Venom’</td>
+<td>0.2891</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>‘Himself’</td>
+<td>0.0788</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>‘Radiation’</td>
+<td>0.0354</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>‘You’</td>
+<td>0.0144</td>
+</tr>
+</tbody>
+</table>
+<p>If the model uses <strong>greedy search</strong>, it will pick the token with the highest probability, which is ‘Dynamite’.</p>
+<p>If it uses <strong>sampling</strong>, it will make a random selection based on those probabilities. So, the model has a 58% chance of picking ‘Dynamite’, a 29% chance of picking ‘Venom’, a 8% chance of picking ‘Himself’, a 4% chance of picking ‘Radiation’, and a 1% chance of picking ‘You’.</p>
+<p>Let’s see how this works in practice, and how seed and temperature have an effect on the output.</p>
+<p>Logits are the raw scores that the model assigns to each token. To go from logits to probabilities, you must apply the softmax function:</p>
+<p><span class="math display">\[\text{P}(w_i) = \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(P(w_i)\)</span> is the probability of token <span class="math inline">\(w_i\)</span></li>
+<li><span class="math inline">\(z_i\)</span> is the logit for token <span class="math inline">\(w_i\)</span></li>
+<li><span class="math inline">\(n\)</span> is the total number of possible tokens</li>
+</ul>
+<p>Logits are the raw output scores from the language model before any transformation. The softmax function gives you the probability assigned to each token.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>Temperature is a parameter that usually goes between 0 and 1 or 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
+<p>You cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, but you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
+<p>It’s magic boils down to this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>scores_processed <span class="op">=</span> scores <span class="op">/</span> <span class="va">self</span>.temperature</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Temperature (<span class="math inline">\(T\)</span>) simply scales the scores (logits) of the tokens by the temperature value. This, in turn, will change the probabilities of the tokens:</p>
+<p><span class="math display">\[P(w_i) = \frac{e^{z_i / T}}{\sum_{j=1}^{n} e^{z_j / T}}\]</span></p>
+<p>The example below shows how temperature affects the probabilities of the tokens:</p>
+<div id="cell-5" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>tokens <span class="op">=</span> [<span class="st">'Dynamite'</span>, <span class="st">'Venom'</span>, <span class="st">'Himself'</span>, <span class="st">'Radiation'</span>, <span class="st">'You'</span>]</span>
+<span id="cb2-4"><a href="#cb2-4"></a>logits <span class="op">=</span> np.array([<span class="fl">2.5</span>, <span class="fl">1.8</span>, <span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.3</span>, <span class="op">-</span><span class="fl">1.2</span>])</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>temperatures <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">1.999999999</span>]</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="cf">for</span> temperature <span class="kw">in</span> temperatures:</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    probs <span class="op">=</span> np.exp(logits <span class="op">/</span> temperature) <span class="op">/</span> np.<span class="bu">sum</span>(np.exp(logits <span class="op">/</span> temperature))</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Temperature: </span><span class="sc">{</span>temperature<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="bu">print</span>(<span class="st">"What's the favorite dish of Chuck Norris?"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="bu">print</span>(<span class="st">"Rank | Token      | Probability"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="bu">print</span>(<span class="st">"-----|------------|------------"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="cf">for</span> i, (token, prob) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(tokens, probs), <span class="dv">1</span>):</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">:4d}</span><span class="ss"> | '</span><span class="sc">{</span>token<span class="sc">:10s}</span><span class="ss">' | </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb2-16"><a href="#cb2-16"></a>    <span class="bu">print</span>(<span class="ss">f"Sum of probabilities: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">sum</span>(probs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This code simulates the impact of different temperature values on the next token probability. Given some initial logits and assuming this is the full vocabulary, we can calculate the probabilities of the tokens for a given temperature.</p>
+<p>For a temperature of <strong>0.1</strong>, you get the following probabilities:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rank</th>
+<th>Token</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>‘Dynamite’</td>
+<td>0.9991</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>‘Venom’</td>
+<td>0.0009</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>‘Himself’</td>
+<td>0.0000</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>‘Radiation’</td>
+<td>0.0000</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>‘You’</td>
+<td>0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>For a temperature of <strong>2</strong>, you get the following probabilities:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rank</th>
+<th>Token</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>‘Dynamite’</td>
+<td>0.4038</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>‘Venom’</td>
+<td>0.2846</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>‘Himself’</td>
+<td>0.1486</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>‘Radiation’</td>
+<td>0.0996</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>‘You’</td>
+<td>0.0635</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that for lower temperature values, the model becomes more deterministic. For temperature 0.1, the probability of picking ‘Dynamite’ is &gt;99.9%, while for temperature 2, it’s only 40%.</p>
+<p>In essence, temperature impacts the randomness of the output by changing the probabilities of selecting the next token. This should give you a good idea of how temperature works. But let’s try it with a real LLM instead of a simulation.</p>
+<p>First, let’s import the required libraries and load the model.</p>
+<div id="cell-7" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> torch</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>model_name <span class="op">=</span> <span class="st">"unsloth/Qwen3-1.7B"</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(model_name)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>model <span class="op">=</span> AutoModelForCausalLM.from_pretrained(</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    model_name,</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    torch_dtype<span class="op">=</span><span class="st">"auto"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    device_map<span class="op">=</span><span class="st">"auto"</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the sake of this example, we’ll use <code>unsloth/Qwen3-1.7B</code>. But what you see here is applicable to most LLMs. We’ll use <code>generate_text</code> as our text generation function.</p>
+<div id="cell-9" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> generate_text(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="cf">if</span> seed:</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        torch.manual_seed(seed)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>        <span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb4-5"><a href="#cb4-5"></a>            torch.cuda.manual_seed(seed)</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    messages <span class="op">=</span> [</span>
+<span id="cb4-8"><a href="#cb4-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    ]</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    text <span class="op">=</span> tokenizer.apply_chat_template(</span>
+<span id="cb4-11"><a href="#cb4-11"></a>        messages,</span>
+<span id="cb4-12"><a href="#cb4-12"></a>        tokenize<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>        add_generation_prompt<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-14"><a href="#cb4-14"></a>        enable_thinking<span class="op">=</span><span class="va">False</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>    )</span>
+<span id="cb4-16"><a href="#cb4-16"></a>    model_inputs <span class="op">=</span> tokenizer([text], return_tensors<span class="op">=</span><span class="st">"pt"</span>).to(model.device)</span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="cf">if</span> temperature <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-19"><a href="#cb4-19"></a>        model_params <span class="op">=</span> {</span>
+<span id="cb4-20"><a href="#cb4-20"></a>            <span class="st">"do_sample"</span>: <span class="va">True</span>,</span>
+<span id="cb4-21"><a href="#cb4-21"></a>            <span class="st">"temperature"</span>: temperature <span class="cf">if</span> temperature <span class="op">&lt;</span> <span class="dv">2</span> <span class="cf">else</span> <span class="fl">1.9999999</span>,</span>
+<span id="cb4-22"><a href="#cb4-22"></a>        }</span>
+<span id="cb4-23"><a href="#cb4-23"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-24"><a href="#cb4-24"></a>        model_params <span class="op">=</span> {</span>
+<span id="cb4-25"><a href="#cb4-25"></a>            <span class="st">"do_sample"</span>: <span class="va">False</span>,</span>
+<span id="cb4-26"><a href="#cb4-26"></a>        }</span>
+<span id="cb4-27"><a href="#cb4-27"></a>    outputs <span class="op">=</span> model.generate(</span>
+<span id="cb4-28"><a href="#cb4-28"></a>        <span class="op">**</span>model_inputs,</span>
+<span id="cb4-29"><a href="#cb4-29"></a>        <span class="op">**</span>model_params,</span>
+<span id="cb4-30"><a href="#cb4-30"></a>        max_new_tokens<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb4-31"><a href="#cb4-31"></a>        output_scores<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-32"><a href="#cb4-32"></a>        return_dict_in_generate<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-33"><a href="#cb4-33"></a>        pad_token_id<span class="op">=</span>tokenizer.eos_token_id</span>
+<span id="cb4-34"><a href="#cb4-34"></a>    )</span>
+<span id="cb4-35"><a href="#cb4-35"></a></span>
+<span id="cb4-36"><a href="#cb4-36"></a>    output_token_id <span class="op">=</span> outputs.sequences[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].tolist()</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    selected_token <span class="op">=</span> tokenizer.decode([output_token_id])</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a>    <span class="cf">if</span> <span class="kw">not</span> print_top_k:</span>
+<span id="cb4-40"><a href="#cb4-40"></a>        <span class="cf">return</span> selected_token</span>
+<span id="cb4-41"><a href="#cb4-41"></a>    </span>
+<span id="cb4-42"><a href="#cb4-42"></a>    probs <span class="op">=</span> F.softmax(outputs.scores[<span class="dv">0</span>][<span class="dv">0</span>], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb4-43"><a href="#cb4-43"></a>    top_k_probs, top_k_indices <span class="op">=</span> torch.topk(probs, <span class="dv">10</span>)</span>
+<span id="cb4-44"><a href="#cb4-44"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a>    <span class="bu">print</span>(<span class="st">"Top-10 most likely tokens:"</span>)</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    <span class="cf">for</span> i, (prob, idx) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(top_k_probs, top_k_indices)):</span>
+<span id="cb4-47"><a href="#cb4-47"></a>        token_text <span class="op">=</span> tokenizer.decode([idx.item()])</span>
+<span id="cb4-48"><a href="#cb4-48"></a>        is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> idx.item() <span class="op">==</span> output_token_id <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss">' (prob: </span><span class="sc">{</span>prob<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, logit: </span><span class="sc">{</span>outputs<span class="sc">.</span>scores[<span class="dv">0</span>][<span class="dv">0</span>][idx.item()]<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">) </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-50"><a href="#cb4-50"></a></span>
+<span id="cb4-51"><a href="#cb4-51"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On a high-level, this function takes a prompt, a temperature value, and a seed, and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
+<ol type="1">
+<li><p><strong>Lines 2 to 16</strong>: It takes a prompt, a temperature value, and optionally a seed. If a seed is provided, it sets the random number generator to that value. Then, it processes the prompt to create the required input for the model.</p></li>
+<li><p><strong>Lines 18 to 37</strong>: It chooses to sample from the model or not, based on the temperature value. If temperature is 0, the model will use to a greedy search strategy.</p></li>
+<li><p><strong>Lines 39 to 50</strong>: It returns the completion token and optinally prints the top 10 most likely tokens with their probabilities and logits.</p></li>
+</ol>
+<p>Similar to what you saw in the previous example, you can try low and high temperature values.</p>
+<p>This is what you get for a temperature of 0.1:</p>
+<div id="cell-11" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">0.1</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top-10 most likely tokens:
+  1. 'Why' (prob: 1.0000, logit: 330.0000) ← SELECTED
+  2. '!' (prob: 0.0000, logit: -inf) 
+  3. '"' (prob: 0.0000, logit: -inf) 
+  4. '#' (prob: 0.0000, logit: -inf) 
+  5. '$' (prob: 0.0000, logit: -inf) 
+  6. '%' (prob: 0.0000, logit: -inf) 
+  7. '&amp;' (prob: 0.0000, logit: -inf) 
+  8. ''' (prob: 0.0000, logit: -inf) 
+  9. '(' (prob: 0.0000, logit: -inf) 
+  10. ')' (prob: 0.0000, logit: -inf) </code></pre>
+</div>
+</div>
+<div id="cell-12" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">1.99</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top-10 most likely tokens:
+  1. 'Why' (prob: 0.5742, logit: 16.5829) ← SELECTED
+  2. 'Sure' (prob: 0.3939, logit: 16.2060) 
+  3. 'Here' (prob: 0.0319, logit: 13.6935) 
+  4. '!' (prob: 0.0000, logit: -inf) 
+  5. '"' (prob: 0.0000, logit: -inf) 
+  6. '#' (prob: 0.0000, logit: -inf) 
+  7. '$' (prob: 0.0000, logit: -inf) 
+  8. '%' (prob: 0.0000, logit: -inf) 
+  9. '&amp;' (prob: 0.0000, logit: -inf) 
+  10. ''' (prob: 0.0000, logit: -inf) </code></pre>
+</div>
+</div>
+<p>You should see similar results. For the “Tell me a joke about dogs” prompt, when using a temperature of 0.1, the model had ~100% probability of picking ‘Why’, while for temperature 2, it’s only 57%.</p>
+<p>Note, that when temperature is 0, the model will use to a greedy search strategy, which is the same as picking the most likely token. So no sampling is done and results are deterministic.</p>
+</section>
+<section id="seed" class="level2">
+<h2 class="anchored" data-anchor-id="seed">Seed</h2>
+<p>The seed parameter controls the randomness of how a model selects tokens. It sets the initial state for the random number generator used in the token sampling process.</p>
+<p>Let’s revisit the example from the previous section to see this in action. By setting the seed to a fixed value, you ensure the generation process is deterministic. This means you will get an identical result on every run, provided all other parameters (like temperature) remain the same in those runs.</p>
+<p>We can start by setting our seed to 42 and temperature to 1 to verify which token is generated.</p>
+<div id="cell-16" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top-10 most likely tokens:
+  1. 'Why' (prob: 0.6792, logit: 33.0000) 
+  2. 'Sure' (prob: 0.3208, logit: 32.2500) ← SELECTED
+  3. '!' (prob: 0.0000, logit: -inf) 
+  4. '"' (prob: 0.0000, logit: -inf) 
+  5. '#' (prob: 0.0000, logit: -inf) 
+  6. '$' (prob: 0.0000, logit: -inf) 
+  7. '%' (prob: 0.0000, logit: -inf) 
+  8. '&amp;' (prob: 0.0000, logit: -inf) 
+  9. ''' (prob: 0.0000, logit: -inf) 
+  10. '(' (prob: 0.0000, logit: -inf) </code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>'Sure'</code></pre>
+</div>
+</div>
+<p>In this case, the model selected “Sure” as the next token, even though its probability is lower than ‘Why’. Now, we can verify that this stays the same over multiple runs.</p>
+<div id="cell-18" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb12-3"><a href="#cb12-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>    tokens.append(token)</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'Sure'}</code></pre>
+</div>
+</div>
+<p>This code runs the text generation process 100 times and verifies that “Sure” was picked in all runs. Next, we should verify that this consistency is lost when we omit the seed parameter.</p>
+<div id="cell-20" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    tokens.append(token)</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'Sure', 'Why'}</code></pre>
+</div>
+</div>
+<p>In this case, you see that after the 100 generations, the model picked two different tokens: ‘Sure’ and ‘Why’. This is expected due to not setting a seed.</p>
+<p>You can also use test this with a propietary model. Let’s try it with <code>gpt-4.1-nano</code> from OpenAI.</p>
+<div id="cell-22" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">import</span> openai</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>load_dotenv()</span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a>client <span class="op">=</span> openai.OpenAI()</span>
+<span id="cb16-8"><a href="#cb16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="kw">def</span> generate_text_openai(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb16-10"><a href="#cb16-10"></a>    response <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb16-11"><a href="#cb16-11"></a>        model<span class="op">=</span><span class="st">"gpt-4.1-nano"</span>,</span>
+<span id="cb16-12"><a href="#cb16-12"></a>        messages<span class="op">=</span>[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}],</span>
+<span id="cb16-13"><a href="#cb16-13"></a>        temperature<span class="op">=</span>temperature,</span>
+<span id="cb16-14"><a href="#cb16-14"></a>        seed<span class="op">=</span>seed,</span>
+<span id="cb16-15"><a href="#cb16-15"></a>        max_tokens<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb16-16"><a href="#cb16-16"></a>        logprobs<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb16-17"><a href="#cb16-17"></a>        top_logprobs<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb16-18"><a href="#cb16-18"></a>    )</span>
+<span id="cb16-19"><a href="#cb16-19"></a>    selected_token <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb16-20"><a href="#cb16-20"></a>    <span class="cf">if</span> print_top_k:</span>
+<span id="cb16-21"><a href="#cb16-21"></a>        logprobs <span class="op">=</span> response.choices[<span class="dv">0</span>].logprobs.content[<span class="dv">0</span>].top_logprobs</span>
+<span id="cb16-22"><a href="#cb16-22"></a>        <span class="bu">print</span>(<span class="st">"Top 10 most likely tokens:"</span>)</span>
+<span id="cb16-23"><a href="#cb16-23"></a>        <span class="cf">for</span> idx, token_info <span class="kw">in</span> <span class="bu">enumerate</span>(logprobs):</span>
+<span id="cb16-24"><a href="#cb16-24"></a>            token <span class="op">=</span> token_info.token</span>
+<span id="cb16-25"><a href="#cb16-25"></a>            logprob <span class="op">=</span> token_info.logprob</span>
+<span id="cb16-26"><a href="#cb16-26"></a>            prob <span class="op">=</span> np.<span class="bu">round</span>(np.exp(logprob)<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>)</span>
+<span id="cb16-27"><a href="#cb16-27"></a>            token_text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>idx<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">': </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss"> (</span><span class="sc">{</span>logprob<span class="sc">:.4f}</span><span class="ss">)"</span></span>
+<span id="cb16-28"><a href="#cb16-28"></a>            is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> token_info.token <span class="op">==</span> selected_token <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb16-29"><a href="#cb16-29"></a>            <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-30"><a href="#cb16-30"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Similar to the previous function, you provide a prompt, a temperature value, and a seed, and the model will return a completion token and will print the top 10 most likely tokens.</p>
+<p>In this case, instead of providing you with the logits, OpenAI will provide you with <code>logprobs</code> which are the logaritmic probabilities of the tokens:</p>
+<p><span class="math display">\[logprob(w_i) = ln(P(w_i)) = ln(\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}) \]</span></p>
+<p>First, let’s check the completion token we get for a temperature of 1 and a seed of 42.</p>
+<div id="cell-24" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top 10 most likely tokens:
+1. 'Why': 59.2600 (-0.5232) ← SELECTED
+2. 'Sure': 40.7300 (-0.8982) 
+3. ' Why': 0.0000 (-10.6482) 
+4. ' sure': 0.0000 (-11.0232) 
+5. ' why': 0.0000 (-11.2732) 
+6. '为什么': 0.0000 (-11.6482) 
+7. ' Sure': 0.0000 (-11.8982) 
+8. 'Pourquoi': 0.0000 (-12.2732) 
+9. 'why': 0.0000 (-12.3982) 
+10. 'sure': 0.0000 (-12.6482) </code></pre>
+</div>
+</div>
+<p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
+<p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    tokens.append(token)</span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'Why'}</code></pre>
+</div>
+</div>
+<p>Similar to the previous example, we run 100 generations with the same seed and temperature and check if the completion token is the same.</p>
+<p>This should <em>generally</em> work, but OpenAI doesn’t guarantee that the same seed will always produce the same output. It might occur that your request is handled by a model with a <a href="https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter">different configuration</a>, and you’ll get different results.</p>
+<p>You can also verify that not using a seed will result in different tokens.</p>
+<div id="cell-28" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb21-3"><a href="#cb21-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb21-4"><a href="#cb21-4"></a>    tokens.append(token)</span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'Sure', 'Why'}</code></pre>
+</div>
+</div>
+<p>Now, you can see that the output is not the same in all runs. Some runs picked “Why”, and others picked “Sure”.</p>
+<p>In essence, seed influences the output by setting the initial state of the random number generator, which is then used for the sampling of the tokens during the generation process.</p>
+</section>
+<section id="top-k-and-top-p" class="level2">
+<h2 class="anchored" data-anchor-id="top-k-and-top-p"><code>top-k</code> and <code>top-p</code></h2>
+<p>In addition to temperature, there are two other parameters that are commonly used to control the randomness of the output of a language model: <code>top-k</code> and <code>top-p</code>.</p>
+<section id="top-k" class="level3">
+<h3 class="anchored" data-anchor-id="top-k">top-k</h3>
+<p>Top-k sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so by keeping only the top-k tokens with the highest probabilities. This reduces the <a href="https://huyenchip.com/2024/01/16/sampling.html#top_k">computational workload</a> by getting the top-k logits and then calculating the softmax over these instead of using the complete vocabulary.</p>
+<p>This parameter isn’t available for OpenAI models. They provide a <code>top_logprobs</code> parameter, but it’s not the same as top-k sampling. It’s a parameter that returns the top N most likely tokens with their logprobs, but it doesn’t change the sampling process.</p>
+</section>
+<section id="top-p" class="level3">
+<h3 class="anchored" data-anchor-id="top-p">top-p</h3>
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so by keeping only the tokens with the highest probabilities that cumulatively account for at least p% of the total probability mass. So it selects the fewest possible tokens to reach the desired probability mass.</p>
+<p>This is available for most providers.</p>
+<div id="cell-31" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, top_p<span class="op">=</span><span class="fl">0.50</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top 10 most likely tokens:
+1. 'Why': 59.2600 (-0.5232) ← SELECTED
+2. 'Sure': 40.7300 (-0.8982) 
+3. ' Why': 0.0000 (-10.6482) 
+4. ' sure': 0.0000 (-11.0232) 
+5. ' why': 0.0000 (-11.2732) 
+6. '为什么': 0.0000 (-11.6482) 
+7. ' Sure': 0.0000 (-11.8982) 
+8. 'Pourquoi': 0.0000 (-12.2732) 
+9. 'why': 0.0000 (-12.3982) 
+10. 'sure': 0.0000 (-12.6482) </code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<pre><code>'Why'</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="seed-and-temperature-in-practice" class="level2">
+<h2 class="anchored" data-anchor-id="seed-and-temperature-in-practice">Seed and temperature in practice</h2>
+<p>Now that you understand how seed and temperature work, here are some things to keep in mind when using them:</p>
+<ol type="1">
+<li><code>seed</code> is only available for <code>OpenAI</code> and open-weight models.</li>
+<li>To get the most deterministic output for a given prompt, set temperature to 0. This minimizes randomness.</li>
+<li>If you want creative results that are still reproducible, set temperature to a value greater than 0 and use a fixed seed. This allows for varied outputs that you can generate again.</li>
+<li>If you don’t need reproducible results and want unique outputs on every run, you can omit the seed parameter entirely.</li>
+<li>Be aware that even if you set a temperature of 0 and a seed, outputs are not guaranteed to be identical. Providers <a href="https://platform.openai.com/docs/advanced-usage#reproducible-outputs">might change model configurations</a> that might impact the output. For OpenAI models, you can monitor such changes by keeping track of the <a href="https://platform.openai.com/docs/api-reference/backward-compatibility">system_fingerprint</a> provided in the responses.</li>
+</ol>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this post, we explored how the temperature and seed parameters control the output of Large Language Models.</p>
+<p>You learned that temperature adjusts the level of randomness: low values (near 0) produce more predictable, deterministic outputs, while high values (near 1) encourage more creative and varied results. In contrast, the seed makes the generation process reproducible. While the specific seed value isn’t important, fixing it ensures you get the same output for a given prompt and set of parameters.</p>
+<p>Finally, remember that while temperature is a near-universal setting, seed is only available (at the time of writing) for OpenAI and open-weight models.</p>
+<p>I hope you found this post useful. If you have any questions, let me know in the comments below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Modern LLMs often have a vocabulary of 100k+ tokens<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2027,
+  author = {Castillo, Dylan},
+  title = {Controlling Randomness in {LLMs:} {Temperature} and {Seed}},
+  date = {2027-01-06},
+  url = {https://dylancastillo.co/posts/seed-temperature-llms.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2027" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2027. <span>“Controlling Randomness in LLMs:
+Temperature and Seed.”</span> January 6, 2027. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
