@@ -15,7 +15,7 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Wed, 06 Jan 2027 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Controlling randomness in LLMs: Temperature and Seed</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -1074,7 +1074,7 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 </div>
 <p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
 <p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
-<div id="cell-26" class="cell">
+<div id="cell-26" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
@@ -1246,22 +1246,22 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 <ol>
 <li id="fn1"><p>Modern LLMs often have a vocabulary of 100k+ tokens↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2027,
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
   title = {Controlling Randomness in {LLMs:} {Temperature} and {Seed}},
-  date = {2027-01-06},
+  date = {2025-06-25},
   url = {https://dylancastillo.co/posts/seed-temperature-llms.html},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2027" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2027. <span>“Controlling Randomness in LLMs:
-Temperature and Seed.”</span> January 6, 2027. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Controlling Randomness in LLMs:
+Temperature and Seed.”</span> June 25, 2025. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>openai</category>
   <category>python</category>
   <guid>https://dylancastillo.co/posts/seed-temperature-llms.html</guid>
-  <pubDate>Wed, 06 Jan 2027 00:00:00 GMT</pubDate>
+  <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>2024: Personal Snapshot</title>

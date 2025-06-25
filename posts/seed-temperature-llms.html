@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2027-01-06">
+<meta name="dcterms.date" content="2025-06-25">
 <meta name="description" content="What are temperature and seed, and how do they affect the output of an LLM?">
 
 <title>Controlling randomness in LLMs: Temperature and Seed – Dylan Castillo</title>
@@ -259,7 +259,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 6, 2027</p>
+      <p class="date">June 25, 2025</p>
     </div>
   </div>
   
@@ -660,7 +660,7 @@ Subscribe to my newsletter
 </div>
 <p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
 <p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
-<div id="cell-26" class="cell">
+<div id="cell-26" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>tokens <span class="op">=</span> []</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb19-3"><a href="#cb19-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
@@ -748,16 +748,16 @@ Subscribe to my newsletter
 <ol>
 <li id="fn1"><p>Modern LLMs often have a vocabulary of 100k+ tokens<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2027,
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
   title = {Controlling Randomness in {LLMs:} {Temperature} and {Seed}},
-  date = {2027-01-06},
+  date = {2025-06-25},
   url = {https://dylancastillo.co/posts/seed-temperature-llms.html},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2027" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2027. <span>“Controlling Randomness in LLMs:
-Temperature and Seed.”</span> January 6, 2027. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“Controlling Randomness in LLMs:
+Temperature and Seed.”</span> June 25, 2025. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
