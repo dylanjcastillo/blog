@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Dylan Castillo <dylanjcastillo@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.13"
 dependencies = [
     "notebook>=7.2.0",
     "openai>=1.30.5",
@@ -18,12 +19,12 @@ dependencies = [
     "modal>=0.67.15",
     "plotly>=5.24.1",
     "jupyter>=1.1.1",
-    "quarto-cli>=1.6.37",
     "google-generativeai>=0.8.3",
     "instructor>=1.7.0",
     "outlines>=1.0.1",
     "mlx-lm>=0.25.2",
     "accelerate>=1.8.1",
+    "quarto-cli>=1.7.32",
 ]
 
 [dependency-groups]
