@@ -266,7 +266,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 25, 2025</p>
+      <p class="date-modified">June 26, 2025</p>
     </div>
   </div>
     
@@ -329,7 +329,10 @@ Subscribe to my newsletter
 </table>
 <p>If the model uses <strong>greedy search</strong>, it will pick the token with the highest probability, which is ‘Dynamite’.</p>
 <p>If it uses <strong>sampling</strong>, it will make a random selection based on those probabilities. So, the model has a 58% chance of picking ‘Dynamite’, a 29% chance of picking ‘Venom’, a 8% chance of picking ‘Himself’, a 4% chance of picking ‘Radiation’, and a 1% chance of picking ‘You’.</p>
-<p>Let’s see how this works in practice, and how seed and temperature have an effect on the output.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>Temperature is a parameter that usually goes from 0 to 1 or 0 to 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
 <p>Logits are the raw scores that the model assigns to each token. To go from logits to probabilities, you must apply the softmax function:</p>
 <p><span class="math display">\[\text{P}(w_i) = \text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}\]</span></p>
 <p>Where:</p>
@@ -338,34 +341,27 @@ Subscribe to my newsletter
 <li><span class="math inline">\(z_i\)</span> is the logit for token <span class="math inline">\(w_i\)</span></li>
 <li><span class="math inline">\(n\)</span> is the total number of possible tokens</li>
 </ul>
-<p>Logits are the raw output scores from the language model before any transformation. The softmax function gives you the probability assigned to each token.</p>
-</section>
-<section id="temperature" class="level2">
-<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
-<p>Temperature is a parameter that usually goes between 0 and 1 or 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
-<p>You cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, but you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
-<p>It’s magic boils down to this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>scores_processed <span class="op">=</span> scores <span class="op">/</span> <span class="va">self</span>.temperature</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Temperature (<span class="math inline">\(T\)</span>) simply scales the scores (logits) of the tokens by the temperature value. This, in turn, will change the probabilities of the tokens:</p>
+<p>This is the non-scaled version of the probabilities. If you use Temperature (<span class="math inline">\(T\)</span>) to scale the logits, you will change the probabilities of the tokens, as shown below:</p>
 <p><span class="math display">\[P(w_i) = \frac{e^{z_i / T}}{\sum_{j=1}^{n} e^{z_j / T}}\]</span></p>
-<p>The example below shows how temperature affects the probabilities of the tokens:</p>
-<div id="cell-5" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>tokens <span class="op">=</span> [<span class="st">'Dynamite'</span>, <span class="st">'Venom'</span>, <span class="st">'Himself'</span>, <span class="st">'Radiation'</span>, <span class="st">'You'</span>]</span>
-<span id="cb2-4"><a href="#cb2-4"></a>logits <span class="op">=</span> np.array([<span class="fl">2.5</span>, <span class="fl">1.8</span>, <span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.3</span>, <span class="op">-</span><span class="fl">1.2</span>])</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a>temperatures <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">1.999999999</span>]</span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="cf">for</span> temperature <span class="kw">in</span> temperatures:</span>
-<span id="cb2-9"><a href="#cb2-9"></a>    probs <span class="op">=</span> np.exp(logits <span class="op">/</span> temperature) <span class="op">/</span> np.<span class="bu">sum</span>(np.exp(logits <span class="op">/</span> temperature))</span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Temperature: </span><span class="sc">{</span>temperature<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb2-11"><a href="#cb2-11"></a>    <span class="bu">print</span>(<span class="st">"What's the favorite dish of Chuck Norris?"</span>)</span>
-<span id="cb2-12"><a href="#cb2-12"></a>    <span class="bu">print</span>(<span class="st">"Rank | Token      | Probability"</span>)</span>
-<span id="cb2-13"><a href="#cb2-13"></a>    <span class="bu">print</span>(<span class="st">"-----|------------|------------"</span>)</span>
-<span id="cb2-14"><a href="#cb2-14"></a>    <span class="cf">for</span> i, (token, prob) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(tokens, probs), <span class="dv">1</span>):</span>
-<span id="cb2-15"><a href="#cb2-15"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">:4d}</span><span class="ss"> | '</span><span class="sc">{</span>token<span class="sc">:10s}</span><span class="ss">' | </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb2-16"><a href="#cb2-16"></a>    <span class="bu">print</span>(<span class="ss">f"Sum of probabilities: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">sum</span>(probs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Even though you cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
+<p>Let’s see a practical example of how temperature affects the probabilities of the tokens:</p>
+<div id="cell-4" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>tokens <span class="op">=</span> [<span class="st">'Dynamite'</span>, <span class="st">'Venom'</span>, <span class="st">'Himself'</span>, <span class="st">'Radiation'</span>, <span class="st">'You'</span>]</span>
+<span id="cb1-4"><a href="#cb1-4"></a>logits <span class="op">=</span> np.array([<span class="fl">2.5</span>, <span class="fl">1.8</span>, <span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.3</span>, <span class="op">-</span><span class="fl">1.2</span>])</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a>temperatures <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">1.999999999</span>]</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="cf">for</span> temperature <span class="kw">in</span> temperatures:</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    probs <span class="op">=</span> np.exp(logits <span class="op">/</span> temperature) <span class="op">/</span> np.<span class="bu">sum</span>(np.exp(logits <span class="op">/</span> temperature))</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Temperature: </span><span class="sc">{</span>temperature<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="bu">print</span>(<span class="st">"What's the favorite dish of Chuck Norris?"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="bu">print</span>(<span class="st">"Rank | Token      | Probability"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="bu">print</span>(<span class="st">"-----|------------|------------"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    <span class="cf">for</span> i, (token, prob) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(tokens, probs), <span class="dv">1</span>):</span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">:4d}</span><span class="ss"> | '</span><span class="sc">{</span>token<span class="sc">:10s}</span><span class="ss">' | </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="bu">print</span>(<span class="ss">f"Sum of probabilities: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">sum</span>(probs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This code simulates the impact of different temperature values on the next token probability. Given some initial logits and assuming this is the full vocabulary, we can calculate the probabilities of the tokens for a given temperature.</p>
 <p>For a temperature of <strong>0.1</strong>, you get the following probabilities:</p>
@@ -445,73 +441,73 @@ Subscribe to my newsletter
 <p>You can see that for lower temperature values, the model becomes more deterministic. For temperature 0.1, the probability of picking ‘Dynamite’ is &gt;99.9%, while for temperature 2, it’s only 40%.</p>
 <p>In essence, temperature impacts the randomness of the output by changing the probabilities of selecting the next token. This should give you a good idea of how temperature works. But let’s try it with a real LLM instead of a simulation.</p>
 <p>First, let’s import the required libraries and load the model.</p>
-<div id="cell-7" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> torch</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a>model_name <span class="op">=</span> <span class="st">"unsloth/Qwen3-1.7B"</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(model_name)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>model <span class="op">=</span> AutoModelForCausalLM.from_pretrained(</span>
-<span id="cb3-9"><a href="#cb3-9"></a>    model_name,</span>
-<span id="cb3-10"><a href="#cb3-10"></a>    torch_dtype<span class="op">=</span><span class="st">"auto"</span>,</span>
-<span id="cb3-11"><a href="#cb3-11"></a>    device_map<span class="op">=</span><span class="st">"auto"</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-6" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>model_name <span class="op">=</span> <span class="st">"unsloth/Qwen3-1.7B"</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(model_name)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>model <span class="op">=</span> AutoModelForCausalLM.from_pretrained(</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    model_name,</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    torch_dtype<span class="op">=</span><span class="st">"auto"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    device_map<span class="op">=</span><span class="st">"auto"</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For the sake of this example, we’ll use <code>unsloth/Qwen3-1.7B</code>. But what you see here is applicable to most LLMs. We’ll use <code>generate_text</code> as our text generation function.</p>
-<div id="cell-9" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> generate_text(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    <span class="cf">if</span> seed:</span>
-<span id="cb4-3"><a href="#cb4-3"></a>        torch.manual_seed(seed)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>        <span class="cf">if</span> torch.cuda.is_available():</span>
-<span id="cb4-5"><a href="#cb4-5"></a>            torch.cuda.manual_seed(seed)</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>    messages <span class="op">=</span> [</span>
-<span id="cb4-8"><a href="#cb4-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    ]</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    text <span class="op">=</span> tokenizer.apply_chat_template(</span>
-<span id="cb4-11"><a href="#cb4-11"></a>        messages,</span>
-<span id="cb4-12"><a href="#cb4-12"></a>        tokenize<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-13"><a href="#cb4-13"></a>        add_generation_prompt<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-14"><a href="#cb4-14"></a>        enable_thinking<span class="op">=</span><span class="va">False</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>    )</span>
-<span id="cb4-16"><a href="#cb4-16"></a>    model_inputs <span class="op">=</span> tokenizer([text], return_tensors<span class="op">=</span><span class="st">"pt"</span>).to(model.device)</span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a>    <span class="cf">if</span> temperature <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb4-19"><a href="#cb4-19"></a>        model_params <span class="op">=</span> {</span>
-<span id="cb4-20"><a href="#cb4-20"></a>            <span class="st">"do_sample"</span>: <span class="va">True</span>,</span>
-<span id="cb4-21"><a href="#cb4-21"></a>            <span class="st">"temperature"</span>: temperature <span class="cf">if</span> temperature <span class="op">&lt;</span> <span class="dv">2</span> <span class="cf">else</span> <span class="fl">1.9999999</span>,</span>
-<span id="cb4-22"><a href="#cb4-22"></a>        }</span>
-<span id="cb4-23"><a href="#cb4-23"></a>    <span class="cf">else</span>:</span>
-<span id="cb4-24"><a href="#cb4-24"></a>        model_params <span class="op">=</span> {</span>
-<span id="cb4-25"><a href="#cb4-25"></a>            <span class="st">"do_sample"</span>: <span class="va">False</span>,</span>
-<span id="cb4-26"><a href="#cb4-26"></a>        }</span>
-<span id="cb4-27"><a href="#cb4-27"></a>    outputs <span class="op">=</span> model.generate(</span>
-<span id="cb4-28"><a href="#cb4-28"></a>        <span class="op">**</span>model_inputs,</span>
-<span id="cb4-29"><a href="#cb4-29"></a>        <span class="op">**</span>model_params,</span>
-<span id="cb4-30"><a href="#cb4-30"></a>        max_new_tokens<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb4-31"><a href="#cb4-31"></a>        output_scores<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-32"><a href="#cb4-32"></a>        return_dict_in_generate<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-33"><a href="#cb4-33"></a>        pad_token_id<span class="op">=</span>tokenizer.eos_token_id</span>
-<span id="cb4-34"><a href="#cb4-34"></a>    )</span>
-<span id="cb4-35"><a href="#cb4-35"></a></span>
-<span id="cb4-36"><a href="#cb4-36"></a>    output_token_id <span class="op">=</span> outputs.sequences[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].tolist()</span>
-<span id="cb4-37"><a href="#cb4-37"></a>    selected_token <span class="op">=</span> tokenizer.decode([output_token_id])</span>
-<span id="cb4-38"><a href="#cb4-38"></a></span>
-<span id="cb4-39"><a href="#cb4-39"></a>    <span class="cf">if</span> <span class="kw">not</span> print_top_k:</span>
-<span id="cb4-40"><a href="#cb4-40"></a>        <span class="cf">return</span> selected_token</span>
-<span id="cb4-41"><a href="#cb4-41"></a>    </span>
-<span id="cb4-42"><a href="#cb4-42"></a>    probs <span class="op">=</span> F.softmax(outputs.scores[<span class="dv">0</span>][<span class="dv">0</span>], dim<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb4-43"><a href="#cb4-43"></a>    top_k_probs, top_k_indices <span class="op">=</span> torch.topk(probs, <span class="dv">10</span>)</span>
-<span id="cb4-44"><a href="#cb4-44"></a></span>
-<span id="cb4-45"><a href="#cb4-45"></a>    <span class="bu">print</span>(<span class="st">"Top-10 most likely tokens:"</span>)</span>
-<span id="cb4-46"><a href="#cb4-46"></a>    <span class="cf">for</span> i, (prob, idx) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(top_k_probs, top_k_indices)):</span>
-<span id="cb4-47"><a href="#cb4-47"></a>        token_text <span class="op">=</span> tokenizer.decode([idx.item()])</span>
-<span id="cb4-48"><a href="#cb4-48"></a>        is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> idx.item() <span class="op">==</span> output_token_id <span class="cf">else</span> <span class="st">""</span></span>
-<span id="cb4-49"><a href="#cb4-49"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss">' (prob: </span><span class="sc">{</span>prob<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, logit: </span><span class="sc">{</span>outputs<span class="sc">.</span>scores[<span class="dv">0</span>][<span class="dv">0</span>][idx.item()]<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">) </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-50"><a href="#cb4-50"></a></span>
-<span id="cb4-51"><a href="#cb4-51"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-8" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> generate_text(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="cf">if</span> seed:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>        torch.manual_seed(seed)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>        <span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb3-5"><a href="#cb3-5"></a>            torch.cuda.manual_seed(seed)</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    messages <span class="op">=</span> [</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    ]</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    text <span class="op">=</span> tokenizer.apply_chat_template(</span>
+<span id="cb3-11"><a href="#cb3-11"></a>        messages,</span>
+<span id="cb3-12"><a href="#cb3-12"></a>        tokenize<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-13"><a href="#cb3-13"></a>        add_generation_prompt<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-14"><a href="#cb3-14"></a>        enable_thinking<span class="op">=</span><span class="va">False</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>    )</span>
+<span id="cb3-16"><a href="#cb3-16"></a>    model_inputs <span class="op">=</span> tokenizer([text], return_tensors<span class="op">=</span><span class="st">"pt"</span>).to(model.device)</span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="cf">if</span> temperature <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-19"><a href="#cb3-19"></a>        model_params <span class="op">=</span> {</span>
+<span id="cb3-20"><a href="#cb3-20"></a>            <span class="st">"do_sample"</span>: <span class="va">True</span>,</span>
+<span id="cb3-21"><a href="#cb3-21"></a>            <span class="st">"temperature"</span>: temperature <span class="cf">if</span> temperature <span class="op">&lt;</span> <span class="dv">2</span> <span class="cf">else</span> <span class="fl">1.9999999</span>,</span>
+<span id="cb3-22"><a href="#cb3-22"></a>        }</span>
+<span id="cb3-23"><a href="#cb3-23"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-24"><a href="#cb3-24"></a>        model_params <span class="op">=</span> {</span>
+<span id="cb3-25"><a href="#cb3-25"></a>            <span class="st">"do_sample"</span>: <span class="va">False</span>,</span>
+<span id="cb3-26"><a href="#cb3-26"></a>        }</span>
+<span id="cb3-27"><a href="#cb3-27"></a>    outputs <span class="op">=</span> model.generate(</span>
+<span id="cb3-28"><a href="#cb3-28"></a>        <span class="op">**</span>model_inputs,</span>
+<span id="cb3-29"><a href="#cb3-29"></a>        <span class="op">**</span>model_params,</span>
+<span id="cb3-30"><a href="#cb3-30"></a>        max_new_tokens<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb3-31"><a href="#cb3-31"></a>        output_scores<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-32"><a href="#cb3-32"></a>        return_dict_in_generate<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-33"><a href="#cb3-33"></a>        pad_token_id<span class="op">=</span>tokenizer.eos_token_id</span>
+<span id="cb3-34"><a href="#cb3-34"></a>    )</span>
+<span id="cb3-35"><a href="#cb3-35"></a></span>
+<span id="cb3-36"><a href="#cb3-36"></a>    output_token_id <span class="op">=</span> outputs.sequences[<span class="dv">0</span>][<span class="op">-</span><span class="dv">1</span>].tolist()</span>
+<span id="cb3-37"><a href="#cb3-37"></a>    selected_token <span class="op">=</span> tokenizer.decode([output_token_id])</span>
+<span id="cb3-38"><a href="#cb3-38"></a></span>
+<span id="cb3-39"><a href="#cb3-39"></a>    <span class="cf">if</span> <span class="kw">not</span> print_top_k:</span>
+<span id="cb3-40"><a href="#cb3-40"></a>        <span class="cf">return</span> selected_token</span>
+<span id="cb3-41"><a href="#cb3-41"></a>    </span>
+<span id="cb3-42"><a href="#cb3-42"></a>    probs <span class="op">=</span> F.softmax(outputs.scores[<span class="dv">0</span>][<span class="dv">0</span>], dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-43"><a href="#cb3-43"></a>    top_k_probs, top_k_indices <span class="op">=</span> torch.topk(probs, <span class="dv">10</span>)</span>
+<span id="cb3-44"><a href="#cb3-44"></a></span>
+<span id="cb3-45"><a href="#cb3-45"></a>    <span class="bu">print</span>(<span class="st">"Top-10 most likely tokens:"</span>)</span>
+<span id="cb3-46"><a href="#cb3-46"></a>    <span class="cf">for</span> i, (prob, idx) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(top_k_probs, top_k_indices)):</span>
+<span id="cb3-47"><a href="#cb3-47"></a>        token_text <span class="op">=</span> tokenizer.decode([idx.item()])</span>
+<span id="cb3-48"><a href="#cb3-48"></a>        is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> idx.item() <span class="op">==</span> output_token_id <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss">' (prob: </span><span class="sc">{</span>prob<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, logit: </span><span class="sc">{</span>outputs<span class="sc">.</span>scores[<span class="dv">0</span>][<span class="dv">0</span>][idx.item()]<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">) </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-50"><a href="#cb3-50"></a></span>
+<span id="cb3-51"><a href="#cb3-51"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>On a high-level, this function takes a prompt, a temperature value, and a seed, and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
 <ol type="1">
@@ -521,8 +517,8 @@ Subscribe to my newsletter
 </ol>
 <p>Similar to what you saw in the previous example, you can try low and high temperature values.</p>
 <p>This is what you get for a temperature of 0.1:</p>
-<div id="cell-11" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">0.1</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-10" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">0.1</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 1.0000, logit: 330.0000) ← SELECTED
@@ -537,8 +533,8 @@ Subscribe to my newsletter
   10. ')' (prob: 0.0000, logit: -inf) </code></pre>
 </div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">1.99</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-11" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">1.99</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 0.5742, logit: 16.5829) ← SELECTED
@@ -561,8 +557,8 @@ Subscribe to my newsletter
 <p>The seed parameter controls the randomness of how a model selects tokens. It sets the initial state for the random number generator used in the token sampling process.</p>
 <p>Let’s revisit the example from the previous section to see this in action. By setting the seed to a fixed value, you ensure the generation process is deterministic. This means you will get an identical result on every run, provided all other parameters (like temperature) remain the same in those runs.</p>
 <p>We can start by setting our seed to 42 and temperature to 1 to verify which token is generated.</p>
-<div id="cell-16" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-15" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 0.6792, logit: 33.0000) 
@@ -581,69 +577,69 @@ Subscribe to my newsletter
 </div>
 </div>
 <p>In this case, the model selected “Sure” as the next token, even though its probability is lower than ‘Why’. Now, we can verify that this stays the same over multiple runs.</p>
-<div id="cell-18" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>tokens <span class="op">=</span> []</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
-<span id="cb12-3"><a href="#cb12-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb12-4"><a href="#cb12-4"></a>    tokens.append(token)</span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb11-3"><a href="#cb11-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    tokens.append(token)</span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure'}</code></pre>
 </div>
 </div>
 <p>This code runs the text generation process 100 times and verifies that “Sure” was picked in all runs. Next, we should verify that this consistency is lost when we omit the seed parameter.</p>
-<div id="cell-20" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>tokens <span class="op">=</span> []</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
-<span id="cb14-3"><a href="#cb14-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    tokens.append(token)</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-19" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    tokens.append(token)</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure', 'Why'}</code></pre>
 </div>
 </div>
 <p>In this case, you see that after the 100 generations, the model picked two different tokens: ‘Sure’ and ‘Why’. This is expected due to not setting a seed.</p>
 <p>You can also use test this with a propietary model. Let’s try it with <code>gpt-4.1-nano</code> from OpenAI.</p>
-<div id="cell-22" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">import</span> openai</span>
-<span id="cb16-2"><a href="#cb16-2"></a></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb16-4"><a href="#cb16-4"></a></span>
-<span id="cb16-5"><a href="#cb16-5"></a>load_dotenv()</span>
-<span id="cb16-6"><a href="#cb16-6"></a></span>
-<span id="cb16-7"><a href="#cb16-7"></a>client <span class="op">=</span> openai.OpenAI()</span>
-<span id="cb16-8"><a href="#cb16-8"></a></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="kw">def</span> generate_text_openai(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb16-10"><a href="#cb16-10"></a>    response <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb16-11"><a href="#cb16-11"></a>        model<span class="op">=</span><span class="st">"gpt-4.1-nano"</span>,</span>
-<span id="cb16-12"><a href="#cb16-12"></a>        messages<span class="op">=</span>[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}],</span>
-<span id="cb16-13"><a href="#cb16-13"></a>        temperature<span class="op">=</span>temperature,</span>
-<span id="cb16-14"><a href="#cb16-14"></a>        seed<span class="op">=</span>seed,</span>
-<span id="cb16-15"><a href="#cb16-15"></a>        max_tokens<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb16-16"><a href="#cb16-16"></a>        logprobs<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb16-17"><a href="#cb16-17"></a>        top_logprobs<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb16-18"><a href="#cb16-18"></a>    )</span>
-<span id="cb16-19"><a href="#cb16-19"></a>    selected_token <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb16-20"><a href="#cb16-20"></a>    <span class="cf">if</span> print_top_k:</span>
-<span id="cb16-21"><a href="#cb16-21"></a>        logprobs <span class="op">=</span> response.choices[<span class="dv">0</span>].logprobs.content[<span class="dv">0</span>].top_logprobs</span>
-<span id="cb16-22"><a href="#cb16-22"></a>        <span class="bu">print</span>(<span class="st">"Top 10 most likely tokens:"</span>)</span>
-<span id="cb16-23"><a href="#cb16-23"></a>        <span class="cf">for</span> idx, token_info <span class="kw">in</span> <span class="bu">enumerate</span>(logprobs):</span>
-<span id="cb16-24"><a href="#cb16-24"></a>            token <span class="op">=</span> token_info.token</span>
-<span id="cb16-25"><a href="#cb16-25"></a>            logprob <span class="op">=</span> token_info.logprob</span>
-<span id="cb16-26"><a href="#cb16-26"></a>            prob <span class="op">=</span> np.<span class="bu">round</span>(np.exp(logprob)<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>)</span>
-<span id="cb16-27"><a href="#cb16-27"></a>            token_text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>idx<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">': </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss"> (</span><span class="sc">{</span>logprob<span class="sc">:.4f}</span><span class="ss">)"</span></span>
-<span id="cb16-28"><a href="#cb16-28"></a>            is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> token_info.token <span class="op">==</span> selected_token <span class="cf">else</span> <span class="st">""</span></span>
-<span id="cb16-29"><a href="#cb16-29"></a>            <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb16-30"><a href="#cb16-30"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-21" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="im">import</span> openai</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a>load_dotenv()</span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a>client <span class="op">=</span> openai.OpenAI()</span>
+<span id="cb15-8"><a href="#cb15-8"></a></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="kw">def</span> generate_text_openai(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb15-10"><a href="#cb15-10"></a>    response <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb15-11"><a href="#cb15-11"></a>        model<span class="op">=</span><span class="st">"gpt-4.1-nano"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12"></a>        messages<span class="op">=</span>[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}],</span>
+<span id="cb15-13"><a href="#cb15-13"></a>        temperature<span class="op">=</span>temperature,</span>
+<span id="cb15-14"><a href="#cb15-14"></a>        seed<span class="op">=</span>seed,</span>
+<span id="cb15-15"><a href="#cb15-15"></a>        max_tokens<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb15-16"><a href="#cb15-16"></a>        logprobs<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb15-17"><a href="#cb15-17"></a>        top_logprobs<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb15-18"><a href="#cb15-18"></a>    )</span>
+<span id="cb15-19"><a href="#cb15-19"></a>    selected_token <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb15-20"><a href="#cb15-20"></a>    <span class="cf">if</span> print_top_k:</span>
+<span id="cb15-21"><a href="#cb15-21"></a>        logprobs <span class="op">=</span> response.choices[<span class="dv">0</span>].logprobs.content[<span class="dv">0</span>].top_logprobs</span>
+<span id="cb15-22"><a href="#cb15-22"></a>        <span class="bu">print</span>(<span class="st">"Top 10 most likely tokens:"</span>)</span>
+<span id="cb15-23"><a href="#cb15-23"></a>        <span class="cf">for</span> idx, token_info <span class="kw">in</span> <span class="bu">enumerate</span>(logprobs):</span>
+<span id="cb15-24"><a href="#cb15-24"></a>            token <span class="op">=</span> token_info.token</span>
+<span id="cb15-25"><a href="#cb15-25"></a>            logprob <span class="op">=</span> token_info.logprob</span>
+<span id="cb15-26"><a href="#cb15-26"></a>            prob <span class="op">=</span> np.<span class="bu">round</span>(np.exp(logprob)<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>)</span>
+<span id="cb15-27"><a href="#cb15-27"></a>            token_text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>idx<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">': </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss"> (</span><span class="sc">{</span>logprob<span class="sc">:.4f}</span><span class="ss">)"</span></span>
+<span id="cb15-28"><a href="#cb15-28"></a>            is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> token_info.token <span class="op">==</span> selected_token <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb15-29"><a href="#cb15-29"></a>            <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-30"><a href="#cb15-30"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similar to the previous function, you provide a prompt, a temperature value, and a seed, and the model will return a completion token and will print the top 10 most likely tokens.</p>
 <p>In this case, instead of providing you with the logits, OpenAI will provide you with <code>logprobs</code> which are the logaritmic probabilities of the tokens:</p>
 <p><span class="math display">\[logprob(w_i) = ln(P(w_i)) = ln(\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}) \]</span></p>
 <p>First, let’s check the completion token we get for a temperature of 1 and a seed of 42.</p>
-<div id="cell-24" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-23" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top 10 most likely tokens:
 1. 'Why': 59.2600 (-0.5232) ← SELECTED
@@ -660,13 +656,13 @@ Subscribe to my newsletter
 </div>
 <p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
 <p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
-<div id="cell-26" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>tokens <span class="op">=</span> []</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
-<span id="cb19-3"><a href="#cb19-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb19-4"><a href="#cb19-4"></a>    tokens.append(token)</span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    tokens.append(token)</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Why'}</code></pre>
 </div>
@@ -674,13 +670,13 @@ Subscribe to my newsletter
 <p>Similar to the previous example, we run 100 generations with the same seed and temperature and check if the completion token is the same.</p>
 <p>This should <em>generally</em> work, but OpenAI doesn’t guarantee that the same seed will always produce the same output. It might occur that your request is handled by a model with a <a href="https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter">different configuration</a>, and you’ll get different results.</p>
 <p>You can also verify that not using a seed will result in different tokens.</p>
-<div id="cell-28" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>tokens <span class="op">=</span> []</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
-<span id="cb21-3"><a href="#cb21-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb21-4"><a href="#cb21-4"></a>    tokens.append(token)</span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>tokens <span class="op">=</span> []</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb20-3"><a href="#cb20-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-4"><a href="#cb20-4"></a>    tokens.append(token)</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure', 'Why'}</code></pre>
 </div>
@@ -698,10 +694,10 @@ Subscribe to my newsletter
 </section>
 <section id="top-p" class="level3">
 <h3 class="anchored" data-anchor-id="top-p">top-p</h3>
-<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so by keeping only the tokens with the highest probabilities that cumulatively account for at least p% of the total probability mass. So it selects the fewest possible tokens to reach the desired probability mass.</p>
-<p>This is available for most providers.</p>
-<div id="cell-31" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, top_p<span class="op">=</span><span class="fl">0.50</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so including the smallest set of tokens whose combined probability ≥ P. For example, top P = 0.9 picks from the smallest group of tokens that together cover at least 90% probability.</p>
+<p>This parameter is available for most providers.</p>
+<div id="cell-30" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, top_p<span class="op">=</span><span class="fl">0.50</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top 10 most likely tokens:
 1. 'Why': 59.2600 (-0.5232) ← SELECTED

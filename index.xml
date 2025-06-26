@@ -15,7 +15,296 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 26 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Prompt engineering 101</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/prompt-engineering-101.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do.</p>
+<p>I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made Cursor agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<sup>1</sup>.</p>
+<p>All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their “ultimate prompt” that it often feels closer to astrology than to engineering.</p>
+<p>This article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based applications, but will avoid you making obvious mistakes.</p>
+<p>Let’s get started!</p>
+<section id="what-is-a-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-prompt">What is a prompt?</h2>
+<p>Prompts are instructions sent as text to an LLM. Most models work with two types of instructions:</p>
+<ol type="1">
+<li><strong>System/developer prompt</strong>: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”</li>
+<li><strong>User prompt</strong>: The actual question end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents”</li>
+</ol>
+<p>The system prompt gives the assistant a “role”, while the user prompt requests specific content within that framework.</p>
+<p>Prompts are usually provided as messages, which are a list of objects with a role and a content:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1">messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb1-2">    {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant."</span>},</span>
+<span id="cb1-3">    {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
+<span id="cb1-4">]</span></code></pre></div>
+<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em>, after combining the system and user prompts:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1">&lt;|im_start|&gt;system</span>
+<span id="cb2-2">You are a helpful assistant.</span>
+<span id="cb2-3">&lt;|im_end|&gt;</span>
+<span id="cb2-4"></span>
+<span id="cb2-5">&lt;|im_start|&gt;user</span>
+<span id="cb2-6">What's the weather in Tokyo?</span>
+<span id="cb2-7">&lt;|im_end|&gt;</span></code></pre></div>
+<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s response<sup>2</sup>. It looks like this:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1">&lt;|im_start|&gt;assistant</span>
+<span id="cb3-2">The weather in Tokyo is sunny.</span>
+<span id="cb3-3">&lt;|im_end|&gt;</span></code></pre></div>
+<p>You’ll generally use the system and user prompts to instruct the model. But for some prompting techniques, such as few-shot prompting, people often use assistant messages to simulate model responses.</p>
+</section>
+<section id="components-of-a-good-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="components-of-a-good-prompt">Components of a good prompt</h2>
+<p>There are many useful free resources online you can use to learn more about prompt engineering. I recommend <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#prompt-engineering-tutorial">this article</a> by Anthropic or <a href="https://platform.openai.com/docs/guides/text?api-mode=responses">this one</a> by OpenAI.</p>
+<p>Most of the advice boils down to these 6 principles:</p>
+<ol type="1">
+<li>Be clear and specific</li>
+<li>Provide examples</li>
+<li>Let models think</li>
+<li>Structure prompts into sections and use clear delimiters</li>
+<li>Split complex tasks into smaller steps</li>
+<li>Repeat instructions when the context is long</li>
+</ol>
+<p>Let’s go through each of these principles in more detail.</p>
+<section id="principle-1-be-clear-and-specific" class="level3">
+<h3 class="anchored" data-anchor-id="principle-1-be-clear-and-specific">Principle 1: Be clear and specific</h3>
+<p>This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: “If I didn’t have any background knowledge in this domain, could I complete this task based on the text that I just wrote in this prompt?”</p>
+<p>In addition to describing the task, you should also provide a role for the model. For example, if you’re classifying documents you can use a role like “You’re an expert in document classification” or if you’re dealing with financial data you can use a role like “You’re an expert in financial analysis”.</p>
+<p>Here’s an example of a clear and specific prompt:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1">You're an expert in business writing. Please review and improve this email by addressing the following issues:</span>
+<span id="cb4-2"></span>
+<span id="cb4-3">- Fix any grammatical errors and typos</span>
+<span id="cb4-4">- Improve clarity and conciseness</span>
+<span id="cb4-5">- Ensure professional tone throughout</span>
+<span id="cb4-6">- Strengthen the subject line to be more specific</span>
+<span id="cb4-7">- Add a clear call-to-action if missing</span>
+<span id="cb4-8">- Format for better readability (bullets, paragraphs, etc.)</span>
+<span id="cb4-9"></span>
+<span id="cb4-10">&lt;EMAIL CONTENT&gt;</span></code></pre></div>
+<p>This information will let the LLM know which specific task you want it to perform. This should go in the system prompt.</p>
+</section>
+<section id="principle-2-provide-examples" class="level3">
+<h3 class="anchored" data-anchor-id="principle-2-provide-examples">Principle 2: Provide examples</h3>
+<p>One of the lowest hanging fruit in prompt engineering is to provide examples. It’s as simple as showing the model a few input and output pairs.</p>
+<p>This technique is formally known as “few shot prompt”. It’s a simple but effective way to improve the <a href="https://arxiv.org/abs/2009.03300">quality of the output</a> in many tasks.</p>
+<p>Here’s an example of a few-shot prompt:</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.</span>
+<span id="cb5-2">Examples:</span>
+<span id="cb5-3"></span>
+<span id="cb5-4">**Example 1**:</span>
+<span id="cb5-5"></span>
+<span id="cb5-6">Input: 'Ian Peter Bernard Stephen'</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">Output: 'NRDN'</span>
+<span id="cb5-9"></span>
+<span id="cb5-10">**Example 2**:</span>
+<span id="cb5-11"></span>
+<span id="cb5-12">Input: 'Javier Dylan Christopher Joseph'</span>
+<span id="cb5-13"></span>
+<span id="cb5-14">Output: 'RNRH'</span></code></pre></div>
+<p>In my experience, it’s better to provide these examples directly in the system prompt because it’s easier to read and keep everything close together. However, as mentioned above, some people prefer to use assistant messages to provide examples.</p>
+</section>
+<section id="principle-3-let-models-think" class="level3">
+<h3 class="anchored" data-anchor-id="principle-3-let-models-think">Principle 3: Let models think</h3>
+<p>LLMs think in tokens. If you want them to achieve better results, you should let them use tokens to reason about the problem before generating the final answer.</p>
+<p>This process is formally known as “Chain of Thought” (CoT) prompting. Similar to few shot prompts, it’s a powerful way to improve the <a href="https://arxiv.org/abs/2201.11903">quality of results</a> in many tasks.</p>
+<p>A 0-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means you provide two examples, etc.).</p>
+<p>Here are two examples of CoT prompts:</p>
+<section id="shot-cot-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="shot-cot-prompt">0-Shot CoT Prompt</h4>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1">**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span>
+<span id="cb6-2"></span>
+<span id="cb6-3">**Note:** think about your answer step by step</span></code></pre></div>
+</section>
+<section id="shot-cot-prompt-1" class="level4">
+<h4 class="anchored" data-anchor-id="shot-cot-prompt-1">1-Shot CoT Prompt</h4>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1">&lt;example&gt;</span>
+<span id="cb7-2">**Question:** Emily buys 3 notebooks at $4 each and 2 pens at $1.50 each. What's her total cost?</span>
+<span id="cb7-3">**Reasoning:**</span>
+<span id="cb7-4"></span>
+<span id="cb7-5">1. Cost of notebooks = 3 × $4 = $12</span>
+<span id="cb7-6">2. Cost of pens = 2 × $1.50 = $3</span>
+<span id="cb7-7">3. Total cost = $12 + $3 = $15</span>
+<span id="cb7-8"></span>
+<span id="cb7-9">**Answer:** $15</span>
+<span id="cb7-10">&lt;/example&gt;</span>
+<span id="cb7-11"></span>
+<span id="cb7-12">**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code></pre></div>
+<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the thinking tokens in the response. OpenAI and Anthropic will only give you the final answer.</p>
+</section>
+</section>
+<section id="principle-4-structure-prompts-into-sections" class="level3">
+<h3 class="anchored" data-anchor-id="principle-4-structure-prompts-into-sections">Principle 4: Structure prompts into sections</h3>
+<p>It’s a common practice to structure system and user prompts into sections. Some people like to use markdown formatting to make the prompt more readable, others use xml tags. You can also use reverse backticks (```) to delimit code blocks or JSON objects. Regardless of the method you use, make sure to do it consistently.</p>
+<p>I really haven’t checked if there is any hard evidence that proves this really improves performance because it just <em>feels right</em>. It also helps with readability. You will spend a lot of time iterating on prompts, so making them easy to read is already a good investment on its own.</p>
+<section id="system-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="system-prompt">System prompt</h4>
+<p>For system prompts, you can use the following structure:</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1">**Role and objective**</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">You’re an expert document classifier. Your goal is to classify this document…</span>
+<span id="cb8-4"></span>
+<span id="cb8-5">**Rules**</span>
+<span id="cb8-6"></span>
+<span id="cb8-7">1. Documents that contain information about medical treatments should be classified as …</span>
+<span id="cb8-8">2. Do not classify documents into multiple categories</span>
+<span id="cb8-9">3. …</span>
+<span id="cb8-10"></span>
+<span id="cb8-11">**Examples**</span>
+<span id="cb8-12"></span>
+<span id="cb8-13">Input: [document text]</span>
+<span id="cb8-14">Classification: [document category]</span>
+<span id="cb8-15">…</span>
+<span id="cb8-16"></span>
+<span id="cb8-17">**Output**</span>
+<span id="cb8-18"></span>
+<span id="cb8-19">You should generate a JSON object with this structure: [JSON schema]</span>
+<span id="cb8-20"></span>
+<span id="cb8-21">**(Optional) Reiterate objective and elicit thinking**</span>
+<span id="cb8-22"></span>
+<span id="cb8-23">Your goal is to XYZ… Before writing your answers, write your reasoning step by step.</span></code></pre></div>
+<p>The headers are for reference only, you can skip them if you want. You also don’t need to include all of these sections in your prompt.</p>
+</section>
+<section id="user-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="user-prompt">User prompt</h4>
+<p>I’d recommend to keep user prompts short:</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1">**Context**</span>
+<span id="cb9-2"></span>
+<span id="cb9-3">Input: [document text]</span>
+<span id="cb9-4"></span>
+<span id="cb9-5">**Briefly reiterate objective**</span>
+<span id="cb9-6"></span>
+<span id="cb9-7">Please classify this document into a category.</span></code></pre></div>
+<p>In it’s simplest form, you just provide the context the LLM needs to work with and reiterate the objective.</p>
+</section>
+</section>
+<section id="principle-5-split-complex-tasks-into-smaller-steps" class="level3">
+<h3 class="anchored" data-anchor-id="principle-5-split-complex-tasks-into-smaller-steps">Principle 5: Split complex tasks into smaller steps</h3>
+<p>LLMs often get confused when the <a href="https://arxiv.org/abs/2307.03172">context is too long</a> and/or the instructions are complex.</p>
+<p>For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does the document classification and the entity extraction, you can split the task into two steps:</p>
+<ol type="1">
+<li>First, you classify the document into a category.</li>
+<li>Then, you extract the entities from the document, based on the category.</li>
+</ol>
+<p>Here’s an example of the same task split into two steps.</p>
+<section id="big-complex-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="big-complex-prompt">Big complex prompt</h4>
+<p>This prompt tries (and likely fails) to do two complex tasks at once.</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1">You're an expert document classifier. First, classify the document into the following categories:</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">- Medical</span>
+<span id="cb10-4">- Financial</span>
+<span id="cb10-5">- Legal</span>
+<span id="cb10-6"></span>
+<span id="cb10-7">Then, if the document is classified as "Medical", extract the following entities:</span>
+<span id="cb10-8">...</span>
+<span id="cb10-9"></span>
+<span id="cb10-10">If the document is classified as "Financial", extract the following entities:</span>
+<span id="cb10-11">...</span>
+<span id="cb10-12"></span>
+<span id="cb10-13">If the document is classified as "Legal", extract the following entities:</span>
+<span id="cb10-14">...</span></code></pre></div>
+</section>
+<section id="smaller-simpler-prompts" class="level4">
+<h4 class="anchored" data-anchor-id="smaller-simpler-prompts">Smaller, simpler prompts</h4>
+<p>This second approach splits the task into two smaller prompts that do each task separately.</p>
+<p><strong>Prompt 1: Document classification</strong></p>
+<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1">You're an expert document classifier. First, classify the document into the following categories:</span>
+<span id="cb11-2"></span>
+<span id="cb11-3">- Medical</span>
+<span id="cb11-4">- Financial</span>
+<span id="cb11-5">- Legal</span></code></pre></div>
+<p><strong>Prompt N: Entity extraction (one for each category)</strong></p>
+<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1">You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to extract the entities from the document.</span>
+<span id="cb12-2">...</span></code></pre></div>
+</section>
+</section>
+<section id="principle-6-with-long-contexts-repeat-instructions" class="level3">
+<h3 class="anchored" data-anchor-id="principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</h3>
+<p>LLMs often get confused when the context is too long and the instructions are complex. When context gets above a certain length, it’s better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts">30% performance improvement</a> when using this technique.</p>
+<p>You can use the following structure:</p>
+<div class="sourceCode" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1">You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span>
+<span id="cb13-2"></span>
+<span id="cb13-3">&lt;VERY LONG CONTEXT&gt;</span>
+<span id="cb13-4"></span>
+<span id="cb13-5">Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span></code></pre></div>
+<p>When dealing with long contexts, I generally reiterate the objective at the bottom of the system and user prompts.</p>
+</section>
+</section>
+<section id="other-advanced-prompting-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="other-advanced-prompting-techniques">Other advanced prompting techniques</h2>
+<p>After you’ve mastered the basics, you’re 90% of the way there. There are other more advanced techniques that might also be worth trying out:</p>
+<ol type="1">
+<li><strong>Exemplar Selection KNN (ES-KNN):</strong> Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has shown to <a href="https://arxiv.org/abs/2506.05614">improve the quality of the results</a> in many tasks.</li>
+<li><strong>Self-consistency (SC):</strong> You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has shown to <a href="https://arxiv.org/abs/2203.11171">boost the performance</a> of CoT prompting.</li>
+<li><strong>Thread of Thought (ThoT):</strong> It’s a <a href="https://arxiv.org/abs/2311.08734">two-tiered prompting system</a> that first asks the LLM to do an analytical dissection of the context, step by step, and summarizing intermediate results. Then, it uses another prompt to distill the analysis into a final answer.</li>
+</ol>
+<p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al is a good starting point.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This article is a short guide to help you write better prompts. Good prompt engineering can be summarized in 6 key principles:</p>
+<ol type="1">
+<li>Be clear and specific</li>
+<li>Provide examples</li>
+<li>Let models think</li>
+<li>Structure prompts into sections and use clear delimiters</li>
+<li>Split complex tasks into smaller steps</li>
+<li>Repeat instructions when the context is long</li>
+</ol>
+<p>These principles will not solve all the problems in your agentic workflow or LLM-based applications. But they will help you get started.</p>
+<p>I hope you found this article useful. If you have any questions or feedback, leave a comment below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>It didn’t work, but I felt much better about myself.↩︎</p></li>
+<li id="fn2"><p>I removed the thinking tokens for brevity.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Engineering 101},
+  date = {2025-06-26},
+  url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Prompt Engineering 101.”</span> June 26,
+2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>openai</category>
+  <category>anthropic</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/prompt-engineering-101.html</guid>
+  <pubDate>Thu, 26 Jun 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Controlling randomness in LLMs: Temperature and Seed</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -77,7 +366,10 @@
 </table>
 <p>If the model uses <strong>greedy search</strong>, it will pick the token with the highest probability, which is ‘Dynamite’.</p>
 <p>If it uses <strong>sampling</strong>, it will make a random selection based on those probabilities. So, the model has a 58% chance of picking ‘Dynamite’, a 29% chance of picking ‘Venom’, a 8% chance of picking ‘Himself’, a 4% chance of picking ‘Radiation’, and a 1% chance of picking ‘You’.</p>
-<p>Let’s see how this works in practice, and how seed and temperature have an effect on the output.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>Temperature is a parameter that usually goes from 0 to 1 or 0 to 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
 <p>Logits are the raw scores that the model assigns to each token. To go from logits to probabilities, you must apply the softmax function:</p>
 <p><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BP%7D(w_i)%20=%20%5Ctext%7Bsoftmax%7D(z_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D"></p>
 <p>Where:</p>
@@ -86,31 +378,18 @@
 <li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit for token <img src="https://latex.codecogs.com/png.latex?w_i"></li>
 <li><img src="https://latex.codecogs.com/png.latex?n"> is the total number of possible tokens</li>
 </ul>
-<p>Logits are the raw output scores from the language model before any transformation. The softmax function gives you the probability assigned to each token.</p>
-</section>
-<section id="temperature" class="level2">
-<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
-<p>Temperature is a parameter that usually goes between 0 and 1 or 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
-<p>You cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, but you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
-<p>It’s magic boils down to this:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1">scores_processed <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> scores <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.temperature</span></code></pre></div>
-<p>Temperature (<img src="https://latex.codecogs.com/png.latex?T">) simply scales the scores (logits) of the tokens by the temperature value. This, in turn, will change the probabilities of the tokens:</p>
+<p>This is the non-scaled version of the probabilities. If you use Temperature (<img src="https://latex.codecogs.com/png.latex?T">) to scale the logits, you will change the probabilities of the tokens, as shown below:</p>
 <p><img src="https://latex.codecogs.com/png.latex?P(w_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%20/%20T%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%20/%20T%7D%7D"></p>
-<p>The example below shows how temperature affects the probabilities of the tokens:</p>
-<div id="cell-5" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+<p>Even though you cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
+<p>Let’s see a practical example of how temperature affects the probabilities of the tokens:</p>
+<div id="cell-4" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> np</span>
-<span id="cb2-2"></span>
-<span id="cb2-3">tokens <span class="op" style="color: #5E5E5E;
+<span id="cb1-2"></span>
+<span id="cb1-3">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
 background-color: null;
@@ -123,7 +402,7 @@ background-color: null;
 font-style: inherit;">'Radiation'</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'You'</span>]</span>
-<span id="cb2-4">logits <span class="op" style="color: #5E5E5E;
+<span id="cb1-4">logits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.array([<span class="fl" style="color: #AD0000;
 background-color: null;
@@ -140,8 +419,8 @@ background-color: null;
 font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.2</span>])</span>
-<span id="cb2-5"></span>
-<span id="cb2-6">temperatures <span class="op" style="color: #5E5E5E;
+<span id="cb1-5"></span>
+<span id="cb1-6">temperatures <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="fl" style="color: #AD0000;
 background-color: null;
@@ -154,15 +433,15 @@ background-color: null;
 font-style: inherit;">1.5</span>, <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.999999999</span>]</span>
-<span id="cb2-7"></span>
-<span id="cb2-8"><span class="cf" style="color: #003B4F;
+<span id="cb1-7"></span>
+<span id="cb1-8"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> temperature <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> temperatures:</span>
-<span id="cb2-9">    probs <span class="op" style="color: #5E5E5E;
+<span id="cb1-9">    probs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.exp(logits <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -173,7 +452,7 @@ background-color: null;
 font-style: inherit;">sum</span>(np.exp(logits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span> temperature))</span>
-<span id="cb2-10">    <span class="bu" style="color: null;
+<span id="cb1-10">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -188,22 +467,22 @@ background-color: null;
 font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb2-11">    <span class="bu" style="color: null;
+<span id="cb1-11">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What's the favorite dish of Chuck Norris?"</span>)</span>
-<span id="cb2-12">    <span class="bu" style="color: null;
+<span id="cb1-12">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Rank | Token      | Probability"</span>)</span>
-<span id="cb2-13">    <span class="bu" style="color: null;
+<span id="cb1-13">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"-----|------------|------------"</span>)</span>
-<span id="cb2-14">    <span class="cf" style="color: #003B4F;
+<span id="cb1-14">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i, (token, prob) <span class="kw" style="color: #003B4F;
@@ -216,7 +495,7 @@ background-color: null;
 font-style: inherit;">zip</span>(tokens, probs), <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>):</span>
-<span id="cb2-15">        <span class="bu" style="color: null;
+<span id="cb1-15">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -239,7 +518,7 @@ background-color: null;
 font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb2-16">    <span class="bu" style="color: null;
+<span id="cb1-16">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -333,53 +612,53 @@ font-style: inherit;">"</span>)</span></code></pre></div>
 <p>You can see that for lower temperature values, the model becomes more deterministic. For temperature 0.1, the probability of picking ‘Dynamite’ is &gt;99.9%, while for temperature 2, it’s only 40%.</p>
 <p>In essence, temperature impacts the randomness of the output by changing the probabilities of selecting the next token. This should give you a good idea of how temperature works. But let’s try it with a real LLM instead of a simulation.</p>
 <p>First, let’s import the required libraries and load the model.</p>
-<div id="cell-7" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+<div id="cell-6" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> np</span>
-<span id="cb3-2"><span class="im" style="color: #00769E;
+<span id="cb2-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch</span>
-<span id="cb3-3"><span class="im" style="color: #00769E;
+<span id="cb2-3"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> F</span>
-<span id="cb3-4"><span class="im" style="color: #00769E;
+<span id="cb2-4"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> AutoModelForCausalLM, AutoTokenizer</span>
-<span id="cb3-5"></span>
-<span id="cb3-6">model_name <span class="op" style="color: #5E5E5E;
+<span id="cb2-5"></span>
+<span id="cb2-6">model_name <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"unsloth/Qwen3-1.7B"</span></span>
-<span id="cb3-7">tokenizer <span class="op" style="color: #5E5E5E;
+<span id="cb2-7">tokenizer <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> AutoTokenizer.from_pretrained(model_name)</span>
-<span id="cb3-8">model <span class="op" style="color: #5E5E5E;
+<span id="cb2-8">model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> AutoModelForCausalLM.from_pretrained(</span>
-<span id="cb3-9">    model_name,</span>
-<span id="cb3-10">    torch_dtype<span class="op" style="color: #5E5E5E;
+<span id="cb2-9">    model_name,</span>
+<span id="cb2-10">    torch_dtype<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"auto"</span>,</span>
-<span id="cb3-11">    device_map<span class="op" style="color: #5E5E5E;
+<span id="cb2-11">    device_map<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"auto"</span></span>
-<span id="cb3-12">)</span></code></pre></div>
+<span id="cb2-12">)</span></code></pre></div>
 </div>
 <p>For the sake of this example, we’ll use <code>unsloth/Qwen3-1.7B</code>. But what you see here is applicable to most LLMs. We’ll use <code>generate_text</code> as our text generation function.</p>
-<div id="cell-9" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+<div id="cell-8" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> generate_text(prompt, temperature, seed<span class="op" style="color: #5E5E5E;
@@ -391,57 +670,57 @@ background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>):</span>
-<span id="cb4-2">    <span class="cf" style="color: #003B4F;
+<span id="cb3-2">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> seed:</span>
-<span id="cb4-3">        torch.manual_seed(seed)</span>
-<span id="cb4-4">        <span class="cf" style="color: #003B4F;
+<span id="cb3-3">        torch.manual_seed(seed)</span>
+<span id="cb3-4">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> torch.cuda.is_available():</span>
-<span id="cb4-5">            torch.cuda.manual_seed(seed)</span>
-<span id="cb4-6"></span>
-<span id="cb4-7">    messages <span class="op" style="color: #5E5E5E;
+<span id="cb3-5">            torch.cuda.manual_seed(seed)</span>
+<span id="cb3-6"></span>
+<span id="cb3-7">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb4-8">        {<span class="st" style="color: #20794D;
+<span id="cb3-8">        {<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"content"</span>: prompt}</span>
-<span id="cb4-9">    ]</span>
-<span id="cb4-10">    text <span class="op" style="color: #5E5E5E;
+<span id="cb3-9">    ]</span>
+<span id="cb3-10">    text <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> tokenizer.apply_chat_template(</span>
-<span id="cb4-11">        messages,</span>
-<span id="cb4-12">        tokenize<span class="op" style="color: #5E5E5E;
+<span id="cb3-11">        messages,</span>
+<span id="cb3-12">        tokenize<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>,</span>
-<span id="cb4-13">        add_generation_prompt<span class="op" style="color: #5E5E5E;
+<span id="cb3-13">        add_generation_prompt<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>,</span>
-<span id="cb4-14">        enable_thinking<span class="op" style="color: #5E5E5E;
+<span id="cb3-14">        enable_thinking<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span></span>
-<span id="cb4-15">    )</span>
-<span id="cb4-16">    model_inputs <span class="op" style="color: #5E5E5E;
+<span id="cb3-15">    )</span>
+<span id="cb3-16">    model_inputs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> tokenizer([text], return_tensors<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"pt"</span>).to(model.device)</span>
-<span id="cb4-17"></span>
-<span id="cb4-18">    <span class="cf" style="color: #003B4F;
+<span id="cb3-17"></span>
+<span id="cb3-18">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> temperature <span class="op" style="color: #5E5E5E;
@@ -449,15 +728,15 @@ background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>:</span>
-<span id="cb4-19">        model_params <span class="op" style="color: #5E5E5E;
+<span id="cb3-19">        model_params <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {</span>
-<span id="cb4-20">            <span class="st" style="color: #20794D;
+<span id="cb3-20">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"do_sample"</span>: <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>,</span>
-<span id="cb4-21">            <span class="st" style="color: #20794D;
+<span id="cb3-21">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"temperature"</span>: temperature <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -472,50 +751,50 @@ font-weight: bold;
 font-style: inherit;">else</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1.9999999</span>,</span>
-<span id="cb4-22">        }</span>
-<span id="cb4-23">    <span class="cf" style="color: #003B4F;
+<span id="cb3-22">        }</span>
+<span id="cb3-23">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">else</span>:</span>
-<span id="cb4-24">        model_params <span class="op" style="color: #5E5E5E;
+<span id="cb3-24">        model_params <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {</span>
-<span id="cb4-25">            <span class="st" style="color: #20794D;
+<span id="cb3-25">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"do_sample"</span>: <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>,</span>
-<span id="cb4-26">        }</span>
-<span id="cb4-27">    outputs <span class="op" style="color: #5E5E5E;
+<span id="cb3-26">        }</span>
+<span id="cb3-27">    outputs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model.generate(</span>
-<span id="cb4-28">        <span class="op" style="color: #5E5E5E;
+<span id="cb3-28">        <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>model_inputs,</span>
-<span id="cb4-29">        <span class="op" style="color: #5E5E5E;
+<span id="cb3-29">        <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>model_params,</span>
-<span id="cb4-30">        max_new_tokens<span class="op" style="color: #5E5E5E;
+<span id="cb3-30">        max_new_tokens<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>,</span>
-<span id="cb4-31">        output_scores<span class="op" style="color: #5E5E5E;
+<span id="cb3-31">        output_scores<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>,</span>
-<span id="cb4-32">        return_dict_in_generate<span class="op" style="color: #5E5E5E;
+<span id="cb3-32">        return_dict_in_generate<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>,</span>
-<span id="cb4-33">        pad_token_id<span class="op" style="color: #5E5E5E;
+<span id="cb3-33">        pad_token_id<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>tokenizer.eos_token_id</span>
-<span id="cb4-34">    )</span>
-<span id="cb4-35"></span>
-<span id="cb4-36">    output_token_id <span class="op" style="color: #5E5E5E;
+<span id="cb3-34">    )</span>
+<span id="cb3-35"></span>
+<span id="cb3-36">    output_token_id <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> outputs.sequences[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -524,23 +803,23 @@ background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>].tolist()</span>
-<span id="cb4-37">    selected_token <span class="op" style="color: #5E5E5E;
+<span id="cb3-37">    selected_token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> tokenizer.decode([output_token_id])</span>
-<span id="cb4-38"></span>
-<span id="cb4-39">    <span class="cf" style="color: #003B4F;
+<span id="cb3-38"></span>
+<span id="cb3-39">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">not</span> print_top_k:</span>
-<span id="cb4-40">        <span class="cf" style="color: #003B4F;
+<span id="cb3-40">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> selected_token</span>
-<span id="cb4-41">    </span>
-<span id="cb4-42">    probs <span class="op" style="color: #5E5E5E;
+<span id="cb3-41">    </span>
+<span id="cb3-42">    probs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> F.softmax(outputs.scores[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -551,18 +830,18 @@ background-color: null;
 font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb4-43">    top_k_probs, top_k_indices <span class="op" style="color: #5E5E5E;
+<span id="cb3-43">    top_k_probs, top_k_indices <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> torch.topk(probs, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>)</span>
-<span id="cb4-44"></span>
-<span id="cb4-45">    <span class="bu" style="color: null;
+<span id="cb3-44"></span>
+<span id="cb3-45">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Top-10 most likely tokens:"</span>)</span>
-<span id="cb4-46">    <span class="cf" style="color: #003B4F;
+<span id="cb3-46">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i, (prob, idx) <span class="kw" style="color: #003B4F;
@@ -573,10 +852,10 @@ background-color: null;
 font-style: inherit;">enumerate</span>(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(top_k_probs, top_k_indices)):</span>
-<span id="cb4-47">        token_text <span class="op" style="color: #5E5E5E;
+<span id="cb3-47">        token_text <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> tokenizer.decode([idx.item()])</span>
-<span id="cb4-48">        is_selected <span class="op" style="color: #5E5E5E;
+<span id="cb3-48">        is_selected <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -591,7 +870,7 @@ font-weight: bold;
 font-style: inherit;">else</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb4-49">        <span class="bu" style="color: null;
+<span id="cb3-49">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -640,8 +919,8 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb4-50"></span>
-<span id="cb4-51">    <span class="cf" style="color: #003B4F;
+<span id="cb3-50"></span>
+<span id="cb3-51">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> selected_token</span></code></pre></div>
@@ -654,8 +933,8 @@ font-style: inherit;">return</span> selected_token</span></code></pre></div>
 </ol>
 <p>Similar to what you saw in the previous example, you can try low and high temperature values.</p>
 <p>This is what you get for a temperature of 0.1:</p>
-<div id="cell-11" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">token <span class="op" style="color: #5E5E5E;
+<div id="cell-10" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
 background-color: null;
@@ -682,8 +961,8 @@ font-style: inherit;">True</span>)</span></code></pre></div>
   10. ')' (prob: 0.0000, logit: -inf) </code></pre>
 </div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">token <span class="op" style="color: #5E5E5E;
+<div id="cell-11" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
 background-color: null;
@@ -718,8 +997,8 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 <p>The seed parameter controls the randomness of how a model selects tokens. It sets the initial state for the random number generator used in the token sampling process.</p>
 <p>Let’s revisit the example from the previous section to see this in action. By setting the seed to a fixed value, you ensure the generation process is deterministic. This means you will get an identical result on every run, provided all other parameters (like temperature) remain the same in those runs.</p>
 <p>We can start by setting our seed to 42 and temperature to 1 to verify which token is generated.</p>
-<div id="cell-16" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">generate_text(<span class="st" style="color: #20794D;
+<div id="cell-15" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">generate_text(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -752,11 +1031,11 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 </div>
 </div>
 <p>In this case, the model selected “Sure” as the next token, even though its probability is lower than ‘Why’. Now, we can verify that this stays the same over multiple runs.</p>
-<div id="cell-18" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">tokens <span class="op" style="color: #5E5E5E;
+<div id="cell-17" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb12-2"><span class="cf" style="color: #003B4F;
+<span id="cb11-2"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
@@ -767,7 +1046,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>):</span>
-<span id="cb12-3">    token <span class="op" style="color: #5E5E5E;
+<span id="cb11-3">    token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
 background-color: null;
@@ -780,8 +1059,8 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">42</span>)</span>
-<span id="cb12-4">    tokens.append(token)</span>
-<span id="cb12-5"><span class="cf" style="color: #003B4F;
+<span id="cb11-4">    tokens.append(token)</span>
+<span id="cb11-5"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">assert</span> <span class="bu" style="color: null;
@@ -793,7 +1072,7 @@ background-color: null;
 font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span></span>
-<span id="cb12-6"><span class="bu" style="color: null;
+<span id="cb11-6"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="bu" style="color: null;
 background-color: null;
@@ -803,11 +1082,11 @@ font-style: inherit;">set</span>(tokens))</span></code></pre></div>
 </div>
 </div>
 <p>This code runs the text generation process 100 times and verifies that “Sure” was picked in all runs. Next, we should verify that this consistency is lost when we omit the seed parameter.</p>
-<div id="cell-20" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">tokens <span class="op" style="color: #5E5E5E;
+<div id="cell-19" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb14-2"><span class="cf" style="color: #003B4F;
+<span id="cb13-2"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
@@ -818,7 +1097,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>):</span>
-<span id="cb14-3">    token <span class="op" style="color: #5E5E5E;
+<span id="cb13-3">    token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
 background-color: null;
@@ -827,8 +1106,8 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb14-4">    tokens.append(token)</span>
-<span id="cb14-5"><span class="cf" style="color: #003B4F;
+<span id="cb13-4">    tokens.append(token)</span>
+<span id="cb13-5"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">assert</span> <span class="bu" style="color: null;
@@ -840,7 +1119,7 @@ background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span></span>
-<span id="cb14-6"><span class="bu" style="color: null;
+<span id="cb13-6"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="bu" style="color: null;
 background-color: null;
@@ -851,24 +1130,24 @@ font-style: inherit;">set</span>(tokens))</span></code></pre></div>
 </div>
 <p>In this case, you see that after the 100 generations, the model picked two different tokens: ‘Sure’ and ‘Why’. This is expected due to not setting a seed.</p>
 <p>You can also use test this with a propietary model. Let’s try it with <code>gpt-4.1-nano</code> from OpenAI.</p>
-<div id="cell-22" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="im" style="color: #00769E;
+<div id="cell-21" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> openai</span>
-<span id="cb16-2"></span>
-<span id="cb16-3"><span class="im" style="color: #00769E;
+<span id="cb15-2"></span>
+<span id="cb15-3"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb16-4"></span>
-<span id="cb16-5">load_dotenv()</span>
-<span id="cb16-6"></span>
-<span id="cb16-7">client <span class="op" style="color: #5E5E5E;
+<span id="cb15-4"></span>
+<span id="cb15-5">load_dotenv()</span>
+<span id="cb15-6"></span>
+<span id="cb15-7">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> openai.OpenAI()</span>
-<span id="cb16-8"></span>
-<span id="cb16-9"><span class="kw" style="color: #003B4F;
+<span id="cb15-8"></span>
+<span id="cb15-9"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> generate_text_openai(prompt, temperature, seed<span class="op" style="color: #5E5E5E;
@@ -880,15 +1159,15 @@ background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>):</span>
-<span id="cb16-10">    response <span class="op" style="color: #5E5E5E;
+<span id="cb15-10">    response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> client.chat.completions.create(</span>
-<span id="cb16-11">        model<span class="op" style="color: #5E5E5E;
+<span id="cb15-11">        model<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4.1-nano"</span>,</span>
-<span id="cb16-12">        messages<span class="op" style="color: #5E5E5E;
+<span id="cb15-12">        messages<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[{<span class="st" style="color: #20794D;
 background-color: null;
@@ -897,50 +1176,50 @@ background-color: null;
 font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"content"</span>: prompt}],</span>
-<span id="cb16-13">        temperature<span class="op" style="color: #5E5E5E;
+<span id="cb15-13">        temperature<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>temperature,</span>
-<span id="cb16-14">        seed<span class="op" style="color: #5E5E5E;
+<span id="cb15-14">        seed<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>seed,</span>
-<span id="cb16-15">        max_tokens<span class="op" style="color: #5E5E5E;
+<span id="cb15-15">        max_tokens<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>,</span>
-<span id="cb16-16">        logprobs<span class="op" style="color: #5E5E5E;
+<span id="cb15-16">        logprobs<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>,</span>
-<span id="cb16-17">        top_logprobs<span class="op" style="color: #5E5E5E;
+<span id="cb15-17">        top_logprobs<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>,</span>
-<span id="cb16-18">    )</span>
-<span id="cb16-19">    selected_token <span class="op" style="color: #5E5E5E;
+<span id="cb15-18">    )</span>
+<span id="cb15-19">    selected_token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>].message.content</span>
-<span id="cb16-20">    <span class="cf" style="color: #003B4F;
+<span id="cb15-20">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> print_top_k:</span>
-<span id="cb16-21">        logprobs <span class="op" style="color: #5E5E5E;
+<span id="cb15-21">        logprobs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>].logprobs.content[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>].top_logprobs</span>
-<span id="cb16-22">        <span class="bu" style="color: null;
+<span id="cb15-22">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Top 10 most likely tokens:"</span>)</span>
-<span id="cb16-23">        <span class="cf" style="color: #003B4F;
+<span id="cb15-23">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> idx, token_info <span class="kw" style="color: #003B4F;
@@ -949,13 +1228,13 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">enumerate</span>(logprobs):</span>
-<span id="cb16-24">            token <span class="op" style="color: #5E5E5E;
+<span id="cb15-24">            token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> token_info.token</span>
-<span id="cb16-25">            logprob <span class="op" style="color: #5E5E5E;
+<span id="cb15-25">            logprob <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> token_info.logprob</span>
-<span id="cb16-26">            prob <span class="op" style="color: #5E5E5E;
+<span id="cb15-26">            prob <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.<span class="bu" style="color: null;
 background-color: null;
@@ -966,7 +1245,7 @@ background-color: null;
 font-style: inherit;">100</span>,<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span>
-<span id="cb16-27">            token_text <span class="op" style="color: #5E5E5E;
+<span id="cb15-27">            token_text <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -999,7 +1278,7 @@ background-color: null;
 font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">)"</span></span>
-<span id="cb16-28">            is_selected <span class="op" style="color: #5E5E5E;
+<span id="cb15-28">            is_selected <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -1014,7 +1293,7 @@ font-weight: bold;
 font-style: inherit;">else</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb16-29">            <span class="bu" style="color: null;
+<span id="cb15-29">            <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -1031,7 +1310,7 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb16-30">    <span class="cf" style="color: #003B4F;
+<span id="cb15-30">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> selected_token</span></code></pre></div>
@@ -1040,8 +1319,8 @@ font-style: inherit;">return</span> selected_token</span></code></pre></div>
 <p>In this case, instead of providing you with the logits, OpenAI will provide you with <code>logprobs</code> which are the logaritmic probabilities of the tokens:</p>
 <p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
 <p>First, let’s check the completion token we get for a temperature of 1 and a seed of 42.</p>
-<div id="cell-24" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1">token <span class="op" style="color: #5E5E5E;
+<div id="cell-23" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1">token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
 background-color: null;
@@ -1074,11 +1353,11 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 </div>
 <p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
 <p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
-<div id="cell-26" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">tokens <span class="op" style="color: #5E5E5E;
+<div id="cell-25" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb19-2"><span class="cf" style="color: #003B4F;
+<span id="cb18-2"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
@@ -1089,7 +1368,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>):</span>
-<span id="cb19-3">    token <span class="op" style="color: #5E5E5E;
+<span id="cb18-3">    token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
 background-color: null;
@@ -1102,8 +1381,8 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">42</span>)</span>
-<span id="cb19-4">    tokens.append(token)</span>
-<span id="cb19-5"><span class="cf" style="color: #003B4F;
+<span id="cb18-4">    tokens.append(token)</span>
+<span id="cb18-5"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">assert</span> <span class="bu" style="color: null;
@@ -1115,7 +1394,7 @@ background-color: null;
 font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span></span>
-<span id="cb19-6"><span class="bu" style="color: null;
+<span id="cb18-6"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="bu" style="color: null;
 background-color: null;
@@ -1127,11 +1406,11 @@ font-style: inherit;">set</span>(tokens))</span></code></pre></div>
 <p>Similar to the previous example, we run 100 generations with the same seed and temperature and check if the completion token is the same.</p>
 <p>This should <em>generally</em> work, but OpenAI doesn’t guarantee that the same seed will always produce the same output. It might occur that your request is handled by a model with a <a href="https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter">different configuration</a>, and you’ll get different results.</p>
 <p>You can also verify that not using a seed will result in different tokens.</p>
-<div id="cell-28" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1">tokens <span class="op" style="color: #5E5E5E;
+<div id="cell-27" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">tokens <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb21-2"><span class="cf" style="color: #003B4F;
+<span id="cb20-2"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
@@ -1142,7 +1421,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>):</span>
-<span id="cb21-3">    token <span class="op" style="color: #5E5E5E;
+<span id="cb20-3">    token <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
 background-color: null;
@@ -1151,8 +1430,8 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb21-4">    tokens.append(token)</span>
-<span id="cb21-5"><span class="cf" style="color: #003B4F;
+<span id="cb20-4">    tokens.append(token)</span>
+<span id="cb20-5"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">assert</span> <span class="bu" style="color: null;
@@ -1164,7 +1443,7 @@ background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span></span>
-<span id="cb21-6"><span class="bu" style="color: null;
+<span id="cb20-6"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="bu" style="color: null;
 background-color: null;
@@ -1186,10 +1465,10 @@ font-style: inherit;">set</span>(tokens))</span></code></pre></div>
 </section>
 <section id="top-p" class="level3">
 <h3 class="anchored" data-anchor-id="top-p">top-p</h3>
-<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so by keeping only the tokens with the highest probabilities that cumulatively account for at least p% of the total probability mass. So it selects the fewest possible tokens to reach the desired probability mass.</p>
-<p>This is available for most providers.</p>
-<div id="cell-31" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1">generate_text_openai(<span class="st" style="color: #20794D;
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so including the smallest set of tokens whose combined probability ≥ P. For example, top P = 0.9 picks from the smallest group of tokens that together cover at least 90% probability.</p>
+<p>This parameter is available for most providers.</p>
+<div id="cell-30" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1">generate_text_openai(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Tell me a joke about dogs"</span>, top_p<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -14275,818 +14554,6 @@ OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylancastillo.
   <category>nlp</category>
   <guid>https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</guid>
   <pubDate>Thu, 27 Apr 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Semantic Search with OpenSearch, Cohere, and FastAPI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Semantic search is a <a href="https://trends.google.com/trends/explore?date=today%205-y&amp;q=semantic%20search">hot topic</a> right now. The fast-paced progress of Large Language Models (LLMs), as well as the availability and quality of embeddings, the key technology behind semantic search, have piqued the interest of many people in this field.</p>
-<p>I’ve worked on a number of projects involving semantic search (before it was cool!), and have been closely following the progress in LLMs. So I decided to write a step-by-step tutorial that combined these two technologies.</p>
-<p>In this tutorial, I’ll show you how to build a semantic search service using <a href="https://opensearch.org/">OpenSearch</a>, <a href="https://cohere.ai/">Cohere</a>, and <a href="fastapi.tiangolo.com/">FastAPI</a>. You’ll create an app that lets users search through news articles to find the ones that are most relevant to their query.</p>
-<p>Let’s get started!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>There are a few things you need to know to get the most out of this tutorial:</p>
-<ol type="1">
-<li>What <a href="https://blog.dataiku.com/semantic-search-an-overlooked-nlp-superpower?ref=dylancastillo.co">semantic search</a> is.</li>
-<li>How <a href="https://dylancastillo.co/opensearch-python/">OpenSearch</a> works.</li>
-<li>What <a href="https://en.wikipedia.org/wiki/Large_language_model">LLMs</a> are.</li>
-</ol>
-<p>Don’t feel discouraged if some of these concepts are new to you. A basic understanding of these topics should be enough to complete this tutorial.</p>
-<p>In addition, you must install <a href="https://docs.docker.com/get-docker/">Docker</a> and create an account at <a href="https://cohere.ai/">Cohere</a>.</p>
-</section>
-<section id="keyword-based-search-vs.-semantic-search" class="level2">
-<h2 class="anchored" data-anchor-id="keyword-based-search-vs.-semantic-search">Keyword-based Search vs.&nbsp;Semantic Search</h2>
-<p>Search engines have evolved over time to provide users with more relevant results. In the past, search engines relied on keyword matching to deliver these results. For example, if a user searched for “AI chatbot,” the search engine would find documents that included that phrase and show them based on a ranking system like <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a>.</p>
-<p>This method worked well for finding results that contained specific keywords but fell short when users sought information that was related to, but not identical to, their initial query. For example, a search for “machine learning” might yield more relevant results if it also considered semantically similar terms such as “artificial intelligence” or “deep learning”.</p>
-<p>Enter <a href="https://en.wikipedia.org/wiki/Semantic_search">semantic search</a>. It is a more sophisticated method that takes into account factors like synonyms, user context, and concept relationships when generating search results. By considering these factors, this approach provides users with better sets of results.</p>
-</section>
-<section id="architecting-a-semantic-search-service" class="level2">
-<h2 class="anchored" data-anchor-id="architecting-a-semantic-search-service">Architecting a Semantic Search Service</h2>
-<p>Aside from the data extraction pipeline, which I’m not including here, the semantic search service you’ll create has four parts:</p>
-<ol type="1">
-<li><strong>Vectorizer:</strong> This takes care of creating numerical vectors, called <a href="https://en.wikipedia.org/wiki/Word_embedding">embeddings</a>, from the documents (news articles) in your dataset.</li>
-<li><strong>Indexer:</strong> This adds the embeddings and the metadata such as URL, title, and author to the vector database.</li>
-<li><strong>Vector database:</strong> This is a database that stores and retrieves vectors representing documents.</li>
-<li><strong>Search client:</strong> This is a FastAPI-based backend service that processes the user’s query, vectorizes it, and searches the vector database for the most similar vectors.</li>
-</ol>
-<p>Here’s a diagram of all the components:</p>
-<p><a href="semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi/image.png" class="img-fluid"></a></p>
-<p>Architecture diagram</p>
-<p>Next, you’ll set up your local environment to run the project.</p>
-</section>
-<section id="set-up-your-local-environment" class="level2">
-<h2 class="anchored" data-anchor-id="set-up-your-local-environment">Set Up Your Local Environment</h2>
-<p>Follow these steps to set up your local environment:</p>
-<ol type="1">
-<li>Install <a href="https://www.python.org/downloads/">Python 3.11</a>.</li>
-<li>Clone the repository with the sample app:</li>
-</ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search</span></code></pre></div>
-<ol start="3" type="1">
-<li>Go to the root folder of the project and create a virtual environment with the dependencies using <strong>venv and pip:</strong></li>
-</ol>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3.11</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pip</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-r</span> requirements.txt</span></code></pre></div>
-<p>Assuming all went smoothly, you should have a virtual environment set up with the required libraries and the following project structure:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">opensearch-cohere-semantic-search</span></span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> LICENSE</span>
-<span id="cb3-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> README.md</span>
-<span id="cb3-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> data</span>
-<span id="cb3-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── news.csv</span>
-<span id="cb3-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── news_sample.csv</span>
-<span id="cb3-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   └── news_sample_with_vectors.csv</span>
-<span id="cb3-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> notebooks</span>
-<span id="cb3-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   └── generate_sample.ipynb</span>
-<span id="cb3-10"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> requirements.txt</span>
-<span id="cb3-11"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> run_opensearch_docker.sh</span>
-<span id="cb3-12"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">└──</span> src</span>
-<span id="cb3-13"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── app.py</span>
-<span id="cb3-14"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── config.py</span>
-<span id="cb3-15"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── indexer.py</span>
-<span id="cb3-16"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   └── vectorizer.py</span>
-<span id="cb3-17"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> .env-example</span>
-<span id="cb3-18"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">└──</span> .venv/</span></code></pre></div>
-<p>The project is organized into several key files and directories, as described below</p>
-<ul>
-<li><code>data/</code>: This directory contains the project’s data. It contains the <a href="https://www.kaggle.com/datasets/szymonjanowski/internet-articles-data-with-users-engagement">original dataset</a> downloaded from Kaggle, and a sample, which you’ll use in the tutorial.</li>
-<li><code>requirements.txt</code>: This file contains a list of Python packages required by the project and their respective versions.</li>
-<li><code>run_opensearch_docker.sh</code>: This file contains a bash script used to run an OpenSearch cluster locally.</li>
-<li><code>src/app.py</code>: This file contains the code of the FastAPI application.</li>
-<li><code>src/config.py</code>: This file contains project configuration specifications such as Cohere’s API key (read from a <code>.env</code> file), the paths to the data, and the name of the index.</li>
-<li><code>src/indexer.py</code>: This file contains the code you use to create an index and insert the documents in OpenSearch.</li>
-<li><code>src/vectorizer.py</code>: This file contains the code to transform the input data into embeddings.</li>
-<li><code>.env-example</code>: This file is an example of the environment variables you must provide.</li>
-<li><code>.venv/</code>: This directory contains the project’s virtual environment.</li>
-</ul>
-<p>All done! Let’s get going.</p>
-</section>
-<section id="run-a-local-opensearch-cluster" class="level2">
-<h2 class="anchored" data-anchor-id="run-a-local-opensearch-cluster">Run a Local OpenSearch Cluster</h2>
-<p>Before we get into the code, you should start a local OpenSearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sh</span> run_opensearch_docker.sh</span></code></pre></div>
-<p>This will launch a local OpenSearch cluster. If everything went well, the terminal will show a long string of text. Keep the terminal open in the background and move on to the next step.</p>
-</section>
-<section id="vectorize-the-articles" class="level2">
-<h2 class="anchored" data-anchor-id="vectorize-the-articles">Vectorize the Articles</h2>
-<p>You’ll start by transforming the news articles into vectors (embeddings). There are many approaches you could take such as using <a href="https://dylancastillo.co/nlp-snippets-cluster-documents-using-word2vec/#cluster-documents-using--mini-batches--k-means">Word2Vec</a>, <a href="https://sbert.net/docs/pretrained_models.html">Sentence-Transformers</a>, or LLM-based <a href="https://platform.openai.com/docs/guides/embeddings">embedding</a> <a href="https://docs.cohere.ai/reference/embed">services</a>. In this case, you’ll use <a href="https://cohere.ai/">Cohere</a>.</p>
-<p>Use <code>src/vectorizer.py</code> for that:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> cohere</span>
-<span id="cb5-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> pd</span>
-<span id="cb5-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> tqdm <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> tqdm</span>
-<span id="cb5-4"></span>
-<span id="cb5-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> COHERE_API_KEY, NEWS_SAMPLE_DATASET, DATA</span>
-<span id="cb5-6"></span>
-<span id="cb5-7"></span>
-<span id="cb5-8"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> main():</span>
-<span id="cb5-9">    df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.read_csv(NEWS_SAMPLE_DATASET)</span>
-<span id="cb5-10">    cohere_client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> cohere.Client(COHERE_API_KEY)</span>
-<span id="cb5-11"></span>
-<span id="cb5-12">    model <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"small"</span></span>
-<span id="cb5-13">    batch_size <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">96</span></span>
-<span id="cb5-14">    batch <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb5-15">    vectors <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb5-16"></span>
-<span id="cb5-17">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> _, row <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> tqdm(df.iterrows(), total<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(df)):</span>
-<span id="cb5-18">        batch.append(row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>])</span>
-<span id="cb5-19"></span>
-<span id="cb5-20">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(batch) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> batch_size:</span>
-<span id="cb5-21">            response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> cohere_client.embed(texts<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>batch, model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>model)</span>
-<span id="cb5-22">            vectors.append(response.embeddings)</span>
-<span id="cb5-23">            batch <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb5-24"></span>
-<span id="cb5-25">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(batch) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>:</span>
-<span id="cb5-26">        response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> cohere_client.embed(texts<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>batch, model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>model)</span>
-<span id="cb5-27">        vectors.append(response.embeddings)</span>
-<span id="cb5-28">        batch <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb5-29"></span>
-<span id="cb5-30">    df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"vector"</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [item <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> sublist <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> vectors <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> sublist]</span>
-<span id="cb5-31"></span>
-<span id="cb5-32">    df.to_csv(DATA <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"news_sample_with_vectors.csv"</span>, index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>)</span>
-<span id="cb5-33"></span>
-<span id="cb5-34"></span>
-<span id="cb5-35"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__main__"</span>:</span>
-<span id="cb5-36">    main()</span></code></pre></div>
-<p>This code reads the news articles dataset, splits it into batches, and generates embeddings for each individual article. It works as follows:</p>
-<ul>
-<li><strong>Lines 1 to 5</strong> import the required Python libraries and the configuration settings from <code>config.py</code>.</li>
-<li><strong>Lines 9 to 28</strong> read the news articles sample, start the Cohere client, split the dataset into batches of 96 documents (as this is the maximum accepted by Cohere), and uses the client to get embeddings for each document.</li>
-<li><strong>Lines 30 to 32</strong> create a new column in the DataFrame to store the vectors and save the new dataset into your filesystem.</li>
-</ul>
-<p>You can run this script by opening a terminal in <code>src</code> and running:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">python vectorizer.py</span></code></pre></div>
-<p>Next, you’ll create an index to store the embeddings.</p>
-</section>
-<section id="index-the-vectors-and-metadata" class="level2">
-<h2 class="anchored" data-anchor-id="index-the-vectors-and-metadata">Index the Vectors and Metadata</h2>
-<p>After you’ve created embeddings of each article, you’ll store them, and their metadata (title, content, description), in an index in your OpenSearch cluster.</p>
-<p>You can use <code>src/indexer.py</code> for that:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> pd</span>
-<span id="cb7-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> opensearchpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenSearch, NotFoundError</span>
-<span id="cb7-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> NEWS_WITH_VECTORS_DATASET, INDEX_NAME</span>
-<span id="cb7-4"></span>
-<span id="cb7-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> tqdm <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> tqdm</span>
-<span id="cb7-6"></span>
-<span id="cb7-7"></span>
-<span id="cb7-8"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> main():</span>
-<span id="cb7-9">    client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenSearch(</span>
-<span id="cb7-10">        hosts<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[{<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"host"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"localhost"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"port"</span>: <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9200</span>}],</span>
-<span id="cb7-11">        http_auth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>),</span>
-<span id="cb7-12">        use_ssl<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb7-13">        verify_certs<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb7-14">        ssl_assert_hostname<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb7-15">        ssl_show_warn<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb7-16">    )</span>
-<span id="cb7-17"></span>
-<span id="cb7-18">    df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.read_csv(NEWS_WITH_VECTORS_DATASET)</span>
-<span id="cb7-19"></span>
-<span id="cb7-20">    body <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb7-21">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"settings"</span>: {</span>
-<span id="cb7-22">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"index"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"knn"</span>: <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>},</span>
-<span id="cb7-23">        },</span>
-<span id="cb7-24">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mappings"</span>: {</span>
-<span id="cb7-25">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"properties"</span>: {</span>
-<span id="cb7-26">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"id"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"integer"</span>},</span>
-<span id="cb7-27">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"keyword"</span>},</span>
-<span id="cb7-28">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"keyword"</span>},</span>
-<span id="cb7-29">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"description"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"keyword"</span>},</span>
-<span id="cb7-30">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"embedding"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"knn_vector"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"dimension"</span>: <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1024</span>},</span>
-<span id="cb7-31">            }</span>
-<span id="cb7-32">        },</span>
-<span id="cb7-33">    }</span>
-<span id="cb7-34"></span>
-<span id="cb7-35">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">try</span>:</span>
-<span id="cb7-36">        client.indices.delete(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>INDEX_NAME)</span>
-<span id="cb7-37">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">except</span> NotFoundError:</span>
-<span id="cb7-38">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pass</span></span>
-<span id="cb7-39">    client.indices.create(INDEX_NAME, body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>body)</span>
-<span id="cb7-40"></span>
-<span id="cb7-41">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i, row <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> tqdm(df.iterrows(), total<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(df)):</span>
-<span id="cb7-42">        embedding <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb7-43">            <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">float</span>(x) <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"vector"</span>].replace(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"["</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>).replace(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"]"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>).split(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">","</span>)</span>
-<span id="cb7-44">        ]</span>
-<span id="cb7-45">        client.index(</span>
-<span id="cb7-46">            index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>INDEX_NAME,</span>
-<span id="cb7-47">            body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>{</span>
-<span id="cb7-48">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"source_id"</span>: i,</span>
-<span id="cb7-49">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>],</span>
-<span id="cb7-50">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>],</span>
-<span id="cb7-51">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"description"</span>: row[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"description"</span>],</span>
-<span id="cb7-52">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"embedding"</span>: embedding,</span>
-<span id="cb7-53">            },</span>
-<span id="cb7-54">        )</span>
-<span id="cb7-55"></span>
-<span id="cb7-56">    client.indices.refresh(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>INDEX_NAME)</span>
-<span id="cb7-57">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Done"</span>, client.cat.count(index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>INDEX_NAME, <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">format</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"json"</span>))</span>
-<span id="cb7-58"></span>
-<span id="cb7-59"></span>
-<span id="cb7-60"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__main__"</span>:</span>
-<span id="cb7-61">    main()</span></code></pre></div>
-<p>This code will create a new index in your OpenSearch cluster, and store the vectors and metadata in it. Here’s how it works:</p>
-<ul>
-<li><strong>Lines 1 to 5</strong> import the required Python libraries and the predefined configuration settings from <code>config.py</code>.</li>
-<li><strong>Lines 9 to 16</strong> start the OpenSearch client.</li>
-<li><strong>Lines 20 to 33</strong> define the settings and mappings of the index you’ll create. You set <code>"knn": True</code> so that OpenSearch knows that you’ll be using the <a href="https://opensearch.org/docs/latest/search-plugins/knn/index/">k-NN plugin</a> to store and retrieve vectors. Very importantly, you also need to define the size of the vector in the <code>mappings</code>, based on the model you use. Cohere’s <a href="https://docs.cohere.ai/reference/embed"><code>small</code></a> embeddings generate vectors of 1024 dimensions.</li>
-<li><strong>Lines 35 to 54</strong> create the index (and delete any previous ones), and add each document one by one. You index the <code>id</code>, <code>title</code>, <code>description</code>, and <code>embedding</code> for each document.</li>
-</ul>
-<p>You can run this script by opening a terminal in <code>src</code> and running:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">python indexer.py</span></code></pre></div>
-<p>So far, you’ve created embeddings for each document and indexed them in your OpenSearch cluster. Next, you’ll run a search client to interact with them.</p>
-</section>
-<section id="create-a-search-client" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-search-client">Create a Search Client</h2>
-<p>Finally, you’ll create a search client so that users can search the articles you indexed using FastAPI. It’ll let users provide a search term, and give them back the 10 most similar documents based on that term.</p>
-<p>The code is available in <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> cohere</span>
-<span id="cb9-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> fastapi <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> FastAPI</span>
-<span id="cb9-3"></span>
-<span id="cb9-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> COHERE_API_KEY, INDEX_NAME</span>
-<span id="cb9-5"></span>
-<span id="cb9-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> opensearchpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenSearch</span>
-<span id="cb9-7"></span>
-<span id="cb9-8"></span>
-<span id="cb9-9">app <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> FastAPI()</span>
-<span id="cb9-10"></span>
-<span id="cb9-11">opensearch_client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenSearch(</span>
-<span id="cb9-12">    hosts<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[{<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"host"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"localhost"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"port"</span>: <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9200</span>}],</span>
-<span id="cb9-13">    http_auth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"admin"</span>),</span>
-<span id="cb9-14">    use_ssl<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb9-15">    verify_certs<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb9-16">    ssl_assert_hostname<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb9-17">    ssl_show_warn<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb9-18">)</span>
-<span id="cb9-19"></span>
-<span id="cb9-20">cohere_client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> cohere.Client(COHERE_API_KEY)</span>
-<span id="cb9-21"></span>
-<span id="cb9-22"></span>
-<span id="cb9-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@app.get</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/"</span>)</span>
-<span id="cb9-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> index():</span>
-<span id="cb9-25">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"message"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Make a post request to /search to search through news articles"</span>}</span>
-<span id="cb9-26"></span>
-<span id="cb9-27"></span>
-<span id="cb9-28"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@app.post</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/search"</span>)</span>
-<span id="cb9-29"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> search(query: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>):</span>
-<span id="cb9-30">    query_embedding <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> cohere_client.embed(texts<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[query], model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"small"</span>).embeddings[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>]</span>
-<span id="cb9-31"></span>
-<span id="cb9-32">    similar_news <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> opensearch_client.search(</span>
-<span id="cb9-33">        index<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>INDEX_NAME,</span>
-<span id="cb9-34">        body<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>{</span>
-<span id="cb9-35">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"knn"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"embedding"</span>: {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"vector"</span>: query_embedding, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"k"</span>: <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>}}},</span>
-<span id="cb9-36">        },</span>
-<span id="cb9-37">    )</span>
-<span id="cb9-38">    response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb9-39">        {</span>
-<span id="cb9-40">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>: r[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_source"</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>],</span>
-<span id="cb9-41">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"description"</span>: r[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_source"</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"description"</span>],</span>
-<span id="cb9-42">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: r[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_source"</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>],</span>
-<span id="cb9-43">        }</span>
-<span id="cb9-44">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> r <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> similar_news[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hits"</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hits"</span>]</span>
-<span id="cb9-45">    ]</span>
-<span id="cb9-46"></span>
-<span id="cb9-47">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> {</span>
-<span id="cb9-48">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"response"</span>: response,</span>
-<span id="cb9-49">    }</span></code></pre></div>
-<p>This code lets users search through the index. It works as follows:</p>
-<ul>
-<li><strong>Lines 1 to 6</strong> import the required Python libraries, and the configuration defined in <code>config.py</code>.</li>
-<li><strong>Lines 9 to 20</strong> initialize the FastAPI app, and the OpenSearch and Cohere clients.</li>
-<li><strong>Lines 23 to 25</strong> define an endpoint that provides the user with a message explaining how to use the app if they make a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET</a> request to “/”.</li>
-<li><strong>Lines 28 to 49</strong> define a<code>**/**search</code> endpoint that accepts a query string parameter. It uses Cohere to generate an embedding from a query and then searches the OpenSearch index for the ten most similar documents. Finally, it formats the results as a user response.</li>
-</ul>
-<p>To run the app, you can use <code>uvicorn app:app --reload</code>. You can test the app by opening your browser, navigating to <code>localhost:8000/docs</code>, and clicking on <code>POST /search</code>:</p>
-<p><a href="images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-5.png" class="img-fluid"></a></p>
-<p>For instance, if you search for “Nicolas Maduro,” the current president of Venezuela who is widely regarded as a dictator. You’ll get results for articles about authoritarian governments or power abuses:</p>
-<p><a href="images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="https://dylancastillo.co/posts/images/semantic-search-with-opensearch-cohere-and-fastapi/image-4.png" class="img-fluid"></a></p>
-<p>That’s it! If you want to know how to deploy this app, check out a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">previous article</a> I wrote.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Congrats! You’ve built your own semantic search service. In this tutorial, you’ve learned:</p>
-<ul>
-<li>What is semantic search, and how it is different from keyword-based search.</li>
-<li>What are the main components of a semantic search service.</li>
-<li>How to use Cohere to vectorize text data.</li>
-<li>How to use OpenSearch to store embeddings.</li>
-</ul>
-<p>Hope you found this tutorial useful. Let me know if you have any questions!</p>
-<p>All the code for this tutorial is <a href="https://github.com/dylanjcastillo/opensearch-cohere-semantic-search">available on GitHub</a>.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {Semantic {Search} with {OpenSearch,} {Cohere,} and {FastAPI}},
-  date = {2023-04-11},
-  url = {https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“Semantic Search with OpenSearch, Cohere,
-and FastAPI.”</span> April 11, 2023. <a href="https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html">https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>ml</category>
-  <category>nlp</category>
-  <guid>https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</guid>
-  <pubDate>Tue, 11 Apr 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

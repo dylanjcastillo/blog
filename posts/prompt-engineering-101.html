@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2025-06-26">
+<meta name="description" content="How to convince LLMs to do what you want them to do.">
+
+<title>Prompt engineering 101 – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-367037fdfe0f341aec79426c22b5edce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+<meta property="og:title" content="Prompt engineering 101 – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta name="twitter:title" content="Prompt engineering 101 – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:github" aria-label="Icon github from fa6-brands Iconify.design set." title="Icon github from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/dylancastillo.co"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:bluesky" aria-label="Icon bluesky from fa6-brands Iconify.design set." title="Icon bluesky from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-a-prompt" id="toc-what-is-a-prompt" class="nav-link active" data-scroll-target="#what-is-a-prompt">What is a prompt?</a></li>
+  <li><a href="#components-of-a-good-prompt" id="toc-components-of-a-good-prompt" class="nav-link" data-scroll-target="#components-of-a-good-prompt">Components of a good prompt</a>
+  <ul class="collapse">
+  <li><a href="#principle-1-be-clear-and-specific" id="toc-principle-1-be-clear-and-specific" class="nav-link" data-scroll-target="#principle-1-be-clear-and-specific">Principle 1: Be clear and specific</a></li>
+  <li><a href="#principle-2-provide-examples" id="toc-principle-2-provide-examples" class="nav-link" data-scroll-target="#principle-2-provide-examples">Principle 2: Provide examples</a></li>
+  <li><a href="#principle-3-let-models-think" id="toc-principle-3-let-models-think" class="nav-link" data-scroll-target="#principle-3-let-models-think">Principle 3: Let models think</a></li>
+  <li><a href="#principle-4-structure-prompts-into-sections" id="toc-principle-4-structure-prompts-into-sections" class="nav-link" data-scroll-target="#principle-4-structure-prompts-into-sections">Principle 4: Structure prompts into sections</a></li>
+  <li><a href="#principle-5-split-complex-tasks-into-smaller-steps" id="toc-principle-5-split-complex-tasks-into-smaller-steps" class="nav-link" data-scroll-target="#principle-5-split-complex-tasks-into-smaller-steps">Principle 5: Split complex tasks into smaller steps</a></li>
+  <li><a href="#principle-6-with-long-contexts-repeat-instructions" id="toc-principle-6-with-long-contexts-repeat-instructions" class="nav-link" data-scroll-target="#principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</a></li>
+  </ul></li>
+  <li><a href="#other-advanced-prompting-techniques" id="toc-other-advanced-prompting-techniques" class="nav-link" data-scroll-target="#other-advanced-prompting-techniques">Other advanced prompting techniques</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Prompt engineering 101</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">openai</div>
+    <div class="quarto-category">anthropic</div>
+    <div class="quarto-category">python</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 26, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">June 26, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do.</p>
+<p>I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made Cursor agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their “ultimate prompt” that it often feels closer to astrology than to engineering.</p>
+<p>This article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based applications, but will avoid you making obvious mistakes.</p>
+<p>Let’s get started!</p>
+<section id="what-is-a-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-prompt">What is a prompt?</h2>
+<p>Prompts are instructions sent as text to an LLM. Most models work with two types of instructions:</p>
+<ol type="1">
+<li><strong>System/developer prompt</strong>: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”</li>
+<li><strong>User prompt</strong>: The actual question end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents”</li>
+</ol>
+<p>The system prompt gives the assistant a “role”, while the user prompt requests specific content within that framework.</p>
+<p>Prompts are usually provided as messages, which are a list of objects with a role and a content:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>messages <span class="op">=</span> [</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What's the weather in Tokyo?"</span>}</span>
+<span id="cb1-4"><a href="#cb1-4"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em>, after combining the system and user prompts:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>&lt;|im_start|&gt;system</span>
+<span id="cb2-2"><a href="#cb2-2"></a>You are a helpful assistant.</span>
+<span id="cb2-3"><a href="#cb2-3"></a>&lt;|im_end|&gt;</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>&lt;|im_start|&gt;user</span>
+<span id="cb2-6"><a href="#cb2-6"></a>What's the weather in Tokyo?</span>
+<span id="cb2-7"><a href="#cb2-7"></a>&lt;|im_end|&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s response<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It looks like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>&lt;|im_start|&gt;assistant</span>
+<span id="cb3-2"><a href="#cb3-2"></a>The weather in Tokyo is sunny.</span>
+<span id="cb3-3"><a href="#cb3-3"></a>&lt;|im_end|&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll generally use the system and user prompts to instruct the model. But for some prompting techniques, such as few-shot prompting, people often use assistant messages to simulate model responses.</p>
+</section>
+<section id="components-of-a-good-prompt" class="level2">
+<h2 class="anchored" data-anchor-id="components-of-a-good-prompt">Components of a good prompt</h2>
+<p>There are many useful free resources online you can use to learn more about prompt engineering. I recommend <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#prompt-engineering-tutorial">this article</a> by Anthropic or <a href="https://platform.openai.com/docs/guides/text?api-mode=responses">this one</a> by OpenAI.</p>
+<p>Most of the advice boils down to these 6 principles:</p>
+<ol type="1">
+<li>Be clear and specific</li>
+<li>Provide examples</li>
+<li>Let models think</li>
+<li>Structure prompts into sections and use clear delimiters</li>
+<li>Split complex tasks into smaller steps</li>
+<li>Repeat instructions when the context is long</li>
+</ol>
+<p>Let’s go through each of these principles in more detail.</p>
+<section id="principle-1-be-clear-and-specific" class="level3">
+<h3 class="anchored" data-anchor-id="principle-1-be-clear-and-specific">Principle 1: Be clear and specific</h3>
+<p>This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: “If I didn’t have any background knowledge in this domain, could I complete this task based on the text that I just wrote in this prompt?”</p>
+<p>In addition to describing the task, you should also provide a role for the model. For example, if you’re classifying documents you can use a role like “You’re an expert in document classification” or if you’re dealing with financial data you can use a role like “You’re an expert in financial analysis”.</p>
+<p>Here’s an example of a clear and specific prompt:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>You're an expert in business writing. Please review and improve this email by addressing the following issues:</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>- Fix any grammatical errors and typos</span>
+<span id="cb4-4"><a href="#cb4-4"></a>- Improve clarity and conciseness</span>
+<span id="cb4-5"><a href="#cb4-5"></a>- Ensure professional tone throughout</span>
+<span id="cb4-6"><a href="#cb4-6"></a>- Strengthen the subject line to be more specific</span>
+<span id="cb4-7"><a href="#cb4-7"></a>- Add a clear call-to-action if missing</span>
+<span id="cb4-8"><a href="#cb4-8"></a>- Format for better readability (bullets, paragraphs, etc.)</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>&lt;EMAIL CONTENT&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This information will let the LLM know which specific task you want it to perform. This should go in the system prompt.</p>
+</section>
+<section id="principle-2-provide-examples" class="level3">
+<h3 class="anchored" data-anchor-id="principle-2-provide-examples">Principle 2: Provide examples</h3>
+<p>One of the lowest hanging fruit in prompt engineering is to provide examples. It’s as simple as showing the model a few input and output pairs.</p>
+<p>This technique is formally known as “few shot prompt”. It’s a simple but effective way to improve the <a href="https://arxiv.org/abs/2009.03300">quality of the output</a> in many tasks.</p>
+<p>Here’s an example of a few-shot prompt:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.</span>
+<span id="cb5-2"><a href="#cb5-2"></a>Examples:</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a>**Example 1**:</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>Input: 'Ian Peter Bernard Stephen'</span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>Output: 'NRDN'</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a>**Example 2**:</span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>Input: 'Javier Dylan Christopher Joseph'</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a>Output: 'RNRH'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In my experience, it’s better to provide these examples directly in the system prompt because it’s easier to read and keep everything close together. However, as mentioned above, some people prefer to use assistant messages to provide examples.</p>
+</section>
+<section id="principle-3-let-models-think" class="level3">
+<h3 class="anchored" data-anchor-id="principle-3-let-models-think">Principle 3: Let models think</h3>
+<p>LLMs think in tokens. If you want them to achieve better results, you should let them use tokens to reason about the problem before generating the final answer.</p>
+<p>This process is formally known as “Chain of Thought” (CoT) prompting. Similar to few shot prompts, it’s a powerful way to improve the <a href="https://arxiv.org/abs/2201.11903">quality of results</a> in many tasks.</p>
+<p>A 0-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means you provide two examples, etc.).</p>
+<p>Here are two examples of CoT prompts:</p>
+<section id="shot-cot-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="shot-cot-prompt">0-Shot CoT Prompt</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>**Note:** think about your answer step by step</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="shot-cot-prompt-1" class="level4">
+<h4 class="anchored" data-anchor-id="shot-cot-prompt-1">1-Shot CoT Prompt</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>&lt;example&gt;</span>
+<span id="cb7-2"><a href="#cb7-2"></a>**Question:** Emily buys 3 notebooks at $4 each and 2 pens at $1.50 each. What's her total cost?</span>
+<span id="cb7-3"><a href="#cb7-3"></a>**Reasoning:**</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>1. Cost of notebooks = 3 × $4 = $12</span>
+<span id="cb7-6"><a href="#cb7-6"></a>2. Cost of pens = 2 × $1.50 = $3</span>
+<span id="cb7-7"><a href="#cb7-7"></a>3. Total cost = $12 + $3 = $15</span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a>**Answer:** $15</span>
+<span id="cb7-10"><a href="#cb7-10"></a>&lt;/example&gt;</span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the thinking tokens in the response. OpenAI and Anthropic will only give you the final answer.</p>
+</section>
+</section>
+<section id="principle-4-structure-prompts-into-sections" class="level3">
+<h3 class="anchored" data-anchor-id="principle-4-structure-prompts-into-sections">Principle 4: Structure prompts into sections</h3>
+<p>It’s a common practice to structure system and user prompts into sections. Some people like to use markdown formatting to make the prompt more readable, others use xml tags. You can also use reverse backticks (```) to delimit code blocks or JSON objects. Regardless of the method you use, make sure to do it consistently.</p>
+<p>I really haven’t checked if there is any hard evidence that proves this really improves performance because it just <em>feels right</em>. It also helps with readability. You will spend a lot of time iterating on prompts, so making them easy to read is already a good investment on its own.</p>
+<section id="system-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="system-prompt">System prompt</h4>
+<p>For system prompts, you can use the following structure:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>**Role and objective**</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>You’re an expert document classifier. Your goal is to classify this document…</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>**Rules**</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>1. Documents that contain information about medical treatments should be classified as …</span>
+<span id="cb8-8"><a href="#cb8-8"></a>2. Do not classify documents into multiple categories</span>
+<span id="cb8-9"><a href="#cb8-9"></a>3. …</span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a>**Examples**</span>
+<span id="cb8-12"><a href="#cb8-12"></a></span>
+<span id="cb8-13"><a href="#cb8-13"></a>Input: [document text]</span>
+<span id="cb8-14"><a href="#cb8-14"></a>Classification: [document category]</span>
+<span id="cb8-15"><a href="#cb8-15"></a>…</span>
+<span id="cb8-16"><a href="#cb8-16"></a></span>
+<span id="cb8-17"><a href="#cb8-17"></a>**Output**</span>
+<span id="cb8-18"><a href="#cb8-18"></a></span>
+<span id="cb8-19"><a href="#cb8-19"></a>You should generate a JSON object with this structure: [JSON schema]</span>
+<span id="cb8-20"><a href="#cb8-20"></a></span>
+<span id="cb8-21"><a href="#cb8-21"></a>**(Optional) Reiterate objective and elicit thinking**</span>
+<span id="cb8-22"><a href="#cb8-22"></a></span>
+<span id="cb8-23"><a href="#cb8-23"></a>Your goal is to XYZ… Before writing your answers, write your reasoning step by step.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The headers are for reference only, you can skip them if you want. You also don’t need to include all of these sections in your prompt.</p>
+</section>
+<section id="user-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="user-prompt">User prompt</h4>
+<p>I’d recommend to keep user prompts short:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>**Context**</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>Input: [document text]</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a>**Briefly reiterate objective**</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>Please classify this document into a category.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In it’s simplest form, you just provide the context the LLM needs to work with and reiterate the objective.</p>
+</section>
+</section>
+<section id="principle-5-split-complex-tasks-into-smaller-steps" class="level3">
+<h3 class="anchored" data-anchor-id="principle-5-split-complex-tasks-into-smaller-steps">Principle 5: Split complex tasks into smaller steps</h3>
+<p>LLMs often get confused when the <a href="https://arxiv.org/abs/2307.03172">context is too long</a> and/or the instructions are complex.</p>
+<p>For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does the document classification and the entity extraction, you can split the task into two steps:</p>
+<ol type="1">
+<li>First, you classify the document into a category.</li>
+<li>Then, you extract the entities from the document, based on the category.</li>
+</ol>
+<p>Here’s an example of the same task split into two steps.</p>
+<section id="big-complex-prompt" class="level4">
+<h4 class="anchored" data-anchor-id="big-complex-prompt">Big complex prompt</h4>
+<p>This prompt tries (and likely fails) to do two complex tasks at once.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a>- Medical</span>
+<span id="cb10-4"><a href="#cb10-4"></a>- Financial</span>
+<span id="cb10-5"><a href="#cb10-5"></a>- Legal</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a>Then, if the document is classified as "Medical", extract the following entities:</span>
+<span id="cb10-8"><a href="#cb10-8"></a>...</span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a>If the document is classified as "Financial", extract the following entities:</span>
+<span id="cb10-11"><a href="#cb10-11"></a>...</span>
+<span id="cb10-12"><a href="#cb10-12"></a></span>
+<span id="cb10-13"><a href="#cb10-13"></a>If the document is classified as "Legal", extract the following entities:</span>
+<span id="cb10-14"><a href="#cb10-14"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="smaller-simpler-prompts" class="level4">
+<h4 class="anchored" data-anchor-id="smaller-simpler-prompts">Smaller, simpler prompts</h4>
+<p>This second approach splits the task into two smaller prompts that do each task separately.</p>
+<p><strong>Prompt 1: Document classification</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a>- Medical</span>
+<span id="cb11-4"><a href="#cb11-4"></a>- Financial</span>
+<span id="cb11-5"><a href="#cb11-5"></a>- Legal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Prompt N: Entity extraction (one for each category)</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to extract the entities from the document.</span>
+<span id="cb12-2"><a href="#cb12-2"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="principle-6-with-long-contexts-repeat-instructions" class="level3">
+<h3 class="anchored" data-anchor-id="principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</h3>
+<p>LLMs often get confused when the context is too long and the instructions are complex. When context gets above a certain length, it’s better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts">30% performance improvement</a> when using this technique.</p>
+<p>You can use the following structure:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>&lt;VERY LONG CONTEXT&gt;</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a>Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When dealing with long contexts, I generally reiterate the objective at the bottom of the system and user prompts.</p>
+</section>
+</section>
+<section id="other-advanced-prompting-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="other-advanced-prompting-techniques">Other advanced prompting techniques</h2>
+<p>After you’ve mastered the basics, you’re 90% of the way there. There are other more advanced techniques that might also be worth trying out:</p>
+<ol type="1">
+<li><strong>Exemplar Selection KNN (ES-KNN):</strong> Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has shown to <a href="https://arxiv.org/abs/2506.05614">improve the quality of the results</a> in many tasks.</li>
+<li><strong>Self-consistency (SC):</strong> You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has shown to <a href="https://arxiv.org/abs/2203.11171">boost the performance</a> of CoT prompting.</li>
+<li><strong>Thread of Thought (ThoT):</strong> It’s a <a href="https://arxiv.org/abs/2311.08734">two-tiered prompting system</a> that first asks the LLM to do an analytical dissection of the context, step by step, and summarizing intermediate results. Then, it uses another prompt to distill the analysis into a final answer.</li>
+</ol>
+<p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al is a good starting point.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This article is a short guide to help you write better prompts. Good prompt engineering can be summarized in 6 key principles:</p>
+<ol type="1">
+<li>Be clear and specific</li>
+<li>Provide examples</li>
+<li>Let models think</li>
+<li>Structure prompts into sections and use clear delimiters</li>
+<li>Split complex tasks into smaller steps</li>
+<li>Repeat instructions when the context is long</li>
+</ol>
+<p>These principles will not solve all the problems in your agentic workflow or LLM-based applications. But they will help you get started.</p>
+<p>I hope you found this article useful. If you have any questions or feedback, leave a comment below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>It didn’t work, but I felt much better about myself.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I removed the thinking tokens for brevity.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Engineering 101},
+  date = {2025-06-26},
+  url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“Prompt Engineering 101.”</span> June 26,
+2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

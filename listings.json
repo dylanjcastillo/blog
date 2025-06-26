@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/prompt-engineering-101.html",
       "/posts/seed-temperature-llms.html",
       "/posts/2024-personal-snapshot.html",
       "/posts/gemini-structured-outputs.html",
