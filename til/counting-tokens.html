@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2023-02-17">
-<meta name="description" content="Learn how to use LinkedIn to get more and higher quality job opportunities.">
+<meta name="dcterms.date" content="2025-06-27">
+<meta name="description" content="Counting tokens in different languages, and their implications for cost.">
 
-<title>Tips for Standing Out on LinkedIn – Dylan Castillo</title>
+<title>A prompt in Japanese uses 77% more tokens than in English – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -76,13 +111,13 @@ ul.task-list li input[type="checkbox"] {
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Tips for Standing Out on LinkedIn – Dylan Castillo">
+<meta property="og:title" content="A prompt in Japanese uses 77% more tokens than in English – Dylan Castillo">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Tips for Standing Out on LinkedIn – Dylan Castillo">
+<meta name="twitter:title" content="A prompt in Japanese uses 77% more tokens than in English – Dylan Castillo">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary_large_image">
@@ -138,26 +173,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#finding-a-great-job" id="toc-finding-a-great-job" class="nav-link active" data-scroll-target="#finding-a-great-job">Finding a (Great) Job</a></li>
-  <li><a href="#playing-the-numbers-game" id="toc-playing-the-numbers-game" class="nav-link" data-scroll-target="#playing-the-numbers-game">Playing the Numbers Game</a>
-  <ul class="collapse">
-  <li><a href="#inbound-leads" id="toc-inbound-leads" class="nav-link" data-scroll-target="#inbound-leads">Inbound Leads</a></li>
-  <li><a href="#outbound-leads" id="toc-outbound-leads" class="nav-link" data-scroll-target="#outbound-leads">Outbound Leads</a></li>
-  </ul></li>
-  <li><a href="#interviewing-101" id="toc-interviewing-101" class="nav-link" data-scroll-target="#interviewing-101">Interviewing 101</a>
-  <ul class="collapse">
-  <li><a href="#general-advice" id="toc-general-advice" class="nav-link" data-scroll-target="#general-advice">General Advice</a></li>
-  <li><a href="#behavioral-interview" id="toc-behavioral-interview" class="nav-link" data-scroll-target="#behavioral-interview">Behavioral interview</a></li>
-  <li><a href="#technical-interview" id="toc-technical-interview" class="nav-link" data-scroll-target="#technical-interview">Technical interview</a></li>
-  <li><a href="#take-home-challenge" id="toc-take-home-challenge" class="nav-link" data-scroll-target="#take-home-challenge">Take-home Challenge</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul>
-</nav>
+        
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
 Subscribe to my newsletter
@@ -168,9 +184,11 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Tips for Standing Out on LinkedIn</h1>
+<h1 class="title">A prompt in Japanese uses 77% more tokens than in English</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">productivity</div>
+    <div class="quarto-category">til</div>
+    <div class="quarto-category">openai</div>
+    <div class="quarto-category">tiktoken</div>
   </div>
   </div>
 
@@ -197,7 +215,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 17, 2023</p>
+      <p class="date">June 27, 2025</p>
     </div>
   </div>
   
@@ -215,137 +233,93 @@ Subscribe to my newsletter
 </header>
 
 
-<p>A few months ago I wrote a <a href="https://www.reddit.com/r/datascience/comments/vzmcc2/some_ideas_to_improve_your_linkedin_profile/">post</a> that blew up on <a href="https://www.reddit.com/r/datascience/">r/datascience</a> about how to make your LinkedIn profile stand out when searching for a job.</p>
-<p>Since then, the economic situation has worsened. We’re now on the verge of an economic downturn, more than <a href="https://layoffs.fyi/">100,000 people have been laid off</a> from tech companies this year, and investors are warning founders of <a href="https://techcrunch.com/2022/05/19/yc-advises-founders-to-plan-for-the-worst/">tough times ahead</a>, so I’ve decided to expand on that original post.</p>
-<p>This isn’t a post about how to get thousands of followers, nor how to become the most popular LinkedIn <a href="https://www.youtube.com/shorts/IHt9PJM8Md8">influencer</a>. It’s about how to use LinkedIn to get more and better quality job opportunities.</p>
-<p>It comes from reading many papers about LinkedIn’s search and ranking algorithms, learning about LinkedIn Recruiter, and making lots of mistakes while working on <a href="https://linkedin.com/in/dylanjcastillo/">my own profile</a>.</p>
-<p>Let’s get to it!</p>
-<section id="finding-a-great-job" class="level2">
-<h2 class="anchored" data-anchor-id="finding-a-great-job">Finding a (Great) Job</h2>
-<p>There are two ways to find a good job: <a href="https://sive.rs/gethired">obsess over a few companies</a> or play the numbers game. On the plus side, the former will increase your chances of landing your dream job, while the latter will likely lead to a better financial outcome. On the other hand, the former is riskier because it places all of your eggs in one or a few baskets, whereas the latter may not lead to the job you were hoping for.</p>
-<p>In this article, I’ll focus on the second strategy as that’s the one I’ve focused on in my career. I never had a dream job in mind because I’ve always wanted to start my own business and the financial aspect was also important to me, so I prioritized learning relevant skills as well as a good salary. Despite not having a “dream job,” I was able to work at cool places like the Boston Consulting Group, Deliveroo, and the Olympics. I’ve also successfully transitioned into full-time freelancing in a very competitive industry.</p>
-<p>However, this does not imply that the approach I took is the best one. Everyone has different preferences and should choose a strategy based on what they want to optimize for.</p>
-</section>
-<section id="playing-the-numbers-game" class="level2">
-<h2 class="anchored" data-anchor-id="playing-the-numbers-game">Playing the Numbers Game</h2>
-<p>The numbers game in job hunting consists of increasing the number of relevant job opportunities that you can access. It is not simply applying to as many job openings as possible.</p>
-<p>Your goal is to obtain as many relevant opportunities as possible by actively seeking them or by making your profile appealing to hiring managers and recruiters. Those who apply for jobs mindlessly are not following this strategy correctly. They’re just wasting their time.</p>
-<p>You should think of your job search as a three-part funnel:</p>
-<ol type="1">
-<li>Leads (job opportunities)</li>
-<li>Interviews</li>
-<li>Offers</li>
-</ol>
-<p>I will cover the first part of the funnel, <em>Leads</em>, and a will provide you with some tips for the second, <em>Interviews</em>. For the first part, the advice comes from my own experience, and the research I’ve done about LinkedIn’s algorithms. For the second part, the advice is mostly based on my own experience.</p>
-<p>You’ll need to focus on two things to increase the number of relevant job opportunities or “qualified leads”: <strong>inbound</strong> and <strong>outbound</strong> <strong>leads</strong>.</p>
-<section id="inbound-leads" class="level3">
-<h3 class="anchored" data-anchor-id="inbound-leads">Inbound Leads</h3>
-<p>Inbound leads are those that come to you without your intervention. Typically, recruiters and hiring managers connect with you on LinkedIn or send you InMail messages.</p>
-<p>Recruiters use <a href="https://business.linkedin.com/talent-solutions/recruiter">LinkedIn Recruiter</a> to find candidates. They can search for terms such as “Data Scientist” and define filters like &nbsp;“has worked at Google” when looking for candidates.</p>
-<p>After a query is defined, LinkedIn Recruiter uses what they call a <a href="https://arxiv.org/pdf/1809.06473.pdf"><strong>talent search algorithm</strong></a>. It works in two stages:</p>
-<ol type="1">
-<li><strong>Search:</strong> It searches the network and defines a set of a few thousand candidates who meet the recruiter’s search criteria.</li>
-<li><strong>Rank:</strong> It provides the recruiter with a list of candidates ranked by how well they fit the search term and how likely they are to respond.</li>
-</ol>
-<p>That’s all. If you want to get more job opportunities, you must figure out how to increase your chances of appearing in step 1 and ranking higher during step 2.</p>
-<p>Fortunately, LinkedIn has released tons of research on its talent search algorithm. It’s not difficult to imagine what will help you stand out from the crowd. Here’s what I’ve found more impactful:</p>
-<ol type="1">
-<li><strong>Use relevant keywords in your profile.</strong> You won’t show up in the results if your profile doesn’t include search terms that recruiters use to find candidates. Examine the keywords used in the job descriptions for the positions you’re interested in, and make sure you have them in your profile.</li>
-<li><strong>Reply to recruiters.</strong> People often don’t reply to recruiters when they’re not interested in the job opportunity. But the <a href="https://arxiv.org/abs/1809.06473">algorithm</a> prioritizes those who are likely to respond over those who are not. Even if it’s just to say no, respond to recruiters!</li>
-<li><strong>Engage with the brands you’re interested in on LinkedIn.</strong> Recruiters <a href="https://youtu.be/S6mVwmCHShk?t=50">can narrow down their search</a> to candidates who have interacted with the brand or have connections who work for that company. If you’re particularly interested in a company, follow their profile, interact with their content, and add connections who work there.</li>
-<li><strong>Expand your network.</strong> <a href="https://business.linkedin.com/talent-solutions/recruiter-lite">LinkedIn Recruiter Lite</a>, a cheaper version of LinkedIn Recruiter, only lets users reach out to candidates up to their third-degree network. This means that the fewer connections you have, the less likely it is a recruiter can contact you.</li>
-<li><strong>Increase your influence.</strong> If you create engaging content, have a large number of visitors to your profile, or receive endorsements and recommendations, you will <a href="https://arxiv.org/abs/1602.04572">rank higher</a>. As a general rule, try to write useful content on a regular basis and solicit recommendations from relevant contacts. LinkedIn’s <a href="https://www.linkedin.com/sales/ssi">Social Selling Index</a> is a good proxy for how well you’re positioning yourself.</li>
-<li><strong>Get a good photo.</strong> This is based on my personal experience. But I believe people are more likely to contact you if your photo looks somewhat professional.</li>
-</ol>
-<p>None of these concepts are revolutionary, but most people overlook them when creating their profiles. LinkedIn’s goal is to match recruiters with the best possible candidates. So your job is to figure out what recruiters are searching for and how to best match that.</p>
-<p>Furthermore, even if recruiters or hiring managers do not pay for LinkedIn Recruiter and instead use the standard search service, the suggestions above will still help you improve your profile.</p>
-</section>
-<section id="outbound-leads" class="level3">
-<h3 class="anchored" data-anchor-id="outbound-leads">Outbound Leads</h3>
-<p>Outbound opportunities are the ones you apply to. Usually, that means applying for jobs on LinkedIn under the <a href="https://www.linkedin.com/jobs/">Jobs</a> tab.</p>
-<p>This takes time and has a very low ROI if not done correctly. I’ve discovered that the following increases its effectiveness:</p>
-<ol type="1">
-<li>Set up <a href="https://www.linkedin.com/learning/linkedin-quick-tips-2022/set-up-job-alerts">alerts</a> for roles you’re interested in.</li>
-<li>Don’t apply for jobs posted more than a week ago.</li>
-<li>Prioritize jobs for which you can contact the poster or someone in a relevant position within the company. In those cases, send them a personalized message expressing your interest. The best way to accomplish this is to connect with them and add a note to the connection request.</li>
-<li>Change your CV to fit the position you’re applying for. Read the job’s requirements and try to highlight the parts of your work history that match them.</li>
-</ol>
-<p>Finally, many opportunities are built through real-world connections, so reach out to people outside of LinkedIn, join relevant communities, and attend meetups.</p>
-</section>
-</section>
-<section id="interviewing-101" class="level2">
-<h2 class="anchored" data-anchor-id="interviewing-101">Interviewing 101</h2>
-<p>It is usually simple to figure out how to prepare for an interview. The difficult part is carrying out the plan.</p>
-<p>I’ve only worked as a Data Scientist and ML Engineer, so I can’t offer advice for interviews outside of those roles. Here are some examples of things that help you get better results for interviews for those roles.</p>
-<section id="general-advice" class="level3">
-<h3 class="anchored" data-anchor-id="general-advice">General Advice</h3>
-<p>You should do the following for any kind of interview:</p>
-<ol type="1">
-<li><strong>Research the company and the role.</strong> You should know what the company does, its competitors, and recent news. You should also think about what the role you’re applying for entails. Also, use <a href="glassdoor.com">Glassdoor</a>, <a href="reddit.com/">Reddit</a>, or ask other people to find out what questions they typically ask during interviews.</li>
-<li><strong>Review the projects you’ve worked on.</strong> Make sure that you know the ins and outs of each one and have an elevator pitch for each of them. You’d be surprised how many people are rejected because they don’t fully understand key details in the projects they’ve worked on or can’t clearly explain what they did.</li>
-<li><strong>Be assertive.</strong> One of the worst places to sell yourself short is during an interview. While it’s obvious that lying during interviews is bad (and you will be caught sooner or later), not expressing confidence is equally bad.<br>
-Consider how many people are willing to lie to get a job; if you sell yourself short, you give dishonest people a better chance of winning.</li>
-<li><strong>See the interview as a conversation of equals.</strong> If you’ve mastered the technical bits, the only big obstacle in an interview is the mindset. They’re seeing if you’re a good fit, but you’re also seeing if they are a good fit. Don’t treat it like an exam.</li>
-<li><strong>Don’t take rejections personally.</strong> Some interviews will go well, others won’t. Sometimes you’re to blame, and other times it’s due to circumstances beyond your control. When you fail an interview, consider why it didn’t go well, use the feedback to improve your next interview and move on.</li>
-</ol>
-<p>In a nutshell, know yourself, know what you’re interviewing for, and be assertive.</p>
-</section>
-<section id="behavioral-interview" class="level3">
-<h3 class="anchored" data-anchor-id="behavioral-interview">Behavioral interview</h3>
-<p>These questions are opportunities to sell yourself, so make sure you have good responses. It simply takes practice.</p>
-<p>Here’s what you should do:</p>
-<ol type="1">
-<li>Make a list of 10-15 commonly asked questions (you can start <a href="https://hbr.org/2021/11/10-common-job-interview-questions-and-how-to-answer-them">here</a>)</li>
-<li>Record yourself answering those questions. For questions like “Give me an example when you did…” or “Tell me about a situation when you…” use the <a href="https://www.rightattitudes.com/2008/07/15/star-technique-answer-interview-questions/">STAR</a> framework.</li>
-<li>See the recordings, give yourself honest feedback, and repeat the process.</li>
-<li>Try practicing with a friend or colleague, and ask them for feedback.</li>
-</ol>
-<p>Let me say it again: practice these questions! You should make sure you get these “easy” points during an interview.</p>
-</section>
-<section id="technical-interview" class="level3">
-<h3 class="anchored" data-anchor-id="technical-interview">Technical interview</h3>
-<p>Technical interviews aren’t usually a great measure of your skills, so don’t base your identity on how you do in them. They are like tests, and all you have to do to pass them is study. And if you don’t pass, it’s not the end of the world; you’ll have more chances elsewhere.</p>
-<p>Here’s what you should do to prepare at the very least:</p>
-<ol type="1">
-<li>Research how the company and team conduct technical interviews.</li>
-<li>Examine the job description to determine the most important topics to research.</li>
-<li>Practice questions in the programming languages used in the team on <a href="https://www.hackerrank.com/">HackerRank</a> or similar.</li>
-<li>Use <a href="https://apps.ankiweb.net/">Anki</a> or another Spaced Repetition System (SRS) to practice key topics you might need to cover. Ideally, make your own cards using your favorite book on the topic.</li>
-</ol>
-</section>
-<section id="take-home-challenge" class="level3">
-<h3 class="anchored" data-anchor-id="take-home-challenge">Take-home Challenge</h3>
-<p>These are hard to practice because every company does them their own way. If you’re a Data Scientist or ML Engineer, you can go to <a href="https://www.kaggle.com/">Kaggle</a>, find a dataset that looks interesting to you, come up with some interesting questions, and then answer them. Or building a small ML model for a specific purpose.</p>
-<p><em>Bonus points:</em> Make sure your projects look nice, write a README explaining what you did, and put all that on GitHub. Also, write short posts on LinkedIn and share your projects.</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s it! By now, you should have a good sense of how LinkedIn works and how you can use it to get more opportunities your way.</p>
-<p>If you’re interested in learning more about the technical aspects of how the LinkedIn search works, they’ve published a lot of useful material you can check:</p>
+<p>OpenAI mentions in their documentation that <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">1 token corresponds to roughly 4 characters</a>.</p>
+<p>I was curious how this would work for different languages. So I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a> and translated it into different languages (English, Spanish, French, German, Japanese, Chinese, Hindi, Russian, and Portuguese), and counted the tokens.</p>
+<p>Here’s the code:</p>
+<div id="cell-2" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> tiktoken</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">def</span> read_text(file_path):</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="cf">with</span> <span class="bu">open</span>(file_path, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="cf">return</span> <span class="bu">file</span>.read()</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>text_en <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/en.md"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>text_es <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/es.md"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>text_fr <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/fr.md"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>text_de <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/de.md"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>text_jp <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/jp.md"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>text_zh <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/zh.md"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>text_hi <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/hi.md"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>text_ru <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/ru.md"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15"></a>text_pt <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/pt.md"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="kw">def</span> count_tokens(text):</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="cf">return</span> <span class="bu">len</span>(tiktoken.encoding_for_model(<span class="st">"gpt-4o"</span>).encode(text))</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a>chars_count <span class="op">=</span> {</span>
+<span id="cb1-21"><a href="#cb1-21"></a>    <span class="st">"en"</span>: <span class="bu">len</span>(text_en),</span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="st">"es"</span>: <span class="bu">len</span>(text_es),</span>
+<span id="cb1-23"><a href="#cb1-23"></a>    <span class="st">"fr"</span>: <span class="bu">len</span>(text_fr),</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    <span class="st">"de"</span>: <span class="bu">len</span>(text_de),</span>
+<span id="cb1-25"><a href="#cb1-25"></a>    <span class="st">"jp"</span>: <span class="bu">len</span>(text_jp),</span>
+<span id="cb1-26"><a href="#cb1-26"></a>    <span class="st">"zh"</span>: <span class="bu">len</span>(text_zh),</span>
+<span id="cb1-27"><a href="#cb1-27"></a>    <span class="st">"hi"</span>: <span class="bu">len</span>(text_hi),</span>
+<span id="cb1-28"><a href="#cb1-28"></a>    <span class="st">"ru"</span>: <span class="bu">len</span>(text_ru),</span>
+<span id="cb1-29"><a href="#cb1-29"></a>    <span class="st">"pt"</span>: <span class="bu">len</span>(text_pt),</span>
+<span id="cb1-30"><a href="#cb1-30"></a>}</span>
+<span id="cb1-31"><a href="#cb1-31"></a></span>
+<span id="cb1-32"><a href="#cb1-32"></a>tokens_count <span class="op">=</span> {</span>
+<span id="cb1-33"><a href="#cb1-33"></a>    <span class="st">"en"</span>: count_tokens(text_en),</span>
+<span id="cb1-34"><a href="#cb1-34"></a>    <span class="st">"es"</span>: count_tokens(text_es),</span>
+<span id="cb1-35"><a href="#cb1-35"></a>    <span class="st">"fr"</span>: count_tokens(text_fr),</span>
+<span id="cb1-36"><a href="#cb1-36"></a>    <span class="st">"de"</span>: count_tokens(text_de),</span>
+<span id="cb1-37"><a href="#cb1-37"></a>    <span class="st">"jp"</span>: count_tokens(text_jp),</span>
+<span id="cb1-38"><a href="#cb1-38"></a>    <span class="st">"zh"</span>: count_tokens(text_zh),</span>
+<span id="cb1-39"><a href="#cb1-39"></a>    <span class="st">"hi"</span>: count_tokens(text_hi),</span>
+<span id="cb1-40"><a href="#cb1-40"></a>    <span class="st">"ru"</span>: count_tokens(text_ru),</span>
+<span id="cb1-41"><a href="#cb1-41"></a>    <span class="st">"pt"</span>: count_tokens(text_pt),</span>
+<span id="cb1-42"><a href="#cb1-42"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This reads the text from the file, and uses tiktoken to count the tokens. I also counted the number of characters in the text.</p>
+<p>Then I calculated the ratio of tokens to characters for each language.</p>
+<div id="cell-4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">for</span> lang <span class="kw">in</span> [<span class="st">"en"</span>, <span class="st">"es"</span>, <span class="st">"fr"</span>, <span class="st">"de"</span>, <span class="st">"jp"</span>, <span class="st">"zh"</span>, <span class="st">"hi"</span>, <span class="st">"ru"</span>, <span class="st">"pt"</span>]:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    chars <span class="op">=</span> chars_count[lang]</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    tokens <span class="op">=</span> tokens_count[lang]</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>lang<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>chars <span class="op">/</span> tokens<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>chars<span class="sc">}</span><span class="ss"> chars, </span><span class="sc">{</span>tokens<span class="sc">}</span><span class="ss"> tokens"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>en: 4.752314814814815, 2053 chars, 432 tokens
+es: 4.5602409638554215, 2271 chars, 498 tokens
+fr: 4.692844677137871, 2689 chars, 573 tokens
+de: 4.4586330935251794, 2479 chars, 556 tokens
+jp: 1.409387222946545, 1081 chars, 767 tokens
+zh: 1.3314500941619585, 707 chars, 531 tokens
+hi: 3.5104, 2194 chars, 625 tokens
+ru: 4.019434628975265, 2275 chars, 566 tokens
+pt: 4.631578947368421, 2200 chars, 475 tokens</code></pre>
+</div>
+</div>
+<p>Here are some highlights from the results:</p>
 <ul>
-<li><a href="https://arxiv.org/pdf/1602.04572.pdf">Personalized Expertise Search at LinkedIn</a></li>
-<li><a href="https://arxiv.org/pdf/1809.06473.pdf">Towards Deep and Representation Learning for Talent Search at LinkedIn</a></li>
-<li><a href="https://arxiv.org/pdf/1809.06481.pdf">Talent Search and Recommendation Systems at LinkedIn: Practical Challenges and Lessons Learned</a></li>
-<li><a href="https://arxiv.org/pdf/2108.13300.pdf">Deep Natural Language Processing For LinkedIn Search</a></li>
-<li><a href="https://arxiv.org/pdf/1709.00653.pdf">From Query-By-Keyword to Query-By-Example: LinkedIn Talent Search Approach</a></li>
-<li><a href="https://arxiv.org/pdf/2008.02460.pdf">DeText: A Deep Text Ranking Framework with BERT</a></li>
+<li>English is the most efficient language, with 4.75 tokens per character.</li>
+<li>Mandarin Chinese is the least efficient language, with 1.33 tokens per character.</li>
+<li>The same prompt in Japanese uses 77% more tokens than in English.</li>
+<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). However, Russian is the most efficient language that uses a non-latin alphabet.</li>
 </ul>
-<p>I hope you find this useful. If you have any questions <a href="https://www.linkedin.com/">reach out</a>!</p>
 
 
-</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Tips for {Standing} {Out} on {LinkedIn}},
-  date = {2023-02-17},
-  url = {https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html},
+  title = {A Prompt in {Japanese} Uses 77\% More Tokens Than in
+    {English}},
+  date = {2025-06-27},
+  url = {https://dylancastillo.co/til/counting-tokens.html},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2023. <span>“Tips for Standing Out on LinkedIn.”</span>
-February 17, 2023. <a href="https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html">https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“A Prompt in Japanese Uses 77% More Tokens
+Than in English.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

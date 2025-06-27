@@ -15,7 +15,293 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Thu, 26 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 27 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>A prompt in Japanese uses 77% more tokens than in English</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/counting-tokens.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>OpenAI mentions in their documentation that <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">1 token corresponds to roughly 4 characters</a>.</p>
+<p>I was curious how this would work for different languages. So I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a> and translated it into different languages (English, Spanish, French, German, Japanese, Chinese, Hindi, Russian, and Portuguese), and counted the tokens.</p>
+<p>Here’s the code:</p>
+<div id="cell-2" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> tiktoken</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> read_text(file_path):</span>
+<span id="cb1-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(file_path, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb1-5">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.read()</span>
+<span id="cb1-6"></span>
+<span id="cb1-7">text_en <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/en.md"</span>)</span>
+<span id="cb1-8">text_es <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/es.md"</span>)</span>
+<span id="cb1-9">text_fr <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/fr.md"</span>)</span>
+<span id="cb1-10">text_de <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/de.md"</span>)</span>
+<span id="cb1-11">text_jp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/jp.md"</span>)</span>
+<span id="cb1-12">text_zh <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/zh.md"</span>)</span>
+<span id="cb1-13">text_hi <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/hi.md"</span>)</span>
+<span id="cb1-14">text_ru <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/ru.md"</span>)</span>
+<span id="cb1-15">text_pt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/counting-tokens/pt.md"</span>)</span>
+<span id="cb1-16"></span>
+<span id="cb1-17"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> count_tokens(text):</span>
+<span id="cb1-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(tiktoken.encoding_for_model(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4o"</span>).encode(text))</span>
+<span id="cb1-19"></span>
+<span id="cb1-20">chars_count <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb1-21">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"en"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_en),</span>
+<span id="cb1-22">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"es"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_es),</span>
+<span id="cb1-23">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fr"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_fr),</span>
+<span id="cb1-24">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"de"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_de),</span>
+<span id="cb1-25">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"jp"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_jp),</span>
+<span id="cb1-26">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"zh"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_zh),</span>
+<span id="cb1-27">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hi"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_hi),</span>
+<span id="cb1-28">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ru"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_ru),</span>
+<span id="cb1-29">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pt"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(text_pt),</span>
+<span id="cb1-30">}</span>
+<span id="cb1-31"></span>
+<span id="cb1-32">tokens_count <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb1-33">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"en"</span>: count_tokens(text_en),</span>
+<span id="cb1-34">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"es"</span>: count_tokens(text_es),</span>
+<span id="cb1-35">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fr"</span>: count_tokens(text_fr),</span>
+<span id="cb1-36">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"de"</span>: count_tokens(text_de),</span>
+<span id="cb1-37">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"jp"</span>: count_tokens(text_jp),</span>
+<span id="cb1-38">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"zh"</span>: count_tokens(text_zh),</span>
+<span id="cb1-39">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hi"</span>: count_tokens(text_hi),</span>
+<span id="cb1-40">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ru"</span>: count_tokens(text_ru),</span>
+<span id="cb1-41">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pt"</span>: count_tokens(text_pt),</span>
+<span id="cb1-42">}</span></code></pre></div>
+</div>
+<p>This reads the text from the file, and uses tiktoken to count the tokens. I also counted the number of characters in the text.</p>
+<p>Then I calculated the ratio of tokens to characters for each language.</p>
+<div id="cell-4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> lang <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"en"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"es"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fr"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"de"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"jp"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"zh"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hi"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ru"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pt"</span>]:</span>
+<span id="cb2-2">    chars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> chars_count[lang]</span>
+<span id="cb2-3">    tokens <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tokens_count[lang]</span>
+<span id="cb2-4">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>lang<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>chars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> tokens<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">, </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>chars<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> chars, </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>tokens<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> tokens"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>en: 4.752314814814815, 2053 chars, 432 tokens
+es: 4.5602409638554215, 2271 chars, 498 tokens
+fr: 4.692844677137871, 2689 chars, 573 tokens
+de: 4.4586330935251794, 2479 chars, 556 tokens
+jp: 1.409387222946545, 1081 chars, 767 tokens
+zh: 1.3314500941619585, 707 chars, 531 tokens
+hi: 3.5104, 2194 chars, 625 tokens
+ru: 4.019434628975265, 2275 chars, 566 tokens
+pt: 4.631578947368421, 2200 chars, 475 tokens</code></pre>
+</div>
+</div>
+<p>Here are some highlights from the results:</p>
+<ul>
+<li>English is the most efficient language, with 4.75 tokens per character.</li>
+<li>Mandarin Chinese is the least efficient language, with 1.33 tokens per character.</li>
+<li>The same prompt in Japanese uses 77% more tokens than in English.</li>
+<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). However, Russian is the most efficient language that uses a non-latin alphabet.</li>
+</ul>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {A Prompt in {Japanese} Uses 77\% More Tokens Than in
+    {English}},
+  date = {2025-06-27},
+  url = {https://dylancastillo.co/til/counting-tokens.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“A Prompt in Japanese Uses 77% More Tokens
+Than in English.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>openai</category>
+  <category>tiktoken</category>
+  <guid>https://dylancastillo.co/til/counting-tokens.html</guid>
+  <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Prompt engineering 101</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -13939,621 +14225,6 @@ Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylanca
   <category>openai</category>
   <guid>https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</guid>
   <pubDate>Fri, 12 May 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Semantic Search with Elasticsearch, OpenAI, and LangChain</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://github.com/hwchase17/langchain">LangChain</a> is the new cool kid on the block. It’s a library designed to help you interact with Large Language Models (LLMs). Up until recently, I was building most things from scratch when working with LLMs, so I decided to give LangChain a try.</p>
-<p>After a <a href="https://deepsheet.dylancastillo.co/">few</a> <a href="https://namemancer.dylancastillo.co/">projects</a> using it, I’m truly impressed. It simplifies many of the routine tasks associated with working with LLMs, such as extracting text from documents or indexing them in a vector database. If you’re working with LLMs today, LangChain can save you hours of work.</p>
-<p>However, one drawback is that its <a href="https://python.langchain.com/en/latest/">documentation</a>, despite being extensive, can be scattered and difficult for newcomers to comprehend. Moreover, most of the content online focuses on the latest generation of vector databases. Since many organizations still use older, but battle-tested technologies such as <a href="https://www.elastic.co/">Elasticsearch</a> and I decided to write a tutorial using it.</p>
-<p>I combined LangChain and Elasticsearch in one of the most common LLM applications: semantic search. In this tutorial, I’ll walk you through building a semantic search service using Elasticsearch, OpenAI, LangChain, and FastAPI. You’ll create an application that lets users ask questions about Marcus Aurelius’ Meditations and provides them with concise answers by extracting the most relevant content from the book.</p>
-<p>Let’s dive in!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>You should be familiar with these topics to make the most out of this tutorial:</p>
-<ol type="1">
-<li>What <a href="https://blog.dataiku.com/semantic-search-an-overlooked-nlp-superpower?ref=dylancastillo.co">semantic search</a> is.</li>
-<li>How to use <a href="https://dylancastillo.co/elasticsearch-python/">Elasticsearch in Python</a>.</li>
-<li>What <a href="https://platform.openai.com/docs/guides/embeddings">text embeddings</a> are.</li>
-</ol>
-<p>In addition, you must install <a href="https://docs.docker.com/get-docker/?ref=dylancastillo.co">Docker</a> and create an account at <a href="https://beta.openai.com">OpenAI</a>.</p>
-</section>
-<section id="designing-a-semantic-search-service" class="level2">
-<h2 class="anchored" data-anchor-id="designing-a-semantic-search-service">Designing a Semantic Search Service</h2>
-<p>You’re going to build a service with three components:</p>
-<ol type="1">
-<li><strong>Indexer:</strong> This creates the index, generates the embeddings and the metadata (source and title of the book, in this case), and adds them to the vector database.</li>
-<li><strong>Vector database:</strong> This is a database that you use to store and retrieve the embeddings you generate.</li>
-<li><strong>Search app:</strong> This is a backend service that uses the user’s search term, generates an embedding from it, and then looks for the most similar embeddings in the vector database.</li>
-</ol>
-<p>Here’s a diagram of this architecture:</p>
-<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/images/semantic-search-elasticsearch-openai-langchain/image-12.png" class="img-fluid"></a></p>
-<p>If you’ve read my previous <a href="https://dylancastillo.co/semantic-search-with-opensearch-cohere-and-fastapi/">tutorial</a> on semantic search, you might have noticed that the <strong>vectorizer</strong> isn’t part of this architecture. I’m purposely skipping it because <code>langchain</code> takes care of that part for you, so you can have the indexer and vectorizer in the same place.</p>
-<p>Next, you’ll set up your local environment.</p>
-</section>
-<section id="set-up-your-local-environment" class="level2">
-<h2 class="anchored" data-anchor-id="set-up-your-local-environment">Set Up Your Local Environment</h2>
-<p>Follow these steps to set up your local environment:</p>
-<ol type="1">
-<li>Install <a href="https://www.python.org/downloads/">Python 3.10</a>.</li>
-<li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
-<li>Clone the project’s repository:</li>
-</ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain</span></code></pre></div>
-<ol start="4" type="1">
-<li><p>From the root folder of the project, install the dependencies:</p>
-<ul>
-<li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
-</ul>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> install</span></code></pre></div>
-<ul>
-<li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
-</ul>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3.10</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pip</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-r</span> requirements.txt</span></code></pre></div></li>
-<li><p>Open <code>src/.env-example</code>, add your secret OpenAI key, and save the file as <code>.env</code>.</p></li>
-</ol>
-<p>By now, you’ll have a virtual environment set up with the required libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">semantic-search-elasticsearch-openai-langchain</span></span>
-<span id="cb4-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> LICENSE</span>
-<span id="cb4-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> README.md</span>
-<span id="cb4-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> poetry.lock</span>
-<span id="cb4-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> pyproject.toml</span>
-<span id="cb4-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> requirements.txt</span>
-<span id="cb4-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> run_elasticsearch.sh</span>
-<span id="cb4-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> src</span>
-<span id="cb4-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> ├── app.py</span>
-<span id="cb4-10"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> ├── config.py</span>
-<span id="cb4-11"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── data</span>
-<span id="cb4-12"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> │   └── Marcus_Aurelius_Antoninus...</span>
-<span id="cb4-13"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> │       ├── index.html</span>
-<span id="cb4-14"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> │       ├── metadata.opf</span>
-<span id="cb4-15"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> │       └── style.css</span>
-<span id="cb4-16"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│&nbsp;&nbsp;</span> ├── indexer.py</span>
-<span id="cb4-17"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   └── .env-example</span>
-<span id="cb4-18"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">└──</span> .venv/</span></code></pre></div>
-<p>These are the most relevant files and directories in the project:</p>
-<ul>
-<li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies and are used by Poetry to create a virtual environment.</li>
-<li><code>requirements.txt</code>: This file contains a list of Python packages required by the project.</li>
-<li><code>run_elasticsearch_docker.sh</code>: This file contains a bash script used to run an Elasticsearch cluster locally.</li>
-<li><code>src/app.py</code>: This file contains the code of the search application.</li>
-<li><code>src/config.py</code>: This file contains project configuration specifications such as OpenAI’s API key (read from a <code>.env</code> file), the paths to the data, and the name of the index.</li>
-<li><code>src/data/</code>: This directory contains <a href="https://en.wikisource.org/wiki/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe">Meditations</a> as originally downloaded from <a href="https://en.wikisource.org/wiki/Main_Page?ref=dylancastillo.co">Wikisource</a>. You’ll use that as the corpus of text for this tutorial.</li>
-<li><code>src/indexer.py</code>: This file contains the code you use to create an index and insert the documents in OpenSearch.</li>
-<li><code>.env-example</code>: This file is typically used for environment variables. In this case, you use it to pass OpenAI’s API key to your application.</li>
-<li><code>.venv/</code>: This directory contains the project’s virtual environment.</li>
-</ul>
-<p>All done! Let’s get going.</p>
-</section>
-<section id="start-a-local-elasticsearch-cluster" class="level2">
-<h2 class="anchored" data-anchor-id="start-a-local-elasticsearch-cluster">Start a Local Elasticsearch Cluster</h2>
-<p>Before we get into the code, you should start a local Elasticsearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sh</span> run_elasticsearch_docker.sh</span></code></pre></div>
-<p>If everything went well, a lengthy text string will appear on the terminal. For the rest of the tutorial, keep this terminal window open in the background.</p>
-</section>
-<section id="split-and-index-the-book" class="level2">
-<h2 class="anchored" data-anchor-id="split-and-index-the-book">Split and Index the Book</h2>
-<p>In this step, you’ll do two things:</p>
-<ol type="1">
-<li>Process the text from the book by splitting it into chunks of 1,000 tokens.</li>
-<li>Index the text chunks you’ve generated (from now on called documents) in your Elasticsearch cluster.</li>
-</ol>
-<p>Take a look at <code>src/indexer.py</code>:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.document_loaders <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> BSHTMLLoader</span>
-<span id="cb6-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.embeddings.openai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenAIEmbeddings</span>
-<span id="cb6-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.text_splitter <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> RecursiveCharacterTextSplitter</span>
-<span id="cb6-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.vectorstores <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> ElasticVectorSearch</span>
-<span id="cb6-5"></span>
-<span id="cb6-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Paths, openai_api_key</span>
-<span id="cb6-7"></span>
-<span id="cb6-8"></span>
-<span id="cb6-9"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> main():</span>
-<span id="cb6-10">    loader <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> BSHTMLLoader(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>(Paths.book))</span>
-<span id="cb6-11">    data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> loader.load()</span>
-<span id="cb6-12"></span>
-<span id="cb6-13">    text_splitter <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RecursiveCharacterTextSplitter.from_tiktoken_encoder(</span>
-<span id="cb6-14">        chunk_size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>, chunk_overlap<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span></span>
-<span id="cb6-15">    )</span>
-<span id="cb6-16">    documents <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> text_splitter.split_documents(data)</span>
-<span id="cb6-17"></span>
-<span id="cb6-18">    embeddings <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenAIEmbeddings(openai_api_key<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>openai_api_key)</span>
-<span id="cb6-19">    db <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> ElasticVectorSearch.from_documents(</span>
-<span id="cb6-20">        documents,</span>
-<span id="cb6-21">        embeddings,</span>
-<span id="cb6-22">        elasticsearch_url<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"http://localhost:9200"</span>,</span>
-<span id="cb6-23">        index_name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"elastic-index"</span>,</span>
-<span id="cb6-24">    )</span>
-<span id="cb6-25">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(db.client.info())</span>
-<span id="cb6-26"></span>
-<span id="cb6-27"></span>
-<span id="cb6-28"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__main__"</span>:</span>
-<span id="cb6-29">    main()</span></code></pre></div>
-<p>This code takes Meditations, splits it into text chunks of 1,000 tokens, and then indexes those chunks in your Elasticsearch cluster. Here’s a detailed breakdown:</p>
-<ul>
-<li><strong>Lines 1 to 4</strong> import the required components from <code>langchain</code>:
-<ul>
-<li><strong><code>BSHTMLLoader</code></strong>: This <a href="https://python.langchain.com/en/latest/modules/indexes/document_loaders.html">loader</a> uses BeautifulSoup4 to parse the documents.</li>
-<li><strong><code>OpenAIEmbeddings</code></strong>: This component is a wrapper around OpenAI embeddings. It helps you generate embeddings for documents and queries.</li>
-<li><strong><code>RecursiveCharacterTextSplitter</code></strong>: This utility function divides the input text by attempting various characters in an order designed to maintain semantically similar content in proximity. The characters used for splitting, in the following order, are: <code>"\n\n"</code>, <code>"\n"</code>, <code>" "</code>, <code>""</code>.</li>
-<li><strong><code>ElasticSearchVector</code></strong>: This is a wrapper around the Elasticsearch client, that simplifies interacting with your cluster.</li>
-</ul></li>
-<li><strong>Line 6</strong> imports the relevant configurations from <code>config.py</code></li>
-<li><strong>Lines 11 and 12</strong> extract the book’s text using <code>BSHTMLLoader</code>.</li>
-<li><strong>Lines 13 to 16</strong> initialize the text splitter and split the text in chunks of no more than 1,000 tokens. In this case, you use <a href="https://github.com/openai/tiktoken"><code>tiktoken</code></a> to count the tokens but you can also use different <a href="https://python.langchain.com/en/latest/modules/indexes/text_splitters/getting_started.html">length functions</a>, such as counting the number of characters instead of tokens or a different tokenizing function.</li>
-<li><strong>Lines 18 to 25</strong> initialize the embeddings function, create a new index, and index the documents generated by the text splitter. In <code>elasticsearch_url</code>, you specify the port where your application is running locally, and in <code>index_name</code> you specify the name of the index you’ll use. Finally, you print the Elasticsearch client information.</li>
-</ul>
-<p>To run this script, open a terminal, activate the virtual environment, and from <code>src</code> folder of your project, run the following command:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># ../src/</span></span>
-<span id="cb7-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python</span> indexer.py</span></code></pre></div>
-<p>If everything went well, you should get an output that looks similar to this (but not properly formatted):</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb8-2">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"name"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"0e1113eb2915"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"cluster_name"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"docker-cluster"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-4">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"cluster_uuid"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"og6mFMqwQtaJiv_3E_q2YQ"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-5">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"version"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb8-6">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"number"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"8.7.0"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-7">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"build_flavor"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"default"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-8">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"build_type"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"docker"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-9">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"build_hash"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"09520b59b6bc1057340b55750186466ea715e30e"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-10">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"build_date"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2023-03-27T16:31:09.816451435Z"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-11">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"build_snapshot"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">false</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-12">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"lucene_version"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"9.5.0"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-13">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"minimum_wire_compatibility_version"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"7.17.0"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb8-14">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"minimum_index_compatibility_version"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"7.0.0"</span></span>
-<span id="cb8-15">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">},</span></span>
-<span id="cb8-16">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"tagline"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You Know, for Search"</span></span>
-<span id="cb8-17"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>Next, let’s create a simple FastAPI app, to interact with your cluster.</p>
-</section>
-<section id="create-a-search-application" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-search-application">Create a Search Application</h2>
-<p>In this step, you’ll create a simple application to interact with Meditations. You’ll connect to the Elasticsearch cluster, initialize the <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/vector_db_qa.html">Retrieval Questioning/Answering Chain</a>, and create an <code>/ask</code> endpoint that lets the user interact with the app.</p>
-<p>Take a look at the code of <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> fastapi <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> FastAPI</span>
-<span id="cb9-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.chains <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> RetrievalQA</span>
-<span id="cb9-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.chat_models <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> ChatOpenAI</span>
-<span id="cb9-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.embeddings.openai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenAIEmbeddings</span>
-<span id="cb9-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.vectorstores <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> ElasticVectorSearch</span>
-<span id="cb9-6"></span>
-<span id="cb9-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> openai_api_key</span>
-<span id="cb9-8"></span>
-<span id="cb9-9">embedding <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenAIEmbeddings(openai_api_key<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>openai_api_key)</span>
-<span id="cb9-10"></span>
-<span id="cb9-11">db <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> ElasticVectorSearch(</span>
-<span id="cb9-12">    elasticsearch_url<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"http://localhost:9200"</span>,</span>
-<span id="cb9-13">    index_name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"elastic-index"</span>,</span>
-<span id="cb9-14">    embedding<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>embedding,</span>
-<span id="cb9-15">)</span>
-<span id="cb9-16">qa <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RetrievalQA.from_chain_type(</span>
-<span id="cb9-17">    llm<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>ChatOpenAI(temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>),</span>
-<span id="cb9-18">    chain_type<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stuff"</span>,</span>
-<span id="cb9-19">    retriever<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>db.as_retriever(),</span>
-<span id="cb9-20">)</span>
-<span id="cb9-21"></span>
-<span id="cb9-22">app <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> FastAPI()</span>
-<span id="cb9-23"></span>
-<span id="cb9-24"></span>
-<span id="cb9-25"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@app.get</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/"</span>)</span>
-<span id="cb9-26"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> index():</span>
-<span id="cb9-27">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> {</span>
-<span id="cb9-28">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"message"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Make a post request to /ask to ask questions about Meditations by Marcus Aurelius"</span></span>
-<span id="cb9-29">    }</span>
-<span id="cb9-30"></span>
-<span id="cb9-31"></span>
-<span id="cb9-32"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@app.post</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/ask"</span>)</span>
-<span id="cb9-33"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> ask(query: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>):</span>
-<span id="cb9-34">    response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> qa.run(query)</span>
-<span id="cb9-35">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> {</span>
-<span id="cb9-36">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"response"</span>: response,</span>
-<span id="cb9-37">    }</span></code></pre></div>
-<p>This code lets the user ask questions about Marcus Aurelius’ Meditations and provides answers back to the users. Let me show you how it works:</p>
-<ul>
-<li><strong>Lines 1 to 5</strong> import the required libraries:
-<ul>
-<li><strong><code>FastAPI</code></strong>: This class initializes the app.</li>
-<li><strong><code>RetrievalQA</code></strong>: This is a <a href="https://python.langchain.com/en/latest/modules/chains.html">chain</a> that allows you to ask questions about documents in a vector database. It finds the most relevant documents based on your question and generates an answer from them.</li>
-<li><strong><code>ChatOpenAI</code></strong>: This is a wrapper around OpenAI’s chat models.</li>
-<li><strong><code>OpenAIEmbeddings</code></strong> and <strong><code>ElasticVectorSearch</code></strong>: These are the same wrappers discussed in the previous section.</li>
-</ul></li>
-<li><strong>Line 7</strong> imports the OpenAI secret key.</li>
-<li><strong>Lines 9 to 15</strong> initialize the Elasticsearch cluster using OpenAI embeddings.</li>
-<li><strong>Lines 16 to 20</strong> initialize the <code>RetrievalQA</code> chain with the following parameters:
-<ul>
-<li><strong><code>llm</code></strong>: Specifies the LLM used to run prompts defined in the chain.</li>
-<li><strong><code>chain_type</code></strong>: Defines how documents are retrieved and processed from the vector database. By specifying <code>stuff</code>, documents will be retrieved and passed to the chain to answer the question as-is. Alternatively, you can use <code>map_reduce</code> or <code>map_rerank</code> for additional processing before answering the question, but these methods use more API calls. For more information, consult <a href="https://docs.langchain.com/docs/components/chains/index_related_chains">the langchain documentation</a>.</li>
-<li><strong><code>retriever</code></strong>: Specifies the vector database used by the chain to retrieve documents.</li>
-</ul></li>
-<li><strong>Lines 22 to 36</strong> initialize the FastAPI app and define two endpoints. The <code>/</code> endpoint provides users with information on how to use the application. The <code>/ask</code> endpoint takes a user’s question (<code>query</code> parameter) and returns an answer using the previously initialized chain.</li>
-</ul>
-<p>Finally, you can run the app from the terminal (using your virtual environment):</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">uvicorn</span> app:app <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--reload</span></span></code></pre></div>
-<p>Then, visit <code>http://127.0.0.1:8000/docs</code>, and test <code>/ask</code> by making a question about the book:</p>
-<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid"></a></p>
-<p>If everything went well, you should get something like this:</p>
-<p><a href="images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="https://dylancastillo.co/posts/images/semantic-search-elasticsearch-openai-langchain/image-14.png" class="img-fluid"></a></p>
-<p>That’s it! You now have your own semantic search service up and running, based on Elasticsearch, OpenAI, Langchain, and FastAPI.</p>
-</section>
-<section id="going-to-production" class="level2">
-<h2 class="anchored" data-anchor-id="going-to-production">Going to Production</h2>
-<p>Moving to production can vary greatly for different software products. However, at a minimum, you should:</p>
-<ul>
-<li>Build appropriate data ingestion and processing pipelines. When adding new data, you generally do not want to rebuild the index, as you did in this tutorial.</li>
-<li>Use a production-ready <a href="https://www.elastic.co/pricing/">Elasticsearch-managed instance</a> or a <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-prod-prerequisites">Docker image</a> optimized for production. The instance used in this tutorial was intended for testing and development purposes only.</li>
-<li>Choose a deployment strategy that suits your organization’s needs. For example, I often use <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">NGINX with Gunicorn and Uvicorn workers</a> for small projects.</li>
-</ul>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Way to go! In this tutorial, you’ve learned how to build a semantic search engine using Elasticsearch, OpenAI, and Langchain.</p>
-<p>In particular, you’ve learned:</p>
-<ul>
-<li>How to structure a semantic search service.</li>
-<li>How to use LangChain to split and index documents.</li>
-<li>How to use Elasticsearch as a vector database with LangChain.</li>
-<li>How to use the Retrieval Questioning/Answering Chain to answer questions with a vector database.</li>
-<li>What you should consider when productizing this type of application.</li>
-</ul>
-<p>Hope you found this tutorial useful. Let me know if you have any questions!</p>
-<p>All the code for this tutorial is <a href="https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain">available on GitHub</a>.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {Semantic {Search} with {Elasticsearch,} {OpenAI,} and
-    {LangChain}},
-  date = {2023-04-27},
-  url = {https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“Semantic Search with Elasticsearch,
-OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html">https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>ml</category>
-  <category>nlp</category>
-  <guid>https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</guid>
-  <pubDate>Thu, 27 Apr 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
