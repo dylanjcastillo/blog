@@ -438,7 +438,7 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <span id="cb7-10">&lt;/example&gt;</span>
 <span id="cb7-11"></span>
 <span id="cb7-12">**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code></pre></div>
-<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the thinking tokens in the response. OpenAI and Anthropic will only give you the final answer.</p>
+<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the full thinking tokens in the response. OpenAI will give you a summarized version of the thinking process and Anthropic will only give you the final answer.</p>
 </section>
 </section>
 <section id="principle-4-structure-prompts-into-sections" class="level3">
