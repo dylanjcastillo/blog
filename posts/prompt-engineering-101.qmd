@@ -159,7 +159,7 @@ Here are two examples of CoT prompts:
 **Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?
 ```
 
-These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I'm writing this, only Gemini gives you access to the thinking tokens in the response. OpenAI and Anthropic will only give you the final answer.
+These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I'm writing this, only Gemini gives you access to the full thinking tokens in the response. OpenAI will give you a summarized version of the thinking process and Anthropic will only give you the final answer.
 
 ### Principle 4: Structure prompts into sections
 
