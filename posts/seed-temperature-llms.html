@@ -279,7 +279,7 @@ Subscribe to my newsletter
 
 <p>Temperature and seed are commonly used parameters when interacting with Large Language Models (LLMs). They’re also a source of confusion for many people. In this post, I’ll show you what they are and how they work.</p>
 <p>Temperature is a parameter that controls the randomness of the output by scaling the logits of the tokens before applying the softmax function. Seed is also a parameter that controls the randomness of how the model selects tokens during text generation. It sets the initial state of the random number generator, which is then used for the sampling of the tokens during the generation process.</p>
-<p>Temperature is available for most providers, while seed is only available for <a href="https://openai.com/api/">OpenAI</a> and open-weight models (that I know of).</p>
+<p>Temperature is available for most providers, while seed is only available for <a href="https://openai.com/api/">OpenAI</a>, Gemini on <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference">Vertex AI</a>, and open-weight models (that I know of).</p>
 <p>Let’s get started.</p>
 <section id="how-llms-generate-text" class="level2">
 <h2 class="anchored" data-anchor-id="how-llms-generate-text">How LLMs generate text</h2>
@@ -721,7 +721,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="seed-and-temperature-in-practice">Seed and temperature in practice</h2>
 <p>Now that you understand how seed and temperature work, here are some things to keep in mind when using them:</p>
 <ol type="1">
-<li><code>seed</code> is only available for <code>OpenAI</code> and open-weight models.</li>
+<li><code>seed</code> is only available for <code>OpenAI</code>, <code>Gemini</code> on <code>Vertex AI</code>, and open-weight models.</li>
 <li>To get the most deterministic output for a given prompt, set temperature to 0. This minimizes randomness.</li>
 <li>If you want creative results that are still reproducible, set temperature to a value greater than 0 and use a fixed seed. This allows for varied outputs that you can generate again.</li>
 <li>If you don’t need reproducible results and want unique outputs on every run, you can omit the seed parameter entirely.</li>
@@ -732,7 +732,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>In this post, we explored how the temperature and seed parameters control the output of Large Language Models.</p>
 <p>You learned that temperature adjusts the level of randomness: low values (near 0) produce more predictable, deterministic outputs, while high values (near 1) encourage more creative and varied results. In contrast, the seed makes the generation process reproducible. While the specific seed value isn’t important, fixing it ensures you get the same output for a given prompt and set of parameters.</p>
-<p>Finally, remember that while temperature is a near-universal setting, seed is only available (at the time of writing) for OpenAI and open-weight models.</p>
+<p>Finally, remember that while temperature is a near-universal setting, seed is only available (at the time of writing) for OpenAI, Gemini on Vertex AI, and open-weight models.</p>
 <p>I hope you found this post useful. If you have any questions, let me know in the comments below.</p>
 
 
