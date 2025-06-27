@@ -100,7 +100,7 @@ This parameter is used to stream the response from the model. This improves the 
 
 ## Tools
 
-This parameter is used to specify the tools that the model can use. This is useful to control the capabilities of the model.
+Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.
 
 ## Conclusion
 
