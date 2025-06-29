@@ -1446,7 +1446,7 @@
     "href": "posts/key-parameters-llms.html",
     "title": "Key parameters for LLMs",
     "section": "",
-    "text": "I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.\nThese are the parameters that you will usually use when building LLM-based products:\nIn the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them. Note that each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter."
+    "text": "I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.\nThese are the parameters that you will usually use when building LLM-based products:\nIn the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them."
   },
   {
     "objectID": "posts/key-parameters-llms.html#model",
