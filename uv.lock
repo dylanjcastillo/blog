@@ -325,6 +325,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pillow" },
     { name = "plotly" },
+    { name = "pypdf" },
     { name = "python-dotenv" },
     { name = "quarto-cli" },
     { name = "scikit-learn" },
@@ -360,6 +361,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.2" },
     { name = "pillow", specifier = ">=10.4.0" },
     { name = "plotly", specifier = ">=5.24.1" },
+    { name = "pypdf", specifier = ">=5.7.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "quarto-cli", specifier = ">=1.7.32" },
     { name = "scikit-learn", specifier = ">=1.5.1" },
@@ -3072,6 +3074,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/bb/22/f1129e69d94ffff626bdb5c835506b3a5b4f3d070f17ea295e12c2c6f60f/pyparsing-3.2.3.tar.gz", hash = "sha256:b9c13f1ab8b3b542f72e28f634bad4de758ab3ce4546e4301970ad6fa77c38be", size = 1088608 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/05/e7/df2285f3d08fee213f2d041540fa4fc9ca6c2d44cf36d3a035bf2a8d2bcc/pyparsing-3.2.3-py3-none-any.whl", hash = "sha256:a749938e02d6fd0b59b356ca504a24982314bb090c383e3cf201c95ef7e2bfcf", size = 111120 },
+]
+
+[[package]]
+name = "pypdf"
+version = "5.7.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/42/fbc37af367b20fa6c53da81b1780025f6046a0fac8cbf0663a17e743b033/pypdf-5.7.0.tar.gz", hash = "sha256:68c92f2e1aae878bab1150e74447f31ab3848b1c0a6f8becae9f0b1904460b6f", size = 5026120 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/73/9f/78d096ef795a813fa0e1cb9b33fa574b205f2b563d9c1e9366c854cf0364/pypdf-5.7.0-py3-none-any.whl", hash = "sha256:203379453439f5b68b7a1cd43cdf4c5f7a02b84810cefa7f93a47b350aaaba48", size = 305524 },
 ]
 
 [[package]]

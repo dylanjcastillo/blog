@@ -29,6 +29,7 @@ dependencies = [
     "langchain>=0.3.26",
     "langchain-openai>=0.3.26",
     "langchain-community>=0.3.26",
+    "pypdf>=5.7.0",
 ]
 
 [dependency-groups]
