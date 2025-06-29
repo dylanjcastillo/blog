@@ -827,6 +827,130 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Key parameters for LLMs</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/key-parameters-llms.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.</p>
+<p>These are the parameters that you will usually use when building LLM-based products:</p>
+<ul>
+<li>Model</li>
+<li>Messages/prompts</li>
+<li>Temperature</li>
+<li>Seed</li>
+<li>Top-P Sampling</li>
+<li>Logprobs</li>
+<li>Logit biases</li>
+<li>Max completion tokens</li>
+<li>Response format</li>
+<li>Streaming</li>
+<li>Tools</li>
+</ul>
+<p>In the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them. Note that each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter.</p>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<p>When choosing a model, consider the following factors:</p>
+<ul>
+<li>Complexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?</li>
+<li>Speed: How important is it that the model replies quickly? Is this something that I can run on the background?</li>
+<li>Cost: How much do I want to spend on this task?</li>
+<li>Provider: Which providers do I have access to? Do I need to self-host?</li>
+</ul>
+<p>Right now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.</p>
+<p>The best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models.</p>
+</section>
+<section id="messagesprompts" class="level2">
+<h2 class="anchored" data-anchor-id="messagesprompts">Messages/prompts</h2>
+<p>The messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompt engineering</a> that covers the basics of how to write good prompts.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>The temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.</p>
+<p>I wrote a <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random.</p>
+</section>
+<section id="seed" class="level2">
+<h2 class="anchored" data-anchor-id="seed">Seed</h2>
+<p>The seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.</p>
+<p>This is only available in OpenAI, Gemini, and open-weight models. Check my <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> for more details.</p>
+</section>
+<section id="top-p-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="top-p-sampling">Top-P Sampling</h2>
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.</p>
+<p>I rarely use this parameter.</p>
+</section>
+<section id="logit-biases" class="level2">
+<h2 class="anchored" data-anchor-id="logit-biases">Logit biases</h2>
+<p>Logits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.</p>
+<p>This is often used for document classification tasks or <a href="https://cookbook.openai.com/examples/search_reranking_with_cross-encoders">LLM-based rerankers</a>.</p>
+</section>
+<section id="logprobs" class="level2">
+<h2 class="anchored" data-anchor-id="logprobs">Logprobs</h2>
+<p>Logprobs are the logaritmic probabilities of the tokens. They are defined as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
+<p>Where:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?w_i"> is the <img src="https://latex.codecogs.com/png.latex?i">-th token in the vocabulary.</li>
+<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
+</ul>
+<p>This available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅).</p>
+<p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
+</section>
+<section id="max-completion-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="max-completion-tokens">Max completion tokens</h2>
+<p>This parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output.</p>
+</section>
+<section id="response-format" class="level2">
+<h2 class="anchored" data-anchor-id="response-format">Response format</h2>
+<p>You can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:</p>
+<ul>
+<li><a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured outputs can hurt the performance of LLMs</a></li>
+<li><a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">The good, the bad, and the ugly of Gemini’s structured outputs</a></li>
+<li><a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">Structured outputs: don’t put the cart before the horse</a></li>
+</ul>
+<p>Open-weight models allow for more flexible structured output formats. For example, using <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> lets you define custom regEx patterns to extract the data you need.</p>
+</section>
+<section id="streaming" class="level2">
+<h2 class="anchored" data-anchor-id="streaming">Streaming</h2>
+<p>This parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated.</p>
+</section>
+<section id="tools" class="level2">
+<h2 class="anchored" data-anchor-id="tools">Tools</h2>
+<p>Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This was a very short post about the key parameters for LLMs. I hope you found it useful.</p>
+<p>Let me know if you have any questions or feedback.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Key Parameters for {LLMs}},
+  date = {2025-06-29},
+  url = {https://dylancastillo.co/posts/key-parameters-llms.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Key Parameters for LLMs.”</span> June 29,
+2025. <a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>openai</category>
+  <category>anthropic</category>
+  <category>gemini</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/key-parameters-llms.html</guid>
+  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Japanese is the most expensive language in terms of input tokens</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/counting-tokens.html</link>
@@ -1119,143 +1243,19 @@ pt: 4.63 chars per token, 2200 chars, 475 tokens</code></pre>
   author = {Castillo, Dylan},
   title = {Japanese Is the Most Expensive Language in Terms of Input
     Tokens},
-  date = {2025-06-29},
+  date = {2025-06-27},
   url = {https://dylancastillo.co/til/counting-tokens.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
-Terms of Input Tokens.”</span> June 29, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>openai</category>
   <category>tiktoken</category>
   <guid>https://dylancastillo.co/til/counting-tokens.html</guid>
-  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Key parameters for LLMs</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/key-parameters-llms.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.</p>
-<p>These are the parameters that you will usually use when building LLM-based products:</p>
-<ul>
-<li>Model</li>
-<li>Messages/prompts</li>
-<li>Temperature</li>
-<li>Seed</li>
-<li>Top-P Sampling</li>
-<li>Logprobs</li>
-<li>Logit biases</li>
-<li>Max completion tokens</li>
-<li>Response format</li>
-<li>Streaming</li>
-<li>Tools</li>
-</ul>
-<p>In the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them. Note that each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter.</p>
-<section id="model" class="level2">
-<h2 class="anchored" data-anchor-id="model">Model</h2>
-<p>When choosing a model, consider the following factors:</p>
-<ul>
-<li>Complexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?</li>
-<li>Speed: How important is it that the model replies quickly? Is this something that I can run on the background?</li>
-<li>Cost: How much do I want to spend on this task?</li>
-<li>Provider: Which providers do I have access to? Do I need to self-host?</li>
-</ul>
-<p>Right now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.</p>
-<p>The best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models.</p>
-</section>
-<section id="messagesprompts" class="level2">
-<h2 class="anchored" data-anchor-id="messagesprompts">Messages/prompts</h2>
-<p>The messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompt engineering</a> that covers the basics of how to write good prompts.</p>
-</section>
-<section id="temperature" class="level2">
-<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
-<p>The temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.</p>
-<p>I wrote a <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random.</p>
-</section>
-<section id="seed" class="level2">
-<h2 class="anchored" data-anchor-id="seed">Seed</h2>
-<p>The seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.</p>
-<p>This is only available in OpenAI, Gemini, and open-weight models. Check my <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> for more details.</p>
-</section>
-<section id="top-p-sampling" class="level2">
-<h2 class="anchored" data-anchor-id="top-p-sampling">Top-P Sampling</h2>
-<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.</p>
-<p>I rarely use this parameter.</p>
-</section>
-<section id="logit-biases" class="level2">
-<h2 class="anchored" data-anchor-id="logit-biases">Logit biases</h2>
-<p>Logits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.</p>
-<p>This is often used for document classification tasks or <a href="https://cookbook.openai.com/examples/search_reranking_with_cross-encoders">LLM-based rerankers</a>.</p>
-</section>
-<section id="logprobs" class="level2">
-<h2 class="anchored" data-anchor-id="logprobs">Logprobs</h2>
-<p>Logprobs are the logaritmic probabilities of the tokens. They are defined as:</p>
-<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
-<p>Where:</p>
-<ul>
-<li><img src="https://latex.codecogs.com/png.latex?w_i"> is the <img src="https://latex.codecogs.com/png.latex?i">-th token in the vocabulary.</li>
-<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
-<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
-<li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
-</ul>
-<p>This available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅).</p>
-<p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
-</section>
-<section id="max-completion-tokens" class="level2">
-<h2 class="anchored" data-anchor-id="max-completion-tokens">Max completion tokens</h2>
-<p>This parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output.</p>
-</section>
-<section id="response-format" class="level2">
-<h2 class="anchored" data-anchor-id="response-format">Response format</h2>
-<p>You can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:</p>
-<ul>
-<li><a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured outputs can hurt the performance of LLMs</a></li>
-<li><a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">The good, the bad, and the ugly of Gemini’s structured outputs</a></li>
-<li><a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">Structured outputs: don’t put the cart before the horse</a></li>
-</ul>
-<p>Open-weight models allow for more flexible structured output formats. For example, using <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> lets you define custom regEx patterns to extract the data you need.</p>
-</section>
-<section id="streaming" class="level2">
-<h2 class="anchored" data-anchor-id="streaming">Streaming</h2>
-<p>This parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated.</p>
-</section>
-<section id="tools" class="level2">
-<h2 class="anchored" data-anchor-id="tools">Tools</h2>
-<p>Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This was a very short post about the key parameters for LLMs. I hope you found it useful.</p>
-<p>Let me know if you have any questions or feedback.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Key Parameters for {LLMs}},
-  date = {2025-06-29},
-  url = {https://dylancastillo.co/til/key-parameters-llms.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Key Parameters for LLMs.”</span> June 29,
-2025. <a href="https://dylancastillo.co/til/key-parameters-llms.html">https://dylancastillo.co/til/key-parameters-llms.html</a>.
-</div></div></section></div> ]]></description>
-  <category>llm</category>
-  <category>openai</category>
-  <category>anthropic</category>
-  <category>gemini</category>
-  <category>python</category>
-  <guid>https://dylancastillo.co/til/key-parameters-llms.html</guid>
-  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
+  <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Prompt engineering 101</title>
