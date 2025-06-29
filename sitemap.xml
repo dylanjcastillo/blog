@@ -2,178 +2,178 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dylancastillo.co/projects.html</loc>
-    <lastmod>2025-06-29T17:35:09.718Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/index.html</loc>
-    <lastmod>2025-06-29T17:35:09.650Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.355Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/django-poetry-dockerfile.html</loc>
-    <lastmod>2025-06-29T17:35:09.718Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.424Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html</loc>
-    <lastmod>2025-06-29T17:35:09.728Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.433Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/live-components-with-django-and-htmx.html</loc>
-    <lastmod>2025-06-29T17:35:09.728Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.433Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/python-pyscript-101.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/build-a-site-quickly-using-google-sheets-python-and-aws.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/llm-pydantic-order-matters.html</loc>
-    <lastmod>2025-06-29T17:35:09.716Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/say-what-you-mean-sometimes.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/prompt-engineering-101.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html</loc>
-    <lastmod>2025-06-29T17:35:09.654Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.360Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/nlp-snippets-cluster-documents-using-word2vec.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/classify-images-with-gemini-flash-1.5.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2023-personal-snapshot.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/what-is-rag.html</loc>
-    <lastmod>2025-06-29T17:35:09.718Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2021-personal-snapshot.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.357Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/text-classification-using-python-and-scikit-learn.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/elasticseach-python.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/my-entrepreneur-first-experience.html</loc>
-    <lastmod>2025-06-29T17:35:09.716Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/seed-temperature-llms.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/mind-reading-algorithms.html</loc>
-    <lastmod>2025-06-29T17:35:09.716Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/gemini-structured-outputs.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/4-ways-to-improve-your-plotly-graphs.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/fast-and-async-in-python-accelerate-your-requests-using-asyncio.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.html</loc>
-    <lastmod>2025-06-29T17:35:09.654Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.360Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/nlp-snippets-clean-and-tokenize-text-with-python.html</loc>
-    <lastmod>2025-06-29T17:35:09.716Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/opensearch-python.html</loc>
-    <lastmod>2025-06-29T17:35:09.717Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.422Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2024-personal-snapshot.html</loc>
-    <lastmod>2025-06-29T17:35:09.652Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.358Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/entrepreneurship-as-a-risk-management-strategy.html</loc>
-    <lastmod>2025-06-29T17:35:09.653Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.359Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html</loc>
-    <lastmod>2025-06-29T17:35:09.718Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.424Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/counting-tokens.html</loc>
-    <lastmod>2025-06-29T17:35:09.718Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.423Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</loc>
-    <lastmod>2025-06-29T17:35:09.728Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.433Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/transforming-images-to-webp.html</loc>
-    <lastmod>2025-06-29T17:35:09.728Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.434Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/about.html</loc>
-    <lastmod>2025-06-29T17:35:09.649Z</lastmod>
+    <lastmod>2025-06-29T17:57:09.355Z</lastmod>
   </url>
 </urlset>

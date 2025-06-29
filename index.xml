@@ -827,7 +827,7 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>The same prompt in Japanese uses 77% more tokens than in English</title>
+  <title>Japanese is the most expensive language in terms of input tokens</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/counting-tokens.html</link>
   <description><![CDATA[ 
@@ -836,9 +836,17 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
 
 
 <p>OpenAI mentions in their documentation that <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">1 token corresponds to roughly 4 characters</a>.</p>
-<p>I was curious how this would work for different languages. So I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a> and translated it into different languages (English, Spanish, French, German, Japanese, Chinese, Hindi, Russian, and Portuguese), and counted the tokens.</p>
+<p>I was curious how this would work for different languages, so:</p>
+<ol type="1">
+<li>I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a></li>
+<li>Translated it into 7 different languages: English, Spanish, French, German, Japanese, Chinese, and Hindi</li>
+<li>Counted the tokens</li>
+<li>compared the results.</li>
+</ol>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
 <p>Here’s the code:</p>
-<div id="cell-2" class="cell" data-execution_count="10">
+<div id="cell-2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> tiktoken</span>
@@ -1007,9 +1015,9 @@ background-color: null;
 font-style: inherit;">"pt"</span>: count_tokens(text_pt),</span>
 <span id="cb1-42">}</span></code></pre></div>
 </div>
-<p>This reads the text from the file, and uses tiktoken to count the tokens. I also counted the number of characters in the text.</p>
+<p>This reads the text from the file, and uses <code>tiktoken</code> to count the tokens. I also counted the number of characters in the text.</p>
 <p>Then I calculated the ratio of tokens to characters for each language.</p>
-<div id="cell-4" class="cell" data-execution_count="11">
+<div id="cell-4" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1057,9 +1065,9 @@ font-style: inherit;">{</span>chars <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">/</span> tokens<span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
 background-color: null;
-font-style: inherit;">, </span><span class="sc" style="color: #5E5E5E;
+font-style: inherit;"> chars per token, </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{</span>chars<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1073,44 +1081,57 @@ font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;"> tokens"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>en: 4.752314814814815, 2053 chars, 432 tokens
-es: 4.5602409638554215, 2271 chars, 498 tokens
-fr: 4.692844677137871, 2689 chars, 573 tokens
-de: 4.4586330935251794, 2479 chars, 556 tokens
-jp: 1.409387222946545, 1081 chars, 767 tokens
-zh: 1.3314500941619585, 707 chars, 531 tokens
-hi: 3.5104, 2194 chars, 625 tokens
-ru: 4.019434628975265, 2275 chars, 566 tokens
-pt: 4.631578947368421, 2200 chars, 475 tokens</code></pre>
+<pre><code>en: 4.75 chars per token, 2053 chars, 432 tokens
+es: 4.56 chars per token, 2271 chars, 498 tokens
+fr: 4.69 chars per token, 2689 chars, 573 tokens
+de: 4.46 chars per token, 2479 chars, 556 tokens
+jp: 1.41 chars per token, 1081 chars, 767 tokens
+zh: 1.33 chars per token, 707 chars, 531 tokens
+hi: 3.51 chars per token, 2194 chars, 625 tokens
+ru: 4.02 chars per token, 2275 chars, 566 tokens
+pt: 4.63 chars per token, 2200 chars, 475 tokens</code></pre>
 </div>
 </div>
-<p>Here are some highlights from the results:</p>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>I found this interesting:</p>
 <ul>
-<li>English is the most efficient language, with 4.75 tokens per character.</li>
-<li>Mandarin Chinese is the least efficient language, with 1.33 tokens per character.</li>
-<li>The same prompt in Japanese uses 77% more tokens than in English.</li>
-<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). However, Russian is the most efficient language that uses a non-latin alphabet.</li>
+<li>English is the most efficient language in terms of characters per token, with 4.75 characters per token.</li>
+<li>Mandarin Chinese (1.33 characters per token) is the least efficient language in terms of characters per token, followed by Japanese (1.41 characters per token).</li>
+<li>The same text in Japanese uses 77% more tokens than in English, making it the most expensive language in terms of input tokens.</li>
+<li>Even though Chinese is less efficient than Japanese in terms of characters per token, it’s more efficient in terms of information conveyed per character. The article took 2053 characters in English, 707 characters in Chinese, and 1081 characters in Japanese. This explains why Chinese isn’t also the most expensive language.</li>
+<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). Russian is the most efficient language of these, with 4.02 characters per token.</li>
 </ul>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p>This analysis has some clear limitations:</p>
+<ol type="1">
+<li>The text might not be a good example of the types of texts you’re working with.</li>
+<li>The translations might not be good enough to truly reflect the information conveyed per character.</li>
+</ol>
 
 
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {The Same Prompt in {Japanese} Uses 77\% More Tokens Than in
-    {English}},
-  date = {2025-06-27},
+  title = {Japanese Is the Most Expensive Language in Terms of Input
+    Tokens},
+  date = {2025-06-29},
   url = {https://dylancastillo.co/til/counting-tokens.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“The Same Prompt in Japanese Uses 77% More
-Tokens Than in English.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
+Terms of Input Tokens.”</span> June 29, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>openai</category>
   <category>tiktoken</category>
   <guid>https://dylancastillo.co/til/counting-tokens.html</guid>
-  <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
+  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Prompt engineering 101</title>
