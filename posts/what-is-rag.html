@@ -468,7 +468,7 @@ Page 1 to Page 4</code></pre>
 <p>Next, you’ll need to split the pages into smaller chunks that you can query the VectorDB with.</p>
 <section id="split-and-index-documents" class="level3">
 <h3 class="anchored" data-anchor-id="split-and-index-documents">Split and index documents</h3>
-<p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., “”, “”, “.”, etc.).</p>
+<p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., <code>"\\n\\n"</code>, <code>"\n"</code>, <code>"."</code>, etc.).</p>
 <p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work better. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
 <div id="cell-28" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op">=</span><span class="dv">1000</span>, chunk_overlap<span class="op">=</span><span class="dv">200</span>)</span>
