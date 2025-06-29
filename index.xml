@@ -1134,6 +1134,130 @@ Terms of Input Tokens.”</span> June 29, 2025. <a href="https://dylancastillo.c
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Key parameters for LLMs</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/key-parameters-llms.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.</p>
+<p>These are the parameters that you will usually use when building LLM-based products:</p>
+<ul>
+<li>Model</li>
+<li>Messages/prompts</li>
+<li>Temperature</li>
+<li>Seed</li>
+<li>Top-P Sampling</li>
+<li>Logprobs</li>
+<li>Logit biases</li>
+<li>Max completion tokens</li>
+<li>Response format</li>
+<li>Streaming</li>
+<li>Tools</li>
+</ul>
+<p>In the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them. Note that each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter.</p>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<p>When choosing a model, consider the following factors:</p>
+<ul>
+<li>Complexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?</li>
+<li>Speed: How important is it that the model replies quickly? Is this something that I can run on the background?</li>
+<li>Cost: How much do I want to spend on this task?</li>
+<li>Provider: Which providers do I have access to? Do I need to self-host?</li>
+</ul>
+<p>Right now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.</p>
+<p>The best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models.</p>
+</section>
+<section id="messagesprompts" class="level2">
+<h2 class="anchored" data-anchor-id="messagesprompts">Messages/prompts</h2>
+<p>The messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompt engineering</a> that covers the basics of how to write good prompts.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>The temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.</p>
+<p>I wrote a <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random.</p>
+</section>
+<section id="seed" class="level2">
+<h2 class="anchored" data-anchor-id="seed">Seed</h2>
+<p>The seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.</p>
+<p>This is only available in OpenAI, Gemini, and open-weight models. Check my <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> for more details.</p>
+</section>
+<section id="top-p-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="top-p-sampling">Top-P Sampling</h2>
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.</p>
+<p>I rarely use this parameter.</p>
+</section>
+<section id="logit-biases" class="level2">
+<h2 class="anchored" data-anchor-id="logit-biases">Logit biases</h2>
+<p>Logits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.</p>
+<p>This is often used for document classification tasks or <a href="https://cookbook.openai.com/examples/search_reranking_with_cross-encoders">LLM-based rerankers</a>.</p>
+</section>
+<section id="logprobs" class="level2">
+<h2 class="anchored" data-anchor-id="logprobs">Logprobs</h2>
+<p>Logprobs are the logaritmic probabilities of the tokens. They are defined as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
+<p>Where:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?w_i"> is the <img src="https://latex.codecogs.com/png.latex?i">-th token in the vocabulary.</li>
+<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
+</ul>
+<p>This available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅).</p>
+<p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
+</section>
+<section id="max-completion-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="max-completion-tokens">Max completion tokens</h2>
+<p>This parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output.</p>
+</section>
+<section id="response-format" class="level2">
+<h2 class="anchored" data-anchor-id="response-format">Response format</h2>
+<p>You can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:</p>
+<ul>
+<li><a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured outputs can hurt the performance of LLMs</a></li>
+<li><a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">The good, the bad, and the ugly of Gemini’s structured outputs</a></li>
+<li><a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">Structured outputs: don’t put the cart before the horse</a></li>
+</ul>
+<p>Open-weight models allow for more flexible structured output formats. For example, using <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> lets you define custom regEx patterns to extract the data you need.</p>
+</section>
+<section id="streaming" class="level2">
+<h2 class="anchored" data-anchor-id="streaming">Streaming</h2>
+<p>This parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated.</p>
+</section>
+<section id="tools" class="level2">
+<h2 class="anchored" data-anchor-id="tools">Tools</h2>
+<p>Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This was a very short post about the key parameters for LLMs. I hope you found it useful.</p>
+<p>Let me know if you have any questions or feedback.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Key Parameters for {LLMs}},
+  date = {2025-06-29},
+  url = {https://dylancastillo.co/til/key-parameters-llms.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Key Parameters for LLMs.”</span> June 29,
+2025. <a href="https://dylancastillo.co/til/key-parameters-llms.html">https://dylancastillo.co/til/key-parameters-llms.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>openai</category>
+  <category>anthropic</category>
+  <category>gemini</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/til/key-parameters-llms.html</guid>
+  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Prompt engineering 101</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/prompt-engineering-101.html</link>
@@ -1418,6 +1542,7 @@ Castillo, Dylan. 2025. <span>“Prompt Engineering 101.”</span> June 26,
   <category>llm</category>
   <category>openai</category>
   <category>anthropic</category>
+  <category>gemini</category>
   <category>python</category>
   <guid>https://dylancastillo.co/posts/prompt-engineering-101.html</guid>
   <pubDate>Thu, 26 Jun 2025 00:00:00 GMT</pubDate>
@@ -13192,568 +13317,6 @@ Castillo, Dylan. 2024. <span>“2023: Personal Snapshot.”</span> January
   <category>personal-snapshot</category>
   <guid>https://dylancastillo.co/posts/2023-personal-snapshot.html</guid>
   <pubDate>Fri, 05 Jan 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Clustering Documents with OpenAI embeddings, HDBSCAN and UMAP</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>In the past, the most common way to cluster documents was by building vectors with traditional Machine Learning methods such as bag-of-words or smaller pre-trained NLP models, like BERT, and then creating groups out of them. But LLMs have changed that.</p>
-<p>While older methods are still relevant, if I had to cluster text data today, I’d start using the OpenAI or Cohere (embeddings and generation) APIs. It’s faster, easier, and gives you additional goodies such as coming up with fitting titles for each cluster.</p>
-<p>I haven’t seen many tutorials on this topic, so I wrote one. In this tutorial, I’ll show you how to cluster news articles using OpenAI embeddings, and HDBSCAN.</p>
-<p>Let’s get to it!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>To make the most of this tutorial, you should be familiar with the following concepts:</p>
-<ul>
-<li><a href="https://dylancastillo.co/nlp-snippets-cluster-documents-using-word2vec/#how-to-cluster-documents">How to cluster text data</a> using traditional ML methods.</li>
-<li>What are <a href="https://platform.openai.com/docs/guides/embeddings">OpenAI Embeddings</a></li>
-<li>How <a href="https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html">HDBSCAN</a> works</li>
-</ul>
-<p>In addition, you’ll need an <a href="beta.openai.com/">OpenAI account</a>.</p>
-</section>
-<section id="set-up-your-local-environment" class="level2">
-<h2 class="anchored" data-anchor-id="set-up-your-local-environment">Set Up Your Local Environment</h2>
-<ol type="1">
-<li>Create a virtual environment using <code>venv</code>:</li>
-</ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3.10</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv</span></code></pre></div>
-<ol start="2" type="1">
-<li>Create a <code>requirements.txt</code> file that contains the following packages:</li>
-</ol>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">hdbscan</span></span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">openai</span></span>
-<span id="cb2-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pandas</span></span>
-<span id="cb2-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">numpy</span></span>
-<span id="cb2-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python-dotenv</span></span>
-<span id="cb2-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">tiktoken</span></span>
-<span id="cb2-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">notebook</span></span>
-<span id="cb2-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">plotly</span></span>
-<span id="cb2-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">umap-learn</span></span></code></pre></div>
-<ol start="3" type="1">
-<li>Activate the virtual environment and install the packages:</li>
-</ol>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pip3</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-r</span> requirements.txt</span></code></pre></div>
-<ol start="4" type="1">
-<li>Create a file called <code>.env</code>, and add the your OpenAI key:</li>
-</ol>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">OPENAI_API_KEY</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=&lt;</span>your <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">key</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<ol start="5" type="1">
-<li>Create an empty notebook file. For the rest of this tutorial, you’ll work on it.</li>
-</ol>
-</section>
-<section id="clustering-documents" class="level2">
-<h2 class="anchored" data-anchor-id="clustering-documents">Clustering Documents</h2>
-<p>You should think of the clustering process in three steps:</p>
-<ol type="1">
-<li>Generate numerical vector representations of documents using OpenAI’s embedding capabilities.</li>
-<li>Apply a clustering algorithm on the vectors to group the documents.</li>
-<li>Generate a title for each cluster summarizing the articles contained in it.</li>
-</ol>
-<p>That’s it! Now, you’ll see how that looks in practice.</p>
-<section id="import-the-required-packages" class="level3">
-<h3 class="anchored" data-anchor-id="import-the-required-packages">Import the Required Packages</h3>
-<p>Start by importing the required Python libraries. Copy the following code in your notebook:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb5-2"></span>
-<span id="cb5-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> hdbscan</span>
-<span id="cb5-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> np</span>
-<span id="cb5-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> pd</span>
-<span id="cb5-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> plotly.express <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> px</span>
-<span id="cb5-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb5-8"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb5-9"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> openai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenAI</span>
-<span id="cb5-10"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> umap <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> UMAP</span>
-<span id="cb5-11"></span>
-<span id="cb5-12">load_dotenv()</span></code></pre></div>
-<p>This code imports the libraries you’ll use throughout the tutorial. Here’s the purpose of each one:</p>
-<ul>
-<li><strong><code>os</code></strong> helps you read the environment variables.</li>
-<li><strong><code>hdbscan</code></strong> gives you a wrapper of HDBSCAN, the clustering algorithm you’ll use to group the documents.</li>
-<li><strong><code>openai</code></strong> to use OpenAI LLMs.</li>
-<li><strong><code>umap</code></strong> loads <a href="https://umap-learn.readthedocs.io/en/latest/">UMAP</a> for dimensionality reduction and visualizing clusters.</li>
-<li><strong><code>dotenv</code></strong> load the environment variables you define in <code>.env</code>.</li>
-</ul>
-<p>Next, you’ll get a sample of news articles to cluster.</p>
-</section>
-<section id="download-the-data-and-generate-embeddings" class="level3">
-<h3 class="anchored" data-anchor-id="download-the-data-and-generate-embeddings">Download the data and generate embeddings</h3>
-<p>Download, read these <a href="https://www.kaggle.com/datasets/dylanjcastillo/news-headlines-2024/">articles</a>, and generate documents you’ll use to create the embeddings:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.read_csv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"news_data_dedup.csv"</span>)</span>
-<span id="cb6-2">docs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb6-3">    <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>title<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>description<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb6-4">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> title, description <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">zip</span>(df.title, df.description)</span>
-<span id="cb6-5">]</span></code></pre></div>
-<p>Then, initialize the OpenAI client and generate the embeddings:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OpenAI()</span>
-<span id="cb7-2">response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> client.embeddings.create(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">input</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>docs, model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text-embedding-3-small"</span>)</span>
-<span id="cb7-3">embeddings <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [np.array(x.embedding) <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> response.data]</span></code></pre></div>
-</section>
-<section id="cluster-documents" class="level3">
-<h3 class="anchored" data-anchor-id="cluster-documents">Cluster documents</h3>
-<p>Once you have the embeddings, you can cluster them using <code>hdbscan</code>:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">hdb <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> hdbscan.HDBSCAN(min_samples<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, min_cluster_size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>).fit(embeddings)</span></code></pre></div>
-<p>This code will generate clusters using the embeddings generated, and then create a DataFrame with the results. Itfits the <code>hdbscan</code> algorithm. In this case, I set <code>min_samples</code> and <code>min_cluster_size</code> to 3, but depending on your data this may change. Check <a href="https://hdbscan.readthedocs.io/en/latest/parameter_selection.html">HDBSCAN’s documentation</a> to learn more about these parameters.</p>
-<p>Next, you’ll create topic titles for each cluster based on their contents.</p>
-</section>
-<section id="visualize-the-clusters" class="level3">
-<h3 class="anchored" data-anchor-id="visualize-the-clusters">Visualize the clusters</h3>
-<p>After you’ve generated the clusters, you can visualize them using <a href="https://pair-code.github.io/understanding-umap/">UMAP</a>:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">umap <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> UMAP(n_components<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>, random_state<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>, n_neighbors<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">80</span>, min_dist<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>)</span>
-<span id="cb9-2"></span>
-<span id="cb9-3">df_umap <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (</span>
-<span id="cb9-4">    pd.DataFrame(umap.fit_transform(np.array(embeddings)), columns<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'x'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'y'</span>])</span>
-<span id="cb9-5">    .assign(cluster<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">lambda</span> df: hdb.labels_.astype(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>))</span>
-<span id="cb9-6">    .query(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cluster != "-1"'</span>)</span>
-<span id="cb9-7">    .sort_values(by<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cluster'</span>)</span>
-<span id="cb9-8">)</span>
-<span id="cb9-9"></span>
-<span id="cb9-10">fig <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> px.scatter(df_umap, x<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'x'</span>, y<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'y'</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cluster'</span>)</span>
-<span id="cb9-11">fig.show()</span></code></pre></div>
-<p>You should get something similar to this graph:</p>
-<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid"></a></p>
-<p>This will give you a sense of how good are the clusters generated.</p>
-</section>
-<section id="create-a-topic-title-per-cluster" class="level3">
-<h3 class="anchored" data-anchor-id="create-a-topic-title-per-cluster">Create a Topic Title per Cluster</h3>
-<p>For each cluster, you’ll generate a topic title summarizing the articles in that cluster. Copy the following code to your notebook:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cluster_name"</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Uncategorized"</span></span>
-<span id="cb10-2"></span>
-<span id="cb10-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> generate_topic_titles():</span>
-<span id="cb10-4">    system_message <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You're an expert journalist. You're helping me write short but compelling topic titles for groups of news articles."</span></span>
-<span id="cb10-5">    user_template <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Using the following articles, write a 4 to 5 word title that summarizes them.</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">ARTICLES:</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{}</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">TOPIC TITLE:"</span></span>
-<span id="cb10-6"></span>
-<span id="cb10-7">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> c <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> df.cluster.unique():</span>
-<span id="cb10-8">        sample_articles <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> df.query(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"cluster == '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>c<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'"</span>).to_dict(orient<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"records"</span>)</span>
-<span id="cb10-9">        articles_str <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>.join(</span>
-<span id="cb10-10">            [</span>
-<span id="cb10-11">                <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"[</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>i<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">] </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>article[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'title'</span>]<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>article[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'description'</span>][:<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">200</span>]<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}{</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'...'</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(article[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'description'</span>]) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">200</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">''</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb10-12">                <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i, article <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(</span>
-<span id="cb10-13">                    sample_articles, start<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb10-14">                )</span>
-<span id="cb10-15">            ]</span>
-<span id="cb10-16">        )</span>
-<span id="cb10-17">        messages <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb10-18">            {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: system_message},</span>
-<span id="cb10-19">            {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: user_template.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">format</span>(articles_str)},</span>
-<span id="cb10-20">        ]</span>
-<span id="cb10-21">        response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> client.chat.completions.create(</span>
-<span id="cb10-22">            model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"gpt-3.5-turbo"</span>, messages<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>messages, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.7</span>, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span></span>
-<span id="cb10-23">        )</span>
-<span id="cb10-24"></span>
-<span id="cb10-25">        topic_title <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>].message.content</span>
-<span id="cb10-26">        df.loc[df.cluster <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> c, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cluster_name"</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> topic_title</span></code></pre></div>
-<p>This code takes all the articles per cluster and uses <code>gpt-3.5-turbo</code> to generate a relevant topic title from them. Itgoes through each cluster, takes the articles in it, and makes a prompt using that to generate a topic title for that cluster.</p>
-<p>Finally, you can check the resulting clusters and topic titles, as follows:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">c <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span></span>
-<span id="cb11-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">with</span> pd.option_context(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"display.max_colwidth"</span>, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>):</span>
-<span id="cb11-3">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(df.query(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"cluster == '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>c<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'"</span>).topic_title.values[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>])</span>
-<span id="cb11-4">    display(df.query(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"cluster == '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>c<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'"</span>).drop(columns<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"topic_title"</span>]).head())</span></code></pre></div>
-<p>In my case, running this code produces the following articles and topic titles:</p>
-<p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
-<p>All articles seem to be related to the topic title. Yay!</p>
-</section>
-<section id="conclusion" class="level3">
-<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>In this short tutorial, you’ve learned how to cluster documents using OpenAI embeddings, HDBSCAN, and UMAP. I hope you find this useful. Let me know in the comments if you have any questions.</p>
-<p>Check out the <a href="https://github.com/dylanjcastillo/random/tree/main/self-organizing-news">code</a> on GitHub. You can also check <a href="https://news.iwanalabs.com/">this project</a> I built with <a href="https://github.com/iswarmondal">Iswar</a> which shows this in practice.</p>
-
-
-</section>
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {Clustering {Documents} with {OpenAI} Embeddings, {HDBSCAN}
-    and {UMAP}},
-  date = {2023-06-09},
-  url = {https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“Clustering Documents with OpenAI
-Embeddings, HDBSCAN and UMAP.”</span> June 9, 2023. <a href="https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html">https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>ml</category>
-  <category>llm</category>
-  <category>openai</category>
-  <guid>https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</guid>
-  <pubDate>Fri, 09 Jun 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
