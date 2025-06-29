@@ -146,8 +146,8 @@ font-style: inherit;">import</span> RecursiveCharacterTextSplitter</span>
 <span id="cb2-11">load_dotenv()</span></code></pre></div>
 </div>
 <p>This code will import the necessary libraries and load the required variables from the .env file.</p>
-<section id="read-the-document" class="level3">
-<h3 class="anchored" data-anchor-id="read-the-document">Read the document</h3>
+<section id="read-the-document-retrieval" class="level3">
+<h3 class="anchored" data-anchor-id="read-the-document-retrieval">Read the document (retrieval)</h3>
 <p>Next, we’ll use a langchain DocumentLoader to load the document. Since, we’re dealing with a PDF file, we’ll use the PyPDFLoader.</p>
 <p>There are many DocumentLoaders available in langchain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
 <div id="cell-8" class="cell" data-execution_count="3">
@@ -196,8 +196,8 @@ font-style: inherit;">0</span>].model_dump()</span></code></pre></div>
 <p>You can see that in addition to the page content, it includes metadata about the source file, the page number, etc.</p>
 <p>This document is about the conditions of some specific banking product. We’ll use it to answer a question about it.</p>
 </section>
-<section id="augment-context" class="level3">
-<h3 class="anchored" data-anchor-id="augment-context">Augment context</h3>
+<section id="augment-the-context" class="level3">
+<h3 class="anchored" data-anchor-id="augment-the-context">Augment the context</h3>
 <p>Now that we have all the pages of the PDF available as a text, let’s build the context we’ll use to generate a response.</p>
 <p>We’ll define a system and a user prompt. In the system prompt, we’ll define the role of the assistant and in the user prompt, we’ll provide the user question and the documents.</p>
 <div id="cell-14" class="cell" data-execution_count="24">
@@ -290,9 +290,8 @@ font-style: inherit;">"</span></span></code></pre></div>
 <p>We’ve set up the system and user prompt, and a a variable that stores the pages we extracted as a single string. When we make a request to the model, we’ll combine all of these into messages and send them to the model.</p>
 <p>Now, we’re ready to generate a response.</p>
 </section>
-</section>
-<section id="generate-response" class="level2">
-<h2 class="anchored" data-anchor-id="generate-response">Generate response</h2>
+<section id="generate-response" class="level3">
+<h3 class="anchored" data-anchor-id="generate-response">Generate response</h3>
 <p>To generate a response we’ll use <code>gpt-4.1-mini</code> and combine the system and user prompts we’ve built to augment the model’s context.</p>
 <div id="cell-18" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">model <span class="op" style="color: #5E5E5E;
@@ -384,6 +383,7 @@ font-style: inherit;">print</span>(response)</span></code></pre></div>
 <p>To answer the “What are the daily transaction limits?”, the model used 3,528 input tokens. While in reality, it only needed less than 500 input tokens.</p>
 <p>For small documents such as this one, the difference isn’t a big deal. But when you’re dealing with thousands of documents and potentially millions of tokens, the difference can be significant in terms of costs, latency, and accuracy.</p>
 <p>Let’s see how we can use a VectorDB to improve improve this.</p>
+</section>
 </section>
 <section id="rag-with-vector-search" class="level2">
 <h2 class="anchored" data-anchor-id="rag-with-vector-search">RAG with vector search</h2>
