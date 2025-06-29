@@ -827,7 +827,7 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>A prompt in Japanese uses 77% more tokens than in English</title>
+  <title>The same prompt in Japanese uses 77% more tokens than in English</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/counting-tokens.html</link>
   <description><![CDATA[ 
@@ -1096,15 +1096,15 @@ pt: 4.631578947368421, 2200 chars, 475 tokens</code></pre>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {A Prompt in {Japanese} Uses 77\% More Tokens Than in
+  title = {The Same Prompt in {Japanese} Uses 77\% More Tokens Than in
     {English}},
   date = {2025-06-27},
   url = {https://dylancastillo.co/til/counting-tokens.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“A Prompt in Japanese Uses 77% More Tokens
-Than in English.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+Castillo, Dylan. 2025. <span>“The Same Prompt in Japanese Uses 77% More
+Tokens Than in English.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>openai</category>
