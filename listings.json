@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/what-is-rag.html",
       "/posts/prompt-engineering-101.html",
       "/posts/seed-temperature-llms.html",
       "/posts/2024-personal-snapshot.html",

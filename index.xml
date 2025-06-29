@@ -15,7 +15,820 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Fri, 27 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 29 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>What is Retrieval Augmented Generation (RAG)?</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/what-is-rag.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Retrieval Augmented Generation (RAG) is the most popular approach to providing LLMs with external information before they generate a response.</p>
+<p>RAG is a technique where you <strong>retrieve</strong> the information required to solve a user’s query, then <strong>augment</strong> the context of the LLM with that information, and <strong>generate</strong> a response. In this tutorial, you’ll learn why RAG is useful, when to use it, and how to build your own RAG pipeline, step-by-step, using Python.</p>
+<p>Let’s get started!</p>
+<section id="what-is-rag" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-rag">What is RAG?</h2>
+<p>It’s a technique to improve LLM answers by providing them with external information before they generate a response. It consists of three steps:</p>
+<ol type="1">
+<li><strong>Retrieve:</strong> The system starts by searching a specific knowledge base for relevant information about the query.</li>
+<li><strong>Augment:</strong> This retrieved information is added to context that’s used by the LLM to generate a response.</li>
+<li><strong>Generate:</strong> The LLM uses both your question and the provided information to generate an answer.</li>
+</ol>
+<p>In addition to reducing costs and latency, RAG is useful because it reduces <a href="https://en.wikipedia.org/wiki/Hallucination_(artificial_intelligence)">hallucinations</a>, lets you use current data, and builds trust with users by (potentially) providing citations.</p>
+</section>
+<section id="vector-databases" class="level2">
+<h2 class="anchored" data-anchor-id="vector-databases">Vector databases</h2>
+<p>A vector database (VectorDB) is a database designed to store and query data as vector embeddings (numerical representations). So, provided with a user query, it’s the engine you use to find the most similar data in your database. It’s one of the most popular components of the retrieval step in RAG pipelines.</p>
+<p>In recent years, many new vector databases have been created. But, in most cases, they had to <a href="https://qdrant.tech/articles/bm42/">re-discover</a> that many of the ideas in the old generation of vector databases such as BM25-based retrieval were still valid and useful.</p>
+<p>Some popular vector databases are:</p>
+<ol type="1">
+<li><em>New generation:</em> <a href="https://qdrant.tech/">Qdrant</a>, <a href="https://www.trychroma.com/">Chroma</a>, <a href="https://www.pinecone.io/">Pinecone</a>, <a href="https://weaviate.io/">Weaviate</a>.</li>
+<li><em>Old generation:</em> <a href="https://www.elastic.co/">Elasticsearch</a>/<a href="https://opensearch.org/">OpenSearch</a> and <a href="https://github.com/pgvector/pgvector">Postgres+PGVector</a></li>
+</ol>
+<p>In this tutorial, you’ll use Chroma. For client projects, I’ve used Elasticsearch, Postgres, Weaviate, and Qdrant. Many companies are already using Elasticsearch or Postgres, so it’s often easier to get started with them.</p>
+<section id="why-use-a-vectordb" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-a-vectordb">Why use a VectorDB?</h3>
+<p>If you have a small dataset, there’s no real reason to use a vector database. But if you’re dealing with thousands or millions of documents, you’ll need to use a vector database to efficiently retrieve the most relevant documents.</p>
+<p>They’re useful because:</p>
+<ol type="1">
+<li>The <a href="https://arxiv.org/abs/2309.01431">more noise</a> in the context provided to the LLM, the more likely it is to produce bad output.</li>
+<li>It takes more time to process a longer context</li>
+<li>It costs more to process a longer context</li>
+</ol>
+</section>
+<section id="retrieval" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval">Retrieval</h3>
+<p>Retrieval is the process of finding the most relevant documents in the vector database. There are two main approaches when dealing with text-based data: term-based retrieval and embedding-based retrieval.</p>
+<section id="term-based-retrieval" class="level4">
+<h4 class="anchored" data-anchor-id="term-based-retrieval">Term-based retrieval</h4>
+<p>Term-based retrieval is a technique that uses the terms in the query to find the most relevant documents in the vector database.</p>
+<p>It’s based on the following ideas:</p>
+<ol type="1">
+<li><strong>TF-IDF:</strong> Counts how often a term appears in this document (TF). Measures how rare the word is across all documents (IDF). Highlights terms important and unique to this specific document.</li>
+<li><strong>Okapi BM25:</strong> Expands TF-IDF to introduce a weighting mechanism for term saturation and document length.</li>
+</ol>
+</section>
+<section id="embedding-based-retrieval" class="level4">
+<h4 class="anchored" data-anchor-id="embedding-based-retrieval">Embedding-based retrieval</h4>
+<p>Embedding-based retrieval is a technique that uses the embedding of the query to find the most relevant documents in the vector database.</p>
+<p>For small datasets, you can use k Nearest Neighbors (k-NN) approach to find the most relevant documents, in which you calculate the similarity score between the query vector and every other vector stored in the VectorDB. Sort all the vectors based on these similarity scores and return the ‘k’ most similar vectors (relative to the query).</p>
+<p>For larger datasets, you can use Approximate Nearest Neighbors (ANN) such as Locality-Sensitive Hashing (LSH) or Hierarchical Navigable Small World (HNSW) to find the most relevant documents.</p>
+</section>
+</section>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To follow this tutorial you’ll need to:</p>
+<ol type="1">
+<li>Sign up and generate an API key in <a href="https://platform.openai.com/docs/overview">OpenAI</a>.</li>
+<li>Set the API key as an environment variable called <code>OPENAI_API_KEY</code>.</li>
+<li>Create a virtual environment in Python and install the requirements:</li>
+<li>Download the <a href="../_extras/what-is-rag/bbva.pdf">sample PDF file</a></li>
+</ol>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> venv venv</span>
+<span id="cb1-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">source</span> venv/bin/activate</span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pip</span> install langchain chromadb langchain-openai langchain-community python-dotenv pypdf jupyter</span></code></pre></div>
+<p>Once you’ve completed the steps above, you can run copy and paste the code from the next sections. You can also download the notebook from <a href="../posts/what-is-rag.html">here</a>.</p>
+</section>
+<section id="rag-without-vector-database" class="level2">
+<h2 class="anchored" data-anchor-id="rag-without-vector-database">RAG without vector database</h2>
+<p>Let’s go through an example without a VectorDB. We’ll simply <em>augment</em> with the full text of the document.</p>
+<p>First, import the necessary libraries and load the required variables from the .env file.</p>
+<div id="cell-4" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> chromadb</span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> chromadb.utils.embedding_functions <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> OpenAIEmbeddingFunction</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_community.document_loaders <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> PyPDFLoader</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.messages <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> HumanMessage, SystemMessage</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ChatOpenAI</span>
+<span id="cb2-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_text_splitters <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> RecursiveCharacterTextSplitter</span>
+<span id="cb2-10"></span>
+<span id="cb2-11">load_dotenv()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>This code will import the necessary libraries and load the required variables from the .env file.</p>
+<section id="read-the-document" class="level3">
+<h3 class="anchored" data-anchor-id="read-the-document">Read the document</h3>
+<p>Next, we’ll use a langchain DocumentLoader to load the document. Since, we’re dealing with a PDF file, we’ll use the PyPDFLoader.</p>
+<p>There are many DocumentLoaders available in langchain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
+<div id="cell-8" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">file_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"../_extras/what-is-rag/bbva.pdf"</span></span>
+<span id="cb4-2">loader <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> PyPDFLoader(file_path)</span>
+<span id="cb4-3">pages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb4-4"></span>
+<span id="cb4-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> page <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> loader.lazy_load():</span>
+<span id="cb4-6">    pages.append(page)</span></code></pre></div>
+</div>
+<p>A document loader is a class that processes a document and returns a list of Document objects. In the case of the PyPDFLoader, it will read each page of the PDF file and return the text of each page with some additional metadata.</p>
+<p>A single page will look like this:</p>
+<div id="cell-10" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">pages[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].model_dump()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>{'id': None,
+ 'metadata': {'producer': 'Adobe PDF Library 15.0',
+  'creator': 'Adobe InDesign 16.1 (Windows)',
+  'creationdate': '2021-03-24T14:51:54+01:00',
+  'moddate': '2021-03-24T14:51:54+01:00',
+  'trapped': '/False',
+  'source': '../_extras/what-is-rag/bbva.pdf',
+  'total_pages': 4,
+  'page': 0,
+  'page_label': '1'},
+ 'page_content': "EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n1 / 4\nThis document contains the Pre-contractual information and the Prior General Information of the Aqua Pre-paid Card contract \n(hereinafter, the Card) in accordance with the provisions of the Ministerial Order ECE/1263/2019, on the transparency of \ninformation conditions applicable to payment services, and Bank of Spain Circular 5/2012, on the transparency of banking services \nand responsibility in the granting of loans.\nThe information highlighted in bold is especially important, in accordance with Circular 5/2012\n1. ON THE PAYMENT SERVICE PROVIDER\n1.1 Details and registration\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A.\nAddress: Plaza San Nicolás, 4 - 48005 BILBAO. \nPhone number: 900 102 801\nWebsite address: www.bbva.es\nRegistered in the Biscay Commercial Register, Volume 2083, \nFolio 1, Sheet BI-17-A, Entry 1\n1.2 Supervisory Authorities:\nBanco de España (Registry 0182)\n[Spanish National Securities Market Commission]\n2. ON THE USE OF THE PAYMENT SERVICES\n2.1 Main characteristics: PREPAID CARD .\nThe Holder may specify that the card be physical or virtual. \nT erms and conditions governing the availability of funds: in \nother words, when and how the holder will obtain the money:\na) The Card, against a balance previously loaded on it, \nmay be used to purchase goods or services in any of \nthe physical or virtual establishments affiliated with the \ncard systems to which the Card belongs and that are \nshown on it.\nb) T o make online payments with the Card, the Account \nHolder must consult the details pertaining to the card \nnumber, expiration date and CVV via the BBVA website \nor mobile app.\nc) Withdraw money from ATMs, Bank branches and \nany other entities that allow it against the balance \npreviously loaded on it.\nT ransactions carried out with the Card will reduce the \navailable balance.\nUnder no circumstances may transactions be carried out \nin excess of the current unused loaded balance at any time \n(available balance).\n2.2 Conducting transactions. Consent.\nT o withdraw money or pay with the Card in physical \nestablishments, you must present the Card and enter your \npersonal identification number (PIN).\nThe Card's contactless technology can be used to pay or \nwithdraw cash with the Card without having to enter the PIN for \ntransactions under 50 euros.\nFor online shop purchases, you must identify yourself in the \nmanner indicated by the Bank, enter the security password and \nfollow the procedure specified by the Bank..\n2.3 Execution period\nThe transactions will be charged to the Direct Debit Account on \nthe date on which they were executed.\nPre-contractual information and \ninformation  booklet  prior to \nconcluding the payment services \ncontract\nAQUA PRE-PAID CARD",
+ 'type': 'Document'}</code></pre>
+</div>
+</div>
+<p>You can see that in addition to the page content, it includes metadata about the source file, the page number, etc.</p>
+<p>This document is about the conditions of some specific banking product. We’ll use it to answer a question about it.</p>
+</section>
+<section id="augment-context" class="level3">
+<h3 class="anchored" data-anchor-id="augment-context">Augment context</h3>
+<p>Now that we have all the pages of the PDF available as a text, let’s build the context we’ll use to generate a response.</p>
+<p>We’ll define a system and a user prompt. In the system prompt, we’ll define the role of the assistant and in the user prompt, we’ll provide the user question and the documents.</p>
+<div id="cell-14" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">system_prompt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb7-2"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">You are a helpful assistant that can answer questions about the provided context.</span></span>
+<span id="cb7-3"></span>
+<span id="cb7-4"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Please cite the page number used to answer the question. Write the page number in the format "Page X" at the end of your answer. </span></span>
+<span id="cb7-5"></span>
+<span id="cb7-6"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">If the answer is not found in the context, please say so.</span></span>
+<span id="cb7-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb7-8">user_prompt <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb7-9"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Please answer the following question based on the context provided:</span></span>
+<span id="cb7-10"></span>
+<span id="cb7-11"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Question: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{question}</span></span>
+<span id="cb7-12"></span>
+<span id="cb7-13"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">Documents:</span></span>
+<span id="cb7-14"><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{documents}</span></span>
+<span id="cb7-15"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb7-16"></span>
+<span id="cb7-17">pages_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb7-18"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i, page <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(pages):</span>
+<span id="cb7-19">    pages_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"--- PAGE </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> ---</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>page<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>page_content<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n\n</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span></code></pre></div>
+</div>
+<p>We’ve set up the system and user prompt, and a a variable that stores the pages we extracted as a single string. When we make a request to the model, we’ll combine all of these into messages and send them to the model.</p>
+<p>Now, we’re ready to generate a response.</p>
+</section>
+</section>
+<section id="generate-response" class="level2">
+<h2 class="anchored" data-anchor-id="generate-response">Generate response</h2>
+<p>To generate a response we’ll use <code>gpt-4.1-mini</code> and combine the system and user prompts we’ve built to augment the model’s context.</p>
+<div id="cell-18" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, temperature<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb8-2"></span>
+<span id="cb8-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_response(context_vars: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>):</span>
+<span id="cb8-4">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb8-5">        SystemMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>system_prompt),</span>
+<span id="cb8-6">        HumanMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>user_prompt.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>context_vars)),</span>
+<span id="cb8-7">    ]</span>
+<span id="cb8-8">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.invoke(messages)</span>
+<span id="cb8-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.content</span>
+<span id="cb8-10"></span>
+<span id="cb8-11"></span>
+<span id="cb8-12">question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What is the main idea of the document?"</span></span>
+<span id="cb8-13">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response({<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"documents"</span>: pages_str})</span>
+<span id="cb8-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The main idea of the document is to provide the pre-contractual and general information regarding the Aqua Pre-paid Card offered by Banco Bilbao Vizcaya Argentaria, S.A. (BBVA). It outlines the terms and conditions of the card, including its features, usage, fees, security measures, responsibilities of the cardholder and the bank, contract duration, amendments, termination, applicable law, dispute resolution procedures, and other important legal aspects. The document aims to ensure transparency and inform potential cardholders about their rights and obligations before entering into the contract. 
+
+Page 1 to Page 4</code></pre>
+</div>
+</div>
+<p>In this code, we’ve combined the system, user prompt, the pages extracted from the document, and a user question (“What is the main idea of the document?”) into messages the model can understand.</p>
+<p>If you run the code, you’ll get an accurate answer from the model. Try running it with a different question.</p>
+<div id="cell-20" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span></span>
+<span id="cb10-2">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response({<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"documents"</span>: pages_str})</span>
+<span id="cb10-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The daily transaction limits for the Aqua Pre-paid Card are as follows: The daily purchase limit will be determined by the Card's balance and up to a maximum of 1,000 euros per day. The Holder and the Bank may modify the initially specified limits. Additionally, the monthly limit for collecting lottery and gambling prizes is ten thousand euros. (Page 2)</code></pre>
+</div>
+</div>
+<p>As long as the document contains the information you need, you will likely get an accurate answer from the model.</p>
+<p>But you can do better. Right now, the model is using the full text of the document to answer the question. Most questions only require a few sentences from the document.</p>
+<p>To answer the “What are the daily transaction limits?”, the model used 3,528 input tokens. While in reality, it only needed less than 500 input tokens.</p>
+<p>For small documents such as this one, the difference isn’t a big deal. But when you’re dealing with thousands of documents and potentially millions of tokens, the difference can be significant in terms of costs, latency, and accuracy.</p>
+<p>Let’s see how we can use a VectorDB to improve improve this.</p>
+</section>
+<section id="rag-with-vector-search" class="level2">
+<h2 class="anchored" data-anchor-id="rag-with-vector-search">RAG with vector search</h2>
+<p>You’ll need to start by doing two things: defining an embedding function, and creating a VectorDB.</p>
+<p>In this example, we’ll use the OpenAIEmbeddingFunction to create embeddings and Chroma to store them.</p>
+<div id="cell-24" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">openai_ef <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> OpenAIEmbeddingFunction(api_key<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"OPENAI_API_KEY"</span>))</span>
+<span id="cb12-2">vector_db <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> chromadb.PersistentClient()</span>
+<span id="cb12-3"></span>
+<span id="cb12-4"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb12-5">    collection <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vector_db.delete_collection(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bbva"</span>)</span>
+<span id="cb12-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span>:</span>
+<span id="cb12-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">pass</span></span>
+<span id="cb12-8"></span>
+<span id="cb12-9">collection <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vector_db.create_collection(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bbva"</span>, embedding_function<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>openai_ef)</span></code></pre></div>
+</div>
+<p>In this code, you’ve set up the embedding function and created a VectorDB. The embedding function converts chunks of text from the document into vectors. The VectorDB stores these vectors and allows you to query them based on similarity to the question.</p>
+<p>Next, you’ll need to split the pages into smaller chunks that you can query the VectorDB with.</p>
+<section id="split-and-index-documents" class="level3">
+<h3 class="anchored" data-anchor-id="split-and-index-documents">Split and index documents</h3>
+<p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., “”, “”, “.”, etc.).</p>
+<p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work better. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
+<div id="cell-28" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">text_splitter <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>, chunk_overlap<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>)</span>
+<span id="cb13-2">all_splits <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> text_splitter.split_documents(pages)</span></code></pre></div>
+</div>
+<p>This code will split the documents and save those splits into <code>all_splits</code>. Then you need to add those chunks into your VectorDB.</p>
+<p>ChromaDB provides you with a simple way to add chunks to your VectorDB:</p>
+<div id="cell-30" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">collection.add(</span>
+<span id="cb14-2">    documents<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[split.page_content <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> split <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> all_splits],</span>
+<span id="cb14-3">    metadatas<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[split.metadata <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> split <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> all_splits],</span>
+<span id="cb14-4">    ids<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(i) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(all_splits))],</span>
+<span id="cb14-5">)</span></code></pre></div>
+</div>
+<p>This will add the chunks to your VectorDB. In addition to the chunks, this will add the metadata of each chunk and generate unique IDs for each chunk.</p>
+</section>
+<section id="query-the-database" class="level3">
+<h3 class="anchored" data-anchor-id="query-the-database">Query the database</h3>
+<p>Once the chunks are in the VectorDB, you can query them with the question.</p>
+<div id="cell-34" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1">collection.query(</span>
+<span id="cb15-2">    query_texts<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span>],</span>
+<span id="cb15-3">    n_results<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb15-4">)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>{'ids': [['4']],
+ 'embeddings': None,
+ 'documents': [["EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:"]],
+ 'uris': None,
+ 'included': ['metadatas', 'documents', 'distances'],
+ 'data': None,
+ 'metadatas': [[{'page_label': '2',
+    'source': '../_extras/what-is-rag/bbva.pdf',
+    'producer': 'Adobe PDF Library 15.0',
+    'total_pages': 4,
+    'trapped': '/False',
+    'creationdate': '2021-03-24T14:51:54+01:00',
+    'page': 1,
+    'creator': 'Adobe InDesign 16.1 (Windows)',
+    'moddate': '2021-03-24T14:51:54+01:00'}]],
+ 'distances': [[0.3241901397705078]]}</code></pre>
+</div>
+</div>
+<p>You can even query it with multiple questions at once:</p>
+<div id="cell-36" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1">collection.query(</span>
+<span id="cb17-2">    query_texts<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What is the maximum amount I can withdraw?"</span>],</span>
+<span id="cb17-3">    n_results<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb17-4">)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>{'ids': [['4'], ['4']],
+ 'embeddings': None,
+ 'documents': [["EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:"],
+  ["EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:"]],
+ 'uris': None,
+ 'included': ['metadatas', 'documents', 'distances'],
+ 'data': None,
+ 'metadatas': [[{'source': '../_extras/what-is-rag/bbva.pdf',
+    'page': 1,
+    'total_pages': 4,
+    'creator': 'Adobe InDesign 16.1 (Windows)',
+    'creationdate': '2021-03-24T14:51:54+01:00',
+    'moddate': '2021-03-24T14:51:54+01:00',
+    'producer': 'Adobe PDF Library 15.0',
+    'page_label': '2',
+    'trapped': '/False'}],
+  [{'page_label': '2',
+    'trapped': '/False',
+    'source': '../_extras/what-is-rag/bbva.pdf',
+    'creator': 'Adobe InDesign 16.1 (Windows)',
+    'total_pages': 4,
+    'creationdate': '2021-03-24T14:51:54+01:00',
+    'moddate': '2021-03-24T14:51:54+01:00',
+    'producer': 'Adobe PDF Library 15.0',
+    'page': 1}]],
+ 'distances': [[0.3241901397705078], [0.416978657245636]]}</code></pre>
+</div>
+</div>
+<p>Now, let’s add the VectorDB into our RAG pipeline.</p>
+</section>
+<section id="rag-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="rag-pipeline">RAG pipeline</h3>
+<p>First, start by defining a function that does the retrieval of the most relevant documents.</p>
+<div id="cell-40" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_relevant_docs(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, top_k: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>):</span>
+<span id="cb19-2">    relevant_docs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> collection.query(query_texts<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>question, n_results<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>top_k)</span>
+<span id="cb19-3">    documents <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> relevant_docs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"documents"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb19-4">    metadatas <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> relevant_docs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"metadatas"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb19-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [</span>
+<span id="cb19-6">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"page_content"</span>: doc, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Document"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"metadata"</span>: metadata}</span>
+<span id="cb19-7">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> doc, metadata <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(documents, metadatas)</span>
+<span id="cb19-8">    ]</span></code></pre></div>
+</div>
+<p>This function will take a question and return the <code>top_k</code> most relevant chunks from the document. Here’s an example:</p>
+<div id="cell-42" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">get_relevant_docs(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>[{'page_content': "EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:",
+  'type': 'Document',
+  'metadata': {'producer': 'Adobe PDF Library 15.0',
+   'creationdate': '2021-03-24T14:51:54+01:00',
+   'creator': 'Adobe InDesign 16.1 (Windows)',
+   'moddate': '2021-03-24T14:51:54+01:00',
+   'page': 1,
+   'trapped': '/False',
+   'source': '../_extras/what-is-rag/bbva.pdf',
+   'page_label': '2',
+   'total_pages': 4}}]</code></pre>
+</div>
+</div>
+<p>After you’ve retrieved the relevant chunks, you’d want to combine them into a single string that you can pass to the model. You can use <code>get_context</code> to do that.</p>
+<div id="cell-44" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_context(relevant_docs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]):</span>
+<span id="cb22-2">    context <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb22-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> relevant_docs:</span>
+<span id="cb22-4">        context <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"--- PAGE </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>doc[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'metadata'</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'page'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> ---</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>doc[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'page_content'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n\n</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb22-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> context</span></code></pre></div>
+</div>
+<div id="cell-45" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1">docs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_relevant_docs(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span>, top_k<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb23-2">get_context(docs)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>"--- PAGE 1 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:\n\n--- PAGE 2 ---\nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n5.3 Liability of the Bank in the event of unauthorized \npayment transactions.\nIf an unauthorized payment transaction is carried out, the \nBank will refund the amount of the unauthorized transaction.\n5.4 Liability of the Holder in the event of unauthorized \ntransactions.\nThe Account Holder will be liable for losses arising from \nunauthorized payment transactions made with the Card up \nto a maximum of 50 euros.\nThe Holder will be liable without any limitations in the \nevent of fraud or gross negligence on their part in meeting \ntheir obligations as respects the security credentials and \nsafekeeping if this situation is not reported to the Bank \nwithout delay.\n5.5 Blocking the Card.\nThe Bank reserves the right to block the Card on objectively \njustified grounds related to the security measures taken\n\n--- PAGE 2 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n3 / 4 \nd) Notify the Bank of any loss, theft or copying of the \nCard or misappropriation of the PIN and/or passwords \nwithout undue delay as soon as they become aware \nof it, at any of the Bank's branches during customer \nservice hours or via the phone numbers shown on the \nCard.\n5.2 Notify the Bank of any unauthorized transactions \nor incorrectly executed payment transactions.\nThe Holder must notify the Bank as soon as they become \naware of the posting of any unauthorized transaction to the \nDirect Debit Account of the Card without undue delay at any \nbranch of the Bank during customer service hours, on the \nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n\n"</code></pre>
+</div>
+</div>
+<p>This will generate a string similar to the one we used in the previous example.</p>
+<p>Finally, you can adapt <code>get_response</code> to use these new steps in the RAG pipeline.</p>
+<div id="cell-47" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_messages(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, relevant_docs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>):</span>
+<span id="cb25-2">    context_vars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"documents"</span>: get_context(relevant_docs)}</span>
+<span id="cb25-3">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb25-4">        SystemMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>system_prompt),</span>
+<span id="cb25-5">        HumanMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>user_prompt.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">format</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>context_vars)),</span>
+<span id="cb25-6">    ]</span>
+<span id="cb25-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> messages</span>
+<span id="cb25-8"></span>
+<span id="cb25-9"></span>
+<span id="cb25-10"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_response(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb25-11">    relevant_docs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_relevant_docs(question)</span>
+<span id="cb25-12">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_messages(question, relevant_docs)</span>
+<span id="cb25-13">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.invoke(messages)</span>
+<span id="cb25-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.content</span>
+<span id="cb25-15"></span>
+<span id="cb25-16"></span>
+<span id="cb25-17">question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the daily transaction limits?"</span></span>
+<span id="cb25-18">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response(question)</span>
+<span id="cb25-19"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The daily purchase limit for transactions is determined by the Card's balance and can be up to a maximum of 1,000 euros per day. Additionally, the monthly limit for collecting lottery and gambling prizes is ten thousand euros. The Holder and the Bank may modify the initially specified limits. 
+
+(Page 1)</code></pre>
+</div>
+</div>
+<p>And, you’re done! You’ve built a RAG pipeline that can answer questions about a document.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this post, you’ve learned about what RAG is, how it works, and how to implement it in Python. You’ve learned why you’d want to use it, and how to do it.</p>
+<p>You’ve walked through the process of: - Extracting text from a PDF file - Creating embeddings for the chunks - Storing the embeddings in a VectorDB - Querying the VectorDB to find the most relevant chunks - Using the model to generate a response</p>
+<p>Hope you find this article usefl. If you have any questions or comments, put them in the comments section below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {What Is {Retrieval} {Augmented} {Generation} {(RAG)?}},
+  date = {2025-06-29},
+  url = {https://dylancastillo.co/posts/what-is-rag.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
+(RAG)?”</span> June 29, 2025. <a href="https://dylancastillo.co/posts/what-is-rag.html">https://dylancastillo.co/posts/what-is-rag.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>rag</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/what-is-rag.html</guid>
+  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>A prompt in Japanese uses 77% more tokens than in English</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -13006,1225 +13819,6 @@ Embeddings, HDBSCAN and UMAP.”</span> June 9, 2023. <a href="https://dylancast
   <category>openai</category>
   <guid>https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</guid>
   <pubDate>Fri, 09 Jun 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>OpenAI has been giving access to users to the <a href="https://wgmimedia.com/chatgpt-code-interpreter-plugin/">Code Interpreter</a> plugin and people are loving it. I wanted to replicate it outside of ChatGPT, so I created my own (simpler) version, specifically to <a href="https://deepsheet.dylancastillo.co/">analyze and visualize data</a>.</p>
-<p>Following that, I figured more people might be interested in building user-facing chatbots capable of running code in the browser. So I put together this tutorial. It will teach you how to create a simple but powerful chatbot that uses Pyodide, LangChain, and OpenAI to generate and run code in the browser for a user.</p>
-<p>C’mon, let’s get to work!</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>To make the most of the tutorial, you should review these topics before getting started:</p>
-<ol type="1">
-<li>What <a href="https://pyodide.org/en/stable/">Pyodide</a> is.</li>
-<li>What <a href="https://python.langchain.com/en/latest/index.html">LangChain</a> is.</li>
-<li>The basics of Python backend servers such as <a href="https://docs.litestar.dev/2/">Litestar</a> or <a href="fastapi.tiangolo.com/">FastAPI</a>.</li>
-</ol>
-<p>In addition, you must create an account at <a href="https://beta.openai.com">OpenAI</a>.</p>
-</section>
-<section id="building-a-code-interpreter-chatbot" class="level2">
-<h2 class="anchored" data-anchor-id="building-a-code-interpreter-chatbot">Building a Code Interpreter Chatbot</h2>
-<p>Security and scalability are two major challenges in developing a user-facing chatbot that’s capable of executing code. Companies like <a href="https://replit.com/">Replit</a> must manage <a href="https://cloud.google.com/customers/repl-it">extremely complex infrastructures</a> in order to provide users with online IDEs.</p>
-<p>We’re fortunate, however, because what we’re doing in this tutorial isn’t as complex as Replit. We can use a simple solution: Pyodide. Pyodide is a CPython port to WebAssembly/Emscripten that lets Python to run in the browser.</p>
-<p>There are some restrictions to what you can do with Pyodide, such as the fact that <a href="https://pyodide.org/en/stable/usage/wasm-constraints.html">not every package is compatible</a> with it and that the maximum memory it can manage is 2GB. But it is more than adequate to process small to medium datasets, which is what you’ll do in this tutorial.</p>
-<p>The chatbot you’ll build will work as follows:</p>
-<ol type="1">
-<li>A user asks a question about a preloaded dataset.</li>
-<li>That question, along with a predefined prompt, is sent to the OpenAI API.</li>
-<li>The API responds with a code snippet that helps answer the question.</li>
-<li>The code snippet is executed on the browser using Pyodide, and the result is displayed to the user.</li>
-</ol>
-<p>Next, you’ll set up your local environment.</p>
-</section>
-<section id="set-up-your-local-environment" class="level2">
-<h2 class="anchored" data-anchor-id="set-up-your-local-environment">Set Up Your Local Environment</h2>
-<p>Before you begin, you must first set up a few things. Follow these steps:</p>
-<ol type="1">
-<li>Install <a href="https://www.python.org/downloads/">Python 3.10</a>.</li>
-<li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
-<li>Clone the project’s repository:</li>
-</ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code></pre></div>
-<ol start="4" type="1">
-<li><p>From the root folder of the project, install the dependencies:</p>
-<ul>
-<li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
-</ul>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> install</span></code></pre></div>
-<ul>
-<li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
-</ul>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3.10</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> venv .venv <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">pip</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-r</span> requirements.txt</span></code></pre></div></li>
-<li><p>Open <code>src/.env-example</code>, add your OpenAI secret key in the corresponding variable, and save the file as <code>.env</code>.</p></li>
-</ol>
-<p>You should now have a virtual environment set up with the necessary libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">chatbot-code-interpreter</span></span>
-<span id="cb4-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> LICENSE</span>
-<span id="cb4-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> README.md</span>
-<span id="cb4-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> poetry.lock</span>
-<span id="cb4-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> pyproject.toml</span>
-<span id="cb4-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> requirements.txt</span>
-<span id="cb4-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> src</span>
-<span id="cb4-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── app.py</span>
-<span id="cb4-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── config.py</span>
-<span id="cb4-10"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── prompts</span>
-<span id="cb4-11"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   │   ├── system.prompt</span>
-<span id="cb4-12"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   │   └── user.prompt</span>
-<span id="cb4-13"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── static</span>
-<span id="cb4-14"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   │   └── all_stocks.csv</span>
-<span id="cb4-15"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── templates</span>
-<span id="cb4-16"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   │   └── index.html</span>
-<span id="cb4-17"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   ├── utils.py</span>
-<span id="cb4-18"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">│</span>   └── .env-example</span>
-<span id="cb4-19"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">└──</span> .venv/</span></code></pre></div>
-<p>These are the most relevant files and directories in the project:</p>
-<ul>
-<li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies. They’re used by Poetry to create a virtual environment.</li>
-<li><code>requirements.txt</code>: This file contains a list of Python packages required by the project.</li>
-<li><code>src/app.py</code>: This file contains the code of the chatbot.</li>
-<li><code>src/config.py</code>: This file contains project configuration details such as OpenAI’s API key (read from a <code>.env</code> file), and the path to the prompts used by the chatbot.</li>
-<li><code>src/prompts/</code>: This directory contains the system and user prompts used by the chatbot. I’ve found that keeping the prompts in text files makes it easier to manage them instead of using strings.</li>
-<li><code>src/static</code> and <code>src/templates</code>: These files contain the data used in the example and the HTML template used for the chatbot’s interface. You’ll use a dataset with prices and the volume of a group of stocks.</li>
-<li><code>src/utils.py</code>: This file contains a function you use to read the prompts from <code>src/prompts</code>.</li>
-<li><code>.env-example</code>: This file is a sample file that provides the required environment variables you should provide. In this case, you use it to pass OpenAI’s API key to your application and choose the name the chatbot should use behind the scenes (<code>gpt-3.5.-turbo</code>).</li>
-<li><code>.venv/</code>: This directory contains the project’s virtual environment.</li>
-</ul>
-<p>Alright! On to the exciting stuff now.</p>
-</section>
-<section id="run-code-on-the-browser-with-pyodide" class="level2">
-<h2 class="anchored" data-anchor-id="run-code-on-the-browser-with-pyodide">Run Code on the Browser with Pyodide</h2>
-<p>In this step, you’ll configure Pyodide to run Python in the browser. You’ll load <code>pyodide.js</code>, start it, import the required libraries, and define an event handler to process the questions asked by the user.</p>
-<p>To make the analysis simpler, I’ll split the code of <code>src/templates/index.html</code> into two sections. In the first section, you’ll only look at the contents of <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>, and in the second part, you’ll go through the JavaScript code defined in <code>&lt;script&gt;</code>.</p>
-<p>Here’s part one:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;!DOCTYPE</span> html<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-2"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">html</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> lang</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"en"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-4">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">meta</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> charset</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"UTF-8"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb5-5">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">meta</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> http-equiv</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"X-UA-Compatible"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> content</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"IE=edge"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb5-6">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">meta</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> name</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"viewport"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> content</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"width=device-width, initial-scale=1.0"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb5-7">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">title</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Code Runner Chatbot<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">title</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-8">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">link</span></span>
-<span id="cb5-9"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">      rel</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stylesheet"</span></span>
-<span id="cb5-10"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">      href</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"</span></span>
-<span id="cb5-11"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">    </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">/&gt;</span></span>
-<span id="cb5-12">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> src</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-13">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">head</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-14"></span>
-<span id="cb5-15">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-16">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">main</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> class</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"container"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-17">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">h1</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> style</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text-align:center;"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Code Runner Chatbot<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">h1</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-18">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">textarea</span></span>
-<span id="cb5-19"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">        name</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span></span>
-<span id="cb5-20"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">        id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span></span>
-<span id="cb5-21"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">        cols</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"30"</span></span>
-<span id="cb5-22"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">        rows</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"10"</span></span>
-<span id="cb5-23"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">        placeholder</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Ask a question about the dataset"</span></span>
-<span id="cb5-24"><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">      </span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">textarea</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-25">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">button</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ask-btn"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span>Ask<span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">button</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-26">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">blockquote</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"> id</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"output"</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">blockquote</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-27">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">main</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-28">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-29">      <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;!--</span> SECOND PART OF CODE <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">--&gt;</span></span>
-<span id="cb5-30">    <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">script</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-31">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">body</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb5-32"><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&lt;/</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">html</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>This section of code loads the necessary libraries and styles, as well as defines the chatbot’s user interface. Here’s how it works:</p>
-<ul>
-<li><strong>Lines 5 to 10</strong> set a title for the page, load <code>pyodide.js</code> and <code>pico.css</code> (a minimal CSS framework), and define a couple of standard <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta">meta tags</a>.</li>
-<li><strong>Lines 14 to 20</strong> define a simple UI that lets users input a question, and submit them by clicking on a button, to get answers about the dataset.</li>
-</ul>
-<p>Then, let’s go through the JavaScript code defined in <code>&lt;script&gt;</code>. This code will load Pyodide, install the required libraries, make the data available for use in Pyodide, and set an event handler to process the user’s question.</p>
-<p>Here’s how it looks:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> queryTextArea <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">document</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getElementById</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-2"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> outputElement <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">document</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getElementById</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"output"</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> askBtn <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">document</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getElementById</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ask-btn"</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-4"></span>
-<span id="cb6-5"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setupPyodide</span>() {</span>
-<span id="cb6-6">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> pyodide <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">loadPyodide</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-7"></span>
-<span id="cb6-8">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> pyodide<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">loadPackage</span>([<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pandas"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numpy"</span>])<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-9"></span>
-<span id="cb6-10">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">fetch</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/static/all_stocks.csv"</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-11">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> fileContentArrayBuffer <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> response<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">arrayBuffer</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-12">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> fileContent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">new</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Uint8Array</span>(fileContentArrayBuffer)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-13">  pyodide<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">FS</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">writeFile</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"all_stocks.csv"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> fileContent)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-14"></span>
-<span id="cb6-15">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> pyodide<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-16">}</span>
-<span id="cb6-17"></span>
-<span id="cb6-18"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> pyodideReadyPromise <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setupPyodide</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-19"></span>
-<span id="cb6-20">askBtn<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">addEventListener</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"click"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">async</span> (<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">event</span>) <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">=&gt;</span> {</span>
-<span id="cb6-21">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> pyodide <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> pyodideReadyPromise<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-22"></span>
-<span id="cb6-23">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> query <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> queryTextArea<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">value</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-24">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> df_info <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> pyodide<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">runPythonAsync</span>(<span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">`</span></span>
-<span id="cb6-25"><span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">    import pandas as pd</span></span>
-<span id="cb6-26"><span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">    df = pd.read_csv('all_stocks.csv')</span></span>
-<span id="cb6-27"><span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">    pd.set_option('display.max_columns', None)</span></span>
-<span id="cb6-28"><span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">    df.head(3).T</span></span>
-<span id="cb6-29"><span class="vs" style="color: #20794D;
-background-color: null;
-font-style: inherit;">    `</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-30"></span>
-<span id="cb6-31">  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">new</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">FormData</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-32">  data<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">append</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> query)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-33">  data<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">append</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"df_info"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> df_info)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-34"></span>
-<span id="cb6-35">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">try</span> {</span>
-<span id="cb6-36">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">fetch</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/ask"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> {</span>
-<span id="cb6-37">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">method</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"POST"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-38">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">body</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> data<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-39">    })<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-40"></span>
-<span id="cb6-41">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> (response<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ok</span>) {</span>
-<span id="cb6-42">      <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> result <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> response<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">text</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-43">      <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">const</span> output <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">await</span> pyodide<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">runPythonAsync</span>(result)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-44"></span>
-<span id="cb6-45">      outputElement<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">innerText</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> output<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-46">    } <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> {</span>
-<span id="cb6-47">      <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">console</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">error</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Error:"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> response<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">statusText</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-48">    }</span>
-<span id="cb6-49">  } <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">catch</span> (error) {</span>
-<span id="cb6-50">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">console</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">error</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Error:"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> error)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb6-51">  }</span>
-<span id="cb6-52">})<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
-<p>This code loads Pyodide, installs the necessary libraries, makes the data accessible in Pyodide, and finally sets an event handler to process the user’s question. It works as follows:</p>
-<ul>
-<li><strong>Lines 1 to 3</strong> select the elements of the DOM that you’ll be interacting with.</li>
-<li><strong>Lines 5 to 18</strong> define a helper function you use to load Pyodide and the data. You first load Pyodide, and install <code>pandas</code> and <code>numpy</code>. Then, you fetch the dataset and write it into Pyodide’s filesystem, to make it available to use the data in it.</li>
-<li><strong>Lines 20 to 52</strong> define the event handler of a click on <code>ask-btn</code>. This means that whenever that button is clicked, this event will execute. The handler does a few things:
-<ul>
-<li><strong>Lines 21 to 33</strong> wait until Pyodide is fully loaded, extract the question that the user has asked, get the first rows of the dataset (which is how the model can know how to generate the right code), and put together the data to send in a POST request.</li>
-<li><strong>Lines 35 to 51</strong> make a POST request to “/ask” with the parameters mentioned earlier. When the server responds, that text is run using Pyodide, and the result is then saved in <code>output</code>.</li>
-</ul></li>
-</ul>
-<p>That’s it! Next, you’ll create the chatbot application.</p>
-</section>
-<section id="create-the-chatbot" class="level2">
-<h2 class="anchored" data-anchor-id="create-the-chatbot">Create the Chatbot</h2>
-<p>Now, you’ll create a simple application that will allow users to make questions to the chatbot about the dataset.</p>
-<p>Take a look at the code in <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dataclasses <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> dataclass</span>
-<span id="cb7-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Path</span>
-<span id="cb7-3"></span>
-<span id="cb7-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> LLMChain</span>
-<span id="cb7-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langchain.chat_models <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> ChatOpenAI</span>
-<span id="cb7-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Litestar, get, post</span>
-<span id="cb7-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.contrib.jinja <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> JinjaTemplateEngine</span>
-<span id="cb7-8"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.enums <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> RequestEncodingType</span>
-<span id="cb7-9"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.params <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Body</span>
-<span id="cb7-10"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.response_containers <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Template</span>
-<span id="cb7-11"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.static_files.config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> StaticFilesConfig</span>
-<span id="cb7-12"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> litestar.template.config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> TemplateConfig</span>
-<span id="cb7-13"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> typing_extensions <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Annotated</span>
-<span id="cb7-14"></span>
-<span id="cb7-15"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> OpenAI</span>
-<span id="cb7-16"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> utils <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> get_prompt</span>
-<span id="cb7-17"></span>
-<span id="cb7-18">chain_create <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> LLMChain(</span>
-<span id="cb7-19">    llm<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>ChatOpenAI(</span>
-<span id="cb7-20">        temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>,</span>
-<span id="cb7-21">        model_name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>OpenAI.model_name,</span>
-<span id="cb7-22">        openai_api_key<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>OpenAI.secret_key,</span>
-<span id="cb7-23">    ),</span>
-<span id="cb7-24">    prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>get_prompt(),</span>
-<span id="cb7-25">)</span>
-<span id="cb7-26"></span>
-<span id="cb7-27"></span>
-<span id="cb7-28"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@get</span>(path<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/"</span>, name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"index"</span>)</span>
-<span id="cb7-29"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> index() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> Template:</span>
-<span id="cb7-30">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> Template(name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"index.html"</span>)</span>
-<span id="cb7-31"></span>
-<span id="cb7-32"></span>
-<span id="cb7-33"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@dataclass</span></span>
-<span id="cb7-34"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">class</span> Query:</span>
-<span id="cb7-35">    query: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span></span>
-<span id="cb7-36">    df_info: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span></span>
-<span id="cb7-37"></span>
-<span id="cb7-38"></span>
-<span id="cb7-39"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@post</span>(path<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/ask"</span>, name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ask"</span>, sync_to_thread<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span>
-<span id="cb7-40"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> ask(</span>
-<span id="cb7-41">    data: Annotated[Query, Body(media_type<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>RequestEncodingType.MULTI_PART)],</span>
-<span id="cb7-42">) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>:</span>
-<span id="cb7-43">    query <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data.query</span>
-<span id="cb7-44">    df_info <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data.df_info</span>
-<span id="cb7-45"></span>
-<span id="cb7-46">    chain_result <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> chain_create.run(</span>
-<span id="cb7-47">        {</span>
-<span id="cb7-48">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"df_info"</span>: df_info,</span>
-<span id="cb7-49">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"query"</span>: query,</span>
-<span id="cb7-50">        }</span>
-<span id="cb7-51">    )</span>
-<span id="cb7-52">    result <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> chain_result.split(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```python"</span>)[<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>][:<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>].strip()</span>
-<span id="cb7-53"></span>
-<span id="cb7-54">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> result</span>
-<span id="cb7-55"></span>
-<span id="cb7-56"></span>
-<span id="cb7-57">app <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Litestar(</span>
-<span id="cb7-58">    route_handlers<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[index, ask],</span>
-<span id="cb7-59">    static_files_config<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[</span>
-<span id="cb7-60">        StaticFilesConfig(directories<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"static"</span>], path<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/static"</span>, name<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"static"</span>),</span>
-<span id="cb7-61">    ],</span>
-<span id="cb7-62">    template_config<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>TemplateConfig(</span>
-<span id="cb7-63">        engine<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>JinjaTemplateEngine, directory<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>Path(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"templates"</span>)</span>
-<span id="cb7-64">    ),</span>
-<span id="cb7-65">)</span></code></pre></div>
-<p>This code provides users with a straightforward interface, allowing them to interact with the chatbot and ask questions about the dataset. Here’s how it works:</p>
-<ul>
-<li><strong>Lines 1 to 16</strong> import the required libraries. The application uses <a href="https://docs.litestar.dev/2/">Litestar</a>, which is a bit verbose; hence, you’ll notice many import statements. But there’s no real mystery to it, it’s <a href="https://docs.litestar.dev/2/migration/index.html">pretty similar to FastAPI or Flask</a>.</li>
-<li><strong>Lines 18 to 25</strong> create an <a href="https://python.langchain.com/en/latest/modules/chains/generic/llm_chain.html">LLMChain</a> to interact with the model using the prompt read from <code>get_prompt</code>, which is a function defined in <code>utils.py</code> reads the prompts defined in <code>src/prompts</code>. The chain takes the prompts, the user’s query, and the first three rows from the dataset, and asks the model for a completion. Make sure to read the prompt to see how they work.</li>
-<li><strong>Lines 28 to 30</strong> define the index route, which returns the <code>index.html</code> when a user visits <code>/</code>.</li>
-<li><strong>Lines 33 to 54</strong> define a dataclass used to validate the parameters of the request made to <code>/ask</code> and define <code>/ask</code>, which is an endpoint that helps users answer questions about the dataset by generating relevant code.</li>
-<li><strong>Lines 57 to 65</strong> set up the Litestar app, incorporating the previously defined routes and the locations of the templates and static files.</li>
-</ul>
-<p>To test the app, <code>cd</code> into <code>src/</code> and run this code in a terminal within the virtual environment:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">litestar</span> run <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--reload</span></span></code></pre></div>
-<p>If everything goes well, you’ll see an output similar to this one:</p>
-<p><a href="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></a></p>
-<p>Next, open <code>http://127.0.0.1:8000</code> on your browser. You should see the app’s UI.</p>
-<p>Try asking a question to the chatbot. For example, you can ask when were the highest and lowest closing prices of AAPL.</p>
-<p>You should get the following result:</p>
-<p><a href="images/code-interpreter-chatbot-pyodide-langchain-openai/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/code-interpreter-chatbot-pyodide-langchain-openai/image.png" class="img-fluid"></a></p>
-<p>That’s all! You’ve built a chatbot capable of running code on your browser.</p>
-</section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
-<p>I won’t cover deployment in this article. This application is pretty standard, so simply choose a method that works well for you and your organization.</p>
-<p>I like using NGINX with Gunicorn and Uvicorn workers and wrote a <a href="https://dylancastillo.co/fastapi-nginx-gunicorn/">tutorial</a> about it. That tutorial uses FastAPI, but the same process would also work with Litestar.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Way to go! By now, you’ve built a chatbot that can run Python code on the browser and help you answer complex questions about a dataset.</p>
-<p>This is what you’ve covered in this tutorial:</p>
-<ul>
-<li>How to integrate Pyodide into a web app to run code in the browser.</li>
-<li>How to use LangChain’s LLMChain to generate Python code.</li>
-<li>How to build a simple application with Litestar.</li>
-</ul>
-<p>I hope this is useful. Let me know if you have questions.</p>
-<p>The code for this tutorial is <a href="https://github.com/dylanjcastillo/chatbot-code-interpreter">available on GitHub</a>.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2023,
-  author = {Castillo, Dylan},
-  title = {Create a {Code} {Interpreter} {Chatbot} with {Pyodide,}
-    {LangChain,} and {OpenAI}},
-  date = {2023-05-12},
-  url = {https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2023" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2023. <span>“Create a Code Interpreter Chatbot with
-Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html">https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</a>.
-</div></div></section></div> ]]></description>
-  <category>python</category>
-  <category>llm</category>
-  <category>openai</category>
-  <guid>https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</guid>
-  <pubDate>Fri, 12 May 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
