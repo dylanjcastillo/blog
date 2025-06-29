@@ -911,7 +911,7 @@ Note
 <li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
 <li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
 </ul>
-<p>This available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅).</p>
+<p>You can use this parameter in OpenAI models. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅). Anthropic doesn’t provide them.</p>
 <p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
 </section>
 <section id="max-completion-tokens" class="level2">

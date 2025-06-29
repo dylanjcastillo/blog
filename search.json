@@ -1495,7 +1495,7 @@
     "href": "posts/key-parameters-llms.html#logprobs",
     "title": "Key parameters for LLMs",
     "section": "Logprobs",
-    "text": "Logprobs\nLogprobs are the logaritmic probabilities of the tokens. They are defined as:\n\\[logprob(w_i) = ln(P(w_i)) = ln(\\frac{e^{z_i}}{\\sum_{j=1}^{n} e^{z_j}}) \\]\nWhere:\n\n\\(w_i\\) is the \\(i\\)-th token in the vocabulary.\n\\(P(w_i)\\) is the probability of the \\(i\\)-th token.\n\\(z_i\\) is the logit of the \\(i\\)-th token.\n\\(n\\) is the number of tokens in the vocabulary.\n\nThis available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a single request with logprobs per day (yes, I’m not kidding 😅).\nOpen-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens."
+    "text": "Logprobs\nLogprobs are the logaritmic probabilities of the tokens. They are defined as:\n\\[logprob(w_i) = ln(P(w_i)) = ln(\\frac{e^{z_i}}{\\sum_{j=1}^{n} e^{z_j}}) \\]\nWhere:\n\n\\(w_i\\) is the \\(i\\)-th token in the vocabulary.\n\\(P(w_i)\\) is the probability of the \\(i\\)-th token.\n\\(z_i\\) is the logit of the \\(i\\)-th token.\n\\(n\\) is the number of tokens in the vocabulary.\n\nYou can use this parameter in OpenAI models. Gemini provides a single request with logprobs per day (yes, I’m not kidding 😅). Anthropic doesn’t provide them.\nOpen-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens."
   },
   {
     "objectID": "posts/key-parameters-llms.html#max-completion-tokens",

@@ -322,7 +322,7 @@ Note
 <li><span class="math inline">\(z_i\)</span> is the logit of the <span class="math inline">\(i\)</span>-th token.</li>
 <li><span class="math inline">\(n\)</span> is the number of tokens in the vocabulary.</li>
 </ul>
-<p>This available for OpenAI models. Anthropic doesn’t provide them. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅).</p>
+<p>You can use this parameter in OpenAI models. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅). Anthropic doesn’t provide them.</p>
 <p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
 </section>
 <section id="max-completion-tokens" class="level2">
