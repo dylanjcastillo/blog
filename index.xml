@@ -104,7 +104,7 @@ font-style: inherit;">pip</span> install langchain chromadb langchain-openai lan
 <h2 class="anchored" data-anchor-id="rag-without-vector-database">RAG without vector database</h2>
 <p>Let’s go through an example without a VectorDB. We’ll simply <em>augment</em> with the full text of the document.</p>
 <p>First, import the necessary libraries and load the required variables from the .env file.</p>
-<div id="cell-4" class="cell" data-execution_count="7">
+<div id="cell-4" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> os</span>
@@ -144,9 +144,6 @@ background-color: null;
 font-style: inherit;">import</span> RecursiveCharacterTextSplitter</span>
 <span id="cb2-10"></span>
 <span id="cb2-11">load_dotenv()</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>True</code></pre>
-</div>
 </div>
 <p>This code will import the necessary libraries and load the required variables from the .env file.</p>
 <section id="read-the-document" class="level3">
@@ -154,31 +151,31 @@ font-style: inherit;">import</span> RecursiveCharacterTextSplitter</span>
 <p>Next, we’ll use a langchain DocumentLoader to load the document. Since, we’re dealing with a PDF file, we’ll use the PyPDFLoader.</p>
 <p>There are many DocumentLoaders available in langchain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
 <div id="cell-8" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">file_path <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">file_path <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"../_extras/what-is-rag/bbva.pdf"</span></span>
-<span id="cb4-2">loader <span class="op" style="color: #5E5E5E;
+<span id="cb3-2">loader <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> PyPDFLoader(file_path)</span>
-<span id="cb4-3">pages <span class="op" style="color: #5E5E5E;
+<span id="cb3-3">pages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb4-4"></span>
-<span id="cb4-5"><span class="cf" style="color: #003B4F;
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> page <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> loader.lazy_load():</span>
-<span id="cb4-6">    pages.append(page)</span></code></pre></div>
+<span id="cb3-6">    pages.append(page)</span></code></pre></div>
 </div>
 <p>A document loader is a class that processes a document and returns a list of Document objects. In the case of the PyPDFLoader, it will read each page of the PDF file and return the text of each page with some additional metadata.</p>
 <p>A single page will look like this:</p>
 <div id="cell-10" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">pages[<span class="dv" style="color: #AD0000;
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">pages[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>].model_dump()</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -204,56 +201,56 @@ font-style: inherit;">0</span>].model_dump()</span></code></pre></div>
 <p>Now that we have all the pages of the PDF available as a text, let’s build the context we’ll use to generate a response.</p>
 <p>We’ll define a system and a user prompt. In the system prompt, we’ll define the role of the assistant and in the user prompt, we’ll provide the user question and the documents.</p>
 <div id="cell-14" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">system_prompt <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">system_prompt <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb7-2"><span class="st" style="color: #20794D;
+<span id="cb6-2"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">You are a helpful assistant that can answer questions about the provided context.</span></span>
-<span id="cb7-3"></span>
-<span id="cb7-4"><span class="st" style="color: #20794D;
+<span id="cb6-3"></span>
+<span id="cb6-4"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">Please cite the page number used to answer the question. Write the page number in the format "Page X" at the end of your answer. </span></span>
-<span id="cb7-5"></span>
-<span id="cb7-6"><span class="st" style="color: #20794D;
+<span id="cb6-5"></span>
+<span id="cb6-6"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">If the answer is not found in the context, please say so.</span></span>
-<span id="cb7-7"><span class="st" style="color: #20794D;
+<span id="cb6-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb7-8">user_prompt <span class="op" style="color: #5E5E5E;
+<span id="cb6-8">user_prompt <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb7-9"><span class="st" style="color: #20794D;
+<span id="cb6-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">Please answer the following question based on the context provided:</span></span>
-<span id="cb7-10"></span>
-<span id="cb7-11"><span class="st" style="color: #20794D;
+<span id="cb6-10"></span>
+<span id="cb6-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">Question: </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{question}</span></span>
-<span id="cb7-12"></span>
-<span id="cb7-13"><span class="st" style="color: #20794D;
+<span id="cb6-12"></span>
+<span id="cb6-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">Documents:</span></span>
-<span id="cb7-14"><span class="sc" style="color: #5E5E5E;
+<span id="cb6-14"><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{documents}</span></span>
-<span id="cb7-15"><span class="st" style="color: #20794D;
+<span id="cb6-15"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb7-16"></span>
-<span id="cb7-17">pages_str <span class="op" style="color: #5E5E5E;
+<span id="cb6-16"></span>
+<span id="cb6-17">pages_str <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb7-18"><span class="cf" style="color: #003B4F;
+<span id="cb6-18"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i, page <span class="kw" style="color: #003B4F;
@@ -262,7 +259,7 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">enumerate</span>(pages):</span>
-<span id="cb7-19">    pages_str <span class="op" style="color: #5E5E5E;
+<span id="cb6-19">    pages_str <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -298,7 +295,7 @@ font-style: inherit;">"</span></span></code></pre></div>
 <h2 class="anchored" data-anchor-id="generate-response">Generate response</h2>
 <p>To generate a response we’ll use <code>gpt-4.1-mini</code> and combine the system and user prompts we’ve built to augment the model’s context.</p>
 <div id="cell-18" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">model <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -309,49 +306,49 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>)</span>
-<span id="cb8-2"></span>
-<span id="cb8-3"><span class="kw" style="color: #003B4F;
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_response(context_vars: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>):</span>
-<span id="cb8-4">    messages <span class="op" style="color: #5E5E5E;
+<span id="cb7-4">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb8-5">        SystemMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb7-5">        SystemMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>system_prompt),</span>
-<span id="cb8-6">        HumanMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb7-6">        HumanMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>user_prompt.<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">format</span>(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>context_vars)),</span>
-<span id="cb8-7">    ]</span>
-<span id="cb8-8">    response <span class="op" style="color: #5E5E5E;
+<span id="cb7-7">    ]</span>
+<span id="cb7-8">    response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model.invoke(messages)</span>
-<span id="cb8-9">    <span class="cf" style="color: #003B4F;
+<span id="cb7-9">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> response.content</span>
-<span id="cb8-10"></span>
-<span id="cb8-11"></span>
-<span id="cb8-12">question <span class="op" style="color: #5E5E5E;
+<span id="cb7-10"></span>
+<span id="cb7-11"></span>
+<span id="cb7-12">question <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What is the main idea of the document?"</span></span>
-<span id="cb8-13">response <span class="op" style="color: #5E5E5E;
+<span id="cb7-13">response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_response({<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>: pages_str})</span>
-<span id="cb8-14"><span class="bu" style="color: null;
+<span id="cb7-14"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(response)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -363,19 +360,19 @@ Page 1 to Page 4</code></pre>
 <p>In this code, we’ve combined the system, user prompt, the pages extracted from the document, and a user question (“What is the main idea of the document?”) into messages the model can understand.</p>
 <p>If you run the code, you’ll get an accurate answer from the model. Try running it with a different question.</p>
 <div id="cell-20" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">question <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">question <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What are the daily transaction limits?"</span></span>
-<span id="cb10-2">response <span class="op" style="color: #5E5E5E;
+<span id="cb9-2">response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_response({<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>: pages_str})</span>
-<span id="cb10-3"><span class="bu" style="color: null;
+<span id="cb9-3"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(response)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -393,36 +390,36 @@ font-style: inherit;">print</span>(response)</span></code></pre></div>
 <p>You’ll need to start by doing two things: defining an embedding function, and creating a VectorDB.</p>
 <p>In this example, we’ll use the OpenAIEmbeddingFunction to create embeddings and Chroma to store them.</p>
 <div id="cell-24" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">openai_ef <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">openai_ef <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> OpenAIEmbeddingFunction(api_key<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"OPENAI_API_KEY"</span>))</span>
-<span id="cb12-2">vector_db <span class="op" style="color: #5E5E5E;
+<span id="cb11-2">vector_db <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> chromadb.PersistentClient()</span>
-<span id="cb12-3"></span>
-<span id="cb12-4"><span class="cf" style="color: #003B4F;
+<span id="cb11-3"></span>
+<span id="cb11-4"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">try</span>:</span>
-<span id="cb12-5">    collection <span class="op" style="color: #5E5E5E;
+<span id="cb11-5">    collection <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> vector_db.delete_collection(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"bbva"</span>)</span>
-<span id="cb12-6"><span class="cf" style="color: #003B4F;
+<span id="cb11-6"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">except</span>:</span>
-<span id="cb12-7">    <span class="cf" style="color: #003B4F;
+<span id="cb11-7">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">pass</span></span>
-<span id="cb12-8"></span>
-<span id="cb12-9">collection <span class="op" style="color: #5E5E5E;
+<span id="cb11-8"></span>
+<span id="cb11-9">collection <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> vector_db.create_collection(<span class="st" style="color: #20794D;
 background-color: null;
@@ -437,7 +434,7 @@ font-style: inherit;">=</span>openai_ef)</span></code></pre></div>
 <p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., <code>"\\n\\n"</code>, <code>"\n"</code>, <code>"."</code>, etc.).</p>
 <p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work better. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
 <div id="cell-28" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">text_splitter <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">text_splitter <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -448,15 +445,15 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">200</span>)</span>
-<span id="cb13-2">all_splits <span class="op" style="color: #5E5E5E;
+<span id="cb12-2">all_splits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> text_splitter.split_documents(pages)</span></code></pre></div>
 </div>
 <p>This code will split the documents and save those splits into <code>all_splits</code>. Then you need to add those chunks into your VectorDB.</p>
 <p>ChromaDB provides you with a simple way to add chunks to your VectorDB:</p>
 <div id="cell-30" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">collection.add(</span>
-<span id="cb14-2">    documents<span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">collection.add(</span>
+<span id="cb13-2">    documents<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[split.page_content <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -465,7 +462,7 @@ font-style: inherit;">for</span> split <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> all_splits],</span>
-<span id="cb14-3">    metadatas<span class="op" style="color: #5E5E5E;
+<span id="cb13-3">    metadatas<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[split.metadata <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -474,7 +471,7 @@ font-style: inherit;">for</span> split <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> all_splits],</span>
-<span id="cb14-4">    ids<span class="op" style="color: #5E5E5E;
+<span id="cb13-4">    ids<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[<span class="bu" style="color: null;
 background-color: null;
@@ -489,7 +486,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">len</span>(all_splits))],</span>
-<span id="cb14-5">)</span></code></pre></div>
+<span id="cb13-5">)</span></code></pre></div>
 </div>
 <p>This will add the chunks to your VectorDB. In addition to the chunks, this will add the metadata of each chunk and generate unique IDs for each chunk.</p>
 </section>
@@ -497,18 +494,18 @@ font-style: inherit;">len</span>(all_splits))],</span>
 <h3 class="anchored" data-anchor-id="query-the-database">Query the database</h3>
 <p>Once the chunks are in the VectorDB, you can query them with the question.</p>
 <div id="cell-34" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1">collection.query(</span>
-<span id="cb15-2">    query_texts<span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">collection.query(</span>
+<span id="cb14-2">    query_texts<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What are the daily transaction limits?"</span>],</span>
-<span id="cb15-3">    n_results<span class="op" style="color: #5E5E5E;
+<span id="cb14-3">    n_results<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>,</span>
-<span id="cb15-4">)</span></code></pre></div>
+<span id="cb14-4">)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>{'ids': [['4']],
  'embeddings': None,
@@ -530,20 +527,20 @@ font-style: inherit;">1</span>,</span>
 </div>
 <p>You can even query it with multiple questions at once:</p>
 <div id="cell-36" class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1">collection.query(</span>
-<span id="cb17-2">    query_texts<span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1">collection.query(</span>
+<span id="cb16-2">    query_texts<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What are the daily transaction limits?"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What is the maximum amount I can withdraw?"</span>],</span>
-<span id="cb17-3">    n_results<span class="op" style="color: #5E5E5E;
+<span id="cb16-3">    n_results<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>,</span>
-<span id="cb17-4">)</span></code></pre></div>
+<span id="cb16-4">)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>{'ids': [['4'], ['4']],
  'embeddings': None,
@@ -579,7 +576,7 @@ font-style: inherit;">1</span>,</span>
 <h3 class="anchored" data-anchor-id="rag-pipeline">RAG pipeline</h3>
 <p>First, start by defining a function that does the retrieval of the most relevant documents.</p>
 <div id="cell-40" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_relevant_docs(question: <span class="bu" style="color: null;
@@ -591,32 +588,32 @@ background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>):</span>
-<span id="cb19-2">    relevant_docs <span class="op" style="color: #5E5E5E;
+<span id="cb18-2">    relevant_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> collection.query(query_texts<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>question, n_results<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>top_k)</span>
-<span id="cb19-3">    documents <span class="op" style="color: #5E5E5E;
+<span id="cb18-3">    documents <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> relevant_docs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span>
-<span id="cb19-4">    metadatas <span class="op" style="color: #5E5E5E;
+<span id="cb18-4">    metadatas <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> relevant_docs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"metadatas"</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span>
-<span id="cb19-5">    <span class="cf" style="color: #003B4F;
+<span id="cb18-5">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> [</span>
-<span id="cb19-6">        {<span class="st" style="color: #20794D;
+<span id="cb18-6">        {<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"page_content"</span>: doc, <span class="st" style="color: #20794D;
 background-color: null;
@@ -625,7 +622,7 @@ background-color: null;
 font-style: inherit;">"Document"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"metadata"</span>: metadata}</span>
-<span id="cb19-7">        <span class="cf" style="color: #003B4F;
+<span id="cb18-7">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> doc, metadata <span class="kw" style="color: #003B4F;
@@ -634,11 +631,11 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(documents, metadatas)</span>
-<span id="cb19-8">    ]</span></code></pre></div>
+<span id="cb18-8">    ]</span></code></pre></div>
 </div>
 <p>This function will take a question and return the <code>top_k</code> most relevant chunks from the document. Here’s an example:</p>
 <div id="cell-42" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">get_relevant_docs(<span class="st" style="color: #20794D;
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">get_relevant_docs(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What are the daily transaction limits?"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="44">
@@ -657,7 +654,7 @@ font-style: inherit;">"What are the daily transaction limits?"</span>)</span></c
 </div>
 <p>After you’ve retrieved the relevant chunks, you’d want to combine them into a single string that you can pass to the model. You can use <code>get_context</code> to do that.</p>
 <div id="cell-44" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_context(relevant_docs: <span class="bu" style="color: null;
@@ -665,19 +662,19 @@ background-color: null;
 font-style: inherit;">list</span>[<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>]):</span>
-<span id="cb22-2">    context <span class="op" style="color: #5E5E5E;
+<span id="cb21-2">    context <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb22-3">    <span class="cf" style="color: #003B4F;
+<span id="cb21-3">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> relevant_docs:</span>
-<span id="cb22-4">        context <span class="op" style="color: #5E5E5E;
+<span id="cb21-4">        context <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -704,13 +701,13 @@ background-color: null;
 font-style: inherit;">\n\n</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb22-5">    <span class="cf" style="color: #003B4F;
+<span id="cb21-5">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> context</span></code></pre></div>
 </div>
 <div id="cell-45" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1">docs <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1">docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_relevant_docs(<span class="st" style="color: #20794D;
 background-color: null;
@@ -719,7 +716,7 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>)</span>
-<span id="cb23-2">get_context(docs)</span></code></pre></div>
+<span id="cb22-2">get_context(docs)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>"--- PAGE 1 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:\n\n--- PAGE 2 ---\nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n5.3 Liability of the Bank in the event of unauthorized \npayment transactions.\nIf an unauthorized payment transaction is carried out, the \nBank will refund the amount of the unauthorized transaction.\n5.4 Liability of the Holder in the event of unauthorized \ntransactions.\nThe Account Holder will be liable for losses arising from \nunauthorized payment transactions made with the Card up \nto a maximum of 50 euros.\nThe Holder will be liable without any limitations in the \nevent of fraud or gross negligence on their part in meeting \ntheir obligations as respects the security credentials and \nsafekeeping if this situation is not reported to the Bank \nwithout delay.\n5.5 Blocking the Card.\nThe Bank reserves the right to block the Card on objectively \njustified grounds related to the security measures taken\n\n--- PAGE 2 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n3 / 4 \nd) Notify the Bank of any loss, theft or copying of the \nCard or misappropriation of the PIN and/or passwords \nwithout undue delay as soon as they become aware \nof it, at any of the Bank's branches during customer \nservice hours or via the phone numbers shown on the \nCard.\n5.2 Notify the Bank of any unauthorized transactions \nor incorrectly executed payment transactions.\nThe Holder must notify the Bank as soon as they become \naware of the posting of any unauthorized transaction to the \nDirect Debit Account of the Card without undue delay at any \nbranch of the Bank during customer service hours, on the \nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n\n"</code></pre>
 </div>
@@ -727,7 +724,7 @@ font-style: inherit;">3</span>)</span>
 <p>This will generate a string similar to the one we used in the previous example.</p>
 <p>Finally, you can adapt <code>get_response</code> to use these new steps in the RAG pipeline.</p>
 <div id="cell-47" class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_messages(question: <span class="bu" style="color: null;
@@ -735,63 +732,63 @@ background-color: null;
 font-style: inherit;">str</span>, relevant_docs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>):</span>
-<span id="cb25-2">    context_vars <span class="op" style="color: #5E5E5E;
+<span id="cb24-2">    context_vars <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: question, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>: get_context(relevant_docs)}</span>
-<span id="cb25-3">    messages <span class="op" style="color: #5E5E5E;
+<span id="cb24-3">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb25-4">        SystemMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb24-4">        SystemMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>system_prompt),</span>
-<span id="cb25-5">        HumanMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb24-5">        HumanMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>user_prompt.<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">format</span>(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>context_vars)),</span>
-<span id="cb25-6">    ]</span>
-<span id="cb25-7">    <span class="cf" style="color: #003B4F;
+<span id="cb24-6">    ]</span>
+<span id="cb24-7">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> messages</span>
-<span id="cb25-8"></span>
-<span id="cb25-9"></span>
-<span id="cb25-10"><span class="kw" style="color: #003B4F;
+<span id="cb24-8"></span>
+<span id="cb24-9"></span>
+<span id="cb24-10"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_response(question: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span>):</span>
-<span id="cb25-11">    relevant_docs <span class="op" style="color: #5E5E5E;
+<span id="cb24-11">    relevant_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_relevant_docs(question)</span>
-<span id="cb25-12">    messages <span class="op" style="color: #5E5E5E;
+<span id="cb24-12">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_messages(question, relevant_docs)</span>
-<span id="cb25-13">    response <span class="op" style="color: #5E5E5E;
+<span id="cb24-13">    response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model.invoke(messages)</span>
-<span id="cb25-14">    <span class="cf" style="color: #003B4F;
+<span id="cb24-14">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> response.content</span>
-<span id="cb25-15"></span>
-<span id="cb25-16"></span>
-<span id="cb25-17">question <span class="op" style="color: #5E5E5E;
+<span id="cb24-15"></span>
+<span id="cb24-16"></span>
+<span id="cb24-17">question <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What are the daily transaction limits?"</span></span>
-<span id="cb25-18">response <span class="op" style="color: #5E5E5E;
+<span id="cb24-18">response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_response(question)</span>
-<span id="cb25-19"><span class="bu" style="color: null;
+<span id="cb24-19"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(response)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">

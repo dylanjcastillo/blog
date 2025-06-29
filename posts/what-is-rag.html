@@ -329,7 +329,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="rag-without-vector-database">RAG without vector database</h2>
 <p>Let’s go through an example without a VectorDB. We’ll simply <em>augment</em> with the full text of the document.</p>
 <p>First, import the necessary libraries and load the required variables from the .env file.</p>
-<div id="cell-4" class="cell" data-execution_count="7">
+<div id="cell-4" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> chromadb</span>
@@ -341,9 +341,6 @@ Subscribe to my newsletter
 <span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> langchain_text_splitters <span class="im">import</span> RecursiveCharacterTextSplitter</span>
 <span id="cb2-10"><a href="#cb2-10"></a></span>
 <span id="cb2-11"><a href="#cb2-11"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>True</code></pre>
-</div>
 </div>
 <p>This code will import the necessary libraries and load the required variables from the .env file.</p>
 <section id="read-the-document" class="level3">
@@ -351,17 +348,17 @@ Subscribe to my newsletter
 <p>Next, we’ll use a langchain DocumentLoader to load the document. Since, we’re dealing with a PDF file, we’ll use the PyPDFLoader.</p>
 <p>There are many DocumentLoaders available in langchain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
 <div id="cell-8" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>file_path <span class="op">=</span> <span class="st">"../_extras/what-is-rag/bbva.pdf"</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>loader <span class="op">=</span> PyPDFLoader(file_path)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>pages <span class="op">=</span> []</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="cf">for</span> page <span class="kw">in</span> loader.lazy_load():</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    pages.append(page)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>file_path <span class="op">=</span> <span class="st">"../_extras/what-is-rag/bbva.pdf"</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>loader <span class="op">=</span> PyPDFLoader(file_path)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>pages <span class="op">=</span> []</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="cf">for</span> page <span class="kw">in</span> loader.lazy_load():</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    pages.append(page)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A document loader is a class that processes a document and returns a list of Document objects. In the case of the PyPDFLoader, it will read each page of the PDF file and return the text of each page with some additional metadata.</p>
 <p>A single page will look like this:</p>
 <div id="cell-10" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>pages[<span class="dv">0</span>].model_dump()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>pages[<span class="dv">0</span>].model_dump()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>{'id': None,
  'metadata': {'producer': 'Adobe PDF Library 15.0',
@@ -385,25 +382,25 @@ Subscribe to my newsletter
 <p>Now that we have all the pages of the PDF available as a text, let’s build the context we’ll use to generate a response.</p>
 <p>We’ll define a system and a user prompt. In the system prompt, we’ll define the role of the assistant and in the user prompt, we’ll provide the user question and the documents.</p>
 <div id="cell-14" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>system_prompt <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="st">You are a helpful assistant that can answer questions about the provided context.</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="st">Please cite the page number used to answer the question. Write the page number in the format "Page X" at the end of your answer. </span></span>
-<span id="cb7-5"><a href="#cb7-5"></a></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="st">If the answer is not found in the context, please say so.</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="st">"""</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>user_prompt <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="st">Please answer the following question based on the context provided:</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="st">Question: </span><span class="sc">{question}</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="st">Documents:</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="sc">{documents}</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="st">"""</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a></span>
-<span id="cb7-17"><a href="#cb7-17"></a>pages_str <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="cf">for</span> i, page <span class="kw">in</span> <span class="bu">enumerate</span>(pages):</span>
-<span id="cb7-19"><a href="#cb7-19"></a>    pages_str <span class="op">+=</span> <span class="ss">f"--- PAGE </span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>page<span class="sc">.</span>page_content<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>system_prompt <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">You are a helpful assistant that can answer questions about the provided context.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="st">Please cite the page number used to answer the question. Write the page number in the format "Page X" at the end of your answer. </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="st">If the answer is not found in the context, please say so.</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="st">"""</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>user_prompt <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="st">Please answer the following question based on the context provided:</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="st">Question: </span><span class="sc">{question}</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="st">Documents:</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="sc">{documents}</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="st">"""</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a>pages_str <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="cf">for</span> i, page <span class="kw">in</span> <span class="bu">enumerate</span>(pages):</span>
+<span id="cb6-19"><a href="#cb6-19"></a>    pages_str <span class="op">+=</span> <span class="ss">f"--- PAGE </span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>page<span class="sc">.</span>page_content<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ve set up the system and user prompt, and a a variable that stores the pages we extracted as a single string. When we make a request to the model, we’ll combine all of these into messages and send them to the model.</p>
 <p>Now, we’re ready to generate a response.</p>
@@ -413,20 +410,20 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="generate-response">Generate response</h2>
 <p>To generate a response we’ll use <code>gpt-4.1-mini</code> and combine the system and user prompts we’ve built to augment the model’s context.</p>
 <div id="cell-18" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">def</span> get_response(context_vars: <span class="bu">dict</span>):</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    messages <span class="op">=</span> [</span>
-<span id="cb8-5"><a href="#cb8-5"></a>        SystemMessage(content<span class="op">=</span>system_prompt),</span>
-<span id="cb8-6"><a href="#cb8-6"></a>        HumanMessage(content<span class="op">=</span>user_prompt.<span class="bu">format</span>(<span class="op">**</span>context_vars)),</span>
-<span id="cb8-7"><a href="#cb8-7"></a>    ]</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    response <span class="op">=</span> model.invoke(messages)</span>
-<span id="cb8-9"><a href="#cb8-9"></a>    <span class="cf">return</span> response.content</span>
-<span id="cb8-10"><a href="#cb8-10"></a></span>
-<span id="cb8-11"><a href="#cb8-11"></a></span>
-<span id="cb8-12"><a href="#cb8-12"></a>question <span class="op">=</span> <span class="st">"What is the main idea of the document?"</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a>response <span class="op">=</span> get_response({<span class="st">"question"</span>: question, <span class="st">"documents"</span>: pages_str})</span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">def</span> get_response(context_vars: <span class="bu">dict</span>):</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    messages <span class="op">=</span> [</span>
+<span id="cb7-5"><a href="#cb7-5"></a>        SystemMessage(content<span class="op">=</span>system_prompt),</span>
+<span id="cb7-6"><a href="#cb7-6"></a>        HumanMessage(content<span class="op">=</span>user_prompt.<span class="bu">format</span>(<span class="op">**</span>context_vars)),</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    ]</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    response <span class="op">=</span> model.invoke(messages)</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">return</span> response.content</span>
+<span id="cb7-10"><a href="#cb7-10"></a></span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a>question <span class="op">=</span> <span class="st">"What is the main idea of the document?"</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>response <span class="op">=</span> get_response({<span class="st">"question"</span>: question, <span class="st">"documents"</span>: pages_str})</span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The main idea of the document is to provide the pre-contractual and general information regarding the Aqua Pre-paid Card offered by Banco Bilbao Vizcaya Argentaria, S.A. (BBVA). It outlines the terms and conditions of the card, including its features, usage, fees, security measures, responsibilities of the cardholder and the bank, contract duration, amendments, termination, applicable law, dispute resolution procedures, and other important legal aspects. The document aims to ensure transparency and inform potential cardholders about their rights and obligations before entering into the contract. 
 
@@ -436,9 +433,9 @@ Page 1 to Page 4</code></pre>
 <p>In this code, we’ve combined the system, user prompt, the pages extracted from the document, and a user question (“What is the main idea of the document?”) into messages the model can understand.</p>
 <p>If you run the code, you’ll get an accurate answer from the model. Try running it with a different question.</p>
 <div id="cell-20" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>question <span class="op">=</span> <span class="st">"What are the daily transaction limits?"</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>response <span class="op">=</span> get_response({<span class="st">"question"</span>: question, <span class="st">"documents"</span>: pages_str})</span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>question <span class="op">=</span> <span class="st">"What are the daily transaction limits?"</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>response <span class="op">=</span> get_response({<span class="st">"question"</span>: question, <span class="st">"documents"</span>: pages_str})</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The daily transaction limits for the Aqua Pre-paid Card are as follows: The daily purchase limit will be determined by the Card's balance and up to a maximum of 1,000 euros per day. The Holder and the Bank may modify the initially specified limits. Additionally, the monthly limit for collecting lottery and gambling prizes is ten thousand euros. (Page 2)</code></pre>
 </div>
@@ -454,15 +451,15 @@ Page 1 to Page 4</code></pre>
 <p>You’ll need to start by doing two things: defining an embedding function, and creating a VectorDB.</p>
 <p>In this example, we’ll use the OpenAIEmbeddingFunction to create embeddings and Chroma to store them.</p>
 <div id="cell-24" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>openai_ef <span class="op">=</span> OpenAIEmbeddingFunction(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
-<span id="cb12-2"><a href="#cb12-2"></a>vector_db <span class="op">=</span> chromadb.PersistentClient()</span>
-<span id="cb12-3"><a href="#cb12-3"></a></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="cf">try</span>:</span>
-<span id="cb12-5"><a href="#cb12-5"></a>    collection <span class="op">=</span> vector_db.delete_collection(<span class="st">"bbva"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="cf">except</span>:</span>
-<span id="cb12-7"><a href="#cb12-7"></a>    <span class="cf">pass</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a></span>
-<span id="cb12-9"><a href="#cb12-9"></a>collection <span class="op">=</span> vector_db.create_collection(<span class="st">"bbva"</span>, embedding_function<span class="op">=</span>openai_ef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>openai_ef <span class="op">=</span> OpenAIEmbeddingFunction(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>vector_db <span class="op">=</span> chromadb.PersistentClient()</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="cf">try</span>:</span>
+<span id="cb11-5"><a href="#cb11-5"></a>    collection <span class="op">=</span> vector_db.delete_collection(<span class="st">"bbva"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="cf">except</span>:</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="cf">pass</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a></span>
+<span id="cb11-9"><a href="#cb11-9"></a>collection <span class="op">=</span> vector_db.create_collection(<span class="st">"bbva"</span>, embedding_function<span class="op">=</span>openai_ef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In this code, you’ve set up the embedding function and created a VectorDB. The embedding function converts chunks of text from the document into vectors. The VectorDB stores these vectors and allows you to query them based on similarity to the question.</p>
 <p>Next, you’ll need to split the pages into smaller chunks that you can query the VectorDB with.</p>
@@ -471,17 +468,17 @@ Page 1 to Page 4</code></pre>
 <p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., <code>"\\n\\n"</code>, <code>"\n"</code>, <code>"."</code>, etc.).</p>
 <p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work better. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
 <div id="cell-28" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op">=</span><span class="dv">1000</span>, chunk_overlap<span class="op">=</span><span class="dv">200</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>all_splits <span class="op">=</span> text_splitter.split_documents(pages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op">=</span><span class="dv">1000</span>, chunk_overlap<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>all_splits <span class="op">=</span> text_splitter.split_documents(pages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This code will split the documents and save those splits into <code>all_splits</code>. Then you need to add those chunks into your VectorDB.</p>
 <p>ChromaDB provides you with a simple way to add chunks to your VectorDB:</p>
 <div id="cell-30" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>collection.add(</span>
-<span id="cb14-2"><a href="#cb14-2"></a>    documents<span class="op">=</span>[split.page_content <span class="cf">for</span> split <span class="kw">in</span> all_splits],</span>
-<span id="cb14-3"><a href="#cb14-3"></a>    metadatas<span class="op">=</span>[split.metadata <span class="cf">for</span> split <span class="kw">in</span> all_splits],</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    ids<span class="op">=</span>[<span class="bu">str</span>(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(all_splits))],</span>
-<span id="cb14-5"><a href="#cb14-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>collection.add(</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    documents<span class="op">=</span>[split.page_content <span class="cf">for</span> split <span class="kw">in</span> all_splits],</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    metadatas<span class="op">=</span>[split.metadata <span class="cf">for</span> split <span class="kw">in</span> all_splits],</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    ids<span class="op">=</span>[<span class="bu">str</span>(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(all_splits))],</span>
+<span id="cb13-5"><a href="#cb13-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This will add the chunks to your VectorDB. In addition to the chunks, this will add the metadata of each chunk and generate unique IDs for each chunk.</p>
 </section>
@@ -489,10 +486,10 @@ Page 1 to Page 4</code></pre>
 <h3 class="anchored" data-anchor-id="query-the-database">Query the database</h3>
 <p>Once the chunks are in the VectorDB, you can query them with the question.</p>
 <div id="cell-34" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>collection.query(</span>
-<span id="cb15-2"><a href="#cb15-2"></a>    query_texts<span class="op">=</span>[<span class="st">"What are the daily transaction limits?"</span>],</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    n_results<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb15-4"><a href="#cb15-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>collection.query(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    query_texts<span class="op">=</span>[<span class="st">"What are the daily transaction limits?"</span>],</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    n_results<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>{'ids': [['4']],
  'embeddings': None,
@@ -514,10 +511,10 @@ Page 1 to Page 4</code></pre>
 </div>
 <p>You can even query it with multiple questions at once:</p>
 <div id="cell-36" class="cell" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>collection.query(</span>
-<span id="cb17-2"><a href="#cb17-2"></a>    query_texts<span class="op">=</span>[<span class="st">"What are the daily transaction limits?"</span>, <span class="st">"What is the maximum amount I can withdraw?"</span>],</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    n_results<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb17-4"><a href="#cb17-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>collection.query(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    query_texts<span class="op">=</span>[<span class="st">"What are the daily transaction limits?"</span>, <span class="st">"What is the maximum amount I can withdraw?"</span>],</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    n_results<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb16-4"><a href="#cb16-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>{'ids': [['4'], ['4']],
  'embeddings': None,
@@ -553,18 +550,18 @@ Page 1 to Page 4</code></pre>
 <h3 class="anchored" data-anchor-id="rag-pipeline">RAG pipeline</h3>
 <p>First, start by defining a function that does the retrieval of the most relevant documents.</p>
 <div id="cell-40" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">def</span> get_relevant_docs(question: <span class="bu">str</span>, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">1</span>):</span>
-<span id="cb19-2"><a href="#cb19-2"></a>    relevant_docs <span class="op">=</span> collection.query(query_texts<span class="op">=</span>question, n_results<span class="op">=</span>top_k)</span>
-<span id="cb19-3"><a href="#cb19-3"></a>    documents <span class="op">=</span> relevant_docs[<span class="st">"documents"</span>][<span class="dv">0</span>]</span>
-<span id="cb19-4"><a href="#cb19-4"></a>    metadatas <span class="op">=</span> relevant_docs[<span class="st">"metadatas"</span>][<span class="dv">0</span>]</span>
-<span id="cb19-5"><a href="#cb19-5"></a>    <span class="cf">return</span> [</span>
-<span id="cb19-6"><a href="#cb19-6"></a>        {<span class="st">"page_content"</span>: doc, <span class="st">"type"</span>: <span class="st">"Document"</span>, <span class="st">"metadata"</span>: metadata}</span>
-<span id="cb19-7"><a href="#cb19-7"></a>        <span class="cf">for</span> doc, metadata <span class="kw">in</span> <span class="bu">zip</span>(documents, metadatas)</span>
-<span id="cb19-8"><a href="#cb19-8"></a>    ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">def</span> get_relevant_docs(question: <span class="bu">str</span>, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">1</span>):</span>
+<span id="cb18-2"><a href="#cb18-2"></a>    relevant_docs <span class="op">=</span> collection.query(query_texts<span class="op">=</span>question, n_results<span class="op">=</span>top_k)</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    documents <span class="op">=</span> relevant_docs[<span class="st">"documents"</span>][<span class="dv">0</span>]</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    metadatas <span class="op">=</span> relevant_docs[<span class="st">"metadatas"</span>][<span class="dv">0</span>]</span>
+<span id="cb18-5"><a href="#cb18-5"></a>    <span class="cf">return</span> [</span>
+<span id="cb18-6"><a href="#cb18-6"></a>        {<span class="st">"page_content"</span>: doc, <span class="st">"type"</span>: <span class="st">"Document"</span>, <span class="st">"metadata"</span>: metadata}</span>
+<span id="cb18-7"><a href="#cb18-7"></a>        <span class="cf">for</span> doc, metadata <span class="kw">in</span> <span class="bu">zip</span>(documents, metadatas)</span>
+<span id="cb18-8"><a href="#cb18-8"></a>    ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This function will take a question and return the <code>top_k</code> most relevant chunks from the document. Here’s an example:</p>
 <div id="cell-42" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>get_relevant_docs(<span class="st">"What are the daily transaction limits?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>get_relevant_docs(<span class="st">"What are the daily transaction limits?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="44">
 <pre><code>[{'page_content': "EDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:",
   'type': 'Document',
@@ -581,15 +578,15 @@ Page 1 to Page 4</code></pre>
 </div>
 <p>After you’ve retrieved the relevant chunks, you’d want to combine them into a single string that you can pass to the model. You can use <code>get_context</code> to do that.</p>
 <div id="cell-44" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> get_context(relevant_docs: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
-<span id="cb22-2"><a href="#cb22-2"></a>    context <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a>    <span class="cf">for</span> doc <span class="kw">in</span> relevant_docs:</span>
-<span id="cb22-4"><a href="#cb22-4"></a>        context <span class="op">+=</span> <span class="ss">f"--- PAGE </span><span class="sc">{</span>doc[<span class="st">'metadata'</span>][<span class="st">'page'</span>]<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>doc[<span class="st">'page_content'</span>]<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">"</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a>    <span class="cf">return</span> context</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">def</span> get_context(relevant_docs: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb21-2"><a href="#cb21-2"></a>    context <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>    <span class="cf">for</span> doc <span class="kw">in</span> relevant_docs:</span>
+<span id="cb21-4"><a href="#cb21-4"></a>        context <span class="op">+=</span> <span class="ss">f"--- PAGE </span><span class="sc">{</span>doc[<span class="st">'metadata'</span>][<span class="st">'page'</span>]<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>doc[<span class="st">'page_content'</span>]<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">"</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>    <span class="cf">return</span> context</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-45" class="cell" data-execution_count="47">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>docs <span class="op">=</span> get_relevant_docs(<span class="st">"What are the daily transaction limits?"</span>, top_k<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb23-2"><a href="#cb23-2"></a>get_context(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>docs <span class="op">=</span> get_relevant_docs(<span class="st">"What are the daily transaction limits?"</span>, top_k<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>get_context(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="47">
 <pre><code>"--- PAGE 1 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n2 / 4 \n2.4 T ransaction limits. \nThe daily purchase limit will be determined by the Card's \nbalance and up to a maximum of 1,000 euros per day. The \nHolder and the Bank may modify the initially specified limits. \nThe monthly limit for collecting lottery and gambling prizes is \nten thousand euros.\n2.5 T o sign up for the card, you do not need to take out \nany other accessory service.\n3. ON COSTS AND INTEREST AND EXCHANGE RATES\nMonthly top-up limit: Minimum of 6, maximum of 1000\nThe applicable fees for using the card may be:\na) Pre-paid card issue and maintenance fee: 5 euros.\nb) Fee for issuance of duplicates: 4 euros.\nc) Fee for using the card outside the Eurozone: 3% \napplicable to the exchange value in euros.\nd) Fees to withdraw cash against the card balance at ATMs:\n\n--- PAGE 2 ---\nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n5.3 Liability of the Bank in the event of unauthorized \npayment transactions.\nIf an unauthorized payment transaction is carried out, the \nBank will refund the amount of the unauthorized transaction.\n5.4 Liability of the Holder in the event of unauthorized \ntransactions.\nThe Account Holder will be liable for losses arising from \nunauthorized payment transactions made with the Card up \nto a maximum of 50 euros.\nThe Holder will be liable without any limitations in the \nevent of fraud or gross negligence on their part in meeting \ntheir obligations as respects the security credentials and \nsafekeeping if this situation is not reported to the Bank \nwithout delay.\n5.5 Blocking the Card.\nThe Bank reserves the right to block the Card on objectively \njustified grounds related to the security measures taken\n\n--- PAGE 2 ---\nEDICIÓN AQUA PREP 01-01\nBANCO BILBAO VIZCAYA ARGENTARIA, S.A. - Plaza de San Nicolás, 4 - 48005 BILBAO\nReg. Mer. Vizcaya -T omo 3858, Folio 1, Hoja BI-17 BIS-A, Inscripción 1035ª C.I.F.: A48265169\n3 / 4 \nd) Notify the Bank of any loss, theft or copying of the \nCard or misappropriation of the PIN and/or passwords \nwithout undue delay as soon as they become aware \nof it, at any of the Bank's branches during customer \nservice hours or via the phone numbers shown on the \nCard.\n5.2 Notify the Bank of any unauthorized transactions \nor incorrectly executed payment transactions.\nThe Holder must notify the Bank as soon as they become \naware of the posting of any unauthorized transaction to the \nDirect Debit Account of the Card without undue delay at any \nbranch of the Bank during customer service hours, on the \nBBVA app or website, or via the phone numbers shown on the \ncards, and in any case within a maximum period of thirteen \nmonths after the date of the debit entry.\n\n"</code></pre>
 </div>
@@ -597,25 +594,25 @@ Page 1 to Page 4</code></pre>
 <p>This will generate a string similar to the one we used in the previous example.</p>
 <p>Finally, you can adapt <code>get_response</code> to use these new steps in the RAG pipeline.</p>
 <div id="cell-47" class="cell" data-execution_count="48">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">def</span> get_messages(question: <span class="bu">str</span>, relevant_docs: <span class="bu">dict</span>):</span>
-<span id="cb25-2"><a href="#cb25-2"></a>    context_vars <span class="op">=</span> {<span class="st">"question"</span>: question, <span class="st">"documents"</span>: get_context(relevant_docs)}</span>
-<span id="cb25-3"><a href="#cb25-3"></a>    messages <span class="op">=</span> [</span>
-<span id="cb25-4"><a href="#cb25-4"></a>        SystemMessage(content<span class="op">=</span>system_prompt),</span>
-<span id="cb25-5"><a href="#cb25-5"></a>        HumanMessage(content<span class="op">=</span>user_prompt.<span class="bu">format</span>(<span class="op">**</span>context_vars)),</span>
-<span id="cb25-6"><a href="#cb25-6"></a>    ]</span>
-<span id="cb25-7"><a href="#cb25-7"></a>    <span class="cf">return</span> messages</span>
-<span id="cb25-8"><a href="#cb25-8"></a></span>
-<span id="cb25-9"><a href="#cb25-9"></a></span>
-<span id="cb25-10"><a href="#cb25-10"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>):</span>
-<span id="cb25-11"><a href="#cb25-11"></a>    relevant_docs <span class="op">=</span> get_relevant_docs(question)</span>
-<span id="cb25-12"><a href="#cb25-12"></a>    messages <span class="op">=</span> get_messages(question, relevant_docs)</span>
-<span id="cb25-13"><a href="#cb25-13"></a>    response <span class="op">=</span> model.invoke(messages)</span>
-<span id="cb25-14"><a href="#cb25-14"></a>    <span class="cf">return</span> response.content</span>
-<span id="cb25-15"><a href="#cb25-15"></a></span>
-<span id="cb25-16"><a href="#cb25-16"></a></span>
-<span id="cb25-17"><a href="#cb25-17"></a>question <span class="op">=</span> <span class="st">"What are the daily transaction limits?"</span></span>
-<span id="cb25-18"><a href="#cb25-18"></a>response <span class="op">=</span> get_response(question)</span>
-<span id="cb25-19"><a href="#cb25-19"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">def</span> get_messages(question: <span class="bu">str</span>, relevant_docs: <span class="bu">dict</span>):</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    context_vars <span class="op">=</span> {<span class="st">"question"</span>: question, <span class="st">"documents"</span>: get_context(relevant_docs)}</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    messages <span class="op">=</span> [</span>
+<span id="cb24-4"><a href="#cb24-4"></a>        SystemMessage(content<span class="op">=</span>system_prompt),</span>
+<span id="cb24-5"><a href="#cb24-5"></a>        HumanMessage(content<span class="op">=</span>user_prompt.<span class="bu">format</span>(<span class="op">**</span>context_vars)),</span>
+<span id="cb24-6"><a href="#cb24-6"></a>    ]</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    <span class="cf">return</span> messages</span>
+<span id="cb24-8"><a href="#cb24-8"></a></span>
+<span id="cb24-9"><a href="#cb24-9"></a></span>
+<span id="cb24-10"><a href="#cb24-10"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>):</span>
+<span id="cb24-11"><a href="#cb24-11"></a>    relevant_docs <span class="op">=</span> get_relevant_docs(question)</span>
+<span id="cb24-12"><a href="#cb24-12"></a>    messages <span class="op">=</span> get_messages(question, relevant_docs)</span>
+<span id="cb24-13"><a href="#cb24-13"></a>    response <span class="op">=</span> model.invoke(messages)</span>
+<span id="cb24-14"><a href="#cb24-14"></a>    <span class="cf">return</span> response.content</span>
+<span id="cb24-15"><a href="#cb24-15"></a></span>
+<span id="cb24-16"><a href="#cb24-16"></a></span>
+<span id="cb24-17"><a href="#cb24-17"></a>question <span class="op">=</span> <span class="st">"What are the daily transaction limits?"</span></span>
+<span id="cb24-18"><a href="#cb24-18"></a>response <span class="op">=</span> get_response(question)</span>
+<span id="cb24-19"><a href="#cb24-19"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The daily purchase limit for transactions is determined by the Card's balance and can be up to a maximum of 1,000 euros per day. Additionally, the monthly limit for collecting lottery and gambling prizes is ten thousand euros. The Holder and the Bank may modify the initially specified limits. 
 
