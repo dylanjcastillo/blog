@@ -1,6 +1,8 @@
 ---
 title: "2024: Personal Snapshot"
 date: "01/05/2025"
+aliases:
+  - /2024-personal-snapshot/
 description-meta: "My annual review of 2024. I analyze what went well in 2024 and what I should change for 2025."
 format:
   html:
@@ -10,6 +12,8 @@ format:
     include-after-body:
       - text: |
           <script defer src="/custom/gallery.js"></script>
+categories:
+  - personal-snapshot
 ---
 
 This is my annual review. I use it as a way to reflect on the past year and get a snapshot of "who I am" at the time of writing.
