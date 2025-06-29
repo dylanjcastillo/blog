@@ -86,7 +86,7 @@ Where:
 - $z_i$ is the logit of the $i$-th token.
 - $n$ is the number of tokens in the vocabulary.
 
-This available for OpenAI models. Anthropic doesn't provide them. Gemini provides a [single request with logprobs per day](https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15) (yes, I'm not kidding 😅).
+You can use this parameter in OpenAI models. Gemini provides a [single request with logprobs per day](https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15) (yes, I'm not kidding 😅). Anthropic doesn't provide them.
 
 Open-weight models don't provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.
 
