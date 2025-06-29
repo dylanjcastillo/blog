@@ -1,8 +1,8 @@
 ---
-title: "Deploying a Django app with Kamal, AWS ECR, and Github Actions"
-date: "09/15/2024"
+title: "Deploying a Django app with Kamal 2, AWS ECR, and Github Actions"
+date: 2024-09-15
 date-modified: last-modified
-description-meta: "A guide to deploy a Django app with Kamal, AWS ECR, and Github Actions"
+description-meta: "A guide to deploy a Django app with Kamal 2, AWS ECR, and Github Actions"
 toc: true
 toc-depth: 3
 lightbox: true
@@ -84,7 +84,6 @@ systemctl restart sshd
 
 # Add the kamal user to the docker group
 usermod -aG docker kamal
-docker network create --driver bridge kamal_network
 
 # Create a folder for the Let's Encrypt ACME JSON
 mkdir -p /letsencrypt && touch /letsencrypt/acme.json && chmod 600 /letsencrypt/acme.json
@@ -295,15 +294,14 @@ Open your Django project in your favorite code editor. Create a folder called `d
 kamal init
 ```
 
-This will create two folders (`.kamal/` and `config/`) and an `.env` file. Inside `config/`, you'll find a `deploy.yml` file. This is where you'll provide the instructions for Kamal to build and deploy your app.
+This will create two folders (`.kamal/` and `config/`), a `deploy.yml` file, and a `secrets` file, and a `.hooks/` folder that contains the hooks for the deployment. This is where you'll provide the instructions for Kamal to build and deploy your app.
 
 You can use the following `deploy.yml` file as a template for your Django app:
 
 ```{.yml filename='deploy.yml'}
+service: example
 
-service: <YOUR_SERVICE_NAME>
-
-image: <YOUR_IMAGE_NAME>
+image: example
 
 ssh:
   user: kamal
@@ -312,39 +310,18 @@ env:
   secret:
     - DJANGO_SECRET_KEY
 
-traefik:
-  options:
-    publish:
-      - "443:443"
-    volume:
-      - "/letsencrypt/:/letsencrypt/"
-    memory: 500m
-    network: kamal_network
-  args:
-    entryPoints.web.address: ":80"
-    entryPoints.websecure.address: ":443"
-    entryPoints.web.http.redirections.entryPoint.to: websecure
-    entryPoints.web.http.redirections.entryPoint.scheme: https
-    entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "<YOUR_EMAIL>"
-    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
-    certificatesResolvers.letsencrypt.acme.httpchallenge: true
-    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+proxy:
+  ssl: true
+  host: example.iwanalabs.com
+  app_port: 8000
+  healthcheck:
+    path: /kamal/up/
+    interval: 2
+    timeout: 2
 
 servers:
   web:
-    hosts:
-      - <YOUR_VPS_IP>
-    healthcheck:
-      port: 8000
-      interval: 5s
-    options:
-      network: kamal_network
-    labels:
-      traefik.http.routers.app.tls: true
-      traefik.http.routers.app.entrypoints: websecure
-      traefik.http.routers.app.rule: Host(`<YOUR_DOMAIN>`)
-      traefik.http.routers.app.tls.certresolver: letsencrypt
+    - 128.140.0.209
 
 accessories:
   redis:
@@ -356,25 +333,55 @@ accessories:
       - /var/redis/data:/data/redis
     options:
       memory: 250m
-      network: kamal_network
+      network: private_network
 
 volumes:
   - "/db/:/app/db/"
 
 registry:
-  server: <YOUR_AWS_ECR_URL> # e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com
+  server: <account_id>.dkr.ecr.<region>.amazonaws.com
   username: AWS
   password:
     - KAMAL_REGISTRY_PASSWORD
 
 builder:
+  arch: amd64
   dockerfile: "../Dockerfile"
   context: "../"
+  cache:
+    type: gha
 ```
 
-This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume to persist the SQLite database. It will also do a healthcheck on `/up` on port `8000`.
+This will set up your app and a [Kamal's proxy server](https://github.com/basecamp/kamal-proxy) (with automatic SSL certificates using Let's Encrypt), a Redis database, and a volume to persist the SQLite database. It will also do a healthcheck on `/kamal/up/` on port `8000`. Remember to replace the placeholders with your own values.
 
-Remember to replace the placeholders with your own values.
+To pass the healthcheck, you will need to add a small middleware that bypasses Django's built-in [security middleware](https://github.com/basecamp/kamal/issues/992).
+
+```{.python filename='src/config/middleware.py'}
+from django.http import HttpResponse
+
+
+class HealthCheckMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path == "/kamal/up/":
+            response = HttpResponse("OK")
+        else:
+            response = self.get_response(request)
+
+        return response
+
+```
+
+And add it to the `MIDDLEWARE` list in the `settings.py` file.
+
+```{.python filename='src/config/settings.py'}
+MIDDLEWARE = [
+    "config.middleware.HealthCheckMiddleware",
+    # other middlewares...
+]
+```
 
 ### Test the configuration locally
 
@@ -388,10 +395,17 @@ aws ecr get-login-password --region <YOUR_REGION>
 
 You should copy the output of this command and paste it in the `KAMAL_REGISTRY_PASSWORD` field in the `.env` file.
 
+Then, you should define the required environment variables in `.kamal/secrets` as follows:
+
+```{.bash filename='.kamal/secrets'}
+KAMAL_REGISTRY_PASSWORD=$KAMAL_REGISTRY_PASSWORD
+DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+OPENAI_API_KEY=$OPENAI_API_KEY
+```
+
 Then, run the following command to deploy your application to your VPS:
 
 ```bash
-kamal env push
 kamal deploy
 ```
 
@@ -447,7 +461,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ECR }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}
           aws-region: us-east-1
-          mask-aws-account-id: false # otherwise the mask will hide your account ID and cause errors in the deployment
+          mask-aws-account-id: false
 
       - name: Login to AWS ECR
         id: login-ecr
@@ -459,21 +473,14 @@ jobs:
       - name: Expose GitHub Runtime for cache
         uses: crazy-max/ghaction-github-runtime@v3
 
-      - name: Create .env file
-        run: |
-          cd <YOUR_PROJECT_ROOT>/deploy
-          touch .env
-          echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_<YOUR_ACCOUNT_ID>_dkr_ecr_<YOUR_REGION>_amazonaws_com }}" >> .env
-          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" >> .env
-          # if you have other secrets, add them here
-          cat .env
-
       - name: Kamal Deploy
         id: kamal-deploy
+        env:
+          KAMAL_REGISTRY_PASSWORD: ${{ steps.login-ecr.outputs.docker_password_<account_id>_dkr_ecr_<region>_amazonaws_com }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          cd <YOUR_PROJECT_ROOT>/deploy
+          cd deploy
           kamal lock release
-          kamal env push
           kamal deploy
 ```
 
@@ -485,8 +492,7 @@ This workflow will:
 4. Login to the AWS ECR registry
 5. Set up Docker Buildx for cache
 6. Expose GitHub Runtime for cache
-7. Create the `.env` file
-8. Run Kamal deploy
+7. Run Kamal deploy with the secrets defined in the environment
 
 It will run everytime you make a push to the main branch or by manually triggering the workflow. It'll cancel any in-progress runs to avoid conflicts.
 
