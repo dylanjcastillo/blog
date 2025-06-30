@@ -17,10 +17,10 @@ about:
 
 I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've worked in the AI & ML space for almost a decade.
 
-I've delivered successful projects for organizations like [Deliveroo](https://www.deliveroo.com/), [Boston Consulting Group (BCG)](https://www.bcg.com/), [the European Commission](https://ec.europa.eu/), and [the Olympics](https://www.olympics.com/).
+I've delivered successful projects for large organizations like [Deliveroo](https://www.deliveroo.com/), [Boston Consulting Group (BCG)](https://www.bcg.com/), and [the Olympics](https://www.olympics.com/) and startups such as [REMATIQ](https://www.rematiq.com/) or [Neurolabs](https://www.neurolabs.ai/). You can read testimonials from some of these projects on my [LinkedIn](https://www.linkedin.com/in/dylanjcastillo/).
 
-In my free time, I like working on random side projects (open source, personal, or otherwise). Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [CMOs of Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie).
+In my free time, I like working on random side projects (open source, personal, or otherwise). Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [leaders at Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie).
 
-Every once in a while, I write about topics I'm interested in. You'll find a collection of my articles here, covering everything from data science and machine learning to financial independence.
+I also write regularly about topics I'm interested in. I mostly cover technical subjects, such as data science and machine learning, but every once in a while I write about topics like financial independence or my end of year reviews.
 
 If you're interested in working with me or just want to chat, feel free to reach out to me at [dylan@iwanalabs.com](mailto:dylan@iwanalabs.com).
