@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/function-calling-structured-outputs.html",
       "/posts/what-is-rag.html",
       "/posts/key-parameters-llms.html",
       "/posts/prompt-engineering-101.html",

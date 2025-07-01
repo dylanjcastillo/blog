@@ -15,7 +15,679 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Sun, 29 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 01 Jul 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Function calling and structured outputs in LLMs with LangChain and OpenAI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/function-calling-structured-outputs.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Function calling and structured outputs let you go from chatbots that just talk to agents that interact with the world. They’re two of the most important techniques for building LLM applications.</p>
+<p>Function calling lets you give LLMs access to external tools and services. Structured outputs ensure that the data coming back from your models is clean, predictable, and ready to integrate with your systems.</p>
+<p>These are two of the most important techniques for building LLM applications. I can tell you that mastering them will make your applications better and easier to maintain.</p>
+<p>In this tutorial, you’ll learn:</p>
+<ul>
+<li>How function calling and structured outputs work and when to use them</li>
+<li>How to implement both techniques using LangChain and OpenAI</li>
+<li>Practical examples you can run and adapt for your own projects.</li>
+</ul>
+<p>Let’s get started.</p>
+<section id="function-calling" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="function-calling">Function calling</h2>
+<p>Function calling refers to the ability to get LLMs to invoke external tools or functions. This works by giving the LLM access to a set of predefined tools that it can invoke at any point.</p>
+<p>It’s relevant because it gives LLMs more capabilities, allows them to talk to external systems, and enables complex task automation. This is one of the key features that unlocked agents.</p>
+<p>The usual flow is: 1. The user asks a question 2. The LLM decides if it needs to use a tool 3. If it does, it invokes the tool and gets the output from the tool 4. The LLM then uses the output to answer the user’s question</p>
+<p>Here’s a diagram that illustrates how function calling works:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/function-calling-structured-outputs/diagram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Function calling flow"><img src="https://dylancastillo.co/posts/images/function-calling-structured-outputs/diagram.png" class="img-fluid figure-img" alt="Function calling flow"></a></p>
+<figcaption class="margin-caption">Function calling flow</figcaption>
+</figure>
+</div>
+<p>AI developers are increasingly using function calling to build more complex systems. You can use it to:</p>
+<ul>
+<li>Get information from a CRM, DB, etc</li>
+<li>Perform calculations (e.g., generate an estimae for a variable, financial calculations)</li>
+<li>Manipulate data (e.g., data cleaning, data transformation)</li>
+<li>Interact with external systems (e.g., booking a flight, sending an email)</li>
+</ul>
+</section>
+<section id="structured-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="structured-outputs">Structured outputs</h2>
+<p>Structured outputs are a group of methods that “ensure that model outputs adhere to a specific structure”<sup>1</sup>. With proprietary models, this usually means a JSON schema. With open-weight models, a structure can mean anything from a JSON schema to a specific regex pattern. You can use <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> for this.</p>
+<p>Structured outputs are very useful to create agentic systems, as they simplify the communication between components. As you can imagine, it’s a lot easier to parse the output of a JSON object than a free-form text. Note, however, that as with other things in life, there’s no free lunch. Using this technique might <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">impact the performance</a> of your task, so you should have evals in place.</p>
+<p>In the next sections, I’ll show you how to use function calling and structured outputs with OpenAI.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To follow this tutorial you’ll need to:</p>
+<ol type="1">
+<li>Sign up and generate an API key in <a href="https://platform.openai.com/docs/overview">OpenAI</a>.</li>
+<li>Sign up and generate an API key in <a href="https://smith.langchain.com/signup">LangSmith</a>.</li>
+<li>Create an <code>.env</code> file with the following variables:</li>
+</ol>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">OPENAI_API_KEY</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>sk-...</span>
+<span id="cb1-2"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGCHAIN_TRACING_V2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>true</span>
+<span id="cb1-3"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGSMITH_API_KEY</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>lsv2_...</span>
+<span id="cb1-4"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGCHAIN_PROJECT</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"my-project"</span></span></code></pre></div>
+<ol start="4" type="1">
+<li>Create a virtual environment in Python and install the requirements:</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> venv venv</span>
+<span id="cb2-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">source</span> venv/bin/activate</span>
+<span id="cb2-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pip</span> install langchain langsmith pydantic langchain-openai python-dotenv jupyter</span></code></pre></div>
+<p>Once you’ve completed the steps above, you can run copy and paste the code from the next sections. You can also download the notebook from <a href="../posts/function-calling-structured-outputs.html">here</a>.</p>
+</section>
+<section id="examples" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>As usual, you’ll start by importing the necessary libraries.</p>
+<p>You’ll use LangChain to interact with the OpenAI API and Pydantic for data validation.</p>
+<div id="cell-4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> textwrap <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dedent</span>
+<span id="cb3-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb3-3"></span>
+<span id="cb3-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb3-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb3-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.messages <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> HumanMessage, SystemMessage</span>
+<span id="cb3-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.tools <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> tool</span>
+<span id="cb3-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ChatOpenAI</span>
+<span id="cb3-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> traceable</span>
+<span id="cb3-10"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel, Field</span>
+<span id="cb3-11"></span>
+<span id="cb3-12">load_dotenv()</span></code></pre></div>
+</div>
+<p>Now that you’ve imported the libraries, we’ll work on three examples:</p>
+<ol type="1">
+<li>Providing a model with a single tool</li>
+<li>Providing a model with multiple tools</li>
+<li>Generating a structured output from a model</li>
+</ol>
+<section id="function-calling-with-a-single-tool" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="function-calling-with-a-single-tool">Function calling with a single tool</h3>
+<p>First you start by defining the model and the tool:</p>
+<div id="cell-7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>)</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@tool</span></span>
+<span id="cb4-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> find_weather(latitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>, longitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>):</span>
+<span id="cb4-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Get the weather of a given latitude and longitude"""</span></span>
+<span id="cb4-6">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(</span>
+<span id="cb4-7">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>latitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;longitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>longitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
+<span id="cb4-8">    )</span>
+<span id="cb4-9">    data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.json()</span>
+<span id="cb4-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"current"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temperature_2m"</span>]</span>
+<span id="cb4-11"></span>
+<span id="cb4-12"></span>
+<span id="cb4-13">tools_mapping <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb4-14">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"find_weather"</span>: find_weather,</span>
+<span id="cb4-15">}</span>
+<span id="cb4-16"></span>
+<span id="cb4-17">model_with_tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.bind_tools([find_weather])</span></code></pre></div>
+</div>
+<p>This code sets up a <code>gpt-4.1-mini</code> model with a single tool. To define a tool, you must define a function and use the <code>@tool</code> decorator. This function must necessarily have a docstring because this will be used to describe the tool to the model. In this case, the tool is a function that takes latitude and longitude values and returns the weather for that location by making a call to the Open Meteo API.</p>
+<p>Next, you need to tell your code how to find and use your tools. This is the purpose of <code>tools_mapping</code>. It is a common point of confusion. The LLM doesn’t run the tools on its own. It only decides if a tool should be used. After the model makes its decision, your own code must make the actual tool call.</p>
+<p>In this situation, since you only have one tool, a mapping isn’t really necessary. But if you were using multiple tools, which is often the case, you would need to create a “map” that links each tool’s name to its corresponding function. This lets you call the right tool when the model decides to use it.</p>
+<p>Finally, you need to <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
+<p>Then, let’s define a function that lets you call the model with the tool.</p>
+<div id="cell-9" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb5-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_response(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb5-3">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb5-4">        SystemMessage(</span>
+<span id="cb5-5">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Use the tools provided when relevant."</span></span>
+<span id="cb5-6">        ),</span>
+<span id="cb5-7">        HumanMessage(question),</span>
+<span id="cb5-8">    ]</span>
+<span id="cb5-9">    ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb5-10">    messages.append(ai_message)</span>
+<span id="cb5-11"></span>
+<span id="cb5-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool_call <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ai_message.tool_calls:</span>
+<span id="cb5-13">        selected_tool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tools_mapping[tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>]]</span>
+<span id="cb5-14">        tool_msg <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> selected_tool.invoke(tool_call)</span>
+<span id="cb5-15">        messages.append(tool_msg)</span>
+<span id="cb5-16"></span>
+<span id="cb5-17">    ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb5-18">    messages.append(ai_message)</span>
+<span id="cb5-19"></span>
+<span id="cb5-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ai_message.content</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"></span>
+<span id="cb5-23">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What's the weather in Tokyo?"</span>)</span>
+<span id="cb5-24"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The current temperature in Tokyo is approximately 25.5°C. If you want more detailed weather information, please let me know!</code></pre>
+</div>
+</div>
+<p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
+<p>It works as follows: 1. <strong>Line 1</strong> adds a LangSmith’s <code>traceable</code> decorator to the function, so that you can see the trace of the function in the LangSmith UI. If you prefer to not use LangSmith, you can remove this line. 1. <strong>Lines 2 to 10</strong> set up the <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompts</a> and call the model. 2. <strong>Lines 12 to 16</strong> is where the magic happens. This is a loop that will check if there’s been a tool call in the response from the model. If there is, it will call (invoke) the tool and add the result to the messages. 3. <strong>Lines 17 to 18</strong> the model is called again to get the final response.</p>
+<p>When you run this code, you’ll get a text response with the weather for the city you asked for. If you check the trace, you can see how the whole process works:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/function-calling-structured-outputs/trace-spans.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Function calling trace"><img src="https://dylancastillo.co/posts/images/function-calling-structured-outputs/trace-spans.png" class="img-fluid figure-img" alt="Function calling trace"></a></p>
+<figcaption class="margin-caption">Function calling trace</figcaption>
+</figure>
+</div>
+<p>There are three steps in the process:</p>
+<ol type="1">
+<li><strong>Initial model call</strong> with the question from the user.</li>
+<li><strong>Tool call</strong> to get the weather data.</li>
+<li><strong>Final model call</strong> to get the response.</li>
+</ol>
+<p>If you dig deeper into the first model call, you’ll see how the tool is provided to the model and how the model decides to use it:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/function-calling-structured-outputs/model-calls-tool.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Model calls tool"><img src="https://dylancastillo.co/posts/images/function-calling-structured-outputs/model-calls-tool.png" class="img-fluid figure-img" alt="Model calls tool"></a></p>
+<figcaption class="margin-caption">Model calls tool</figcaption>
+</figure>
+</div>
+<p>The tools is provided by describing it to the model using the docstring of the function. The parameter and their types are also provided. Then the model responds specifying the name of the tool it wants to use and the parameters it wants to pass to it. This tool is then called:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/function-calling-structured-outputs/tool-call.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Tool call"><img src="https://dylancastillo.co/posts/images/function-calling-structured-outputs/tool-call.png" class="img-fluid figure-img" alt="Tool call"></a></p>
+<figcaption class="margin-caption">Tool call</figcaption>
+</figure>
+</div>
+<p>The results of the tool call are then passed to the model again. The model then uses the result to generate the final response:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/function-calling-structured-outputs/tool-call-result.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Tool call result"><img src="https://dylancastillo.co/posts/images/function-calling-structured-outputs/tool-call-result.png" class="img-fluid figure-img" alt="Tool call result"></a></p>
+<figcaption class="margin-caption">Tool call result</figcaption>
+</figure>
+</div>
+<p>That’s it. This how you provide a model with tools. In the next section, you’ll see how to use multiple tools.</p>
+</section>
+<section id="function-calling-with-multiple-tools" class="level3">
+<h3 class="anchored" data-anchor-id="function-calling-with-multiple-tools">Function calling with multiple tools</h3>
+<p>Similar to the previous example, you start by defining the tools (using the <code>@tool</code> decorator) and binding them to the model.</p>
+<p>In addition to <code>get_weather</code>, you’ll also define a tool to check if a response follows the company guidelines. In this case, the company guidelines are that responses should be written in the style of a haiku.<sup>2</sup></p>
+<div id="cell-13" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>)</span>
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@tool</span></span>
+<span id="cb7-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_weather(latitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>, longitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>):</span>
+<span id="cb7-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Get the weather of a given latitude and longitude"""</span></span>
+<span id="cb7-6">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(</span>
+<span id="cb7-7">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>latitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;longitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>longitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
+<span id="cb7-8">    )</span>
+<span id="cb7-9">    data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.json()</span>
+<span id="cb7-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"current"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temperature_2m"</span>]</span>
+<span id="cb7-11"></span>
+<span id="cb7-12"></span>
+<span id="cb7-13"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@tool</span></span>
+<span id="cb7-14"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> check_guidelines(drafted_response: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb7-15">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Check if a given response follows the company guidelines"""</span></span>
+<span id="cb7-16">    model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>)</span>
+<span id="cb7-17">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.invoke(</span>
+<span id="cb7-18">        [</span>
+<span id="cb7-19">            SystemMessage(</span>
+<span id="cb7-20">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Your task is to check if a given response follows the company guidelines. The company guidelines are that responses should be written in the style of a haiku. You should reply with 'OK' or 'REQUIRES FIXING' and a short explanation."</span></span>
+<span id="cb7-21">            ),</span>
+<span id="cb7-22">            HumanMessage(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Current response: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>drafted_response<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>),</span>
+<span id="cb7-23">        ]</span>
+<span id="cb7-24">    )</span>
+<span id="cb7-25">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.content</span>
+<span id="cb7-26"></span>
+<span id="cb7-27"></span>
+<span id="cb7-28">tools_mapping <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb7-29">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"get_weather"</span>: get_weather,</span>
+<span id="cb7-30">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"check_guidelines"</span>: check_guidelines,</span>
+<span id="cb7-31">}</span>
+<span id="cb7-32"></span>
+<span id="cb7-33">model_with_tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.bind_tools([get_weather, check_guidelines])</span></code></pre></div>
+</div>
+<p>This code defines the tools and binds them to the model. Just like we did before, you also need to define a mapping of the tools, so that you can call the right tool when the model decides to use it.</p>
+<div id="cell-15" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb8-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_response(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb8-3">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb8-4">        SystemMessage(</span>
+<span id="cb8-5">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Use the tools provided when relevant. Then draft a response and check if it follows the company guidelines. Only respond to the user after you've validated and modified the response if needed."</span></span>
+<span id="cb8-6">        ),</span>
+<span id="cb8-7">        HumanMessage(question),</span>
+<span id="cb8-8">    ]</span>
+<span id="cb8-9">    ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb8-10">    messages.append(ai_message)</span>
+<span id="cb8-11"></span>
+<span id="cb8-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">while</span> ai_message.tool_calls:</span>
+<span id="cb8-13">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool_call <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ai_message.tool_calls:</span>
+<span id="cb8-14">            selected_tool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tools_mapping[tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>]]</span>
+<span id="cb8-15">            tool_msg <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> selected_tool.invoke(tool_call)</span>
+<span id="cb8-16">            messages.append(tool_msg)</span>
+<span id="cb8-17">        ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb8-18">        messages.append(ai_message)</span>
+<span id="cb8-19"></span>
+<span id="cb8-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> ai_message.content</span>
+<span id="cb8-21"></span>
+<span id="cb8-22"></span>
+<span id="cb8-23">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What is the temperature in Madrid?"</span>)</span>
+<span id="cb8-24"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sunny Madrid basks,  
+Thirty-six degrees embrace,  
+Summer's warm caress.</code></pre>
+</div>
+</div>
+<p>This code is pretty much the same as the previous example, but with two tools. There’s also a one small difference.</p>
+<p>Previously, we checked for tool calls once. Now, we’ll use a while loop that keeps checking. So, instead of the model having to provide the final answer after one turn, it can now ask for tools multiple times in a row until it has all the information it needs.</p>
+<p>This is the core idea behind how agents work. So, congratulations, you’ve just built a simple agent! If you check the process in LangSmith, you’ll see how these turns play out.</p>
+<p>Next, let’s see how to use structured outputs.</p>
+</section>
+<section id="structured-outputs-1" class="level3">
+<h3 class="anchored" data-anchor-id="structured-outputs-1">Structured outputs</h3>
+<p>Structured outputs are a set of methods used to get model outputs that follow a specific structure. This is useful when you want to get a specific type of output, such as a JSON object.</p>
+<p>It’s easy to set up with proprietary models. With LangChain, you can define a <code>dict</code> or a <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic model</a> to describe the output. I recommend using Pydantic models.</p>
+<p>For example, let’s define a Pydantic model that will help us classify document into categories:</p>
+<div id="cell-19" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> DocumentInfo(BaseModel):</span>
+<span id="cb10-2">    category: Literal[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"financial"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"legal"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"marketing"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pets"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"other"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb10-3">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The category of the document"</span></span>
+<span id="cb10-4">    )</span>
+<span id="cb10-5">    summary: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"A short summary of the document"</span>)</span></code></pre></div>
+</div>
+<p>This model defines the structured output we’ll get from the model. It has two fields: <code>category</code> and <code>summary</code>.</p>
+<p>Then, you can use the <code>with_structured_output</code> method to create a model that will return the structured output:</p>
+<div id="cell-21" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, temperature<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb11-2"></span>
+<span id="cb11-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_document_info(document: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> DocumentInfo:</span>
+<span id="cb11-4">    model_with_structure <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.with_structured_output(DocumentInfo)</span>
+<span id="cb11-5">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_structure.invoke(document)</span>
+<span id="cb11-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb11-7"></span>
+<span id="cb11-8"></span>
+<span id="cb11-9">document_text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> dedent(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb11-10"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">This is a document about cats. Very important document. It explain how cats will take over the world in 20230.</span></span>
+<span id="cb11-11"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb11-12">)</span>
+<span id="cb11-13">document_info <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_document_info(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I'm a document about a cat"</span>)</span>
+<span id="cb11-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(document_info)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>category='pets' summary='A document about a cat.'</code></pre>
+</div>
+</div>
+<p>After running this code, you’ll get a structured output with the category and summary of the document that you can then use in further steps of your workflow.</p>
+<p>Depending on the provider, you’ll have different options to get structured outputs. OpenAI offers three different methods:</p>
+<ul>
+<li><code>function_calling</code>: This uses the tool calling mechanism to get the structured output.</li>
+<li><code>json_mode</code>: This method ensures you get a valid JSON object, but it’s not clear how it works under the hood.</li>
+<li><code>json_schema</code>: This is default method in LangChain. It ensures that the output is a valid JSON object and that it matches the schema you provide using <a href="https://openai.com/index/introducing-structured-outputs-in-the-api/">constrained decoding</a>.</li>
+</ul>
+<p><a href="https://ai.google.dev/gemini-api/docs/structured-output">Gemini</a> and <a href="https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/increase-consistency">Anthropic</a> provide their own methods to get structured outputs.</p>
+<p>One thing to keep in mind is that structured outputs can impact performance. I’ve <a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">written</a> <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">multiple</a> <a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">posts</a> about this topic, so I won’t go into detail here.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Function calling and structured outputs are powerful tools that can significantly enhance your LLM applications. They’re also the foundation of agents.</p>
+<p>Function calling is a way to provide LLMs with tools to use. It’s the difference between building a chatbot that can only talk and building an AI assistant that can actually interact with the world. It opens up a world of possibilities, from connecting to databases, calling APIs, or automating workflows.</p>
+<p>Structured outputs are just as important. They’re critical to integrating LLMs into existing systems. Instead of struggling with parsing free-form text, you get clean, predictable data structures that you can use in your code.</p>
+<p>The examples in this tutorial should give you a sense of how to use these methods. But as usual, the real learning happens when you start applying these concepts to your own problems. Pick a task you’re working on, see if any of these methods can help you, and give it a try.</p>
+<p>If you have any questions or comments, let me know in the comments below.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://arxiv.org/abs/2404.07362">“We Need Structured Output”: Towards User-centered Constraints on LLM Output. MX Liu et al.&nbsp;2024</a>↩︎</p></li>
+<li id="fn2"><p>Please don’t judge me. Companies do all sorts of weird things these days.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Function Calling and Structured Outputs in {LLMs} with
+    {LangChain} and {OpenAI}},
+  date = {2025-07-01},
+  url = {https://dylancastillo.co/posts/function-calling-structured-outputs.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Function Calling and Structured Outputs in
+LLMs with LangChain and OpenAI.”</span> July 1, 2025. <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">https://dylancastillo.co/posts/function-calling-structured-outputs.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>function-calling</category>
+  <category>structured-outputs</category>
+  <category>openai</category>
+  <guid>https://dylancastillo.co/posts/function-calling-structured-outputs.html</guid>
+  <pubDate>Tue, 01 Jul 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>What is Retrieval Augmented Generation (RAG)?</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -98,7 +770,7 @@ font-style: inherit;">source</span> venv/bin/activate</span>
 <span id="cb1-3"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">pip</span> install langchain chromadb langchain-openai langchain-community python-dotenv pypdf jupyter</span></code></pre></div>
-<p>Once you’ve completed the steps above, you can run copy and paste the code from the next sections. You can also download the notebook from <a href="../posts/what-is-rag.html">here</a>.</p>
+<p>Once you’ve completed the steps above, you can run copy and paste the code from the next sections. You can also download the notebook from <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/what-is-rag.ipynb">here</a>.</p>
 </section>
 <section id="rag-without-vector-database" class="level2">
 <h2 class="anchored" data-anchor-id="rag-without-vector-database">RAG without vector database</h2>
@@ -13170,167 +13842,6 @@ Htmx.”</span> January 28, 2024. <a href="https://dylancastillo.co/til/live-com
   <category>htmx</category>
   <guid>https://dylancastillo.co/til/live-components-with-django-and-htmx.html</guid>
   <pubDate>Sun, 28 Jan 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2023: Personal Snapshot</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/2023-personal-snapshot.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This is my annual review. It serves two purposes: a deep analysis of the past year and a record of my thoughts at the time of writing.</p>
-<p>I hope it’s fun to read or, at the very least, provides some interesting insights.</p>
-<p>If it’s me rereading this, welcome back. This is Dylan from 2023.</p>
-<section id="what-went-well" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="what-went-well">What went well?</h2>
-<p>According to my <a href="https://github.com/dylanjcastillo/">GitHub account</a>, I committed code 276 out of 365 days in 2023. I likely coded even more since there were days when I didn’t commit my code. Also, sometimes I used a different account for projects due to company policy.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Squint to see the secret message"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-1.png" class="img-fluid figure-img" alt="Squint to see the secret message"></a></p>
-<figcaption class="margin-caption">Squint to see the secret message</figcaption>
-</figure>
-</div>
-<p>The more I code the more I learn. So, as long as I stay honest and avoid committing useless code, coding serves as a good proxy of how much I’ve learned about technical topics throughout the year. This year, I felt I learned a lot, so I’m happy.</p>
-<p>Despite reaching an all-time high compared to previous years, I think I could have achieved more. Sometimes, especially between projects or during periods when I felt burned out, I procrastinated quite a bit. Next year, I want to improve this.</p>
-<p>I shipped five AI apps (not including client work). I developed four on my own and created one with a friend. Two of them made it to the front page of <a href="https://news.ycombinator.com/item?id=34547015">Hacker</a> News and got featured in <a href="https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence">The Economist</a>. Another one won brownie points in an <a href="https://www.youtube.com/watch?v=0Sz-Nmi_5xg&amp;t=1432s">AI Shark Tank</a>.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="AI apps I built in 2023"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-2.png" class="img-fluid figure-img" alt="AI apps I built in 2023"></a></p>
-<figcaption class="margin-caption">AI apps I built in 2023</figcaption>
-</figure>
-</div>
-<p>I also wrote 9 blog posts. I was very motivated at first and worked with a good friend, <a href="https://www.linkedin.com/in/hujingjing/">Jing</a>, as an accountability partner. We ended up prioritizing other projects and stopped the accountability challenge, but it was fun and effective while it lasted. I’m very grateful to Jing for joining me in this challenge.</p>
-<p>I focused on writing tutorials about AI topics, but I got tired after a while. Writing high-quality tutorials demands a lot of effort. Plus, AI evolves so fast that my tutorials often become outdated within months. That sucked!</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="My stats looking like 💩"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-7.png" class="img-fluid figure-img" alt="My stats looking like 💩"></a></p>
-<figcaption class="margin-caption">My stats looking like 💩</figcaption>
-</figure>
-</div>
-<p>When I stopped writing regularly, my site’s traffic started to drop. I also believe ChatGPT was a major factor. My basic-level tutorials, which ChatGPT can easily replace, have stopped growing.</p>
-<p>I’m making a change this year in my content creation strategy. I’ll focus on creating videos for technical topics and write about <em>evergreen</em> subjects on my blog. I’ve realized that making videos for technical content is a time-saver compared to writing tutorials. Showing users directly through videos is simpler than writing detailed descriptions or taking screenshots and explaining them.</p>
-<p>My original plan for my blog was to share my thoughts. I ended up writing technical tutorials because it was a more effective way to drive traffic, but in all honesty, I didn’t enjoy it very much. So I’m going back to my original plan.</p>
-<p>I posted more or less consistently on LinkedIn throughout the year. I got roughly 420k views on my posts. A third of those views came from a single <a href="https://www.linkedin.com/posts/dylanjcastillo_a-hackers-guide-to-language-models-activity-7117426046404063233-_T51?utm_source=share&amp;utm_medium=member_desktop">post</a>, and I gained ~2.3k followers.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="The outcome of spamming LinkedIn"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image.png" class="img-fluid figure-img" alt="The outcome of spamming LinkedIn"></a></p>
-<figcaption class="margin-caption">The outcome of spamming LinkedIn</figcaption>
-</figure>
-</div>
-<p>I met lots of great people and had tons of catch-ups this year. I am grateful for all the people I met this year. Special thanks go to <a href="https://www.linkedin.com/in/dr-maximilian-brunner/">Max</a>, <a href="https://www.linkedin.com/in/emanuel-schamp/">Emanuel</a>, <a href="https://www.linkedin.com/in/jscastanoc/">Sebastián</a>, <a href="https://www.linkedin.com/in/eduardo-gonzalo-almorox-phd-5b8b4955">Edu</a>, and <a href="https://www.linkedin.com/in/rhys-donoghue/">Rhys</a> for the collaborations we did. Not all things went as planned, but we had fun.</p>
-<p>Posting random things online helps me chat, befriend, learn from, and even do business with people I wouldn’t have met otherwise. It feels great!</p>
-<p>I did more sales this year. I took part in two 6-figure proposals that didn’t pan out, and landed two 5-figure contracts, each setting a new record for my hourly rate. I also sold quite a few small projects. Selling is fun but I’m not great at it. This is one of the focuses for next year.</p>
-<p>Financially, things went well. Despite being more focused on learning than on making money this year, I made ~2.5x my annual burn rate (I’m frugal!). All my income was made through freelancing, and 68% of my income came from a single project. This situation is better than the past two years because I’m a bit less dependent on one client. But I’m still not where I want to be. To lower my risk, I want to spread my income more evenly across different clients.</p>
-<p>Healthwise, this year went well. I completed 169 strength training sessions, averaging 3 gym visits per week. I’m pretty happy with that. I faced some minor injuries but dealt with them effectively.</p>
-<p>Also, I completed 4,711 minutes of <a href="https://www.howardluksmd.com/zone-2-hr-training-live-longer-less-injury/">Z2 training</a> (roughly 90 minutes per week). For Z2, I experimented with running, cycling, and stair-climbing. Running is my favorite, but stair-climbing lets me multitask. So, I mostly split my time between these two activities.</p>
-<p>This year, I gave stand-up comedy a shot, all thanks to my wife. I’ve wanted to try it for a long time but kept coming up with excuses. For our fifth anniversary, she surprised me by signing me up for a <a href="https://estudioteatromadrid.com/cursos/intensivo-curso-de-stand-up-iniciacion/">course</a>. It’s my favorite gift since getting a Game Boy Advance twenty years ago.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Me, holding a fart on stage"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-4.png" class="img-fluid figure-img" alt="Me, holding a fart on stage"></a></p>
-<figcaption class="margin-caption">Me, holding a fart on stage</figcaption>
-</figure>
-</div>
-<p>For those who know me in real life, you’ll know that I don’t enjoy speaking in public. So this was a real challenge for me. I did a presentation with family and friends and went to four <a href="https://en.wikipedia.org/wiki/Open_mic">open mics</a>.</p>
-<p>IT WAS GREAT! Even though I felt terrified before stepping onto the stage, I ended up having a lot of fun. Most of my jokes made people laugh, which felt comforting.</p>
-<p>I do need to work on my stage presence. I often stood in awkward places, struggled to make eye contact with the audience during punchlines, and frequently said “Ehhh… Uhhh…”</p>
-<p>I’ve opened an <a href="https://www.instagram.com/dylanporque/">IG account</a> for my comedy stuff. I haven’t posted anything yet, but I’m planning to start in the next few weeks. For now, I will post in Spanish. Follow me there if you want to stay updated!</p>
-<p>Finally, this year has been good for my relationships with my wife, family, and friends. My wife and I continue to work as a team, each of us progressing in our respective areas and supporting one another. And I made time to enjoy with family and friends.</p>
-<p>In my last snapshot, I didn’t include any photos. When I revised it a few days ago, I realized I missed having them. So, this time, I’ve included a few.</p>
-<details>
-<summary>
-Click to see photos
-</summary>
-<div class="quarto-layout-panel" data-layout-nrow="3">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/IMG_6052-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/IMG_6052-2.png" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/PHOTO-2024-01-01-00-16-52-2.jpg" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/81334753-8d4f-44aa-b6df-42c56a1605de-1.JPG" class="img-fluid"></a></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/PHOTO-2023-08-02-21-32-13-2.jpg" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/PHOTO-2023-11-05-09-57-49-5.jpg" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/ca4e866d-278d-4513-8973-5b0025166e78-1.JPG" class="img-fluid"></a></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/d31e56f6-9f97-43ab-bbe4-7971fee4053c.JPG" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/RUTA-IVA-N-619.jpg" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><a href="images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/9b0233e0-465c-4215-9644-ff127f0d0c91-1.JPG" class="img-fluid"></a></p>
-</div>
-</div>
-</div>
-</details>
-<p>This year, a family highlight was my in-laws’ visit to Madrid for a few months. We found out that our family loves karaoke, especially my dad and my father-in-law. It was tough to get them off the microphone!</p>
-<p>More importantly, my loved ones remain healthy and happy, and so am I.</p>
-</section>
-<section id="what-didnt-go-well" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="what-didnt-go-well">What didn’t go well?</h2>
-<p>I didn’t write a 2022 personal snapshot. That wasn’t a great way to start 2023.</p>
-<p>After <a href="https://dylancastillo.co/my-entrepreneur-first-experience/">Entrepreneur First</a>, I felt burned out and lacked the motivation to write a detailed review of the past year. I kept putting it off until it was way too late. And nobody wants to read your annual review in August!</p>
-<p>I failed to get funding twice this year. First from <a href="https://www.joinef.com/">Entrepreneur First</a>, and second, from <a href="https://www.speedinvest.com/">Speedinvest</a>. Pitching, preparing the materials, and all the discussions involved were a cool experience, but the outcome was frustrating both times.</p>
-<p>I’m not sure it would have worked out. In both cases, I wasn’t too excited about the idea, but I thought it was worth a try. My main concern with raising venture capital money too early often leads to poor financial outcomes for founders. That’s a no-no for me.</p>
-<p>Though, bootstrapping isn’t easy either. My most successful AI product made 60€. Just enough for a decent dinner for two in Madrid.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-5-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="My “best” AI product"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-5-1-1.png" height="300" alt="My “best” AI product" class="figure-img"></a></p>
-<figcaption class="margin-caption">My “best” AI product</figcaption>
-</figure>
-</div>
-<p>The AI apps I built this year landed me several freelancing projects. But they made little money by themselves. To be fair, I only launched two products you could pay for. I didn’t intend the others to make money, at least not initially.</p>
-<p>This year, I finally grasped something you might find obvious: to have products that generate revenue, you must be intentional about it. You must create opportunities for people to pay.</p>
-<p>I used to believe that if I built something cool enough, people would discover it and somehow find a way to pay for it. I was wrong. I realized that I must actively set up a payment system for my products or deliberately plan how to monetize the attention they receive. Without that, after the initial burst of attention fades, you might end up with nothing. Many of my projects this year suffered this fate.</p>
-<p>I’ve always dreamed of creating a product, so I ignored the market’s pull towards a consulting company. Instead of doubling down on the demand, I often said no, aiming to focus on my product ideas. After spending much of this year like a person with a hammer in search of a nail, I’ve decided to reverse my approach.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2023-personal-snapshot/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Me running away from the demand"><img src="https://dylancastillo.co/posts/images/2023-personal-snapshot/image-6.png" class="img-fluid figure-img" alt="Me running away from the demand"></a></p>
-<figcaption class="margin-caption">Me running away from the demand</figcaption>
-</figure>
-</div>
-<p>Now, I’ll start with the demand and then figure out how to offer services to meet it. My focus will be on establishing a consulting practice. From there, I might develop a product. But then again, maybe I don’t need to. I’m content with the idea of getting rich through a services-only company 😉</p>
-<p>Although I’m satisfied with my physical fitness, I’ve noticed that I often don’t rest enough. This happens either because I don’t sleep enough or because I overtrain. I’ve started feeling some symptoms of this, so improving my rest is a goal for next year.</p>
-</section>
-<section id="what-are-the-plans-for-next-year" class="level2">
-<h2 class="anchored" data-anchor-id="what-are-the-plans-for-next-year">What are the plans for next year?</h2>
-<p>First, focus on building a successful consulting practice. I’ll be doing a lot more sales this year and plan to share updates frequently. I have some exciting news about this that I’ll be sharing soon.</p>
-<p>Next, establishing a sustainable content engine. I believe shifting to video for technical content might yield a higher ROI than text. So, this year, I plan to explore this approach and reserve the blog for more personal articles.</p>
-<p>Keep doing stand-up comedy. I haven’t found such an enjoyable hobby in a long time. I want to do more of it. It also brings extra benefits, like improving my sales skills.</p>
-<p>Finally, make time for rest. I often struggle with guilt over taking breaks, leading to very few days off throughout the year. But this isn’t good for my mental and physical well-being. I aim to create more space for rest, and I’m sure my wife and family will appreciate that too 😁</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {2023: {Personal} {Snapshot}},
-  date = {2024-01-05},
-  url = {https://dylancastillo.co/posts/2023-personal-snapshot.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“2023: Personal Snapshot.”</span> January
-5, 2024. <a href="https://dylancastillo.co/posts/2023-personal-snapshot.html">https://dylancastillo.co/posts/2023-personal-snapshot.html</a>.
-</div></div></section></div> ]]></description>
-  <category>personal-snapshot</category>
-  <guid>https://dylancastillo.co/posts/2023-personal-snapshot.html</guid>
-  <pubDate>Fri, 05 Jan 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
