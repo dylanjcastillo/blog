@@ -15,7 +15,7 @@ about:
       href: https://www.linkedin.com/in/dylanjcastillo/
 ---
 
-I'm Dylan – I'm the founder of [Iwana Labs](https://iwanalabs.com). I've worked in the AI & ML space for almost a decade.
+I'm Dylan – I'm an independent [AI consultant](https://iwanalabs.com). I've worked in the AI & ML space for almost a decade.
 
 I've delivered successful projects for large organizations like [Deliveroo](https://www.deliveroo.com/), [Boston Consulting Group (BCG)](https://www.bcg.com/), and [the Olympics](https://www.olympics.com/) and startups such as [REMATIQ](https://www.rematiq.com/) or [Neurolabs](https://www.neurolabs.ai/). You can read testimonials from some of these projects on my [LinkedIn](https://www.linkedin.com/in/dylanjcastillo/).
 
