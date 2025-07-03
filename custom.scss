@@ -2,21 +2,20 @@
 
 $theme: "darkly" !default;
 
-//
-// Color system
-//
+// Colors
 
 $white: #fff !default;
-$gray-100: #eee !default;
-$gray-200: #ebebeb !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #888 !default;
-$gray-700: #444 !default;
-$gray-800: #303030 !default;
-$gray-900: #222 !default;
-$slate-800: #222831 !default;
+$gray-50: #fafafa !default;
+$gray-100: #f4f4f5 !default;
+$gray-200: #e4e4e7 !default;
+$gray-300: #d4d4d8 !default;
+$gray-400: #a1a1aa !default;
+$gray-500: #71717a !default;
+$gray-600: #52525b !default;
+$gray-700: #3f3f46 !default;
+$gray-800: #27272a !default;
+$gray-900: #18181b !default;
+$gray-950: #09090b !default;
 $black: #000 !default;
 
 $blue: #375a7f !default;
@@ -34,15 +33,15 @@ $inline-code-color-bg: #363b43 !default;
 
 // Body
 
-$body-bg: $slate-800 !default;
-$body-color: $gray-100 !default;
+$body-bg: $gray-900 !default;
+$body-color: $white !default;
 @function body-mix($weight) {
   @return mix($body-bg, $body-color, $weight);
 }
 
 $primary: $blue !default;
 $secondary: body-mix(85%) !default;
-$success: $green !default;
+$success: $orange !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
@@ -57,13 +56,14 @@ $min-contrast-ratio: 1.9 !default;
 
 // Links
 
-$link-color: $orange !default;
+$link-color: $success !default;
 
 // Fonts
 
 // stylelint-disable-next-line value-keyword-case
-$font-family-sans-serif: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica,
-  Arial, sans-serif;
+$font-family-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol" !default;
 $font-family-serif: "Merriweather", Times, serif;
 $h1-font-size: 2rem !default;
 $h2-font-size: 1.5rem !default;
@@ -127,16 +127,16 @@ $navbar-light-toggler-border-color: rgba($body-bg, 0.1) !default;
 // Pagination
 
 $pagination-color: $body-color !default;
-$pagination-bg: $orange !default;
+$pagination-bg: $success !default;
 $pagination-border-width: 0 !default;
 $pagination-border-color: transparent !default;
 $pagination-hover-color: $body-color !default;
-$pagination-hover-bg: lighten($orange, 15%) !default;
+$pagination-hover-bg: lighten($success, 15%) !default;
 $pagination-hover-border-color: transparent !default;
 $pagination-active-bg: $pagination-hover-bg !default;
 $pagination-active-border-color: transparent !default;
 $pagination-disabled-color: $body-color !default;
-$pagination-disabled-bg: darken($orange, 15%) !default;
+$pagination-disabled-bg: darken($success, 15%) !default;
 $pagination-disabled-border-color: transparent !default;
 
 // Cards
@@ -200,27 +200,8 @@ $code-block-bg: black;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.content p,
-.content li {
-  font-family: $font-family-serif;
-  line-height: 1.6;
-}
-
-// Titles
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.quarto-title-meta-heading {
-  font-family: $font-family-sans-serif;
-}
-
 // Navbar
 .navbar {
-  font-family: $font-family-sans-serif;
   background-color: $body-bg;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   max-width: 1000px;
@@ -369,10 +350,16 @@ kbd,
 // Fix pagination format
 ul.pagination li {
   padding-right: 0;
-  font-family: $font-family-sans-serif;
 }
 
 .table,
 .cell {
   margin-bottom: 1rem !important;
+}
+
+.code-with-filename-file {
+  background-color: $gray-800 !important;
+  border-top: 1px solid $gray-800 !important;
+  border-bottom: 1px solid $gray-800 !important;
+  color: $white !important;
 }
