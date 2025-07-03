@@ -44,6 +44,8 @@ format:
       margin-width: 276px
       gutter-width: 24px
     code-line-numbers: true
+    mermaid:
+      theme: dark
 
 execute:
   freeze: auto
