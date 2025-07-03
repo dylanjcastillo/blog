@@ -26,8 +26,6 @@ website:
         href: https://github.com/dylanjcastillo
       - text: "{{< iconify fa6-brands linkedin >}}"
         href: https://www.linkedin.com/in/dylanjcastillo/
-      - text: "{{< iconify fa6-brands bluesky >}}"
-        href: https://bsky.app/profile/dylancastillo.co
   page-footer: "Copyright 2024, Dylan Castillo"
 
 format:
