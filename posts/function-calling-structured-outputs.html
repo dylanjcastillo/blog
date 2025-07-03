@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-367037fdfe0f341aec79426c22b5edce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-02fbb510e4cffa154b4bcf141135e604.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -166,10 +166,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
 <span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://bsky.app/profile/dylancastillo.co"> 
-<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:bluesky" aria-label="Icon bluesky from fa6-brands Iconify.design set." title="Icon bluesky from fa6-brands Iconify.design set."></iconify-icon></span></a>
-  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -247,7 +243,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 2, 2025</p>
+      <p class="date-modified">July 3, 2025</p>
     </div>
   </div>
     
@@ -272,7 +268,13 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="function-calling">Function calling</h2>
 <p>Function calling refers to the ability to get LLMs to invoke external tools or functions. This works by giving the LLM access to a set of predefined tools that it can invoke at any point.</p>
 <p>It’s relevant because it gives LLMs more capabilities, allows them to talk to external systems, and enables complex task automation. This is one of the key features that unlocked agents.</p>
-<p>The usual flow is: 1. The user asks a question 2. The LLM decides if it needs to use a tool 3. If it does, it invokes the tool and gets the output from the tool 4. The LLM then uses the output to answer the user’s question</p>
+<p>The usual flow is:</p>
+<ol type="1">
+<li>The user asks a question</li>
+<li>The LLM decides if it needs to use a tool</li>
+<li>If it does, it invokes the tool and gets the output from the tool</li>
+<li>The LLM then uses the output to answer the user’s question</li>
+</ol>
 <p>Here’s a diagram that illustrates how function calling works:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -395,7 +397,13 @@ Subscribe to my newsletter
 </div>
 </div>
 <p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
-<p>It works as follows: 1. <strong>Line 1</strong> adds a LangSmith’s <code>traceable</code> decorator to the function, so that you can see the trace of the function in the LangSmith UI. If you prefer to not use LangSmith, you can remove this line. 1. <strong>Lines 2 to 10</strong> set up the <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompts</a> and call the model. 2. <strong>Lines 12 to 16</strong> is where the magic happens. This is a loop that will check if there’s been a tool call in the response from the model. If there is, it will call (invoke) the tool and add the result to the messages. 3. <strong>Lines 17 to 18</strong> the model is called again to get the final response.</p>
+<p>It works as follows:</p>
+<ol type="1">
+<li><strong>Line 1</strong> adds a LangSmith’s <code>traceable</code> decorator to the function, so that you can see the trace of the function in the LangSmith UI. If you prefer to not use LangSmith, you can remove this line.</li>
+<li><strong>Lines 2 to 10</strong> set up the <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompts</a> and call the model.</li>
+<li><strong>Lines 12 to 16</strong> is where the magic happens. This is a loop that will check if there’s been a tool call in the response from the model. If there is, it will call (invoke) the tool and add the result to the messages.</li>
+<li><strong>Lines 17 to 18</strong> the model is called again to get the final response.</li>
+</ol>
 <p>When you run this code, you’ll get a text response with the weather for the city you asked for. If you check the trace, you can see how the whole process works:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">

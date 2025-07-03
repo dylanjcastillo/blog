@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/agentic-workflows-langgraph.html",
       "/posts/function-calling-structured-outputs.html",
       "/posts/what-is-rag.html",
       "/posts/key-parameters-llms.html",
