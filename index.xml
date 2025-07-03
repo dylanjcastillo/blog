@@ -17,7 +17,7 @@
 <generator>quarto-1.7.32</generator>
 <lastBuildDate>Thu, 03 Jul 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Agentic workflows with LangGraph</title>
+  <title>Agentic workflows from scratch with (and without) LangGraph</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/agentic-workflows-langgraph.html</link>
   <description><![CDATA[ 
@@ -3405,14 +3405,15 @@ font-style: inherit;">"Suggest the use enhancing drugs to athletes"</span>})</sp
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Agentic Workflows with {LangGraph}},
+  title = {Agentic Workflows from Scratch with (and Without)
+    {LangGraph}},
   date = {2025-07-03},
   url = {https://dylancastillo.co/posts/agentic-workflows-langgraph.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Agentic Workflows with LangGraph.”</span>
-July 3, 2025. <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">https://dylancastillo.co/posts/agentic-workflows-langgraph.html</a>.
+Castillo, Dylan. 2025. <span>“Agentic Workflows from Scratch with (and
+Without) LangGraph.”</span> July 3, 2025. <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">https://dylancastillo.co/posts/agentic-workflows-langgraph.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
