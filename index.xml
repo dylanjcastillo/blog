@@ -938,6 +938,281 @@ LangGraph.”</span> July 4, 2025. <a href="https://dylancastillo.co/posts/react
   <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Using Pydantic AI to build a ReAct agent</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/react-agent-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I wanted to get more familiar with Pydantic AI, so I decided to build a ReAct agent with multiple tools.</p>
+<p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div id="2a607486" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div>
+</div>
+<p>Then, I did the imports as usual. I hadn’t used <code>logfire</code> for monitoring LLM applications before, so I thought it’d be a good idea to try it out.</p>
+<div id="4081c493" class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">load_dotenv()</span></code></pre></div>
+</div>
+<p>PydanticAI instrumentation uses OpenTelemetry (OTel). So it’s pretty straightforward to use it with Logfire or with any other OTel-compatible observability tool.</p>
+<p>You just need to create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">logfire.configure(</span>
+<span id="cb3-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb3-3">)</span>
+<span id="cb3-4">logfire.instrument_pydantic_ai()</span></code></pre></div>
+</div>
+<p>This will ask you to select a project the first time you run it. It will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="react-agent" class="level2">
+<h2 class="anchored" data-anchor-id="react-agent">ReAct Agent</h2>
+<p>I decided to make an agent that had access to a tool to get the weather and another one that checks if the response that’s going to be sent to the user follows the company guidelines.</p>
+<p>Here’s thee code:</p>
+<div id="d4edf351" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Feedback(BaseModel):</span>
+<span id="cb4-4">    feedback: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span></span>
+<span id="cb4-5">    status: Literal[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'OK'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'REQUIRES FIXING'</span>]</span>
+<span id="cb4-6"></span>
+<span id="cb4-7">evaluator_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb4-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-9">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb4-10">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Your task is to check if a given response follows the company guidelines. The company guidelines are that responses should be written in the style of a haiku. You should reply with 'OK' or 'REQUIRES FIXING' and a short explanation."</span></span>
+<span id="cb4-11">    ),</span>
+<span id="cb4-12">    output_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Feedback,</span>
+<span id="cb4-13">)</span>
+<span id="cb4-14"></span>
+<span id="cb4-15">react_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(  </span>
+<span id="cb4-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-17">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb4-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Use the tools provided when relevant. Then draft a response and check if it follows the company guidelines. Only respond to the user after you've validated and modified the response if needed."</span></span>
+<span id="cb4-19">    ),</span>
+<span id="cb4-20">)</span>
+<span id="cb4-21"></span>
+<span id="cb4-22"></span>
+<span id="cb4-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@react_agent.tool_plain</span></span>
+<span id="cb4-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_weather(latitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>, longitude: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">float</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb4-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Get the weather of a given latitude and longitude"""</span></span>
+<span id="cb4-26">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(</span>
+<span id="cb4-27">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>latitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;longitude=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>longitude<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
+<span id="cb4-28">    )</span>
+<span id="cb4-29">    data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.json()</span>
+<span id="cb4-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"current"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temperature_2m"</span>])</span>
+<span id="cb4-31"></span>
+<span id="cb4-32"></span>
+<span id="cb4-33"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@react_agent.tool_plain</span></span>
+<span id="cb4-34"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> check_guidelines(drafted_response: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb4-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Check if a given response follows the company guidelines"""</span></span>
+<span id="cb4-36">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> evaluator_agent.run_sync(drafted_response)</span>
+<span id="cb4-37">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.output</span>
+<span id="cb4-38"></span>
+<span id="cb4-39"></span>
+<span id="cb4-40">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> react_agent.run_sync(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What is the temperature in Madrid?"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18:57:42.206 react_agent run
+18:57:42.208   chat gpt-4.1-mini
+18:57:43.191   running 1 tool
+18:57:43.192     running tool: get_weather
+18:57:43.408   chat gpt-4.1-mini
+18:57:44.117   running 1 tool
+18:57:44.118     running tool: check_guidelines
+18:57:44.120       evaluator_agent run
+18:57:44.120         chat gpt-4.1-mini
+18:57:46.291   chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>And here’s the output:</p>
+<div id="d74111c3" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response.output)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>In Madrid sunshine,
+Temperature climbs so high,
+Thirty-four degrees.</code></pre>
+</div>
+</div>
+<p>The output in Logfire looks like typical observability tools:</p>
+<div id="fig-logfire" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-logfire-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Traces in Logfire"><img src="https://dylancastillo.co/til/images/react-agent-logfire-1.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;1: Traces in Logfire"><img src="https://dylancastillo.co/til/images/react-agent-logfire-2.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;1: Traces in Logfire"><img src="https://dylancastillo.co/til/images/react-agent-logfire-3.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-logfire-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Traces in Logfire
+</figcaption>
+</figure>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/react-agent-pydantic-ai.ipynb">here</a>.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Using {Pydantic} {AI} to Build a {ReAct} Agent},
+  date = {2025-07-04},
+  url = {https://dylancastillo.co/til/react-agent-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Using Pydantic AI to Build a ReAct
+Agent.”</span> July 4, 2025. <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">https://dylancastillo.co/til/react-agent-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>agents</category>
+  <guid>https://dylancastillo.co/til/react-agent-pydantic-ai.html</guid>
+  <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Agentic workflows from scratch with (and without) LangGraph</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/agentic-workflows-langgraph.html</link>
@@ -6277,6 +6552,7 @@ Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
 Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
+  <category>llm</category>
   <category>openai</category>
   <category>tiktoken</category>
   <guid>https://dylancastillo.co/til/counting-tokens.html</guid>
@@ -15712,1013 +15988,6 @@ Poetry.”</span> June 22, 2024. <a href="https://dylancastillo.co/til/django-po
   <category>django</category>
   <guid>https://dylancastillo.co/til/django-poetry-dockerfile.html</guid>
   <pubDate>Sat, 22 Jun 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Migrate a blog from Ghost to Quarto</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>When I started blogging five years ago, I read all reddit posts comparing blogging platforms and concluded that <a href="https://ghost.org/">Ghost</a> was the best choice because I needed a powerful tool for all those millions of visitors my blog would get.</p>
-<p>I saw myself as the <a href="https://es.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez">García Márquez</a> of technical writing.</p>
-<p>Fast forward five years, and I’ve paid $2,000 for hosting a blog that barely gets 8k visits per month. Plus, I’m forced to write it in an interface that I hate.</p>
-<p>With that kind of money, I could have funded a moderately extravagant hamster-only summer party.</p>
-<p>Not that I should, but I could.</p>
-<p>Yes, I’m not proud of that decision<sup>1</sup>. So I’m migrating my blog from Ghost to Quarto.</p>
-<p>Here’s a short guide on how to migrate your blog from Ghost to Quarto.</p>
-<section id="migrate-blog-from-ghost-to-quarto" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="migrate-blog-from-ghost-to-quarto">Migrate blog from Ghost to Quarto</h2>
-<section id="setting-up-your-blog" class="level3">
-<h3 class="anchored" data-anchor-id="setting-up-your-blog">Setting up your blog</h3>
-<p>First, install <a href="https://quarto.org/">Quarto</a> and create a blog in an empty repository:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">quarto</span> create project blog myblog</span></code></pre></div>
-<p>The resulting <code>myblog</code> folder will contain the barebones configuration for a Quarto blog and a <code>posts</code> folder with some example posts. You can remove those posts. Later on, you’ll add your own.</p>
-</section>
-<section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="exporting-your-ghosts-blog-content">Exporting your Ghost’s blog content</h3>
-<p>Then, you need to download a copy of your Ghost’s blog content.</p>
-<p>Go to <code>&lt;YOUR_BLOG_URL&gt;/ghost/#/settings/migration</code> and click on <code>Export</code>, then <code>Export JSON</code>.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/ghost-export.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Exporting my blog"><img src="https://dylancastillo.co/til/images/ghost-export.png" class="img-fluid figure-img" alt="Exporting my blog"></a></p>
-<figcaption class="margin-caption">Exporting my blog</figcaption>
-</figure>
-</div>
-<p>This is pretty obvious, but remember to replace <code>&lt;YOUR_BLOG_URL&gt;</code> with your blog’s URL.</p>
-<p>You’ll get a JSON file with all the posts and pages in your blog. You’ll need to process it to convert your posts to Quarto posts.</p>
-<p>This small Python script did the heavy lifting for me:</p>
-<details>
-<summary>
-Show the code
-</summary>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> json</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb2-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> datetime</span>
-<span id="cb2-4"></span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> bs4 <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> BeautifulSoup</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> markdownify <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> markdownify <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> md</span>
-<span id="cb2-8"></span>
-<span id="cb2-9"></span>
-<span id="cb2-10">BLOG_URL <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://dylancastillo.co"</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Replace with your blog's URL</span></span>
-<span id="cb2-11">BLOG_JSON_DUMP <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"./dylan-castillo.ghost.2024-05-28-10-39-09.json"</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Replace with the path to the JSON file you downloaded</span></span>
-<span id="cb2-12">BLOG_AUTHOR_NAME <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Dylan Castillo"</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Replace with your name</span></span>
-<span id="cb2-13"></span>
-<span id="cb2-14"></span>
-<span id="cb2-15"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> download_images(markdown_content, post_slug):</span>
-<span id="cb2-16">    soup <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> BeautifulSoup(markdown_content, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"html.parser"</span>)</span>
-<span id="cb2-17">    images <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> soup.find_all(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"img"</span>)</span>
-<span id="cb2-18">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> images:</span>
-<span id="cb2-19">        os.makedirs(post_slug, exist_ok<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span>
-<span id="cb2-20">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> img <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> images:</span>
-<span id="cb2-21">            img_url_raw <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> img[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"src"</span>]</span>
-<span id="cb2-22">            img_url <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> img_url_raw.replace(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__GHOST_URL__"</span>, BLOG_URL)</span>
-<span id="cb2-23">            img_name <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> os.path.basename(img_url)</span>
-<span id="cb2-24">            response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> requests.get(img_url, stream<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span>
-<span id="cb2-25">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> response.status_code <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">200</span>:</span>
-<span id="cb2-26">                <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Downloading image: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>img_url<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> to </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>post_slug<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">/</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>img_name<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb2-27">                <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">with</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(os.path.join(post_slug, img_name), <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wb"</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> f:</span>
-<span id="cb2-28">                    f.write(response.content)</span>
-<span id="cb2-29">                markdown_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> markdown_content.replace(</span>
-<span id="cb2-30">                    img_url_raw, os.path.join(post_slug, img_name)</span>
-<span id="cb2-31">                )</span>
-<span id="cb2-32">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span>:</span>
-<span id="cb2-33">                <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Failed to download image: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>img_url<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb2-34">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> markdown_content</span>
-<span id="cb2-35"></span>
-<span id="cb2-36"></span>
-<span id="cb2-37"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> process_posts(data):</span>
-<span id="cb2-38">    posts <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"db"</span>][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>][<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"posts"</span>]</span>
-<span id="cb2-39">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> post <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> posts:</span>
-<span id="cb2-40">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Processing post:"</span>, post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>])</span>
-<span id="cb2-41">        title <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"title"</span>]</span>
-<span id="cb2-42">        description <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"custom_excerpt"</span>]</span>
-<span id="cb2-43">        author <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> BLOG_AUTHOR_NAME</span>
-<span id="cb2-44">        date <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (</span>
-<span id="cb2-45">            datetime.strptime(post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"published_at"</span>], <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%Y-%m-</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">T%H:%M:%S.</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%f</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">Z"</span>).strftime(</span>
-<span id="cb2-46">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%m/</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">/%Y"</span></span>
-<span id="cb2-47">            )</span>
-<span id="cb2-48">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"published_at"</span>]</span>
-<span id="cb2-49">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span></span>
-<span id="cb2-50">        )</span>
-<span id="cb2-51">        date_modified <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (</span>
-<span id="cb2-52">            datetime.strptime(post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"updated_at"</span>], <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%Y-%m-</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">T%H:%M:%S.</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%f</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">Z"</span>).strftime(</span>
-<span id="cb2-53">                <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%m/</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">/%Y"</span></span>
-<span id="cb2-54">            )</span>
-<span id="cb2-55">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"updated_at"</span>]</span>
-<span id="cb2-56">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span></span>
-<span id="cb2-57">        )</span>
-<span id="cb2-58"></span>
-<span id="cb2-59">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Convert HTML content to Markdown</span></span>
-<span id="cb2-60">        markdown_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> download_images(</span>
-<span id="cb2-61">            post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"html"</span>] <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"html"</span>] <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slug"</span>]</span>
-<span id="cb2-62">        )</span>
-<span id="cb2-63">        markdown_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> md(markdown_content, code_language<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"python"</span>)</span>
-<span id="cb2-64">        markdown_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> markdown_content.replace(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__GHOST_URL__"</span>, BLOG_URL)</span>
-<span id="cb2-65">        markdown_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"""---</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">title: "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>title<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">description: "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>description<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">author: "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>author<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">date: "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>date<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">date-modified: "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>date_modified<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">---</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>markdown_content<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"""</span></span>
-<span id="cb2-66"></span>
-<span id="cb2-67">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Save the markdown content to a file</span></span>
-<span id="cb2-68">        filename <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>post[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'slug'</span>]<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">.md"</span></span>
-<span id="cb2-69">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">with</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(filename, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"w"</span>, encoding<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"utf-8"</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>:</span>
-<span id="cb2-70">            <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>.write(markdown_content)</span>
-<span id="cb2-71"></span>
-<span id="cb2-72"></span>
-<span id="cb2-73"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"__main__"</span>:</span>
-<span id="cb2-74">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">with</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(BLOG_JSON_DUMP) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>:</span>
-<span id="cb2-75">        data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> json.load(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>)</span>
-<span id="cb2-76">    process_posts(data)</span></code></pre></div>
-</details>
-<p>When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.</p>
-</section>
-<section id="customizing-your-blog" class="level3">
-<h3 class="anchored" data-anchor-id="customizing-your-blog">Customizing your blog</h3>
-<p>Through trial and error, I found some settings that helped me customize the look and feel of my blog.</p>
-<p>Here are some of the things I modified:</p>
-<ol type="1">
-<li>Added RSS, favicon, and customized the navbar:</li>
-</ol>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>_quarto.yml</strong></pre>
-</div>
-<div class="sourceCode" id="cb3" data-filename="_quarto.yml" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">website</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb3-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">title</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # The title of your blog</span></span>
-<span id="cb3-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">site-url</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # For the RSS feed that no one will read</span></span>
-<span id="cb3-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">favicon</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Add a favicon to the blog</span></span>
-<span id="cb3-5"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">navbar</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Customize the navbar if you want</span></span>
-<span id="cb3-6"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">page-footer</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit</span></span></code></pre></div>
-</div>
-<ol start="2" type="1">
-<li>Added custom CSS and JS and a custom theme:</li>
-</ol>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>_quarto.yml</strong></pre>
-</div>
-<div class="sourceCode" id="cb4" data-filename="_quarto.yml" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">format</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">html</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">include-in-header</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-4"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">      - </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">text</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">|</span></span>
-<span id="cb4-5">          &lt;link href="&lt;YOUR_CUSTOM_FONT_URL&gt;" rel="stylesheet"&gt;</span>
-<span id="cb4-6">          &lt;script src="&lt;YOUR_CUSTOM_JS_URL&gt;" defer&gt;&lt;/script&gt;</span>
-<span id="cb4-7"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">page-layout</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"article"</span></span>
-<span id="cb4-8"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Pick a theme and customize it in `custom.scss`</span></span>
-<span id="cb4-9"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;YOUR_THEME&gt;</span></span>
-<span id="cb4-10"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> custom.scss</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Add your custom CSS here</span></span>
-<span id="cb4-11"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">code-line-numbers</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Add line numbers to code blocks</span></span></code></pre></div>
-</div>
-<ol start="3" type="1">
-<li>For each post, I used this front matter:</li>
-</ol>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>&lt;POST_SLUG&gt;.md</strong></pre>
-</div>
-<div class="sourceCode" id="cb5" data-filename="<POST_SLUG>.md" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">---</span></span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">title</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;POST_TITLE&gt;"</span></span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aliases</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb5-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> /&lt;POST_SLUG&gt;/</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Add an alias to the previous post's URL</span></span>
-<span id="cb5-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">description-meta</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;POST_DESCRIPTION&gt;"</span></span>
-<span id="cb5-6"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">date</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;POST_DATE&gt;"</span></span>
-<span id="cb5-7"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">date-modified</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> last-modified</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Automatically set to the last modified date</span></span>
-<span id="cb5-8"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">toc</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb5-9"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">toc-depth</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span></span>
-<span id="cb5-10"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lightbox</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # For images</span></span>
-<span id="cb5-11"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">fig-cap-location</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> margin</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Captions for images</span></span>
-<span id="cb5-12"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">categories</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb5-13"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;CATEGORY&gt;</span></span>
-<span id="cb5-14"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">author</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb5-15"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;AUTHOR_NAME&gt;</span></span>
-<span id="cb5-16"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">url</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;AUTHOR_URL&gt;</span></span>
-<span id="cb5-17"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">affiliation</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;AUTHOR_AFFILIATION&gt;</span></span>
-<span id="cb5-18"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">affiliation-url</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;AUTHOR_AFFILIATION_URL&gt;</span></span>
-<span id="cb5-19"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">citation</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb5-20"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">comments</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb5-21"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">utterances</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # For comments</span></span>
-<span id="cb5-22"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;YOUR_GITHUB_USERNAME&gt;/&lt;YOUR_GITHUB_REPO&gt;</span></span>
-<span id="cb5-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">issue-term</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> pathname</span></span>
-<span id="cb5-24"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">---</span></span></code></pre></div>
-</div>
-<p>See my <a href="https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml">settings</a> for an example and a recent post <a href="https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd">source</a> for reference.</p>
-<p>For the CSS, I copied <a href="https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/formats/html/bootstrap/themes/darkly.scss">darkly</a> and created a custom <code>custom.scss</code> file to modify some Bootstrap styles. I just changed some colors and a couple of styles to make the blog look closer to my Ghost theme. It was super easy.</p>
-</section>
-<section id="deployment-using-github-pages-github-actions" class="level3">
-<h3 class="anchored" data-anchor-id="deployment-using-github-pages-github-actions">Deployment using GitHub Pages + GitHub Actions</h3>
-<p>Quarto offers multiple <a href="https://quarto.org/docs/publishing/">deployment options</a>. I wanted one where I could push changes to a GitHub repository, and have the blog automatically deployed. I went with GitHub Pages combined with GitHub Actions.</p>
-<p>To deploy the blog, I created a <a href="https://github.com/dylanjcastillo/blog">GitHub repository</a>, added the blog’s content, updated <code>.gitignore</code> to ignore the <code>/.quarto/</code> and <code>/_site/</code> and updated <code>_quarto.yml</code> to only compute code locally (otherwise you’d need a Python kernel running on your GitHub Actions runner):</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>_quarto.yml</strong></pre>
-</div>
-<div class="sourceCode" id="cb6" data-filename="_quarto.yml" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">execute</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb6-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">freeze</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> auto</span></span></code></pre></div>
-</div>
-<p>Then I ran this command to automatically generate the workflow <code>.github/workflows/publish.yml</code> for me:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">quarto</span> publish gh-pages</span></code></pre></div>
-<p>Since then, every time I push changes to the <code>main</code> branch, GitHub Actions automatically renders the website and updates the <code>gh-pages</code> branch.</p>
-</section>
-<section id="using-a-custom-domain" class="level3">
-<h3 class="anchored" data-anchor-id="using-a-custom-domain">Using a custom domain</h3>
-<p>That seemed to work at first, but very quickly I noticed that whenever I pushed changes to the <code>main</code> branch, the site would no longer be served from my custom domain <a href="https://dylancastillo.co">dylancastillo.co</a>.</p>
-<p>When you render your website, Quarto recreates the CNAME file in the <code>gh-pages</code> branch, which seems to break the custom domain setup in GitHub Pages.</p>
-<p>I found a solution in this <a href="https://github.com/quarto-dev/quarto-cli/discussions/5341">discussion</a> and added a CNAME file to the root of the repository with my custom domain:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>CNAME</strong></pre>
-</div>
-<div class="sourceCode" id="cb8" data-filename="CNAME" style="background: #f1f3f5;"><pre class="sourceCode numberSource txt number-lines code-with-copy"><code class="sourceCode default"><span id="cb8-1">dylancastillo.co</span></code></pre></div>
-</div>
-<p>Then, I added this to <code>_quarto.yml</code>:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>_quarto.yml</strong></pre>
-</div>
-<div class="sourceCode" id="cb9" data-filename="_quarto.yml" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">project</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb9-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">type</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> website</span></span>
-<span id="cb9-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">resources</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # New</span></span>
-<span id="cb9-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> CNAME</span></span></code></pre></div>
-</div>
-<p>And that worked!</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>There you go, my friend.</p>
-<p>Now you can also break free from Ghost.</p>
-<p>See you in the next post.</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Choosing Ghost. No regrets about the hypothetical hamster party.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {Migrate a Blog from {Ghost} to {Quarto}},
-  date = {2024-06-16},
-  url = {https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“Migrate a Blog from Ghost to
-Quarto.”</span> June 16, 2024. <a href="https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html">https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>quarto</category>
-  <guid>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</guid>
-  <pubDate>Sun, 16 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

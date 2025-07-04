@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2025-06-27">
-<meta name="description" content="Counting tokens in different languages, and their implications for costs.">
+<meta name="dcterms.date" content="2025-07-04">
+<meta name="description" content="Using Pydantic AI to build a ReAct agent.">
 
-<title>Japanese is the most expensive language in terms of input tokens – Dylan Castillo</title>
+<title>Using Pydantic AI to build a ReAct agent – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -80,6 +80,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-02fbb510e4cffa154b4bcf141135e604.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,15 +114,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Japanese is the most expensive language in terms of input tokens – Dylan Castillo">
+<meta property="og:title" content="Using Pydantic AI to build a ReAct agent – Dylan Castillo">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
+<meta property="og:image" content="https://dylancastillo.co/til/images/react-agent-logfire-1.png">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Japanese is the most expensive language in terms of input tokens – Dylan Castillo">
+<meta property="og:image:height" content="946">
+<meta property="og:image:width" content="1866">
+<meta name="twitter:title" content="Using Pydantic AI to build a ReAct agent – Dylan Castillo">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
+<meta name="twitter:image" content="https://dylancastillo.co/til/images/react-agent-logfire-1.png">
 <meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:image-height" content="946">
+<meta name="twitter:image-width" content="1866">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -173,9 +180,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#code" id="toc-code" class="nav-link active" data-scroll-target="#code">Code</a></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
-  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#react-agent" id="toc-react-agent" class="nav-link" data-scroll-target="#react-agent">ReAct Agent</a></li>
   </ul>
 </nav>
     <div class="quarto-margin-footer"><div class="margin-footer-item">
@@ -188,12 +194,12 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Japanese is the most expensive language in terms of input tokens</h1>
+<h1 class="title">Using Pydantic AI to build a ReAct agent</h1>
   <div class="quarto-categories">
     <div class="quarto-category">til</div>
     <div class="quarto-category">llm</div>
-    <div class="quarto-category">openai</div>
-    <div class="quarto-category">tiktoken</div>
+    <div class="quarto-category">pydantic-ai</div>
+    <div class="quarto-category">agents</div>
   </div>
   </div>
 
@@ -220,7 +226,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 27, 2025</p>
+      <p class="date">July 4, 2025</p>
     </div>
   </div>
   
@@ -238,114 +244,141 @@ Subscribe to my newsletter
 </header>
 
 
-<p>OpenAI mentions in their documentation that <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">1 token corresponds to roughly 4 characters</a>.</p>
-<p>I was curious how this would work for different languages, so:</p>
-<ol type="1">
-<li>I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a></li>
-<li>Translated it into 7 different languages: English, Spanish, French, German, Japanese, Chinese, and Hindi</li>
-<li>Counted the tokens</li>
-<li>compared the results.</li>
-</ol>
-<section id="code" class="level2">
-<h2 class="anchored" data-anchor-id="code">Code</h2>
-<p>Here’s the code:</p>
-<div id="cell-2" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> tiktoken</span>
+<p>I wanted to get more familiar with Pydantic AI, so I decided to build a ReAct agent with multiple tools.</p>
+<p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div id="2a607486" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">def</span> read_text(file_path):</span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="cf">with</span> <span class="bu">open</span>(file_path, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
-<span id="cb1-5"><a href="#cb1-5"></a>        <span class="cf">return</span> <span class="bu">file</span>.read()</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a>text_en <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/en.md"</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a>text_es <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/es.md"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a>text_fr <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/fr.md"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a>text_de <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/de.md"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>text_jp <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/jp.md"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12"></a>text_zh <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/zh.md"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13"></a>text_hi <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/hi.md"</span>)</span>
-<span id="cb1-14"><a href="#cb1-14"></a>text_ru <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/ru.md"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15"></a>text_pt <span class="op">=</span> read_text(<span class="st">"../_extras/counting-tokens/pt.md"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="kw">def</span> count_tokens(text):</span>
-<span id="cb1-18"><a href="#cb1-18"></a>    <span class="cf">return</span> <span class="bu">len</span>(tiktoken.encoding_for_model(<span class="st">"gpt-4o"</span>).encode(text))</span>
-<span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a>chars_count <span class="op">=</span> {</span>
-<span id="cb1-21"><a href="#cb1-21"></a>    <span class="st">"en"</span>: <span class="bu">len</span>(text_en),</span>
-<span id="cb1-22"><a href="#cb1-22"></a>    <span class="st">"es"</span>: <span class="bu">len</span>(text_es),</span>
-<span id="cb1-23"><a href="#cb1-23"></a>    <span class="st">"fr"</span>: <span class="bu">len</span>(text_fr),</span>
-<span id="cb1-24"><a href="#cb1-24"></a>    <span class="st">"de"</span>: <span class="bu">len</span>(text_de),</span>
-<span id="cb1-25"><a href="#cb1-25"></a>    <span class="st">"jp"</span>: <span class="bu">len</span>(text_jp),</span>
-<span id="cb1-26"><a href="#cb1-26"></a>    <span class="st">"zh"</span>: <span class="bu">len</span>(text_zh),</span>
-<span id="cb1-27"><a href="#cb1-27"></a>    <span class="st">"hi"</span>: <span class="bu">len</span>(text_hi),</span>
-<span id="cb1-28"><a href="#cb1-28"></a>    <span class="st">"ru"</span>: <span class="bu">len</span>(text_ru),</span>
-<span id="cb1-29"><a href="#cb1-29"></a>    <span class="st">"pt"</span>: <span class="bu">len</span>(text_pt),</span>
-<span id="cb1-30"><a href="#cb1-30"></a>}</span>
-<span id="cb1-31"><a href="#cb1-31"></a></span>
-<span id="cb1-32"><a href="#cb1-32"></a>tokens_count <span class="op">=</span> {</span>
-<span id="cb1-33"><a href="#cb1-33"></a>    <span class="st">"en"</span>: count_tokens(text_en),</span>
-<span id="cb1-34"><a href="#cb1-34"></a>    <span class="st">"es"</span>: count_tokens(text_es),</span>
-<span id="cb1-35"><a href="#cb1-35"></a>    <span class="st">"fr"</span>: count_tokens(text_fr),</span>
-<span id="cb1-36"><a href="#cb1-36"></a>    <span class="st">"de"</span>: count_tokens(text_de),</span>
-<span id="cb1-37"><a href="#cb1-37"></a>    <span class="st">"jp"</span>: count_tokens(text_jp),</span>
-<span id="cb1-38"><a href="#cb1-38"></a>    <span class="st">"zh"</span>: count_tokens(text_zh),</span>
-<span id="cb1-39"><a href="#cb1-39"></a>    <span class="st">"hi"</span>: count_tokens(text_hi),</span>
-<span id="cb1-40"><a href="#cb1-40"></a>    <span class="st">"ru"</span>: count_tokens(text_ru),</span>
-<span id="cb1-41"><a href="#cb1-41"></a>    <span class="st">"pt"</span>: count_tokens(text_pt),</span>
-<span id="cb1-42"><a href="#cb1-42"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This reads the text from the file, and uses <code>tiktoken</code> to count the tokens. I also counted the number of characters in the text.</p>
-<p>Then I calculated the ratio of tokens to characters for each language.</p>
-<div id="cell-4" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">for</span> lang <span class="kw">in</span> [<span class="st">"en"</span>, <span class="st">"es"</span>, <span class="st">"fr"</span>, <span class="st">"de"</span>, <span class="st">"jp"</span>, <span class="st">"zh"</span>, <span class="st">"hi"</span>, <span class="st">"ru"</span>, <span class="st">"pt"</span>]:</span>
-<span id="cb2-2"><a href="#cb2-2"></a>    chars <span class="op">=</span> chars_count[lang]</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    tokens <span class="op">=</span> tokens_count[lang]</span>
-<span id="cb2-4"><a href="#cb2-4"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>lang<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>chars <span class="op">/</span> tokens<span class="sc">:.2f}</span><span class="ss"> chars per token, </span><span class="sc">{</span>chars<span class="sc">}</span><span class="ss"> chars, </span><span class="sc">{</span>tokens<span class="sc">}</span><span class="ss"> tokens"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, I did the imports as usual. I hadn’t used <code>logfire</code> for monitoring LLM applications before, so I thought it’d be a good idea to try it out.</p>
+<div id="4081c493" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">import</span> logfire</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> requests</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>PydanticAI instrumentation uses OpenTelemetry (OTel). So it’s pretty straightforward to use it with Logfire or with any other OTel-compatible observability tool.</p>
+<p>You just need to create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>logfire.configure(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    token<span class="op">=</span>os.getenv(<span class="st">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb3-3"><a href="#cb3-3"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>logfire.instrument_pydantic_ai()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will ask you to select a project the first time you run it. It will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="react-agent" class="level2">
+<h2 class="anchored" data-anchor-id="react-agent">ReAct Agent</h2>
+<p>I decided to make an agent that had access to a tool to get the weather and another one that checks if the response that’s going to be sent to the user follows the company guidelines.</p>
+<p>Here’s thee code:</p>
+<div id="d4edf351" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">class</span> Feedback(BaseModel):</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    feedback: <span class="bu">str</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    status: Literal[<span class="st">'OK'</span>, <span class="st">'REQUIRES FIXING'</span>]</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>evaluator_agent <span class="op">=</span> Agent(</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb4-10"><a href="#cb4-10"></a>        <span class="st">"You're a helpful assistant. Your task is to check if a given response follows the company guidelines. The company guidelines are that responses should be written in the style of a haiku. You should reply with 'OK' or 'REQUIRES FIXING' and a short explanation."</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    ),</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    output_type<span class="op">=</span>Feedback,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>react_agent <span class="op">=</span> Agent(  </span>
+<span id="cb4-16"><a href="#cb4-16"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-17"><a href="#cb4-17"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb4-18"><a href="#cb4-18"></a>        <span class="st">"You're a helpful assistant. Use the tools provided when relevant. Then draft a response and check if it follows the company guidelines. Only respond to the user after you've validated and modified the response if needed."</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>    ),</span>
+<span id="cb4-20"><a href="#cb4-20"></a>)</span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="at">@react_agent.tool_plain</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="kw">def</span> get_weather(latitude: <span class="bu">float</span>, longitude: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-25"><a href="#cb4-25"></a>    <span class="co">"""Get the weather of a given latitude and longitude"""</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>    response <span class="op">=</span> requests.get(</span>
+<span id="cb4-27"><a href="#cb4-27"></a>        <span class="ss">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc">{</span>latitude<span class="sc">}</span><span class="ss">&amp;longitude=</span><span class="sc">{</span>longitude<span class="sc">}</span><span class="ss">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>    )</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    data <span class="op">=</span> response.json()</span>
+<span id="cb4-30"><a href="#cb4-30"></a>    <span class="cf">return</span> <span class="bu">str</span>(data[<span class="st">"current"</span>][<span class="st">"temperature_2m"</span>])</span>
+<span id="cb4-31"><a href="#cb4-31"></a></span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="at">@react_agent.tool_plain</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="kw">def</span> check_guidelines(drafted_response: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-35"><a href="#cb4-35"></a>    <span class="co">"""Check if a given response follows the company guidelines"""</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>    response <span class="op">=</span> evaluator_agent.run_sync(drafted_response)</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="cf">return</span> response.output</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a></span>
+<span id="cb4-40"><a href="#cb4-40"></a>response <span class="op">=</span> react_agent.run_sync(<span class="st">"What is the temperature in Madrid?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>en: 4.75 chars per token, 2053 chars, 432 tokens
-es: 4.56 chars per token, 2271 chars, 498 tokens
-fr: 4.69 chars per token, 2689 chars, 573 tokens
-de: 4.46 chars per token, 2479 chars, 556 tokens
-jp: 1.41 chars per token, 1081 chars, 767 tokens
-zh: 1.33 chars per token, 707 chars, 531 tokens
-hi: 3.51 chars per token, 2194 chars, 625 tokens
-ru: 4.02 chars per token, 2275 chars, 566 tokens
-pt: 4.63 chars per token, 2200 chars, 475 tokens</code></pre>
+<pre><code>18:57:42.206 react_agent run
+18:57:42.208   chat gpt-4.1-mini
+18:57:43.191   running 1 tool
+18:57:43.192     running tool: get_weather
+18:57:43.408   chat gpt-4.1-mini
+18:57:44.117   running 1 tool
+18:57:44.118     running tool: check_guidelines
+18:57:44.120       evaluator_agent run
+18:57:44.120         chat gpt-4.1-mini
+18:57:46.291   chat gpt-4.1-mini</code></pre>
 </div>
 </div>
-</section>
-<section id="results" class="level2">
-<h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>I found this interesting:</p>
-<ul>
-<li>English is the most efficient language in terms of characters per token, with 4.75 characters per token.</li>
-<li>Mandarin Chinese (1.33 characters per token) is the least efficient language in terms of characters per token, followed by Japanese (1.41 characters per token).</li>
-<li>The same text in Japanese uses 77% more tokens than in English, making it the most expensive language in terms of input tokens.</li>
-<li>Even though Chinese is less efficient than Japanese in terms of characters per token, it’s more efficient in terms of information conveyed per character. The article took 2053 characters in English, 707 characters in Chinese, and 1081 characters in Japanese. This explains why Chinese isn’t also the most expensive language.</li>
-<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). Russian is the most efficient language of these, with 4.02 characters per token.</li>
-</ul>
-</section>
-<section id="limitations" class="level2">
-<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
-<p>This analysis has some clear limitations:</p>
-<ol type="1">
-<li>The text might not be a good example of the types of texts you’re working with.</li>
-<li>The translations might not be good enough to truly reflect the information conveyed per character.</li>
-</ol>
+<p>And here’s the output:</p>
+<div id="d74111c3" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(response.output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>In Madrid sunshine,
+Temperature climbs so high,
+Thirty-four degrees.</code></pre>
+</div>
+</div>
+<p>The output in Logfire looks like typical observability tools:</p>
+<div id="fig-logfire" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-logfire-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Traces in Logfire"><img src="./images/react-agent-logfire-1.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;1: Traces in Logfire"><img src="./images/react-agent-logfire-2.png" class="img-fluid figure-img"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><a href="./images/react-agent-logfire-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;1: Traces in Logfire"><img src="./images/react-agent-logfire-3.png" class="img-fluid figure-img"></a></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-logfire-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Traces in Logfire
+</figcaption>
+</figure>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/react-agent-pydantic-ai.ipynb">here</a>.</p>
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Japanese Is the Most Expensive Language in Terms of Input
-    Tokens},
-  date = {2025-06-27},
-  url = {https://dylancastillo.co/til/counting-tokens.html},
+  title = {Using {Pydantic} {AI} to Build a {ReAct} Agent},
+  date = {2025-07-04},
+  url = {https://dylancastillo.co/til/react-agent-pydantic-ai.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
-Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+Castillo, Dylan. 2025. <span>“Using Pydantic AI to Build a ReAct
+Agent.”</span> July 4, 2025. <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">https://dylancastillo.co/til/react-agent-pydantic-ai.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -762,6 +795,38 @@ Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.c
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
