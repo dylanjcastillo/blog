@@ -27,11 +27,11 @@ page-layout: full
 title-block-banner: true
 ---
 
-Hi there 👋, I'm Dylan, an independent [AI consultant](https://iwanalabs.com).
+Hi there 👋, I'm Dylan.
 
-I've been working in the AI & ML space for the [past 8 years](https://linkedin.com/in/dylanjcastillo) and have delivered projects for startups, large corporations, and government agencies. I also like working on [open-source projects](https://github.com/dylanjcastillo).
+I'm an independent [AI consultant](https://iwanalabs.com) and have been working in the AI & ML space for the [past 8 years](https://linkedin.com/in/dylanjcastillo). I've delivered projects for startups, large corporations, and government agencies. I also enjoy working on [open-source projects](https://github.com/dylanjcastillo).
 
-Here, you'll find a collection of my articles. I usually write about technical topics, but every once in a while I publish posts about financial independence or my end-of-year reviews.
+This is my blog. Here, you'll find a collection of my articles. I usually write about technical topics, but every once in a while I publish posts about financial independence or my end-of-year reviews.
 
 If you'd like me to send you an email when I write new posts, you can [subscribe to my newsletter](https://subscribe.dylancastillo.co).
 
