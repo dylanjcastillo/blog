@@ -15,7 +15,928 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Thu, 03 Jul 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Building ReAct agents with (and without) LangGraph</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/react-agent-langgraph.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>As Large Language Models (LLMs) have become more powerful, I’ve started to see increasing interest from clients in building agents.</p>
+<p>The problem is that most of the use cases clients have in mind for agents are better suited for <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">agentic workflows</a>. Agents are a good fit for tasks without a predefined path and where the order of steps is not known beforehand. Agentic workflows, on the other hand, are the right choice for tasks where both of these things are known.</p>
+<p>In this post, I’ll show you how to build a ReAct agent with (and without) LangGraph.</p>
+<p>Let’s start by defining some key concepts.</p>
+<section id="what-is-an-agent" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
+<p>The biggest players in the ecosystem have converged on similar definitions of what constitutes an “agent.” <a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic</a> describes them as systems where LLMs “dynamically direct their own processes and tool usage,” while <a href="https://openai.com/index/new-tools-for-building-agents/">OpenAI</a> calls them “systems that independently accomplish tasks on behalf of users.” <a href="https://blog.langchain.com/what-is-an-agent/">LangChain</a> similarly defines them as systems using an LLM to “decide the control flow of an application.”</p>
+<p>In essence, agents are systems that can independently make decisions, use tools, take actions, and pursue a goal without direct human guidance. The most well-known agent implementation are <em>ReAct Agents</em>.</p>
+</section>
+<section id="whats-a-react-agent" class="level2">
+<h2 class="anchored" data-anchor-id="whats-a-react-agent">What’s a ReAct agent?</h2>
+<p><a href="https://arxiv.org/abs/2210.03629">ReAct (Reasoning and Acting) Agents</a> are AI systems that merge the reasoning of Large Language Models (LLMs) with the ability to perform actions. They follow an iterative “think, act, observe” cycle to solve problems and achieve user goals. For example, a ReAct agent would:</p>
+<ol type="1">
+<li>Take a user query.</li>
+<li>Think about the query and decide on an action.</li>
+<li>Execute the action using available tools.</li>
+<li>Analyzes the result of that action.</li>
+<li>Continues the “Reason, Act, Observe” loop until it reaches the final answer.</li>
+</ol>
+<p>Here’s a diagram of a ReAct agent:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph LR
+    Human &lt;--&gt; LLM_Call[LLM Call]
+    LLM_Call --&gt;|Action| Environment
+    Environment --&gt;|Feedback| LLM_Call
+    LLM_Call -.-&gt; Stop
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The first generation of ReAct agents used a prompt technique of “Thought, Action, Observation”. Current agents rely on <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">function-calling</a> to implement the “think, act, observe” loop.</p>
+</section>
+<section id="what-is-langgraph" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-langgraph">What is LangGraph?</h2>
+<p>LangGraph is a graph-based framework for building complex LLM applications, designed for stateful workflows. It makes it easier to build complex agent architectures.</p>
+<p>Graphs are composed of nodes, edges, state, and reducers. Nodes are the units of work (functions, tools) and edges define the paths between nodes. State is persistent data passed between nodes and updated through reducers (functions that define how the state is updated).</p>
+<p>I like LangGraph because it provides you with easy-to-use components, a simple API, and it lets you visualize your workflow. It also integrates well with LangSmith, a tool for monitoring and debugging LLM applications.</p>
+<p>In this tutorial, I’ll show you how to build a ReAct agent with (and without) LangGraph. I’ll also use <em>LangChain</em> as a thin wrapper on top of OpenAI models.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To follow this tutorial you’ll need to:</p>
+<ol type="1">
+<li>Sign up and generate an API key in <a href="https://platform.openai.com/docs/overview">OpenAI</a>.</li>
+<li>Set the API key as an environment variable called <code>OPENAI_API_KEY</code>.</li>
+<li>Create a virtual environment in Python and install the requirements:</li>
+</ol>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> venv venv</span>
+<span id="cb1-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">source</span> venv/bin/activate</span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pip</span> install langchain langchain-openai langchain-community langgraph jupyter</span></code></pre></div>
+<p>Once you’ve completed the steps above, you can run the code from this article. You can also download the notebook from <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/react-agent-langgraph.ipynb">here</a>.</p>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<p>As usual, you must start by importing the necessary libraries and loading the environment variables. You’ll use the same model in all the examples, so you’ll define it once here:</p>
+<div id="cell-4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> IPython.display <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Image, display</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.messages <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> HumanMessage, SystemMessage, ToolMessage</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.tools <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> tool</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ChatOpenAI</span>
+<span id="cb2-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langgraph.graph <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> END, START, MessagesState, StateGraph</span>
+<span id="cb2-10"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langgraph.prebuilt <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> create_react_agent</span>
+<span id="cb2-11"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> traceable</span>
+<span id="cb2-12"></span>
+<span id="cb2-13">load_dotenv()</span>
+<span id="cb2-14"></span>
+<span id="cb2-15">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, temperature<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span></code></pre></div>
+</div>
+<p>This code:</p>
+<ol type="1">
+<li>Imports the necessary libraries.</li>
+<li>Loads environment variables from a <code>.env</code> file using <code>load_dotenv()</code>.</li>
+<li>Defines a model (<code>gpt-4.1-mini</code>) that you’ll use in all the examples.</li>
+</ol>
+<section id="vanilla-react-agent" class="level3">
+<h3 class="anchored" data-anchor-id="vanilla-react-agent">Vanilla ReAct agent</h3>
+<p>You’ll build an agent that takes a question from a user and has access to a a tool. The tool is a Python REPL that it can use to answer the question.</p>
+<p><strong>You should not use this in production</strong>. This tool can run arbitrary Python code on your device, and that’s not something you want to expose to random people on the internet.</p>
+<p>First, let’s define the <code>run_python_code</code> tool.</p>
+<div id="cell-8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@tool</span></span>
+<span id="cb3-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_python_code(code: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb3-3">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Run arbitrary Python code including imports, assignments, and statements. Do not use any external libraries. Save your results as a variable.</span></span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    Args:</span></span>
+<span id="cb3-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">        code: Python code to run</span></span>
+<span id="cb3-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb3-8">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sys</span>
+<span id="cb3-9">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> io <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> StringIO</span>
+<span id="cb3-10"></span>
+<span id="cb3-11">    old_stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sys.stdout</span>
+<span id="cb3-12">    sys.stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> captured_output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> StringIO()</span>
+<span id="cb3-13"></span>
+<span id="cb3-14">    namespace <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {}</span>
+<span id="cb3-15"></span>
+<span id="cb3-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb3-17">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exec</span>(code, namespace)</span>
+<span id="cb3-18"></span>
+<span id="cb3-19">        output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> captured_output.getvalue()</span>
+<span id="cb3-20"></span>
+<span id="cb3-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> output.strip():</span>
+<span id="cb3-22">            user_vars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb3-23">                k: v</span>
+<span id="cb3-24">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k, v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> namespace.items()</span>
+<span id="cb3-25">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> k.startswith(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"__"</span>) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"StringIO"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sys"</span>]</span>
+<span id="cb3-26">            }</span>
+<span id="cb3-27">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> user_vars:</span>
+<span id="cb3-28">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(user_vars) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:</span>
+<span id="cb3-29">                    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(user_vars.values())[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>])</span>
+<span id="cb3-30">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb3-31">                    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(user_vars)</span>
+<span id="cb3-32"></span>
+<span id="cb3-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> output.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> output.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Code executed successfully"</span></span>
+<span id="cb3-34"></span>
+<span id="cb3-35">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb3-36">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Error: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(e)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb3-37">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">finally</span>:</span>
+<span id="cb3-38">        sys.stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> old_stdout</span>
+<span id="cb3-39"></span>
+<span id="cb3-40">tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [run_python_code]</span>
+<span id="cb3-41">tools_mapping <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {tool.name: tool <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> tools}</span>
+<span id="cb3-42">model_with_tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
+</div>
+<p>This code defines a tool. In <code>LangChain</code> tools are defined as functions decorated with the <code>@tool</code> decorator. These functions must have a <em>docstring</em> because it will be used to describe the tool to the model.</p>
+<p><code>run_python_code</code> is a function that takes a code string and returns the result of executing that code.</p>
+<p>Next, you provide the model with a mapping of the tool to its name by creating <code>tools_mapping</code>. This is often a point of confusion. The LLM doesn’t run the tools on its own. It only decides if a tool should be used. Then, your own code must make the actual tool call.</p>
+<p>The mapping is more useful when there are multiple tools, and not a single tool, like in this case. However, I’m showing it here to illustrate how you’d usually do this in a real-world application.</p>
+<p>Finally, you <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
+<p>Then, let’s define a function that encapsulates the logic of the agent.</p>
+<div id="cell-10" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_agent(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb4-2">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb4-3">        SystemMessage(</span>
+<span id="cb4-4">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant. Use the tools provided when relevant."</span></span>
+<span id="cb4-5">        ),</span>
+<span id="cb4-6">        HumanMessage(question),</span>
+<span id="cb4-7">    ]</span>
+<span id="cb4-8">    ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb4-9">    messages.append(ai_message)</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">while</span> ai_message.tool_calls:</span>
+<span id="cb4-12">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool_call <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ai_message.tool_calls:</span>
+<span id="cb4-13">            selected_tool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tools_mapping[tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>]]</span>
+<span id="cb4-14">            tool_msg <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> selected_tool.invoke(tool_call)</span>
+<span id="cb4-15">            messages.append(tool_msg)</span>
+<span id="cb4-16">        ai_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
+<span id="cb4-17">        messages.append(ai_message)</span>
+<span id="cb4-18"></span>
+<span id="cb4-19">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> messages </span></code></pre></div>
+</div>
+<p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
+<p>It works as follows:</p>
+<ul>
+<li><strong>Lines 2 to 9</strong> set up the <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompts</a> and call the assistant.</li>
+<li><strong>Lines 11 to 17</strong> is where the magic happens. This is a loop that will check if there’s been a tool call in the response from the model. If there is, it will call (invoke) the tool and add the result to the messages. It will then send the results back to the assistant, and repeat this process until there are no more tool calls.</li>
+</ul>
+<p>This is the core idea behind how agents work. You provide the assistant with a question and one or more tools. Then you let the assistant decide which tool to use, until it has all the information it needs to answer the question.</p>
+<p>You can try it out by running the following code:</p>
+<div id="cell-12" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_agent(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Generate 10 random numbers between 1 and 100"</span>)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> m <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> messages:</span>
+<span id="cb5-4">    m.pretty_print()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>================================<span class="ansi-bold"> System Message </span>================================
+
+
+
+You're a helpful assistant. Use the tools provided when relevant.
+
+================================<span class="ansi-bold"> Human Message </span>=================================
+
+
+
+Generate 10 random numbers between 1 and 100
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+Tool Calls:
+
+  run_python_code (call_4W42twIzLEUpd8ap7xGbTkiF)
+
+ Call ID: call_4W42twIzLEUpd8ap7xGbTkiF
+
+  Args:
+
+    code: import random
+
+random_numbers = [random.randint(1, 100) for _ in range(10)]
+
+random_numbers
+
+=================================<span class="ansi-bold"> Tool Message </span>=================================
+
+Name: run_python_code
+
+
+
+{'random': &lt;module 'random' from '/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/random.py'&gt;, 'random_numbers': [37, 60, 8, 58, 7, 12, 39, 4, 77, 39]}
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+
+
+Here are 10 random numbers between 1 and 100: 37, 60, 8, 58, 7, 12, 39, 4, 77, 39.
+</pre>
+</div>
+</div>
+</div>
+<p>You can see that the agent took the user’s request, used the <code>run_python_code</code> tool to generate the numbers, and then returned the result.</p>
+<p>Now, let’s see how you can build a ReAct agent with LangGraph.</p>
+</section>
+<section id="langgraph-react-agent" class="level3">
+<h3 class="anchored" data-anchor-id="langgraph-react-agent">LangGraph ReAct agent</h3>
+<p>Like, in the previous example, you start by defining the tools you want to use. You’ll use the same <code>run_python_code</code> tool.</p>
+<div id="cell-16" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@tool</span></span>
+<span id="cb6-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_python_code(code: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb6-3">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Run arbitrary Python code including imports, assignments, and statements. Do not use any external libraries. Save your results as a variable.</span></span>
+<span id="cb6-4"></span>
+<span id="cb6-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    Args:</span></span>
+<span id="cb6-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">        code: Python code to run</span></span>
+<span id="cb6-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb6-8">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sys</span>
+<span id="cb6-9">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> io <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> StringIO</span>
+<span id="cb6-10"></span>
+<span id="cb6-11">    old_stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sys.stdout</span>
+<span id="cb6-12">    sys.stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> captured_output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> StringIO()</span>
+<span id="cb6-13"></span>
+<span id="cb6-14">    namespace <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {}</span>
+<span id="cb6-15"></span>
+<span id="cb6-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb6-17">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exec</span>(code, namespace)</span>
+<span id="cb6-18"></span>
+<span id="cb6-19">        output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> captured_output.getvalue()</span>
+<span id="cb6-20"></span>
+<span id="cb6-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> output.strip():</span>
+<span id="cb6-22">            user_vars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb6-23">                k: v</span>
+<span id="cb6-24">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k, v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> namespace.items()</span>
+<span id="cb6-25">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> k.startswith(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"__"</span>) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"StringIO"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sys"</span>]</span>
+<span id="cb6-26">            }</span>
+<span id="cb6-27">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> user_vars:</span>
+<span id="cb6-28">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(user_vars) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:</span>
+<span id="cb6-29">                    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(user_vars.values())[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>])</span>
+<span id="cb6-30">                <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb6-31">                    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(user_vars)</span>
+<span id="cb6-32"></span>
+<span id="cb6-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> output.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> output.strip() <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Code executed successfully"</span></span>
+<span id="cb6-34"></span>
+<span id="cb6-35">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb6-36">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Error: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(e)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb6-37">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">finally</span>:</span>
+<span id="cb6-38">        sys.stdout <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> old_stdout</span>
+<span id="cb6-39"></span>
+<span id="cb6-40"></span>
+<span id="cb6-41">tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [run_python_code]</span>
+<span id="cb6-42">tools_by_name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {tool.name: tool <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> tools}</span>
+<span id="cb6-43">model_with_tools <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
+</div>
+<p>With langgraph you also need to you define the tools in the same way: set up the functions, add the <code>@tool</code> decorator, and create the mapping. Then, <em>bind</em> the tools to the model.</p>
+<p>Next, you need to define the functions (nodes) that correspond to the steps the agent will take:</p>
+<div id="cell-18" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> llm_call(state: MessagesState):</span>
+<span id="cb7-2">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb7-3">        SystemMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant that can run python code."</span>),</span>
+<span id="cb7-4">    ] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> state[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>]</span>
+<span id="cb7-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>: [model_with_tools.invoke(messages)]}</span>
+<span id="cb7-6"></span>
+<span id="cb7-7"></span>
+<span id="cb7-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> tool_node(state: MessagesState):</span>
+<span id="cb7-9">    result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb7-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> tool_call <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> state[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>][<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>].tool_calls:</span>
+<span id="cb7-11">        tool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tools_by_name[tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>]]</span>
+<span id="cb7-12">        observation <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> tool.invoke(tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"args"</span>])</span>
+<span id="cb7-13">        result.append(ToolMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>observation, tool_call_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>tool_call[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"id"</span>]))</span>
+<span id="cb7-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>: result}</span>
+<span id="cb7-15"></span>
+<span id="cb7-16"></span>
+<span id="cb7-17"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> should_continue(state: MessagesState) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Literal[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"environment"</span>, END]:</span>
+<span id="cb7-18">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> state[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>]</span>
+<span id="cb7-19">    last_message <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> messages[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb7-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> last_message.tool_calls:</span>
+<span id="cb7-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Action"</span></span>
+<span id="cb7-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> END</span></code></pre></div>
+</div>
+<p>This is how it works:</p>
+<ol type="1">
+<li><code>llm_call</code>: Sends the conversation history to the LLM to get the next response.</li>
+<li><code>tool_node</code>: If the LLM’s response is a request to use a tool, this function executes the tool with the specified arguments.</li>
+<li><code>should_continue</code>: This is the control logic. It checks the LLM’s last message. If it’s a tool request, it routes to the tool_node; otherwise, it ends the conversation.</li>
+</ol>
+<p><code>llm_call</code> and <code>tool_node</code> take <code>MessagesState</code> as input and return a the message key with the new message. This updates the <code>messages</code> key in the <code>MessagesState</code>. <code>should_continue</code> takes <code>MessagesState</code> act as a router, so it decides if a tool should be executed or if the conversation should end.</p>
+<div id="cell-20" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">agent_builder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> StateGraph(MessagesState)</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">agent_builder.add_node(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm_call"</span>, llm_call)</span>
+<span id="cb8-4">agent_builder.add_node(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"environment"</span>, tool_node)</span>
+<span id="cb8-5"></span>
+<span id="cb8-6">agent_builder.add_edge(START, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm_call"</span>)</span>
+<span id="cb8-7">agent_builder.add_conditional_edges(</span>
+<span id="cb8-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm_call"</span>,</span>
+<span id="cb8-9">    should_continue,</span>
+<span id="cb8-10">    {</span>
+<span id="cb8-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Action"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"environment"</span>,</span>
+<span id="cb8-12">        END: END,</span>
+<span id="cb8-13">    },</span>
+<span id="cb8-14">)</span>
+<span id="cb8-15">agent_builder.add_edge(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"environment"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm_call"</span>)</span>
+<span id="cb8-16"></span>
+<span id="cb8-17">agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> agent_builder.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">compile</span>()</span></code></pre></div>
+</div>
+<p>This code sets up the logic of the agent. It starts with a call to the LLM. The LLM then decides whether to use a tool or to finish the task. If it uses a tool, the tool’s output is sent back to the LLM for the next step. This “think-act” loop continues until the agent decides the task is complete.</p>
+<p>You can use <code>LangGraph</code> to visualize the agent’s flow:</p>
+<div id="cell-22" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">display(Image(agent.get_graph(xray<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>).draw_mermaid_png()))</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="react-agent-langgraph_files/figure-html/cell-9-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/react-agent-langgraph_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
+<div id="cell-24" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb10-2">    SystemMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant that can run python code."</span>),</span>
+<span id="cb10-3">    HumanMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Generate 10 random numbers between 1 and 100"</span>)</span>
+<span id="cb10-4">]</span>
+<span id="cb10-5"></span>
+<span id="cb10-6">messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> agent.invoke({<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>: messages})</span></code></pre></div>
+</div>
+<p>You can review the process by printing the messages:</p>
+<div id="cell-26" class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> m <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> messages[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>]:</span>
+<span id="cb11-2">    m.pretty_print()</span></code></pre></div>
+</div>
+<p>That’s all!</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this tutorial, you’ve learned what are agents, how they work, and how to build a simple ReAct agent with and without LangGraph. We covered:</p>
+<ul>
+<li><strong>Agent fundamentals</strong>: How agents differ from traditional systems by dynamically directing their own processes</li>
+<li><strong>ReAct pattern</strong>: The core “think, act, observe” loop that enables agents to take actions based on the information they have</li>
+<li><strong>Vanilla and LangGraph implementation</strong>: Understanding how to implement agents with and without LangGraph</li>
+</ul>
+<p>Agents are great for open-ended tasks where the path isn’t predetermined. If you’re working on one of those, this article provides a good starting point. On the other hand, for tasks that have predefined steps, consider <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">agentic workflows</a> instead.</p>
+<p>Hope you find this tutorial useful. If you have any questions, let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Building {ReAct} Agents with (and Without) {LangGraph}},
+  date = {2025-07-04},
+  url = {https://dylancastillo.co/posts/react-agent-langgraph.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Building ReAct Agents with (and Without)
+LangGraph.”</span> July 4, 2025. <a href="https://dylancastillo.co/posts/react-agent-langgraph.html">https://dylancastillo.co/posts/react-agent-langgraph.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>python</category>
+  <category>anthropic</category>
+  <category>openai</category>
+  <category>agents</category>
+  <guid>https://dylancastillo.co/posts/react-agent-langgraph.html</guid>
+  <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Agentic workflows from scratch with (and without) LangGraph</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -15798,461 +16719,6 @@ Quarto.”</span> June 16, 2024. <a href="https://dylancastillo.co/til/migrate-b
   <category>quarto</category>
   <guid>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</guid>
   <pubDate>Sun, 16 Jun 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Installing Alacritty, Zellij, and Neovim in macOS</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Ever since I saw <a href="https://www.youtube.com/watch?v=8wU8k2kDaTo">The Matrix</a>, I’ve wanted to be a hacker.</p>
-<p>When I say hacker, I mean having a cool-looking terminal. The kind that makes people think I’m a stealing millions from banks when, in reality, I’m just struggling to exit vim.</p>
-<p>I use macOS. The closest I’ve been to being a hacker is using <a href="https://github.com/VSCodeVim/Vim">vim hotkeys</a> in VSCode.</p>
-<p>It’s not that I haven’t tried to look the part. I was a just one audio driver away from saying <a href="https://www.reddit.com/r/linuxmemes/comments/9xgfxq/why_i_use_arch_btw/">“I use Arch btw”</a>. I did succeed with Ubuntu, but honestly, using Linux as my main OS always felt like too much work<sup>1</sup>. So that didn’t last long.</p>
-<p>But, today, after reading about <a href="https://world.hey.com/dhh/introducing-omakub-354db366">DHH’s Omakub</a>, I though it was time to give my hacker dreams a second shot.</p>
-<p>Installing Ubuntu felt like a bit too much work<sup>2</sup>, so I decided to settle on just upgrading my terminal.</p>
-<p>I decided to set up Alacritty, Zellij, and Neovim on my M3 MacBook Pro.</p>
-<p>Sure, I have client projects to deliver. But how could I let go of one-in-a-lifetime opportunity to procrastinate and imagine I’m a genius hacker for an afternoon?</p>
-<section id="installing-alacritty" class="level2">
-<h2 class="anchored" data-anchor-id="installing-alacritty">Installing Alacritty</h2>
-<p>Alacritty is a terminal emulator, similar to <a href="https://iterm2.com/">Iterm2</a> and others. It’s selling point is that it’s very fast due to GPU-acceleration. Plus, you also get 256 colors support by default.</p>
-<p>The best way to install it is using Homebrew:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--cask</span> alacritty</span></code></pre></div>
-<p>Then, you you can customize it to your liking by creating a <code>~/.config/alacritty/alacritty.toml</code> file.</p>
-<p>I ended up modifying just a couple of things:</p>
-<ol type="1">
-<li>Increase padding.</li>
-<li>Change the font.</li>
-<li>Change the color scheme. I used One Dark from <a href="https://gist.github.com/r-darwish/f8bb21a6c89a02c4bef76cc38bddad39">this gist</a>.</li>
-</ol>
-<details>
-<summary>
-Show the code
-</summary>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">window</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">padding.x = 16</span></span>
-<span id="cb2-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">padding.y = 14</span></span>
-<span id="cb2-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">decorations = "none"</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # Removes the window decoration (title bar, etc.)</span></span>
-<span id="cb2-5"></span>
-<span id="cb2-6"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">font</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-7"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size = 13</span></span>
-<span id="cb2-8"></span>
-<span id="cb2-9"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># FiraCode Nerd Font</span></span>
-<span id="cb2-10"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">normal = { family = "FiraCode Nerd Font", style = "Regular" }</span></span>
-<span id="cb2-11"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bold = { family = "FiraCode Nerd Font", style = "Bold" }</span></span>
-<span id="cb2-12"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">italic = { family = "FiraCode Nerd Font", style = "Italic" }</span></span>
-<span id="cb2-13"></span>
-<span id="cb2-14"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># One Dark theme</span></span>
-<span id="cb2-15"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colors</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-16"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colors.primary</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-17"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">background = '0x1e2127'</span></span>
-<span id="cb2-18"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">foreground = '0xabb2bf'</span></span>
-<span id="cb2-19"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bright_foreground = '0xe6efff'</span></span>
-<span id="cb2-20"></span>
-<span id="cb2-21"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Normal colors</span></span>
-<span id="cb2-22"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colors.normal</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">black = '0x1e2127'</span></span>
-<span id="cb2-24"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">red = '0xe06c75'</span></span>
-<span id="cb2-25"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">green = '0x98c379'</span></span>
-<span id="cb2-26"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">yellow = '0xd19a66'</span></span>
-<span id="cb2-27"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">blue = '0x61afef'</span></span>
-<span id="cb2-28"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">magenta = '0xc678dd'</span></span>
-<span id="cb2-29"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cyan = '0x56b6c2'</span></span>
-<span id="cb2-30"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">white = '0x828791'</span></span>
-<span id="cb2-31"></span>
-<span id="cb2-32"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Bright colors</span></span>
-<span id="cb2-33"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colors.bright</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-34"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">black = '0x5c6370'</span></span>
-<span id="cb2-35"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">red = '0xe06c75'</span></span>
-<span id="cb2-36"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">green = '0x98c379'</span></span>
-<span id="cb2-37"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">yellow = '0xd19a66'</span></span>
-<span id="cb2-38"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">blue = '0x61afef'</span></span>
-<span id="cb2-39"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">magenta = '0xc678dd'</span></span>
-<span id="cb2-40"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cyan = '0x56b6c2'</span></span>
-<span id="cb2-41"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">white = '0xe6efff'</span></span>
-<span id="cb2-42"></span>
-<span id="cb2-43"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Dim colors</span></span>
-<span id="cb2-44"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colors.dim</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb2-45"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">black = '0x1e2127'</span></span>
-<span id="cb2-46"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">red = '0xe06c75'</span></span>
-<span id="cb2-47"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">green = '0x98c379'</span></span>
-<span id="cb2-48"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">yellow = '0xd19a66'</span></span>
-<span id="cb2-49"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">blue = '0x61afef'</span></span>
-<span id="cb2-50"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">magenta = '0xc678dd'</span></span>
-<span id="cb2-51"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cyan = '0x56b6c2'</span></span>
-<span id="cb2-52"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">white = '0x828791'</span></span></code></pre></div>
-</details>
-<p>I use <a href="https://github.com/tonsky/FiraCode">FiraCode</a> Nerd Font. <a href="https://www.nerdfonts.com/">Nerd Fonts</a> are a collection of fonts that include glyphs such as icons that represent folders, file types, <a href="https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true">weird arrows</a>, etc.</p>
-<p>You can install them using Homebrew:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> install font-<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>name-of-the-font<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>-nerd-font <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># For example, font-fira-code-nerd-font</span></span></code></pre></div>
-</section>
-<section id="installing-zellij" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="installing-zellij">Installing Zellij</h2>
-<p>Zellij is an improved version of <a href="https://en.wikipedia.org/wiki/Tmux"><code>tmux</code></a>. Whenever I used tmux, I spent half my time figuring out the key bindings. Zellij shows the key bindings on screen (unless you disable it), which greatly improves the user experience.</p>
-<p>This is what it looks like:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/zellij-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Zellij"><img src="https://dylancastillo.co/til/images/zellij-screenshot.png" class="img-fluid figure-img" alt="Zellij"></a></p>
-<figcaption class="margin-caption">Zellij</figcaption>
-</figure>
-</div>
-<p>Same as before, the best way to install it is using Homebrew.</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> install zellij</span></code></pre></div>
-<p>You can customize it by creating a <code>~/.config/zellij/config.kdl</code> file.</p>
-<p>I just copied the <a href="https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/themes/one-half-dark.kdl">One Half Dark</a> theme they provide.</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource kdl number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1">theme "one-half-dark"</span>
-<span id="cb5-2"></span>
-<span id="cb5-3">themes {</span>
-<span id="cb5-4">    one-half-dark {</span>
-<span id="cb5-5">        fg 169 177 214</span>
-<span id="cb5-6">        bg 26 27 38</span>
-<span id="cb5-7">        black 56 62 90</span>
-<span id="cb5-8">        red 249 51 87</span>
-<span id="cb5-9">        green 158 206 106</span>
-<span id="cb5-10">        yellow 224 175 104</span>
-<span id="cb5-11">        blue 122 162 247</span>
-<span id="cb5-12">        magenta 187 154 247</span>
-<span id="cb5-13">        cyan 42 195 222</span>
-<span id="cb5-14">        white 192 202 245</span>
-<span id="cb5-15">        orange 255 158 100</span>
-<span id="cb5-16">    }</span>
-<span id="cb5-17">}</span></code></pre></div>
-<p>Is One Half Dark the same as One Dark? I don’t really know. I like to live dangerously.</p>
-<section id="making-zellij-play-nice-with-alacritty" class="level3">
-<h3 class="anchored" data-anchor-id="making-zellij-play-nice-with-alacritty">Making Zellij play nice with Alacritty</h3>
-<p>Getting Alacritty to work with Zellij took me a while to figure out. But luckily it’s as simple as adding the full path to the <code>zellij</code> binary in the <code>~/.config/alacritty/alacritty.toml</code> file.</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">terminal.shell</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb6-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">     program = "/opt/homebrew/bin/zellij"</span></span></code></pre></div>
-</section>
-</section>
-<section id="installing-neovim-and-lazyvim" class="level2">
-<h2 class="anchored" data-anchor-id="installing-neovim-and-lazyvim">Installing Neovim and LazyVim</h2>
-<p><a href="https://neovim.io/">Neovim</a> is a fork from <a href="https://www.vim.org/">Vim</a>, that solves some of Vim’s issues<sup>3</sup>. I didn’t really know if it was better or worse than Vim, but given that DHH recommended it, I thought it was a good idea to give it a shot.</p>
-<p><a href="https://github.com/LazyVim/starter">LazyVim</a> is a premade configuration for Neovim. The purists will probably hate it, but it’s a good start.</p>
-<p>I had my own <code>.vimrc</code>, and after trying LazyVim for 30 minutes or so, I realized my config sucked.</p>
-<p>First, install Neovim using Homebrew.</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> install neovim</span></code></pre></div>
-<p>Then, install LazyVim.</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">git</span> clone https://github.com/LazyVim/starter ~/.config/nvim</span></code></pre></div>
-<p>So far, I’ve only made a few changes:</p>
-<ul>
-<li>Installed <a href="https://github.com/github/copilot.vim">Copilot</a>, <a href="https://github.com/CopilotC-Nvim/CopilotChat.nvim">CopilotChat</a>, and <a href="https://github.com/echasnovski/mini.surround">mini-surround</a>.</li>
-<li>Installed <a href="https://github.com/navarasu/onedark.nvim">One Dark</a> color scheme.</li>
-</ul>
-<p>The plugins I mentioned are available in <code>:LazyExtras</code>, so it’s very easy to install them. Run <code>:LazyExtras</code>, select the plugins, and then install them with <span class="visually-hidden">I</span>.</p>
-<p>To install <code>One Dark</code>, you must create a new file in <code>~/.config/nvim/lua/plugins/</code> containing the following code:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource lua number-lines code-with-copy"><code class="sourceCode lua"><span id="cb9-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb9-2">  <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"navarasu/onedark.nvim"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">},</span></span>
-<span id="cb9-3"></span>
-<span id="cb9-4">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-- Configure LazyVim to load One Dark</span></span>
-<span id="cb9-5">  <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb9-6">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"LazyVim/LazyVim"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb9-7">    <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">opts</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb9-8">      <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">colorscheme</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"onedark"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb9-9">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">},</span></span>
-<span id="cb9-10">  <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">},</span></span>
-<span id="cb9-11"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-</section>
-<section id="other-useful-tools" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="other-useful-tools">Other useful tools</h2>
-<p>While exploring <a href="https://github.com/basecamp/omakub/">Omakub’s repository</a>, I also learned about other useful tools that I’ve now included in my daily workflow:</p>
-<section id="lazydocker" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="lazydocker">lazydocker</h3>
-<p><a href="https://github.com/jesseduffield/lazydocker">lazydocker</a>: A simple terminal UI to manage everything Docker. Much better than everything else I’ve used.</p>
-<p>Docker is great. But, until now, the experience of managing Docker containers sucked.</p>
-<p>Take a look at the main screen:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/lazydocker-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="lazydocker"><img src="https://dylancastillo.co/til/images/lazydocker-screenshot.png" class="img-fluid figure-img" alt="lazydocker"></a></p>
-<figcaption class="margin-caption">lazydocker</figcaption>
-</figure>
-</div>
-</section>
-<section id="lazygit" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="lazygit">lazygit</h3>
-<p><a href="https://github.com/jesseduffield/lazygit">lazygit</a> is a simple terminal UI for <code>git</code>.</p>
-<p>I’ve found it better than GitHub Desktop when doing complex operations.</p>
-<p>Here’s a screenshot of the main screen:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/lazygit-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="lazygit"><img src="https://dylancastillo.co/til/images/lazygit-screenshot.png" class="img-fluid figure-img" alt="lazygit"></a></p>
-<figcaption class="margin-caption">lazygit</figcaption>
-</figure>
-</div>
-</section>
-<section id="eza" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="eza">eza</h3>
-<p><a href="https://github.com/eza-community/eza">eza</a> is an improved version of <code>ls</code>.</p>
-<p>I also added a couple of aliases from Omakub:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">alias</span> ls=<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'eza -lh --group-directories-first --icons --hyperlink'</span></span>
-<span id="cb10-2"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">alias</span> lsa=<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ls -a'</span></span>
-<span id="cb10-3"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">alias</span> lt=<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'eza --tree --level=2 --long --icons --git'</span></span>
-<span id="cb10-4"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">alias</span> lta=<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'lt -a'</span></span></code></pre></div>
-<p>If you run <code>lta</code> you’ll get a nice view of the current directory.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/eza-screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="eza"><img src="https://dylancastillo.co/til/images/eza-screenshot.png" class="img-fluid figure-img" alt="eza"></a></p>
-<figcaption class="margin-caption">eza</figcaption>
-</figure>
-</div>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s all. I hope you learned something from this post or, at least, got a cool looking terminal.</p>
-<p>There’s nothing else to say except that I’m never going to recover those 4 hours of my life.</p>
-<p>I should get back to work.</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I’m sure you’re itching to explain how I’m completely wrong about this, and how you haven’t had to fix anything in years. Please reach me at <a href="mailto:elon@x.com">elon@x.com</a>↩︎</p></li>
-<li id="fn2"><p>Can you even install Ubuntu on a Mac?↩︎</p></li>
-<li id="fn3"><p>Including its horrible website.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {Installing {Alacritty,} {Zellij,} and {Neovim} in {macOS}},
-  date = {2024-06-08},
-  url = {https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“Installing Alacritty, Zellij, and Neovim
-in macOS.”</span> June 8, 2024. <a href="https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html">https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>alacritty</category>
-  <category>zellij</category>
-  <category>neovim</category>
-  <guid>https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html</guid>
-  <pubDate>Sat, 08 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
