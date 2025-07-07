@@ -302,8 +302,13 @@ Subscribe to my newsletter
 <section id="embedding-based-retrieval" class="level4">
 <h4 class="anchored" data-anchor-id="embedding-based-retrieval">Embedding-based retrieval</h4>
 <p>Embedding-based retrieval is a technique that uses the embedding of the query to find the most relevant documents in the vector database.</p>
-<p>For small datasets, you can use k Nearest Neighbors (k-NN) approach to find the most relevant documents, in which you calculate the similarity score between the query vector and every other vector stored in the VectorDB. Sort all the vectors based on these similarity scores and return the ‘k’ most similar vectors (relative to the query).</p>
-<p>For larger datasets, you can use Approximate Nearest Neighbors (ANN) such as Locality-Sensitive Hashing (LSH) or Hierarchical Navigable Small World (HNSW) to find the most relevant documents.</p>
+<p>For small datasets, you can use k Nearest Neighbors (k-NN) approach to find the most relevant documents following this approach:</p>
+<ol type="1">
+<li>Calculate the similarity score between the query vector and every other vector stored in the VectorDB.</li>
+<li>Sort all the vectors based on these similarity scores</li>
+<li>Return the ‘k’ most similar vectors (relative to the query).</li>
+</ol>
+<p>For large datasets, you can use Approximate Nearest Neighbors (ANN) algorithms such as Locality-Sensitive Hashing (LSH) or Hierarchical Navigable Small World (HNSW) to find the most relevant documents.</p>
 </section>
 </section>
 </section>
@@ -323,8 +328,9 @@ Subscribe to my newsletter
 </section>
 <section id="rag-without-vector-database" class="level2">
 <h2 class="anchored" data-anchor-id="rag-without-vector-database">RAG without vector database</h2>
-<p>Let’s go through an example without a VectorDB. We’ll simply <em>augment</em> with the full text of the document.</p>
-<p>First, import the necessary libraries and load the required variables from the .env file.</p>
+<p>Let’s go through an example without a VectorDB. We’ll use a sample document that’s about the conditions of some specific banking product. Our goal is to be able to ask questions about it, and get accurate answers.</p>
+<p>For the first version of the pipeline, we’ll simply <em>augment</em> the context with the full text of the document. So there’s no real retrieval step in this version. We’ll get to that in the next section.</p>
+<p>Start by importing the necessary libraries and load the required variables from the .env file.</p>
 <div id="cell-4" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
@@ -341,8 +347,8 @@ Subscribe to my newsletter
 <p>This code will import the necessary libraries and load the required variables from the .env file.</p>
 <section id="read-the-document-retrieval" class="level3">
 <h3 class="anchored" data-anchor-id="read-the-document-retrieval">Read the document (retrieval)</h3>
-<p>Next, we’ll use a langchain DocumentLoader to load the document. Since, we’re dealing with a PDF file, we’ll use the PyPDFLoader.</p>
-<p>There are many DocumentLoaders available in langchain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
+<p>Next, we’ll use a <code>DocumentLoader</code> to read the document from the PDF file. Since, we’re dealing with a PDF, we’ll use <code>PyPDFLoader</code>.</p>
+<p>There are many other document loaders available in LangChain. You can find the full list <a href="https://python.langchain.com/docs/integrations/document_loaders/">here</a>.</p>
 <div id="cell-8" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>file_path <span class="op">=</span> <span class="st">"../_extras/what-is-rag/bbva.pdf"</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>loader <span class="op">=</span> PyPDFLoader(file_path)</span>
@@ -351,7 +357,7 @@ Subscribe to my newsletter
 <span id="cb3-5"><a href="#cb3-5"></a><span class="cf">for</span> page <span class="kw">in</span> loader.lazy_load():</span>
 <span id="cb3-6"><a href="#cb3-6"></a>    pages.append(page)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A document loader is a class that processes a document and returns a list of Document objects. In the case of the PyPDFLoader, it will read each page of the PDF file and return the text of each page with some additional metadata.</p>
+<p>A <code>DocumentLoader</code> is a class that processes a document and returns a list of <code>Document</code> objects. In the case of <code>PyPDFLoader</code>, it will read each page of the PDF file and return the text of each page with some additional metadata.</p>
 <p>A single page will look like this:</p>
 <div id="cell-10" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>pages[<span class="dv">0</span>].model_dump()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -370,12 +376,11 @@ Subscribe to my newsletter
  'type': 'Document'}</code></pre>
 </div>
 </div>
-<p>You can see that in addition to the page content, it includes metadata about the source file, the page number, etc.</p>
-<p>This document is about the conditions of some specific banking product. We’ll use it to answer a question about it.</p>
+<p>In addition to the page content, each Document object includes metadata about the source file, the page number, and other information.</p>
 </section>
 <section id="augment-the-context" class="level3">
 <h3 class="anchored" data-anchor-id="augment-the-context">Augment the context</h3>
-<p>Now that we have all the pages of the PDF available as a text, let’s build the context we’ll use to generate a response.</p>
+<p>Now that we have all the pages of the PDF available as text, let’s build the context we’ll use to generate a response.</p>
 <p>We’ll define a system and a user prompt. In the system prompt, we’ll define the role of the assistant and in the user prompt, we’ll provide the user question and the documents.</p>
 <div id="cell-14" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>system_prompt <span class="op">=</span> <span class="st">"""</span></span>
@@ -426,7 +431,7 @@ Page 1 to Page 4</code></pre>
 </div>
 </div>
 <p>In this code, we’ve combined the system, user prompt, the pages extracted from the document, and a user question (“What is the main idea of the document?”) into messages the model can understand.</p>
-<p>If you run the code, you’ll get an accurate answer from the model. Try running it with a different question.</p>
+<p>I tried it with a couple of questions and it worked well. The answers were accurate. Try changing the question and see how the model responds.</p>
 <div id="cell-20" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>question <span class="op">=</span> <span class="st">"What are the daily transaction limits?"</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>response <span class="op">=</span> get_response({<span class="st">"question"</span>: question, <span class="st">"documents"</span>: pages_str})</span>
@@ -437,7 +442,7 @@ Page 1 to Page 4</code></pre>
 </div>
 <p>As long as the document contains the information you need, you will likely get an accurate answer from the model.</p>
 <p>But you can do better. Right now, the model is using the full text of the document to answer the question. Most questions only require a few sentences from the document.</p>
-<p>To answer the “What are the daily transaction limits?”, the model used 3,528 input tokens. While in reality, it only needed less than 500 input tokens.</p>
+<p>To answer the “What are the daily transaction limits?”, the model used 3,528 input tokens. While in reality, it needed less than 500 input tokens.</p>
 <p>For small documents such as this one, the difference isn’t a big deal. But when you’re dealing with thousands of documents and potentially millions of tokens, the difference can be significant in terms of costs, latency, and accuracy.</p>
 <p>Let’s see how we can use a VectorDB to improve improve this.</p>
 </section>
@@ -462,7 +467,7 @@ Page 1 to Page 4</code></pre>
 <section id="split-and-index-documents" class="level3">
 <h3 class="anchored" data-anchor-id="split-and-index-documents">Split and index documents</h3>
 <p>The RecursiveCharacterTextSplitter is a class that splits text into chunks of a specified size. It’s a recursive approach that splits the text into smaller chunks using a hierarchy of delimiters (e.g., <code>"\\n\\n"</code>, <code>"\n"</code>, <code>"."</code>, etc.).</p>
-<p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work better. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
+<p>In this example, we’ll use a chunk size of 1,000 characters and an overlap of 200 characters. However, in practice bigger chunks seem to work well and simplify a lot the indexing process. Popular embedding functions can handle up to 8,192 tokens, which is ~32,000 characters. You might want to start there.</p>
 <div id="cell-28" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>text_splitter <span class="op">=</span> RecursiveCharacterTextSplitter(chunk_size<span class="op">=</span><span class="dv">1000</span>, chunk_overlap<span class="op">=</span><span class="dv">200</span>)</span>
 <span id="cb12-2"><a href="#cb12-2"></a>all_splits <span class="op">=</span> text_splitter.split_documents(pages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
