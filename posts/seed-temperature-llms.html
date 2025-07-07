@@ -262,7 +262,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 4, 2025</p>
+      <p class="date-modified">July 7, 2025</p>
     </div>
   </div>
     
@@ -505,7 +505,7 @@ Subscribe to my newsletter
 <span id="cb3-50"><a href="#cb3-50"></a></span>
 <span id="cb3-51"><a href="#cb3-51"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>On a high-level, this function takes a prompt, a temperature value, and a seed, and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
+<p>On a high-level, this function takes a prompt, a temperature value, and a seed (which we’ll ignore for now), and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
 <ol type="1">
 <li><p><strong>Lines 2 to 16</strong>: It takes a prompt, a temperature value, and optionally a seed. If a seed is provided, it sets the random number generator to that value. Then, it processes the prompt to create the required input for the model.</p></li>
 <li><p><strong>Lines 18 to 37</strong>: It chooses to sample from the model or not, based on the temperature value. If temperature is 0, the model will use to a greedy search strategy.</p></li>

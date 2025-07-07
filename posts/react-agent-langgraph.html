@@ -246,7 +246,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 4, 2025</p>
+      <p class="date-modified">July 7, 2025</p>
     </div>
   </div>
     
@@ -318,22 +318,19 @@ Subscribe to my newsletter
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p>As usual, you must start by importing the necessary libraries and loading the environment variables. You’ll use the same model in all the examples, so you’ll define it once here:</p>
-<div id="cell-4" class="cell" data-execution_count="11">
+<div id="cell-4" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> requests</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image, display</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage, ToolMessage</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> langchain_core.tools <span class="im">import</span> tool</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> END, START, MessagesState, StateGraph</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> langgraph.prebuilt <span class="im">import</span> create_react_agent</span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> langsmith <span class="im">import</span> traceable</span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a>load_dotenv()</span>
-<span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image, display</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage, ToolMessage</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> langchain_core.tools <span class="im">import</span> tool</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> END, START, MessagesState, StateGraph</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a>load_dotenv()</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This code:</p>
 <ol type="1">
@@ -346,7 +343,7 @@ Subscribe to my newsletter
 <p>You’ll build an agent that takes a question from a user and has access to a a tool. The tool is a Python REPL that it can use to answer the question.</p>
 <p><strong>You should not use this in production</strong>. This tool can run arbitrary Python code on your device, and that’s not something you want to expose to random people on the internet.</p>
 <p>First, let’s define the <code>run_python_code</code> tool.</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-8" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@tool</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="kw">def</span> run_python_code(code: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">"""Run arbitrary Python code including imports, assignments, and statements. Do not use any external libraries. Save your results as a variable.</span></span>
@@ -386,9 +383,10 @@ Subscribe to my newsletter
 <span id="cb3-37"><a href="#cb3-37"></a>    <span class="cf">finally</span>:</span>
 <span id="cb3-38"><a href="#cb3-38"></a>        sys.stdout <span class="op">=</span> old_stdout</span>
 <span id="cb3-39"><a href="#cb3-39"></a></span>
-<span id="cb3-40"><a href="#cb3-40"></a>tools <span class="op">=</span> [run_python_code]</span>
-<span id="cb3-41"><a href="#cb3-41"></a>tools_mapping <span class="op">=</span> {tool.name: tool <span class="cf">for</span> tool <span class="kw">in</span> tools}</span>
-<span id="cb3-42"><a href="#cb3-42"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-40"><a href="#cb3-40"></a></span>
+<span id="cb3-41"><a href="#cb3-41"></a>tools <span class="op">=</span> [run_python_code]</span>
+<span id="cb3-42"><a href="#cb3-42"></a>tools_mapping <span class="op">=</span> {tool.name: tool <span class="cf">for</span> tool <span class="kw">in</span> tools}</span>
+<span id="cb3-43"><a href="#cb3-43"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This code defines a tool. In <code>LangChain</code> tools are defined as functions decorated with the <code>@tool</code> decorator. These functions must have a <em>docstring</em> because it will be used to describe the tool to the model.</p>
 <p><code>run_python_code</code> is a function that takes a code string and returns the result of executing that code.</p>
@@ -396,7 +394,7 @@ Subscribe to my newsletter
 <p>The mapping is more useful when there are multiple tools, and not a single tool, like in this case. However, I’m showing it here to illustrate how you’d usually do this in a real-world application.</p>
 <p>Finally, you <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
 <p>Then, let’s define a function that encapsulates the logic of the agent.</p>
-<div id="cell-10" class="cell" data-execution_count="3">
+<div id="cell-10" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> run_agent(question: <span class="bu">str</span>):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    messages <span class="op">=</span> [</span>
 <span id="cb4-3"><a href="#cb4-3"></a>        SystemMessage(</span>
@@ -415,7 +413,7 @@ Subscribe to my newsletter
 <span id="cb4-16"><a href="#cb4-16"></a>        ai_message <span class="op">=</span> model_with_tools.invoke(messages)</span>
 <span id="cb4-17"><a href="#cb4-17"></a>        messages.append(ai_message)</span>
 <span id="cb4-18"><a href="#cb4-18"></a></span>
-<span id="cb4-19"><a href="#cb4-19"></a>    <span class="cf">return</span> messages </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="cf">return</span> messages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
 <p>It works as follows:</p>
@@ -593,10 +591,10 @@ Here are 10 random numbers between 1 and 100: 37, 60, 8, 58, 7, 12, 39, 4, 77, 3
 </div>
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
-<div id="cell-24" class="cell" data-execution_count="13">
+<div id="cell-24" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messages <span class="op">=</span> [</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that can run python code."</span>),</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Generate 10 random numbers between 1 and 100"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Generate 10 random numbers between 1 and 100"</span>),</span>
 <span id="cb10-4"><a href="#cb10-4"></a>]</span>
 <span id="cb10-5"><a href="#cb10-5"></a></span>
 <span id="cb10-6"><a href="#cb10-6"></a>messages <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: messages})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -94,7 +94,7 @@ font-style: inherit;">pip</span> install langchain langchain-openai langchain-co
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p>As usual, you must start by importing the necessary libraries and loading the environment variables. You’ll use the same model in all the examples, so you’ll define it once here:</p>
-<div id="cell-4" class="cell" data-execution_count="11">
+<div id="cell-4" class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
@@ -103,51 +103,38 @@ font-style: inherit;">import</span> Literal</span>
 <span id="cb2-2"></span>
 <span id="cb2-3"><span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
 font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
+<span id="cb2-4"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> IPython.display <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> Image, display</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
+<span id="cb2-5"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_core.messages <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> HumanMessage, SystemMessage, ToolMessage</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
+<span id="cb2-6"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_core.tools <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> tool</span>
-<span id="cb2-8"><span class="im" style="color: #00769E;
+<span id="cb2-7"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> ChatOpenAI</span>
-<span id="cb2-9"><span class="im" style="color: #00769E;
+<span id="cb2-8"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langgraph.graph <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> END, START, MessagesState, StateGraph</span>
-<span id="cb2-10"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langgraph.prebuilt <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> create_react_agent</span>
-<span id="cb2-11"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> traceable</span>
-<span id="cb2-12"></span>
-<span id="cb2-13">load_dotenv()</span>
-<span id="cb2-14"></span>
-<span id="cb2-15">model <span class="op" style="color: #5E5E5E;
+<span id="cb2-9"></span>
+<span id="cb2-10">load_dotenv()</span>
+<span id="cb2-11"></span>
+<span id="cb2-12">model <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -170,7 +157,7 @@ font-style: inherit;">0</span>)</span></code></pre></div>
 <p>You’ll build an agent that takes a question from a user and has access to a a tool. The tool is a Python REPL that it can use to answer the question.</p>
 <p><strong>You should not use this in production</strong>. This tool can run arbitrary Python code on your device, and that’s not something you want to expose to random people on the internet.</p>
 <p>First, let’s define the <code>run_python_code</code> tool.</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-8" class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">@tool</span></span>
@@ -348,10 +335,11 @@ font-style: inherit;">finally</span>:</span>
 background-color: null;
 font-style: inherit;">=</span> old_stdout</span>
 <span id="cb3-39"></span>
-<span id="cb3-40">tools <span class="op" style="color: #5E5E5E;
+<span id="cb3-40"></span>
+<span id="cb3-41">tools <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [run_python_code]</span>
-<span id="cb3-41">tools_mapping <span class="op" style="color: #5E5E5E;
+<span id="cb3-42">tools_mapping <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {tool.name: tool <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -360,7 +348,7 @@ font-style: inherit;">for</span> tool <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> tools}</span>
-<span id="cb3-42">model_with_tools <span class="op" style="color: #5E5E5E;
+<span id="cb3-43">model_with_tools <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
 </div>
@@ -370,7 +358,7 @@ font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
 <p>The mapping is more useful when there are multiple tools, and not a single tool, like in this case. However, I’m showing it here to illustrate how you’d usually do this in a real-world application.</p>
 <p>Finally, you <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
 <p>Then, let’s define a function that encapsulates the logic of the agent.</p>
-<div id="cell-10" class="cell" data-execution_count="3">
+<div id="cell-10" class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -420,7 +408,7 @@ font-style: inherit;">=</span> model_with_tools.invoke(messages)</span>
 <span id="cb4-19">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">return</span> messages </span></code></pre></div>
+font-style: inherit;">return</span> messages</span></code></pre></div>
 </div>
 <p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
 <p>It works as follows:</p>
@@ -866,7 +854,7 @@ font-style: inherit;">True</span>).draw_mermaid_png()))</span></code></pre></div
 </div>
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
-<div id="cell-24" class="cell" data-execution_count="13">
+<div id="cell-24" class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
@@ -879,7 +867,7 @@ font-style: inherit;">"You are a helpful assistant that can run python code."</s
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"Generate 10 random numbers between 1 and 100"</span>)</span>
+font-style: inherit;">"Generate 10 random numbers between 1 and 100"</span>),</span>
 <span id="cb10-4">]</span>
 <span id="cb10-5"></span>
 <span id="cb10-6">messages <span class="op" style="color: #5E5E5E;
@@ -7468,7 +7456,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> selected_token</span></code></pre></div>
 </div>
-<p>On a high-level, this function takes a prompt, a temperature value, and a seed, and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
+<p>On a high-level, this function takes a prompt, a temperature value, and a seed (which we’ll ignore for now), and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
 <ol type="1">
 <li><p><strong>Lines 2 to 16</strong>: It takes a prompt, a temperature value, and optionally a seed. If a seed is provided, it sets the random number generator to that value. Then, it processes the prompt to create the required input for the model.</p></li>
 <li><p><strong>Lines 18 to 37</strong>: It chooses to sample from the model or not, based on the temperature value. If temperature is 0, the model will use to a greedy search strategy.</p></li>
