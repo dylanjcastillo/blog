@@ -15,7 +15,317 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 08 Jul 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Prompt chaining with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<section id="what-is-prompt-chaining" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
+<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In --&gt; LLM1["LLM Call 1"]
+    LLM1 -- "Output 1" --&gt; Gate{Gate}
+    Gate -- Pass --&gt; LLM2["LLM Call 2"]
+    Gate -- Fail --&gt; Exit[Exit]
+    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
+<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
+</ul>
+<p>Let’s get to it!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
+<ol type="1">
+<li>Generate a table of contents for the article</li>
+<li>Generate the content of the article</li>
+<li>Update the content of the article if it’s too long</li>
+</ol>
+<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div>
+</div>
+<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
+<div id="4081c493" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">load_dotenv()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
+</pre>
+</div>
+</div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
+<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
+<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
+<p>Here’s the code:</p>
+<div id="97be7efe" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span>
+<span id="cb5-14"></span>
+<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
+<span id="cb5-19">    ),</span>
+<span id="cb5-20">)</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"></span>
+<span id="cb5-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>:</span>
+<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> revised_content.output</span>
+<span id="cb5-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> content.output</span>
+<span id="cb5-31"></span>
+<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18:54:00.987 Run workflow
+18:54:00.988   toc_agent run
+18:54:00.989     chat gpt-4.1-mini
+18:54:02.911   article_agent run
+18:54:02.911     chat gpt-4.1-mini
+18:54:18.621   editor_agent run
+18:54:18.622     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
+<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
+</figure>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Chaining with {Pydantic} {AI}},
+  date = {2025-07-08},
+  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Prompt Chaining with Pydantic AI.”</span>
+July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
+  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Building ReAct agents with (and without) LangGraph</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -934,7 +1244,7 @@ LangGraph.”</span> July 4, 2025. <a href="https://dylancastillo.co/posts/react
 
 
 
-<p>I wanted to get more familiar with Pydantic AI, so I decided to build a ReAct agent with multiple tools.</p>
+<p>I wanted to get more familiar with Pydantic AI, so I decided to build a <a href="https://arxiv.org/abs/2210.03629">Reasoning and Acting (ReAct)</a> agent with multiple tools.</p>
 <p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -994,7 +1304,7 @@ font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
 <section id="react-agent" class="level2">
 <h2 class="anchored" data-anchor-id="react-agent">ReAct Agent</h2>
 <p>I decided to make an agent that had access to a tool to get the weather and another one that checks if the response that’s going to be sent to the user follows the company guidelines.</p>
-<p>Here’s thee code:</p>
+<p>Here’s the code:</p>
 <div id="d4edf351" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
@@ -15248,739 +15558,6 @@ VPS on Hetzner Using Terraform.”</span> August 11, 2024. <a href="https://dyla
   <category>terraform</category>
   <guid>https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</guid>
   <pubDate>Sun, 11 Aug 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>A Dockerfile for a Django app using Poetry</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/django-poetry-dockerfile.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><a href="https://levels.io/">Pieter Levels</a> makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply <a href="https://news.ycombinator.com/item?id=28838537">uploading files via FTP</a>.</p>
-<p>If you focus on what your users want and know how to market your product, you can make a lot of money.</p>
-<p>Which is why I decided to stay poor and spent an inordinate amount of time improving my deployment process.</p>
-<p>Who needs money when you can get the satisfaction of that beautiful green check mark after you’ve run your CI/CD pipeline?</p>
-<p>Anyways…</p>
-<p>These days, I’m using <a href="https://kamal-deploy.org/">kamal</a> to deploy most of my projects.</p>
-<p>I used to hate Docker. But, like with Gollum, I’ve come to realize that it’s not that bad after all.</p>
-<p>I wanted to create a simple Dockerfile to run a Django app using Poetry, with a SQLite database, and hot reload. Additionally, I wanted to switch between the development and production versions of the container.</p>
-<p>So here’s a simple Dockerfile that does just that.</p>
-<section id="project-structure" class="level2">
-<h2 class="anchored" data-anchor-id="project-structure">Project structure</h2>
-<p>This is my project structure:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">.</span></span>
-<span id="cb1-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> db/</span>
-<span id="cb1-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> src/</span>
-<span id="cb1-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> entrypoint.sh</span>
-<span id="cb1-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> Dockerfile</span>
-<span id="cb1-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> docker-compose.yml</span>
-<span id="cb1-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">├──</span> poetry.lock</span>
-<span id="cb1-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">└──</span> pyproject.toml</span></code></pre></div>
-<p>The <code>src/</code> directory contains the Django project. The <code>db/</code> directory contains the SQLite database. The <code>entrypoint.sh</code> file is the entrypoint for the Docker container.</p>
-<p>If your project is not structured in a similar way, you might need to adapt the files below to your needs.</p>
-</section>
-<section id="dockerfile" class="level2">
-<h2 class="anchored" data-anchor-id="dockerfile">Dockerfile</h2>
-<p>I created a <code>Dockerfile</code> that fulfilled this:</p>
-<ol type="1">
-<li>A base stage with Python 3.10 and Poetry installed.</li>
-<li>A builder stage that installs the dependencies.</li>
-<li>A runner stage that copies the virtual environment from the builder stage.</li>
-<li>A development stage that runs the entrypoint as a root user.</li>
-<li>A production stage that runs the entrypoint as a non-root user.</li>
-</ol>
-<p>Here’s the full <code>Dockerfile</code>:</p>
-<details>
-<summary>
-Dockerfile
-</summary>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource dockerfile number-lines code-with-copy"><code class="sourceCode dockerfile"><span id="cb2-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> python:3.10-slim <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> base</span>
-<span id="cb2-2"></span>
-<span id="cb2-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENV</span> POETRY_HOME=/opt/poetry</span>
-<span id="cb2-4"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENV</span> PATH=${POETRY_HOME}/bin:${PATH}</span>
-<span id="cb2-5"></span>
-<span id="cb2-6"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> update <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb2-7">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--no-install-recommends</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb2-8">    curl <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb2-9">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> clean <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb2-10">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rm</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-rf</span> /var/lib/apt/lists/<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">*</span></span>
-<span id="cb2-11"></span>
-<span id="cb2-12"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">curl</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-sSL</span> https://install.python-poetry.org <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--version</span></span>
-<span id="cb2-13"></span>
-<span id="cb2-14"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> base <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> builder</span>
-<span id="cb2-15"></span>
-<span id="cb2-16"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app</span>
-<span id="cb2-17"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> poetry.lock pyproject.toml ./</span>
-<span id="cb2-18"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-19"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--only</span> main <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--no-interaction</span></span>
-<span id="cb2-20"></span>
-<span id="cb2-21"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> base <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> runner</span>
-<span id="cb2-22"></span>
-<span id="cb2-23"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app</span>
-<span id="cb2-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">--from=builder</span> /app/.venv/ /app/.venv/</span>
-<span id="cb2-25"></span>
-<span id="cb2-26"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> . /app</span>
-<span id="cb2-27"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> /db</span>
-<span id="cb2-28"></span>
-<span id="cb2-29"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">EXPOSE</span> 8000</span>
-<span id="cb2-30"></span>
-<span id="cb2-31"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> +x /app/src/entrypoint.sh</span>
-<span id="cb2-32"></span>
-<span id="cb2-33"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> runner <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> development</span>
-<span id="cb2-34"></span>
-<span id="cb2-35"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app/src</span>
-<span id="cb2-36"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENTRYPOINT</span> [ <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/app/src/entrypoint.sh"</span> ]</span>
-<span id="cb2-37"></span>
-<span id="cb2-38"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> runner <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> production</span>
-<span id="cb2-39"></span>
-<span id="cb2-40"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Set user and group</span></span>
-<span id="cb2-41"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> user=django</span>
-<span id="cb2-42"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> group=django</span>
-<span id="cb2-43"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> uid=1000</span>
-<span id="cb2-44"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> gid=1000</span>
-<span id="cb2-45"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">groupadd</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-g</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${gid}</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${group}</span></span>
-<span id="cb2-46"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">useradd</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-u</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${uid}</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-g</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${group}</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> /bin/sh <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${user}</span></span>
-<span id="cb2-47"></span>
-<span id="cb2-48"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Switch to user</span></span>
-<span id="cb2-49"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chown</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${uid}</span>:<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${gid}</span> /app</span>
-<span id="cb2-50"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chown</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${uid}</span>:<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${gid}</span> /db</span>
-<span id="cb2-51"></span>
-<span id="cb2-52"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">USER</span> ${uid}:${gid}</span>
-<span id="cb2-53"></span>
-<span id="cb2-54"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app/src</span>
-<span id="cb2-55"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENTRYPOINT</span> [ <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/app/src/entrypoint.sh"</span> ]</span></code></pre></div>
-</details>
-</section>
-<section id="entrypoint" class="level2">
-<h2 class="anchored" data-anchor-id="entrypoint">Entrypoint</h2>
-<p>For <code>entrypoint.sh</code> I use this:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#!/bin/sh</span></span>
-<span id="cb3-2"></span>
-<span id="cb3-3"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">[</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$ENVIRONMENT</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"production"</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">then</span></span>
-<span id="cb3-4">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Running in production mode"</span></span>
-<span id="cb3-5">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">exec</span> poetry run gunicorn <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> gunicorn.conf.py</span>
-<span id="cb3-6"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">elif</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">[</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$ENVIRONMENT</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"development"</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">then</span></span>
-<span id="cb3-7">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Running in development mode"</span></span>
-<span id="cb3-8">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">exec</span> poetry run python manage.py runserver 0.0.0.0:8000</span>
-<span id="cb3-9"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span></span>
-<span id="cb3-10">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ENVIRONMENT variable is not set"</span></span>
-<span id="cb3-11"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fi</span></span></code></pre></div>
-<p>If <code>ENVIRONMENT</code> is set to <code>production</code>, the container will run the production server using gunicorn. If it is <code>development</code>, the container will run Django’s development server.</p>
-</section>
-<section id="docker-compose" class="level2">
-<h2 class="anchored" data-anchor-id="docker-compose">Docker-compose</h2>
-<p>Then, I have a docker-compose that lets you run the development and production containers:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">services</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">app</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">build</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">context</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> .</span></span>
-<span id="cb4-5"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">target</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ${ENVIRONMENT}</span></span>
-<span id="cb4-6"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">platform</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> linux/amd64</span></span>
-<span id="cb4-7"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">environment</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-8"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}</span></span>
-<span id="cb4-9"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_DEBUG=${DJANGO_DEBUG}</span></span>
-<span id="cb4-10"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SECURE_SSL_REDIRECT=${DJANGO_SECURE_SSL_REDIRECT}</span></span>
-<span id="cb4-11"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SECURE_HSTS_SECONDS=${DJANGO_SECURE_HSTS_SECONDS}</span></span>
-<span id="cb4-12"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=${DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS}</span></span>
-<span id="cb4-13"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SECURE_HSTS_PRELOAD=${DJANGO_SECURE_HSTS_PRELOAD}</span></span>
-<span id="cb4-14"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_SESSION_COOKIE_SECURE=${DJANGO_SESSION_COOKIE_SECURE}</span></span>
-<span id="cb4-15"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> DJANGO_CSRF_COOKIE_SECURE=${DJANGO_CSRF_COOKIE_SECURE}</span></span>
-<span id="cb4-16"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> CACHE_REDIS_URL=${CACHE_REDIS_URL}</span></span>
-<span id="cb4-17"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ENVIRONMENT=${ENVIRONMENT}</span></span>
-<span id="cb4-18"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">env_file</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-19"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> .env</span></span>
-<span id="cb4-20"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ports</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-21"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"8000:8000"</span></span>
-<span id="cb4-22"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">volumes</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"./db/:/app/db/"</span></span>
-<span id="cb4-24"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">develop</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-25"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">watch</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb4-26"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">action</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> sync</span></span>
-<span id="cb4-27"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">path</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ./src/</span></span>
-<span id="cb4-28"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">target</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> /app/src</span></span>
-<span id="cb4-29"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">action</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> rebuild</span></span>
-<span id="cb4-30"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">path</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> pyproject.toml</span></span></code></pre></div>
-<p>In this <code>docker-compose</code>, I use <code>ENVIRONMENT</code> to switch between the development and production containers.</p>
-<p>I also use the <a href="https://docs.docker.com/compose/file-watch/">Compose Watch</a> to reload the container when I make changes to the code and to rebuild the container when I make changes to the <code>pyproject.toml</code> file.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s it. I hope you find this useful.</p>
-<p>And remember, while Pieter is busy counting his cash, here you are counting the number of successful builds.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {A {Dockerfile} for a {Django} App Using {Poetry}},
-  date = {2024-06-22},
-  url = {https://dylancastillo.co/til/django-poetry-dockerfile.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“A Dockerfile for a Django App Using
-Poetry.”</span> June 22, 2024. <a href="https://dylancastillo.co/til/django-poetry-dockerfile.html">https://dylancastillo.co/til/django-poetry-dockerfile.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>python</category>
-  <category>django</category>
-  <guid>https://dylancastillo.co/til/django-poetry-dockerfile.html</guid>
-  <pubDate>Sat, 22 Jun 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

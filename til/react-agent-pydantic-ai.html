@@ -233,7 +233,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 7, 2025</p>
+      <p class="date-modified">July 8, 2025</p>
     </div>
   </div>
     
@@ -244,7 +244,7 @@ Subscribe to my newsletter
 </header>
 
 
-<p>I wanted to get more familiar with Pydantic AI, so I decided to build a ReAct agent with multiple tools.</p>
+<p>I wanted to get more familiar with Pydantic AI, so I decided to build a <a href="https://arxiv.org/abs/2210.03629">Reasoning and Acting (ReAct)</a> agent with multiple tools.</p>
 <p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -278,7 +278,7 @@ Subscribe to my newsletter
 <section id="react-agent" class="level2">
 <h2 class="anchored" data-anchor-id="react-agent">ReAct Agent</h2>
 <p>I decided to make an agent that had access to a tool to get the weather and another one that checks if the response that’s going to be sent to the user follows the company guidelines.</p>
-<p>Here’s thee code:</p>
+<p>Here’s the code:</p>
 <div id="d4edf351" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
