@@ -188,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#workflows" id="toc-workflows" class="nav-link" data-scroll-target="#workflows">Workflows</a>
   <ul class="collapse">
   <li><a href="#prompt-chaining" id="toc-prompt-chaining" class="nav-link" data-scroll-target="#prompt-chaining">Prompt chaining</a></li>
-  <li><a href="#router" id="toc-router" class="nav-link" data-scroll-target="#router">Router</a></li>
+  <li><a href="#routing" id="toc-routing" class="nav-link" data-scroll-target="#routing">Routing</a></li>
   <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization">Parallelization</a></li>
   <li><a href="#orchestrator-workers" id="toc-orchestrator-workers" class="nav-link" data-scroll-target="#orchestrator-workers">Orchestrator-workers</a></li>
   <li><a href="#evaluator-optimizer" id="toc-evaluator-optimizer" class="nav-link" data-scroll-target="#evaluator-optimizer">Evaluator-optimizer</a></li>
@@ -545,18 +545,18 @@ Subscribe to my newsletter
  'revised_content': 'Artificial Intelligence (AI) simulates human intelligence in machines, enabling tasks like learning, reasoning, and problem-solving. Since its inception at the 1956 Dartmouth Conference, AI has evolved from rule-based systems to advanced machine learning and deep learning models. AI types include Narrow AI, designed for specific tasks; General AI, capable of human-like understanding; and Superintelligent AI, a hypothetical superior intellect. AI revolutionizes industries—improving healthcare diagnostics, financial fraud detection, retail personalization, manufacturing automation, transportation logistics, and education. Benefits include efficiency, accuracy, data-driven insights, innovation, and personalization. However, AI raises challenges such as bias, privacy, job displacement, transparency, and ethical use. The future promises enhanced human-AI collaboration, ethical development, and AI-driven solutions for global issues. Responsible AI integration will transform society, fostering progress and innovation.'}</code></pre>
 </div>
 </div>
-<p>That’s it for prompt chaining. Next, you’ll see how to implement a router workflow.</p>
+<p>That’s it for prompt chaining. Next, you’ll see how to implement a routing workflow.</p>
 </section>
 </section>
-<section id="router" class="level3">
-<h3 class="anchored" data-anchor-id="router">Router</h3>
+<section id="routing" class="level3">
+<h3 class="anchored" data-anchor-id="routing">Routing</h3>
 <p>Routing is a sorting system that sends each task to the right place for the best handling. This process can be managed by an LLM or a traditional classification model. It makes sense to use when a system needs to apply different logic to different types of queries.</p>
 <p><strong>Examples:</strong></p>
 <ul>
 <li>Classify complexity of question and adjust model depending on it</li>
 <li>Classify type of query and use specialized tools (e.g., indexes, prompts)</li>
 </ul>
-<p>I’ll walk you through a simple example of a router workflow. The workflow will be composed of two steps:</p>
+<p>I’ll walk you through a simple example of a routing workflow. The workflow will be composed of two steps:</p>
 <ol type="1">
 <li>Classify the type of query</li>
 <li>Route the query to the right place</li>
@@ -644,7 +644,7 @@ Subscribe to my newsletter
 <span id="cb16-12"><a href="#cb16-12"></a></span>
 <span id="cb16-13"><a href="#cb16-13"></a>output <span class="op">=</span> run_workflow(<span class="st">"Write an article about the meaning of life"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>run_workflow</code> takes the user’s message, classifies it to determine the intent, and then routes it to the appropriate specialized function. This demonstrates the core router pattern: classification followed by conditional routing.</p>
+<p><code>run_workflow</code> takes the user’s message, classifies it to determine the intent, and then routes it to the appropriate specialized function. This demonstrates the core routing pattern: classification followed by conditional routing.</p>
 <p>Now let’s implement the same workflow using LangGraph.</p>
 </section>
 <section id="langgraph-1" class="level4">
@@ -1400,7 +1400,7 @@ Summarized evaluations: All evaluations consistently state that the text is inap
 <p>Throughout this tutorial, you’ve seen how different agentic workflow patterns solve specific types of problems:</p>
 <ul>
 <li><strong>Prompt Chaining</strong>: Break complex tasks into sequential steps with clear handoffs</li>
-<li><strong>Router</strong>: Classify inputs and route them to specialized handlers</li>
+<li><strong>Routing</strong>: Classify inputs and route them to specialized handlers</li>
 <li><strong>Parallelization</strong>: Run multiple evaluations or processes simultaneously for speed and diversity</li>
 <li><strong>Orchestrator-Workers</strong>: Dynamically decompose tasks and distribute work</li>
 <li><strong>Evaluator-Optimizer</strong>: Create feedback loops for iterative quality improvement</li>
