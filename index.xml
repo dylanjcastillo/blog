@@ -1476,47 +1476,52 @@ font-style: inherit;">return</span> END</span></code></pre></div>
 </div>
 <p>This is how it works:</p>
 <ol type="1">
-<li><code>llm_call</code>: Sends the conversation history to the LLM to get the next response.</li>
-<li><code>tool_node</code>: If the LLM’s response is a request to use a tool, this function executes the tool with the specified arguments.</li>
-<li><code>should_continue</code>: This is the control logic. It checks the LLM’s last message. If it’s a tool request, it routes to the tool_node; otherwise, it ends the conversation.</li>
+<li><code>call_llm</code>: Sends the conversation history to the LLM to get the next response.</li>
+<li><code>call_tool</code>: If the LLM’s response is a request to use a tool, this function executes the tool with the specified arguments.</li>
+<li><code>should_continue</code>: This is the control logic. It checks the LLM’s last message. If it’s a tool request, it routes to the <code>call_tool</code>; otherwise, it ends the conversation.</li>
 </ol>
-<p><code>llm_call</code> and <code>tool_node</code> take <code>MessagesState</code> as input and return a the message key with the new message. This updates the <code>messages</code> key in the <code>MessagesState</code>. <code>should_continue</code> takes <code>MessagesState</code> act as a router, so it decides if a tool should be executed or if the conversation should end.</p>
+<p><code>call_llm</code> and <code>call_tool</code> take <code>MessagesState</code> as input and return a the message key with the new message. This updates the <code>messages</code> key in the <code>MessagesState</code>. <code>should_continue</code> takes <code>MessagesState</code> act as a router, so it decides if a tool should be executed or if the conversation should end.</p>
+</section>
+</section>
+<section id="vanilla-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="vanilla-implementation">Vanilla implementation</h2>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"></code></pre></div>
 <div id="cell-20" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">agent_builder <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">agent_builder <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> StateGraph(MessagesState)</span>
-<span id="cb8-2"></span>
-<span id="cb8-3">agent_builder.add_node(<span class="st" style="color: #20794D;
+<span id="cb9-2"></span>
+<span id="cb9-3">agent_builder.add_node(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"llm"</span>, call_llm)</span>
-<span id="cb8-4">agent_builder.add_node(<span class="st" style="color: #20794D;
+<span id="cb9-4">agent_builder.add_node(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"environment"</span>, call_tool)</span>
-<span id="cb8-5"></span>
-<span id="cb8-6">agent_builder.add_edge(START, <span class="st" style="color: #20794D;
+<span id="cb9-5"></span>
+<span id="cb9-6">agent_builder.add_edge(START, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"llm"</span>)</span>
-<span id="cb8-7">agent_builder.add_conditional_edges(</span>
-<span id="cb8-8">    <span class="st" style="color: #20794D;
+<span id="cb9-7">agent_builder.add_conditional_edges(</span>
+<span id="cb9-8">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"llm"</span>,</span>
-<span id="cb8-9">    should_continue,</span>
-<span id="cb8-10">    {</span>
-<span id="cb8-11">        <span class="st" style="color: #20794D;
+<span id="cb9-9">    should_continue,</span>
+<span id="cb9-10">    {</span>
+<span id="cb9-11">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Action"</span>: <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"environment"</span>,</span>
-<span id="cb8-12">        END: END,</span>
-<span id="cb8-13">    },</span>
-<span id="cb8-14">)</span>
-<span id="cb8-15">agent_builder.add_edge(<span class="st" style="color: #20794D;
+<span id="cb9-12">        END: END,</span>
+<span id="cb9-13">    },</span>
+<span id="cb9-14">)</span>
+<span id="cb9-15">agent_builder.add_edge(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"environment"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"llm"</span>)</span>
-<span id="cb8-16"></span>
-<span id="cb8-17">agent <span class="op" style="color: #5E5E5E;
+<span id="cb9-16"></span>
+<span id="cb9-17">agent <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> agent_builder.<span class="bu" style="color: null;
 background-color: null;
@@ -1525,7 +1530,7 @@ font-style: inherit;">compile</span>()</span></code></pre></div>
 <p>This code sets up the logic of the agent. It starts with a call to the LLM. The LLM then decides whether to use a tool or to finish the task. If it uses a tool, the tool’s output is sent back to the LLM for the next step. This “think-act” loop continues until the agent decides the task is complete.</p>
 <p>You can use <code>LangGraph</code> to visualize the agent’s flow:</p>
 <div id="cell-22" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1">display(Image(agent.get_graph(xray<span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">display(Image(agent.get_graph(xray<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
@@ -1540,22 +1545,22 @@ font-style: inherit;">True</span>).draw_mermaid_png()))</span></code></pre></div
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
 <div id="cell-24" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">messages <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb10-2">    SystemMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb11-2">    SystemMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"You are a helpful assistant that can run python code."</span>),</span>
-<span id="cb10-3">    HumanMessage(content<span class="op" style="color: #5E5E5E;
+<span id="cb11-3">    HumanMessage(content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Generate 10 random numbers between 1 and 100"</span>),</span>
-<span id="cb10-4">]</span>
-<span id="cb10-5"></span>
-<span id="cb10-6">messages <span class="op" style="color: #5E5E5E;
+<span id="cb11-4">]</span>
+<span id="cb11-5"></span>
+<span id="cb11-6">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> agent.invoke({<span class="st" style="color: #20794D;
 background-color: null;
@@ -1563,7 +1568,7 @@ font-style: inherit;">"messages"</span>: messages})</span></code></pre></div>
 </div>
 <p>You can review the process by printing the messages:</p>
 <div id="cell-26" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="cf" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> m <span class="kw" style="color: #003B4F;
@@ -1572,7 +1577,7 @@ font-weight: bold;
 font-style: inherit;">in</span> messages[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"messages"</span>]:</span>
-<span id="cb11-2">    m.pretty_print()</span></code></pre></div>
+<span id="cb12-2">    m.pretty_print()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> System Message </span>================================
@@ -1619,7 +1624,6 @@ Here are 10 random numbers between 1 and 100: 77, 37, 97, 26, 22, 29, 58, 82, 17
 </div>
 </div>
 <p>That’s all!</p>
-</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>

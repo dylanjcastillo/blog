@@ -2,206 +2,206 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dylancastillo.co/projects.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/index.html</loc>
-    <lastmod>2025-07-09T08:45:27.579Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.213Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/django-poetry-dockerfile.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/migrate-blog-from-ghost-to-quarto.html</loc>
-    <lastmod>2025-07-09T08:45:27.673Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/counting-tokens.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/live-components-with-django-and-htmx.html</loc>
-    <lastmod>2025-07-09T08:45:27.672Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</loc>
-    <lastmod>2025-07-09T08:45:27.673Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/entrepreneurship-as-a-risk-management-strategy.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2024-personal-snapshot.html</loc>
-    <lastmod>2025-07-09T08:45:27.581Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.215Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/opensearch-python.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/fastapi-nginx-gunicorn.html</loc>
-    <lastmod>2025-07-09T08:45:27.584Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/nlp-snippets-clean-and-tokenize-text-with-python.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/say-what-you-mean-sometimes.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/prompt-engineering-101.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/how-to-use-github-deploy-keys.html</loc>
-    <lastmod>2025-07-09T08:45:27.585Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.219Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/4-ways-to-improve-your-plotly-graphs.html</loc>
-    <lastmod>2025-07-09T08:45:27.581Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.216Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/clustering-documents-with-openai-langchain-hdbscan.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/semantic-search-elasticsearch-openai-langchain.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/gemini-structured-outputs.html</loc>
-    <lastmod>2025-07-09T08:45:27.584Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/mind-reading-algorithms.html</loc>
-    <lastmod>2025-07-09T08:45:27.657Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/react-agent-langgraph.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/text-classification-using-python-and-scikit-learn.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/elasticseach-python.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/seed-temperature-llms.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/my-entrepreneur-first-experience.html</loc>
-    <lastmod>2025-07-09T08:45:27.657Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/function-calling-structured-outputs.html</loc>
-    <lastmod>2025-07-09T08:45:27.584Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/ai-search-engine-fastapi-qdrant-chatgpt.html</loc>
-    <lastmod>2025-07-09T08:45:27.582Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2021-personal-snapshot.html</loc>
-    <lastmod>2025-07-09T08:45:27.581Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.215Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/what-is-rag.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/2023-personal-snapshot.html</loc>
-    <lastmod>2025-07-09T08:45:27.581Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.215Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/classify-images-with-gemini-flash-1.5.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/nlp-snippets-cluster-documents-using-word2vec.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/key-parameters-llms.html</loc>
-    <lastmod>2025-07-09T08:45:27.657Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.284Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/fast-and-async-in-python-accelerate-your-requests-using-asyncio.html</loc>
-    <lastmod>2025-07-09T08:45:27.584Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.218Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.html</loc>
-    <lastmod>2025-07-09T08:45:27.585Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.219Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/agentic-workflows-langgraph.html</loc>
-    <lastmod>2025-07-09T08:45:27.582Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/llm-pydantic-order-matters.html</loc>
-    <lastmod>2025-07-09T08:45:27.657Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.284Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/semantic-search-with-opensearch-cohere-and-fastapi.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/build-a-site-quickly-using-google-sheets-python-and-aws.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/tips-for-standing-out-on-linkedin.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/python-pyscript-101.html</loc>
-    <lastmod>2025-07-09T08:45:27.658Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/posts/code-interpreter-chatbot-pyodide-langchain-openai.html</loc>
-    <lastmod>2025-07-09T08:45:27.583Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.217Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html</loc>
-    <lastmod>2025-07-09T08:45:27.659Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.286Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/react-agent-pydantic-ai.html</loc>
-    <lastmod>2025-07-09T08:45:27.673Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html</loc>
-    <lastmod>2025-07-09T08:45:27.672Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/routing-pydantic-ai.html</loc>
-    <lastmod>2025-07-09T08:45:27.673Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/til/transforming-images-to-webp.html</loc>
-    <lastmod>2025-07-09T08:45:27.673Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.300Z</lastmod>
   </url>
   <url>
     <loc>https://dylancastillo.co/about.html</loc>
-    <lastmod>2025-07-09T08:45:27.578Z</lastmod>
+    <lastmod>2025-07-09T09:23:08.213Z</lastmod>
   </url>
 </urlset>
