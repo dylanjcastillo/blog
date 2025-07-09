@@ -193,7 +193,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#vanilla-react-agent" id="toc-vanilla-react-agent" class="nav-link" data-scroll-target="#vanilla-react-agent">Vanilla ReAct agent</a></li>
   <li><a href="#langgraph-react-agent" id="toc-langgraph-react-agent" class="nav-link" data-scroll-target="#langgraph-react-agent">LangGraph ReAct agent</a></li>
   </ul></li>
-  <li><a href="#vanilla-implementation" id="toc-vanilla-implementation" class="nav-link" data-scroll-target="#vanilla-implementation">Vanilla implementation</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
@@ -561,34 +560,29 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 <li><code>should_continue</code>: This is the control logic. It checks the LLM’s last message. If it’s a tool request, it routes to the <code>call_tool</code>; otherwise, it ends the conversation.</li>
 </ol>
 <p><code>call_llm</code> and <code>call_tool</code> take <code>MessagesState</code> as input and return a the message key with the new message. This updates the <code>messages</code> key in the <code>MessagesState</code>. <code>should_continue</code> takes <code>MessagesState</code> act as a router, so it decides if a tool should be executed or if the conversation should end.</p>
-</section>
-</section>
-<section id="vanilla-implementation" class="level2">
-<h2 class="anchored" data-anchor-id="vanilla-implementation">Vanilla implementation</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="cell-20" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>agent_builder <span class="op">=</span> StateGraph(MessagesState)</span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>agent_builder.add_node(<span class="st">"llm"</span>, call_llm)</span>
-<span id="cb9-4"><a href="#cb9-4"></a>agent_builder.add_node(<span class="st">"environment"</span>, call_tool)</span>
-<span id="cb9-5"><a href="#cb9-5"></a></span>
-<span id="cb9-6"><a href="#cb9-6"></a>agent_builder.add_edge(START, <span class="st">"llm"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>agent_builder.add_conditional_edges(</span>
-<span id="cb9-8"><a href="#cb9-8"></a>    <span class="st">"llm"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9"></a>    should_continue,</span>
-<span id="cb9-10"><a href="#cb9-10"></a>    {</span>
-<span id="cb9-11"><a href="#cb9-11"></a>        <span class="st">"Action"</span>: <span class="st">"environment"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>        END: END,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>    },</span>
-<span id="cb9-14"><a href="#cb9-14"></a>)</span>
-<span id="cb9-15"><a href="#cb9-15"></a>agent_builder.add_edge(<span class="st">"environment"</span>, <span class="st">"llm"</span>)</span>
-<span id="cb9-16"><a href="#cb9-16"></a></span>
-<span id="cb9-17"><a href="#cb9-17"></a>agent <span class="op">=</span> agent_builder.<span class="bu">compile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>agent_builder <span class="op">=</span> StateGraph(MessagesState)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>agent_builder.add_node(<span class="st">"llm"</span>, call_llm)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>agent_builder.add_node(<span class="st">"environment"</span>, call_tool)</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a>agent_builder.add_edge(START, <span class="st">"llm"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>agent_builder.add_conditional_edges(</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="st">"llm"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9"></a>    should_continue,</span>
+<span id="cb8-10"><a href="#cb8-10"></a>    {</span>
+<span id="cb8-11"><a href="#cb8-11"></a>        <span class="st">"Action"</span>: <span class="st">"environment"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12"></a>        END: END,</span>
+<span id="cb8-13"><a href="#cb8-13"></a>    },</span>
+<span id="cb8-14"><a href="#cb8-14"></a>)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>agent_builder.add_edge(<span class="st">"environment"</span>, <span class="st">"llm"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16"></a></span>
+<span id="cb8-17"><a href="#cb8-17"></a>agent <span class="op">=</span> agent_builder.<span class="bu">compile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This code sets up the logic of the agent. It starts with a call to the LLM. The LLM then decides whether to use a tool or to finish the task. If it uses a tool, the tool’s output is sent back to the LLM for the next step. This “think-act” loop continues until the agent decides the task is complete.</p>
 <p>You can use <code>LangGraph</code> to visualize the agent’s flow:</p>
 <div id="cell-22" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>display(Image(agent.get_graph(xray<span class="op">=</span><span class="va">True</span>).draw_mermaid_png()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>display(Image(agent.get_graph(xray<span class="op">=</span><span class="va">True</span>).draw_mermaid_png()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -599,17 +593,17 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
 <div id="cell-24" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>messages <span class="op">=</span> [</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that can run python code."</span>),</span>
-<span id="cb11-3"><a href="#cb11-3"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Generate 10 random numbers between 1 and 100"</span>),</span>
-<span id="cb11-4"><a href="#cb11-4"></a>]</span>
-<span id="cb11-5"><a href="#cb11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6"></a>messages <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: messages})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messages <span class="op">=</span> [</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that can run python code."</span>),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Generate 10 random numbers between 1 and 100"</span>),</span>
+<span id="cb10-4"><a href="#cb10-4"></a>]</span>
+<span id="cb10-5"><a href="#cb10-5"></a></span>
+<span id="cb10-6"><a href="#cb10-6"></a>messages <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: messages})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can review the process by printing the messages:</p>
 <div id="cell-26" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="cf">for</span> m <span class="kw">in</span> messages[<span class="st">"messages"</span>]:</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    m.pretty_print()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="cf">for</span> m <span class="kw">in</span> messages[<span class="st">"messages"</span>]:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    m.pretty_print()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> System Message </span>================================
@@ -656,6 +650,7 @@ Here are 10 random numbers between 1 and 100: 77, 37, 97, 26, 22, 29, 58, 82, 17
 </div>
 </div>
 <p>That’s all!</p>
+</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
