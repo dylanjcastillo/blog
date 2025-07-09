@@ -17,7 +17,7 @@
 <generator>quarto-1.7.32</generator>
 <lastBuildDate>Wed, 09 Jul 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Parallelization and orchestrator-worker workflows with Pydantic AI</title>
+  <title>Parallelization and orchestrator-workers workflows with Pydantic AI</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</link>
   <description><![CDATA[ 
@@ -616,14 +616,14 @@ font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Parallelization and Orchestrator-Worker Workflows with
+  title = {Parallelization and Orchestrator-Workers Workflows with
     {Pydantic} {AI}},
   date = {2025-07-09},
   url = {https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Parallelization and Orchestrator-Worker
+Castillo, Dylan. 2025. <span>“Parallelization and Orchestrator-Workers
 Workflows with Pydantic AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
