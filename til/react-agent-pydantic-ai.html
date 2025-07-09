@@ -245,9 +245,17 @@ Subscribe to my newsletter
 
 
 <p>I wanted to get more familiar with Pydantic AI, so I decided to build a <a href="https://arxiv.org/abs/2210.03629">Reasoning and Acting (ReAct)</a> agent with multiple tools.</p>
-<p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
+<p>I’ve also written other TILs about Pydantic AI:</p>
+<ul>
+<li><a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">Prompt chaining</a></li>
+<li><a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a></li>
+<li><a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a></li>
+<li><a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></li>
+</ul>
+<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/react-agent-pydantic-ai.ipynb">here</a>.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
 <div id="2a607486" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>

@@ -247,6 +247,14 @@ Subscribe to my newsletter
 
 <p>I’m trying to get more familiar with Pydantic AI, so I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
 <p>In this post, I’ll build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-routing">routing</a> workflow. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<p>I’ve also written other TILs about Pydantic AI:</p>
+<ul>
+<li><a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">Prompt chaining</a></li>
+<li><a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a></li>
+<li><a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a></li>
+<li><a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></li>
+</ul>
+<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/routing-pydantic-ai.ipynb">here</a>.</p>
 <section id="what-is-router" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-router">What is router?</h2>
 <p>Routing is a workflow pattern that takes the input, classifies it and then sends it to the right place for the best handling. This process can be managed by an LLM or a traditional classification model. It makes sense to use when a system needs to apply different logic to different types of queries.</p>
