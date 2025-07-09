@@ -711,7 +711,8 @@ July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">ht
 
 <p>As Large Language Models (LLMs) have become more powerful, I’ve started to see increasing interest from clients in building agents.</p>
 <p>The problem is that most of the use cases clients have in mind for agents are better suited for <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">agentic workflows</a>. Agents are a good fit for tasks without a predefined path and where the order of steps is not known beforehand. Agentic workflows, on the other hand, are the right choice for tasks where both of these things are known.</p>
-<p>In this post, I’ll show you how to build a ReAct agent with (and without) LangGraph.</p>
+<p>Nonetheless, agents are still a good fit for many use cases, such as coding assistants and support agents. You should definitely spend some time learning about them.</p>
+<p>In this post, I’ll show you how to build a Reasoning and Acting (ReAct) agent with (and without) LangGraph.</p>
 <p>Let’s start by defining some key concepts.</p>
 <section id="what-is-an-agent" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
@@ -724,8 +725,8 @@ July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">ht
 <ol type="1">
 <li>Take a user query.</li>
 <li>Think about the query and decide on an action.</li>
-<li>Execute the action using available tools.</li>
-<li>Analyzes the result of that action.</li>
+<li>Execute the action using available tools (environment).</li>
+<li>Analyzes the result of that action (environment).</li>
 <li>Continues the “Reason, Act, Observe” loop until it reaches the final answer.</li>
 </ol>
 <p>Here’s a diagram of a ReAct agent:</p>
@@ -735,10 +736,10 @@ July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">ht
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">graph LR
-    Human &lt;--&gt; LLM_Call[LLM Call]
-    LLM_Call --&gt;|Action| Environment
-    Environment --&gt;|Feedback| LLM_Call
-    LLM_Call -.-&gt; Stop
+    Human &lt;--&gt; LLM[LLM]
+    LLM --&gt;|Action| Environment
+    Environment --&gt;|Feedback| LLM
+    LLM -.-&gt; Stop
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -778,7 +779,7 @@ font-style: inherit;">pip</span> install langchain langchain-openai langchain-co
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p>As usual, you must start by importing the necessary libraries and loading the environment variables. You’ll use the same model in all the examples, so you’ll define it once here:</p>
-<div id="cell-4" class="cell">
+<div id="cell-4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
@@ -841,7 +842,7 @@ font-style: inherit;">0</span>)</span></code></pre></div>
 <p>You’ll build an agent that takes a question from a user and has access to a a tool. The tool is a Python REPL that it can use to answer the question.</p>
 <p><strong>You should not use this in production</strong>. This tool can run arbitrary Python code on your device, and that’s not something you want to expose to random people on the internet.</p>
 <p>First, let’s define the <code>run_python_code</code> tool.</p>
-<div id="cell-8" class="cell">
+<div id="cell-8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">@tool</span></span>
@@ -1036,13 +1037,13 @@ font-style: inherit;">in</span> tools}</span>
 background-color: null;
 font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
 </div>
-<p>This code defines a tool. In <code>LangChain</code> tools are defined as functions decorated with the <code>@tool</code> decorator. These functions must have a <em>docstring</em> because it will be used to describe the tool to the model.</p>
+<p>This code defines a tool. In <code>LangChain</code> tools are defined as functions decorated with <code>@tool</code>. These functions must have a <em>docstring</em> because it will be used to describe the tool to the LLM.</p>
 <p><code>run_python_code</code> is a function that takes a code string and returns the result of executing that code.</p>
 <p>Next, you provide the model with a mapping of the tool to its name by creating <code>tools_mapping</code>. This is often a point of confusion. The LLM doesn’t run the tools on its own. It only decides if a tool should be used. Then, your own code must make the actual tool call.</p>
 <p>The mapping is more useful when there are multiple tools, and not a single tool, like in this case. However, I’m showing it here to illustrate how you’d usually do this in a real-world application.</p>
 <p>Finally, you <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
 <p>Then, let’s define a function that encapsulates the logic of the agent.</p>
-<div id="cell-10" class="cell">
+<div id="cell-10" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1094,7 +1095,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> messages</span></code></pre></div>
 </div>
-<p>This function takes a city name and returns the weather for that city. It uses the <code>find_weather</code> tool to get the weather data.</p>
+<p>This function takes a question from a user, comes up with a python script, uses <code>run_python_code</code> to execute it and returns the result.</p>
 <p>It works as follows:</p>
 <ul>
 <li><strong>Lines 2 to 9</strong> set up the <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompts</a> and call the assistant.</li>
@@ -1102,7 +1103,7 @@ font-style: inherit;">return</span> messages</span></code></pre></div>
 </ul>
 <p>This is the core idea behind how agents work. You provide the assistant with a question and one or more tools. Then you let the assistant decide which tool to use, until it has all the information it needs to answer the question.</p>
 <p>You can try it out by running the following code:</p>
-<div id="cell-12" class="cell" data-execution_count="12">
+<div id="cell-12" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> run_agent(<span class="st" style="color: #20794D;
@@ -1135,9 +1136,9 @@ Generate 10 random numbers between 1 and 100
 
 Tool Calls:
 
-  run_python_code (call_4W42twIzLEUpd8ap7xGbTkiF)
+  run_python_code (call_twMJ1JkZK81ofm3842P3jNtb)
 
- Call ID: call_4W42twIzLEUpd8ap7xGbTkiF
+ Call ID: call_twMJ1JkZK81ofm3842P3jNtb
 
   Args:
 
@@ -1153,13 +1154,13 @@ Name: run_python_code
 
 
 
-{'random': &lt;module 'random' from '/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/random.py'&gt;, 'random_numbers': [37, 60, 8, 58, 7, 12, 39, 4, 77, 39]}
+{'random': &lt;module 'random' from '/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/random.py'&gt;, 'random_numbers': [74, 75, 58, 19, 90, 45, 44, 52, 90, 33]}
 
 ==================================<span class="ansi-bold"> Ai Message </span>==================================
 
 
 
-Here are 10 random numbers between 1 and 100: 37, 60, 8, 58, 7, 12, 39, 4, 77, 39.
+Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90, 33.
 </pre>
 </div>
 </div>
@@ -1365,13 +1366,13 @@ font-style: inherit;">in</span> tools}</span>
 background-color: null;
 font-style: inherit;">=</span> model.bind_tools(tools)</span></code></pre></div>
 </div>
-<p>With langgraph you also need to you define the tools in the same way: set up the functions, add the <code>@tool</code> decorator, and create the mapping. Then, <em>bind</em> the tools to the model.</p>
+<p>With langgraph you also need to you define the tools in the same way: set up the functions, add <code>@tool</code>, and create the tool mapping. Then, <em>bind</em> the tools to the model.</p>
 <p>Next, you need to define the functions (nodes) that correspond to the steps the agent will take:</p>
-<div id="cell-18" class="cell" data-execution_count="10">
+<div id="cell-18" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">def</span> llm_call(state: MessagesState):</span>
+font-style: inherit;">def</span> call_llm(state: MessagesState):</span>
 <span id="cb7-2">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
@@ -1396,7 +1397,7 @@ font-style: inherit;">"messages"</span>: [model_with_tools.invoke(messages)]}</s
 <span id="cb7-8"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">def</span> tool_node(state: MessagesState):</span>
+font-style: inherit;">def</span> call_tool(state: MessagesState):</span>
 <span id="cb7-9">    result <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
@@ -1487,18 +1488,18 @@ font-style: inherit;">=</span> StateGraph(MessagesState)</span>
 <span id="cb8-2"></span>
 <span id="cb8-3">agent_builder.add_node(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"llm_call"</span>, llm_call)</span>
+font-style: inherit;">"llm"</span>, call_llm)</span>
 <span id="cb8-4">agent_builder.add_node(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"environment"</span>, tool_node)</span>
+font-style: inherit;">"environment"</span>, call_tool)</span>
 <span id="cb8-5"></span>
 <span id="cb8-6">agent_builder.add_edge(START, <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"llm_call"</span>)</span>
+font-style: inherit;">"llm"</span>)</span>
 <span id="cb8-7">agent_builder.add_conditional_edges(</span>
 <span id="cb8-8">    <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"llm_call"</span>,</span>
+font-style: inherit;">"llm"</span>,</span>
 <span id="cb8-9">    should_continue,</span>
 <span id="cb8-10">    {</span>
 <span id="cb8-11">        <span class="st" style="color: #20794D;
@@ -1513,7 +1514,7 @@ font-style: inherit;">"environment"</span>,</span>
 background-color: null;
 font-style: inherit;">"environment"</span>, <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"llm_call"</span>)</span>
+font-style: inherit;">"llm"</span>)</span>
 <span id="cb8-16"></span>
 <span id="cb8-17">agent <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1538,7 +1539,7 @@ font-style: inherit;">True</span>).draw_mermaid_png()))</span></code></pre></div
 </div>
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
-<div id="cell-24" class="cell">
+<div id="cell-24" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
@@ -1561,7 +1562,7 @@ background-color: null;
 font-style: inherit;">"messages"</span>: messages})</span></code></pre></div>
 </div>
 <p>You can review the process by printing the messages:</p>
-<div id="cell-26" class="cell">
+<div id="cell-26" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -1572,15 +1573,59 @@ font-style: inherit;">in</span> messages[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"messages"</span>]:</span>
 <span id="cb11-2">    m.pretty_print()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>================================<span class="ansi-bold"> System Message </span>================================
+
+
+
+You are a helpful assistant that can run python code.
+
+================================<span class="ansi-bold"> Human Message </span>=================================
+
+
+
+Generate 10 random numbers between 1 and 100
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+Tool Calls:
+
+  run_python_code (call_bsBRC5aL7kgHjeGHXaLR85TC)
+
+ Call ID: call_bsBRC5aL7kgHjeGHXaLR85TC
+
+  Args:
+
+    code: import random
+
+random_numbers = [random.randint(1, 100) for _ in range(10)]
+
+random_numbers
+
+=================================<span class="ansi-bold"> Tool Message </span>=================================
+
+
+
+{'random': &lt;module 'random' from '/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/random.py'&gt;, 'random_numbers': [77, 37, 97, 26, 22, 29, 58, 82, 17, 80]}
+
+==================================<span class="ansi-bold"> Ai Message </span>==================================
+
+
+
+Here are 10 random numbers between 1 and 100: 77, 37, 97, 26, 22, 29, 58, 82, 17, 80.
+</pre>
+</div>
+</div>
 </div>
 <p>That’s all!</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>In this tutorial, you’ve learned what are agents, how they work, and how to build a simple ReAct agent with and without LangGraph. We covered:</p>
+<p>In this tutorial, you’ve learned what agents are, how they work, and how to build a simple ReAct agent with and without LangGraph. We covered:</p>
 <ul>
-<li><strong>Agent fundamentals</strong>: How agents differ from traditional systems by dynamically directing their own processes</li>
+<li><strong>Agent fundamentals</strong>: How agents differ from agentic workflows by dynamically directing their own processes</li>
 <li><strong>ReAct pattern</strong>: The core “think, act, observe” loop that enables agents to take actions based on the information they have</li>
 <li><strong>Vanilla and LangGraph implementation</strong>: Understanding how to implement agents with and without LangGraph</li>
 </ul>
