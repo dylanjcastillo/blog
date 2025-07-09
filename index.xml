@@ -15,7 +15,399 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Tue, 08 Jul 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 09 Jul 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Evaluator-optimizer workflow with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m doing a deep dive into Pydantic AI, so I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-evaluator-optimizer">evaluator-optimizer</a> workflow. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<section id="what-is-evaluator-optimizer" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-evaluator-optimizer">What is evaluator-optimizer?</h2>
+<p>Evaluator-optimizer is a pattern that has an LLM generator and an LLM evaluator. The generator generates a solution and the evaluator evaluates if the solution is good enough. If it’s not, the generator is given feedback and it generates a new solution. This process is repeated until the solution is good enough.</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In([In]) --&gt; Gen["Generator (LLM)"]
+    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]
+    Eval -- "Accepted" --&gt; Out([Out])
+    Eval -- "Rejected + Feedback" --&gt; Gen
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Content generation that must match certain guidelines such as writing with a particular style.</li>
+<li>Improving search results iteratively</li>
+</ul>
+<p>Let’s see how this looks in practice.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I will implement a simple workflow:</p>
+<ol type="1">
+<li>Generate a candidate article</li>
+<li>Evaluate if the article is good enough</li>
+<li>If it’s not, provide feedback and generate a new article</li>
+<li>Repeat until the article is good enough</li>
+</ol>
+<p>Before we start, because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div>
+</div>
+<p>Then, you need to import the required libraries. I’m using <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> to monitor the workflow.</p>
+<div id="4081c493" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel, Field</span>
+<span id="cb2-9"></span>
+<span id="cb2-10">load_dotenv()</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="evaluator-optimizer-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="evaluator-optimizer-workflow">Evaluator-optimizer workflow</h2>
+<p>The workflow is composed of two steps:</p>
+<ul>
+<li><code>Text generator</code>: Generates a candidate article.</li>
+<li><code>Evaluator</code>: Evaluates if the article is good enough.</li>
+</ul>
+<p>I’ll split the text generation into two agents: <code>generator</code> and <code>fixer</code>. The <code>generator</code> will generate a candidate article and the <code>fixer</code> will fix the article, when provided with feedback.</p>
+<div id="18ec377f" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">generator <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer. Provided with a topic, you will generate an engaging article with less than 500 words"</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">fixer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer. Provided with a text and feedback, you wil improve the text."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Logfire</span> project URL: <a href="https://logfire-us.pydantic.dev/dylanjcastillo/blog" target="_blank"><span style="color: #008080; text-decoration-color: #008080; text-decoration: underline">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span></a>
+</pre>
+</div>
+</div>
+<p>Next, I’ll create the <code>Evaluator</code> agent. It will take a text and it will evaluate if it’s good enough. It’ll produce an <code>Evaluation</code> object as the output.</p>
+<div id="2dd08409" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Evaluation(BaseModel):</span>
+<span id="cb6-2">    explanation: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-3">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Explain why the text evaluated matches or not the evaluation criteria"</span></span>
+<span id="cb6-4">    )</span>
+<span id="cb6-5">    feedback: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-6">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Provide feedback to the writer to improve the text"</span></span>
+<span id="cb6-7">    )</span>
+<span id="cb6-8">    is_correct: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">bool</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-9">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Whether the text evaluated matches or not the evaluation criteria"</span></span>
+<span id="cb6-10">    )</span>
+<span id="cb6-11"></span>
+<span id="cb6-12">evaluator <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb6-13">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb6-14">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb6-15">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert evaluator. Provided with a text, you will evaluate if it's written in British English and if it's appropriate for a young audience. The text must always use British spelling and grammar. Make sure the text doesn't include any em dashes."</span></span>
+<span id="cb6-16">    ),</span>
+<span id="cb6-17">    output_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Evaluation,</span>
+<span id="cb6-18">)</span></code></pre></div>
+</div>
+<p>Finally, you can encapsulate all the logic in a single function:</p>
+<div id="97be7efe" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb7-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb7-3">    text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> generator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate an article about '</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'"</span>)</span>
+<span id="cb7-4">    evaluation <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>):</span>
+<span id="cb7-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> evaluation.output.is_correct:</span>
+<span id="cb7-7">            text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fixer.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Fix the text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following feedback: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>evaluation<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>feedback<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-8">            evaluation <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-9">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb7-10">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text.output</span>
+<span id="cb7-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text.output</span>
+<span id="cb7-12"></span>
+<span id="cb7-13">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Consumption of hard drugs"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11:28:25.995 Run workflow
+11:28:25.995   generator run
+11:28:25.996     chat gpt-4.1-mini
+11:28:36.293   evaluator run
+11:28:36.294     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>**The Complex Reality of Hard Drug Consumption**
+
+Hard drugs — substances such as heroin, cocaine, methamphetamines, and crack — have long been a subject of concern worldwide due to their profound impact on individuals and society. The consumption of these drugs is not merely a matter of personal choice but a complex issue influenced by social, economic, psychological, and cultural factors.
+
+**Understanding Hard Drugs and Their Effects**
+
+Hard drugs are characterized by their high potential for addiction and severe physical and psychological effects. Unlike softer substances such as marijuana or alcohol (when consumed responsibly), hard drugs often disrupt brain function dramatically, leading to addiction, mental health disorders, and significant physical health problems. Users may experience paranoia, hallucinations, heart issues, and even fatal overdoses.
+
+The allure of hard drugs often stems from their ability to produce intense euphoria or numb emotional pain temporarily. However, this fleeting escape comes at a steep cost. Dependence quickly sets in, making cessation incredibly difficult and often trapping users in a cycle of abuse.
+
+**Social and Economic Implications**
+
+The ramifications of hard drug consumption ripple beyond the individual. Families endure emotional and financial strain, communities face increased crime rates and reduced public safety, and healthcare systems are burdened with treating overdoses and long-term complications. Moreover, productivity declines as addiction interferes with employment, contributing to broader economic challenges.
+
+Many users come from marginalized backgrounds, where poverty, trauma, and lack of education or opportunity make drugs seem like a refuge or an escape. This correlation highlights that addressing drug consumption isn't only a matter of law enforcement but of social equity and support.
+
+**Challenges in Addressing Hard Drug Use**
+
+Efforts to reduce hard drug consumption have varied widely, from strict punitive measures to harm reduction strategies. While criminalization seeks to deter use, it often leads to overcrowded prisons and can exacerbate social stigma, making it harder for users to seek help. Conversely, approaches like supervised consumption sites, needle exchange programs, and accessible addiction treatment aim to minimize harm and promote recovery.
+
+Prevention and education are critical components. Informing communities about the risks of hard drugs and providing mental health support can reduce initial experimentation and help those at risk before addiction takes hold.
+
+**Moving Towards Compassionate Solutions**
+
+Ultimately, the consumption of hard drugs is a multifaceted issue requiring balanced and compassionate responses. Policymakers, healthcare providers, and communities must work together to create environments that prioritize treatment over punishment, recognize addiction as a health issue, and promote social support.
+
+By understanding the complex realities behind hard drug use, society can better address its consequences and help those affected find a path to recovery and hope.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Evaluator-Optimizer Workflow with {Pydantic} {AI}},
+  date = {2025-07-09},
+  url = {https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Evaluator-Optimizer Workflow with Pydantic
+AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</guid>
+  <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Prompt chaining workflow with Pydantic AI</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -15803,68 +16195,6 @@ with Gemini Flash 1.5.”</span> September 8, 2024. <a href="https://dylancastil
   <category>gemini</category>
   <guid>https://dylancastillo.co/posts/classify-images-with-gemini-flash-1.5.html</guid>
   <pubDate>Sun, 08 Sep 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Fixing missing ‘python’ error in macOS</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>After the last macOS update, I started getting the following error when trying to run <code>poetry install</code>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">[Errno 2] No such file or directory: 'python'</span></code></pre></div>
-<p>I went through GitHub issues, StackOverflow questions, and blog posts, but none of the suggested solutions worked.</p>
-<p>Finally, I found the solution somewhat hidden in this <a href="https://mac.install.guide/python/brew">blog post</a>.</p>
-<p>So, what’s the fix?</p>
-<p>🥁 🥁 🥁</p>
-<p>Just add the following line to your <code>.zshrc</code> file:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">export</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">PATH</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--prefix</span> python<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">)</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">/libexec/bin:</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$PATH</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span></code></pre></div>
-<p>This gets the installation prefix for <code>python</code> installed via Homebrew (e.g.&nbsp;<code>/opt/homebrew/opt/python@3.12</code>), gets the <code>libexec/bin</code> directory, and adds it to the PATH.</p>
-<p>In that <code>libexec/bin</code>, there’s a <code>python</code> executable that gets called when you run <code>python</code> in the terminal.</p>
-<p>That’s all. Hope that helps!</p>
-
-
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {Fixing Missing “Python” Error in {macOS}},
-  date = {2024-08-12},
-  url = {https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“Fixing Missing <span>‘Python’</span> Error
-in macOS.”</span> August 12, 2024. <a href="https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html">https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>python</category>
-  <category>poetry</category>
-  <guid>https://dylancastillo.co/til/fixing-python-not-found-error-in-macos.html</guid>
-  <pubDate>Mon, 12 Aug 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
