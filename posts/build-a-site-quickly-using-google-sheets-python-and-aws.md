@@ -4,7 +4,7 @@ aliases:
   - /build-a-site-quickly-using-google-sheets-python-and-aws/
 description-meta: "We will set up a Python script that reads data from Google Sheets, generates a static site using a predefined template, and deploys it to an S3 bucket."
 date: "04/16/2020"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 lightbox: true

@@ -1,6 +1,7 @@
 ---
 title: "2024: Personal Snapshot"
 date: "01/05/2025"
+date-modified: "2025-06-29"
 aliases:
   - /2024-personal-snapshot/
 description-meta: "My annual review of 2024. I analyze what went well in 2024 and what I should change for 2025."

@@ -4,7 +4,7 @@ aliases:
   - /nlp-snippets-clean-and-tokenize-text-with-python/
 description-meta: "The first step in a Machine Learning project is cleaning the data. In this article, you'll find 20 code snippets to clean and tokenize text data using Python."
 date: "12/10/2020"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 4
 categories:

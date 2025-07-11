@@ -4,7 +4,7 @@ aliases:
   - /fast-and-async-in-python-accelerate-your-requests-using-asyncio/
 description-meta: "Speedup your Python code by learning how to make concurrent requests to an API using asyncio and aiohttp."
 date: "03/01/2020"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 lightbox: true

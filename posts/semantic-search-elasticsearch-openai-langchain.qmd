@@ -4,7 +4,7 @@ aliases:
   - /semantic-search-elasticsearch-openai-langchain/
 description-meta: "In this tutorial, I'll walk you through building a semantic search service using Elasticsearch, OpenAI, LangChain, and FastAPI."
 date: "04/27/2023"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 categories:

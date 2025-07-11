@@ -3,7 +3,7 @@ title: "2023: Personal Snapshot"
 aliases:
   - /2023-personal-snapshot/
 date: "01/05/2024"
-date-modified: last-modified
+date-modified: "2024-07-13"
 description-meta: "An annual review of 2023. I took a look at what went well in 2023 and what I should change for 2024."
 toc: true
 toc-depth: 3

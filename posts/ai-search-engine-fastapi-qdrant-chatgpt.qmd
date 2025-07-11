@@ -4,7 +4,7 @@ aliases:
   - /ai-search-engine-fastapi-qdrant-chatgpt/
 description-meta: "In this tutorial, you'll learn how to use FastAPI, Qdrant, Sentence Transformers, and ChatGPT to create an AI search engine."
 date: "03/03/2023"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 categories:

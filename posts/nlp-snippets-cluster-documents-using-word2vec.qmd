@@ -4,7 +4,7 @@ aliases:
   - /nlp-snippets-cluster-documents-using-word2vec/
 description-meta: "Learn how to cluster documents using Word2Vec. In this tutorial, you'll train a Word2Vec model, generate word embeddings, and use K-means to create groups of news articles."
 date: "01/18/2021"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 categories:

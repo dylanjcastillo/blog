@@ -4,7 +4,7 @@ aliases:
   - /semantic-search-with-opensearch-cohere-and-fastapi/
 description-meta: "In this tutorial, I'll you'll learn how to build a semantic search service using OpenSearch, Cohere, and FastAPI. You'll create an app that lets users search through news articles to find the ones that are most relevant to their query."
 date: "04/11/2023"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 categories:

@@ -1,6 +1,7 @@
 ---
 title: "The good, the bad, and the ugly of Gemini's structured outputs"
 date: "12/27/2024"
+date-modified: "2025-05-20"
 description-meta: "This article will go over Gemini's structured outputs and how they compare to unstructured outputs."
 categories:
   - llm

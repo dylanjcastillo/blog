@@ -4,7 +4,7 @@ aliases:
   - /opensearch-python/
 description-meta: "This tutorial covers the basics of using OpenSearch in Python. You'll learn how to set up a local development cluster, create an index, and store and search your data."
 date: "08/31/2022"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 categories:

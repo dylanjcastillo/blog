@@ -4,7 +4,7 @@ aliases:
   - /fine-tuning-vs-rag/
 description-meta: "Learn why you should not fine-tune a model to add new knowledge to it, and what's the right approach for that."
 date: "11/27/2023"
-date-modified: last-modified
+date-modified: "2024-07-13"
 toc: true
 toc-depth: 3
 lightbox: true

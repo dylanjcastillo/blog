@@ -4,7 +4,7 @@ aliases:
   - /how-to-use-github-deploy-keys/
 description-meta: "Github deploy keys make it easy to deploy your app's code to a server. In this article, you'll learn how to create, configure, and use them."
 date: "10/07/2021"
-date-modified: last-modified
+date-modified: "2024-07-13"
 lightbox: true
 fig-cap-location: margin
 categories:

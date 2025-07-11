@@ -1,6 +1,7 @@
 ---
 title: "Structured outputs can hurt the performance of LLMs"
 date: "12/08/2024"
+date-modified: "2025-05-20"
 description-meta: "A look at the impact of structured outputs on the performance of LLMs."
 categories:
   - llm

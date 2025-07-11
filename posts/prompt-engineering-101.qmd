@@ -1,6 +1,7 @@
 ---
 title: "Prompt engineering 101"
 date: 2025-06-26
+date-modified: "2025-06-29"
 description-meta: "How to convince LLMs to do what you want them to do."
 categories:
   - llm
