@@ -27,11 +27,13 @@ dependencies = [
     "quarto-cli>=1.7.32",
     "chromadb>=1.0.13",
     "langchain>=0.3.26",
-    "langchain-openai>=0.3.26",
+    "langchain-openai==0.3.27",
     "langchain-community>=0.3.26",
     "pypdf>=5.7.0",
     "langgraph>=0.5.0",
     "pydantic-ai[logfire]>=0.3.6",
+    "unstructured>=0.18.5",
+    "openpyxl>=3.1.5",
 ]
 
 [dependency-groups]
