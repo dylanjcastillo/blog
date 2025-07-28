@@ -34,6 +34,7 @@ dependencies = [
     "pydantic-ai[logfire]>=0.3.6",
     "unstructured>=0.18.5",
     "openpyxl>=3.1.5",
+    "sentence-transformers>=5.0.0",
 ]
 
 [dependency-groups]
