@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/synthetic-data-rag.html",
       "/posts/react-agent-langgraph.html",
       "/posts/agentic-workflows-langgraph.html",
       "/posts/function-calling-structured-outputs.html",

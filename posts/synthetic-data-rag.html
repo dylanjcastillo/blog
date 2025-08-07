@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2025-08-07">
+<meta name="description" content="How to use synthetic data to build a RAG system">
+
+<title>How to use synthetic data to bootstrap your RAG system evals – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7087bcf82a3c6fa223fe00ad8f3b6ef0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="How to use synthetic data to bootstrap your RAG system evals – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta name="twitter:title" content="How to use synthetic data to bootstrap your RAG system evals – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:github" aria-label="Icon github from fa6-brands Iconify.design set." title="Icon github from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#how-to-generate-synthetic-data-for-rag-evals" id="toc-how-to-generate-synthetic-data-for-rag-evals" class="nav-link" data-scroll-target="#how-to-generate-synthetic-data-for-rag-evals">How to generate synthetic data for RAG evals</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#index-data" id="toc-index-data" class="nav-link" data-scroll-target="#index-data">Index data</a></li>
+  <li><a href="#generate-qa-pairs" id="toc-generate-qa-pairs" class="nav-link" data-scroll-target="#generate-qa-pairs">Generate QA Pairs</a></li>
+  <li><a href="#filter-qa-pairs" id="toc-filter-qa-pairs" class="nav-link" data-scroll-target="#filter-qa-pairs">Filter QA pairs</a></li>
+  <li><a href="#evaluate-the-rag-system" id="toc-evaluate-the-rag-system" class="nav-link" data-scroll-target="#evaluate-the-rag-system">Evaluate the RAG system</a>
+  <ul class="collapse">
+  <li><a href="#retrieval-metrics" id="toc-retrieval-metrics" class="nav-link" data-scroll-target="#retrieval-metrics">Retrieval Metrics</a></li>
+  <li><a href="#recallk" id="toc-recallk" class="nav-link" data-scroll-target="#recallk">Recall@k</a></li>
+  <li><a href="#generation-metrics" id="toc-generation-metrics" class="nav-link" data-scroll-target="#generation-metrics">Generation metrics</a></li>
+  <li><a href="#run-evaluation" id="toc-run-evaluation" class="nav-link" data-scroll-target="#run-evaluation">Run evaluation</a></li>
+  </ul></li>
+  <li><a href="#improve-metrics-with-a-reranker" id="toc-improve-metrics-with-a-reranker" class="nav-link" data-scroll-target="#improve-metrics-with-a-reranker">Improve metrics with a reranker</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to use synthetic data to bootstrap your RAG system evals</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">rag</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 7, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">August 7, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>I’ve been catching up on Hamel Husain and Shreya Shankar’s <a href="https://maven.com/parlance-labs/evals">AI Evals for Engineers &amp; PMs</a> course. If you’re thinking of taking it, I highly recommend it. There’s no better material on evaluating AI systems out there.</p>
+<p>One part that I found particularly interesting was the section on generating synthetic data for bootstrapping the evaluation of RAG systems. I’ve worked on several AI projects, but in all of them, we had real data to work with, so I hadn’t had the chance to generate synthetic data for this purpose.</p>
+<p>I decided to work through a simple example and write some notes about it. In this article, I’ll walk you through the process of bootstrapping your RAG system evals using synthetic data.</p>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>If you plan to follow along, you’ll need to:</p>
+<ol type="1">
+<li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
+<li>Create a <code>.env</code> file in the root directory of your project and add the following lines: <code>bash     OPENAI_API_KEY=your_openai_api_key     LANGCHAIN_TRACING_V2=true     LANGCHAIN_PROJECT=your_langchain_project_name     LANGSMITH_API_KEY=your_langsmith_api_key</code></li>
+<li>Create a virtual environment in Python (I use <a href="https://docs.astral.sh/uv/"><code>uv</code></a>) and install the following packages: <code>langchain</code>, <code>langchain-openai</code>, <code>langchain-community</code>, <code>jupyter</code>, <code>chromadb</code>, <code>python-dotenv</code>, <code>nest_asyncio</code>, and <code>sentence-transformers</code>.</li>
+<li>Download the People Group’s section from GitLab’s <a href="https://gitlab.com/gitlab-com/content-sites/handbook/-/tree/main/content/handbook/people-group">handbook</a>.</li>
+</ol>
+<p>I’m also assuming you’re familiar with the basics of RAG systems and how to use vector databases. If you need a refresher, you can check out my <a href="https://dylancastillo.co/posts/what-is-rag.html">RAG tutorial</a>.</p>
+<p>Then, you’ll be able to run the code from this article. If you don’t want to copy and paste the code, you can download this <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/synthetic-data-rag.ipynb">notebook</a>.</p>
+</section>
+<section id="how-to-generate-synthetic-data-for-rag-evals" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-generate-synthetic-data-for-rag-evals">How to generate synthetic data for RAG evals</h2>
+<p>The process is simple. Here’s how it works:</p>
+<ol type="1">
+<li>Split your source document into chunks and store them in a vector database.</li>
+<li>Sample a few chunks from the vector database.</li>
+<li>For each sampled chunk, extract a <strong>fact</strong> from it and generate a <strong>question</strong> that is unambiguously answered by the fact.</li>
+<li>Define evaluation metrics for your RAG system.</li>
+<li>Optionally, filter the generated questions to remove the ones that don’t seem realistic.</li>
+<li>Measure the performance of your RAG system.</li>
+</ol>
+<p>In the next sections, I’ll help you implement this process step by step, providing code snippets you can run in a Jupyter notebook.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>You’ll use <code>asyncio</code> in some of the code snippets, so you must enable <code>nest_asyncio</code> to run the code:</p>
+<div id="1e2a708d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, you can proceed as usual, importing the required packages:</p>
+<div id="f58b9d35" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> random</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">import</span> chromadb</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> chromadb.utils.embedding_functions <span class="im">import</span> OpenAIEmbeddingFunction</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> langchain_community.document_loaders <span class="im">import</span> DirectoryLoader, TextLoader</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> langchain_core.prompts <span class="im">import</span> ChatPromptTemplate</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="im">from</span> langchain_text_splitters <span class="im">import</span> MarkdownTextSplitter</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="im">from</span> langsmith <span class="im">import</span> Client, traceable</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> CrossEncoder</span>
+<span id="cb2-17"><a href="#cb2-17"></a></span>
+<span id="cb2-18"><a href="#cb2-18"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These are the most important libraries you’ll use in this article:</p>
+<ul>
+<li><strong>chromadb</strong>: Vector database for storing and retrieving document embeddings</li>
+<li><strong>langchain</strong>: Framework for building LLM applications</li>
+<li><strong>langchain-openai</strong>: Wrapper for OpenAI’s API, providing access to LLMs and embeddings</li>
+<li><strong>pydantic</strong>: Provides models for generating structured data and validating types</li>
+<li><strong>sentence-transformers</strong>: In the last section of the article, you’ll use this library to rerank the retrieved documents.</li>
+</ul>
+<p>The rest of the libraries will handle typical Python tasks, such as reading files, managing environment variables, etc.</p>
+<p>For this tutorial, you’ll be building a RAG system that feeds an internal chatbot that helps employees of a company answer questions about company policies.</p>
+<p>I chose this topic because there’s a pretty good source of data we can use for this: <a href="https://handbook.gitlab.com/">The GitLab Handbook</a>. We’ll just use the People Group section of the handbook, to keep costs manageable.</p>
+<p>Your next step is to load the data from the handbook:</p>
+<div id="66a8c9c6" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>loader <span class="op">=</span> DirectoryLoader(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="st">"../data/synthetic-data-rag/people-group/"</span>, glob<span class="op">=</span><span class="st">"**/*.md"</span>, loader_cls<span class="op">=</span>TextLoader</span>
+<span id="cb3-3"><a href="#cb3-3"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>docs <span class="op">=</span> loader.load()</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="bu">len</span>(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>99</code></pre>
+</div>
+</div>
+<p>If you set everything up correctly, the cell should output the number of documents in the <code>docs</code> variable. Depending on when you read this article, the number of documents may change, as the handbook is updated regularly. The date I downloaded the data, there were 99 documents in the People Group section.</p>
+<p>Then, you must add the data to the vector database.</p>
+</section>
+<section id="index-data" class="level2">
+<h2 class="anchored" data-anchor-id="index-data">Index data</h2>
+<p>A <strong>vector database</strong> is a database designed to efficiently store and query data as vector embeddings (numerical representations). Provided with a user query, it’s the engine you use to find the most similar data in your database.</p>
+<p>For this tutorial, you’ll use <a href="https://www.trychroma.com/">ChromaDB</a>. Let’s set it up:</p>
+<div id="c7df6e53" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>openai_ef <span class="op">=</span> OpenAIEmbeddingFunction(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a>client <span class="op">=</span> chromadb.PersistentClient(</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    path<span class="op">=</span><span class="st">"../data/synthetic-data-rag/chroma"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>collection <span class="op">=</span> client.get_or_create_collection(</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="st">"gitlab-handbook"</span>, embedding_function<span class="op">=</span>openai_ef</span>
+<span id="cb5-7"><a href="#cb5-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This code snippet:</p>
+<ol type="1">
+<li>Defines an embedding function that uses OpenAI’s API to generate embeddings for the documents.</li>
+<li>Creates a ChromaDB client to interact with the vector database.</li>
+<li>Creates a collection in the vector database to store the document embeddings and sets the embedding function to use the OpenAI embedding model.</li>
+</ol>
+<p>Next, you should generate embeddings for the documents and store them in the vector database. But there’s a little catch: some documents are longer than the maximum token limit of the embedding model (8192 tokens). This will break the indexing process. To avoid this, you must split the documents into smaller chunks.</p>
+<p>You can do this with the following code snippet:</p>
+<div id="10523d7a" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>text_splitter <span class="op">=</span> MarkdownTextSplitter.from_tiktoken_encoder(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    model_name<span class="op">=</span><span class="st">"gpt-4o"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    chunk_size<span class="op">=</span><span class="dv">400</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    chunk_overlap<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>splits <span class="op">=</span> text_splitter.split_documents(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The handbook is written using Markdown, so you can use the <code>MarkdownTextSplitter</code> to split the documents. This will use the headings in the files for the splitting in addition to the number of tokens. This generally results in better chunks, as they will be more likely to contain complete thoughts or sections of the document.</p>
+<p>The <code>from_tiktoken_encoder</code> method lets you do the splits based on the number of tokens, not characters which is the default behavior. You’ve set a chunk size of 400 tokens, with no overlap.</p>
+<p>After running the splitting code, you can check the number of chunks created by running this:</p>
+<div id="ba5cec1e" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="bu">len</span>(splits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>999</code></pre>
+</div>
+</div>
+<p>Now you have another problem: you have too many chunks. If you try to add all of them to the vector database at once—which also generates their embeddings—you’ll likely hit the OpenAI API rate limits.</p>
+<p>To solve this, let’s define a utility function that adds the chunks to the vector database in batches:</p>
+<div id="c5cc250f" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> create_batches(ids, documents, metadatas, batch_size<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    batches <span class="op">=</span> []</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(ids), batch_size):</span>
+<span id="cb9-4"><a href="#cb9-4"></a>        batch_ids <span class="op">=</span> ids[i : i <span class="op">+</span> batch_size]</span>
+<span id="cb9-5"><a href="#cb9-5"></a>        batch_documents <span class="op">=</span> documents[i : i <span class="op">+</span> batch_size]</span>
+<span id="cb9-6"><a href="#cb9-6"></a>        batch_metadatas <span class="op">=</span> metadatas[i : i <span class="op">+</span> batch_size]</span>
+<span id="cb9-7"><a href="#cb9-7"></a>        batches.append((batch_ids, batch_metadatas, batch_documents))</span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="cf">return</span> batches</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, you can apply this function to the chunks you created earlier:</p>
+<div id="3287eb76" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>ids <span class="op">=</span> [<span class="ss">f"</span><span class="sc">{</span><span class="bu">str</span>(i)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(splits))]</span>
+<span id="cb10-2"><a href="#cb10-2"></a>documents <span class="op">=</span> [doc.page_content <span class="cf">for</span> doc <span class="kw">in</span> splits]</span>
+<span id="cb10-3"><a href="#cb10-3"></a>metadatas <span class="op">=</span> [doc.metadata <span class="cf">for</span> doc <span class="kw">in</span> splits]</span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="cf">if</span> collection.count() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    <span class="bu">print</span>(<span class="st">"Collection already exists, skipping creation."</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="cf">else</span>:</span>
+<span id="cb10-9"><a href="#cb10-9"></a>    <span class="bu">print</span>(<span class="st">"Adding documents..."</span>)</span>
+<span id="cb10-10"><a href="#cb10-10"></a>    batches <span class="op">=</span> create_batches(ids<span class="op">=</span>ids, documents<span class="op">=</span>documents, metadatas<span class="op">=</span>metadatas)</span>
+<span id="cb10-11"><a href="#cb10-11"></a>    <span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(batches):</span>
+<span id="cb10-12"><a href="#cb10-12"></a>        <span class="bu">print</span>(<span class="ss">f"Adding batch </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> of size </span><span class="sc">{</span><span class="bu">len</span>(batch[<span class="dv">0</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-13"><a href="#cb10-13"></a>        collection.add(ids<span class="op">=</span>batch[<span class="dv">0</span>], metadatas<span class="op">=</span>batch[<span class="dv">1</span>], documents<span class="op">=</span>batch[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Feel free to adjust the batch size according to your needs. This should take a few seconds to run. Once it’s done, your vector database should be ready to use.</p>
+<p>Next, you’ll define a couple of functions to interact with the vector database and a data model to represent the retrieved documents you’ll be working with.</p>
+<div id="bb0baae9" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span> RetrievedDoc(BaseModel):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="bu">id</span>: <span class="bu">str</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>    path: <span class="bu">str</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>    page_content: <span class="bu">str</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="kw">def</span> get_similar_docs(text: <span class="bu">str</span>, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">5</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[RetrievedDoc]:</span>
+<span id="cb11-8"><a href="#cb11-8"></a>    results <span class="op">=</span> collection.query(query_texts<span class="op">=</span>[text], n_results<span class="op">=</span>top_k)</span>
+<span id="cb11-9"><a href="#cb11-9"></a>    docs <span class="op">=</span> [results[<span class="st">"documents"</span>][<span class="dv">0</span>][i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
+<span id="cb11-10"><a href="#cb11-10"></a>    metadatas <span class="op">=</span> [results[<span class="st">"metadatas"</span>][<span class="dv">0</span>][i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
+<span id="cb11-11"><a href="#cb11-11"></a>    ids <span class="op">=</span> [results[<span class="st">"ids"</span>][<span class="dv">0</span>][i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
+<span id="cb11-12"><a href="#cb11-12"></a>    <span class="cf">return</span> [</span>
+<span id="cb11-13"><a href="#cb11-13"></a>        RetrievedDoc(<span class="bu">id</span><span class="op">=</span>id_, path<span class="op">=</span>m[<span class="st">"source"</span>], page_content<span class="op">=</span>d)</span>
+<span id="cb11-14"><a href="#cb11-14"></a>        <span class="cf">for</span> d, m, id_ <span class="kw">in</span> <span class="bu">zip</span>(docs, metadatas, ids)</span>
+<span id="cb11-15"><a href="#cb11-15"></a>    ]</span>
+<span id="cb11-16"><a href="#cb11-16"></a></span>
+<span id="cb11-17"><a href="#cb11-17"></a></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="kw">def</span> get_doc_by_id(doc_id: <span class="bu">str</span>) <span class="op">-&gt;</span> RetrievedDoc:</span>
+<span id="cb11-19"><a href="#cb11-19"></a>    results <span class="op">=</span> collection.get(ids<span class="op">=</span>[doc_id])</span>
+<span id="cb11-20"><a href="#cb11-20"></a>    doc <span class="op">=</span> results[<span class="st">"documents"</span>][<span class="dv">0</span>]</span>
+<span id="cb11-21"><a href="#cb11-21"></a>    metadata <span class="op">=</span> results[<span class="st">"metadatas"</span>][<span class="dv">0</span>]</span>
+<span id="cb11-22"><a href="#cb11-22"></a>    <span class="cf">return</span> RetrievedDoc(<span class="bu">id</span><span class="op">=</span>doc_id, path<span class="op">=</span>metadata[<span class="st">"source"</span>], page_content<span class="op">=</span>doc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this code snippet, you define two functions:</p>
+<ol type="1">
+<li><code>get_similar_docs</code> will let you retrieve the most similar documents to a user query.</li>
+<li><code>get_document_by_id</code> will let you retrieve a document by its ID.</li>
+</ol>
+<p><code>RetrievedDoc</code> is a Pydantic model that represents a retrieved document. It includes the document’s ID, file path, and the page content. This model will help you structure the data you retrieve from the vector database.</p>
+<p>Next, you can sample documents for the synthetic data generation:</p>
+<div id="4db2a9ca" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>golden_docs_idx <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(splits)), <span class="dv">200</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>golden_docs <span class="op">=</span> [get_doc_by_id(<span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> golden_docs_idx]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will result in 200 documents that you’ll use to generate the synthetic data.</p>
+</section>
+<section id="generate-qa-pairs" class="level2">
+<h2 class="anchored" data-anchor-id="generate-qa-pairs">Generate QA Pairs</h2>
+<p>Using the documents you just sampled, you can generate synthetic data. For each document, you’ll extract a fact and generate a question from it.</p>
+<p>This is simple but it has a big issue: it may produce questions that are too easy to answer and result in an overly optimistic evaluation of your RAG system.</p>
+<p>To create more challenging synthetic queries, Hamel and Shreya recommend adding similar confounding chunks to the generation process, so that it can generate questions in an adversarial manner. The generator will create a question that is uniquely answered by the target chunk but also include themes or keywords that are present in other chunks.</p>
+<p>Here’s an example of how this works:</p>
+<p><strong>Target chunk:</strong> “George Orwell’s masterpiece, <em>Nineteen Eighty-Four</em>, was published in June 1949 and introduced the concept of ‘Big Brother’ to a global audience.”</p>
+<p><strong>Similar chunks:</strong></p>
+<ol type="1">
+<li>“Aldous Huxley’s <em>Brave New World</em>, another influential work of dystopian fiction, was first released in 1932 and explores themes of social conditioning and control.”</li>
+<li>“Ray Bradbury’s <em>Fahrenheit 451</em>, published in 1953, depicts a future society where books are banned and ‘firemen’ burn any that are found.”</li>
+</ol>
+<p><strong>Synthetic Question:</strong> “In what year was the dystopian novel that introduced the concept of ‘Big Brother’ published?”</p>
+<p>The target chunk helps the generator come up with a synthetic question. The similar chunks provide distractors that help the generator include themes or keywords that are also present in other chunks (e.g., dystopian fiction), making the question more challenging.</p>
+<p>To do this, you can use the following prompts:</p>
+<div id="582a5b45" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>system_prompt_generate <span class="op">=</span> dedent(</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="st">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="st">    You are a helpful assistant generating synthetic QA pairs for retrieval evaluation.</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="st">    Given a target chunk of text and a set of confounding chunks, you must extract a specific, self-contained fact from the target chunk that is not included in the confounding chunks. Then write a question that is directly and unambiguously answered by that fact. The question should only be answered by the fact extracted from the target chunk (and not by any of the confounding chunks) but it should also use themes or terminology that is present in the confounding chunks.</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="st">    Always respond with a JSON object with the following keys (in that exact order):</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="st">    1. "fact": "&lt;the fact extracted from the target chunk&gt;",</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="st">    2. "confounding_terms": "&lt;a list of terms or themes from the confounding chunks that are relevant to the question&gt;",</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="st">    3. "question": "&lt;the question that is directly and unambiguously answered by the fact&gt;",</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="st">    </span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="st">    You should write the questions as if you're an employee looking for information in the handbook. The question should be as realistic and natural as possible, reflecting the kind of queries an employee might actually make when searching for information in the handbook.</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="st">    """</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a>)</span>
+<span id="cb13-16"><a href="#cb13-16"></a></span>
+<span id="cb13-17"><a href="#cb13-17"></a>user_prompt_generate <span class="op">=</span> dedent(</span>
+<span id="cb13-18"><a href="#cb13-18"></a>    <span class="st">"""</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="st">    TARGET CHUNK:</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a><span class="st">    </span><span class="sc">{target_chunk}</span></span>
+<span id="cb13-21"><a href="#cb13-21"></a></span>
+<span id="cb13-22"><a href="#cb13-22"></a><span class="st">    CONFOUNDING CHUNKS:</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="st">    </span><span class="sc">{confounding_chunks}</span><span class="st"> </span></span>
+<span id="cb13-24"><a href="#cb13-24"></a><span class="st">    """</span></span>
+<span id="cb13-25"><a href="#cb13-25"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These prompts will be used to generate the synthetic data. The <code>system_prompt_generate</code> defines the generation process, explaining how to extract facts and generate questions, and <code>user_prompt_generate</code> provides the required context: target and confounding chunks.</p>
+<p>Then, you initialize the LLM, set up the response model, and define a function to format the documents for the LLM:</p>
+<div id="f5aab841" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    fact: <span class="bu">str</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>    confounding_terms: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> []</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    question: <span class="bu">str</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6"></a></span>
+<span id="cb14-7"><a href="#cb14-7"></a>llm <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a>llm_with_structured_output <span class="op">=</span> llm.with_structured_output(Response)</span>
+<span id="cb14-9"><a href="#cb14-9"></a></span>
+<span id="cb14-10"><a href="#cb14-10"></a>messages <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb14-11"><a href="#cb14-11"></a>    [(<span class="st">"system"</span>, system_prompt_generate), (<span class="st">"user"</span>, user_prompt_generate)]</span>
+<span id="cb14-12"><a href="#cb14-12"></a>)</span>
+<span id="cb14-13"><a href="#cb14-13"></a></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="kw">def</span> format_docs(chunks: <span class="bu">list</span>[RetrievedDoc]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb14-15"><a href="#cb14-15"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(</span>
+<span id="cb14-16"><a href="#cb14-16"></a>        [<span class="ss">f"*** Filepath: </span><span class="sc">{</span>chunk<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> ***</span><span class="ch">\n</span><span class="sc">{</span>chunk<span class="sc">.</span>page_content<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span> <span class="cf">for</span> chunk <span class="kw">in</span> chunks]</span>
+<span id="cb14-17"><a href="#cb14-17"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, you can define a function to generate the synthetic data. This function will take a target chunk, retrieve the most similar chunks from the vector database, and generate a question from the target chunk using the similar chunks as distractors:</p>
+<div id="248ec536" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_qa_pair(chunk):</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    similar_chunks <span class="op">=</span> get_similar_docs(chunk.page_content)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages.ainvoke(</span>
+<span id="cb15-4"><a href="#cb15-4"></a>        {</span>
+<span id="cb15-5"><a href="#cb15-5"></a>            <span class="st">"target_chunk"</span>: format_docs([similar_chunks[<span class="dv">0</span>]]),</span>
+<span id="cb15-6"><a href="#cb15-6"></a>            <span class="st">"confounding_chunks"</span>: format_docs(similar_chunks[<span class="dv">1</span>:]),</span>
+<span id="cb15-7"><a href="#cb15-7"></a>        }</span>
+<span id="cb15-8"><a href="#cb15-8"></a>    )</span>
+<span id="cb15-9"><a href="#cb15-9"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output.ainvoke(compiled_messages)</span>
+<span id="cb15-10"><a href="#cb15-10"></a>    <span class="cf">return</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To speed up question generation, you can run this concurrently using <code>asyncio</code>:</p>
+<div id="3f3cf7ae" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>tasks <span class="op">=</span> [generate_qa_pair(random_split) <span class="cf">for</span> random_split <span class="kw">in</span> golden_docs]</span>
+<span id="cb16-2"><a href="#cb16-2"></a>qa_pairs <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a>df <span class="op">=</span> pd.DataFrame([qa_pair.<span class="bu">dict</span>() <span class="cf">for</span> qa_pair <span class="kw">in</span> qa_pairs])</span>
+<span id="cb16-5"><a href="#cb16-5"></a>df.to_excel(<span class="st">"../data/synthetic-data-rag/files/qa_pairs.xlsx"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are some of the resulting QA pairs:</p>
+<ol type="1">
+<li>Example 1:
+<ul>
+<li><strong>Question:</strong> How soon should managers send the results after the 360 feedback cycle closes to prepare for the feedback meeting?</li>
+<li><strong>Answer:</strong> Managers should send the results of 360 feedback within 48 hours of the feedback cycle closing so they can prepare and come to the meeting with questions and discussion points.</li>
+</ul></li>
+<li>Example 2:
+<ul>
+<li><strong>Question:</strong> At what point in the hiring process must candidates disclose outside employment or side projects for GitLab to assess potential conflicts with their job obligations?</li>
+<li><strong>Answer:</strong> Candidates at a certain stage in the recruiting process are asked to disclose outside employment, side projects, or other activities so GitLab can determine if a conflict exists with their ability to fulfill obligations to GitLab.</li>
+</ul></li>
+</ol>
+<p>Even though the questions seem relevant, it’s not entirely clear if they are truly the type of questions real users ask.</p>
+<p>To improve that, you can iterate a bit more on the prompt, including few-shot examples of real or adjusted queries. Or, you can take the lazy way out and generate a filter that will help you remove the questions that don’t seem realistic enough. Let’s do that!</p>
+</section>
+<section id="filter-qa-pairs" class="level2">
+<h2 class="anchored" data-anchor-id="filter-qa-pairs">Filter QA pairs</h2>
+<p>For that, you should open the Excel file and manually review some of the generated Q&amp;A pairs and evaluate them for relevance. Then, you should provide those questions in a system prompt as examples to the LLM, asking it to assign a score to each question based on your evaluation criteria.</p>
+<p>Here’s an example of how to do that:</p>
+<div id="3eeec315" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>system_prompt_rate <span class="op">=</span> dedent(</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="st">"""</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">    You are an AI assistant helping us curate a high-quality dataset of questions for evaluating an company's internal handbook. We have generated synthetic questions and need to filter out those that are unrealistic or not representative of typical user queries.</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="st">    Here are examples of realistic and unrealistic user queries we have manually rated:</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="st">    ### Realistic Queries (Good Examples)</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="st">    * **Query:** "What is the required process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="st">        * **Explanation:** Very realistic user query. It's concise, information-seeking, and process-oriented.</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="st">        * **Rating:** 5</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="st">    * **Query:** "Where is the People Operations internal handbook hosted, and how can someone gain access to it?"</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="st">        * **Explanation:** Realistic query but might be a bit too detailed for a typical user.</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="st">        * **Rating:** 4</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="st">    * **Query:** "Who controls access to People Data in the data warehouse at GitLab, and what approvals are required for Analytics Engineers and Data Analysts to obtain access?"</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a><span class="st">        * **Explanation:** Seems reasonable but too lengthy for a typical user query. </span></span>
+<span id="cb17-17"><a href="#cb17-17"></a><span class="st">        * **Rating:** 3</span></span>
+<span id="cb17-18"><a href="#cb17-18"></a></span>
+<span id="cb17-19"><a href="#cb17-19"></a><span class="st">    ### Unrealistic Queries (Bad Examples)</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a></span>
+<span id="cb17-21"><a href="#cb17-21"></a><span class="st">    * **Query:** "If a GitLab team member has been with the company for over 3 months and is interested in participating in the Onboarding Buddy Program, what should they do to express their interest?"</span></span>
+<span id="cb17-22"><a href="#cb17-22"></a><span class="st">        * **Explanation:** Overly specific and unnatural. No real user would ask this.</span></span>
+<span id="cb17-23"><a href="#cb17-23"></a><span class="st">        * **Rating:** 1</span></span>
+<span id="cb17-24"><a href="#cb17-24"></a><span class="st">    * **Query:** "On what date did the 'Managing Burnout with Time Off with John Fitch' session occur as part of the FY21 Learning Speaker Series?"</span></span>
+<span id="cb17-25"><a href="#cb17-25"></a><span class="st">        * **Explanation:** Irrelevant and overly specific. Not a typical user query. </span></span>
+<span id="cb17-26"><a href="#cb17-26"></a><span class="st">        * **Rating:** 2</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a></span>
+<span id="cb17-28"><a href="#cb17-28"></a><span class="st">    ### Your Task</span></span>
+<span id="cb17-29"><a href="#cb17-29"></a></span>
+<span id="cb17-30"><a href="#cb17-30"></a><span class="st">    For the following generated question, please:</span></span>
+<span id="cb17-31"><a href="#cb17-31"></a></span>
+<span id="cb17-32"><a href="#cb17-32"></a><span class="st">    1.  Rate its realism as a typical user query for an internal handbook application on a scale of 1 to 5 (1 = Very Unrealistic, 3 = Neutral/Somewhat Realistic, 5 = Very Realistic).</span></span>
+<span id="cb17-33"><a href="#cb17-33"></a><span class="st">    2.  Provide a brief explanation for your rating, comparing it to the examples above if helpful.</span></span>
+<span id="cb17-34"><a href="#cb17-34"></a></span>
+<span id="cb17-35"><a href="#cb17-35"></a><span class="st">    ### Output Format</span></span>
+<span id="cb17-36"><a href="#cb17-36"></a></span>
+<span id="cb17-37"><a href="#cb17-37"></a><span class="st">    **Explanation:** `[Your brief explanation]`</span></span>
+<span id="cb17-38"><a href="#cb17-38"></a><span class="st">    **Rating:** `[Your 1–5 rating]`</span></span>
+<span id="cb17-39"><a href="#cb17-39"></a><span class="st">    """</span></span>
+<span id="cb17-40"><a href="#cb17-40"></a>)</span>
+<span id="cb17-41"><a href="#cb17-41"></a></span>
+<span id="cb17-42"><a href="#cb17-42"></a>user_prompt_rate <span class="op">=</span> dedent(</span>
+<span id="cb17-43"><a href="#cb17-43"></a>    <span class="st">"""</span></span>
+<span id="cb17-44"><a href="#cb17-44"></a><span class="st">    **Generated Question to Evaluate:**</span></span>
+<span id="cb17-45"><a href="#cb17-45"></a><span class="st">    `</span><span class="sc">{question_to_evaluate}</span><span class="st">`</span></span>
+<span id="cb17-46"><a href="#cb17-46"></a><span class="st">    """</span></span>
+<span id="cb17-47"><a href="#cb17-47"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hamel and Shreya generally discourage using Likert-type 1-5 scales for LLM judges. However, in this case, we’re not aiming for a very accurate judge, we’re just trying to have a method that works well enough to filter out the questions. We don’t need to make this overly complicated.</p>
+<p>Using the LLM judge, you can apply the filter to the generated questions:</p>
+<div id="dd0929e4" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">class</span> ResponseFiltering(BaseModel):</span>
+<span id="cb18-2"><a href="#cb18-2"></a>    explanation: <span class="bu">str</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>    rating: <span class="bu">int</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a></span>
+<span id="cb18-5"><a href="#cb18-5"></a></span>
+<span id="cb18-6"><a href="#cb18-6"></a>llm_with_structured_output_filtering <span class="op">=</span> llm.with_structured_output(ResponseFiltering)</span>
+<span id="cb18-7"><a href="#cb18-7"></a></span>
+<span id="cb18-8"><a href="#cb18-8"></a>messages_filtering <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb18-9"><a href="#cb18-9"></a>    [(<span class="st">"system"</span>, system_prompt_rate), (<span class="st">"user"</span>, user_prompt_rate)]</span>
+<span id="cb18-10"><a href="#cb18-10"></a>)</span>
+<span id="cb18-11"><a href="#cb18-11"></a></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="cf">async</span> <span class="kw">def</span> rate_qa_pair(qa_pair):</span>
+<span id="cb18-13"><a href="#cb18-13"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages_filtering.ainvoke(</span>
+<span id="cb18-14"><a href="#cb18-14"></a>        {<span class="st">"question_to_evaluate"</span>: qa_pair.question}</span>
+<span id="cb18-15"><a href="#cb18-15"></a>    )</span>
+<span id="cb18-16"><a href="#cb18-16"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_filtering.ainvoke(compiled_messages)</span>
+<span id="cb18-17"><a href="#cb18-17"></a>    <span class="cf">return</span> output</span>
+<span id="cb18-18"><a href="#cb18-18"></a></span>
+<span id="cb18-19"><a href="#cb18-19"></a></span>
+<span id="cb18-20"><a href="#cb18-20"></a>tasks <span class="op">=</span> [rate_qa_pair(qa_pair) <span class="cf">for</span> qa_pair <span class="kw">in</span> qa_pairs]</span>
+<span id="cb18-21"><a href="#cb18-21"></a>results <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb18-22"><a href="#cb18-22"></a></span>
+<span id="cb18-23"><a href="#cb18-23"></a>rated_qa_pairs <span class="op">=</span> [</span>
+<span id="cb18-24"><a href="#cb18-24"></a>    {</span>
+<span id="cb18-25"><a href="#cb18-25"></a>        <span class="st">"rating"</span>: result.rating,</span>
+<span id="cb18-26"><a href="#cb18-26"></a>        <span class="st">"explanation"</span>: result.explanation,</span>
+<span id="cb18-27"><a href="#cb18-27"></a>        <span class="st">"question"</span>: qa_pair.question,</span>
+<span id="cb18-28"><a href="#cb18-28"></a>        <span class="st">"answer"</span>: qa_pair.fact,</span>
+<span id="cb18-29"><a href="#cb18-29"></a>    }</span>
+<span id="cb18-30"><a href="#cb18-30"></a>    <span class="cf">for</span> (result, qa_pair) <span class="kw">in</span> <span class="bu">zip</span>(results, qa_pairs)</span>
+<span id="cb18-31"><a href="#cb18-31"></a>]</span>
+<span id="cb18-32"><a href="#cb18-32"></a></span>
+<span id="cb18-33"><a href="#cb18-33"></a>df_rated_qa_pairs <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb18-34"><a href="#cb18-34"></a>    rated_qa_pairs, columns<span class="op">=</span>[<span class="st">"Rating"</span>, <span class="st">"Explanation"</span>, <span class="st">"Question"</span>]</span>
+<span id="cb18-35"><a href="#cb18-35"></a>)</span>
+<span id="cb18-36"><a href="#cb18-36"></a></span>
+<span id="cb18-37"><a href="#cb18-37"></a>df_rated_qa_pairs.to_excel(</span>
+<span id="cb18-38"><a href="#cb18-38"></a>    <span class="st">"../data/synthetic-data-rag/files/rated_qa_pairs.xlsx"</span>, index<span class="op">=</span><span class="va">False</span></span>
+<span id="cb18-39"><a href="#cb18-39"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will result in a list of <code>ResponseFiltering</code> objects, each containing an explanation and a rating for the corresponding question.</p>
+<p>You can save the results to a file for later use.</p>
+</section>
+<section id="evaluate-the-rag-system" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-the-rag-system">Evaluate the RAG system</h2>
+<p>Now that we have the filtered QA pairs, it’s time to evaluate your RAG system. You’ll evaluate two parts of the RAG system: retrieval and generation.</p>
+<p>Let’s use LangSmith to store our evaluation results. Start by creating a dataset on LangSmith:</p>
+<div id="cfdfe231" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>langsmith_client <span class="op">=</span> Client()</span>
+<span id="cb19-2"><a href="#cb19-2"></a>dataset_name <span class="op">=</span> <span class="st">"Gitlab Handbook QA Evaluation 2"</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="cf">try</span>:</span>
+<span id="cb19-5"><a href="#cb19-5"></a>    dataset <span class="op">=</span> langsmith_client.create_dataset(dataset_name<span class="op">=</span>dataset_name)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    examples <span class="op">=</span> [</span>
+<span id="cb19-7"><a href="#cb19-7"></a>        {</span>
+<span id="cb19-8"><a href="#cb19-8"></a>            <span class="st">"inputs"</span>: {</span>
+<span id="cb19-9"><a href="#cb19-9"></a>                <span class="st">"question"</span>: h[<span class="st">"question"</span>],</span>
+<span id="cb19-10"><a href="#cb19-10"></a>            },</span>
+<span id="cb19-11"><a href="#cb19-11"></a>            <span class="st">"outputs"</span>: {</span>
+<span id="cb19-12"><a href="#cb19-12"></a>                <span class="st">"answer"</span>: h[<span class="st">"answer"</span>],</span>
+<span id="cb19-13"><a href="#cb19-13"></a>                <span class="st">"doc"</span>: {</span>
+<span id="cb19-14"><a href="#cb19-14"></a>                    <span class="st">"id"</span>: chunk.<span class="bu">id</span>,</span>
+<span id="cb19-15"><a href="#cb19-15"></a>                    <span class="st">"path"</span>: chunk.path,</span>
+<span id="cb19-16"><a href="#cb19-16"></a>                },</span>
+<span id="cb19-17"><a href="#cb19-17"></a>            },</span>
+<span id="cb19-18"><a href="#cb19-18"></a>        }</span>
+<span id="cb19-19"><a href="#cb19-19"></a>        <span class="cf">for</span> h, chunk <span class="kw">in</span> <span class="bu">zip</span>(rated_qa_pairs, golden_docs)</span>
+<span id="cb19-20"><a href="#cb19-20"></a>        <span class="cf">if</span> h[<span class="st">"rating"</span>] <span class="op">&gt;=</span> <span class="dv">5</span></span>
+<span id="cb19-21"><a href="#cb19-21"></a>    ]</span>
+<span id="cb19-22"><a href="#cb19-22"></a>    langsmith_client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
+<span id="cb19-23"><a href="#cb19-23"></a><span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb19-24"><a href="#cb19-24"></a>    <span class="bu">print</span>(<span class="st">"Dataset already exists, skipping creation."</span>)</span>
+<span id="cb19-25"><a href="#cb19-25"></a>    dataset <span class="op">=</span> langsmith_client.read_dataset(dataset_name<span class="op">=</span>dataset_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will create a dataset on LangSmith with the rated QA pairs. Each example will include the question, answer, and the document from which the question was generated.</p>
+<section id="retrieval-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="retrieval-metrics">Retrieval Metrics</h3>
+<p>To evaluate the retrieval part of the RAG system, you can use metrics such as recall@k, precision@k, Mean Reciprocal Rank (MRR), and Normalized Discounted Cumulative Gain (NDCG).</p>
+<p>For this tutorial, you’ll use two metrics: MRR and recall@k.</p>
+<section id="mean-reciprocal-rank-mrr" class="level4">
+<h4 class="anchored" data-anchor-id="mean-reciprocal-rank-mrr">Mean Reciprocal Rank (MRR)</h4>
+<p>MRR measures how well the RAG system retrieves relevant documents. It calculates the average of the reciprocal ranks of the first relevant document for each query. It essentially measures how quickly the system retrieves the first relevant document for a given query.</p>
+<p>Reciprocal Rank (RR) is calculated for a single query. It is the reciprocal of the rank at which the first relevant document is found. For example, if the first relevant item is at position 1, the RR is 1. If it’s at position 3, the RR is <span class="math inline">\(1/3\)</span>. The formula is:</p>
+<p><span class="math display">\[RR = \frac{1}{rank}\]</span></p>
+<p>where <span class="math inline">\(rank\)</span> is the position of the first relevant document.</p>
+<p>MRR is the average of the Reciprocal Rank scores across all your queries. It provides a single, aggregate measure of retrieval performance. An MRR of 1 means you found the correct document at the first position for every query. The formula is:</p>
+<p><span class="math display">\[MRR = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{rank}\]</span></p>
+<p>where <span class="math inline">\(|Q|\)</span> is the number of queries and <span class="math inline">\(rank_i\)</span> is the position of the first relevant document for query <span class="math inline">\(i\)</span>.</p>
+</section>
+</section>
+<section id="recallk" class="level3">
+<h3 class="anchored" data-anchor-id="recallk">Recall@k</h3>
+<p>Recall@k measures the proportion of relevant documents retrieved in the top k results. It helps you understand how many relevant documents are retrieved by the RAG system.</p>
+<p>For example, if you retrieve 5 documents and 3 of them are relevant, recall@5 is 3/5 = 0.6. The formula is:</p>
+<p><span class="math display">\[Recall@k = \frac{|\text{relevant documents in top k}|}{|\text{total relevant documents}|}\]</span></p>
+<p>where the numerator is the number of relevant documents retrieved in the top k results, and the denominator is the total number of relevant documents for the query. To get the overall performance, you average the Recall@k values across all queries.</p>
+<p>In our specific case, since we only have one relevant document per query, Recall@k will be 1 if the relevant document is in the top k results, and 0 otherwise.</p>
+<p>You can define two LangSmith evaluators to calculate these metrics:</p>
+<div id="07239efe" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">def</span> mrr(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb20-2"><a href="#cb20-2"></a>    reference_docs <span class="op">=</span> [<span class="bu">str</span>(reference_outputs[<span class="st">"doc"</span>][<span class="st">"id"</span>])]</span>
+<span id="cb20-3"><a href="#cb20-3"></a>    docs <span class="op">=</span> outputs.get(<span class="st">"docs"</span>, [])</span>
+<span id="cb20-4"><a href="#cb20-4"></a>    <span class="cf">if</span> <span class="kw">not</span> docs:</span>
+<span id="cb20-5"><a href="#cb20-5"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>    rank <span class="op">=</span> <span class="bu">next</span>((i <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> i, doc <span class="kw">in</span> <span class="bu">enumerate</span>(docs) <span class="cf">if</span> doc <span class="kw">in</span> reference_docs), <span class="va">None</span>)</span>
+<span id="cb20-7"><a href="#cb20-7"></a>    <span class="cf">return</span> <span class="fl">1.0</span> <span class="op">/</span> rank <span class="cf">if</span> rank <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a></span>
+<span id="cb20-9"><a href="#cb20-9"></a></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="kw">def</span> recall(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb20-11"><a href="#cb20-11"></a>    reference_docs <span class="op">=</span> [<span class="bu">str</span>(reference_outputs[<span class="st">"doc"</span>][<span class="st">"id"</span>])]</span>
+<span id="cb20-12"><a href="#cb20-12"></a>    docs <span class="op">=</span> outputs.get(<span class="st">"docs"</span>, [])</span>
+<span id="cb20-13"><a href="#cb20-13"></a>    <span class="cf">if</span> <span class="kw">not</span> docs:</span>
+<span id="cb20-14"><a href="#cb20-14"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb20-15"><a href="#cb20-15"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="bu">any</span>(doc <span class="kw">in</span> reference_docs <span class="cf">for</span> doc <span class="kw">in</span> docs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>LangSmith evaluators take <code>inputs</code>, <code>outputs</code>, and <code>reference_outputs</code> as arguments. The <code>inputs</code> are the user query and the retrieved documents, the <code>outputs</code> are the generated answers, and the <code>reference_outputs</code> are the target chunks.</p>
+<p>Using those values, you can use the formulas we discussed to compute the MRR and recall@k metrics.</p>
+</section>
+<section id="generation-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="generation-metrics">Generation metrics</h3>
+<p>In addition to measuring how good are the retrieved documents, you also want to measure if the LLM makes good use of them to generate answers. For that, Hamel and Shreya recommend using <a href="https://github.com/stanford-futuredata/ARES">ARES</a> or <a href="https://github.com/explodinggradients/ragas">RAGAS</a>.</p>
+<p>The only issue is that ARES requires a human preference validation set of at least 50 examples and the standard RAGAS metrics consume tons of tokens. So, to keep things simple, you’ll build 3 simple metrics using an LLM judge, similar to RAGAS’ <a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/nvidia_metrics/">Nvidia metrics</a>:</p>
+<ul>
+<li><strong>Answer accuracy</strong>: Measures how accurate the generated answer is compared to the expected answer.</li>
+<li><strong>Context relevance</strong>: Measures if the context provided to the LLM is relevant to the user query.</li>
+<li><strong>Groundedness</strong>: Measures if the generated answer is grounded in the provided context.</li>
+</ul>
+<p>Compared to RAGAS implementation of these same metrics, the ones you’ll define here don’t do multiple runs and average the resulting scores. But, if you want to, you can easily apply a <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html#parallelization">parallelization strategy</a> to do this. I’d also recommend using reasoning models, as they tend to perform better in these types of tasks.</p>
+<p>Let’s see how to implement these metrics using LangSmith.</p>
+<section id="answer-accuracy" class="level4">
+<h4 class="anchored" data-anchor-id="answer-accuracy">Answer accuracy</h4>
+<p>This metric evaluates how accurate the generated answer is compared to the expected answer. It’s an LLM judge that scores the generated answer against a reference answer using a 0, 1, 2 scale:</p>
+<div id="07f60491" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>system_prompt_answer_accuracy <span class="op">=</span> dedent(</span>
+<span id="cb21-2"><a href="#cb21-2"></a>    <span class="st">"""</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the accuracy of a User Answer against a Reference Answer, given a Question.</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="st">    Here's the grading scale you must use:</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="st">    0 - If User Answer is not contained in Reference Answer or not accurate in all terms, topics, numbers, metrics, dates and units or the User Answer do not answer the question.</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="st">    2 - If User Answer is full contained and equivalent to Reference Answer in all terms, topics, numbers, metrics, dates and units.</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="st">    1 - If User Answer is partially contained and almost equivalent to Reference Answer in all terms, topics, numbers, metrics, dates and units.</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="st">    Your rating must be only 0, 1 or 2 according to the instructions above.</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a></span>
+<span id="cb21-13"><a href="#cb21-13"></a><span class="st">    Your answer must be a JSON object with the following keys:</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="st">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a><span class="st">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
+<span id="cb21-16"><a href="#cb21-16"></a><span class="st">    """</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a>)</span>
+<span id="cb21-18"><a href="#cb21-18"></a></span>
+<span id="cb21-19"><a href="#cb21-19"></a>user_prompt_answer_accuracy <span class="op">=</span> dedent(</span>
+<span id="cb21-20"><a href="#cb21-20"></a>    <span class="st">"""</span></span>
+<span id="cb21-21"><a href="#cb21-21"></a><span class="st">    **Question:** `</span><span class="sc">{question}</span><span class="st">`</span></span>
+<span id="cb21-22"><a href="#cb21-22"></a><span class="st">    **User Answer:** `</span><span class="sc">{user_answer}</span><span class="st">`</span></span>
+<span id="cb21-23"><a href="#cb21-23"></a><span class="st">    **Reference Answer:** `</span><span class="sc">{reference_answer}</span><span class="st">`</span></span>
+<span id="cb21-24"><a href="#cb21-24"></a><span class="st">    """</span></span>
+<span id="cb21-25"><a href="#cb21-25"></a>)</span>
+<span id="cb21-26"><a href="#cb21-26"></a></span>
+<span id="cb21-27"><a href="#cb21-27"></a>messages_answer_accuracy <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb21-28"><a href="#cb21-28"></a>    [(<span class="st">"system"</span>, system_prompt_answer_accuracy), (<span class="st">"user"</span>, user_prompt_answer_accuracy)]</span>
+<span id="cb21-29"><a href="#cb21-29"></a>)</span>
+<span id="cb21-30"><a href="#cb21-30"></a></span>
+<span id="cb21-31"><a href="#cb21-31"></a></span>
+<span id="cb21-32"><a href="#cb21-32"></a><span class="kw">class</span> ResponseAnswerAccuracy(BaseModel):</span>
+<span id="cb21-33"><a href="#cb21-33"></a>    explanation: <span class="bu">str</span></span>
+<span id="cb21-34"><a href="#cb21-34"></a>    rating: <span class="bu">int</span></span>
+<span id="cb21-35"><a href="#cb21-35"></a></span>
+<span id="cb21-36"><a href="#cb21-36"></a></span>
+<span id="cb21-37"><a href="#cb21-37"></a>llm <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
+<span id="cb21-38"><a href="#cb21-38"></a></span>
+<span id="cb21-39"><a href="#cb21-39"></a>llm_with_structured_output_answer_accuracy <span class="op">=</span> llm.with_structured_output(</span>
+<span id="cb21-40"><a href="#cb21-40"></a>    ResponseAnswerAccuracy</span>
+<span id="cb21-41"><a href="#cb21-41"></a>)</span>
+<span id="cb21-42"><a href="#cb21-42"></a></span>
+<span id="cb21-43"><a href="#cb21-43"></a></span>
+<span id="cb21-44"><a href="#cb21-44"></a><span class="cf">async</span> <span class="kw">def</span> answer_accuracy(</span>
+<span id="cb21-45"><a href="#cb21-45"></a>    inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span></span>
+<span id="cb21-46"><a href="#cb21-46"></a>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb21-47"><a href="#cb21-47"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages_answer_accuracy.ainvoke(</span>
+<span id="cb21-48"><a href="#cb21-48"></a>        {</span>
+<span id="cb21-49"><a href="#cb21-49"></a>            <span class="st">"question"</span>: inputs[<span class="st">"question"</span>],</span>
+<span id="cb21-50"><a href="#cb21-50"></a>            <span class="st">"user_answer"</span>: outputs[<span class="st">"answer"</span>],</span>
+<span id="cb21-51"><a href="#cb21-51"></a>            <span class="st">"reference_answer"</span>: reference_outputs[<span class="st">"answer"</span>],</span>
+<span id="cb21-52"><a href="#cb21-52"></a>        }</span>
+<span id="cb21-53"><a href="#cb21-53"></a>    )</span>
+<span id="cb21-54"><a href="#cb21-54"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_answer_accuracy.ainvoke(compiled_messages)</span>
+<span id="cb21-55"><a href="#cb21-55"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="fl">2.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Similar to the retrieval evaluators, you can define LangSmith evaluators for the answer accuracy metric. The <code>inputs</code> will contain the user question, the <code>outputs</code> will have the generated answer, and the <code>reference_outputs</code> will have the expected answer.</p>
+</section>
+<section id="context-relevance" class="level4">
+<h4 class="anchored" data-anchor-id="context-relevance">Context relevance</h4>
+<p>This metric evaluates if the context provided to the LLM is relevant to the user query. Similar to the answer accuracy metric, it uses an LLM judge that scores the context relevance against a reference answer using a 0, 1, 2 scale:</p>
+<div id="82c8f6b6" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>system_prompt_context_relevance <span class="op">=</span> dedent(</span>
+<span id="cb22-2"><a href="#cb22-2"></a>    <span class="st">"""</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the relevance of a Context in order to answer a Question. </span></span>
+<span id="cb22-4"><a href="#cb22-4"></a></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="st">    Do not rely on your previous knowledge about the Question. Use only what is written in the Context and in the Question.</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="st">    Here's the grading scale you must use:</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="st">    0 - If the context does not contain any relevant information to answer the question.</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="st">    1 - If the context partially contains relevant information to answer the question.</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="st">    2 - If the context contains relevant information to answer the question.</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="st">    You must always provide the relevance score of 0, 1, or 2, nothing else.</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a></span>
+<span id="cb22-15"><a href="#cb22-15"></a><span class="st">    Your answer must be a JSON object with the following keys:</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a><span class="st">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
+<span id="cb22-17"><a href="#cb22-17"></a><span class="st">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a><span class="st">    """</span></span>
+<span id="cb22-19"><a href="#cb22-19"></a>)</span>
+<span id="cb22-20"><a href="#cb22-20"></a></span>
+<span id="cb22-21"><a href="#cb22-21"></a>user_prompt_context_relevance <span class="op">=</span> dedent(</span>
+<span id="cb22-22"><a href="#cb22-22"></a>    <span class="st">"""</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="st">    **Question:** `</span><span class="sc">{question}</span><span class="st">`</span></span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="st">    **Context:** `</span><span class="sc">{context}</span><span class="st">`</span></span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="st">    """</span></span>
+<span id="cb22-26"><a href="#cb22-26"></a>)</span>
+<span id="cb22-27"><a href="#cb22-27"></a></span>
+<span id="cb22-28"><a href="#cb22-28"></a>messages_context_relevance <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb22-29"><a href="#cb22-29"></a>    [</span>
+<span id="cb22-30"><a href="#cb22-30"></a>        (<span class="st">"system"</span>, system_prompt_context_relevance),</span>
+<span id="cb22-31"><a href="#cb22-31"></a>        (<span class="st">"user"</span>, user_prompt_context_relevance),</span>
+<span id="cb22-32"><a href="#cb22-32"></a>    ]</span>
+<span id="cb22-33"><a href="#cb22-33"></a>)</span>
+<span id="cb22-34"><a href="#cb22-34"></a></span>
+<span id="cb22-35"><a href="#cb22-35"></a></span>
+<span id="cb22-36"><a href="#cb22-36"></a><span class="kw">class</span> ResponseContextRelevance(BaseModel):</span>
+<span id="cb22-37"><a href="#cb22-37"></a>    explanation: <span class="bu">str</span></span>
+<span id="cb22-38"><a href="#cb22-38"></a>    rating: <span class="bu">int</span></span>
+<span id="cb22-39"><a href="#cb22-39"></a></span>
+<span id="cb22-40"><a href="#cb22-40"></a></span>
+<span id="cb22-41"><a href="#cb22-41"></a>llm <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
+<span id="cb22-42"><a href="#cb22-42"></a>llm_with_structured_output_context_relevance <span class="op">=</span> llm.with_structured_output(</span>
+<span id="cb22-43"><a href="#cb22-43"></a>    ResponseContextRelevance</span>
+<span id="cb22-44"><a href="#cb22-44"></a>)</span>
+<span id="cb22-45"><a href="#cb22-45"></a></span>
+<span id="cb22-46"><a href="#cb22-46"></a></span>
+<span id="cb22-47"><a href="#cb22-47"></a><span class="cf">async</span> <span class="kw">def</span> context_relevance(</span>
+<span id="cb22-48"><a href="#cb22-48"></a>    inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span></span>
+<span id="cb22-49"><a href="#cb22-49"></a>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb22-50"><a href="#cb22-50"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages_context_relevance.ainvoke(</span>
+<span id="cb22-51"><a href="#cb22-51"></a>        {</span>
+<span id="cb22-52"><a href="#cb22-52"></a>            <span class="st">"question"</span>: inputs[<span class="st">"question"</span>],</span>
+<span id="cb22-53"><a href="#cb22-53"></a>            <span class="st">"context"</span>: outputs[<span class="st">"context"</span>],</span>
+<span id="cb22-54"><a href="#cb22-54"></a>        }</span>
+<span id="cb22-55"><a href="#cb22-55"></a>    )</span>
+<span id="cb22-56"><a href="#cb22-56"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_context_relevance.ainvoke(</span>
+<span id="cb22-57"><a href="#cb22-57"></a>        compiled_messages</span>
+<span id="cb22-58"><a href="#cb22-58"></a>    )</span>
+<span id="cb22-59"><a href="#cb22-59"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can define a <code>context_relevance</code> evaluator. The <code>inputs</code> will contain the user question and from the <code>outputs</code> you’ll use the context provided to the LLM.</p>
+</section>
+<section id="groundedness" class="level4">
+<h4 class="anchored" data-anchor-id="groundedness">Groundedness</h4>
+<p>This metric evaluates if the answer is grounded in the provided context. Like before, you use an LLM judge that scores the groundedness of the answer against the context using a 0, 1, 2 scale:</p>
+<div id="32cef827" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>system_prompt_groundedness <span class="op">=</span> dedent(</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="st">"""</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the groundedness of an assertion against a context. </span></span>
+<span id="cb23-4"><a href="#cb23-4"></a></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="st">    Do not rely on your previous knowledge about the assertion or context. Use only what is written in the assertion and in the context.</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="st">    Here's the grading scale you must use:</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a></span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="st">    0 - If the assertion is not supported by the context. Or, if the context or assertion is empty.</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="st">    1 - If the context partially contains relevant information to support the assertion.</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a><span class="st">    2 - If the context fully supports the assertion.</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a></span>
+<span id="cb23-13"><a href="#cb23-13"></a><span class="st">    You must always provide the relevance score of 0, 1, or 2, nothing else.</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a></span>
+<span id="cb23-15"><a href="#cb23-15"></a><span class="st">    Your answer must be a JSON object with the following keys:</span></span>
+<span id="cb23-16"><a href="#cb23-16"></a></span>
+<span id="cb23-17"><a href="#cb23-17"></a><span class="st">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
+<span id="cb23-18"><a href="#cb23-18"></a><span class="st">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
+<span id="cb23-19"><a href="#cb23-19"></a><span class="st">    """</span></span>
+<span id="cb23-20"><a href="#cb23-20"></a>)</span>
+<span id="cb23-21"><a href="#cb23-21"></a></span>
+<span id="cb23-22"><a href="#cb23-22"></a>user_prompt_groundedness <span class="op">=</span> dedent(</span>
+<span id="cb23-23"><a href="#cb23-23"></a>    <span class="st">"""</span></span>
+<span id="cb23-24"><a href="#cb23-24"></a><span class="st">    **Assertion:** `</span><span class="sc">{answer}</span><span class="st">`</span></span>
+<span id="cb23-25"><a href="#cb23-25"></a><span class="st">    **Context:** `</span><span class="sc">{context}</span><span class="st">`</span></span>
+<span id="cb23-26"><a href="#cb23-26"></a><span class="st">    """</span></span>
+<span id="cb23-27"><a href="#cb23-27"></a>)</span>
+<span id="cb23-28"><a href="#cb23-28"></a></span>
+<span id="cb23-29"><a href="#cb23-29"></a>messages_groundedness <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb23-30"><a href="#cb23-30"></a>    [(<span class="st">"system"</span>, system_prompt_groundedness), (<span class="st">"user"</span>, user_prompt_groundedness)]</span>
+<span id="cb23-31"><a href="#cb23-31"></a>)</span>
+<span id="cb23-32"><a href="#cb23-32"></a></span>
+<span id="cb23-33"><a href="#cb23-33"></a></span>
+<span id="cb23-34"><a href="#cb23-34"></a><span class="kw">class</span> ResponseGroundedness(BaseModel):</span>
+<span id="cb23-35"><a href="#cb23-35"></a>    explanation: <span class="bu">str</span></span>
+<span id="cb23-36"><a href="#cb23-36"></a>    rating: <span class="bu">int</span></span>
+<span id="cb23-37"><a href="#cb23-37"></a></span>
+<span id="cb23-38"><a href="#cb23-38"></a></span>
+<span id="cb23-39"><a href="#cb23-39"></a>llm <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
+<span id="cb23-40"><a href="#cb23-40"></a>llm_with_structured_output_groundedness <span class="op">=</span> llm.with_structured_output(</span>
+<span id="cb23-41"><a href="#cb23-41"></a>    ResponseGroundedness</span>
+<span id="cb23-42"><a href="#cb23-42"></a>)</span>
+<span id="cb23-43"><a href="#cb23-43"></a></span>
+<span id="cb23-44"><a href="#cb23-44"></a></span>
+<span id="cb23-45"><a href="#cb23-45"></a><span class="cf">async</span> <span class="kw">def</span> groundedness(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb23-46"><a href="#cb23-46"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages_groundedness.ainvoke(</span>
+<span id="cb23-47"><a href="#cb23-47"></a>        {</span>
+<span id="cb23-48"><a href="#cb23-48"></a>            <span class="st">"answer"</span>: outputs[<span class="st">"answer"</span>],</span>
+<span id="cb23-49"><a href="#cb23-49"></a>            <span class="st">"context"</span>: outputs[<span class="st">"context"</span>],</span>
+<span id="cb23-50"><a href="#cb23-50"></a>        }</span>
+<span id="cb23-51"><a href="#cb23-51"></a>    )</span>
+<span id="cb23-52"><a href="#cb23-52"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_groundedness.ainvoke(compiled_messages)</span>
+<span id="cb23-53"><a href="#cb23-53"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You use the same approach as before to define LangSmith evaluators for this metric. The <code>inputs</code> will contain the user question, the <code>outputs</code> will have the context provided to the LLM.</p>
+</section>
+</section>
+<section id="run-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="run-evaluation">Run evaluation</h3>
+<p>Now we can run the full RAG pipeline and evaluate its results using the LangSmith evaluators.</p>
+<div id="ddb7581f" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>system_prompt_generation <span class="op">=</span> dedent(</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    <span class="st">"""</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="st">    You're a helpful assistant. Provided with a question and the most relevant documents, you must generate a concise and accurate answer based on the information in those documents.</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="st">    """</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>)</span>
+<span id="cb24-6"><a href="#cb24-6"></a></span>
+<span id="cb24-7"><a href="#cb24-7"></a>user_prompt_generation <span class="op">=</span> dedent(</span>
+<span id="cb24-8"><a href="#cb24-8"></a>    <span class="st">"""</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="st">    QUESTION: </span><span class="sc">{question}</span></span>
+<span id="cb24-10"><a href="#cb24-10"></a></span>
+<span id="cb24-11"><a href="#cb24-11"></a><span class="st">    RELEVANT DOCUMENTS:</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="st">    </span><span class="sc">{documents}</span></span>
+<span id="cb24-13"><a href="#cb24-13"></a><span class="st">    """</span></span>
+<span id="cb24-14"><a href="#cb24-14"></a>)</span>
+<span id="cb24-15"><a href="#cb24-15"></a></span>
+<span id="cb24-16"><a href="#cb24-16"></a>messages_generation <span class="op">=</span> ChatPromptTemplate.from_messages(</span>
+<span id="cb24-17"><a href="#cb24-17"></a>    [(<span class="st">"system"</span>, system_prompt_generation), (<span class="st">"user"</span>, user_prompt_generation)]</span>
+<span id="cb24-18"><a href="#cb24-18"></a>)</span>
+<span id="cb24-19"><a href="#cb24-19"></a></span>
+<span id="cb24-20"><a href="#cb24-20"></a>llm_generation <span class="op">=</span> ChatOpenAI(</span>
+<span id="cb24-21"><a href="#cb24-21"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
+<span id="cb24-22"><a href="#cb24-22"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A good starting point is to evaluate different values for the number of retrieved documents (K). For example, you could evaluate different values for the number of retrieved documents.</p>
+<p>Langsmith requires a wrapper or target function that encapsulates your RAG system. In your case, this function takes a user query, retrieves the most similar documents, generates an answer using the LLM, and returns the generated answer with the document IDs and context retrieved.</p>
+<p>I’ll run this code for K values of 3, 5, and 10, and compare the results.</p>
+<div id="9c0ddd40" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="cf">for</span> K <span class="kw">in</span> [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>]:</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="bu">print</span>(<span class="ss">f"Running evaluation for K=</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a></span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="at">@traceable</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>    <span class="cf">async</span> <span class="kw">def</span> target(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb25-6"><a href="#cb25-6"></a>        relevant_docs <span class="op">=</span> get_similar_docs(inputs[<span class="st">"question"</span>], top_k<span class="op">=</span>K)</span>
+<span id="cb25-7"><a href="#cb25-7"></a>        formatted_docs <span class="op">=</span> format_docs(relevant_docs)</span>
+<span id="cb25-8"><a href="#cb25-8"></a>        messages <span class="op">=</span> <span class="cf">await</span> messages_generation.ainvoke(</span>
+<span id="cb25-9"><a href="#cb25-9"></a>            {</span>
+<span id="cb25-10"><a href="#cb25-10"></a>                <span class="st">"question"</span>: inputs[<span class="st">"question"</span>],</span>
+<span id="cb25-11"><a href="#cb25-11"></a>                <span class="st">"documents"</span>: formatted_docs,</span>
+<span id="cb25-12"><a href="#cb25-12"></a>            }</span>
+<span id="cb25-13"><a href="#cb25-13"></a>        )</span>
+<span id="cb25-14"><a href="#cb25-14"></a>        response <span class="op">=</span> <span class="cf">await</span> llm_generation.ainvoke(messages)</span>
+<span id="cb25-15"><a href="#cb25-15"></a>        <span class="cf">return</span> {</span>
+<span id="cb25-16"><a href="#cb25-16"></a>            <span class="st">"answer"</span>: response.content,</span>
+<span id="cb25-17"><a href="#cb25-17"></a>            <span class="st">"docs"</span>: [doc.<span class="bu">id</span> <span class="cf">for</span> doc <span class="kw">in</span> relevant_docs],</span>
+<span id="cb25-18"><a href="#cb25-18"></a>            <span class="st">"context"</span>: formatted_docs,</span>
+<span id="cb25-19"><a href="#cb25-19"></a>        }</span>
+<span id="cb25-20"><a href="#cb25-20"></a></span>
+<span id="cb25-21"><a href="#cb25-21"></a>    experiment_results <span class="op">=</span> <span class="cf">await</span> langsmith_client.aevaluate(</span>
+<span id="cb25-22"><a href="#cb25-22"></a>        target,</span>
+<span id="cb25-23"><a href="#cb25-23"></a>        data<span class="op">=</span>dataset_name,</span>
+<span id="cb25-24"><a href="#cb25-24"></a>        evaluators<span class="op">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
+<span id="cb25-25"><a href="#cb25-25"></a>        max_concurrency<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb25-26"><a href="#cb25-26"></a>        experiment_prefix<span class="op">=</span><span class="ss">f"top-</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb25-27"><a href="#cb25-27"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using <code>aevaluate</code> you can speed up the evaluation process and run the evaluations concurrently. I got the following results:</p>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>k</strong></th>
+<th style="text-align: center;"><strong>Answer accuracy</strong></th>
+<th style="text-align: center;"><strong>Context relevance</strong></th>
+<th style="text-align: center;"><strong>Groundedness</strong></th>
+<th style="text-align: center;"><strong>MRR</strong></th>
+<th style="text-align: center;"><strong>Recall</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: center;">0.81</td>
+<td style="text-align: center;">0.93</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">0.80</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">0.76</td>
+<td style="text-align: center;">0.85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">0.98</td>
+<td style="text-align: center;">0.77</td>
+<td style="text-align: center;">0.91</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that recall improves significantly as you increase the number of retrieved documents, which is expected. Answer accuracy and context relevance only seems to improve significantly when you increase the number of retrieved documents from 5 to 10.</p>
+<p>If you got here, you’ve successfully built a RAG system and evaluated it using synthetic data. The next steps would be to continue making changes to parts of the pipeline and re-running the evaluations to see how they affect the performance of your RAG system.</p>
+<p>You will also want to improve the quality of the generated questions, and ideally include real user queries in the evaluation process.</p>
+<p>Next, I’ll show you how to squeeze a bit more performance from the retrieval part of the RAG system by using a reranker.</p>
+</section>
+</section>
+<section id="improve-metrics-with-a-reranker" class="level2">
+<h2 class="anchored" data-anchor-id="improve-metrics-with-a-reranker">Improve metrics with a reranker</h2>
+<p>A quick way to improve your RAG system is to rerank the retrieved documents. In addition to doing retrieval using vector similarity or keyword search, you can have a reranking step that uses a more capable model to score and reorder the retrieved documents based on their relevance to the user query.</p>
+<p>Let’s use <code>sentence-transformers</code> with an open-source model to do this:</p>
+<div id="3ef76069" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>cross_encoder <span class="op">=</span> CrossEncoder(<span class="st">"mixedbread-ai/mxbai-rerank-xsmall-v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To rerank a set of documents, you take the results from the retrieval step and pass them to the reranker, which will return a new set of documents ordered by their relevance to the user query.</p>
+<p>Here’s an example:</p>
+<div id="481b2e0b" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>query <span class="op">=</span> <span class="st">"What is the process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>hits <span class="op">=</span> get_similar_docs(query, top_k<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a>cross_inp <span class="op">=</span> [[query, h.page_content] <span class="cf">for</span> h <span class="kw">in</span> hits]</span>
+<span id="cb27-4"><a href="#cb27-4"></a>reranker_scores <span class="op">=</span> cross_encoder.predict(cross_inp)</span>
+<span id="cb27-5"><a href="#cb27-5"></a>sorted_hits <span class="op">=</span> <span class="bu">sorted</span>(hits, key<span class="op">=</span><span class="kw">lambda</span> x: reranker_scores[hits.index(x)], reverse<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This takes the 50 most similar documents to the query and reranks them using a cross-encoder model. The <code>reranker_scores</code> are used to sort the documents in descending order of relevance.</p>
+<p>Now you can do the same evaluation as before (for k = 5), but including this new reranking step:</p>
+<div id="3411cd58" class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>K <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="kw">def</span> get_reranked_docs(</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    query: <span class="bu">str</span>, similar_docs: <span class="bu">list</span>[RetrievedDoc]</span>
+<span id="cb28-5"><a href="#cb28-5"></a>) <span class="op">-&gt;</span> <span class="bu">list</span>[RetrievedDoc]:</span>
+<span id="cb28-6"><a href="#cb28-6"></a>    cross_inp <span class="op">=</span> [[query, doc.page_content] <span class="cf">for</span> doc <span class="kw">in</span> similar_docs]</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    reranker_scores <span class="op">=</span> cross_encoder.predict(cross_inp)</span>
+<span id="cb28-8"><a href="#cb28-8"></a>    sorted_docs <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb28-9"><a href="#cb28-9"></a>        similar_docs, key<span class="op">=</span><span class="kw">lambda</span> x: reranker_scores[similar_docs.index(x)], reverse<span class="op">=</span><span class="va">True</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a>    )</span>
+<span id="cb28-11"><a href="#cb28-11"></a>    <span class="cf">return</span> sorted_docs</span>
+<span id="cb28-12"><a href="#cb28-12"></a></span>
+<span id="cb28-13"><a href="#cb28-13"></a></span>
+<span id="cb28-14"><a href="#cb28-14"></a><span class="at">@traceable</span></span>
+<span id="cb28-15"><a href="#cb28-15"></a><span class="cf">async</span> <span class="kw">def</span> target_with_reranking(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb28-16"><a href="#cb28-16"></a>    relevant_docs <span class="op">=</span> get_similar_docs(inputs[<span class="st">"question"</span>], top_k<span class="op">=</span><span class="dv">75</span>)</span>
+<span id="cb28-17"><a href="#cb28-17"></a>    reranked_docs <span class="op">=</span> get_reranked_docs(inputs[<span class="st">"question"</span>], relevant_docs)[:K]</span>
+<span id="cb28-18"><a href="#cb28-18"></a>    formatted_docs <span class="op">=</span> format_docs(reranked_docs)</span>
+<span id="cb28-19"><a href="#cb28-19"></a>    messages <span class="op">=</span> <span class="cf">await</span> messages_generation.ainvoke(</span>
+<span id="cb28-20"><a href="#cb28-20"></a>        {</span>
+<span id="cb28-21"><a href="#cb28-21"></a>            <span class="st">"question"</span>: inputs[<span class="st">"question"</span>],</span>
+<span id="cb28-22"><a href="#cb28-22"></a>            <span class="st">"documents"</span>: formatted_docs,</span>
+<span id="cb28-23"><a href="#cb28-23"></a>        }</span>
+<span id="cb28-24"><a href="#cb28-24"></a>    )</span>
+<span id="cb28-25"><a href="#cb28-25"></a>    response <span class="op">=</span> <span class="cf">await</span> llm.ainvoke(messages)</span>
+<span id="cb28-26"><a href="#cb28-26"></a>    <span class="cf">return</span> {</span>
+<span id="cb28-27"><a href="#cb28-27"></a>        <span class="st">"answer"</span>: response,</span>
+<span id="cb28-28"><a href="#cb28-28"></a>        <span class="st">"docs"</span>: [doc.<span class="bu">id</span> <span class="cf">for</span> doc <span class="kw">in</span> reranked_docs],</span>
+<span id="cb28-29"><a href="#cb28-29"></a>        <span class="st">"context"</span>: formatted_docs,</span>
+<span id="cb28-30"><a href="#cb28-30"></a>    }</span>
+<span id="cb28-31"><a href="#cb28-31"></a></span>
+<span id="cb28-32"><a href="#cb28-32"></a>experiment_results <span class="op">=</span> <span class="cf">await</span> langsmith_client.aevaluate(</span>
+<span id="cb28-33"><a href="#cb28-33"></a>    target_with_reranking,</span>
+<span id="cb28-34"><a href="#cb28-34"></a>    data<span class="op">=</span>dataset_name,</span>
+<span id="cb28-35"><a href="#cb28-35"></a>    evaluators<span class="op">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
+<span id="cb28-36"><a href="#cb28-36"></a>    max_concurrency<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb28-37"><a href="#cb28-37"></a>    experiment_prefix<span class="op">=</span><span class="ss">f"top-</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">-reranked"</span>,</span>
+<span id="cb28-38"><a href="#cb28-38"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are the results of the original run with k=5 and the run with a reranker:</p>
+<table class="table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>experiment</strong></th>
+<th style="text-align: center;"><strong>answer_accuracy</strong></th>
+<th style="text-align: center;"><strong>context_relevance</strong></th>
+<th style="text-align: center;"><strong>groundedness</strong></th>
+<th style="text-align: center;"><strong>mrr</strong></th>
+<th style="text-align: center;"><strong>recall</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>k=5, vanilla</strong></td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">0.76</td>
+<td style="text-align: center;">0.85</td>
+</tr>
+<tr class="even">
+<td><strong>k=5, reranked</strong></td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">0.79</td>
+<td style="text-align: center;">0.91</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that it immediately improves most metrics, especially the answer accuracy and recall. You should expect some variance in the results, so be aware that the change is not necessarily as big as it seems (but that’s a topic for another article!).</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this tutorial, you’ve learned how to use synthetic data to bootstrap your RAG system evaluations. We covered:</p>
+<ul>
+<li><strong>Synthetic data generation</strong>: How to generate QA pairs from your documents using adversarial techniques with confounding chunks</li>
+<li><strong>Evaluation metrics</strong>: Both retrieval metrics (MRR, Recall@k) and generation metrics (answer accuracy, context relevance, groundedness)</li>
+<li><strong>Filtering synthetic data</strong>: Using an LLM judge to filter out unrealistic questions and improve the dataset quality</li>
+<li><strong>Performance optimization</strong>: How reranking can significantly improve both retrieval and generation metrics</li>
+</ul>
+<p>This approach gives you a solid foundation for evaluating RAG systems even when you don’t have real user data. Synthetic data is useful for getting started quickly, but remember that you should incorporate real user queries into your evaluation process, as that is the most realistic way to evaluate your RAG system.</p>
+<p>Hope you find this tutorial useful. If you have any questions, leave a comment below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {How to Use Synthetic Data to Bootstrap Your {RAG} System
+    Evals},
+  date = {2025-08-07},
+  url = {https://dylancastillo.co/posts/synthetic-data-rag.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“How to Use Synthetic Data to Bootstrap
+Your RAG System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/synthetic-data-rag.html">https://dylancastillo.co/posts/synthetic-data-rag.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2025, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
