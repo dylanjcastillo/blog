@@ -17,7 +17,7 @@
 <generator>quarto-1.7.33</generator>
 <lastBuildDate>Thu, 07 Aug 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>How to use synthetic data to bootstrap your RAG system evals</title>
+  <title>Using synthetic data to bootstrap your RAG system evals</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/synthetic-data-rag.html</link>
   <description><![CDATA[ 
@@ -56,7 +56,15 @@ font-style: inherit;">LANGSMITH_API_KEY</span><span class="op" style="color: #5E
 background-color: null;
 font-style: inherit;">=</span>your_langsmith_api_key</span></code></pre></div>
 <ol start="3" type="1">
-<li>Create a virtual environment in Python (I use <a href="https://docs.astral.sh/uv/"><code>uv</code></a>) and install the following packages: <code>langchain</code>, <code>langchain-openai</code>, <code>langchain-community</code>, <code>jupyter</code>, <code>chromadb</code>, <code>python-dotenv</code>, <code>nest_asyncio</code>, and <code>sentence-transformers</code>.</li>
+<li>Create a virtual environment in Python and install the following packages:</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> venv</span>
+<span id="cb2-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> add langchain langchain-openai langchain-community jupyter chromadb python-dotenv nest_asyncio sentence-transformers</span></code></pre></div>
+<ol start="4" type="1">
 <li>Download the People Group’s section from GitLab’s <a href="https://gitlab.com/gitlab-com/content-sites/handbook/-/tree/main/content/handbook/people-group">handbook</a>.</li>
 </ol>
 <p>I’m also assuming you’re familiar with the basics of RAG systems and how to use vector databases. If you need a refresher, you can check out my <a href="https://dylancastillo.co/posts/what-is-rag.html">RAG tutorial</a>.</p>
@@ -79,86 +87,86 @@ font-style: inherit;">=</span>your_langsmith_api_key</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>You’ll use <code>asyncio</code> in some of the code snippets, so you must enable <code>nest_asyncio</code> to run the code:</p>
 <div id="1e2a708d" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> nest_asyncio</span>
-<span id="cb2-2"></span>
-<span id="cb2-3">nest_asyncio.<span class="bu" style="color: null;
+<span id="cb3-2"></span>
+<span id="cb3-3">nest_asyncio.<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">apply</span>()</span></code></pre></div>
 </div>
 <p>Then, you can proceed as usual, importing the required packages:</p>
 <div id="f58b9d35" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> asyncio</span>
-<span id="cb3-2"><span class="im" style="color: #00769E;
+<span id="cb4-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> os</span>
-<span id="cb3-3"><span class="im" style="color: #00769E;
+<span id="cb4-3"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> random</span>
-<span id="cb3-4"><span class="im" style="color: #00769E;
+<span id="cb4-4"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> textwrap <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> dedent</span>
-<span id="cb3-5"></span>
-<span id="cb3-6"><span class="im" style="color: #00769E;
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> chromadb</span>
-<span id="cb3-7"><span class="im" style="color: #00769E;
+<span id="cb4-7"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> pd</span>
-<span id="cb3-8"><span class="im" style="color: #00769E;
+<span id="cb4-8"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> chromadb.utils.embedding_functions <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> OpenAIEmbeddingFunction</span>
-<span id="cb3-9"><span class="im" style="color: #00769E;
+<span id="cb4-9"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb3-10"><span class="im" style="color: #00769E;
+<span id="cb4-10"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_community.document_loaders <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> DirectoryLoader, TextLoader</span>
-<span id="cb3-11"><span class="im" style="color: #00769E;
+<span id="cb4-11"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_core.prompts <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> ChatPromptTemplate</span>
-<span id="cb3-12"><span class="im" style="color: #00769E;
+<span id="cb4-12"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> ChatOpenAI</span>
-<span id="cb3-13"><span class="im" style="color: #00769E;
+<span id="cb4-13"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langchain_text_splitters <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> MarkdownTextSplitter</span>
-<span id="cb3-14"><span class="im" style="color: #00769E;
+<span id="cb4-14"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> Client, traceable</span>
-<span id="cb3-15"><span class="im" style="color: #00769E;
+<span id="cb4-15"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> BaseModel</span>
-<span id="cb3-16"><span class="im" style="color: #00769E;
+<span id="cb4-16"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> sentence_transformers <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> CrossEncoder</span>
-<span id="cb3-17"></span>
-<span id="cb3-18">load_dotenv()</span></code></pre></div>
+<span id="cb4-17"></span>
+<span id="cb4-18">load_dotenv()</span></code></pre></div>
 </div>
 <p>These are the most important libraries you’ll use in this article:</p>
 <ul>
@@ -173,10 +181,10 @@ font-style: inherit;">import</span> CrossEncoder</span>
 <p>I chose this topic because there’s a pretty good source of data we can use for this: <a href="https://handbook.gitlab.com/">The GitLab Handbook</a>. We’ll just use the People Group section of the handbook, to keep costs manageable.</p>
 <p>Your next step is to load the data from the handbook:</p>
 <div id="66a8c9c6" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">loader <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">loader <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> DirectoryLoader(</span>
-<span id="cb4-2">    <span class="st" style="color: #20794D;
+<span id="cb5-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"../data/synthetic-data-rag/people-group/"</span>, glob<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -185,12 +193,12 @@ background-color: null;
 font-style: inherit;">"**/*.md"</span>, loader_cls<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>TextLoader</span>
-<span id="cb4-3">)</span>
-<span id="cb4-4">docs <span class="op" style="color: #5E5E5E;
+<span id="cb5-3">)</span>
+<span id="cb5-4">docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> loader.load()</span>
-<span id="cb4-5"></span>
-<span id="cb4-6"><span class="bu" style="color: null;
+<span id="cb5-5"></span>
+<span id="cb5-6"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">len</span>(docs)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -205,31 +213,31 @@ font-style: inherit;">len</span>(docs)</span></code></pre></div>
 <p>A <strong>vector database</strong> is a database designed to efficiently store and query data as vector embeddings (numerical representations). Provided with a user query, it’s the engine you use to find the most similar data in your database.</p>
 <p>For this tutorial, you’ll use <a href="https://www.trychroma.com/">ChromaDB</a>. Let’s set it up:</p>
 <div id="c7df6e53" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">openai_ef <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">openai_ef <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> OpenAIEmbeddingFunction(api_key<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"OPENAI_API_KEY"</span>))</span>
-<span id="cb6-2">client <span class="op" style="color: #5E5E5E;
+<span id="cb7-2">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> chromadb.PersistentClient(</span>
-<span id="cb6-3">    path<span class="op" style="color: #5E5E5E;
+<span id="cb7-3">    path<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"../data/synthetic-data-rag/chroma"</span>,</span>
-<span id="cb6-4">)</span>
-<span id="cb6-5">collection <span class="op" style="color: #5E5E5E;
+<span id="cb7-4">)</span>
+<span id="cb7-5">collection <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> client.get_or_create_collection(</span>
-<span id="cb6-6">    <span class="st" style="color: #20794D;
+<span id="cb7-6">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gitlab-handbook"</span>, embedding_function<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>openai_ef</span>
-<span id="cb6-7">)</span></code></pre></div>
+<span id="cb7-7">)</span></code></pre></div>
 </div>
 <p>This code snippet:</p>
 <ol type="1">
@@ -240,26 +248,26 @@ font-style: inherit;">=</span>openai_ef</span>
 <p>Next, you should generate embeddings for the documents and store them in the vector database. But there’s a little catch: some documents are longer than the maximum token limit of the embedding model (8192 tokens). This will break the indexing process. To avoid this, you must split the documents into smaller chunks.</p>
 <p>You can do this with the following code snippet:</p>
 <div id="10523d7a" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">text_splitter <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">text_splitter <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> MarkdownTextSplitter.from_tiktoken_encoder(</span>
-<span id="cb7-2">    model_name<span class="op" style="color: #5E5E5E;
+<span id="cb8-2">    model_name<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4o"</span>,</span>
-<span id="cb7-3">    chunk_size<span class="op" style="color: #5E5E5E;
+<span id="cb8-3">    chunk_size<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">400</span>,</span>
-<span id="cb7-4">    chunk_overlap<span class="op" style="color: #5E5E5E;
+<span id="cb8-4">    chunk_overlap<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>,</span>
-<span id="cb7-5">)</span>
-<span id="cb7-6">splits <span class="op" style="color: #5E5E5E;
+<span id="cb8-5">)</span>
+<span id="cb8-6">splits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> text_splitter.split_documents(docs)</span></code></pre></div>
 </div>
@@ -267,7 +275,7 @@ font-style: inherit;">=</span> text_splitter.split_documents(docs)</span></code>
 <p>The <code>from_tiktoken_encoder</code> method lets you do the splits based on the number of tokens, not characters which is the default behavior. You’ve set a chunk size of 400 tokens, with no overlap.</p>
 <p>After running the splitting code, you can check the number of chunks created by running this:</p>
 <div id="ba5cec1e" class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="bu" style="color: null;
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">len</span>(splits)</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -277,7 +285,7 @@ font-style: inherit;">len</span>(splits)</span></code></pre></div>
 <p>Now you have another problem: you have too many chunks. If you try to add all of them to the vector database at once—which also generates their embeddings—you’ll likely hit the OpenAI API rate limits.</p>
 <p>To solve this, let’s define a utility function that adds the chunks to the vector database in batches:</p>
 <div id="c5cc250f" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> create_batches(ids, documents, metadatas, batch_size<span class="op" style="color: #5E5E5E;
@@ -285,10 +293,10 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span>):</span>
-<span id="cb10-2">    batches <span class="op" style="color: #5E5E5E;
+<span id="cb11-2">    batches <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb10-3">    <span class="cf" style="color: #003B4F;
+<span id="cb11-3">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
@@ -301,30 +309,30 @@ background-color: null;
 font-style: inherit;">0</span>, <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">len</span>(ids), batch_size):</span>
-<span id="cb10-4">        batch_ids <span class="op" style="color: #5E5E5E;
+<span id="cb11-4">        batch_ids <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ids[i : i <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> batch_size]</span>
-<span id="cb10-5">        batch_documents <span class="op" style="color: #5E5E5E;
+<span id="cb11-5">        batch_documents <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> documents[i : i <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> batch_size]</span>
-<span id="cb10-6">        batch_metadatas <span class="op" style="color: #5E5E5E;
+<span id="cb11-6">        batch_metadatas <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> metadatas[i : i <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> batch_size]</span>
-<span id="cb10-7">        batches.append((batch_ids, batch_metadatas, batch_documents))</span>
-<span id="cb10-8">    <span class="cf" style="color: #003B4F;
+<span id="cb11-7">        batches.append((batch_ids, batch_metadatas, batch_documents))</span>
+<span id="cb11-8">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> batches</span></code></pre></div>
 </div>
 <p>Then, you can apply this function to the chunks you created earlier:</p>
 <div id="3287eb76" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">ids <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">ids <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="ss" style="color: #20794D;
 background-color: null;
@@ -347,7 +355,7 @@ background-color: null;
 font-style: inherit;">range</span>(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">len</span>(splits))]</span>
-<span id="cb11-2">documents <span class="op" style="color: #5E5E5E;
+<span id="cb12-2">documents <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [doc.page_content <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -356,7 +364,7 @@ font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> splits]</span>
-<span id="cb11-3">metadatas <span class="op" style="color: #5E5E5E;
+<span id="cb12-3">metadatas <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [doc.metadata <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -365,9 +373,9 @@ font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> splits]</span>
-<span id="cb11-4"></span>
-<span id="cb11-5"></span>
-<span id="cb11-6"><span class="cf" style="color: #003B4F;
+<span id="cb12-4"></span>
+<span id="cb12-5"></span>
+<span id="cb12-6"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> collection.count() <span class="op" style="color: #5E5E5E;
@@ -375,21 +383,21 @@ background-color: null;
 font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>:</span>
-<span id="cb11-7">    <span class="bu" style="color: null;
+<span id="cb12-7">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Collection already exists, skipping creation."</span>)</span>
-<span id="cb11-8"><span class="cf" style="color: #003B4F;
+<span id="cb12-8"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">else</span>:</span>
-<span id="cb11-9">    <span class="bu" style="color: null;
+<span id="cb12-9">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Adding documents..."</span>)</span>
-<span id="cb11-10">    batches <span class="op" style="color: #5E5E5E;
+<span id="cb12-10">    batches <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> create_batches(ids<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -398,7 +406,7 @@ background-color: null;
 font-style: inherit;">=</span>documents, metadatas<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>metadatas)</span>
-<span id="cb11-11">    <span class="cf" style="color: #003B4F;
+<span id="cb12-11">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i, batch <span class="kw" style="color: #003B4F;
@@ -407,7 +415,7 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">enumerate</span>(batches):</span>
-<span id="cb11-12">        <span class="bu" style="color: null;
+<span id="cb12-12">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -428,7 +436,7 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb11-13">        collection.add(ids<span class="op" style="color: #5E5E5E;
+<span id="cb12-13">        collection.add(ids<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>batch[<span class="dv" style="color: #AD0000;
 background-color: null;
@@ -445,24 +453,24 @@ font-style: inherit;">2</span>])</span></code></pre></div>
 <p>Feel free to adjust the batch size according to your needs. This should take a few seconds to run. Once it’s done, your vector database should be ready to use.</p>
 <p>Next, you’ll define a couple of functions to interact with the vector database and a data model to represent the retrieved documents you’ll be working with.</p>
 <div id="bb0baae9" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> RetrievedDoc(BaseModel):</span>
-<span id="cb12-2">    <span class="bu" style="color: null;
+<span id="cb13-2">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">id</span>: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb12-3">    path: <span class="bu" style="color: null;
+<span id="cb13-3">    path: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb12-4">    page_content: <span class="bu" style="color: null;
+<span id="cb13-4">    page_content: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb12-5"></span>
-<span id="cb12-6"></span>
-<span id="cb12-7"><span class="kw" style="color: #003B4F;
+<span id="cb13-5"></span>
+<span id="cb13-6"></span>
+<span id="cb13-7"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_similar_docs(text: <span class="bu" style="color: null;
@@ -478,14 +486,14 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>[RetrievedDoc]:</span>
-<span id="cb12-8">    results <span class="op" style="color: #5E5E5E;
+<span id="cb13-8">    results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> collection.query(query_texts<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[text], n_results<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>top_k)</span>
-<span id="cb12-9">    docs <span class="op" style="color: #5E5E5E;
+<span id="cb13-9">    docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [results[<span class="st" style="color: #20794D;
 background-color: null;
@@ -500,7 +508,7 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(top_k)]</span>
-<span id="cb12-10">    metadatas <span class="op" style="color: #5E5E5E;
+<span id="cb13-10">    metadatas <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [results[<span class="st" style="color: #20794D;
 background-color: null;
@@ -515,7 +523,7 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(top_k)]</span>
-<span id="cb12-11">    ids <span class="op" style="color: #5E5E5E;
+<span id="cb13-11">    ids <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [results[<span class="st" style="color: #20794D;
 background-color: null;
@@ -530,11 +538,11 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(top_k)]</span>
-<span id="cb12-12">    <span class="cf" style="color: #003B4F;
+<span id="cb13-12">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> [</span>
-<span id="cb12-13">        RetrievedDoc(<span class="bu" style="color: null;
+<span id="cb13-13">        RetrievedDoc(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">id</span><span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -545,7 +553,7 @@ background-color: null;
 font-style: inherit;">"source"</span>], page_content<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>d)</span>
-<span id="cb12-14">        <span class="cf" style="color: #003B4F;
+<span id="cb13-14">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> d, m, id_ <span class="kw" style="color: #003B4F;
@@ -554,10 +562,10 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(docs, metadatas, ids)</span>
-<span id="cb12-15">    ]</span>
-<span id="cb12-16"></span>
-<span id="cb12-17"></span>
-<span id="cb12-18"><span class="kw" style="color: #003B4F;
+<span id="cb13-15">    ]</span>
+<span id="cb13-16"></span>
+<span id="cb13-17"></span>
+<span id="cb13-18"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_doc_by_id(doc_id: <span class="bu" style="color: null;
@@ -565,26 +573,26 @@ background-color: null;
 font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-&gt;</span> RetrievedDoc:</span>
-<span id="cb12-19">    results <span class="op" style="color: #5E5E5E;
+<span id="cb13-19">    results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> collection.get(ids<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[doc_id])</span>
-<span id="cb12-20">    doc <span class="op" style="color: #5E5E5E;
+<span id="cb13-20">    doc <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> results[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span>
-<span id="cb12-21">    metadata <span class="op" style="color: #5E5E5E;
+<span id="cb13-21">    metadata <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> results[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"metadatas"</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span>
-<span id="cb12-22">    <span class="cf" style="color: #003B4F;
+<span id="cb13-22">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> RetrievedDoc(<span class="bu" style="color: null;
@@ -607,7 +615,7 @@ font-style: inherit;">=</span>doc)</span></code></pre></div>
 <p><code>RetrievedDoc</code> is a Pydantic model that represents a retrieved document. It includes the document’s ID, file path, and the page content. This model will help you structure the data you retrieve from the vector database.</p>
 <p>Next, you can sample documents for the synthetic data generation:</p>
 <div id="4db2a9ca" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">golden_docs_idx <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">golden_docs_idx <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> random.sample(<span class="bu" style="color: null;
 background-color: null;
@@ -616,7 +624,7 @@ background-color: null;
 font-style: inherit;">len</span>(splits)), <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">200</span>)</span>
-<span id="cb13-2">golden_docs <span class="op" style="color: #5E5E5E;
+<span id="cb14-2">golden_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [get_doc_by_id(<span class="bu" style="color: null;
 background-color: null;
@@ -646,97 +654,97 @@ font-style: inherit;">in</span> golden_docs_idx]</span></code></pre></div>
 <p>The target chunk helps the generator come up with a synthetic question. The similar chunks provide distractors that help the generator include themes or keywords that are also present in other chunks (e.g., dystopian fiction), making the question more challenging.</p>
 <p>To do this, you can use the following prompts:</p>
 <div id="582a5b45" class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">system_prompt_generate <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1">system_prompt_generate <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb14-2">    <span class="st" style="color: #20794D;
+<span id="cb15-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb14-3"><span class="st" style="color: #20794D;
+<span id="cb15-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You are a helpful assistant generating synthetic QA pairs for retrieval evaluation.</span></span>
-<span id="cb14-4"></span>
-<span id="cb14-5"><span class="st" style="color: #20794D;
+<span id="cb15-4"></span>
+<span id="cb15-5"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Given a target chunk of text and a set of confounding chunks, you must extract a specific, self-contained fact from the target chunk that is not included in the confounding chunks. Then write a question that is directly and unambiguously answered by that fact. The question should only be answered by the fact extracted from the target chunk (and not by any of the confounding chunks) but it should also use themes or terminology that is present in the confounding chunks.</span></span>
-<span id="cb14-6"></span>
-<span id="cb14-7"><span class="st" style="color: #20794D;
+<span id="cb15-6"></span>
+<span id="cb15-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Always respond with a JSON object with the following keys (in that exact order):</span></span>
-<span id="cb14-8"></span>
-<span id="cb14-9"><span class="st" style="color: #20794D;
+<span id="cb15-8"></span>
+<span id="cb15-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1. "fact": "&lt;the fact extracted from the target chunk&gt;",</span></span>
-<span id="cb14-10"><span class="st" style="color: #20794D;
+<span id="cb15-10"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2. "confounding_terms": "&lt;a list of terms or themes from the confounding chunks that are relevant to the question&gt;",</span></span>
-<span id="cb14-11"><span class="st" style="color: #20794D;
+<span id="cb15-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    3. "question": "&lt;the question that is directly and unambiguously answered by the fact&gt;",</span></span>
-<span id="cb14-12"><span class="st" style="color: #20794D;
+<span id="cb15-12"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    </span></span>
-<span id="cb14-13"><span class="st" style="color: #20794D;
+<span id="cb15-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You should write the questions as if you're an employee looking for information in the handbook. The question should be as realistic and natural as possible, reflecting the kind of queries an employee might actually make when searching for information in the handbook.</span></span>
-<span id="cb14-14"><span class="st" style="color: #20794D;
+<span id="cb15-14"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb14-15">)</span>
-<span id="cb14-16"></span>
-<span id="cb14-17">user_prompt_generate <span class="op" style="color: #5E5E5E;
+<span id="cb15-15">)</span>
+<span id="cb15-16"></span>
+<span id="cb15-17">user_prompt_generate <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb14-18">    <span class="st" style="color: #20794D;
+<span id="cb15-18">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb14-19"><span class="st" style="color: #20794D;
+<span id="cb15-19"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    TARGET CHUNK:</span></span>
-<span id="cb14-20"><span class="st" style="color: #20794D;
+<span id="cb15-20"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{target_chunk}</span></span>
-<span id="cb14-21"></span>
-<span id="cb14-22"><span class="st" style="color: #20794D;
+<span id="cb15-21"></span>
+<span id="cb15-22"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    CONFOUNDING CHUNKS:</span></span>
-<span id="cb14-23"><span class="st" style="color: #20794D;
+<span id="cb15-23"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{confounding_chunks}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;"> </span></span>
-<span id="cb14-24"><span class="st" style="color: #20794D;
+<span id="cb15-24"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb14-25">)</span></code></pre></div>
+<span id="cb15-25">)</span></code></pre></div>
 </div>
 <p>These prompts will be used to generate the synthetic data. The <code>system_prompt_generate</code> defines the generation process, explaining how to extract facts and generate questions, and <code>user_prompt_generate</code> provides the required context: target and confounding chunks.</p>
 <p>Then, you initialize the LLM, set up the response model, and define a function to format the documents for the LLM:</p>
 <div id="f5aab841" class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> Response(BaseModel):</span>
-<span id="cb15-2">    fact: <span class="bu" style="color: null;
+<span id="cb16-2">    fact: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb15-3">    confounding_terms: <span class="bu" style="color: null;
+<span id="cb16-3">    confounding_terms: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>[<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb15-4">    question: <span class="bu" style="color: null;
+<span id="cb16-4">    question: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb15-5"></span>
-<span id="cb15-6"></span>
-<span id="cb15-7">llm <span class="op" style="color: #5E5E5E;
+<span id="cb16-5"></span>
+<span id="cb16-6"></span>
+<span id="cb16-7">llm <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -747,21 +755,21 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb15-8">llm_with_structured_output <span class="op" style="color: #5E5E5E;
+<span id="cb16-8">llm_with_structured_output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> llm.with_structured_output(Response)</span>
-<span id="cb15-9"></span>
-<span id="cb15-10">messages <span class="op" style="color: #5E5E5E;
+<span id="cb16-9"></span>
+<span id="cb16-10">messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb15-11">    [(<span class="st" style="color: #20794D;
+<span id="cb16-11">    [(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_generate), (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_generate)]</span>
-<span id="cb15-12">)</span>
-<span id="cb15-13"></span>
-<span id="cb15-14"><span class="kw" style="color: #003B4F;
+<span id="cb16-12">)</span>
+<span id="cb16-13"></span>
+<span id="cb16-14"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> format_docs(chunks: <span class="bu" style="color: null;
@@ -771,7 +779,7 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span>:</span>
-<span id="cb15-15">    <span class="cf" style="color: #003B4F;
+<span id="cb16-15">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> <span class="st" style="color: #20794D;
@@ -781,7 +789,7 @@ background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>.join(</span>
-<span id="cb15-16">        [<span class="ss" style="color: #20794D;
+<span id="cb16-16">        [<span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">f"*** Filepath: </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -810,53 +818,53 @@ font-style: inherit;">for</span> chunk <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> chunks]</span>
-<span id="cb15-17">    )</span></code></pre></div>
+<span id="cb16-17">    )</span></code></pre></div>
 </div>
 <p>Finally, you can define a function to generate the synthetic data. This function will take a target chunk, retrieve the most similar chunks from the vector database, and generate a question from the target chunk using the similar chunks as distractors:</p>
 <div id="248ec536" class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="cf" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> generate_qa_pair(chunk):</span>
-<span id="cb16-2">    similar_chunks <span class="op" style="color: #5E5E5E;
+<span id="cb17-2">    similar_chunks <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_similar_docs(chunk.page_content)</span>
-<span id="cb16-3">    compiled_messages <span class="op" style="color: #5E5E5E;
+<span id="cb17-3">    compiled_messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages.ainvoke(</span>
-<span id="cb16-4">        {</span>
-<span id="cb16-5">            <span class="st" style="color: #20794D;
+<span id="cb17-4">        {</span>
+<span id="cb17-5">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"target_chunk"</span>: format_docs([similar_chunks[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]]),</span>
-<span id="cb16-6">            <span class="st" style="color: #20794D;
+<span id="cb17-6">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"confounding_chunks"</span>: format_docs(similar_chunks[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:]),</span>
-<span id="cb16-7">        }</span>
-<span id="cb16-8">    )</span>
-<span id="cb16-9">    output <span class="op" style="color: #5E5E5E;
+<span id="cb17-7">        }</span>
+<span id="cb17-8">    )</span>
+<span id="cb17-9">    output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_with_structured_output.ainvoke(compiled_messages)</span>
-<span id="cb16-10">    <span class="cf" style="color: #003B4F;
+<span id="cb17-10">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output</span></code></pre></div>
 </div>
 <p>To speed up question generation, you can run this concurrently using <code>asyncio</code>:</p>
 <div id="3f3cf7ae" class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1">tasks <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1">tasks <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [generate_qa_pair(random_split) <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -865,7 +873,7 @@ font-style: inherit;">for</span> random_split <span class="kw" style="color: #00
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> golden_docs]</span>
-<span id="cb17-2">qa_pairs <span class="op" style="color: #5E5E5E;
+<span id="cb18-2">qa_pairs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -873,8 +881,8 @@ font-weight: bold;
 font-style: inherit;">await</span> asyncio.gather(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">*</span>tasks)</span>
-<span id="cb17-3"></span>
-<span id="cb17-4">df <span class="op" style="color: #5E5E5E;
+<span id="cb18-3"></span>
+<span id="cb18-4">df <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.DataFrame([qa_pair.<span class="bu" style="color: null;
 background-color: null;
@@ -885,7 +893,7 @@ font-style: inherit;">for</span> qa_pair <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> qa_pairs])</span>
-<span id="cb17-5">df.to_excel(<span class="st" style="color: #20794D;
+<span id="cb18-5">df.to_excel(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"../data/synthetic-data-rag/files/qa_pairs.xlsx"</span>, index<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -914,185 +922,185 @@ font-style: inherit;">False</span>)</span></code></pre></div>
 <p>For that, you should open the Excel file and manually review some of the generated Q&amp;A pairs and evaluate them for relevance. Then, you should provide those questions in a system prompt as examples to the LLM, asking it to assign a score to each question based on your evaluation criteria.</p>
 <p>Here’s an example of how to do that:</p>
 <div id="3eeec315" class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1">system_prompt_rate <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">system_prompt_rate <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb18-2">    <span class="st" style="color: #20794D;
+<span id="cb19-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb18-3"><span class="st" style="color: #20794D;
+<span id="cb19-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You are an AI assistant helping us curate a high-quality dataset of questions for evaluating an company's internal handbook. We have generated synthetic questions and need to filter out those that are unrealistic or not representative of typical user queries.</span></span>
-<span id="cb18-4"></span>
-<span id="cb18-5"><span class="st" style="color: #20794D;
+<span id="cb19-4"></span>
+<span id="cb19-5"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Here are examples of realistic and unrealistic user queries we have manually rated:</span></span>
-<span id="cb18-6"></span>
-<span id="cb18-7"><span class="st" style="color: #20794D;
+<span id="cb19-6"></span>
+<span id="cb19-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    ### Realistic Queries (Good Examples)</span></span>
-<span id="cb18-8"></span>
-<span id="cb18-9"><span class="st" style="color: #20794D;
+<span id="cb19-8"></span>
+<span id="cb19-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    * **Query:** "What is the required process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
-<span id="cb18-10"><span class="st" style="color: #20794D;
+<span id="cb19-10"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Explanation:** Very realistic user query. It's concise, information-seeking, and process-oriented.</span></span>
-<span id="cb18-11"><span class="st" style="color: #20794D;
+<span id="cb19-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Rating:** 5</span></span>
-<span id="cb18-12"><span class="st" style="color: #20794D;
+<span id="cb19-12"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    * **Query:** "Where is the People Operations internal handbook hosted, and how can someone gain access to it?"</span></span>
-<span id="cb18-13"><span class="st" style="color: #20794D;
+<span id="cb19-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Explanation:** Realistic query but might be a bit too detailed for a typical user.</span></span>
-<span id="cb18-14"><span class="st" style="color: #20794D;
+<span id="cb19-14"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Rating:** 4</span></span>
-<span id="cb18-15"><span class="st" style="color: #20794D;
+<span id="cb19-15"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    * **Query:** "Who controls access to People Data in the data warehouse at GitLab, and what approvals are required for Analytics Engineers and Data Analysts to obtain access?"</span></span>
-<span id="cb18-16"><span class="st" style="color: #20794D;
+<span id="cb19-16"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Explanation:** Seems reasonable but too lengthy for a typical user query. </span></span>
-<span id="cb18-17"><span class="st" style="color: #20794D;
+<span id="cb19-17"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Rating:** 3</span></span>
-<span id="cb18-18"></span>
-<span id="cb18-19"><span class="st" style="color: #20794D;
+<span id="cb19-18"></span>
+<span id="cb19-19"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    ### Unrealistic Queries (Bad Examples)</span></span>
-<span id="cb18-20"></span>
-<span id="cb18-21"><span class="st" style="color: #20794D;
+<span id="cb19-20"></span>
+<span id="cb19-21"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    * **Query:** "If a GitLab team member has been with the company for over 3 months and is interested in participating in the Onboarding Buddy Program, what should they do to express their interest?"</span></span>
-<span id="cb18-22"><span class="st" style="color: #20794D;
+<span id="cb19-22"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Explanation:** Overly specific and unnatural. No real user would ask this.</span></span>
-<span id="cb18-23"><span class="st" style="color: #20794D;
+<span id="cb19-23"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Rating:** 1</span></span>
-<span id="cb18-24"><span class="st" style="color: #20794D;
+<span id="cb19-24"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    * **Query:** "On what date did the 'Managing Burnout with Time Off with John Fitch' session occur as part of the FY21 Learning Speaker Series?"</span></span>
-<span id="cb18-25"><span class="st" style="color: #20794D;
+<span id="cb19-25"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Explanation:** Irrelevant and overly specific. Not a typical user query. </span></span>
-<span id="cb18-26"><span class="st" style="color: #20794D;
+<span id="cb19-26"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">        * **Rating:** 2</span></span>
-<span id="cb18-27"></span>
-<span id="cb18-28"><span class="st" style="color: #20794D;
+<span id="cb19-27"></span>
+<span id="cb19-28"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    ### Your Task</span></span>
-<span id="cb18-29"></span>
-<span id="cb18-30"><span class="st" style="color: #20794D;
+<span id="cb19-29"></span>
+<span id="cb19-30"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    For the following generated question, please:</span></span>
-<span id="cb18-31"></span>
-<span id="cb18-32"><span class="st" style="color: #20794D;
+<span id="cb19-31"></span>
+<span id="cb19-32"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1.  Rate its realism as a typical user query for an internal handbook application on a scale of 1 to 5 (1 = Very Unrealistic, 3 = Neutral/Somewhat Realistic, 5 = Very Realistic).</span></span>
-<span id="cb18-33"><span class="st" style="color: #20794D;
+<span id="cb19-33"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2.  Provide a brief explanation for your rating, comparing it to the examples above if helpful.</span></span>
-<span id="cb18-34"></span>
-<span id="cb18-35"><span class="st" style="color: #20794D;
+<span id="cb19-34"></span>
+<span id="cb19-35"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    ### Output Format</span></span>
-<span id="cb18-36"></span>
-<span id="cb18-37"><span class="st" style="color: #20794D;
+<span id="cb19-36"></span>
+<span id="cb19-37"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Explanation:** `[Your brief explanation]`</span></span>
-<span id="cb18-38"><span class="st" style="color: #20794D;
+<span id="cb19-38"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Rating:** `[Your 1–5 rating]`</span></span>
-<span id="cb18-39"><span class="st" style="color: #20794D;
+<span id="cb19-39"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb18-40">)</span>
-<span id="cb18-41"></span>
-<span id="cb18-42">user_prompt_rate <span class="op" style="color: #5E5E5E;
+<span id="cb19-40">)</span>
+<span id="cb19-41"></span>
+<span id="cb19-42">user_prompt_rate <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb18-43">    <span class="st" style="color: #20794D;
+<span id="cb19-43">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb18-44"><span class="st" style="color: #20794D;
+<span id="cb19-44"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Generated Question to Evaluate:**</span></span>
-<span id="cb18-45"><span class="st" style="color: #20794D;
+<span id="cb19-45"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{question_to_evaluate}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb18-46"><span class="st" style="color: #20794D;
+<span id="cb19-46"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb18-47">)</span></code></pre></div>
+<span id="cb19-47">)</span></code></pre></div>
 </div>
 <p>Hamel and Shreya generally discourage using Likert-type 1-5 scales for LLM judges. However, in this case, we’re not aiming for a very accurate judge, we’re just trying to have a method that works well enough to filter out the questions. We don’t need to make this overly complicated.</p>
 <p>Using the LLM judge, you can apply the filter to the generated questions:</p>
 <div id="dd0929e4" class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseFiltering(BaseModel):</span>
-<span id="cb19-2">    explanation: <span class="bu" style="color: null;
+<span id="cb20-2">    explanation: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb19-3">    rating: <span class="bu" style="color: null;
+<span id="cb20-3">    rating: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">int</span></span>
-<span id="cb19-4"></span>
-<span id="cb19-5"></span>
-<span id="cb19-6">llm_with_structured_output_filtering <span class="op" style="color: #5E5E5E;
+<span id="cb20-4"></span>
+<span id="cb20-5"></span>
+<span id="cb20-6">llm_with_structured_output_filtering <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> llm.with_structured_output(ResponseFiltering)</span>
-<span id="cb19-7"></span>
-<span id="cb19-8">messages_filtering <span class="op" style="color: #5E5E5E;
+<span id="cb20-7"></span>
+<span id="cb20-8">messages_filtering <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb19-9">    [(<span class="st" style="color: #20794D;
+<span id="cb20-9">    [(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_rate), (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_rate)]</span>
-<span id="cb19-10">)</span>
-<span id="cb19-11"></span>
-<span id="cb19-12"><span class="cf" style="color: #003B4F;
+<span id="cb20-10">)</span>
+<span id="cb20-11"></span>
+<span id="cb20-12"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> rate_qa_pair(qa_pair):</span>
-<span id="cb19-13">    compiled_messages <span class="op" style="color: #5E5E5E;
+<span id="cb20-13">    compiled_messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_filtering.ainvoke(</span>
-<span id="cb19-14">        {<span class="st" style="color: #20794D;
+<span id="cb20-14">        {<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question_to_evaluate"</span>: qa_pair.question}</span>
-<span id="cb19-15">    )</span>
-<span id="cb19-16">    output <span class="op" style="color: #5E5E5E;
+<span id="cb20-15">    )</span>
+<span id="cb20-16">    output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_with_structured_output_filtering.ainvoke(compiled_messages)</span>
-<span id="cb19-17">    <span class="cf" style="color: #003B4F;
+<span id="cb20-17">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output</span>
-<span id="cb19-18"></span>
-<span id="cb19-19"></span>
-<span id="cb19-20">tasks <span class="op" style="color: #5E5E5E;
+<span id="cb20-18"></span>
+<span id="cb20-19"></span>
+<span id="cb20-20">tasks <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [rate_qa_pair(qa_pair) <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -1101,7 +1109,7 @@ font-style: inherit;">for</span> qa_pair <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> qa_pairs]</span>
-<span id="cb19-21">results <span class="op" style="color: #5E5E5E;
+<span id="cb20-21">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -1109,25 +1117,25 @@ font-weight: bold;
 font-style: inherit;">await</span> asyncio.gather(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">*</span>tasks)</span>
-<span id="cb19-22"></span>
-<span id="cb19-23">rated_qa_pairs <span class="op" style="color: #5E5E5E;
+<span id="cb20-22"></span>
+<span id="cb20-23">rated_qa_pairs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb19-24">    {</span>
-<span id="cb19-25">        <span class="st" style="color: #20794D;
+<span id="cb20-24">    {</span>
+<span id="cb20-25">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"rating"</span>: result.rating,</span>
-<span id="cb19-26">        <span class="st" style="color: #20794D;
+<span id="cb20-26">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"explanation"</span>: result.explanation,</span>
-<span id="cb19-27">        <span class="st" style="color: #20794D;
+<span id="cb20-27">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: qa_pair.question,</span>
-<span id="cb19-28">        <span class="st" style="color: #20794D;
+<span id="cb20-28">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>: qa_pair.fact,</span>
-<span id="cb19-29">    }</span>
-<span id="cb19-30">    <span class="cf" style="color: #003B4F;
+<span id="cb20-29">    }</span>
+<span id="cb20-30">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> (result, qa_pair) <span class="kw" style="color: #003B4F;
@@ -1136,12 +1144,12 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(results, qa_pairs)</span>
-<span id="cb19-31">]</span>
-<span id="cb19-32"></span>
-<span id="cb19-33">df_rated_qa_pairs <span class="op" style="color: #5E5E5E;
+<span id="cb20-31">]</span>
+<span id="cb20-32"></span>
+<span id="cb20-33">df_rated_qa_pairs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.DataFrame(</span>
-<span id="cb19-34">    rated_qa_pairs, columns<span class="op" style="color: #5E5E5E;
+<span id="cb20-34">    rated_qa_pairs, columns<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
 background-color: null;
@@ -1150,17 +1158,17 @@ background-color: null;
 font-style: inherit;">"Explanation"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Question"</span>]</span>
-<span id="cb19-35">)</span>
-<span id="cb19-36"></span>
-<span id="cb19-37">df_rated_qa_pairs.to_excel(</span>
-<span id="cb19-38">    <span class="st" style="color: #20794D;
+<span id="cb20-35">)</span>
+<span id="cb20-36"></span>
+<span id="cb20-37">df_rated_qa_pairs.to_excel(</span>
+<span id="cb20-38">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"../data/synthetic-data-rag/files/rated_qa_pairs.xlsx"</span>, index<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span></span>
-<span id="cb19-39">)</span></code></pre></div>
+<span id="cb20-39">)</span></code></pre></div>
 </div>
 <p>This will result in a list of <code>ResponseFiltering</code> objects, each containing an explanation and a rating for the corresponding question.</p>
 <p>You can save the results to a file for later use.</p>
@@ -1170,60 +1178,60 @@ font-style: inherit;">False</span></span>
 <p>Now that we have the filtered QA pairs, it’s time to evaluate your RAG system. You’ll evaluate two parts of the RAG system: retrieval and generation.</p>
 <p>Let’s use LangSmith to store our evaluation results. Start by creating a dataset on LangSmith:</p>
 <div id="cfdfe231" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">langsmith_client <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1">langsmith_client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> Client()</span>
-<span id="cb20-2">dataset_name <span class="op" style="color: #5E5E5E;
+<span id="cb21-2">dataset_name <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Gitlab Handbook QA Evaluation 2"</span></span>
-<span id="cb20-3"></span>
-<span id="cb20-4"><span class="cf" style="color: #003B4F;
+<span id="cb21-3"></span>
+<span id="cb21-4"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">try</span>:</span>
-<span id="cb20-5">    dataset <span class="op" style="color: #5E5E5E;
+<span id="cb21-5">    dataset <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> langsmith_client.create_dataset(dataset_name<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>dataset_name)</span>
-<span id="cb20-6">    examples <span class="op" style="color: #5E5E5E;
+<span id="cb21-6">    examples <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
-<span id="cb20-7">        {</span>
-<span id="cb20-8">            <span class="st" style="color: #20794D;
+<span id="cb21-7">        {</span>
+<span id="cb21-8">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"inputs"</span>: {</span>
-<span id="cb20-9">                <span class="st" style="color: #20794D;
+<span id="cb21-9">                <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: h[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>],</span>
-<span id="cb20-10">            },</span>
-<span id="cb20-11">            <span class="st" style="color: #20794D;
+<span id="cb21-10">            },</span>
+<span id="cb21-11">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"outputs"</span>: {</span>
-<span id="cb20-12">                <span class="st" style="color: #20794D;
+<span id="cb21-12">                <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>: h[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>],</span>
-<span id="cb20-13">                <span class="st" style="color: #20794D;
+<span id="cb21-13">                <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"doc"</span>: {</span>
-<span id="cb20-14">                    <span class="st" style="color: #20794D;
+<span id="cb21-14">                    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"id"</span>: chunk.<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">id</span>,</span>
-<span id="cb20-15">                    <span class="st" style="color: #20794D;
+<span id="cb21-15">                    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"path"</span>: chunk.path,</span>
-<span id="cb20-16">                },</span>
-<span id="cb20-17">            },</span>
-<span id="cb20-18">        }</span>
-<span id="cb20-19">        <span class="cf" style="color: #003B4F;
+<span id="cb21-16">                },</span>
+<span id="cb21-17">            },</span>
+<span id="cb21-18">        }</span>
+<span id="cb21-19">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> h, chunk <span class="kw" style="color: #003B4F;
@@ -1232,7 +1240,7 @@ font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(rated_qa_pairs, golden_docs)</span>
-<span id="cb20-20">        <span class="cf" style="color: #003B4F;
+<span id="cb21-20">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> h[<span class="st" style="color: #20794D;
@@ -1242,26 +1250,26 @@ background-color: null;
 font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span></span>
-<span id="cb20-21">    ]</span>
-<span id="cb20-22">    langsmith_client.create_examples(dataset_id<span class="op" style="color: #5E5E5E;
+<span id="cb21-21">    ]</span>
+<span id="cb21-22">    langsmith_client.create_examples(dataset_id<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>dataset.<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">id</span>, examples<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>examples)</span>
-<span id="cb20-23"><span class="cf" style="color: #003B4F;
+<span id="cb21-23"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">Exception</span>:</span>
-<span id="cb20-24">    <span class="bu" style="color: null;
+<span id="cb21-24">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Dataset already exists, skipping creation."</span>)</span>
-<span id="cb20-25">    dataset <span class="op" style="color: #5E5E5E;
+<span id="cb21-25">    dataset <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> langsmith_client.read_dataset(dataset_name<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1292,7 +1300,7 @@ font-style: inherit;">=</span>dataset_name)</span></code></pre></div>
 <p>In our specific case, since we only have one relevant document per query, Recall@k will be 1 if the relevant document is in the top k results, and 0 otherwise.</p>
 <p>You can define two LangSmith evaluators to calculate these metrics:</p>
 <div id="07239efe" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="kw" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> mrr(inputs: <span class="bu" style="color: null;
@@ -1306,7 +1314,7 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">float</span>:</span>
-<span id="cb21-2">    reference_docs <span class="op" style="color: #5E5E5E;
+<span id="cb22-2">    reference_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="bu" style="color: null;
 background-color: null;
@@ -1315,25 +1323,25 @@ background-color: null;
 font-style: inherit;">"doc"</span>][<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"id"</span>])]</span>
-<span id="cb21-3">    docs <span class="op" style="color: #5E5E5E;
+<span id="cb22-3">    docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> outputs.get(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"docs"</span>, [])</span>
-<span id="cb21-4">    <span class="cf" style="color: #003B4F;
+<span id="cb22-4">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">not</span> docs:</span>
-<span id="cb21-5">        <span class="cf" style="color: #003B4F;
+<span id="cb22-5">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.0</span></span>
-<span id="cb21-6">    rank <span class="op" style="color: #5E5E5E;
+<span id="cb22-6">    rank <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
@@ -1358,7 +1366,7 @@ font-weight: bold;
 font-style: inherit;">in</span> reference_docs), <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">None</span>)</span>
-<span id="cb21-7">    <span class="cf" style="color: #003B4F;
+<span id="cb22-7">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
@@ -1374,9 +1382,9 @@ font-weight: bold;
 font-style: inherit;">else</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.0</span></span>
-<span id="cb21-8"></span>
-<span id="cb21-9"></span>
-<span id="cb21-10"><span class="kw" style="color: #003B4F;
+<span id="cb22-8"></span>
+<span id="cb22-9"></span>
+<span id="cb22-10"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> recall(inputs: <span class="bu" style="color: null;
@@ -1390,7 +1398,7 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">float</span>:</span>
-<span id="cb21-11">    reference_docs <span class="op" style="color: #5E5E5E;
+<span id="cb22-11">    reference_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="bu" style="color: null;
 background-color: null;
@@ -1399,25 +1407,25 @@ background-color: null;
 font-style: inherit;">"doc"</span>][<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"id"</span>])]</span>
-<span id="cb21-12">    docs <span class="op" style="color: #5E5E5E;
+<span id="cb22-12">    docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> outputs.get(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"docs"</span>, [])</span>
-<span id="cb21-13">    <span class="cf" style="color: #003B4F;
+<span id="cb22-13">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">not</span> docs:</span>
-<span id="cb21-14">        <span class="cf" style="color: #003B4F;
+<span id="cb22-14">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.0</span></span>
-<span id="cb21-15">    <span class="cf" style="color: #003B4F;
+<span id="cb22-15">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> <span class="bu" style="color: null;
@@ -1453,168 +1461,168 @@ font-style: inherit;">in</span> docs))</span></code></pre></div>
 <h4 class="anchored" data-anchor-id="answer-accuracy">Answer accuracy</h4>
 <p>This metric evaluates how accurate the generated answer is compared to the expected answer. It’s an LLM judge that scores the generated answer against a reference answer using a 0, 1, 2 scale:</p>
 <div id="07f60491" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1">system_prompt_answer_accuracy <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1">system_prompt_answer_accuracy <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb22-2">    <span class="st" style="color: #20794D;
+<span id="cb23-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb22-3"><span class="st" style="color: #20794D;
+<span id="cb23-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You are an expert evaluator. Your task is to evaluate the accuracy of a User Answer against a Reference Answer, given a Question.</span></span>
-<span id="cb22-4"></span>
-<span id="cb22-5"><span class="st" style="color: #20794D;
+<span id="cb23-4"></span>
+<span id="cb23-5"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Here's the grading scale you must use:</span></span>
-<span id="cb22-6"></span>
-<span id="cb22-7"><span class="st" style="color: #20794D;
+<span id="cb23-6"></span>
+<span id="cb23-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    0 - If User Answer is not contained in Reference Answer or not accurate in all terms, topics, numbers, metrics, dates and units or the User Answer do not answer the question.</span></span>
-<span id="cb22-8"><span class="st" style="color: #20794D;
+<span id="cb23-8"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2 - If User Answer is full contained and equivalent to Reference Answer in all terms, topics, numbers, metrics, dates and units.</span></span>
-<span id="cb22-9"><span class="st" style="color: #20794D;
+<span id="cb23-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1 - If User Answer is partially contained and almost equivalent to Reference Answer in all terms, topics, numbers, metrics, dates and units.</span></span>
-<span id="cb22-10"></span>
-<span id="cb22-11"><span class="st" style="color: #20794D;
+<span id="cb23-10"></span>
+<span id="cb23-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Your rating must be only 0, 1 or 2 according to the instructions above.</span></span>
-<span id="cb22-12"></span>
-<span id="cb22-13"><span class="st" style="color: #20794D;
+<span id="cb23-12"></span>
+<span id="cb23-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Your answer must be a JSON object with the following keys:</span></span>
-<span id="cb22-14"><span class="st" style="color: #20794D;
+<span id="cb23-14"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
-<span id="cb22-15"><span class="st" style="color: #20794D;
+<span id="cb23-15"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
-<span id="cb22-16"><span class="st" style="color: #20794D;
+<span id="cb23-16"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb22-17">)</span>
-<span id="cb22-18"></span>
-<span id="cb22-19">user_prompt_answer_accuracy <span class="op" style="color: #5E5E5E;
+<span id="cb23-17">)</span>
+<span id="cb23-18"></span>
+<span id="cb23-19">user_prompt_answer_accuracy <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb22-20">    <span class="st" style="color: #20794D;
+<span id="cb23-20">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb22-21"><span class="st" style="color: #20794D;
+<span id="cb23-21"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Question:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{question}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb22-22"><span class="st" style="color: #20794D;
+<span id="cb23-22"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **User Answer:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{user_answer}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb22-23"><span class="st" style="color: #20794D;
+<span id="cb23-23"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Reference Answer:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{reference_answer}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb22-24"><span class="st" style="color: #20794D;
+<span id="cb23-24"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb22-25">)</span>
-<span id="cb22-26"></span>
-<span id="cb22-27">messages_answer_accuracy <span class="op" style="color: #5E5E5E;
+<span id="cb23-25">)</span>
+<span id="cb23-26"></span>
+<span id="cb23-27">messages_answer_accuracy <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb22-28">    [(<span class="st" style="color: #20794D;
+<span id="cb23-28">    [(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_answer_accuracy), (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_answer_accuracy)]</span>
-<span id="cb22-29">)</span>
-<span id="cb22-30"></span>
-<span id="cb22-31"></span>
-<span id="cb22-32"><span class="kw" style="color: #003B4F;
+<span id="cb23-29">)</span>
+<span id="cb23-30"></span>
+<span id="cb23-31"></span>
+<span id="cb23-32"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseAnswerAccuracy(BaseModel):</span>
-<span id="cb22-33">    explanation: <span class="bu" style="color: null;
+<span id="cb23-33">    explanation: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb22-34">    rating: <span class="bu" style="color: null;
+<span id="cb23-34">    rating: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">int</span></span>
-<span id="cb22-35"></span>
-<span id="cb22-36"></span>
-<span id="cb22-37">llm <span class="op" style="color: #5E5E5E;
+<span id="cb23-35"></span>
+<span id="cb23-36"></span>
+<span id="cb23-37">llm <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4.1-mini"</span>)</span>
-<span id="cb22-38"></span>
-<span id="cb22-39">llm_with_structured_output_answer_accuracy <span class="op" style="color: #5E5E5E;
+<span id="cb23-38"></span>
+<span id="cb23-39">llm_with_structured_output_answer_accuracy <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> llm.with_structured_output(</span>
-<span id="cb22-40">    ResponseAnswerAccuracy</span>
-<span id="cb22-41">)</span>
-<span id="cb22-42"></span>
-<span id="cb22-43"></span>
-<span id="cb22-44"><span class="cf" style="color: #003B4F;
+<span id="cb23-40">    ResponseAnswerAccuracy</span>
+<span id="cb23-41">)</span>
+<span id="cb23-42"></span>
+<span id="cb23-43"></span>
+<span id="cb23-44"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> answer_accuracy(</span>
-<span id="cb22-45">    inputs: <span class="bu" style="color: null;
+<span id="cb23-45">    inputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>, outputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>, reference_outputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span></span>
-<span id="cb22-46">) <span class="op" style="color: #5E5E5E;
+<span id="cb23-46">) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">float</span>:</span>
-<span id="cb22-47">    compiled_messages <span class="op" style="color: #5E5E5E;
+<span id="cb23-47">    compiled_messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_answer_accuracy.ainvoke(</span>
-<span id="cb22-48">        {</span>
-<span id="cb22-49">            <span class="st" style="color: #20794D;
+<span id="cb23-48">        {</span>
+<span id="cb23-49">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>],</span>
-<span id="cb22-50">            <span class="st" style="color: #20794D;
+<span id="cb23-50">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user_answer"</span>: outputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>],</span>
-<span id="cb22-51">            <span class="st" style="color: #20794D;
+<span id="cb23-51">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"reference_answer"</span>: reference_outputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>],</span>
-<span id="cb22-52">        }</span>
-<span id="cb22-53">    )</span>
-<span id="cb22-54">    output <span class="op" style="color: #5E5E5E;
+<span id="cb23-52">        }</span>
+<span id="cb23-53">    )</span>
+<span id="cb23-54">    output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_with_structured_output_answer_accuracy.ainvoke(compiled_messages)</span>
-<span id="cb22-55">    <span class="cf" style="color: #003B4F;
+<span id="cb23-55">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output.rating <span class="op" style="color: #5E5E5E;
@@ -1629,164 +1637,164 @@ font-style: inherit;">2.0</span></span></code></pre></div>
 <h4 class="anchored" data-anchor-id="context-relevance">Context relevance</h4>
 <p>This metric evaluates if the context provided to the LLM is relevant to the user query. Similar to the answer accuracy metric, it uses an LLM judge that scores the context relevance against a reference answer using a 0, 1, 2 scale:</p>
 <div id="82c8f6b6" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1">system_prompt_context_relevance <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1">system_prompt_context_relevance <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb23-2">    <span class="st" style="color: #20794D;
+<span id="cb24-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb23-3"><span class="st" style="color: #20794D;
+<span id="cb24-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You are an expert evaluator. Your task is to evaluate the relevance of a Context in order to answer a Question. </span></span>
-<span id="cb23-4"></span>
-<span id="cb23-5"><span class="st" style="color: #20794D;
+<span id="cb24-4"></span>
+<span id="cb24-5"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Do not rely on your previous knowledge about the Question. Use only what is written in the Context and in the Question.</span></span>
-<span id="cb23-6"></span>
-<span id="cb23-7"><span class="st" style="color: #20794D;
+<span id="cb24-6"></span>
+<span id="cb24-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Here's the grading scale you must use:</span></span>
-<span id="cb23-8"></span>
-<span id="cb23-9"><span class="st" style="color: #20794D;
+<span id="cb24-8"></span>
+<span id="cb24-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    0 - If the context does not contain any relevant information to answer the question.</span></span>
-<span id="cb23-10"><span class="st" style="color: #20794D;
+<span id="cb24-10"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1 - If the context partially contains relevant information to answer the question.</span></span>
-<span id="cb23-11"><span class="st" style="color: #20794D;
+<span id="cb24-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2 - If the context contains relevant information to answer the question.</span></span>
-<span id="cb23-12"></span>
-<span id="cb23-13"><span class="st" style="color: #20794D;
+<span id="cb24-12"></span>
+<span id="cb24-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You must always provide the relevance score of 0, 1, or 2, nothing else.</span></span>
-<span id="cb23-14"></span>
-<span id="cb23-15"><span class="st" style="color: #20794D;
+<span id="cb24-14"></span>
+<span id="cb24-15"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Your answer must be a JSON object with the following keys:</span></span>
-<span id="cb23-16"><span class="st" style="color: #20794D;
+<span id="cb24-16"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
-<span id="cb23-17"><span class="st" style="color: #20794D;
+<span id="cb24-17"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
-<span id="cb23-18"><span class="st" style="color: #20794D;
+<span id="cb24-18"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb23-19">)</span>
-<span id="cb23-20"></span>
-<span id="cb23-21">user_prompt_context_relevance <span class="op" style="color: #5E5E5E;
+<span id="cb24-19">)</span>
+<span id="cb24-20"></span>
+<span id="cb24-21">user_prompt_context_relevance <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb23-22">    <span class="st" style="color: #20794D;
+<span id="cb24-22">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb23-23"><span class="st" style="color: #20794D;
+<span id="cb24-23"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Question:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{question}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb23-24"><span class="st" style="color: #20794D;
+<span id="cb24-24"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Context:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{context}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb23-25"><span class="st" style="color: #20794D;
+<span id="cb24-25"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb23-26">)</span>
-<span id="cb23-27"></span>
-<span id="cb23-28">messages_context_relevance <span class="op" style="color: #5E5E5E;
+<span id="cb24-26">)</span>
+<span id="cb24-27"></span>
+<span id="cb24-28">messages_context_relevance <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb23-29">    [</span>
-<span id="cb23-30">        (<span class="st" style="color: #20794D;
+<span id="cb24-29">    [</span>
+<span id="cb24-30">        (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_context_relevance),</span>
-<span id="cb23-31">        (<span class="st" style="color: #20794D;
+<span id="cb24-31">        (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_context_relevance),</span>
-<span id="cb23-32">    ]</span>
-<span id="cb23-33">)</span>
-<span id="cb23-34"></span>
-<span id="cb23-35"></span>
-<span id="cb23-36"><span class="kw" style="color: #003B4F;
+<span id="cb24-32">    ]</span>
+<span id="cb24-33">)</span>
+<span id="cb24-34"></span>
+<span id="cb24-35"></span>
+<span id="cb24-36"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseContextRelevance(BaseModel):</span>
-<span id="cb23-37">    explanation: <span class="bu" style="color: null;
+<span id="cb24-37">    explanation: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb23-38">    rating: <span class="bu" style="color: null;
+<span id="cb24-38">    rating: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">int</span></span>
-<span id="cb23-39"></span>
-<span id="cb23-40"></span>
-<span id="cb23-41">llm <span class="op" style="color: #5E5E5E;
+<span id="cb24-39"></span>
+<span id="cb24-40"></span>
+<span id="cb24-41">llm <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4.1-mini"</span>)</span>
-<span id="cb23-42">llm_with_structured_output_context_relevance <span class="op" style="color: #5E5E5E;
+<span id="cb24-42">llm_with_structured_output_context_relevance <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> llm.with_structured_output(</span>
-<span id="cb23-43">    ResponseContextRelevance</span>
-<span id="cb23-44">)</span>
-<span id="cb23-45"></span>
-<span id="cb23-46"></span>
-<span id="cb23-47"><span class="cf" style="color: #003B4F;
+<span id="cb24-43">    ResponseContextRelevance</span>
+<span id="cb24-44">)</span>
+<span id="cb24-45"></span>
+<span id="cb24-46"></span>
+<span id="cb24-47"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> context_relevance(</span>
-<span id="cb23-48">    inputs: <span class="bu" style="color: null;
+<span id="cb24-48">    inputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>, outputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>, reference_outputs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span></span>
-<span id="cb23-49">) <span class="op" style="color: #5E5E5E;
+<span id="cb24-49">) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">float</span>:</span>
-<span id="cb23-50">    compiled_messages <span class="op" style="color: #5E5E5E;
+<span id="cb24-50">    compiled_messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_context_relevance.ainvoke(</span>
-<span id="cb23-51">        {</span>
-<span id="cb23-52">            <span class="st" style="color: #20794D;
+<span id="cb24-51">        {</span>
+<span id="cb24-52">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>],</span>
-<span id="cb23-53">            <span class="st" style="color: #20794D;
+<span id="cb24-53">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>: outputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>],</span>
-<span id="cb23-54">        }</span>
-<span id="cb23-55">    )</span>
-<span id="cb23-56">    output <span class="op" style="color: #5E5E5E;
+<span id="cb24-54">        }</span>
+<span id="cb24-55">    )</span>
+<span id="cb24-56">    output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_with_structured_output_context_relevance.ainvoke(</span>
-<span id="cb23-57">        compiled_messages</span>
-<span id="cb23-58">    )</span>
-<span id="cb23-59">    <span class="cf" style="color: #003B4F;
+<span id="cb24-57">        compiled_messages</span>
+<span id="cb24-58">    )</span>
+<span id="cb24-59">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output.rating <span class="op" style="color: #5E5E5E;
@@ -1801,116 +1809,116 @@ font-style: inherit;">2</span></span></code></pre></div>
 <h4 class="anchored" data-anchor-id="groundedness">Groundedness</h4>
 <p>This metric evaluates if the answer is grounded in the provided context. Like before, you use an LLM judge that scores the groundedness of the answer against the context using a 0, 1, 2 scale:</p>
 <div id="32cef827" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1">system_prompt_groundedness <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1">system_prompt_groundedness <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb24-2">    <span class="st" style="color: #20794D;
+<span id="cb25-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb24-3"><span class="st" style="color: #20794D;
+<span id="cb25-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You are an expert evaluator. Your task is to evaluate the groundedness of an assertion against a context. </span></span>
-<span id="cb24-4"></span>
-<span id="cb24-5"><span class="st" style="color: #20794D;
+<span id="cb25-4"></span>
+<span id="cb25-5"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Do not rely on your previous knowledge about the assertion or context. Use only what is written in the assertion and in the context.</span></span>
-<span id="cb24-6"></span>
-<span id="cb24-7"><span class="st" style="color: #20794D;
+<span id="cb25-6"></span>
+<span id="cb25-7"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Here's the grading scale you must use:</span></span>
-<span id="cb24-8"></span>
-<span id="cb24-9"><span class="st" style="color: #20794D;
+<span id="cb25-8"></span>
+<span id="cb25-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    0 - If the assertion is not supported by the context. Or, if the context or assertion is empty.</span></span>
-<span id="cb24-10"><span class="st" style="color: #20794D;
+<span id="cb25-10"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1 - If the context partially contains relevant information to support the assertion.</span></span>
-<span id="cb24-11"><span class="st" style="color: #20794D;
+<span id="cb25-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2 - If the context fully supports the assertion.</span></span>
-<span id="cb24-12"></span>
-<span id="cb24-13"><span class="st" style="color: #20794D;
+<span id="cb25-12"></span>
+<span id="cb25-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You must always provide the relevance score of 0, 1, or 2, nothing else.</span></span>
-<span id="cb24-14"></span>
-<span id="cb24-15"><span class="st" style="color: #20794D;
+<span id="cb25-14"></span>
+<span id="cb25-15"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    Your answer must be a JSON object with the following keys:</span></span>
-<span id="cb24-16"></span>
-<span id="cb24-17"><span class="st" style="color: #20794D;
+<span id="cb25-16"></span>
+<span id="cb25-17"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    1. "explanation": "&lt;a brief explanation of your rating&gt;",</span></span>
-<span id="cb24-18"><span class="st" style="color: #20794D;
+<span id="cb25-18"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    2. "rating": "&lt;your rating, which must be one of the following: 0, 1, 2&gt;"</span></span>
-<span id="cb24-19"><span class="st" style="color: #20794D;
+<span id="cb25-19"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb24-20">)</span>
-<span id="cb24-21"></span>
-<span id="cb24-22">user_prompt_groundedness <span class="op" style="color: #5E5E5E;
+<span id="cb25-20">)</span>
+<span id="cb25-21"></span>
+<span id="cb25-22">user_prompt_groundedness <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb24-23">    <span class="st" style="color: #20794D;
+<span id="cb25-23">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb24-24"><span class="st" style="color: #20794D;
+<span id="cb25-24"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Assertion:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{answer}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb24-25"><span class="st" style="color: #20794D;
+<span id="cb25-25"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    **Context:** `</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{context}</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">`</span></span>
-<span id="cb24-26"><span class="st" style="color: #20794D;
+<span id="cb25-26"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb24-27">)</span>
-<span id="cb24-28"></span>
-<span id="cb24-29">messages_groundedness <span class="op" style="color: #5E5E5E;
+<span id="cb25-27">)</span>
+<span id="cb25-28"></span>
+<span id="cb25-29">messages_groundedness <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb24-30">    [(<span class="st" style="color: #20794D;
+<span id="cb25-30">    [(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_groundedness), (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_groundedness)]</span>
-<span id="cb24-31">)</span>
-<span id="cb24-32"></span>
-<span id="cb24-33"></span>
-<span id="cb24-34"><span class="kw" style="color: #003B4F;
+<span id="cb25-31">)</span>
+<span id="cb25-32"></span>
+<span id="cb25-33"></span>
+<span id="cb25-34"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">class</span> ResponseGroundedness(BaseModel):</span>
-<span id="cb24-35">    explanation: <span class="bu" style="color: null;
+<span id="cb25-35">    explanation: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span></span>
-<span id="cb24-36">    rating: <span class="bu" style="color: null;
+<span id="cb25-36">    rating: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">int</span></span>
-<span id="cb24-37"></span>
-<span id="cb24-38"></span>
-<span id="cb24-39">llm <span class="op" style="color: #5E5E5E;
+<span id="cb25-37"></span>
+<span id="cb25-38"></span>
+<span id="cb25-39">llm <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4.1-mini"</span>)</span>
-<span id="cb24-40">llm_with_structured_output_groundedness <span class="op" style="color: #5E5E5E;
+<span id="cb25-40">llm_with_structured_output_groundedness <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> llm.with_structured_output(</span>
-<span id="cb24-41">    ResponseGroundedness</span>
-<span id="cb24-42">)</span>
-<span id="cb24-43"></span>
-<span id="cb24-44"></span>
-<span id="cb24-45"><span class="cf" style="color: #003B4F;
+<span id="cb25-41">    ResponseGroundedness</span>
+<span id="cb25-42">)</span>
+<span id="cb25-43"></span>
+<span id="cb25-44"></span>
+<span id="cb25-45"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
@@ -1927,32 +1935,32 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">float</span>:</span>
-<span id="cb24-46">    compiled_messages <span class="op" style="color: #5E5E5E;
+<span id="cb25-46">    compiled_messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_groundedness.ainvoke(</span>
-<span id="cb24-47">        {</span>
-<span id="cb24-48">            <span class="st" style="color: #20794D;
+<span id="cb25-47">        {</span>
+<span id="cb25-48">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>: outputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>],</span>
-<span id="cb24-49">            <span class="st" style="color: #20794D;
+<span id="cb25-49">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>: outputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>],</span>
-<span id="cb24-50">        }</span>
-<span id="cb24-51">    )</span>
-<span id="cb24-52">    output <span class="op" style="color: #5E5E5E;
+<span id="cb25-50">        }</span>
+<span id="cb25-51">    )</span>
+<span id="cb25-52">    output <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_with_structured_output_groundedness.ainvoke(compiled_messages)</span>
-<span id="cb24-53">    <span class="cf" style="color: #003B4F;
+<span id="cb25-53">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> output.rating <span class="op" style="color: #5E5E5E;
@@ -1968,70 +1976,70 @@ font-style: inherit;">2</span></span></code></pre></div>
 <h3 class="anchored" data-anchor-id="run-evaluation">Run evaluation</h3>
 <p>Now we can run the full RAG pipeline and evaluate its results using the LangSmith evaluators.</p>
 <div id="ddb7581f" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1">system_prompt_generation <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1">system_prompt_generation <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb25-2">    <span class="st" style="color: #20794D;
+<span id="cb26-2">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb25-3"><span class="st" style="color: #20794D;
+<span id="cb26-3"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    You're a helpful assistant. Provided with a question and the most relevant documents, you must generate a concise and accurate answer based on the information in those documents.</span></span>
-<span id="cb25-4"><span class="st" style="color: #20794D;
+<span id="cb26-4"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb25-5">)</span>
-<span id="cb25-6"></span>
-<span id="cb25-7">user_prompt_generation <span class="op" style="color: #5E5E5E;
+<span id="cb26-5">)</span>
+<span id="cb26-6"></span>
+<span id="cb26-7">user_prompt_generation <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> dedent(</span>
-<span id="cb25-8">    <span class="st" style="color: #20794D;
+<span id="cb26-8">    <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"""</span></span>
-<span id="cb25-9"><span class="st" style="color: #20794D;
+<span id="cb26-9"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    QUESTION: </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{question}</span></span>
-<span id="cb25-10"></span>
-<span id="cb25-11"><span class="st" style="color: #20794D;
+<span id="cb26-10"></span>
+<span id="cb26-11"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    RELEVANT DOCUMENTS:</span></span>
-<span id="cb25-12"><span class="st" style="color: #20794D;
+<span id="cb26-12"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    </span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{documents}</span></span>
-<span id="cb25-13"><span class="st" style="color: #20794D;
+<span id="cb26-13"><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">    """</span></span>
-<span id="cb25-14">)</span>
-<span id="cb25-15"></span>
-<span id="cb25-16">messages_generation <span class="op" style="color: #5E5E5E;
+<span id="cb26-14">)</span>
+<span id="cb26-15"></span>
+<span id="cb26-16">messages_generation <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatPromptTemplate.from_messages(</span>
-<span id="cb25-17">    [(<span class="st" style="color: #20794D;
+<span id="cb26-17">    [(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"system"</span>, system_prompt_generation), (<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"user"</span>, user_prompt_generation)]</span>
-<span id="cb25-18">)</span>
-<span id="cb25-19"></span>
-<span id="cb25-20">llm_generation <span class="op" style="color: #5E5E5E;
+<span id="cb26-18">)</span>
+<span id="cb26-19"></span>
+<span id="cb26-20">llm_generation <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> ChatOpenAI(</span>
-<span id="cb25-21">    model<span class="op" style="color: #5E5E5E;
+<span id="cb26-21">    model<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"gpt-4o-mini"</span>,</span>
-<span id="cb25-22">)</span></code></pre></div>
+<span id="cb26-22">)</span></code></pre></div>
 </div>
 <p>A good starting point is to evaluate different values for the number of retrieved documents (K). For example, you could evaluate different values for the number of retrieved documents.</p>
 <p>Langsmith requires a wrapper or target function that encapsulates your RAG system. In your case, this function takes a user query, retrieves the most similar documents, generates an answer using the LLM, and returns the generated answer with the document IDs and context retrieved.</p>
 <p>I’ll run this code for K values of 3, 5, and 10, and compare the results.</p>
 <div id="9c0ddd40" class="cell">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><span class="cf" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> K <span class="kw" style="color: #003B4F;
@@ -2044,7 +2052,7 @@ background-color: null;
 font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>]:</span>
-<span id="cb26-2">    <span class="bu" style="color: null;
+<span id="cb27-2">    <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -2055,11 +2063,11 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb26-3"></span>
-<span id="cb26-4">    <span class="at" style="color: #657422;
+<span id="cb27-3"></span>
+<span id="cb27-4">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">@traceable</span></span>
-<span id="cb26-5">    <span class="cf" style="color: #003B4F;
+<span id="cb27-5">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
@@ -2072,47 +2080,47 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>:</span>
-<span id="cb26-6">        relevant_docs <span class="op" style="color: #5E5E5E;
+<span id="cb27-6">        relevant_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_similar_docs(inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>], top_k<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>K)</span>
-<span id="cb26-7">        formatted_docs <span class="op" style="color: #5E5E5E;
+<span id="cb27-7">        formatted_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> format_docs(relevant_docs)</span>
-<span id="cb26-8">        messages <span class="op" style="color: #5E5E5E;
+<span id="cb27-8">        messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_generation.ainvoke(</span>
-<span id="cb26-9">            {</span>
-<span id="cb26-10">                <span class="st" style="color: #20794D;
+<span id="cb27-9">            {</span>
+<span id="cb27-10">                <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>],</span>
-<span id="cb26-11">                <span class="st" style="color: #20794D;
+<span id="cb27-11">                <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>: formatted_docs,</span>
-<span id="cb26-12">            }</span>
-<span id="cb26-13">        )</span>
-<span id="cb26-14">        response <span class="op" style="color: #5E5E5E;
+<span id="cb27-12">            }</span>
+<span id="cb27-13">        )</span>
+<span id="cb27-14">        response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm_generation.ainvoke(messages)</span>
-<span id="cb26-15">        <span class="cf" style="color: #003B4F;
+<span id="cb27-15">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> {</span>
-<span id="cb26-16">            <span class="st" style="color: #20794D;
+<span id="cb27-16">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>: response.content,</span>
-<span id="cb26-17">            <span class="st" style="color: #20794D;
+<span id="cb27-17">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"docs"</span>: [doc.<span class="bu" style="color: null;
 background-color: null;
@@ -2123,30 +2131,30 @@ font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> relevant_docs],</span>
-<span id="cb26-18">            <span class="st" style="color: #20794D;
+<span id="cb27-18">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>: formatted_docs,</span>
-<span id="cb26-19">        }</span>
-<span id="cb26-20"></span>
-<span id="cb26-21">    experiment_results <span class="op" style="color: #5E5E5E;
+<span id="cb27-19">        }</span>
+<span id="cb27-20"></span>
+<span id="cb27-21">    experiment_results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> langsmith_client.aevaluate(</span>
-<span id="cb26-22">        target,</span>
-<span id="cb26-23">        data<span class="op" style="color: #5E5E5E;
+<span id="cb27-22">        target,</span>
+<span id="cb27-23">        data<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>dataset_name,</span>
-<span id="cb26-24">        evaluators<span class="op" style="color: #5E5E5E;
+<span id="cb27-24">        evaluators<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
-<span id="cb26-25">        max_concurrency<span class="op" style="color: #5E5E5E;
+<span id="cb27-25">        max_concurrency<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">50</span>,</span>
-<span id="cb26-26">        experiment_prefix<span class="op" style="color: #5E5E5E;
+<span id="cb27-26">        experiment_prefix<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="ss" style="color: #20794D;
 background-color: null;
@@ -2157,7 +2165,7 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb26-27">    )</span></code></pre></div>
+<span id="cb27-27">    )</span></code></pre></div>
 </div>
 <p>Using <code>aevaluate</code> you can speed up the evaluation process and run the evaluations concurrently. I got the following results:</p>
 <table class="table">
@@ -2217,7 +2225,7 @@ font-style: inherit;">"</span>,</span>
 <p>A quick way to improve your RAG system is to rerank the retrieved documents. In addition to doing retrieval using vector similarity or keyword search, you can have a reranking step that uses a more capable model to score and reorder the retrieved documents based on their relevance to the user query.</p>
 <p>Let’s use <code>sentence-transformers</code> with an open-source model to do this:</p>
 <div id="3ef76069" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1">cross_encoder <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1">cross_encoder <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CrossEncoder(<span class="st" style="color: #20794D;
 background-color: null;
@@ -2226,19 +2234,19 @@ font-style: inherit;">"mixedbread-ai/mxbai-rerank-xsmall-v1"</span>)</span></cod
 <p>To rerank a set of documents, you take the results from the retrieval step and pass them to the reranker, which will return a new set of documents ordered by their relevance to the user query.</p>
 <p>Here’s an example:</p>
 <div id="481b2e0b" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1">query <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1">query <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What is the process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
-<span id="cb28-2">hits <span class="op" style="color: #5E5E5E;
+<span id="cb29-2">hits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_similar_docs(query, top_k<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">50</span>)</span>
-<span id="cb28-3">cross_inp <span class="op" style="color: #5E5E5E;
+<span id="cb29-3">cross_inp <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [[query, h.page_content] <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -2247,10 +2255,10 @@ font-style: inherit;">for</span> h <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> hits]</span>
-<span id="cb28-4">reranker_scores <span class="op" style="color: #5E5E5E;
+<span id="cb29-4">reranker_scores <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> cross_encoder.predict(cross_inp)</span>
-<span id="cb28-5">sorted_hits <span class="op" style="color: #5E5E5E;
+<span id="cb29-5">sorted_hits <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
@@ -2268,27 +2276,27 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 <p>This takes the 50 most similar documents to the query and reranks them using a cross-encoder model. The <code>reranker_scores</code> are used to sort the documents in descending order of relevance.</p>
 <p>Now you can do the same evaluation as before (for k = 5), but including this new reranking step:</p>
 <div id="3411cd58" class="cell">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1">K <span class="op" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1">K <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span></span>
-<span id="cb29-2"></span>
-<span id="cb29-3"><span class="kw" style="color: #003B4F;
+<span id="cb30-2"></span>
+<span id="cb30-3"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> get_reranked_docs(</span>
-<span id="cb29-4">    query: <span class="bu" style="color: null;
+<span id="cb30-4">    query: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">str</span>, similar_docs: <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>[RetrievedDoc]</span>
-<span id="cb29-5">) <span class="op" style="color: #5E5E5E;
+<span id="cb30-5">) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>[RetrievedDoc]:</span>
-<span id="cb29-6">    cross_inp <span class="op" style="color: #5E5E5E;
+<span id="cb30-6">    cross_inp <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [[query, doc.page_content] <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -2297,15 +2305,15 @@ font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> similar_docs]</span>
-<span id="cb29-7">    reranker_scores <span class="op" style="color: #5E5E5E;
+<span id="cb30-7">    reranker_scores <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> cross_encoder.predict(cross_inp)</span>
-<span id="cb29-8">    sorted_docs <span class="op" style="color: #5E5E5E;
+<span id="cb30-8">    sorted_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">sorted</span>(</span>
-<span id="cb29-9">        similar_docs, key<span class="op" style="color: #5E5E5E;
+<span id="cb30-9">        similar_docs, key<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="kw" style="color: #003B4F;
 background-color: null;
@@ -2315,17 +2323,17 @@ background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span></span>
-<span id="cb29-10">    )</span>
-<span id="cb29-11">    <span class="cf" style="color: #003B4F;
+<span id="cb30-10">    )</span>
+<span id="cb30-11">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> sorted_docs</span>
-<span id="cb29-12"></span>
-<span id="cb29-13"></span>
-<span id="cb29-14"><span class="at" style="color: #657422;
+<span id="cb30-12"></span>
+<span id="cb30-13"></span>
+<span id="cb30-14"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">@traceable</span></span>
-<span id="cb29-15"><span class="cf" style="color: #003B4F;
+<span id="cb30-15"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
@@ -2338,7 +2346,7 @@ background-color: null;
 font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">dict</span>:</span>
-<span id="cb29-16">    relevant_docs <span class="op" style="color: #5E5E5E;
+<span id="cb30-16">    relevant_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_similar_docs(inputs[<span class="st" style="color: #20794D;
 background-color: null;
@@ -2347,45 +2355,45 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">75</span>)</span>
-<span id="cb29-17">    reranked_docs <span class="op" style="color: #5E5E5E;
+<span id="cb30-17">    reranked_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> get_reranked_docs(inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>], relevant_docs)[:K]</span>
-<span id="cb29-18">    formatted_docs <span class="op" style="color: #5E5E5E;
+<span id="cb30-18">    formatted_docs <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> format_docs(reranked_docs)</span>
-<span id="cb29-19">    messages <span class="op" style="color: #5E5E5E;
+<span id="cb30-19">    messages <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> messages_generation.ainvoke(</span>
-<span id="cb29-20">        {</span>
-<span id="cb29-21">            <span class="st" style="color: #20794D;
+<span id="cb30-20">        {</span>
+<span id="cb30-21">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>: inputs[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"question"</span>],</span>
-<span id="cb29-22">            <span class="st" style="color: #20794D;
+<span id="cb30-22">            <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"documents"</span>: formatted_docs,</span>
-<span id="cb29-23">        }</span>
-<span id="cb29-24">    )</span>
-<span id="cb29-25">    response <span class="op" style="color: #5E5E5E;
+<span id="cb30-23">        }</span>
+<span id="cb30-24">    )</span>
+<span id="cb30-25">    response <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> llm.ainvoke(messages)</span>
-<span id="cb29-26">    <span class="cf" style="color: #003B4F;
+<span id="cb30-26">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">return</span> {</span>
-<span id="cb29-27">        <span class="st" style="color: #20794D;
+<span id="cb30-27">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"answer"</span>: response,</span>
-<span id="cb29-28">        <span class="st" style="color: #20794D;
+<span id="cb30-28">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"docs"</span>: [doc.<span class="bu" style="color: null;
 background-color: null;
@@ -2396,30 +2404,30 @@ font-style: inherit;">for</span> doc <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> reranked_docs],</span>
-<span id="cb29-29">        <span class="st" style="color: #20794D;
+<span id="cb30-29">        <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"context"</span>: formatted_docs,</span>
-<span id="cb29-30">    }</span>
-<span id="cb29-31"></span>
-<span id="cb29-32">experiment_results <span class="op" style="color: #5E5E5E;
+<span id="cb30-30">    }</span>
+<span id="cb30-31"></span>
+<span id="cb30-32">experiment_results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">await</span> langsmith_client.aevaluate(</span>
-<span id="cb29-33">    target_with_reranking,</span>
-<span id="cb29-34">    data<span class="op" style="color: #5E5E5E;
+<span id="cb30-33">    target_with_reranking,</span>
+<span id="cb30-34">    data<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>dataset_name,</span>
-<span id="cb29-35">    evaluators<span class="op" style="color: #5E5E5E;
+<span id="cb30-35">    evaluators<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
-<span id="cb29-36">    max_concurrency<span class="op" style="color: #5E5E5E;
+<span id="cb30-36">    max_concurrency<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">50</span>,</span>
-<span id="cb29-37">    experiment_prefix<span class="op" style="color: #5E5E5E;
+<span id="cb30-37">    experiment_prefix<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="ss" style="color: #20794D;
 background-color: null;
@@ -2430,7 +2438,7 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">-reranked"</span>,</span>
-<span id="cb29-38">)</span></code></pre></div>
+<span id="cb30-38">)</span></code></pre></div>
 </div>
 <p>Here are the results of the original run with k=5 and the run with a reranker:</p>
 <table class="table">
@@ -2490,19 +2498,19 @@ font-style: inherit;">-reranked"</span>,</span>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {How to Use Synthetic Data to Bootstrap Your {RAG} System
-    Evals},
+  title = {Using Synthetic Data to Bootstrap Your {RAG} System Evals},
   date = {2025-08-07},
   url = {https://dylancastillo.co/posts/synthetic-data-rag.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“How to Use Synthetic Data to Bootstrap
-Your RAG System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/synthetic-data-rag.html">https://dylancastillo.co/posts/synthetic-data-rag.html</a>.
+Castillo, Dylan. 2025. <span>“Using Synthetic Data to Bootstrap Your RAG
+System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/synthetic-data-rag.html">https://dylancastillo.co/posts/synthetic-data-rag.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
   <category>rag</category>
+  <category>openai</category>
   <guid>https://dylancastillo.co/posts/synthetic-data-rag.html</guid>
   <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
 </item>
