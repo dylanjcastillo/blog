@@ -1166,7 +1166,7 @@
     "href": "index.html#posts",
     "title": "Dylan Castillo",
     "section": "Posts",
-    "text": "Posts\nThese are longer posts covering mostly technical topics and a few personal posts such as yearly reviews.\n\n\n\n\n\n\nDate\n\n\n\nTitle\n\n\n\nReading Time\n\n\n\n\n\n\n\n\nAug 7, 2025\n\n\nUsing synthetic data to bootstrap your RAG system evals\n\n\n17 min\n\n\n\n\n\n\nJul 4, 2025\n\n\nBuilding ReAct agents with (and without) LangGraph\n\n\n8 min\n\n\n\n\n\n\nJul 3, 2025\n\n\nAgentic workflows from scratch with (and without) LangGraph\n\n\n18 min\n\n\n\n\n\n\nJul 1, 2025\n\n\nFunction calling and structured outputs in LLMs with LangChain and OpenAI\n\n\n9 min\n\n\n\n\n\n\nJun 29, 2025\n\n\nKey parameters for LLMs\n\n\n5 min\n\n\n\n\n\n\nJun 29, 2025\n\n\nWhat is Retrieval Augmented Generation (RAG)?\n\n\n9 min\n\n\n\n\n\n\nJun 26, 2025\n\n\nPrompt engineering 101\n\n\n10 min\n\n\n\n\n\n\nJun 25, 2025\n\n\nControlling randomness in LLMs: Temperature and Seed\n\n\n10 min\n\n\n\n\n\n\nJan 5, 2025\n\n\n2024: Personal Snapshot\n\n\n11 min\n\n\n\n\n\n\nDec 27, 2024\n\n\nThe good, the bad, and the ugly of Gemini’s structured outputs\n\n\n13 min\n\n\n\n\n\n\nDec 8, 2024\n\n\nStructured outputs can hurt the performance of LLMs\n\n\n14 min\n\n\n\n\n\n\nNov 9, 2024\n\n\nStructured outputs: don’t put the cart before the horse\n\n\n5 min\n\n\n\n\n\n\nSep 21, 2024\n\n\nDeploying a FastAPI app with Kamal, AWS ECR, and Github Actions\n\n\n13 min\n\n\n\n\n\n\nSep 15, 2024\n\n\nDeploying a Django app with Kamal 2, AWS ECR, and Github Actions\n\n\n14 min\n\n\n\n\n\n\nSep 8, 2024\n\n\nClassifying images with Gemini Flash 1.5\n\n\n7 min\n\n\n\n\n\n\nAug 11, 2024\n\n\nCreate a Kamal-ready VPS on Hetzner using Terraform\n\n\n3 min\n\n\n\n\n\n\nJan 5, 2024\n\n\n2023: Personal Snapshot\n\n\n9 min\n\n\n\n\n\n\nJun 9, 2023\n\n\nClustering Documents with OpenAI embeddings, HDBSCAN and UMAP\n\n\n6 min\n\n\n\n\n\n\nMay 12, 2023\n\n\nCreate a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI\n\n\n12 min\n\n\n\n\n\n\nApr 27, 2023\n\n\nSemantic Search with Elasticsearch, OpenAI, and LangChain\n\n\n10 min\n\n\n\n\n\n\nApr 11, 2023\n\n\nSemantic Search with OpenSearch, Cohere, and FastAPI\n\n\n12 min\n\n\n\n\n\n\nMar 3, 2023\n\n\nBuild an AI Search Engine Using FastAPI, Qdrant, and ChatGPT\n\n\n17 min\n\n\n\n\n\n\nFeb 17, 2023\n\n\nTips for Standing Out on LinkedIn\n\n\n10 min\n\n\n\n\n\n\nFeb 3, 2023\n\n\nHow to Securely Deploy a FastAPI app with NGINX and Gunicorn\n\n\n14 min\n\n\n\n\n\n\nJan 20, 2023\n\n\nMy Experience at Entrepreneur First\n\n\n11 min\n\n\n\n\n\n\nSep 21, 2022\n\n\nPyScript 101\n\n\n7 min\n\n\n\n\n\n\nAug 31, 2022\n\n\nHow to Use OpenSearch in Python\n\n\n10 min\n\n\n\n\n\n\nAug 23, 2022\n\n\nText Classification Using Python and Scikit-learn\n\n\n9 min\n\n\n\n\n\n\nAug 12, 2022\n\n\nHow to Use Elasticsearch in Python\n\n\n10 min\n\n\n\n\n\n\nJun 17, 2022\n\n\nEntrepreneurship as a Risk Management Strategy\n\n\n7 min\n\n\n\n\n\n\nJan 31, 2022\n\n\n2021: Personal Snapshot\n\n\n8 min\n\n\n\n\n\n\nOct 7, 2021\n\n\nHow to Use GitHub Deploy Keys\n\n\n5 min\n\n\n\n\n\n\nJul 3, 2021\n\n\nHow to Plot with Python: 8 Popular Graphs Made with pandas, matplotlib, seaborn, and plotly.express\n\n\n100 min\n\n\n\n\n\n\nJan 18, 2021\n\n\nHow to Cluster Documents Using Word2Vec and K-means\n\n\n21 min\n\n\n\n\n\n\nDec 10, 2020\n\n\nClean and Tokenize Text With Python\n\n\n11 min\n\n\n\n\n\n\nMay 25, 2020\n\n\n4 Ways To Improve Your Graphs Using Plotly\n\n\n12 min\n\n\n\n\n\n\nApr 16, 2020\n\n\nUse Google Sheets, S3, and Python to Build a Website Quickly\n\n\n13 min\n\n\n\n\n\n\nMar 1, 2020\n\n\nFast & Asynchronous In Python: Accelerate Your Requests Using asyncio\n\n\n12 min\n\n\n\n\n\n\nDec 20, 2019\n\n\nMind-reading Algorithms: An Introduction to Recommender Systems\n\n\n15 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Posts\nThese are longer posts covering mostly technical topics and a few personal posts such as yearly reviews.\n\n\n\n\n\n\nDate\n\n\n\nTitle\n\n\n\nReading Time\n\n\n\n\n\n\n\n\nAug 7, 2025\n\n\nUsing synthetic data to bootstrap your RAG system evals\n\n\n17 min\n\n\n\n\n\n\nJul 4, 2025\n\n\nBuilding ReAct agents with (and without) LangGraph\n\n\n8 min\n\n\n\n\n\n\nJul 3, 2025\n\n\nAgentic workflows from scratch with (and without) LangGraph\n\n\n18 min\n\n\n\n\n\n\nJul 1, 2025\n\n\nFunction calling and structured outputs in LLMs with LangChain and OpenAI\n\n\n9 min\n\n\n\n\n\n\nJun 29, 2025\n\n\nKey parameters of LLMs\n\n\n5 min\n\n\n\n\n\n\nJun 29, 2025\n\n\nWhat is Retrieval Augmented Generation (RAG)?\n\n\n9 min\n\n\n\n\n\n\nJun 26, 2025\n\n\nPrompt engineering 101\n\n\n10 min\n\n\n\n\n\n\nJun 25, 2025\n\n\nControlling randomness in LLMs: Temperature and Seed\n\n\n10 min\n\n\n\n\n\n\nJan 5, 2025\n\n\n2024: Personal Snapshot\n\n\n11 min\n\n\n\n\n\n\nDec 27, 2024\n\n\nThe good, the bad, and the ugly of Gemini’s structured outputs\n\n\n13 min\n\n\n\n\n\n\nDec 8, 2024\n\n\nStructured outputs can hurt the performance of LLMs\n\n\n14 min\n\n\n\n\n\n\nNov 9, 2024\n\n\nStructured outputs: don’t put the cart before the horse\n\n\n5 min\n\n\n\n\n\n\nSep 21, 2024\n\n\nDeploying a FastAPI app with Kamal, AWS ECR, and Github Actions\n\n\n13 min\n\n\n\n\n\n\nSep 15, 2024\n\n\nDeploying a Django app with Kamal 2, AWS ECR, and Github Actions\n\n\n14 min\n\n\n\n\n\n\nSep 8, 2024\n\n\nClassifying images with Gemini Flash 1.5\n\n\n7 min\n\n\n\n\n\n\nAug 11, 2024\n\n\nCreate a Kamal-ready VPS on Hetzner using Terraform\n\n\n3 min\n\n\n\n\n\n\nJan 5, 2024\n\n\n2023: Personal Snapshot\n\n\n9 min\n\n\n\n\n\n\nJun 9, 2023\n\n\nClustering Documents with OpenAI embeddings, HDBSCAN and UMAP\n\n\n6 min\n\n\n\n\n\n\nMay 12, 2023\n\n\nCreate a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI\n\n\n12 min\n\n\n\n\n\n\nApr 27, 2023\n\n\nSemantic Search with Elasticsearch, OpenAI, and LangChain\n\n\n10 min\n\n\n\n\n\n\nApr 11, 2023\n\n\nSemantic Search with OpenSearch, Cohere, and FastAPI\n\n\n12 min\n\n\n\n\n\n\nMar 3, 2023\n\n\nBuild an AI Search Engine Using FastAPI, Qdrant, and ChatGPT\n\n\n17 min\n\n\n\n\n\n\nFeb 17, 2023\n\n\nTips for Standing Out on LinkedIn\n\n\n10 min\n\n\n\n\n\n\nFeb 3, 2023\n\n\nHow to Securely Deploy a FastAPI app with NGINX and Gunicorn\n\n\n14 min\n\n\n\n\n\n\nJan 20, 2023\n\n\nMy Experience at Entrepreneur First\n\n\n11 min\n\n\n\n\n\n\nSep 21, 2022\n\n\nPyScript 101\n\n\n7 min\n\n\n\n\n\n\nAug 31, 2022\n\n\nHow to Use OpenSearch in Python\n\n\n10 min\n\n\n\n\n\n\nAug 23, 2022\n\n\nText Classification Using Python and Scikit-learn\n\n\n9 min\n\n\n\n\n\n\nAug 12, 2022\n\n\nHow to Use Elasticsearch in Python\n\n\n10 min\n\n\n\n\n\n\nJun 17, 2022\n\n\nEntrepreneurship as a Risk Management Strategy\n\n\n7 min\n\n\n\n\n\n\nJan 31, 2022\n\n\n2021: Personal Snapshot\n\n\n8 min\n\n\n\n\n\n\nOct 7, 2021\n\n\nHow to Use GitHub Deploy Keys\n\n\n5 min\n\n\n\n\n\n\nJul 3, 2021\n\n\nHow to Plot with Python: 8 Popular Graphs Made with pandas, matplotlib, seaborn, and plotly.express\n\n\n100 min\n\n\n\n\n\n\nJan 18, 2021\n\n\nHow to Cluster Documents Using Word2Vec and K-means\n\n\n21 min\n\n\n\n\n\n\nDec 10, 2020\n\n\nClean and Tokenize Text With Python\n\n\n11 min\n\n\n\n\n\n\nMay 25, 2020\n\n\n4 Ways To Improve Your Graphs Using Plotly\n\n\n12 min\n\n\n\n\n\n\nApr 16, 2020\n\n\nUse Google Sheets, S3, and Python to Build a Website Quickly\n\n\n13 min\n\n\n\n\n\n\nMar 1, 2020\n\n\nFast & Asynchronous In Python: Accelerate Your Requests Using asyncio\n\n\n12 min\n\n\n\n\n\n\nDec 20, 2019\n\n\nMind-reading Algorithms: An Introduction to Recommender Systems\n\n\n15 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#today-i-learned-til",
@@ -1857,91 +1857,91 @@
   {
     "objectID": "posts/key-parameters-llms.html",
     "href": "posts/key-parameters-llms.html",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "",
     "text": "I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.\nThese are the parameters that you will usually use when building LLM-based products:\nIn the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them."
   },
   {
     "objectID": "posts/key-parameters-llms.html#model",
     "href": "posts/key-parameters-llms.html#model",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Model",
     "text": "Model\nWhen choosing a model, consider the following factors:\n\nComplexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?\nSpeed: How important is it that the model replies quickly? Is this something that I can run on the background?\nCost: How much do I want to spend on this task?\nProvider: Which providers do I have access to? Do I need to self-host?\n\nRight now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.\nThe best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models."
   },
   {
     "objectID": "posts/key-parameters-llms.html#messagesprompts",
     "href": "posts/key-parameters-llms.html#messagesprompts",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Messages/prompts",
     "text": "Messages/prompts\nThe messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on prompt engineering that covers the basics of how to write good prompts."
   },
   {
     "objectID": "posts/key-parameters-llms.html#temperature",
     "href": "posts/key-parameters-llms.html#temperature",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Temperature",
     "text": "Temperature\nThe temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.\nI wrote a post about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random."
   },
   {
     "objectID": "posts/key-parameters-llms.html#seed",
     "href": "posts/key-parameters-llms.html#seed",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Seed",
     "text": "Seed\nThe seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.\nThis is only available in OpenAI, Gemini, and open-weight models. Check my post for more details."
   },
   {
     "objectID": "posts/key-parameters-llms.html#top-p-sampling",
     "href": "posts/key-parameters-llms.html#top-p-sampling",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Top-P Sampling",
     "text": "Top-P Sampling\nTop-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.\nI rarely use this parameter."
   },
   {
     "objectID": "posts/key-parameters-llms.html#logit-biases",
     "href": "posts/key-parameters-llms.html#logit-biases",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Logit biases",
     "text": "Logit biases\nLogits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.\nThis is often used for document classification tasks or LLM-based rerankers."
   },
   {
     "objectID": "posts/key-parameters-llms.html#logprobs",
     "href": "posts/key-parameters-llms.html#logprobs",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Logprobs",
     "text": "Logprobs\nLogprobs are the logaritmic probabilities of the tokens. They are defined as:\n\\[logprob(w_i) = ln(P(w_i)) = ln(\\frac{e^{z_i}}{\\sum_{j=1}^{n} e^{z_j}}) \\]\nWhere:\n\n\\(w_i\\) is the \\(i\\)-th token in the vocabulary.\n\\(P(w_i)\\) is the probability of the \\(i\\)-th token.\n\\(z_i\\) is the logit of the \\(i\\)-th token.\n\\(n\\) is the number of tokens in the vocabulary.\n\nYou can use this parameter in OpenAI models. Gemini provides a single request with logprobs per day (yes, I’m not kidding 😅). Anthropic doesn’t provide them.\nOpen-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens."
   },
   {
     "objectID": "posts/key-parameters-llms.html#max-completion-tokens",
     "href": "posts/key-parameters-llms.html#max-completion-tokens",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Max completion tokens",
     "text": "Max completion tokens\nThis parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output."
   },
   {
     "objectID": "posts/key-parameters-llms.html#response-format",
     "href": "posts/key-parameters-llms.html#response-format",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Response format",
     "text": "Response format\nYou can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:\n\nStructured outputs can hurt the performance of LLMs\nThe good, the bad, and the ugly of Gemini’s structured outputs\nStructured outputs: don’t put the cart before the horse\n\nOpen-weight models allow for more flexible structured output formats. For example, using outlines lets you define custom regEx patterns to extract the data you need."
   },
   {
     "objectID": "posts/key-parameters-llms.html#streaming",
     "href": "posts/key-parameters-llms.html#streaming",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Streaming",
     "text": "Streaming\nThis parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated."
   },
   {
     "objectID": "posts/key-parameters-llms.html#tools",
     "href": "posts/key-parameters-llms.html#tools",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Tools",
     "text": "Tools\nTools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents."
   },
   {
     "objectID": "posts/key-parameters-llms.html#conclusion",
     "href": "posts/key-parameters-llms.html#conclusion",
-    "title": "Key parameters for LLMs",
+    "title": "Key parameters of LLMs",
     "section": "Conclusion",
     "text": "Conclusion\nThis was a very short post about the key parameters for LLMs. I hope you found it useful.\nLet me know if you have any questions or feedback."
   },

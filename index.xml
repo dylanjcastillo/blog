@@ -9492,7 +9492,7 @@ LLMs with LangChain and OpenAI.”</span> July 1, 2025. <a href="https://dylanca
   <pubDate>Tue, 01 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Key parameters for LLMs</title>
+  <title>Key parameters of LLMs</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/key-parameters-llms.html</link>
   <description><![CDATA[ 
@@ -9611,13 +9611,13 @@ Note
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Key Parameters for {LLMs}},
+  title = {Key Parameters of {LLMs}},
   date = {2025-06-29},
   url = {https://dylancastillo.co/posts/key-parameters-llms.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Key Parameters for LLMs.”</span> June 29,
+Castillo, Dylan. 2025. <span>“Key Parameters of LLMs.”</span> June 29,
 2025. <a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
