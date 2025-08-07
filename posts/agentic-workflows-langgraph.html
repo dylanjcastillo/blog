@@ -110,6 +110,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<meta name="mermaid-theme" content="dark">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
@@ -187,11 +191,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#workflows" id="toc-workflows" class="nav-link" data-scroll-target="#workflows">Workflows</a>
   <ul class="collapse">
-  <li><a href="#prompt-chainingthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-subtasks.-the-key-trade-off-is-accepting-longer-completion-times-higher-latency-in-exchange-for-a-higher-quality-result.heres-what-the-workflow-looks-likemermaidflowchart-lr-in----llm1llm-call-1-llm1----output-1----gategate-gate----pass----llm2llm-call-2-gate----fail----exitexit-llm2----output-2----llm3llm-call-3-llm3----outexamples--generating-content-in-a-pipeline-by-generating-table-of-contents-content-revisions-translations-etc.--generating-a-text-through-a-multi-step-process-to-evaluate-if-it-matches-certain-criterianow-ill-show-you-how-to-implement-a-prompt-chaining-workflow-for-generating-an-article.-the-workflow-will-be-composed-of-three-steps1.-generate-a-table-of-contents-for-the-article2.-generate-the-content-of-the-article3.-revise-the-content-of-the-article-if-its-too-longill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." id="toc-prompt-chainingthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-subtasks.-the-key-trade-off-is-accepting-longer-completion-times-higher-latency-in-exchange-for-a-higher-quality-result.heres-what-the-workflow-looks-likemermaidflowchart-lr-in----llm1llm-call-1-llm1----output-1----gategate-gate----pass----llm2llm-call-2-gate----fail----exitexit-llm2----output-2----llm3llm-call-3-llm3----outexamples--generating-content-in-a-pipeline-by-generating-table-of-contents-content-revisions-translations-etc.--generating-a-text-through-a-multi-step-process-to-evaluate-if-it-matches-certain-criterianow-ill-show-you-how-to-implement-a-prompt-chaining-workflow-for-generating-an-article.-the-workflow-will-be-composed-of-three-steps1.-generate-a-table-of-contents-for-the-article2.-generate-the-content-of-the-article3.-revise-the-content-of-the-article-if-its-too-longill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="nav-link" data-scroll-target="#prompt-chainingthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-subtasks.-the-key-trade-off-is-accepting-longer-completion-times-higher-latency-in-exchange-for-a-higher-quality-result.heres-what-the-workflow-looks-likemermaidflowchart-lr-in----llm1llm-call-1-llm1----output-1----gategate-gate----pass----llm2llm-call-2-gate----fail----exitexit-llm2----output-2----llm3llm-call-3-llm3----outexamples--generating-content-in-a-pipeline-by-generating-table-of-contents-content-revisions-translations-etc.--generating-a-text-through-a-multi-step-process-to-evaluate-if-it-matches-certain-criterianow-ill-show-you-how-to-implement-a-prompt-chaining-workflow-for-generating-an-article.-the-workflow-will-be-composed-of-three-steps1.-generate-a-table-of-contents-for-the-article2.-generate-the-content-of-the-article3.-revise-the-content-of-the-article-if-its-too-longill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">Prompt chainingThis workflow is designed for tasks that can be easily divided into subtasks. The key trade-off is accepting longer completion times (higher latency) in exchange for a higher-quality result.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In --&gt; LLM1["LLM Call 1"]    LLM1 -- "Output 1" --&gt; Gate{Gate}    Gate -- Pass --&gt; LLM2["LLM Call 2"]    Gate -- Fail --&gt; Exit[Exit]    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]    LLM3 --&gt; Out</code><strong>Examples:</strong>- Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.- Generating a text through a multi-step process to evaluate if it matches certain criteriaNow I’ll show you how to implement a prompt chaining workflow for generating an article. The workflow will be composed of three steps:1. Generate a table of contents for the article2. Generate the content of the article3. Revise the content of the article if it’s too longI’ll show you a vanilla implementation and then a LangGraph implementation.</a></li>
-  <li><a href="#routingrouting-is-a-sorting-system-that-sends-each-task-to-the-right-place-for-the-best-handling.-this-process-can-be-managed-by-an-llm-or-a-traditional-classification-model.-it-makes-sense-to-use-when-a-system-needs-to-apply-different-logic-to-different-types-of-queries.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----routerllm-call-router-router---route-1-llm1llm-call-1-router---route-2-llm2llm-call-2-router---route-3-llm3llm-call-3-llm1----outout-llm2----out-llm3----outexamples--classify-complexity-of-question-and-adjust-model-depending-on-it--classify-type-of-query-and-use-specialized-tools-e.g.-indexes-promptsill-walk-you-through-a-simple-example-of-a-routing-workflow.-the-workflow-will-be-composed-of-two-steps1.-classify-the-type-of-query2.-route-the-query-to-the-right-placeill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." id="toc-routingrouting-is-a-sorting-system-that-sends-each-task-to-the-right-place-for-the-best-handling.-this-process-can-be-managed-by-an-llm-or-a-traditional-classification-model.-it-makes-sense-to-use-when-a-system-needs-to-apply-different-logic-to-different-types-of-queries.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----routerllm-call-router-router---route-1-llm1llm-call-1-router---route-2-llm2llm-call-2-router---route-3-llm3llm-call-3-llm1----outout-llm2----out-llm3----outexamples--classify-complexity-of-question-and-adjust-model-depending-on-it--classify-type-of-query-and-use-specialized-tools-e.g.-indexes-promptsill-walk-you-through-a-simple-example-of-a-routing-workflow.-the-workflow-will-be-composed-of-two-steps1.-classify-the-type-of-query2.-route-the-query-to-the-right-placeill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="nav-link" data-scroll-target="#routingrouting-is-a-sorting-system-that-sends-each-task-to-the-right-place-for-the-best-handling.-this-process-can-be-managed-by-an-llm-or-a-traditional-classification-model.-it-makes-sense-to-use-when-a-system-needs-to-apply-different-logic-to-different-types-of-queries.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----routerllm-call-router-router---route-1-llm1llm-call-1-router---route-2-llm2llm-call-2-router---route-3-llm3llm-call-3-llm1----outout-llm2----out-llm3----outexamples--classify-complexity-of-question-and-adjust-model-depending-on-it--classify-type-of-query-and-use-specialized-tools-e.g.-indexes-promptsill-walk-you-through-a-simple-example-of-a-routing-workflow.-the-workflow-will-be-composed-of-two-steps1.-classify-the-type-of-query2.-route-the-query-to-the-right-placeill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">RoutingRouting is a sorting system that sends each task to the right place for the best handling. This process can be managed by an LLM or a traditional classification model. It makes sense to use when a system needs to apply different logic to different types of queries.Here’s what the workflow looks like:<code>{mermaid}flowchart LR     In([In]) --&gt; Router["LLM Call Router"]    Router --&gt;|Route 1| LLM1["LLM Call 1"]    Router --&gt;|Route 2| LLM2["LLM Call 2"]    Router --&gt;|Route 3| LLM3["LLM Call 3"]    LLM1 --&gt; Out([Out])    LLM2 --&gt; Out    LLM3 --&gt; Out</code><strong>Examples:</strong>- Classify complexity of question and adjust model depending on it- Classify type of query and use specialized tools (e.g., indexes, prompts)I’ll walk you through a simple example of a routing workflow. The workflow will be composed of two steps:1. Classify the type of query2. Route the query to the right placeI’ll show you a vanilla implementation and then a LangGraph implementation.</a></li>
-  <li><a href="#parallelizationthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-independent-subtasks.-the-key-trade-off-is-managing-complexity-and-coordination-overhead-in-exchange-for-significant-speed-improvements-or-diverse-perspectives.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----llm1llm-call-1-in----llm2llm-call-2-in----llm3llm-call-3-llm1----aggregatoraggregator-llm2----aggregatoraggregator-llm3----aggregatoraggregator-aggregator----outoutexamples--evaluate-multiple-independent-aspects-of-a-text-safety-quality-relevance--process-user-query-and-apply-guardrails-in-parallel--generate-multiple-response-candidates-given-a-query-for-comparisonnow-ill-show-you-how-to-implement-a-parallelization-workflow-for-content-evaluation.-the-workflow-will-be-composed-of-three-steps1.-run-multiple-independent-evaluations-of-the-same-content2.-collect-all-evaluation-results3.-aggregate-the-results-into-a-final-assessmentill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." id="toc-parallelizationthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-independent-subtasks.-the-key-trade-off-is-managing-complexity-and-coordination-overhead-in-exchange-for-significant-speed-improvements-or-diverse-perspectives.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----llm1llm-call-1-in----llm2llm-call-2-in----llm3llm-call-3-llm1----aggregatoraggregator-llm2----aggregatoraggregator-llm3----aggregatoraggregator-aggregator----outoutexamples--evaluate-multiple-independent-aspects-of-a-text-safety-quality-relevance--process-user-query-and-apply-guardrails-in-parallel--generate-multiple-response-candidates-given-a-query-for-comparisonnow-ill-show-you-how-to-implement-a-parallelization-workflow-for-content-evaluation.-the-workflow-will-be-composed-of-three-steps1.-run-multiple-independent-evaluations-of-the-same-content2.-collect-all-evaluation-results3.-aggregate-the-results-into-a-final-assessmentill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="nav-link" data-scroll-target="#parallelizationthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-independent-subtasks.-the-key-trade-off-is-managing-complexity-and-coordination-overhead-in-exchange-for-significant-speed-improvements-or-diverse-perspectives.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----llm1llm-call-1-in----llm2llm-call-2-in----llm3llm-call-3-llm1----aggregatoraggregator-llm2----aggregatoraggregator-llm3----aggregatoraggregator-aggregator----outoutexamples--evaluate-multiple-independent-aspects-of-a-text-safety-quality-relevance--process-user-query-and-apply-guardrails-in-parallel--generate-multiple-response-candidates-given-a-query-for-comparisonnow-ill-show-you-how-to-implement-a-parallelization-workflow-for-content-evaluation.-the-workflow-will-be-composed-of-three-steps1.-run-multiple-independent-evaluations-of-the-same-content2.-collect-all-evaluation-results3.-aggregate-the-results-into-a-final-assessmentill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">ParallelizationThis workflow is designed for tasks that can be easily divided into independent subtasks. The key trade-off is managing complexity and coordination overhead in exchange for significant speed improvements or diverse perspectives.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; LLM1["LLM Call 1"]    In --&gt; LLM2["LLM Call 2"]    In --&gt; LLM3["LLM Call 3"]    LLM1 --&gt; Aggregator["Aggregator"]     LLM2 --&gt; Aggregator["Aggregator"]     LLM3 --&gt; Aggregator["Aggregator"]     Aggregator --&gt; Out([Out])</code><strong>Examples:</strong>- Evaluate multiple independent aspects of a text (safety, quality, relevance)- Process user query and apply guardrails in parallel- Generate multiple response candidates given a query for comparisonNow I’ll show you how to implement a parallelization workflow for content evaluation. The workflow will be composed of three steps:1. Run multiple independent evaluations of the same content2. Collect all evaluation results3. Aggregate the results into a final assessmentI’ll show you a vanilla implementation and then a LangGraph implementation.</a></li>
-  <li><a href="#orchestrator-workersthis-workflow-works-well-for-tasks-where-you-dont-know-the-required-subtasks-beforehand.-the-subtasks-are-determined-by-the-orchestrator.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----orchorchestrator-orch--.--llm1llm-call-1-orch--.--llm2llm-call-2-orch--.--llm3llm-call-3-llm1--.--synthsynthesizer-llm2--.--synth-llm3--.--synth-synth----outoutexamples--coding-tools-making-changes-to-multiple-files-at-once--searching-multiple-sources-and-synthesize-the-resultsill-walk-through-an-example-of-how-to-implement-this-pattern.-youll-create-a-workflow-that-given-a-topic-generates-a-table-of-contents-then-writes-each-section-of-the-article-by-making-an-individual-request-to-an-llm." id="toc-orchestrator-workersthis-workflow-works-well-for-tasks-where-you-dont-know-the-required-subtasks-beforehand.-the-subtasks-are-determined-by-the-orchestrator.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----orchorchestrator-orch--.--llm1llm-call-1-orch--.--llm2llm-call-2-orch--.--llm3llm-call-3-llm1--.--synthsynthesizer-llm2--.--synth-llm3--.--synth-synth----outoutexamples--coding-tools-making-changes-to-multiple-files-at-once--searching-multiple-sources-and-synthesize-the-resultsill-walk-through-an-example-of-how-to-implement-this-pattern.-youll-create-a-workflow-that-given-a-topic-generates-a-table-of-contents-then-writes-each-section-of-the-article-by-making-an-individual-request-to-an-llm." class="nav-link" data-scroll-target="#orchestrator-workersthis-workflow-works-well-for-tasks-where-you-dont-know-the-required-subtasks-beforehand.-the-subtasks-are-determined-by-the-orchestrator.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----orchorchestrator-orch--.--llm1llm-call-1-orch--.--llm2llm-call-2-orch--.--llm3llm-call-3-llm1--.--synthsynthesizer-llm2--.--synth-llm3--.--synth-synth----outoutexamples--coding-tools-making-changes-to-multiple-files-at-once--searching-multiple-sources-and-synthesize-the-resultsill-walk-through-an-example-of-how-to-implement-this-pattern.-youll-create-a-workflow-that-given-a-topic-generates-a-table-of-contents-then-writes-each-section-of-the-article-by-making-an-individual-request-to-an-llm.">Orchestrator-workersThis workflow works well for tasks where you don’t know the required subtasks beforehand. The subtasks are determined by the orchestrator.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; Orch[Orchestrator]    Orch -.-&gt; LLM1["LLM Call 1"]    Orch -.-&gt; LLM2["LLM Call 2"]    Orch -.-&gt; LLM3["LLM Call 3"]    LLM1 -.-&gt; Synth[Synthesizer]    LLM2 -.-&gt; Synth    LLM3 -.-&gt; Synth    Synth --&gt; Out([Out])</code><strong>Examples:</strong>- Coding tools making changes to multiple files at once- Searching multiple sources and synthesize the resultsI’ll walk through an example of how to implement this pattern. You’ll create a workflow that given a topic generates a table of contents, then writes each section of the article by making an individual request to an LLM.</a></li>
-  <li><a href="#evaluator-optimizerthis-workflow-is-useful-when-we-have-clear-evaluation-criteria-that-an-llm-evaluator-can-use-to-provide-feedback-to-the-llm-generator-to-iteratively-improve-its-output.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----gengenerator-llm-gen----solution----evalevaluator-llm-eval----accepted----outout-eval----rejected-feedback----genexamples--content-generation-that-must-match-certain-guidelines-such-as-writing-with-a-particular-style.--improving-search-results-iterativelyill-walk-you-through-an-example-of-an-evaluator-optimizer-workflow-where-youll-generate-a-text-evaluate-if-it-matches-certain-criteria-and-then-iteratively-improve-it.lets-start-with-the-vanilla-implementation." id="toc-evaluator-optimizerthis-workflow-is-useful-when-we-have-clear-evaluation-criteria-that-an-llm-evaluator-can-use-to-provide-feedback-to-the-llm-generator-to-iteratively-improve-its-output.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----gengenerator-llm-gen----solution----evalevaluator-llm-eval----accepted----outout-eval----rejected-feedback----genexamples--content-generation-that-must-match-certain-guidelines-such-as-writing-with-a-particular-style.--improving-search-results-iterativelyill-walk-you-through-an-example-of-an-evaluator-optimizer-workflow-where-youll-generate-a-text-evaluate-if-it-matches-certain-criteria-and-then-iteratively-improve-it.lets-start-with-the-vanilla-implementation." class="nav-link" data-scroll-target="#evaluator-optimizerthis-workflow-is-useful-when-we-have-clear-evaluation-criteria-that-an-llm-evaluator-can-use-to-provide-feedback-to-the-llm-generator-to-iteratively-improve-its-output.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----gengenerator-llm-gen----solution----evalevaluator-llm-eval----accepted----outout-eval----rejected-feedback----genexamples--content-generation-that-must-match-certain-guidelines-such-as-writing-with-a-particular-style.--improving-search-results-iterativelyill-walk-you-through-an-example-of-an-evaluator-optimizer-workflow-where-youll-generate-a-text-evaluate-if-it-matches-certain-criteria-and-then-iteratively-improve-it.lets-start-with-the-vanilla-implementation.">Evaluator-optimizerThis workflow is useful when we have clear evaluation criteria that an LLM evaluator can use to provide feedback to the LLM generator to iteratively improve its output.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; Gen["Generator (LLM)"]    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]    Eval -- "Accepted" --&gt; Out([Out])    Eval -- "Rejected + Feedback" --&gt; Gen</code><strong>Examples:</strong>- Content generation that must match certain guidelines such as writing with a particular style.- Improving search results iterativelyI’ll walk you through an example of an evaluator-optimizer workflow where you’ll generate a text, evaluate if it matches certain criteria, and then iteratively improve it.Let’s start with the vanilla implementation.</a></li>
+  <li><a href="#prompt-chaining" id="toc-prompt-chaining" class="nav-link" data-scroll-target="#prompt-chaining">Prompt chaining</a></li>
+  <li><a href="#routing" id="toc-routing" class="nav-link" data-scroll-target="#routing">Routing</a></li>
+  <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization">Parallelization</a></li>
+  <li><a href="#orchestrator-workers" id="toc-orchestrator-workers" class="nav-link" data-scroll-target="#orchestrator-workers">Orchestrator-workers</a></li>
+  <li><a href="#evaluator-optimizer" id="toc-evaluator-optimizer" class="nav-link" data-scroll-target="#evaluator-optimizer">Evaluator-optimizer</a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
@@ -354,8 +358,40 @@ Subscribe to my newsletter
 <li><strong>Pydantic</strong>: For data validation and structured data models</li>
 </ul>
 <p>The <code>load_dotenv()</code> function loads environment variables from a <code>.env</code> file, including your OpenAI API key. You also define model (<code>gpt-4.1-mini</code>) that you’ll use in all the examples.</p>
-<section id="prompt-chainingthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-subtasks.-the-key-trade-off-is-accepting-longer-completion-times-higher-latency-in-exchange-for-a-higher-quality-result.heres-what-the-workflow-looks-likemermaidflowchart-lr-in----llm1llm-call-1-llm1----output-1----gategate-gate----pass----llm2llm-call-2-gate----fail----exitexit-llm2----output-2----llm3llm-call-3-llm3----outexamples--generating-content-in-a-pipeline-by-generating-table-of-contents-content-revisions-translations-etc.--generating-a-text-through-a-multi-step-process-to-evaluate-if-it-matches-certain-criterianow-ill-show-you-how-to-implement-a-prompt-chaining-workflow-for-generating-an-article.-the-workflow-will-be-composed-of-three-steps1.-generate-a-table-of-contents-for-the-article2.-generate-the-content-of-the-article3.-revise-the-content-of-the-article-if-its-too-longill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="level3">
-<h3 class="anchored" data-anchor-id="prompt-chainingthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-subtasks.-the-key-trade-off-is-accepting-longer-completion-times-higher-latency-in-exchange-for-a-higher-quality-result.heres-what-the-workflow-looks-likemermaidflowchart-lr-in----llm1llm-call-1-llm1----output-1----gategate-gate----pass----llm2llm-call-2-gate----fail----exitexit-llm2----output-2----llm3llm-call-3-llm3----outexamples--generating-content-in-a-pipeline-by-generating-table-of-contents-content-revisions-translations-etc.--generating-a-text-through-a-multi-step-process-to-evaluate-if-it-matches-certain-criterianow-ill-show-you-how-to-implement-a-prompt-chaining-workflow-for-generating-an-article.-the-workflow-will-be-composed-of-three-steps1.-generate-a-table-of-contents-for-the-article2.-generate-the-content-of-the-article3.-revise-the-content-of-the-article-if-its-too-longill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">Prompt chainingThis workflow is designed for tasks that can be easily divided into subtasks. The key trade-off is accepting longer completion times (higher latency) in exchange for a higher-quality result.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In --&gt; LLM1["LLM Call 1"]    LLM1 -- "Output 1" --&gt; Gate{Gate}    Gate -- Pass --&gt; LLM2["LLM Call 2"]    Gate -- Fail --&gt; Exit[Exit]    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]    LLM3 --&gt; Out</code><strong>Examples:</strong>- Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.- Generating a text through a multi-step process to evaluate if it matches certain criteriaNow I’ll show you how to implement a prompt chaining workflow for generating an article. The workflow will be composed of three steps:1. Generate a table of contents for the article2. Generate the content of the article3. Revise the content of the article if it’s too longI’ll show you a vanilla implementation and then a LangGraph implementation.</h3>
+<section id="prompt-chaining" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-chaining">Prompt chaining</h3>
+<p>This workflow is designed for tasks that can be easily divided into subtasks. The key trade-off is accepting longer completion times (higher latency) in exchange for a higher-quality result.</p>
+<p>Here’s what the workflow looks like:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In --&gt; LLM1["LLM Call 1"]
+    LLM1 -- "Output 1" --&gt; Gate{Gate}
+    Gate -- Pass --&gt; LLM2["LLM Call 2"]
+    Gate -- Fail --&gt; Exit[Exit]
+    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
+<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
+</ul>
+<p>Now I’ll show you how to implement a prompt chaining workflow for generating an article. The workflow will be composed of three steps:</p>
+<ol type="1">
+<li>Generate a table of contents for the article</li>
+<li>Generate the content of the article</li>
+<li>Revise the content of the article if it’s too long</li>
+</ol>
+<p>I’ll show you a vanilla implementation and then a LangGraph implementation.</p>
 <section id="vanilla-langchain" class="level4">
 <h4 class="anchored" data-anchor-id="vanilla-langchain">Vanilla (+LangChain)</h4>
 <p>First, you need to define the state of the workflow and a model to use for the LLM. You’ll use Pydantic for the state and LangChain for the model.</p>
@@ -435,7 +471,7 @@ Subscribe to my newsletter
 <span id="cb7-4"><a href="#cb7-4"></a>    content: <span class="bu">str</span></span>
 <span id="cb7-5"><a href="#cb7-5"></a>    revised_content: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When working with LangGraph, I’d suggest to use a <code>TypedDict</code> to manage your state. Using a Pydantic model to manage your state in LangGraph has a few downsides:</p>
+<p>When working with LangGraph, I’d suggest using a <code>TypedDict</code> to manage your state. Using a Pydantic model to manage your state in LangGraph has a few downsides:</p>
 <ol type="1">
 <li>Data types are only checked when they enter a node, not when they exit. This means you could accidentally save data of the wrong type to your state.</li>
 <li>The final output of the entire graph will be a dictionary, not your Pydantic model.</li>
@@ -535,8 +571,42 @@ Subscribe to my newsletter
 <p>That’s it for prompt chaining. Next, you’ll see how to implement a routing workflow.</p>
 </section>
 </section>
-<section id="routingrouting-is-a-sorting-system-that-sends-each-task-to-the-right-place-for-the-best-handling.-this-process-can-be-managed-by-an-llm-or-a-traditional-classification-model.-it-makes-sense-to-use-when-a-system-needs-to-apply-different-logic-to-different-types-of-queries.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----routerllm-call-router-router---route-1-llm1llm-call-1-router---route-2-llm2llm-call-2-router---route-3-llm3llm-call-3-llm1----outout-llm2----out-llm3----outexamples--classify-complexity-of-question-and-adjust-model-depending-on-it--classify-type-of-query-and-use-specialized-tools-e.g.-indexes-promptsill-walk-you-through-a-simple-example-of-a-routing-workflow.-the-workflow-will-be-composed-of-two-steps1.-classify-the-type-of-query2.-route-the-query-to-the-right-placeill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="level3">
-<h3 class="anchored" data-anchor-id="routingrouting-is-a-sorting-system-that-sends-each-task-to-the-right-place-for-the-best-handling.-this-process-can-be-managed-by-an-llm-or-a-traditional-classification-model.-it-makes-sense-to-use-when-a-system-needs-to-apply-different-logic-to-different-types-of-queries.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----routerllm-call-router-router---route-1-llm1llm-call-1-router---route-2-llm2llm-call-2-router---route-3-llm3llm-call-3-llm1----outout-llm2----out-llm3----outexamples--classify-complexity-of-question-and-adjust-model-depending-on-it--classify-type-of-query-and-use-specialized-tools-e.g.-indexes-promptsill-walk-you-through-a-simple-example-of-a-routing-workflow.-the-workflow-will-be-composed-of-two-steps1.-classify-the-type-of-query2.-route-the-query-to-the-right-placeill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">RoutingRouting is a sorting system that sends each task to the right place for the best handling. This process can be managed by an LLM or a traditional classification model. It makes sense to use when a system needs to apply different logic to different types of queries.Here’s what the workflow looks like:<code>{mermaid}flowchart LR     In([In]) --&gt; Router["LLM Call Router"]    Router --&gt;|Route 1| LLM1["LLM Call 1"]    Router --&gt;|Route 2| LLM2["LLM Call 2"]    Router --&gt;|Route 3| LLM3["LLM Call 3"]    LLM1 --&gt; Out([Out])    LLM2 --&gt; Out    LLM3 --&gt; Out</code><strong>Examples:</strong>- Classify complexity of question and adjust model depending on it- Classify type of query and use specialized tools (e.g., indexes, prompts)I’ll walk you through a simple example of a routing workflow. The workflow will be composed of two steps:1. Classify the type of query2. Route the query to the right placeI’ll show you a vanilla implementation and then a LangGraph implementation.</h3>
+<section id="routing" class="level3">
+<h3 class="anchored" data-anchor-id="routing">Routing</h3>
+<p>Routing is a sorting system that sends each task to the right place for the best handling. This process can be managed by an LLM or a traditional classification model. It makes sense to use when a system needs to apply different logic to different types of queries.</p>
+<p>Here’s what the workflow looks like:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR 
+    In([In]) --&gt; Router["LLM Call Router"]
+
+    Router --&gt;|Route 1| LLM1["LLM Call 1"]
+    Router --&gt;|Route 2| LLM2["LLM Call 2"]
+    Router --&gt;|Route 3| LLM3["LLM Call 3"]
+
+    LLM1 --&gt; Out([Out])
+    LLM2 --&gt; Out
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Classify complexity of question and adjust model depending on it</li>
+<li>Classify type of query and use specialized tools (e.g., indexes, prompts)</li>
+</ul>
+<p>I’ll walk you through a simple example of a routing workflow. The workflow will be composed of two steps:</p>
+<ol type="1">
+<li>Classify the type of query</li>
+<li>Route the query to the right place</li>
+</ol>
+<p>I’ll show you a vanilla implementation and then a LangGraph implementation.</p>
 <section id="vanilla-langchain-1" class="level4">
 <h4 class="anchored" data-anchor-id="vanilla-langchain-1">Vanilla (+LangChain)</h4>
 <p>First, you need to initialize the model, and define the state of the workflow and the data models. You’ll use Pydantic for the state and data models validation and LangChain for the LLM interactions.</p>
@@ -736,8 +806,42 @@ Subscribe to my newsletter
 </div>
 </section>
 </section>
-<section id="parallelizationthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-independent-subtasks.-the-key-trade-off-is-managing-complexity-and-coordination-overhead-in-exchange-for-significant-speed-improvements-or-diverse-perspectives.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----llm1llm-call-1-in----llm2llm-call-2-in----llm3llm-call-3-llm1----aggregatoraggregator-llm2----aggregatoraggregator-llm3----aggregatoraggregator-aggregator----outoutexamples--evaluate-multiple-independent-aspects-of-a-text-safety-quality-relevance--process-user-query-and-apply-guardrails-in-parallel--generate-multiple-response-candidates-given-a-query-for-comparisonnow-ill-show-you-how-to-implement-a-parallelization-workflow-for-content-evaluation.-the-workflow-will-be-composed-of-three-steps1.-run-multiple-independent-evaluations-of-the-same-content2.-collect-all-evaluation-results3.-aggregate-the-results-into-a-final-assessmentill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation." class="level3">
-<h3 class="anchored" data-anchor-id="parallelizationthis-workflow-is-designed-for-tasks-that-can-be-easily-divided-into-independent-subtasks.-the-key-trade-off-is-managing-complexity-and-coordination-overhead-in-exchange-for-significant-speed-improvements-or-diverse-perspectives.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----llm1llm-call-1-in----llm2llm-call-2-in----llm3llm-call-3-llm1----aggregatoraggregator-llm2----aggregatoraggregator-llm3----aggregatoraggregator-aggregator----outoutexamples--evaluate-multiple-independent-aspects-of-a-text-safety-quality-relevance--process-user-query-and-apply-guardrails-in-parallel--generate-multiple-response-candidates-given-a-query-for-comparisonnow-ill-show-you-how-to-implement-a-parallelization-workflow-for-content-evaluation.-the-workflow-will-be-composed-of-three-steps1.-run-multiple-independent-evaluations-of-the-same-content2.-collect-all-evaluation-results3.-aggregate-the-results-into-a-final-assessmentill-show-you-a-vanilla-implementation-and-then-a-langgraph-implementation.">ParallelizationThis workflow is designed for tasks that can be easily divided into independent subtasks. The key trade-off is managing complexity and coordination overhead in exchange for significant speed improvements or diverse perspectives.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; LLM1["LLM Call 1"]    In --&gt; LLM2["LLM Call 2"]    In --&gt; LLM3["LLM Call 3"]    LLM1 --&gt; Aggregator["Aggregator"]     LLM2 --&gt; Aggregator["Aggregator"]     LLM3 --&gt; Aggregator["Aggregator"]     Aggregator --&gt; Out([Out])</code><strong>Examples:</strong>- Evaluate multiple independent aspects of a text (safety, quality, relevance)- Process user query and apply guardrails in parallel- Generate multiple response candidates given a query for comparisonNow I’ll show you how to implement a parallelization workflow for content evaluation. The workflow will be composed of three steps:1. Run multiple independent evaluations of the same content2. Collect all evaluation results3. Aggregate the results into a final assessmentI’ll show you a vanilla implementation and then a LangGraph implementation.</h3>
+<section id="parallelization" class="level3">
+<h3 class="anchored" data-anchor-id="parallelization">Parallelization</h3>
+<p>This workflow is designed for tasks that can be easily divided into independent subtasks. The key trade-off is managing complexity and coordination overhead in exchange for significant speed improvements or diverse perspectives.</p>
+<p>Here’s what the workflow looks like:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In([In]) --&gt; LLM1["LLM Call 1"]
+    In --&gt; LLM2["LLM Call 2"]
+    In --&gt; LLM3["LLM Call 3"]
+    LLM1 --&gt; Aggregator["Aggregator"] 
+    LLM2 --&gt; Aggregator["Aggregator"] 
+    LLM3 --&gt; Aggregator["Aggregator"] 
+    Aggregator --&gt; Out([Out])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Evaluate multiple independent aspects of a text (safety, quality, relevance)</li>
+<li>Process user query and apply guardrails in parallel</li>
+<li>Generate multiple response candidates given a query for comparison</li>
+</ul>
+<p>Now I’ll show you how to implement a parallelization workflow for content evaluation. The workflow will be composed of three steps:</p>
+<ol type="1">
+<li>Run multiple independent evaluations of the same content</li>
+<li>Collect all evaluation results</li>
+<li>Aggregate the results into a final assessment</li>
+</ol>
+<p>I’ll show you a vanilla implementation and then a LangGraph implementation.</p>
 <section id="vanilla-langchain-2" class="level4">
 <h4 class="anchored" data-anchor-id="vanilla-langchain-2">Vanilla (+LangChain)</h4>
 <p>First, you need to define the state of the workflow and data models for evaluations. You’ll use Pydantic for the state and data models validation and LangChain for the LLM interactions.</p>
@@ -927,8 +1031,39 @@ Summarized evaluations: All evaluations consistently state that the text is inap
 <p>Next, you’ll learn how to implement the Orchestrator-worker pattern.</p>
 </section>
 </section>
-<section id="orchestrator-workersthis-workflow-works-well-for-tasks-where-you-dont-know-the-required-subtasks-beforehand.-the-subtasks-are-determined-by-the-orchestrator.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----orchorchestrator-orch--.--llm1llm-call-1-orch--.--llm2llm-call-2-orch--.--llm3llm-call-3-llm1--.--synthsynthesizer-llm2--.--synth-llm3--.--synth-synth----outoutexamples--coding-tools-making-changes-to-multiple-files-at-once--searching-multiple-sources-and-synthesize-the-resultsill-walk-through-an-example-of-how-to-implement-this-pattern.-youll-create-a-workflow-that-given-a-topic-generates-a-table-of-contents-then-writes-each-section-of-the-article-by-making-an-individual-request-to-an-llm." class="level3">
-<h3 class="anchored" data-anchor-id="orchestrator-workersthis-workflow-works-well-for-tasks-where-you-dont-know-the-required-subtasks-beforehand.-the-subtasks-are-determined-by-the-orchestrator.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----orchorchestrator-orch--.--llm1llm-call-1-orch--.--llm2llm-call-2-orch--.--llm3llm-call-3-llm1--.--synthsynthesizer-llm2--.--synth-llm3--.--synth-synth----outoutexamples--coding-tools-making-changes-to-multiple-files-at-once--searching-multiple-sources-and-synthesize-the-resultsill-walk-through-an-example-of-how-to-implement-this-pattern.-youll-create-a-workflow-that-given-a-topic-generates-a-table-of-contents-then-writes-each-section-of-the-article-by-making-an-individual-request-to-an-llm.">Orchestrator-workersThis workflow works well for tasks where you don’t know the required subtasks beforehand. The subtasks are determined by the orchestrator.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; Orch[Orchestrator]    Orch -.-&gt; LLM1["LLM Call 1"]    Orch -.-&gt; LLM2["LLM Call 2"]    Orch -.-&gt; LLM3["LLM Call 3"]    LLM1 -.-&gt; Synth[Synthesizer]    LLM2 -.-&gt; Synth    LLM3 -.-&gt; Synth    Synth --&gt; Out([Out])</code><strong>Examples:</strong>- Coding tools making changes to multiple files at once- Searching multiple sources and synthesize the resultsI’ll walk through an example of how to implement this pattern. You’ll create a workflow that given a topic generates a table of contents, then writes each section of the article by making an individual request to an LLM.</h3>
+<section id="orchestrator-workers" class="level3">
+<h3 class="anchored" data-anchor-id="orchestrator-workers">Orchestrator-workers</h3>
+<p>This workflow works well for tasks where you don’t know the required subtasks beforehand. The subtasks are determined by the orchestrator.</p>
+<p>Here’s what the workflow looks like:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In([In]) --&gt; Orch[Orchestrator]
+
+    Orch -.-&gt; LLM1["LLM Call 1"]
+    Orch -.-&gt; LLM2["LLM Call 2"]
+    Orch -.-&gt; LLM3["LLM Call 3"]
+
+    LLM1 -.-&gt; Synth[Synthesizer]
+    LLM2 -.-&gt; Synth
+    LLM3 -.-&gt; Synth
+
+    Synth --&gt; Out([Out])
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Coding tools making changes to multiple files at once</li>
+<li>Searching multiple sources and synthesize the results</li>
+</ul>
+<p>I’ll walk through an example of how to implement this pattern. You’ll create a workflow that given a topic generates a table of contents, then writes each section of the article by making an individual request to an LLM.</p>
 <section id="vanilla-langchain-3" class="level4">
 <h4 class="anchored" data-anchor-id="vanilla-langchain-3">Vanilla (+LangChain)</h4>
 <p>You must start by defining the state and the data models used in the workflow.</p>
@@ -1142,8 +1277,33 @@ Summarized evaluations: All evaluations consistently state that the text is inap
 <p>Finally, I’ll show you how to implement a evaluator-optimizer workflow.</p>
 </section>
 </section>
-<section id="evaluator-optimizerthis-workflow-is-useful-when-we-have-clear-evaluation-criteria-that-an-llm-evaluator-can-use-to-provide-feedback-to-the-llm-generator-to-iteratively-improve-its-output.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----gengenerator-llm-gen----solution----evalevaluator-llm-eval----accepted----outout-eval----rejected-feedback----genexamples--content-generation-that-must-match-certain-guidelines-such-as-writing-with-a-particular-style.--improving-search-results-iterativelyill-walk-you-through-an-example-of-an-evaluator-optimizer-workflow-where-youll-generate-a-text-evaluate-if-it-matches-certain-criteria-and-then-iteratively-improve-it.lets-start-with-the-vanilla-implementation." class="level3">
-<h3 class="anchored" data-anchor-id="evaluator-optimizerthis-workflow-is-useful-when-we-have-clear-evaluation-criteria-that-an-llm-evaluator-can-use-to-provide-feedback-to-the-llm-generator-to-iteratively-improve-its-output.heres-what-the-workflow-looks-likemermaidflowchart-lr-inin----gengenerator-llm-gen----solution----evalevaluator-llm-eval----accepted----outout-eval----rejected-feedback----genexamples--content-generation-that-must-match-certain-guidelines-such-as-writing-with-a-particular-style.--improving-search-results-iterativelyill-walk-you-through-an-example-of-an-evaluator-optimizer-workflow-where-youll-generate-a-text-evaluate-if-it-matches-certain-criteria-and-then-iteratively-improve-it.lets-start-with-the-vanilla-implementation.">Evaluator-optimizerThis workflow is useful when we have clear evaluation criteria that an LLM evaluator can use to provide feedback to the LLM generator to iteratively improve its output.Here’s what the workflow looks like:<code>{mermaid}flowchart LR    In([In]) --&gt; Gen["Generator (LLM)"]    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]    Eval -- "Accepted" --&gt; Out([Out])    Eval -- "Rejected + Feedback" --&gt; Gen</code><strong>Examples:</strong>- Content generation that must match certain guidelines such as writing with a particular style.- Improving search results iterativelyI’ll walk you through an example of an evaluator-optimizer workflow where you’ll generate a text, evaluate if it matches certain criteria, and then iteratively improve it.Let’s start with the vanilla implementation.</h3>
+<section id="evaluator-optimizer" class="level3">
+<h3 class="anchored" data-anchor-id="evaluator-optimizer">Evaluator-optimizer</h3>
+<p>This workflow is useful when we have clear evaluation criteria that an LLM evaluator can use to provide feedback to the LLM generator to iteratively improve its output.</p>
+<p>Here’s what the workflow looks like:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In([In]) --&gt; Gen["Generator (LLM)"]
+    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]
+    Eval -- "Accepted" --&gt; Out([Out])
+    Eval -- "Rejected + Feedback" --&gt; Gen
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Content generation that must match certain guidelines such as writing with a particular style.</li>
+<li>Improving search results iteratively</li>
+</ul>
+<p>I’ll walk you through an example of an evaluator-optimizer workflow where you’ll generate a text, evaluate if it matches certain criteria, and then iteratively improve it.</p>
+<p>Let’s start with the vanilla implementation.</p>
 <section id="vanilla-langchain-4" class="level4">
 <h4 class="anchored" data-anchor-id="vanilla-langchain-4">Vanilla (+LangChain)</h4>
 <p>As usual, you start by defining the state and required data models.</p>
