@@ -63,7 +63,7 @@ background-color: null;
 font-style: inherit;">uv</span> venv</span>
 <span id="cb2-2"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">uv</span> add langchain langchain-openai langchain-community jupyter chromadb python-dotenv nest_asyncio sentence-transformers</span></code></pre></div>
+font-style: inherit;">uv</span> add langchain langchain-openai langchain-community langsmith jupyter chromadb python-dotenv nest_asyncio sentence-transformers</span></code></pre></div>
 <ol start="4" type="1">
 <li>Download the People Group’s section from GitLab’s <a href="https://gitlab.com/gitlab-com/content-sites/handbook/-/tree/main/content/handbook/people-group">handbook</a>.</li>
 </ol>
