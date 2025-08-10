@@ -15,9 +15,9 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Fri, 08 Aug 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 10 Aug 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Monitoring and evaluating LLM applications with LangSmith</title>
+  <title>LangSmith 101</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/langsmith-101.html</link>
   <description><![CDATA[ 
@@ -1051,22 +1051,20 @@ font-style: inherit;">15</span></span>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Monitoring and Evaluating {LLM} Applications with
-    {LangSmith}},
-  date = {2025-08-08},
+  title = {LangSmith 101},
+  date = {2025-08-10},
   url = {https://dylancastillo.co/posts/langsmith-101.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Monitoring and Evaluating LLM Applications
-with LangSmith.”</span> August 8, 2025. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
+Castillo, Dylan. 2025. <span>“LangSmith 101.”</span> August 10, 2025. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
   <category>openai</category>
   <category>langsmith</category>
   <guid>https://dylancastillo.co/posts/langsmith-101.html</guid>
-  <pubDate>Fri, 08 Aug 2025 00:00:00 GMT</pubDate>
+  <pubDate>Sun, 10 Aug 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Using synthetic data to bootstrap your RAG system evals</title>
