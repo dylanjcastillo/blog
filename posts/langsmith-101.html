@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2025-08-08">
+<meta name="description" content="A beginner’s guide to LangSmith, an observability and evaluation platform for LLM applications.">
+
+<title>Monitoring and evaluating LLM applications with LangSmith – Dylan Castillo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-0208502c2bc785d7f8760c6f758d0dc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+<meta property="og:title" content="Monitoring and evaluating LLM applications with LangSmith – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/langsmith-101/traces.png">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="2522">
+<meta name="twitter:title" content="Monitoring and evaluating LLM applications with LangSmith – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/langsmith-101/traces.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:image-height" content="900">
+<meta name="twitter:image-width" content="2522">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:github" aria-label="Icon github from fa6-brands Iconify.design set." title="Icon github from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#tracing-and-monitoring" id="toc-tracing-and-monitoring" class="nav-link" data-scroll-target="#tracing-and-monitoring">Tracing and monitoring</a>
+  <ul class="collapse">
+  <li><a href="#using-traceable" id="toc-using-traceable" class="nav-link" data-scroll-target="#using-traceable">Using <code>@traceable</code></a></li>
+  <li><a href="#using-a-trace-context-manager" id="toc-using-a-trace-context-manager" class="nav-link" data-scroll-target="#using-a-trace-context-manager">Using a <code>trace</code> context manager</a></li>
+  <li><a href="#using-a-wrapped-client" id="toc-using-a-wrapped-client" class="nav-link" data-scroll-target="#using-a-wrapped-client">Using a wrapped client</a></li>
+  <li><a href="#manually-creating-traces-with-runtree" id="toc-manually-creating-traces-with-runtree" class="nav-link" data-scroll-target="#manually-creating-traces-with-runtree">Manually creating traces with <code>RunTree</code></a></li>
+  </ul></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Monitoring and evaluating LLM applications with LangSmith</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">python</div>
+    <div class="quarto-category">openai</div>
+    <div class="quarto-category">langsmith</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 8, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">August 8, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In my first AI projects, I didn’t have access to proper observability tools and didn’t know how to evaluate the performance of LLM pipelines. I struggled to figure out what to improve and even when I knew what to improve, it was hard to do so, without breaking other things. Many of those projects failed miserably.</p>
+<p>Those failed projects made me start looking for better ways and tools to build AI applications. Over time, tools such as <a href="https://smith.langchain.com/">LangSmith</a>, <a href="https://langfuse.com">Langfuse</a>, or <a href="https://logfire.pydantic.dev">Logfire</a> became key components of my AI toolkit. I can no longer imagine building an AI application without them.</p>
+<p>In this tutorial, I’ll walk you through the basics of using LangSmith to monitor and evaluate your LLM applications.</p>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To complete this tutorial, you need to:</p>
+<ol type="1">
+<li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
+<li>Create a <code>.env</code> file in the root directory of your project and add the following lines:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="va">LANGSMITH_TRACING</span><span class="op">=</span>true</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="va">LANGSMITH_PROJECT</span><span class="op">=</span>your_langchain_project_name</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Create a virtual environment in Python and install the following packages:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I’m assuming you’re familiar with the basics of LLMs. If you need a refresher, you can check out some of <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">my</a> <a href="https://dylancastillo.co/posts/key-parameters-llms.html">older</a> <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">posts</a>. Also, if you don’t want to copy and paste the code, you can download this post’s <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/synthetic-data-rag.ipynb">notebook</a> and follow along.</p>
+<p>Let’s go!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>As usual, you should start by importing the necessary libraries:</p>
+<div id="cell-4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="im">from</span> langsmith <span class="im">import</span> Client, trace, traceable</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="im">from</span> langsmith.run_trees <span class="im">import</span> RunTree</span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will import all the libraries required for the next sections:</p>
+<ol type="1">
+<li><code>datasets</code> for loading the sample dataset we’ll use to run evaluations.</li>
+<li><code>langchain</code> libraries and <code>openai</code> for working with LLMs</li>
+<li><code>langsmith</code> for tracing and evaluating the pipeline</li>
+<li><code>dotenv</code> and <code>pydantic</code> for environment variable management and data validation</li>
+</ol>
+<p>Next, you will create your first trace on LangSmith.</p>
+</section>
+<section id="tracing-and-monitoring" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="tracing-and-monitoring">Tracing and monitoring</h2>
+<p>A LangSmith <strong>trace</strong> captures the full execution path of a single operation. It consists of a sequence of steps, which are called <strong>runs</strong>. Each trace contains the top-level inputs and outputs, as well as metadata such as runtime version and operating system details.</p>
+<p>There are four ways to create traces in LangSmith:</p>
+<ol type="1">
+<li>Using <code>@traceable</code></li>
+<li>Using a wrapped client</li>
+<li>Using a <code>trace</code> context manager</li>
+<li>Manually creating traces with <code>RunTree</code></li>
+</ol>
+<section id="using-traceable" class="level3">
+<h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
+<p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
+<div id="cell-8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="at">@traceable</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="cf">return</span> [</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb4-8"><a href="#cb4-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    ]</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb4-14"><a href="#cb4-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb4-15"><a href="#cb4-15"></a>    <span class="cf">return</span> response</span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="at">@traceable</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    messages <span class="op">=</span> format_messages(question)</span>
+<span id="cb4-21"><a href="#cb4-21"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb4-22"><a href="#cb4-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb4-23"><a href="#cb4-23"></a></span>
+<span id="cb4-24"><a href="#cb4-24"></a></span>
+<span id="cb4-25"><a href="#cb4-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will automatically log the input and ouput of the functions decorated with <code>traceable</code>. It will also handle the nesting for you, so that <code>format_messages</code> and <code>call_llm</code> are steps within the <code>run_pipeline</code> function.</p>
+<p>In <code>traceable</code> you can customize xyz.</p>
+</section>
+<section id="using-a-trace-context-manager" class="level3">
+<h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
+<p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
+<div id="cell-12" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="at">@traceable</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="cf">return</span> [</span>
+<span id="cb5-7"><a href="#cb5-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb5-8"><a href="#cb5-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    ]</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb5-14"><a href="#cb5-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="cf">return</span> response</span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a></span>
+<span id="cb5-18"><a href="#cb5-18"></a>app_inputs <span class="op">=</span> {<span class="st">"question"</span>: <span class="st">"Who are you?"</span>}</span>
+<span id="cb5-19"><a href="#cb5-19"></a></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="cf">with</span> trace(<span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>app_inputs) <span class="im">as</span> rt:</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    messages <span class="op">=</span> format_messages(app_inputs[<span class="st">"question"</span>])</span>
+<span id="cb5-22"><a href="#cb5-22"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb5-23"><a href="#cb5-23"></a>    output <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb5-24"><a href="#cb5-24"></a>    rt.end(outputs<span class="op">=</span>{<span class="st">"output"</span>: output})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will generate a trace called “LLM Pipeline” with the input and output of the entire pipeline. Within this trace, you will find the individual traces for each function call.</p>
+</section>
+<section id="using-a-wrapped-client" class="level3">
+<h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
+<p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
+<div id="cell-15" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="at">@traceable</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">return</span> [</span>
+<span id="cb6-7"><a href="#cb6-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb6-8"><a href="#cb6-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    ]</span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># Removed @traceable</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="cf">return</span> response</span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="at">@traceable</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb6-20"><a href="#cb6-20"></a>    messages <span class="op">=</span> format_messages(question)</span>
+<span id="cb6-21"><a href="#cb6-21"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb6-22"><a href="#cb6-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb6-23"><a href="#cb6-23"></a></span>
+<span id="cb6-24"><a href="#cb6-24"></a></span>
+<span id="cb6-25"><a href="#cb6-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will automatically log the LLM calls made within <code>run_pipeline</code>, so you no longer need to add the <code>traceable</code> decorator to each call.</p>
+</section>
+<section id="manually-creating-traces-with-runtree" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="manually-creating-traces-with-runtree">Manually creating traces with <code>RunTree</code></h3>
+<p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
+<p>Here’s the <code>RunTree</code> version of the previous example:</p>
+<div id="cell-18" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>, parent_run: RunTree):</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    format_message_step <span class="op">=</span> parent_run.create_child(</span>
+<span id="cb7-6"><a href="#cb7-6"></a>        name<span class="op">=</span><span class="st">"format_messages"</span>, run_type<span class="op">=</span><span class="st">"tool"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question}</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    )</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    format_message_step.post()</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    messages <span class="op">=</span> [</span>
+<span id="cb7-10"><a href="#cb7-10"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
+<span id="cb7-11"><a href="#cb7-11"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    ]</span>
+<span id="cb7-13"><a href="#cb7-13"></a>    format_message_step.end(outputs<span class="op">=</span>{<span class="st">"messages"</span>: messages})</span>
+<span id="cb7-14"><a href="#cb7-14"></a>    format_message_step.patch()</span>
+<span id="cb7-15"><a href="#cb7-15"></a>    <span class="cf">return</span> messages</span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>], parent_run: RunTree):</span>
+<span id="cb7-19"><a href="#cb7-19"></a>    call_llm_step <span class="op">=</span> parent_run.create_child(</span>
+<span id="cb7-20"><a href="#cb7-20"></a>        name<span class="op">=</span><span class="st">"call_llm"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21"></a>        run_type<span class="op">=</span><span class="st">"llm"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22"></a>        inputs<span class="op">=</span>{<span class="st">"messages"</span>: messages},</span>
+<span id="cb7-23"><a href="#cb7-23"></a>    )</span>
+<span id="cb7-24"><a href="#cb7-24"></a>    call_llm_step.post()</span>
+<span id="cb7-25"><a href="#cb7-25"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb7-26"><a href="#cb7-26"></a>    call_llm_step.end(outputs<span class="op">=</span>response)</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    call_llm_step.patch()</span>
+<span id="cb7-28"><a href="#cb7-28"></a>    <span class="cf">return</span> response</span>
+<span id="cb7-29"><a href="#cb7-29"></a></span>
+<span id="cb7-30"><a href="#cb7-30"></a></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb7-32"><a href="#cb7-32"></a>    parent_run <span class="op">=</span> RunTree(name<span class="op">=</span><span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question})</span>
+<span id="cb7-33"><a href="#cb7-33"></a>    parent_run.post()</span>
+<span id="cb7-34"><a href="#cb7-34"></a></span>
+<span id="cb7-35"><a href="#cb7-35"></a>    messages <span class="op">=</span> format_messages(question, parent_run)</span>
+<span id="cb7-36"><a href="#cb7-36"></a>    response <span class="op">=</span> call_llm(messages, parent_run)</span>
+<span id="cb7-37"><a href="#cb7-37"></a></span>
+<span id="cb7-38"><a href="#cb7-38"></a>    parent_run.end(outputs<span class="op">=</span>{<span class="st">"answer"</span>: response.choices[<span class="dv">0</span>].message.content})</span>
+<span id="cb7-39"><a href="#cb7-39"></a>    parent_run.patch()</span>
+<span id="cb7-40"><a href="#cb7-40"></a></span>
+<span id="cb7-41"><a href="#cb7-41"></a></span>
+<span id="cb7-42"><a href="#cb7-42"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will result in a similar trace, but in this case you have more control over when/what to send in each step.</p>
+<p>For all of these methods, you should’ve obtained a trace that looks like this:</p>
+<p><a href="./images/langsmith-101/traces.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="./images/langsmith-101/traces.png" class="img-fluid"></a></p>
+<p>To the left of the image, you should see the trace for the <code>run_pipeline</code> function, which includes all the steps taken during the execution of the function, including the formatting of messages and the call to the LLM. To the right, you will see the input and output for the full trace.</p>
+<p>Then, you can click on each individual step to view more details about that step, including the inputs, outputs, and any errors that may have occurred.</p>
+<p>Here’s <code>format_messages</code>:</p>
+<p><a href="./images/langsmith-101/format_messages.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="./images/langsmith-101/format_messages.png" class="img-fluid"></a></p>
+<p>And here’s <code>call_llm</code>:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/call_llm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="image.png"><img src="./images/langsmith-101/call_llm.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>I recommend you explore the traces on your own. Just looking at the images in this post won’t be enough.</p>
+</section>
+</section>
+<section id="evaluation" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
+<p>LangSmith lets you evaluate your LLM pipelines by providing you with a way to upload evaluation datasets, define evaluation metrics, and view the results of your experiments.</p>
+<p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
+<p>You should start by creating a dataset on LangSmith:</p>
+<div id="cell-23" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>examples <span class="op">=</span> [</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    {<span class="st">"inputs"</span>: {<span class="st">"question"</span>: d[<span class="st">"problem"</span>]}, <span class="st">"outputs"</span>: {<span class="st">"answer"</span>: <span class="bu">int</span>(d[<span class="st">"answer"</span>])}}</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">for</span> d <span class="kw">in</span> ds[<span class="st">"train"</span>]</span>
+<span id="cb8-5"><a href="#cb8-5"></a>][:<span class="dv">15</span>]</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>client <span class="op">=</span> Client()</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a>dataset_name <span class="op">=</span> <span class="st">"AIME Example Dataset (sample)"</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="cf">try</span>:</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    dataset <span class="op">=</span> client.create_dataset(dataset_name)</span>
+<span id="cb8-13"><a href="#cb8-13"></a>    client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb8-15"><a href="#cb8-15"></a>    <span class="bu">print</span>(<span class="ss">f"Dataset </span><span class="sc">{</span>dataset_name<span class="sc">}</span><span class="ss"> already exists. Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dataset AIME Example Dataset (sample) already exists. Error: Conflict for /datasets. HTTPError('409 Client Error: Conflict for url: https://api.smith.langchain.com/datasets', '{"detail":"Dataset with this name already exists."}')</code></pre>
+</div>
+</div>
+<p>This will create a dataset with the first 15 examples from the AIMO Validation AIME dataset. I only included a a sample of the dataset to keep costs down. You can always add more examples later if needed.</p>
+<p>The dataset will be available under <code>Datasets &amp; Experiments</code>:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/dataset.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="image.png"><img src="./images/langsmith-101/dataset.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
+<div id="cell-25" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    answer: <span class="bu">int</span> <span class="op">=</span> Field(</span>
+<span id="cb10-4"><a href="#cb10-4"></a>        description<span class="op">=</span><span class="st">"The answer to the question. It should be an integer."</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>    )</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-9"><a href="#cb10-9"></a>model_with_structure <span class="op">=</span> model.with_structured_output(Response, method<span class="op">=</span><span class="st">"function_calling"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10"></a></span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>) <span class="op">-&gt;</span> Response:</span>
+<span id="cb10-13"><a href="#cb10-13"></a>    max_retries <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_retries):</span>
+<span id="cb10-15"><a href="#cb10-15"></a>        <span class="cf">try</span>:</span>
+<span id="cb10-16"><a href="#cb10-16"></a>            messages <span class="op">=</span> [</span>
+<span id="cb10-17"><a href="#cb10-17"></a>                SystemMessage(</span>
+<span id="cb10-18"><a href="#cb10-18"></a>                    <span class="st">"You're a math expert. You will always respond in a JSON format with the following fields: explanation and answer."</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a>                ),</span>
+<span id="cb10-20"><a href="#cb10-20"></a>                HumanMessage(question),</span>
+<span id="cb10-21"><a href="#cb10-21"></a>            ]</span>
+<span id="cb10-22"><a href="#cb10-22"></a>            response <span class="op">=</span> model_with_structure.invoke(messages)</span>
+<span id="cb10-23"><a href="#cb10-23"></a>            <span class="cf">return</span> response</span>
+<span id="cb10-24"><a href="#cb10-24"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb10-25"><a href="#cb10-25"></a>            <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-26"><a href="#cb10-26"></a>            <span class="cf">continue</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Failed to get a valid response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
+<p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
+<div id="cell-27" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
+<p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
+<p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
+<div id="cell-29" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>    clarity: <span class="bu">int</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The clarity of the explanation"</span>, ge<span class="op">=</span><span class="dv">1</span>, le<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">def</span> clarity(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    messages <span class="op">=</span> [</span>
+<span id="cb12-8"><a href="#cb12-8"></a>        SystemMessage(</span>
+<span id="cb12-9"><a href="#cb12-9"></a>            content<span class="op">=</span><span class="st">"You are a helpful assistant that evaluates the clarity of the explanation of the answer. You will always return a number between 1 and 5, where 1 is the lowest clarity and 5 is the highest clarity."</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a>        ),</span>
+<span id="cb12-11"><a href="#cb12-11"></a>        HumanMessage(content<span class="op">=</span><span class="ss">f"Explanation: </span><span class="sc">{</span>outputs[<span class="st">'explanation'</span>]<span class="sc">}</span><span class="ss">"</span>),</span>
+<span id="cb12-12"><a href="#cb12-12"></a>    ]</span>
+<span id="cb12-13"><a href="#cb12-13"></a>    model_with_clarity_structure <span class="op">=</span> model.with_structured_output(ClarityResponse)</span>
+<span id="cb12-14"><a href="#cb12-14"></a>    response <span class="op">=</span> model_with_clarity_structure.invoke(messages)</span>
+<span id="cb12-15"><a href="#cb12-15"></a>    <span class="cf">return</span> response.clarity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
+<p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
+<div id="cell-31" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    response <span class="op">=</span> get_response(inputs[<span class="st">"question"</span>])</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="cf">return</span> response.model_dump()</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a>experiment_results <span class="op">=</span> client.aevaluate(</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    ls_wrapper, data<span class="op">=</span>dataset_name, evaluators<span class="op">=</span>[accuracy, clarity], max_concurrency<span class="op">=</span><span class="dv">15</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>LangSmith requires you to define a function that wraps your pipeline function. It should take an input dictionary that contains the necessary parameters for your pipeline and return a dictionary with the results. You can also specify a <code>evaluators</code> parameter that includes the evaluation metrics you want to use.</p>
+<p>After you’ve run the evaluation, you’ll be able to inspect the results of the experiment:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="image.png"><img src="./images/langsmith-101/results.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>You can also investigate single runs:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/single_run.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="image.png"><img src="./images/langsmith-101/single_run.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Or see how results look over time:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/results_over_time.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="image.png"><img src="./images/langsmith-101/results_over_time.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Once again, I suggest you go explore the results in the LangSmith UI.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>That’s all! We’ve covered the basics of using LangSmith to trace and evaluate your LLM applications.</p>
+<p>By now, you should have a good understanding of how to create traces, define evaluation metrics, and run experiments.</p>
+<p>If you have any questions or feedback, let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Monitoring and Evaluating {LLM} Applications with
+    {LangSmith}},
+  date = {2025-08-08},
+  url = {https://dylancastillo.co/posts/langsmith-101.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2025. <span>“Monitoring and Evaluating LLM Applications
+with LangSmith.”</span> August 8, 2025. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2025, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

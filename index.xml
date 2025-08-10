@@ -15,7 +15,1059 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.7.33</generator>
-<lastBuildDate>Thu, 07 Aug 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 08 Aug 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Monitoring and evaluating LLM applications with LangSmith</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/langsmith-101.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>In my first AI projects, I didn’t have access to proper observability tools and didn’t know how to evaluate the performance of LLM pipelines. I struggled to figure out what to improve and even when I knew what to improve, it was hard to do so, without breaking other things. Many of those projects failed miserably.</p>
+<p>Those failed projects made me start looking for better ways and tools to build AI applications. Over time, tools such as <a href="https://smith.langchain.com/">LangSmith</a>, <a href="https://langfuse.com">Langfuse</a>, or <a href="https://logfire.pydantic.dev">Logfire</a> became key components of my AI toolkit. I can no longer imagine building an AI application without them.</p>
+<p>In this tutorial, I’ll walk you through the basics of using LangSmith to monitor and evaluate your LLM applications.</p>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>To complete this tutorial, you need to:</p>
+<ol type="1">
+<li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
+<li>Create a <code>.env</code> file in the root directory of your project and add the following lines:</li>
+</ol>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">OPENAI_API_KEY</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>your_openai_api_key</span>
+<span id="cb1-2"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGSMITH_TRACING</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>true</span>
+<span id="cb1-3"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGSMITH_PROJECT</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>your_langchain_project_name</span>
+<span id="cb1-4"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">LANGSMITH_API_KEY</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>your_langsmith_api_key</span></code></pre></div>
+<ol start="3" type="1">
+<li>Create a virtual environment in Python and install the following packages:</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> venv</span>
+<span id="cb2-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code></pre></div>
+<p>I’m assuming you’re familiar with the basics of LLMs. If you need a refresher, you can check out some of <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">my</a> <a href="https://dylancastillo.co/posts/key-parameters-llms.html">older</a> <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">posts</a>. Also, if you don’t want to copy and paste the code, you can download this post’s <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/synthetic-data-rag.ipynb">notebook</a> and follow along.</p>
+<p>Let’s go!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>As usual, you should start by importing the necessary libraries:</p>
+<div id="cell-4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datasets <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dataset</span>
+<span id="cb3-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb3-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_core.messages <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> HumanMessage, SystemMessage</span>
+<span id="cb3-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langchain_openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ChatOpenAI</span>
+<span id="cb3-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Client, trace, traceable</span>
+<span id="cb3-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith.run_trees <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> RunTree</span>
+<span id="cb3-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> langsmith.wrappers <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> wrap_openai</span>
+<span id="cb3-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> openai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> OpenAI</span>
+<span id="cb3-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel, Field</span>
+<span id="cb3-10"></span>
+<span id="cb3-11">load_dotenv()</span></code></pre></div>
+</div>
+<p>This will import all the libraries required for the next sections:</p>
+<ol type="1">
+<li><code>datasets</code> for loading the sample dataset we’ll use to run evaluations.</li>
+<li><code>langchain</code> libraries and <code>openai</code> for working with LLMs</li>
+<li><code>langsmith</code> for tracing and evaluating the pipeline</li>
+<li><code>dotenv</code> and <code>pydantic</code> for environment variable management and data validation</li>
+</ol>
+<p>Next, you will create your first trace on LangSmith.</p>
+</section>
+<section id="tracing-and-monitoring" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="tracing-and-monitoring">Tracing and monitoring</h2>
+<p>A LangSmith <strong>trace</strong> captures the full execution path of a single operation. It consists of a sequence of steps, which are called <strong>runs</strong>. Each trace contains the top-level inputs and outputs, as well as metadata such as runtime version and operating system details.</p>
+<p>There are four ways to create traces in LangSmith:</p>
+<ol type="1">
+<li>Using <code>@traceable</code></li>
+<li>Using a wrapped client</li>
+<li>Using a <code>trace</code> context manager</li>
+<li>Manually creating traces with <code>RunTree</code></li>
+</ol>
+<section id="using-traceable" class="level3">
+<h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
+<p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
+<div id="cell-8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> OpenAI()</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"></span>
+<span id="cb4-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb4-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> format_messages(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]:</span>
+<span id="cb4-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [</span>
+<span id="cb4-7">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant"</span>},</span>
+<span id="cb4-8">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: question},</span>
+<span id="cb4-9">    ]</span>
+<span id="cb4-10"></span>
+<span id="cb4-11"></span>
+<span id="cb4-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span>(run_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm"</span>)</span>
+<span id="cb4-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> call_llm(messages: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]):</span>
+<span id="cb4-14">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.chat.completions.create(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>messages)</span>
+<span id="cb4-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb4-16"></span>
+<span id="cb4-17"></span>
+<span id="cb4-18"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb4-19"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_pipeline(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb4-20">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> format_messages(question)</span>
+<span id="cb4-21">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> call_llm(messages)</span>
+<span id="cb4-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].message.content</span>
+<span id="cb4-23"></span>
+<span id="cb4-24"></span>
+<span id="cb4-25">run_pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
+</div>
+<p>This will automatically log the input and ouput of the functions decorated with <code>traceable</code>. It will also handle the nesting for you, so that <code>format_messages</code> and <code>call_llm</code> are steps within the <code>run_pipeline</code> function.</p>
+<p>In <code>traceable</code> you can customize xyz.</p>
+</section>
+<section id="using-a-trace-context-manager" class="level3">
+<h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
+<p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
+<div id="cell-12" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> OpenAI()</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"></span>
+<span id="cb5-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb5-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> format_messages(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]:</span>
+<span id="cb5-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [</span>
+<span id="cb5-7">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant"</span>},</span>
+<span id="cb5-8">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: question},</span>
+<span id="cb5-9">    ]</span>
+<span id="cb5-10"></span>
+<span id="cb5-11"></span>
+<span id="cb5-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span>(run_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm"</span>)</span>
+<span id="cb5-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> call_llm(messages: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]):</span>
+<span id="cb5-14">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.chat.completions.create(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>messages)</span>
+<span id="cb5-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb5-16"></span>
+<span id="cb5-17"></span>
+<span id="cb5-18">app_inputs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Who are you?"</span>}</span>
+<span id="cb5-19"></span>
+<span id="cb5-20"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> trace(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"run_pipeline"</span>, inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>app_inputs) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> rt:</span>
+<span id="cb5-21">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> format_messages(app_inputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>])</span>
+<span id="cb5-22">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> call_llm(messages)</span>
+<span id="cb5-23">    output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].message.content</span>
+<span id="cb5-24">    rt.end(outputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output"</span>: output})</span></code></pre></div>
+</div>
+<p>This will generate a trace called “LLM Pipeline” with the input and output of the entire pipeline. Within this trace, you will find the individual traces for each function call.</p>
+</section>
+<section id="using-a-wrapped-client" class="level3">
+<h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
+<p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
+<div id="cell-15" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> wrap_openai(OpenAI())  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Added client wrapper</span></span>
+<span id="cb6-2"></span>
+<span id="cb6-3"></span>
+<span id="cb6-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb6-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> format_messages(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]:</span>
+<span id="cb6-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> [</span>
+<span id="cb6-7">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a helpful assistant"</span>},</span>
+<span id="cb6-8">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: question},</span>
+<span id="cb6-9">    ]</span>
+<span id="cb6-10"></span>
+<span id="cb6-11"></span>
+<span id="cb6-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Removed @traceable</span></span>
+<span id="cb6-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> call_llm(messages: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>]):</span>
+<span id="cb6-14">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.chat.completions.create(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>messages)</span>
+<span id="cb6-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb6-16"></span>
+<span id="cb6-17"></span>
+<span id="cb6-18"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@traceable</span></span>
+<span id="cb6-19"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_pipeline(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb6-20">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> format_messages(question)</span>
+<span id="cb6-21">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> call_llm(messages)</span>
+<span id="cb6-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].message.content</span>
+<span id="cb6-23"></span>
+<span id="cb6-24"></span>
+<span id="cb6-25">run_pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
+</div>
+<p>This will automatically log the LLM calls made within <code>run_pipeline</code>, so you no longer need to add the <code>traceable</code> decorator to each call.</p>
+</section>
+<section id="manually-creating-traces-with-runtree" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="manually-creating-traces-with-runtree">Manually creating traces with <code>RunTree</code></h3>
+<p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
+<p>Here’s the <code>RunTree</code> version of the previous example:</p>
+<div id="cell-18" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> OpenAI()</span>
+<span id="cb7-2"></span>
+<span id="cb7-3"></span>
+<span id="cb7-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> format_messages(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, parent_run: RunTree):</span>
+<span id="cb7-5">    format_message_step <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> parent_run.create_child(</span>
+<span id="cb7-6">        name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"format_messages"</span>, run_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tool"</span>, inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: question}</span>
+<span id="cb7-7">    )</span>
+<span id="cb7-8">    format_message_step.post()</span>
+<span id="cb7-9">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb7-10">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant."</span>},</span>
+<span id="cb7-11">        {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: question},</span>
+<span id="cb7-12">    ]</span>
+<span id="cb7-13">    format_message_step.end(outputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>: messages})</span>
+<span id="cb7-14">    format_message_step.patch()</span>
+<span id="cb7-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> messages</span>
+<span id="cb7-16"></span>
+<span id="cb7-17"></span>
+<span id="cb7-18"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> call_llm(messages: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>], parent_run: RunTree):</span>
+<span id="cb7-19">    call_llm_step <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> parent_run.create_child(</span>
+<span id="cb7-20">        name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"call_llm"</span>,</span>
+<span id="cb7-21">        run_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"llm"</span>,</span>
+<span id="cb7-22">        inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"messages"</span>: messages},</span>
+<span id="cb7-23">    )</span>
+<span id="cb7-24">    call_llm_step.post()</span>
+<span id="cb7-25">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.chat.completions.create(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>messages)</span>
+<span id="cb7-26">    call_llm_step.end(outputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>response)</span>
+<span id="cb7-27">    call_llm_step.patch()</span>
+<span id="cb7-28">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb7-29"></span>
+<span id="cb7-30"></span>
+<span id="cb7-31"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_pipeline(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb7-32">    parent_run <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> RunTree(name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"run_pipeline"</span>, inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: question})</span>
+<span id="cb7-33">    parent_run.post()</span>
+<span id="cb7-34"></span>
+<span id="cb7-35">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> format_messages(question, parent_run)</span>
+<span id="cb7-36">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> call_llm(messages, parent_run)</span>
+<span id="cb7-37"></span>
+<span id="cb7-38">    parent_run.end(outputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>: response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>].message.content})</span>
+<span id="cb7-39">    parent_run.patch()</span>
+<span id="cb7-40"></span>
+<span id="cb7-41"></span>
+<span id="cb7-42">run_pipeline(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
+</div>
+<p>This will result in a similar trace, but in this case you have more control over when/what to send in each step.</p>
+<p>For all of these methods, you should’ve obtained a trace that looks like this:</p>
+<p><a href="./images/langsmith-101/traces.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://dylancastillo.co/posts/images/langsmith-101/traces.png" class="img-fluid"></a></p>
+<p>To the left of the image, you should see the trace for the <code>run_pipeline</code> function, which includes all the steps taken during the execution of the function, including the formatting of messages and the call to the LLM. To the right, you will see the input and output for the full trace.</p>
+<p>Then, you can click on each individual step to view more details about that step, including the inputs, outputs, and any errors that may have occurred.</p>
+<p>Here’s <code>format_messages</code>:</p>
+<p><a href="./images/langsmith-101/format_messages.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="https://dylancastillo.co/posts/images/langsmith-101/format_messages.png" class="img-fluid"></a></p>
+<p>And here’s <code>call_llm</code>:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/call_llm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="image.png"><img src="https://dylancastillo.co/posts/images/langsmith-101/call_llm.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>I recommend you explore the traces on your own. Just looking at the images in this post won’t be enough.</p>
+</section>
+</section>
+<section id="evaluation" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evaluation">Evaluation</h2>
+<p>LangSmith lets you evaluate your LLM pipelines by providing you with a way to upload evaluation datasets, define evaluation metrics, and view the results of your experiments.</p>
+<p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
+<p>You should start by creating a dataset on LangSmith:</p>
+<div id="cell-23" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">ds <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_dataset(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"AI-MO/aimo-validation-aime"</span>)</span>
+<span id="cb8-2">examples <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb8-3">    {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"inputs"</span>: {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>: d[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"problem"</span>]}, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"outputs"</span>: {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(d[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>])}}</span>
+<span id="cb8-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> d <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> ds[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"train"</span>]</span>
+<span id="cb8-5">][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>]</span>
+<span id="cb8-6"></span>
+<span id="cb8-7">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Client()</span>
+<span id="cb8-8"></span>
+<span id="cb8-9">dataset_name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"AIME Example Dataset (sample)"</span></span>
+<span id="cb8-10"></span>
+<span id="cb8-11"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb8-12">    dataset <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.create_dataset(dataset_name)</span>
+<span id="cb8-13">    client.create_examples(dataset_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dataset.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">id</span>, examples<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>examples)</span>
+<span id="cb8-14"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb8-15">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Dataset </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>dataset_name<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> already exists. Error: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>e<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb8-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">pass</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dataset AIME Example Dataset (sample) already exists. Error: Conflict for /datasets. HTTPError('409 Client Error: Conflict for url: https://api.smith.langchain.com/datasets', '{"detail":"Dataset with this name already exists."}')</code></pre>
+</div>
+</div>
+<p>This will create a dataset with the first 15 examples from the AIMO Validation AIME dataset. I only included a a sample of the dataset to keep costs down. You can always add more examples later if needed.</p>
+<p>The dataset will be available under <code>Datasets &amp; Experiments</code>:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/dataset.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="image.png"><img src="https://dylancastillo.co/posts/images/langsmith-101/dataset.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
+<div id="cell-25" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Response(BaseModel):</span>
+<span id="cb10-2">    explanation: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The explanation of the answer"</span>)</span>
+<span id="cb10-3">    answer: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb10-4">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The answer to the question. It should be an integer."</span></span>
+<span id="cb10-5">    )</span>
+<span id="cb10-6"></span>
+<span id="cb10-7"></span>
+<span id="cb10-8">model <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ChatOpenAI(model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gpt-4.1-mini"</span>, temperature<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb10-9">model_with_structure <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.with_structured_output(Response, method<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"function_calling"</span>)</span>
+<span id="cb10-10"></span>
+<span id="cb10-11"></span>
+<span id="cb10-12"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_response(question: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Response:</span>
+<span id="cb10-13">    max_retries <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb10-14">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(max_retries):</span>
+<span id="cb10-15">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb10-16">            messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb10-17">                SystemMessage(</span>
+<span id="cb10-18">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You're a math expert. You will always respond in a JSON format with the following fields: explanation and answer."</span></span>
+<span id="cb10-19">                ),</span>
+<span id="cb10-20">                HumanMessage(question),</span>
+<span id="cb10-21">            ]</span>
+<span id="cb10-22">            response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_structure.invoke(messages)</span>
+<span id="cb10-23">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response</span>
+<span id="cb10-24">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb10-25">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Error: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>e<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb10-26">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">continue</span></span>
+<span id="cb10-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">raise</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ValueError</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Failed to get a valid response"</span>)</span></code></pre></div>
+</div>
+<p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
+<p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
+<div id="cell-27" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> accuracy(inputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, outputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, reference_outputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">bool</span>:</span>
+<span id="cb11-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> reference_outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"answer"</span>]</span></code></pre></div>
+</div>
+<p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
+<p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
+<p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
+<div id="cell-29" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> ClarityResponse(BaseModel):</span>
+<span id="cb12-2">    explanation: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The explanation of the answer"</span>)</span>
+<span id="cb12-3">    clarity: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The clarity of the explanation"</span>, ge<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, le<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb12-4"></span>
+<span id="cb12-5"></span>
+<span id="cb12-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> clarity(inputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, outputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, reference_outputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>:</span>
+<span id="cb12-7">    messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb12-8">        SystemMessage(</span>
+<span id="cb12-9">            content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant that evaluates the clarity of the explanation of the answer. You will always return a number between 1 and 5, where 1 is the lowest clarity and 5 is the highest clarity."</span></span>
+<span id="cb12-10">        ),</span>
+<span id="cb12-11">        HumanMessage(content<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Explanation: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'explanation'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>),</span>
+<span id="cb12-12">    ]</span>
+<span id="cb12-13">    model_with_clarity_structure <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.with_structured_output(ClarityResponse)</span>
+<span id="cb12-14">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model_with_clarity_structure.invoke(messages)</span>
+<span id="cb12-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.clarity</span></code></pre></div>
+</div>
+<p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
+<p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
+<div id="cell-31" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> ls_wrapper(inputs: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>:</span>
+<span id="cb13-2">    response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_response(inputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"question"</span>])</span>
+<span id="cb13-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> response.model_dump()</span>
+<span id="cb13-4"></span>
+<span id="cb13-5"></span>
+<span id="cb13-6">experiment_results <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.aevaluate(</span>
+<span id="cb13-7">    ls_wrapper, data<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dataset_name, evaluators<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[accuracy, clarity], max_concurrency<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span></span>
+<span id="cb13-8">)</span></code></pre></div>
+</div>
+<p>LangSmith requires you to define a function that wraps your pipeline function. It should take an input dictionary that contains the necessary parameters for your pipeline and return a dictionary with the results. You can also specify a <code>evaluators</code> parameter that includes the evaluation metrics you want to use.</p>
+<p>After you’ve run the evaluation, you’ll be able to inspect the results of the experiment:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="image.png"><img src="https://dylancastillo.co/posts/images/langsmith-101/results.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>You can also investigate single runs:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/single_run.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="image.png"><img src="https://dylancastillo.co/posts/images/langsmith-101/single_run.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Or see how results look over time:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/langsmith-101/results_over_time.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="image.png"><img src="https://dylancastillo.co/posts/images/langsmith-101/results_over_time.png" class="img-fluid figure-img" alt="image.png"></a></p>
+<figcaption class="margin-caption">image.png</figcaption>
+</figure>
+</div>
+<p>Once again, I suggest you go explore the results in the LangSmith UI.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>That’s all! We’ve covered the basics of using LangSmith to trace and evaluate your LLM applications.</p>
+<p>By now, you should have a good understanding of how to create traces, define evaluation metrics, and run experiments.</p>
+<p>If you have any questions or feedback, let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Monitoring and Evaluating {LLM} Applications with
+    {LangSmith}},
+  date = {2025-08-08},
+  url = {https://dylancastillo.co/posts/langsmith-101.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Monitoring and Evaluating LLM Applications
+with LangSmith.”</span> August 8, 2025. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>python</category>
+  <category>openai</category>
+  <category>langsmith</category>
+  <guid>https://dylancastillo.co/posts/langsmith-101.html</guid>
+  <pubDate>Fri, 08 Aug 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Using synthetic data to bootstrap your RAG system evals</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -42,12 +1094,12 @@ background-color: null;
 font-style: inherit;">=</span>your_openai_api_key</span>
 <span id="cb1-2"><span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">LANGCHAIN_TRACING_V2</span><span class="op" style="color: #5E5E5E;
+font-style: inherit;">LANGSMITH_TRACING</span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>true</span>
 <span id="cb1-3"><span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">LANGCHAIN_PROJECT</span><span class="op" style="color: #5E5E5E;
+font-style: inherit;">LANGSMITH_PROJECT</span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>your_langchain_project_name</span>
 <span id="cb1-4"><span class="va" style="color: #111111;
@@ -14550,1877 +15602,6 @@ Before the Horse.”</span> November 9, 2024. <a href="https://dylancastillo.co/
   <category>python</category>
   <guid>https://dylancastillo.co/posts/llm-pydantic-order-matters.html</guid>
   <pubDate>Sat, 09 Nov 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>These days I use Kamal to deploy my FastAPI (or Django) projects. Kamal is a simpler alternative to <a href="https://kubernetes.io/">Kubernetes</a> that you can use to deploy containerized apps to a <a href="https://en.wikipedia.org/wiki/Virtual_private_server">VPS</a>.</p>
-<p>Once you get the hang of it, it’ll only take you a few minutes to set up a CI/CD pipeline that automatically deploys your app to production with each push to the <em>main</em> branch.</p>
-<p>In this tutorial, I’ll walk you through the process of deploying a FastAPI app with Kamal, AWS ECR, and Github Actions.</p>
-<p>You can find the code for this tutorial in <a href="https://github.com/dylanjcastillo/fastapi-kamal-aws-gha-example">this repository</a>.</p>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>To make the most of this tutorial, you should:</p>
-<ul>
-<li>Have a <a href="https://fastapi.tiangolo.com/">FastAPI</a> app ready to deploy.</li>
-<li>Have an <a href="https://aws.amazon.com/">AWS</a> account and its <a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">CLI</a> installed.</li>
-<li>Be comfortable with <a href="https://www.docker.com/">Docker</a>.</li>
-<li>Have a basic understanding of <a href="https://kamal-deploy.org/">Kamal</a>. You’ll need to install version <code>1.9.0</code> for this tutorial.</li>
-<li>Have a basic understanding of <a href="https://docs.github.com/en/actions">Github Actions</a>.</li>
-<li>Have a VPS with Ubuntu ready to host your app.</li>
-</ul>
-</section>
-<section id="prepare-your-vps" class="level2">
-<h2 class="anchored" data-anchor-id="prepare-your-vps">Prepare your VPS</h2>
-<p>You’ll need to install docker, curl, git, and snapd on your VPS, and create a non-root user called <code>kamal</code> that can sudo. You should also set the <code>UID</code> and <code>GID</code> of the user to 1000.</p>
-<p>If you’re using Hetzner, you can use my <a href="https://dylancastillo.co/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.html">terraform script</a> to prepare the VPS.</p>
-<p>Otherwise, you can run these commands on your VPS’s terminal:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Install docker, curl, and git, and snapd</span></span>
-<span id="cb1-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> update</span>
-<span id="cb1-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span> docker.io curl git snapd</span>
-<span id="cb1-4"></span>
-<span id="cb1-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Start and enable the docker service</span></span>
-<span id="cb1-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">systemctl</span> start docker</span>
-<span id="cb1-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">systemctl</span> enable docker</span>
-<span id="cb1-8"></span>
-<span id="cb1-9"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create a non-root user called kamal</span></span>
-<span id="cb1-10"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">useradd</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> /bin/bash <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-u</span> 1000 kamal</span>
-<span id="cb1-11"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">usermod</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-aG</span> sudo kamal</span>
-<span id="cb1-12"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"kamal ALL=(ALL) NOPASSWD:ALL"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> /etc/sudoers.d/kamal</span>
-<span id="cb1-13"></span>
-<span id="cb1-14"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Add SSH key to login as kamal user</span></span>
-<span id="cb1-15"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> /home/kamal/.ssh</span>
-<span id="cb1-16"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;YOUR_PUBLIC_SSH_KEY&gt;"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> /home/kamal/.ssh/authorized_keys <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># you need a public key to login as the kamal user</span></span>
-<span id="cb1-17"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> 700 /home/kamal/.ssh</span>
-<span id="cb1-18"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> 600 /home/kamal/.ssh/authorized_keys</span>
-<span id="cb1-19"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chown</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> kamal:kamal /home/kamal/.ssh</span>
-<span id="cb1-20"></span>
-<span id="cb1-21"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Disable root login</span></span>
-<span id="cb1-22"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sed</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-i</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'/PermitRootLogin/d'</span> /etc/ssh/sshd_config</span>
-<span id="cb1-23"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"PermitRootLogin no"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> /etc/ssh/sshd_config</span>
-<span id="cb1-24"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">systemctl</span> restart sshd</span>
-<span id="cb1-25"></span>
-<span id="cb1-26"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Add the kamal user to the docker group</span></span>
-<span id="cb1-27"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">usermod</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-aG</span> docker kamal</span>
-<span id="cb1-28"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">docker</span> network create <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--driver</span> bridge kamal_network</span>
-<span id="cb1-29"></span>
-<span id="cb1-30"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create a folder for the Let's Encrypt ACME JSON</span></span>
-<span id="cb1-31"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> /letsencrypt <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">touch</span> /letsencrypt/acme.json <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> 600 /letsencrypt/acme.json</span>
-<span id="cb1-32"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chown</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> kamal:kamal /letsencrypt</span>
-<span id="cb1-33"></span>
-<span id="cb1-34"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">reboot</span></span></code></pre></div>
-<p>To run these commands, you need to login as root. This assumes that there isn’t already a non-root user with <code>UID</code> 1000. Otherwise, you’ll have to adjust the commands accordingly.</p>
-<p>Also, if you don’t have a public SSH key for the “Add SSH key” step, you can generate one with the following command:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh-keygen</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-t</span> ed25519 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-C</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"your-email@example.com"</span></span></code></pre></div>
-<p>These commands will:</p>
-<ol type="1">
-<li>Install docker, curl, and git</li>
-<li>Start and enable the docker service</li>
-<li>Create a non-root user called kamal</li>
-<li>Disable root login</li>
-<li>Add the kamal user to the docker group (this allows the user to run docker without needing to use <code>sudo</code>)</li>
-<li>Create a Docker bridge network for Traefik</li>
-<li>Create a folder for the Let’s Encrypt ACME JSON file</li>
-<li>Make the Let’s Encrypt ACME JSON folder writable by the kamal user</li>
-<li>Restart the server</li>
-</ol>
-<p>Finally, configure the SSH key in your local <code>.ssh/config</code> file so you can login as the kamal user without using the root account.</p>
-<pre><code>Host kamal
-  HostName &lt;YOUR_VPS_IP&gt;
-  User kamal
-  IdentityFile ~/.ssh/&lt;YOUR_PRIVATE_SSH_KEY&gt;</code></pre>
-</section>
-<section id="create-a-dockerfile-for-your-fastapi-app" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-dockerfile-for-your-fastapi-app">Create a Dockerfile for your FastAPI app</h2>
-<p>Kamal works with containerized apps, so you’ll need to have a Dockerfile. I also recommend using an <code>entrypoint.sh</code> script to run the application, because that also allows you to run commands in the container.</p>
-<section id="dockerfile" class="level3">
-<h3 class="anchored" data-anchor-id="dockerfile">Dockerfile</h3>
-<p>Here’s the Dockerfile I’m using for my projects. You can use this as a template and adjust it to your needs.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Dockerfile</strong></pre>
-</div>
-<div class="sourceCode" id="cb4" data-filename="Dockerfile" style="background: #f1f3f5;"><pre class="sourceCode numberSource dockerfile number-lines code-with-copy"><code class="sourceCode dockerfile"><span id="cb4-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> python:3.10-slim <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> base</span>
-<span id="cb4-2"></span>
-<span id="cb4-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENV</span> POETRY_HOME=/opt/poetry</span>
-<span id="cb4-4"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENV</span> POETRY_VERSION=1.8.3</span>
-<span id="cb4-5"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ENV</span> PATH=${POETRY_HOME}/bin:${PATH}</span>
-<span id="cb4-6"></span>
-<span id="cb4-7"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> update <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-8">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--no-install-recommends</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-y</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-9">    curl <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-10">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt-get</span> clean <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-11">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rm</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-rf</span> /var/lib/apt/lists/<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">*</span></span>
-<span id="cb4-12"></span>
-<span id="cb4-13"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">curl</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-sSL</span> https://install.python-poetry.org <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">python3</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--version</span></span>
-<span id="cb4-14"></span>
-<span id="cb4-15"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> base <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> builder</span>
-<span id="cb4-16"></span>
-<span id="cb4-17"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app</span>
-<span id="cb4-18"></span>
-<span id="cb4-19"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> poetry.lock pyproject.toml ./</span>
-<span id="cb4-20"></span>
-<span id="cb4-21"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> config virtualenvs.in-project true <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-22">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">poetry</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--only</span> main <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--no-interaction</span></span>
-<span id="cb4-23"></span>
-<span id="cb4-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> base <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> runner</span>
-<span id="cb4-25"></span>
-<span id="cb4-26"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app</span>
-<span id="cb4-27"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">--from=builder</span> /app/.venv/ /app/.venv/</span>
-<span id="cb4-28"></span>
-<span id="cb4-29"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">COPY</span> . /app</span>
-<span id="cb4-30"></span>
-<span id="cb4-31"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chmod</span> +x /app/entrypoint.sh</span>
-<span id="cb4-32"></span>
-<span id="cb4-33"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">FROM</span> runner <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">AS</span> production</span>
-<span id="cb4-34"></span>
-<span id="cb4-35"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">EXPOSE</span> 8000</span>
-<span id="cb4-36"></span>
-<span id="cb4-37"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> user=kamal</span>
-<span id="cb4-38"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> group=kamal</span>
-<span id="cb4-39"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> uid=1000</span>
-<span id="cb4-40"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">ARG</span> gid=1000</span>
-<span id="cb4-41"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">RUN</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">groupadd</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-g</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${gid}</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${group}</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-42">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">useradd</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-u</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${uid}</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-g</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${group}</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> /bin/sh <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-m</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${user}</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;&amp;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">\</span></span>
-<span id="cb4-43">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chown</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-R</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${uid}</span>:<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${gid}</span> /app</span>
-<span id="cb4-44"></span>
-<span id="cb4-45"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">USER</span> ${uid}:${gid}</span>
-<span id="cb4-46"></span>
-<span id="cb4-47"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">WORKDIR</span> /app</span>
-<span id="cb4-48"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">CMD</span> [ <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/app/entrypoint.sh"</span> , <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"app"</span>]</span></code></pre></div>
-</div>
-<p>This multi-stage Dockerfile does the following:</p>
-<ol type="1">
-<li>Installs poetry and sets up the virtual environment</li>
-<li>Creates the user <code>kamal</code> with the <code>UID</code> and <code>GID</code> 1000 and runs the application with that user.</li>
-<li>Exposes port 8000 and runs the application by executing the <code>entrypoint.sh</code> script. Kamal automatically detects that is the port the app runs on and <a href="https://github.com/basecamp/kamal/issues/58">will use that to set up the reverse proxy</a>.</li>
-</ol>
-<p>Feel free to adjust this Dockerfile to your needs.</p>
-</section>
-<section id="entrypoint.sh-script" class="level3">
-<h3 class="anchored" data-anchor-id="entrypoint.sh-script"><code>entrypoint.sh</code> script</h3>
-<p>I use an <code>entrypoint.sh</code> script to run the application because that makes it easier to collect static files, run migrations when the container starts, and also running commands in the container.</p>
-<p>Here’s an example of a simple <code>entrypoint.sh</code> script:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>entrypoint.sh</strong></pre>
-</div>
-<div class="sourceCode" id="cb5" data-filename="entrypoint.sh" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#!/bin/sh</span></span>
-<span id="cb5-2"></span>
-<span id="cb5-3"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-e</span></span>
-<span id="cb5-4"></span>
-<span id="cb5-5"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">[</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$1</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"app"</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">then</span></span>
-<span id="cb5-6">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Collecting static files"</span></span>
-<span id="cb5-7">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">exec</span> poetry run gunicorn <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> gunicorn.conf.py</span>
-<span id="cb5-8"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span></span>
-<span id="cb5-9">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">exec</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$@</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb5-10"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fi</span></span></code></pre></div>
-</div>
-<p>This script starts the <code>gunicorn</code> server with <code>uvicorn</code> workers and some sensible defaults. It also allows you to pass other arguments to the script, which is useful if you want to run other commands in the container. You can add or remove commands to the script as needed.</p>
-</section>
-</section>
-<section id="configure-an-ecr-registry-in-aws" class="level2">
-<h2 class="anchored" data-anchor-id="configure-an-ecr-registry-in-aws">Configure an ECR registry in AWS</h2>
-<p>Next, you’ll need a place to push and pull your Docker images. I use <a href="https://aws.amazon.com/ecr/">AWS ECR</a>, so that’s what I’ll show you how to do here. Kamal also supports <a href="https://kamal-deploy.org/docs/configuration/docker-registry/">other registries</a>.</p>
-<p>Log in to the <a href="https://aws.amazon.com/console/">AWS Management Console</a> and go to Amazon ECR. Click on <code>Create repository</code> and set a name for your repository.</p>
-<p>Then, create a new IAM user in your AWS account by going to Services &gt; IAM &gt; Users &gt; Add user.</p>
-<p>During the process you’ll have to assign a permissions to the user. You can create a new policy with the following content and attach it to the user:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-2">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Version"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2012-10-17"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-3">  <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Statement"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span></span>
-<span id="cb6-4">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-5">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Sid"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ListImagesInRepository"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-6">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Effect"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Allow"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-7">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Action"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:ListImages"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-8">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Resource"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span></span>
-<span id="cb6-9">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"arn:aws:ecr:&lt;REGION&gt;:&lt;ACCOUNT_ID&gt;:repository/&lt;REPOSITORY_NAME&gt;"</span></span>
-<span id="cb6-10">      <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb6-11">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-12">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-13">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Sid"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"GetAuthorizationToken"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-14">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Effect"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Allow"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-15">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Action"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:GetAuthorizationToken"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-16">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Resource"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"*"</span></span>
-<span id="cb6-17">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-18">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-19">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Sid"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ManageRepositoryContents"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-20">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Effect"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Allow"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-21">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Action"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span></span>
-<span id="cb6-22">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:BatchCheckLayerAvailability"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-23">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:GetDownloadUrlForLayer"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-24">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:GetRepositoryPolicy"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-25">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:DescribeRepositories"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-26">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:ListImages"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-27">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:DescribeImages"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-28">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:BatchGetImage"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-29">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:InitiateLayerUpload"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-30">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:UploadLayerPart"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-31">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:CompleteLayerUpload"</span><span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-32">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ecr:PutImage"</span></span>
-<span id="cb6-33">      <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb6-34">      <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">"Resource"</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">:</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">[</span></span>
-<span id="cb6-35">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"arn:aws:ecr:&lt;REGION&gt;:&lt;ACCOUNT_ID&gt;:repository/&lt;REPOSITORY_NAME&gt;"</span></span>
-<span id="cb6-36">      <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb6-37">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb6-38">  <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb6-39"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>This policy enables users to list, access, and manage the ECR repository they have previously created, as well as obtain an authorization token necessary for pushing and pulling images. You must replace <code>&lt;REGION&gt;</code>, <code>&lt;ACCOUNT_ID&gt;</code>, and <code>&lt;REPOSITORY_NAME&gt;</code> with the specific details of your own repository.</p>
-<p>Then, select the user you created and navigate to Security credentials &gt; Access keys &gt; Create access key. Download the generated CSV file and store it in a secure location.</p>
-<p>The GitHub Actions workflow will use these credentials for pushing and pulling images from the ECR registry.</p>
-</section>
-<section id="set-up-kamal-in-your-project" class="level2">
-<h2 class="anchored" data-anchor-id="set-up-kamal-in-your-project">Set up Kamal in your project</h2>
-<p>Open your FastAPI project in your favorite code editor. Create a folder called <code>deploy</code> in the root directory. Then go into the folder and initialize Kamal:</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">kamal</span> init</span></code></pre></div>
-<p>This will create two folders (<code>.kamal/</code> and <code>config/</code>) and an <code>.env</code> file. Inside <code>config/</code>, you’ll find a <code>deploy.yml</code> file. This is where you’ll provide the instructions for Kamal to build and deploy your app.</p>
-<p>You can use the following <code>deploy.yml</code> file as a template for your FastAPI app:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>deploy.yml</strong></pre>
-</div>
-<div class="sourceCode" id="cb8" data-filename="deploy.yml" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">service</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> example</span></span>
-<span id="cb8-2"></span>
-<span id="cb8-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">image</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> example</span></span>
-<span id="cb8-4"></span>
-<span id="cb8-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-6"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">user</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> kamal</span></span>
-<span id="cb8-7"></span>
-<span id="cb8-8"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">env</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-9"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">secret</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-10"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> FASTAPI_ENV</span></span>
-<span id="cb8-11"></span>
-<span id="cb8-12"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">traefik</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-13"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">options</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-14"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">publish</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-15"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"443:443"</span></span>
-<span id="cb8-16"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">volume</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-17"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/letsencrypt/:/letsencrypt/"</span></span>
-<span id="cb8-18"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">memory</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> 500m</span></span>
-<span id="cb8-19"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">network</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> private_network</span></span>
-<span id="cb8-20"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">args</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-21"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">entryPoints.web.address</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">":80"</span></span>
-<span id="cb8-22"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">entryPoints.websecure.address</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">":443"</span></span>
-<span id="cb8-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">entryPoints.web.http.redirections.entryPoint.to</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> websecure</span></span>
-<span id="cb8-24"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">entryPoints.web.http.redirections.entryPoint.scheme</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> https</span></span>
-<span id="cb8-25"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">entryPoints.web.http.redirections.entrypoint.permanent</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb8-26"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">certificatesResolvers.letsencrypt.acme.email</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;YOUR_EMAIL&gt;"</span></span>
-<span id="cb8-27"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">certificatesResolvers.letsencrypt.acme.storage</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/letsencrypt/acme.json"</span></span>
-<span id="cb8-28"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">certificatesResolvers.letsencrypt.acme.httpchallenge</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb8-29"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> web</span></span>
-<span id="cb8-30"></span>
-<span id="cb8-31"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">servers</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-32"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">web</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-33"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">hosts</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-34"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">128.140.0.209</span></span>
-<span id="cb8-35"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">healthcheck</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-36"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">port</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">8000</span></span>
-<span id="cb8-37"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">interval</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> 5s</span></span>
-<span id="cb8-38"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">options</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-39"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">network</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> private_network</span></span>
-<span id="cb8-40"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">labels</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-41"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">traefik.http.routers.app.tls</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb8-42"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">traefik.http.routers.app.entrypoints</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> websecure</span></span>
-<span id="cb8-43"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">traefik.http.routers.app.rule</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Host(`&lt;YOUR_DOMAIN&gt;`)</span></span>
-<span id="cb8-44"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">traefik.http.routers.app.tls.certresolver</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> letsencrypt</span></span>
-<span id="cb8-45"></span>
-<span id="cb8-46"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">registry</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-47"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">server</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> &lt;account_id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com</span></span>
-<span id="cb8-48"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">username</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> AWS</span></span>
-<span id="cb8-49"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">password</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-50"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> KAMAL_REGISTRY_PASSWORD</span></span>
-<span id="cb8-51"></span>
-<span id="cb8-52"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">builder</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-53"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dockerfile</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../Dockerfile"</span></span>
-<span id="cb8-54"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">context</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../"</span></span>
-<span id="cb8-55"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">multiarch</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">false</span></span>
-<span id="cb8-56"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cache</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb8-57"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">type</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> gha</span></span></code></pre></div>
-</div>
-<p>This will set up your app and a reverse proxy using Traefik (with automatic SSL certificates using Let’s Encrypt). Remember to replace the placeholders with your own values. It will also do a healthcheck on <code>/up</code> on port 8000.</p>
-<section id="test-the-configuration-locally" class="level3">
-<h3 class="anchored" data-anchor-id="test-the-configuration-locally">Test the configuration locally</h3>
-<p>To test it locally, first, you must define the required environment variables in <code>.env</code>, such as keys for AI services, email providers, etc.</p>
-<p>You’ll also need to get a temporary password to authenticate into the ECR registry. You can get this password by running the following command from your terminal:</p>
-<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">aws</span> ecr get-login-password <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--region</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>YOUR_REGION<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span></code></pre></div>
-<p>You should copy the output of this command and paste it in the <code>KAMAL_REGISTRY_PASSWORD</code> field in the <code>.env</code> file.</p>
-<p>Then, run the following command to deploy your application to your VPS:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">kamal</span> env push</span>
-<span id="cb10-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">kamal</span> deploy</span></code></pre></div>
-<p>The first command will push the environment variables to the VPS. The second command will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
-<p>After a few minutes, your app should be live at <code>https://&lt;YOUR_DOMAIN&gt;</code>.</p>
-<p>If you see any errors, you can:</p>
-<ol type="1">
-<li>Run <code>kamal app logs</code> to see the logs of the app.</li>
-<li>Open a terminal in the container by running <code>kamal app exec -it bash</code>.</li>
-</ol>
-<p>This is how I usually debug the app.</p>
-</section>
-</section>
-<section id="automate-the-deployment-with-github-actions" class="level2">
-<h2 class="anchored" data-anchor-id="automate-the-deployment-with-github-actions">Automate the deployment with Github Actions</h2>
-<p>Now that you have a working deployment process in your local environment, you can set up your CI/CD pipeline using GitHub Actions.</p>
-<p>Create a new file in the <code>.github/workflows</code> folder called <code>deploy.yml</code> and add the following code:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Deploy FastAPI app to VPS</span></span>
-<span id="cb11-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">concurrency</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">group</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ${{ github.workflow }}-${{ github.ref }}</span></span>
-<span id="cb11-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cancel-in-progress</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">true</span></span>
-<span id="cb11-5"></span>
-<span id="cb11-6"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">on</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-7"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">push</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-8"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">branches</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"main"</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]</span></span>
-<span id="cb11-9"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">workflow_dispatch</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-10"></span>
-<span id="cb11-11"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">jobs</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-12"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">deploy</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-13"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">runs-on</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ubuntu-latest</span></span>
-<span id="cb11-14"></span>
-<span id="cb11-15"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">steps</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-16"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Checkout</span></span>
-<span id="cb11-17"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> actions/checkout@v3</span></span>
-<span id="cb11-18"></span>
-<span id="cb11-19"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> webfactory/ssh-agent@v0.7.0</span></span>
-<span id="cb11-20"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-21"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ssh-private-key</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ${{ secrets.VPS_SSH_PRIVATE_KEY }}</span></span>
-<span id="cb11-22"></span>
-<span id="cb11-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Set up Ruby and install kamal</span></span>
-<span id="cb11-24"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ruby/setup-ruby@v1</span></span>
-<span id="cb11-25"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-26"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ruby-version</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3.2.2</span></span>
-<span id="cb11-27"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">run</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> gem install kamal -v 1.9.0</span></span>
-<span id="cb11-28"></span>
-<span id="cb11-29"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Configure AWS credentials</span></span>
-<span id="cb11-30"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> aws-actions/configure-aws-credentials@v4</span></span>
-<span id="cb11-31"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb11-32"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aws-access-key-id</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ${{ secrets.AWS_ACCESS_KEY_ID_ECR }}</span></span>
-<span id="cb11-33"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aws-secret-access-key</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> ${{ secrets.AWS_SECRET_ACCESS_KEY_ECR }}</span></span>
-<span id="cb11-34"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aws-region</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> us-east-1</span></span>
-<span id="cb11-35"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mask-aws-account-id</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">false</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # otherwise the mask will hide your account ID and cause errors in the deployment</span></span>
-<span id="cb11-36"></span>
-<span id="cb11-37"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Login to AWS ECR</span></span>
-<span id="cb11-38"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> login-ecr</span></span>
-<span id="cb11-39"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> aws-actions/amazon-ecr-login@v2</span></span>
-<span id="cb11-40"></span>
-<span id="cb11-41"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Set up Docker Buildx for cache</span></span>
-<span id="cb11-42"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> docker/setup-buildx-action@v3</span></span>
-<span id="cb11-43"></span>
-<span id="cb11-44"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Expose GitHub Runtime for cache</span></span>
-<span id="cb11-45"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> crazy-max/ghaction-github-runtime@v3</span></span>
-<span id="cb11-46"></span>
-<span id="cb11-47"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Create .env file</span></span>
-<span id="cb11-48"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">        run</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">: </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">|</span></span>
-<span id="cb11-49">          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
-<span id="cb11-50">          touch .env</span>
-<span id="cb11-51">          echo KAMAL_REGISTRY_PASSWORD="${{ steps.login-ecr.outputs.docker_password_&lt;YOUR_ACCOUNT_ID&gt;_dkr_ecr_&lt;YOUR_REGION&gt;_amazonaws_com }}" &gt;&gt; .env</span>
-<span id="cb11-52">          # if you have other secrets, add them here</span>
-<span id="cb11-53">          cat .env</span>
-<span id="cb11-54"></span>
-<span id="cb11-55"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">-</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> Kamal Deploy</span></span>
-<span id="cb11-56"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> kamal-deploy</span></span>
-<span id="cb11-57"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">        run</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">: </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">|</span></span>
-<span id="cb11-58">          cd &lt;YOUR_PROJECT_ROOT&gt;/deploy</span>
-<span id="cb11-59">          kamal lock release</span>
-<span id="cb11-60">          kamal env push</span>
-<span id="cb11-61">          kamal deploy</span></code></pre></div>
-<p>This workflow will:</p>
-<ol type="1">
-<li>Checkout the code</li>
-<li>Set up the Ruby environment and install Kamal</li>
-<li>Configure the AWS credentials</li>
-<li>Login to the AWS ECR registry</li>
-<li>Set up Docker Buildx for cache</li>
-<li>Expose GitHub Runtime for cache</li>
-<li>Create the <code>.env</code> file</li>
-<li>Run Kamal deploy</li>
-</ol>
-<p>It will run everytime you make a push to the main branch or by manually triggering the workflow. It’ll cancel any in-progress runs to avoid conflicts.</p>
-<p>Also, before you push your code to the repository, you’ll need to add the following secrets to the repository:</p>
-<ul>
-<li><code>VPS_SSH_PRIVATE_KEY</code>: The private key to connect to your VPS</li>
-<li><code>AWS_ACCESS_KEY_ID_ECR</code>: The access key ID for the AWS ECR registry</li>
-<li><code>AWS_SECRET_ACCESS_KEY_ECR</code>: The secret access key for the AWS ECR registry</li>
-</ul>
-<p>Finally, to speed up the deployment, add these options to the <code>builder</code> section of the <code>deploy.yml</code> file:</p>
-<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">builder</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span></span>
-<span id="cb12-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dockerfile</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../Dockerfile"</span></span>
-<span id="cb12-3"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">context</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../"</span></span>
-<span id="cb12-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">multiarch</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> </span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">false</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # new</span></span>
-<span id="cb12-5"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cache</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # new</span></span>
-<span id="cb12-6"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">type</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">:</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;"> gha</span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"> # new</span></span></code></pre></div>
-<p>This will enable the Docker Buildx cache for the build process in Github Actions. You can set <code>multiarch</code> to <code>false</code> if your CI pipeline shares the same architecture as your VPS, which was the case for me.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>You now have a fully automated deployment pipeline for your FastAPI app. A push to the <code>main</code> branch will trigger the workflow, that will build the Docker image, push it to the ECR registry, and deploy it to your VPS.</p>
-<p>Break free from the tyranny of manual deployments and expensive cloud services. Sleep like a baby and let Kamal handle your deployments.</p>
-<p>If you have any questions or feedback, please feel free to leave a comment below.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {Deploying a {FastAPI} App with {Kamal,} {AWS} {ECR,} and
-    {Github} {Actions}},
-  date = {2024-09-21},
-  url = {https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“Deploying a FastAPI App with Kamal, AWS
-ECR, and Github Actions.”</span> September 21, 2024. <a href="https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html">https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</a>.
-</div></div></section></div> ]]></description>
-  <category>fastapi</category>
-  <category>kamal</category>
-  <category>aws</category>
-  <guid>https://dylancastillo.co/posts/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.html</guid>
-  <pubDate>Sat, 21 Sep 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

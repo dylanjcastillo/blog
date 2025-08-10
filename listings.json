@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/langsmith-101.html",
       "/posts/synthetic-data-rag.html",
       "/posts/react-agent-langgraph.html",
       "/posts/agentic-workflows-langgraph.html",
