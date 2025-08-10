@@ -278,7 +278,7 @@ Subscribe to my newsletter
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>As usual, you should start by importing the necessary libraries:</p>
-<div id="cell-4" class="cell" data-execution_count="1">
+<div id="cell-3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
@@ -313,7 +313,7 @@ Subscribe to my newsletter
 <section id="using-traceable" class="level3">
 <h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
 <p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
@@ -346,7 +346,7 @@ Subscribe to my newsletter
 <section id="using-a-trace-context-manager" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
 <p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
-<div id="cell-12" class="cell" data-execution_count="3">
+<div id="cell-11" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
@@ -377,7 +377,7 @@ Subscribe to my newsletter
 <section id="using-a-wrapped-client" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
 <p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
-<div id="cell-15" class="cell" data-execution_count="4">
+<div id="cell-14" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
@@ -410,7 +410,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="manually-creating-traces-with-runtree">Manually creating traces with <code>RunTree</code></h3>
 <p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
 <p>Here’s the <code>RunTree</code> version of the previous example:</p>
-<div id="cell-18" class="cell" data-execution_count="5">
+<div id="cell-17" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
@@ -476,7 +476,7 @@ Subscribe to my newsletter
 <p>LangSmith lets you evaluate your LLM pipelines by providing you with a way to upload evaluation datasets, define evaluation metrics, and view the results of your experiments.</p>
 <p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
 <p>You should start by creating a dataset on LangSmith:</p>
-<div id="cell-23" class="cell" data-execution_count="6">
+<div id="cell-22" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>examples <span class="op">=</span> [</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    {<span class="st">"inputs"</span>: {<span class="st">"question"</span>: d[<span class="st">"problem"</span>]}, <span class="st">"outputs"</span>: {<span class="st">"answer"</span>: <span class="bu">int</span>(d[<span class="st">"answer"</span>])}}</span>
@@ -506,7 +506,7 @@ Subscribe to my newsletter
 </figure>
 </div>
 <p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
-<div id="cell-25" class="cell" data-execution_count="7">
+<div id="cell-24" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> Response(BaseModel):</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    answer: <span class="bu">int</span> <span class="op">=</span> Field(</span>
@@ -537,14 +537,14 @@ Subscribe to my newsletter
 </div>
 <p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
 <p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
-<div id="cell-27" class="cell" data-execution_count="8">
+<div id="cell-26" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
 <p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
 <p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
-<div id="cell-29" class="cell" data-execution_count="9">
+<div id="cell-28" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
 <span id="cb12-2"><a href="#cb12-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3"></a>    clarity: <span class="bu">int</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The clarity of the explanation"</span>, ge<span class="op">=</span><span class="dv">1</span>, le<span class="op">=</span><span class="dv">5</span>)</span>
@@ -563,7 +563,7 @@ Subscribe to my newsletter
 </div>
 <p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
 <p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
-<div id="cell-31" class="cell" data-execution_count="10">
+<div id="cell-30" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    response <span class="op">=</span> get_response(inputs[<span class="st">"question"</span>])</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    <span class="cf">return</span> response.model_dump()</span>

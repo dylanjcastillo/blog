@@ -70,7 +70,7 @@ font-style: inherit;">uv</span> add langchain langchain-openai langsmith openai 
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>As usual, you should start by importing the necessary libraries:</p>
-<div id="cell-4" class="cell" data-execution_count="1">
+<div id="cell-3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> datasets <span class="im" style="color: #00769E;
@@ -141,7 +141,7 @@ font-style: inherit;">import</span> BaseModel, Field</span>
 <section id="using-traceable" class="level3">
 <h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
 <p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> OpenAI()</span>
@@ -248,7 +248,7 @@ font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
 <section id="using-a-trace-context-manager" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
 <p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
-<div id="cell-12" class="cell" data-execution_count="3">
+<div id="cell-11" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> OpenAI()</span>
@@ -364,7 +364,7 @@ font-style: inherit;">"output"</span>: output})</span></code></pre></div>
 <section id="using-a-wrapped-client" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
 <p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
-<div id="cell-15" class="cell" data-execution_count="4">
+<div id="cell-14" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> wrap_openai(OpenAI())  <span class="co" style="color: #5E5E5E;
@@ -469,7 +469,7 @@ font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
 <h3 class="anchored" data-anchor-id="manually-creating-traces-with-runtree">Manually creating traces with <code>RunTree</code></h3>
 <p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
 <p>Here’s the <code>RunTree</code> version of the previous example:</p>
-<div id="cell-18" class="cell" data-execution_count="5">
+<div id="cell-17" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">client <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> OpenAI()</span>
@@ -640,7 +640,7 @@ font-style: inherit;">"Who are you?"</span>)</span></code></pre></div>
 <p>LangSmith lets you evaluate your LLM pipelines by providing you with a way to upload evaluation datasets, define evaluation metrics, and view the results of your experiments.</p>
 <p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
 <p>You should start by creating a dataset on LangSmith:</p>
-<div id="cell-23" class="cell" data-execution_count="6">
+<div id="cell-22" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">ds <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> load_dataset(<span class="st" style="color: #20794D;
@@ -743,7 +743,7 @@ font-style: inherit;">pass</span></span></code></pre></div>
 </figure>
 </div>
 <p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
-<div id="cell-25" class="cell" data-execution_count="7">
+<div id="cell-24" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -867,7 +867,7 @@ font-style: inherit;">"Failed to get a valid response"</span>)</span></code></pr
 </div>
 <p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
 <p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
-<div id="cell-27" class="cell" data-execution_count="8">
+<div id="cell-26" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -896,7 +896,7 @@ font-style: inherit;">"answer"</span>]</span></code></pre></div>
 <p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
 <p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
 <p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
-<div id="cell-29" class="cell" data-execution_count="9">
+<div id="cell-28" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -980,7 +980,7 @@ font-style: inherit;">return</span> response.clarity</span></code></pre></div>
 </div>
 <p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
 <p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
-<div id="cell-31" class="cell" data-execution_count="10">
+<div id="cell-30" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
