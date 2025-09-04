@@ -19,7 +19,7 @@ I'm Dylan – I'm an independent [AI consultant](https://iwanalabs.com). I've wo
 
 I've delivered successful projects for large organizations like [Deliveroo](https://www.deliveroo.com/), [Boston Consulting Group (BCG)](https://www.bcg.com/), and [the Olympics](https://www.olympics.com/) and startups such as [REMATIQ](https://www.rematiq.com/) or [Neurolabs](https://www.neurolabs.ai/). You can read testimonials from some of these projects on my [LinkedIn](https://www.linkedin.com/in/dylanjcastillo/).
 
-In my free time, I like working on random side projects (open source, personal, or otherwise). Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [leaders at Zapier and HubSpot](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), and reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie).
+In my free time, I like working on [random side projects](https://dylancastillo.co/projects). Some of them have been featured in [The Economist](https://www.economist.com/business/2023/02/28/investors-are-going-nuts-for-chatgpt-ish-artificial-intelligence), praised by the [Zapier and HubSpot executives](https://www.youtube.com/watch?v=0Sz-Nmi_5xg&t=1432s), or reached hundreds of stars on [GitHub](https://github.com/dylanjcastillo/shell-genie).
 
 I also write regularly about topics I'm interested in. I mostly cover technical subjects, such as data science and machine learning, but every once in a while I write about topics like financial independence or my end of year reviews.
 
