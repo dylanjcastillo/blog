@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -281,20 +286,20 @@ Subscribe to my newsletter
 <li>Start a Jupyter notebook.</li>
 </ol>
 <p>If you’re using <code>venv</code>, then you need to run these commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="bu">source</span> venv/bin/activate</span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="ex">jupyter</span> notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="ex">jupyter</span> notebook</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you’re using <code>conda</code>, then you need to run these commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/nlp-snippets.git</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="ex">conda</span> create <span class="at">--name</span> venv</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="ex">conda</span> activate venv</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="ex">jupyter</span> notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="ex">jupyter</span> notebook</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, open Jupyter Notebook. Then, create a new notebook in the root folder and set its name to <code>clustering_word2vec.ipynb</code>.</p>
 <p>By now, your project structure should look like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">nlp-snippets/</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">nlp-snippets/</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="ex">│</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="ex">├──</span> clustering/</span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="ex">│</span></span>
@@ -309,7 +314,7 @@ Subscribe to my newsletter
 <span id="cb3-13"><a href="#cb3-13"></a><span class="ex">├──</span> clustering_word2vec.ipynb</span>
 <span id="cb3-14"><a href="#cb3-14"></a><span class="ex">├──</span> LICENSE</span>
 <span id="cb3-15"><a href="#cb3-15"></a><span class="ex">├──</span> README.md</span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="ex">└──</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="ex">└──</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is your project’s structure. It includes these directories and files:</p>
 <ul>
 <li><code>clustering/</code>: Examples of clustering text data using bag-of-words, training a word2vec model, and using a pretrained fastText embeddings.</li>
@@ -327,7 +332,7 @@ Subscribe to my newsletter
 <section id="import-the-required-libraries" class="level3">
 <h3 class="anchored" data-anchor-id="import-the-required-libraries">Import the Required Libraries</h3>
 <p>Once you finish setting up your local environment, it’s time to start writing code in your notebook. Open <code>clustering_word2vec.ipynb</code>, and copy the following code in the first cell:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> os</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> random</span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="im">import</span> re</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="im">import</span> string</span>
@@ -350,7 +355,7 @@ Subscribe to my newsletter
 <span id="cb4-21"><a href="#cb4-21"></a>SEED <span class="op">=</span> <span class="dv">42</span></span>
 <span id="cb4-22"><a href="#cb4-22"></a>random.seed(SEED)</span>
 <span id="cb4-23"><a href="#cb4-23"></a>os.environ[<span class="st">"PYTHONHASHSEED"</span>] <span class="op">=</span> <span class="bu">str</span>(SEED)</span>
-<span id="cb4-24"><a href="#cb4-24"></a>np.random.seed(SEED)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-24"><a href="#cb4-24"></a>np.random.seed(SEED)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the libraries you need for the sample project. Here’s what you do with each of them:</p>
 <ul>
 <li><code>os</code> and <code>random</code> help you define a random seed to make the code deterministically reproducible.</li>
@@ -367,7 +372,7 @@ Subscribe to my newsletter
 <section id="clean-and-tokenize-data" class="level3">
 <h3 class="anchored" data-anchor-id="clean-and-tokenize-data">Clean and Tokenize Data</h3>
 <p>After you import the required libraries, you need to read and preprocess the data you’ll use in your clustering algorithm. The preprocessing consists of cleaning and tokenizing the data. To do that, copy the following function in a new cell in your notebook:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> clean_text(text, tokenizer, stopwords):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> clean_text(text, tokenizer, stopwords):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">"""Pre-process text and generate tokens</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="co">    Args:</span></span>
@@ -389,7 +394,7 @@ Subscribe to my newsletter
 <span id="cb5-20"><a href="#cb5-20"></a>    tokens <span class="op">=</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> <span class="kw">not</span> t <span class="kw">in</span> stopwords]  <span class="co"># Remove stopwords</span></span>
 <span id="cb5-21"><a href="#cb5-21"></a>    tokens <span class="op">=</span> [<span class="st">""</span> <span class="cf">if</span> t.isdigit() <span class="cf">else</span> t <span class="cf">for</span> t <span class="kw">in</span> tokens]  <span class="co"># Remove digits</span></span>
 <span id="cb5-22"><a href="#cb5-22"></a>    tokens <span class="op">=</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> <span class="bu">len</span>(t) <span class="op">&gt;</span> <span class="dv">1</span>]  <span class="co"># Remove short tokens</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a>    <span class="cf">return</span> tokens</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-23"><a href="#cb5-23"></a>    <span class="cf">return</span> tokens</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code cleans and tokenizes a <code>text</code> input, using a predefined <code>tokenizer</code> and a list of <code>stopwords</code>. It helps you perform these operations:</p>
 <ol type="1">
 <li><strong>Line 10:</strong> Transform the input into a string and lowercase it.</li>
@@ -401,7 +406,7 @@ Subscribe to my newsletter
 <li><strong>Lines 21-22:</strong> Remove digits and tokens whose length is too short.</li>
 </ol>
 <p>Then, in the next cell, copy the following code to read the data and apply that function to the text columns:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>custom_stopwords <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">"english"</span>) <span class="op">+</span> [<span class="st">"news"</span>, <span class="st">"new"</span>, <span class="st">"top"</span>])</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>custom_stopwords <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">"english"</span>) <span class="op">+</span> [<span class="st">"news"</span>, <span class="st">"new"</span>, <span class="st">"top"</span>])</span>
 <span id="cb6-2"><a href="#cb6-2"></a>text_columns <span class="op">=</span> [<span class="st">"title"</span>, <span class="st">"description"</span>, <span class="st">"content"</span>]</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a>df_raw <span class="op">=</span> pd.read_csv(<span class="st">"data/news_data.csv"</span>)</span>
@@ -426,12 +431,12 @@ Subscribe to my newsletter
 <span id="cb6-23"><a href="#cb6-23"></a>tokenized_docs <span class="op">=</span> df[<span class="st">"tokens"</span>].values</span>
 <span id="cb6-24"><a href="#cb6-24"></a></span>
 <span id="cb6-25"><a href="#cb6-25"></a><span class="bu">print</span>(<span class="ss">f"Original dataframe: </span><span class="sc">{</span>df_raw<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="bu">print</span>(<span class="ss">f"Pre-processed dataframe: </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="bu">print</span>(<span class="ss">f"Pre-processed dataframe: </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is how you read and preprocess the data. This code applies the cleaning function you defined earlier, removes duplicates and nulls, and drops irrelevant columns.</p>
 <p>You apply these steps to a new data frame (<code>df</code>). It contains a column with the raw documents called <code>text</code> and another one with the preprocessed documents called <code>tokens</code>. You save the values of those columns into two variables, <code>docs</code> and <code>tokenized_docs</code>, to use in the next code snippets.</p>
 <p>If you execute the two cells you defined, then you should get the following output:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">Original</span> dataframe: <span class="er">(</span><span class="ex">10437,</span> 15<span class="kw">)</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">Pre-processed</span> dataframe: <span class="er">(</span><span class="ex">9882,</span> 2<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">Original</span> dataframe: <span class="er">(</span><span class="ex">10437,</span> 15<span class="kw">)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">Pre-processed</span> dataframe: <span class="er">(</span><span class="ex">9882,</span> 2<span class="kw">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, you’ll create document vectors using Word2Vec.</p>
 </section>
 <section id="generate-document-vectors" class="level3">
@@ -445,7 +450,7 @@ Subscribe to my newsletter
 <section id="train-word2vec-model" class="level4">
 <h4 class="anchored" data-anchor-id="train-word2vec-model">Train Word2Vec Model</h4>
 <p>The following code will help you train a Word2Vec model. Copy it into a new cell in your notebook:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> Word2Vec(sentences<span class="op">=</span>tokenized_docs, vector_size<span class="op">=</span><span class="dv">100</span>, workers<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span>SEED)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> Word2Vec(sentences<span class="op">=</span>tokenized_docs, vector_size<span class="op">=</span><span class="dv">100</span>, workers<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span>SEED)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You use this code to train a Word2Vec model based on your tokenized documents. For this example, you specified the following parameters in the <code>Word2Vec</code> class:</p>
 <ul>
 <li><code>sentences</code> expects a list of lists with the tokenized documents.</li>
@@ -456,12 +461,12 @@ Subscribe to my newsletter
 <p>There are other parameters you can tune when training the Word2Vec model. See <a href="https://radimrehurek.com/gensim/models/word2vec.html#gensim.models.word2vec.Word2Vec">gensim’s documentation</a> if you’d like to learn more about them.</p>
 <p><strong>Note:</strong> In many cases, you might want to use a pre-trained model instead of training one yourself. If that’s the case, gensim provides you with an easy way to access some of the <a href="https://github.com/RaRe-Technologies/gensim-data#models">most popular pre-trained word embeddings</a>.</p>
 <p>You can load a pre-trained Word2Vec model as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>wv <span class="op">=</span> api.load(<span class="st">'word2vec-google-news-300'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>wv <span class="op">=</span> api.load(<span class="st">'word2vec-google-news-300'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>One last thing, if you’re following this tutorial and decide to use a pre-trained model, you’ll need to replace <code>model.wv</code> by <code>wv</code> in the code snippets from here on. Otherwise, you’ll get an error.</p>
 <p>Next, run the cell you just created in your notebook. It might take a couple of minutes. After it’s done, you can validate that the results make sense by <a href="https://machinelearningmastery.com/develop-word-embeddings-python-gensim/">plotting the vectors</a> or reviewing the similarity results for relevant words. You can do the latter by copying and running this code in a cell in your notebook:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>model.wv.most_similar(<span class="st">"trump"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>model.wv.most_similar(<span class="st">"trump"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you run this code, then you’ll get this output:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>[(<span class="st">'trumps'</span>, <span class="fl">0.988541841506958</span>),</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>[(<span class="st">'trumps'</span>, <span class="fl">0.988541841506958</span>),</span>
 <span id="cb11-2"><a href="#cb11-2"></a> (<span class="st">'president'</span>, <span class="fl">0.9746493697166443</span>),</span>
 <span id="cb11-3"><a href="#cb11-3"></a> (<span class="st">'donald'</span>, <span class="fl">0.9274922013282776</span>),</span>
 <span id="cb11-4"><a href="#cb11-4"></a> (<span class="st">'ivanka'</span>, <span class="fl">0.9203903079032898</span>),</span>
@@ -470,7 +475,7 @@ Subscribe to my newsletter
 <span id="cb11-7"><a href="#cb11-7"></a> (<span class="st">'avlon'</span>, <span class="fl">0.9148306846618652</span>),</span>
 <span id="cb11-8"><a href="#cb11-8"></a> (<span class="st">'biden'</span>, <span class="fl">0.9146010279655457</span>),</span>
 <span id="cb11-9"><a href="#cb11-9"></a> (<span class="st">'breitbart'</span>, <span class="fl">0.9144087433815002</span>),</span>
-<span id="cb11-10"><a href="#cb11-10"></a> (<span class="st">'vice'</span>, <span class="fl">0.9067237973213196</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-10"><a href="#cb11-10"></a> (<span class="st">'vice'</span>, <span class="fl">0.9067237973213196</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That’s it! You’ve trained your Word2Vec model, now, you’ll use it to generate document vectors.</p>
 </section>
 <section id="create-document-vectors-from-word-embedding" class="level4">
@@ -478,7 +483,7 @@ Subscribe to my newsletter
 <p>Now you’ll generate document vectors using the Word2Vec model you trained. The idea is straightforward. From the Word2Vec model, you’ll get numerical vectors per word in a document, so you need to find a way of generating a single vector out of them.</p>
 <p>For <a href="https://arxiv.org/pdf/1607.00570.pdf">short texts</a>, a common approach is to use the <a href="https://stats.stackexchange.com/a/318891">average</a> of the vectors. There’s no clear consensus on what will work well for longer texts. Though, using a <a href="https://openreview.net/forum?id=SyK00v5xx">weighted average of the vectors</a> might help.</p>
 <p>The following code will help you create a vector per document by averaging its word vectors. Create a new cell in your notebook and copy this code there:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> vectorize(list_of_docs, model):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> vectorize(list_of_docs, model):</span>
 <span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">"""Generate vectors for list of documents using a Word Embedding</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a></span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="co">    Args:</span></span>
@@ -508,7 +513,7 @@ Subscribe to my newsletter
 <span id="cb12-28"><a href="#cb12-28"></a>    <span class="cf">return</span> features</span>
 <span id="cb12-29"><a href="#cb12-29"></a></span>
 <span id="cb12-30"><a href="#cb12-30"></a>vectorized_docs <span class="op">=</span> vectorize(tokenized_docs, model<span class="op">=</span>model)</span>
-<span id="cb12-31"><a href="#cb12-31"></a><span class="bu">len</span>(vectorized_docs), <span class="bu">len</span>(vectorized_docs[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-31"><a href="#cb12-31"></a><span class="bu">len</span>(vectorized_docs), <span class="bu">len</span>(vectorized_docs[<span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will get all the word vectors of each document and average them to generate a vector per each document. Here’s what’s happening there:</p>
 <ol type="1">
 <li>You define the <code>vectorize</code> function that takes a list of documents and a <code>gensim</code> model as input, and generates a feature vector per document as output.</li>
@@ -522,7 +527,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="cluster-documents-using-mini-batches-k-means">Cluster Documents Using (Mini-batches) K-means</h3>
 <p>To cluster the documents, you’ll use the <strong>Mini-batches K-means</strong> algorithm. This K-means variant uses random input data samples to reduce the time required during training. The upside is that it shares the same objective function with the original algorithm, so, in practice, the results are <a href="https://scikit-learn.org/stable/modules/clustering.html#mini-batch-k-means">just a bit worse than K-means</a>.</p>
 <p>In the code snippet below, you can see the function you’ll use to create the clusters using Mini-batches K-means. Create a new cell in your notebook, and copy the following code there:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> mbkmeans_clusters(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> mbkmeans_clusters(</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    X,</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    k,</span>
 <span id="cb13-4"><a href="#cb13-4"></a>    mb,</span>
@@ -566,7 +571,7 @@ Subscribe to my newsletter
 <span id="cb13-42"><a href="#cb13-42"></a>            <span class="bu">print</span>(</span>
 <span id="cb13-43"><a href="#cb13-43"></a>                <span class="ss">f"    Cluster </span><span class="sc">{</span>s[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">: Size:</span><span class="sc">{</span>s[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> | Avg:</span><span class="sc">{</span>s[<span class="dv">2</span>]<span class="sc">:.2f}</span><span class="ss"> | Min:</span><span class="sc">{</span>s[<span class="dv">3</span>]<span class="sc">:.2f}</span><span class="ss"> | Max: </span><span class="sc">{</span>s[<span class="dv">4</span>]<span class="sc">:.2f}</span><span class="ss">"</span></span>
 <span id="cb13-44"><a href="#cb13-44"></a>            )</span>
-<span id="cb13-45"><a href="#cb13-45"></a>    <span class="cf">return</span> km, km.labels_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-45"><a href="#cb13-45"></a>    <span class="cf">return</span> km, km.labels_</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This function creates the clusters using the Mini-batches K-means algorithm. It takes the following arguments:</p>
 <ul>
 <li><code>**X**</code>: Matrix of features. In this case, it’s your vectorized documents.</li>
@@ -580,7 +585,7 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="definition-of-clusters">Definition of Clusters</h4>
 <p>Now, you need to execute <code>mbkmean_clusters</code> providing it with the vectorized documents and the number of clusters. You’ll print the Silhouette Coefficients per cluster to review the quality of your clusters.</p>
 <p>Create a new cell and copy this code there:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>clustering, cluster_labels <span class="op">=</span> mbkmeans_clusters(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>clustering, cluster_labels <span class="op">=</span> mbkmeans_clusters(</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    X<span class="op">=</span>vectorized_docs,</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    k<span class="op">=</span><span class="dv">50</span>,</span>
 <span id="cb14-4"><a href="#cb14-4"></a>    mb<span class="op">=</span><span class="dv">500</span>,</span>
@@ -590,7 +595,7 @@ Subscribe to my newsletter
 <span id="cb14-8"><a href="#cb14-8"></a>    <span class="st">"text"</span>: docs,</span>
 <span id="cb14-9"><a href="#cb14-9"></a>    <span class="st">"tokens"</span>: [<span class="st">" "</span>.join(text) <span class="cf">for</span> text <span class="kw">in</span> tokenized_docs],</span>
 <span id="cb14-10"><a href="#cb14-10"></a>    <span class="st">"cluster"</span>: cluster_labels</span>
-<span id="cb14-11"><a href="#cb14-11"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-11"><a href="#cb14-11"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will fit the clustering model, print the Silhouette Coefficient per cluster, and return the fitted model and the labels per cluster. It’ll also create a data frame you can use to review the results.</p>
 <p>There are a few things to consider when setting the input arguments:</p>
 <ul>
@@ -601,7 +606,7 @@ Subscribe to my newsletter
 <p>You could use metrics like the Silhouette Coefficient for the quantitative evaluation of the number of clusters. This coefficient is an evaluation metric frequently used in problems where ground truth labels are unknown. It’s calculated using the mean intra-cluster distance and the mean nearest-cluster distance and goes from -1 to 1. Well-defined clusters result in positive values of this coefficient, while incorrect clusters will result in negative values. If you’d like to learn more about it, look at <a href="https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient">scikit-learn’s documentation</a>.</p>
 <p>The qualitative part generally requires you to have domain knowledge of the subject matter so you can sense-check your clustering algorithm’s results. In the next section, I’ll show you two approaches you can use to check your results qualitatively.</p>
 <p>After executing the cell you just created, the output should look like this:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">For</span> n_clusters = 50</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">For</span> n_clusters = 50</span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="ex">Silhouette</span> coefficient: 0.11</span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="ex">Inertia:3568.342791047967</span></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="ex">Silhouette</span> values:</span>
@@ -616,7 +621,7 @@ Subscribe to my newsletter
 <span id="cb15-13"><a href="#cb15-13"></a>    <span class="ex">Cluster</span> 47: Size:53 <span class="kw">|</span> <span class="ex">Avg:0.23</span> <span class="kw">|</span> <span class="ex">Min:0.01</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.45</span>
 <span id="cb15-14"><a href="#cb15-14"></a>    <span class="ex">Cluster</span> 22: Size:78 <span class="kw">|</span> <span class="ex">Avg:0.22</span> <span class="kw">|</span> <span class="ex">Min:-0.01</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.43</span>
 <span id="cb15-15"><a href="#cb15-15"></a>    <span class="ex">Cluster</span> 45: Size:38 <span class="kw">|</span> <span class="ex">Avg:0.21</span> <span class="kw">|</span> <span class="ex">Min:-0.07</span> <span class="kw">|</span> <span class="ex">Max:</span> 0.41</span>
-<span id="cb15-16"><a href="#cb15-16"></a><span class="ex">...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="ex">...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is the output of your clustering algorithm. The sizes and Silhouette Coefficients per cluster are the most relevant metrics. The clusters are printed by the value of the Silhouette coefficient in descending order. A higher score means denser – and thus better – clusters. In this case, you can see that clusters 29, 35, and 37 seem to be the top ones.</p>
 <p>Next, you’ll learn how to check what’s in each cluster.</p>
 </section>
@@ -624,32 +629,32 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="qualitative-review-of-clusters">Qualitative Review of Clusters</h4>
 <p>There are a few ways you can qualitatively analyze the results. During the earlier sections, our approach resulted in vector representations of tokens and documents, and vectors of the clusters’ centroids. You can find the most representative tokens and documents to analyze the results by looking for the vectors closest to the clusters’ centroids.</p>
 <p>Here’s how you obtain the most representative tokens per cluster:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="bu">print</span>(<span class="st">"Most representative terms per cluster (based on centroids):"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="bu">print</span>(<span class="st">"Most representative terms per cluster (based on centroids):"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>):</span>
 <span id="cb16-3"><a href="#cb16-3"></a>    tokens_per_cluster <span class="op">=</span> <span class="st">""</span></span>
 <span id="cb16-4"><a href="#cb16-4"></a>    most_representative <span class="op">=</span> model.wv.most_similar(positive<span class="op">=</span>[clustering.cluster_centers_[i]], topn<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb16-5"><a href="#cb16-5"></a>    <span class="cf">for</span> t <span class="kw">in</span> most_representative:</span>
 <span id="cb16-6"><a href="#cb16-6"></a>        tokens_per_cluster <span class="op">+=</span> <span class="ss">f"</span><span class="sc">{</span>t[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> "</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a>    <span class="bu">print</span>(<span class="ss">f"Cluster </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>tokens_per_cluster<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-7"><a href="#cb16-7"></a>    <span class="bu">print</span>(<span class="ss">f"Cluster </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>tokens_per_cluster<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For the top clusters we identified earlier – 29, 35, and 37 – these are the results:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">Cluster</span> 29: noaa sharpie claim assertions forecasters</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">Cluster</span> 29: noaa sharpie claim assertions forecasters</span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="ex">Cluster</span> 35: eye lilinow path halts projected</span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="ex">Cluster</span> 37: cnnpolitics complaint clinton pences whistleblower</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="ex">Cluster</span> 37: cnnpolitics complaint clinton pences whistleblower</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, we can do the same analysis with documents instead of tokens. This is how you find the most representative documents for cluster 29:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>test_cluster <span class="op">=</span> <span class="dv">29</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>test_cluster <span class="op">=</span> <span class="dv">29</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>most_representative_docs <span class="op">=</span> np.argsort(</span>
 <span id="cb18-3"><a href="#cb18-3"></a>    np.linalg.norm(vectorized_docs <span class="op">-</span> clustering.cluster_centers_[test_cluster], axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb18-4"><a href="#cb18-4"></a>)</span>
 <span id="cb18-5"><a href="#cb18-5"></a><span class="cf">for</span> d <span class="kw">in</span> most_representative_docs[:<span class="dv">3</span>]:</span>
 <span id="cb18-6"><a href="#cb18-6"></a>    <span class="bu">print</span>(docs[d])</span>
-<span id="cb18-7"><a href="#cb18-7"></a>    <span class="bu">print</span>(<span class="st">"-------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-7"><a href="#cb18-7"></a>    <span class="bu">print</span>(<span class="st">"-------------"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>And these are the 3 most representative documents in that cluster:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">Dorian,</span> Comey and Debra Messing: What Trump tweeted on Labor Day weekend <span class="kw">|</span> <span class="ex">President</span> Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President<span class="st">'s more than 120 tweets are any indication, he had more than just the storm on his mind. | Washington (CNN)President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President'</span>s more than 120 tweets are any indication, he had more than just the storm on hi… [+3027 chars]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">Dorian,</span> Comey and Debra Messing: What Trump tweeted on Labor Day weekend <span class="kw">|</span> <span class="ex">President</span> Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President<span class="st">'s more than 120 tweets are any indication, he had more than just the storm on his mind. | Washington (CNN)President Donald Trump axed his visit to Poland over the weekend to monitor Hurricane Dorian from Camp David with emergency management staff, but if the President'</span>s more than 120 tweets are any indication, he had more than just the storm on hi… [+3027 chars]</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="ex">-------------</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="ex">Ross</span> Must Resign If Report He Threatened NOAA Officials Is True: Democrat <span class="kw">|</span> <span class="ex">As</span> President Donald Trump claimed Hurricane Dorian could hit Alabama, the National Weather Service tweeted to correct the rumors. <span class="kw">|</span> <span class="ex">Commerce</span> Secretary Wilbur Ross is facing calls to resign over a report alleging that he threatened to fire top officials at NOAA for a tweet disputing President Donald Trump<span class="st">'s claim that Hurricane Dorian would hit Alabama.</span></span>
 <span id="cb19-4"><a href="#cb19-4"></a><span class="st">"If that story is true, and I don'</span>t… [+3828 chars]</span>
 <span id="cb19-5"><a href="#cb19-5"></a><span class="ex">-------------</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="ex">Federal</span> weather workers are furious at the NOAA<span class="st">'s '</span>utterly disgusting<span class="st">' statement defending Trump'</span>s claim Hurricane Dorian would hit Alabama <span class="kw">|</span> <span class="ex">Federal</span> weather workers have reacted furiously to the National Oceanic and Atmospheric Administration<span class="st">'s (NOAA) defence of US President Donald Trump'</span>s repeated assertions that Hurricane Dorian was set to hit Alabama. <span class="st">"Never ever before has their management thr… | Federal weather workers have reacted furiously to the National Oceanic and Atmospheric Administration's (NOAA) defence of US President Donald Trump's repeated assertions that Hurricane Dorian was set to hit Alabama, saying they have been "</span>thrown under the bus… [+3510 chars]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="ex">Federal</span> weather workers are furious at the NOAA<span class="st">'s '</span>utterly disgusting<span class="st">' statement defending Trump'</span>s claim Hurricane Dorian would hit Alabama <span class="kw">|</span> <span class="ex">Federal</span> weather workers have reacted furiously to the National Oceanic and Atmospheric Administration<span class="st">'s (NOAA) defence of US President Donald Trump'</span>s repeated assertions that Hurricane Dorian was set to hit Alabama. <span class="st">"Never ever before has their management thr… | Federal weather workers have reacted furiously to the National Oceanic and Atmospheric Administration's (NOAA) defence of US President Donald Trump's repeated assertions that Hurricane Dorian was set to hit Alabama, saying they have been "</span>thrown under the bus… [+3510 chars]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Most of the results seem to be related to a dispute between Donald Trump and the National Oceanic and Atmospheric Agency (NOAA). It was a famous controversy that people referred to as <a href="https://en.wikipedia.org/wiki/Hurricane_Dorian%E2%80%93Alabama_controversy">Sharpiegate</a>.</p>
 <p>You could also explore other approaches like generating word frequencies per cluster or reviewing random samples of documents per cluster.</p>
 </section>
@@ -744,13 +749,14 @@ and K-Means.”</span> January 18, 2021. <a href="https://dylancastillo.co/posts
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

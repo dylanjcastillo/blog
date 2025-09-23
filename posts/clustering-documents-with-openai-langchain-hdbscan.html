@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -272,11 +277,11 @@ Subscribe to my newsletter
 <ol type="1">
 <li>Create a virtual environment using <code>venv</code>:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="1">
 <li>Create a <code>requirements.txt</code> file that contains the following packages:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">hdbscan</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">hdbscan</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="ex">openai</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="ex">pandas</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="ex">numpy</span></span>
@@ -284,16 +289,16 @@ Subscribe to my newsletter
 <span id="cb2-6"><a href="#cb2-6"></a><span class="ex">tiktoken</span></span>
 <span id="cb2-7"><a href="#cb2-7"></a><span class="ex">notebook</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a><span class="ex">plotly</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="ex">umap-learn</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="ex">umap-learn</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li>Activate the virtual environment and install the packages:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li>Create a file called <code>.env</code>, and add the your OpenAI key:</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>your <span class="ex">key</span><span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>your <span class="ex">key</span><span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="5" type="1">
 <li>Create an empty notebook file. For the rest of this tutorial, you’ll work on it.</li>
 </ol>
@@ -310,7 +315,7 @@ Subscribe to my newsletter
 <section id="import-the-required-packages" class="level3">
 <h3 class="anchored" data-anchor-id="import-the-required-packages">Import the Required Packages</h3>
 <p>Start by importing the required Python libraries. Copy the following code in your notebook:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> os</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="im">import</span> hdbscan</span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -321,7 +326,7 @@ Subscribe to my newsletter
 <span id="cb5-9"><a href="#cb5-9"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
 <span id="cb5-10"><a href="#cb5-10"></a><span class="im">from</span> umap <span class="im">import</span> UMAP</span>
 <span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-12"><a href="#cb5-12"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code imports the libraries you’ll use throughout the tutorial. Here’s the purpose of each one:</p>
 <ul>
 <li><strong><code>os</code></strong> helps you read the environment variables.</li>
@@ -335,27 +340,27 @@ Subscribe to my newsletter
 <section id="download-the-data-and-generate-embeddings" class="level3">
 <h3 class="anchored" data-anchor-id="download-the-data-and-generate-embeddings">Download the data and generate embeddings</h3>
 <p>Download, read these <a href="https://www.kaggle.com/datasets/dylanjcastillo/news-headlines-2024/">articles</a>, and generate documents you’ll use to create the embeddings:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"news_data_dedup.csv"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"news_data_dedup.csv"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>docs <span class="op">=</span> [</span>
 <span id="cb6-3"><a href="#cb6-3"></a>    <span class="ss">f"</span><span class="sc">{</span>title<span class="sc">}</span><span class="ch">\n</span><span class="sc">{</span>description<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>    <span class="cf">for</span> title, description <span class="kw">in</span> <span class="bu">zip</span>(df.title, df.description)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-5"><a href="#cb6-5"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, initialize the OpenAI client and generate the embeddings:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb7-2"><a href="#cb7-2"></a>response <span class="op">=</span> client.embeddings.create(<span class="bu">input</span><span class="op">=</span>docs, model<span class="op">=</span><span class="st">"text-embedding-3-small"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>embeddings <span class="op">=</span> [np.array(x.embedding) <span class="cf">for</span> x <span class="kw">in</span> response.data]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3"></a>embeddings <span class="op">=</span> [np.array(x.embedding) <span class="cf">for</span> x <span class="kw">in</span> response.data]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="cluster-documents" class="level3">
 <h3 class="anchored" data-anchor-id="cluster-documents">Cluster documents</h3>
 <p>Once you have the embeddings, you can cluster them using <code>hdbscan</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>hdb <span class="op">=</span> hdbscan.HDBSCAN(min_samples<span class="op">=</span><span class="dv">3</span>, min_cluster_size<span class="op">=</span><span class="dv">3</span>).fit(embeddings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>hdb <span class="op">=</span> hdbscan.HDBSCAN(min_samples<span class="op">=</span><span class="dv">3</span>, min_cluster_size<span class="op">=</span><span class="dv">3</span>).fit(embeddings)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will generate clusters using the embeddings generated, and then create a DataFrame with the results. Itfits the <code>hdbscan</code> algorithm. In this case, I set <code>min_samples</code> and <code>min_cluster_size</code> to 3, but depending on your data this may change. Check <a href="https://hdbscan.readthedocs.io/en/latest/parameter_selection.html">HDBSCAN’s documentation</a> to learn more about these parameters.</p>
 <p>Next, you’ll create topic titles for each cluster based on their contents.</p>
 </section>
 <section id="visualize-the-clusters" class="level3">
 <h3 class="anchored" data-anchor-id="visualize-the-clusters">Visualize the clusters</h3>
 <p>After you’ve generated the clusters, you can visualize them using <a href="https://pair-code.github.io/understanding-umap/">UMAP</a>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>umap <span class="op">=</span> UMAP(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">42</span>, n_neighbors<span class="op">=</span><span class="dv">80</span>, min_dist<span class="op">=</span><span class="fl">0.1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>umap <span class="op">=</span> UMAP(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">42</span>, n_neighbors<span class="op">=</span><span class="dv">80</span>, min_dist<span class="op">=</span><span class="fl">0.1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a>df_umap <span class="op">=</span> (</span>
 <span id="cb9-4"><a href="#cb9-4"></a>    pd.DataFrame(umap.fit_transform(np.array(embeddings)), columns<span class="op">=</span>[<span class="st">'x'</span>, <span class="st">'y'</span>])</span>
@@ -365,7 +370,7 @@ Subscribe to my newsletter
 <span id="cb9-8"><a href="#cb9-8"></a>)</span>
 <span id="cb9-9"><a href="#cb9-9"></a></span>
 <span id="cb9-10"><a href="#cb9-10"></a>fig <span class="op">=</span> px.scatter(df_umap, x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>, color<span class="op">=</span><span class="st">'cluster'</span>)</span>
-<span id="cb9-11"><a href="#cb9-11"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-11"><a href="#cb9-11"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should get something similar to this graph:</p>
 <p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clustering-documents-with-openai-langchain-hdbscan/image.png" class="img-fluid"></a></p>
 <p>This will give you a sense of how good are the clusters generated.</p>
@@ -373,7 +378,7 @@ Subscribe to my newsletter
 <section id="create-a-topic-title-per-cluster" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-topic-title-per-cluster">Create a Topic Title per Cluster</h3>
 <p>For each cluster, you’ll generate a topic title summarizing the articles in that cluster. Copy the following code to your notebook:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>df[<span class="st">"cluster_name"</span>] <span class="op">=</span> <span class="st">"Uncategorized"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>df[<span class="st">"cluster_name"</span>] <span class="op">=</span> <span class="st">"Uncategorized"</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="kw">def</span> generate_topic_titles():</span>
 <span id="cb10-4"><a href="#cb10-4"></a>    system_message <span class="op">=</span> <span class="st">"You're an expert journalist. You're helping me write short but compelling topic titles for groups of news articles."</span></span>
@@ -398,13 +403,13 @@ Subscribe to my newsletter
 <span id="cb10-23"><a href="#cb10-23"></a>        )</span>
 <span id="cb10-24"><a href="#cb10-24"></a></span>
 <span id="cb10-25"><a href="#cb10-25"></a>        topic_title <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb10-26"><a href="#cb10-26"></a>        df.loc[df.cluster <span class="op">==</span> c, <span class="st">"cluster_name"</span>] <span class="op">=</span> topic_title</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-26"><a href="#cb10-26"></a>        df.loc[df.cluster <span class="op">==</span> c, <span class="st">"cluster_name"</span>] <span class="op">=</span> topic_title</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code takes all the articles per cluster and uses <code>gpt-3.5-turbo</code> to generate a relevant topic title from them. Itgoes through each cluster, takes the articles in it, and makes a prompt using that to generate a topic title for that cluster.</p>
 <p>Finally, you can check the resulting clusters and topic titles, as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>c <span class="op">=</span> <span class="dv">6</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>c <span class="op">=</span> <span class="dv">6</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="cf">with</span> pd.option_context(<span class="st">"display.max_colwidth"</span>, <span class="va">None</span>):</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    <span class="bu">print</span>(df.query(<span class="ss">f"cluster == '</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'"</span>).topic_title.values[<span class="dv">0</span>])</span>
-<span id="cb11-4"><a href="#cb11-4"></a>    display(df.query(<span class="ss">f"cluster == '</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'"</span>).drop(columns<span class="op">=</span>[<span class="st">"topic_title"</span>]).head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4"></a>    display(df.query(<span class="ss">f"cluster == '</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'"</span>).drop(columns<span class="op">=</span>[<span class="st">"topic_title"</span>]).head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In my case, running this code produces the following articles and topic titles:</p>
 <p><a href="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clustering-documents-with-openai-langchain-hdbscan/image-1.png" class="img-fluid"></a></p>
 <p>All articles seem to be related to the topic title. Yay!</p>
@@ -481,13 +486,14 @@ Embeddings, HDBSCAN and UMAP.”</span> June 9, 2023. <a href="https://dylancast
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

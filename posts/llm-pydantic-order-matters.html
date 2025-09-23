@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -246,7 +251,7 @@ Subscribe to my newsletter
 <p>Suppose I have a physical, solid, equilateral triangle, and I make two cuts. The two cuts are from two parallel lines, and both cuts pass through the interior of the triangle. How many pieces are there after the cuts? Think step by step, and then put your answer in <strong>bold</strong> as a single integer (for example, <strong>0</strong>). If you don’t know, guess.</p>
 </blockquote>
 <p>Let’s say I write a simple system prompt and two Pydantic models to format the responses:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>system_prompt <span class="op">=</span> (</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>system_prompt <span class="op">=</span> (</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
@@ -258,14 +263,14 @@ Subscribe to my newsletter
 <span id="cb1-10"><a href="#cb1-10"></a></span>
 <span id="cb1-11"><a href="#cb1-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
 <span id="cb1-12"><a href="#cb1-12"></a>    answer: <span class="bu">str</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>    reasoning: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
 <p>Not sure? Well, you’re in luck! Let’s run some experiments to find out.</p>
 <section id="set-up-the-environment" class="level2">
 <h2 class="anchored" data-anchor-id="set-up-the-environment">Set up the environment</h2>
 <p>First, start by importing the necessary libraries:</p>
 <div id="cell-5" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> json</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> asyncio <span class="im">import</span> Semaphore</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
@@ -284,13 +289,13 @@ Subscribe to my newsletter
 <span id="cb2-17"><a href="#cb2-17"></a></span>
 <span id="cb2-18"><a href="#cb2-18"></a>load_dotenv()</span>
 <span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>client <span class="op">=</span> wrap_openai(AsyncOpenAI())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-20"><a href="#cb2-20"></a>client <span class="op">=</span> wrap_openai(AsyncOpenAI())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/11545ceb-70d3-4213-9f05-89891586b809/r?runtab=0">runs</a>.</p>
 <p>To run the experiment, you need some data. I ended up using a subset of the <a href="https://huggingface.co/datasets/livebench/reasoning">reasoning questions</a> from LiveBench. You can download it and save it in the <code>data</code> directory.</p>
 <p>Then, you can read it into a pandas <code>DataFrame</code>:</p>
 <div id="cell-7" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>data_dir <span class="op">=</span> Path().absolute().parent <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"live_bench"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>data_dir <span class="op">=</span> Path().absolute().parent <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"live_bench"</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>reasoning_dir <span class="op">=</span> data_dir <span class="op">/</span> <span class="st">"reasoning"</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>live_bench_json <span class="op">=</span> reasoning_dir <span class="op">/</span> <span class="st">"question.jsonl"</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
@@ -303,11 +308,11 @@ Subscribe to my newsletter
 <span id="cb3-11"><a href="#cb3-11"></a>    )</span>
 <span id="cb3-12"><a href="#cb3-12"></a>    .reset_index()</span>
 <span id="cb3-13"><a href="#cb3-13"></a>    .rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"data_point_id"</span>})</span>
-<span id="cb3-14"><a href="#cb3-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-14"><a href="#cb3-14"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, define the system prompt and the Pydantic models you’ll use to format the responses:</p>
 <div id="cell-9" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>system_prompt_template <span class="op">=</span> (</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>system_prompt_template <span class="op">=</span> (</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
@@ -319,12 +324,12 @@ Subscribe to my newsletter
 <span id="cb4-10"><a href="#cb4-10"></a></span>
 <span id="cb4-11"><a href="#cb4-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
 <span id="cb4-12"><a href="#cb4-12"></a>    answer: <span class="bu">str</span> </span>
-<span id="cb4-13"><a href="#cb4-13"></a>    reasoning: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-13"><a href="#cb4-13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In the system prompt you send to the LLM, you’ll replace <code>{response_format}</code> with the JSON schema of the response format you want to use.</p>
 <p>Then, let’s define a few helper functions to run the experiment:</p>
 <div id="cell-11" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> validate_response(response_json, response_format):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> validate_response(response_json, response_format):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    response_dict <span class="op">=</span> json.loads(response_json)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    expected_keys <span class="op">=</span> <span class="bu">list</span>(response_format.model_json_schema()[<span class="st">"properties"</span>].keys())</span>
 <span id="cb5-4"><a href="#cb5-4"></a>    actual_keys <span class="op">=</span> <span class="bu">list</span>(response_dict.keys())</span>
@@ -367,7 +372,7 @@ Subscribe to my newsletter
 <span id="cb5-41"><a href="#cb5-41"></a>    <span class="cf">return</span> responses</span>
 <span id="cb5-42"><a href="#cb5-42"></a></span>
 <span id="cb5-43"><a href="#cb5-43"></a><span class="kw">def</span> extract_answer(answer):</span>
-<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).replace(<span class="st">"**"</span>, <span class="st">""</span>).strip()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).replace(<span class="st">"**"</span>, <span class="st">""</span>).strip()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this code, <code>validate_response</code> is used to check if the response is valid (i.e.&nbsp;it matches the JSON schema in the same order). If it is, it returns the response. Otherwise, it raises an exception.</p>
 <p><code>extract_answer</code> is used to remove ** from the answer if it exists in the response. Some of the questions in the LiveBench dataset included instructions to put the answer in bold, which is why we need to remove it.</p>
@@ -378,7 +383,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="running-the-experiment">Running the experiment</h2>
 <p>Now, you can run the experiment using the two response formats:</p>
 <div id="cell-14" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>n_runs <span class="op">=</span> <span class="dv">3</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>n_runs <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>df_runs <span class="op">=</span> []</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="cf">for</span> run <span class="kw">in</span> <span class="bu">range</span>(n_runs):</span>
@@ -398,11 +403,11 @@ Subscribe to my newsletter
 <span id="cb6-18"><a href="#cb6-18"></a>    df_copy[<span class="st">"run"</span>] <span class="op">=</span> run</span>
 <span id="cb6-19"><a href="#cb6-19"></a>    df_run <span class="op">=</span> df_copy[[<span class="st">"data_point_id"</span>, <span class="st">"ground_truth"</span>, <span class="st">"is_correct_A"</span>, <span class="st">"is_correct_B"</span>, <span class="st">"run"</span>]]</span>
 <span id="cb6-20"><a href="#cb6-20"></a>    </span>
-<span id="cb6-21"><a href="#cb6-21"></a>    df_runs.append(df_run)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-21"><a href="#cb6-21"></a>    df_runs.append(df_run)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We run the experiment multiple times with the same inputs to account for the randomness in the LLM’s responses. Ideally, we should run it more than three times, but I’m poor. So, we’ll just do it 3 times.</p>
 <div id="cell-16" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>df_all_runs <span class="op">=</span> pd.concat(df_runs, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>df_all_runs <span class="op">=</span> pd.concat(df_runs, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a>n_bootstraps <span class="op">=</span> <span class="dv">10000</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>bootstrap_accuracies_A <span class="op">=</span> []</span>
@@ -445,7 +450,7 @@ Subscribe to my newsletter
 <span id="cb7-41"><a href="#cb7-41"></a>)</span>
 <span id="cb7-42"><a href="#cb7-42"></a><span class="bu">print</span>(</span>
 <span id="cb7-43"><a href="#cb7-43"></a>    <span class="ss">f"Response format B - Mean: </span><span class="sc">{</span>mean_accuracy_B <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_B[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_B[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
-<span id="cb7-44"><a href="#cb7-44"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-44"><a href="#cb7-44"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you can build bootstrap confidence intervals for the accuracies of the two response formats. Given that I’m asking the LLM the same question multiple times, I went with an approach called <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5965657/">cluster bootstrapping</a>, which accounts for the fact that the data points are not independent.</p>
 <p>It should take a few seconds to run. Once it’s done, you should see output like the following:</p>
@@ -470,7 +475,7 @@ Subscribe to my newsletter
 <p>These results suggest that the order of the fields in the JSON schema does matter.</p>
 <p>But if you’re still unsure, you can perform a t-test to see if the two response formats are statistically different:</p>
 <div id="cell-18" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>accuracies_A <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_A'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>accuracies_A <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_A'</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>accuracies_B <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_B'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
 <span id="cb8-4"><a href="#cb8-4"></a>mean_accuracies_A <span class="op">=</span> accuracies_A.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -478,7 +483,7 @@ Subscribe to my newsletter
 <span id="cb8-6"><a href="#cb8-6"></a></span>
 <span id="cb8-7"><a href="#cb8-7"></a>t_stat, p_value <span class="op">=</span> stats.ttest_rel(mean_accuracies_A, mean_accuracies_B, alternative<span class="op">=</span><span class="st">'greater'</span>)</span>
 <span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I got a p-value &lt;0.01, meaning I can reject the null hypothesis that the two response formats are the same.</p>
 </section>
@@ -564,13 +569,14 @@ Before the Horse.”</span> November 9, 2024. <a href="https://dylancastillo.co/
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

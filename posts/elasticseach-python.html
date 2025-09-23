@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -273,16 +278,16 @@ Subscribe to my newsletter
 <li>Download the necessary <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">data</a>.</li>
 <li>Create a virtual environment and install the required packages. If you like <code>venv</code>, you can run these commands:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 elasticsearch==8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 elasticsearch==8.7.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>All good? Let’s continue.</p>
 </section>
 <section id="create-a-local-elasticsearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-local-elasticsearch-cluster">Create a Local Elasticsearch Cluster</h2>
 <p>The easiest way to run Elasticsearch locally is by using docker.</p>
 <p>Open a terminal and run this code to start a single-node ES cluster you can use for local development:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 9200:9200 <span class="at">-p</span> 9300:9300 <span class="at">-e</span> <span class="st">"xpack.security.enabled=false"</span> <span class="at">-e</span> <span class="st">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch:8.7.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 9200:9200 <span class="at">-p</span> 9300:9300 <span class="at">-e</span> <span class="st">"xpack.security.enabled=false"</span> <span class="at">-e</span> <span class="st">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch:8.7.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once you run this command, you’ll see a lot of text on your terminal. But don’t worry, that’s fine!</p>
 <p>This command will start an Elasticsearch cluster in your machine. There are a few things to unpack here:</p>
 <ul>
@@ -296,10 +301,10 @@ Subscribe to my newsletter
 <section id="connect-to-your-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="connect-to-your-cluster">Connect to Your Cluster</h2>
 <p>Create a new Jupyter Notebook, and run the following code, to connect to your newly created ES cluster.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> elasticsearch <span class="im">import</span> Elasticsearch</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> elasticsearch <span class="im">import</span> Elasticsearch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a>es <span class="op">=</span> Elasticsearch(<span class="st">"http://localhost:9200"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>es.info().body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4"></a>es.info().body</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will connect to your local cluster. Make sure to use <code>http</code> instead of <code>https</code>. If you don’t, you’ll get an error as you don’t have a valid SSL/TLS certificate. Note that in production, you’ll want to use <code>https</code>.</p>
 <p>If everything went well, you should see an output similar to mine:</p>
 <p><a href="images/elasticsearch-python/image-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/elasticsearch-python/image-6.png" class="img-fluid"></a></p>
@@ -308,14 +313,14 @@ Subscribe to my newsletter
 <section id="read-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="read-the-dataset">Read the Dataset</h2>
 <p>Use pandas to read the <a href="https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots">dataset</a> and get a sample of 5,000 rows from it. You’ll use a sample because otherwise, it’ll take a long time to index the documents.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a>df <span class="op">=</span> (</span>
 <span id="cb4-4"><a href="#cb4-4"></a>    pd.read_csv(<span class="st">"wiki_movie_plots_deduped.csv"</span>)</span>
 <span id="cb4-5"><a href="#cb4-5"></a>    .dropna()</span>
 <span id="cb4-6"><a href="#cb4-6"></a>    .sample(<span class="dv">5000</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb4-7"><a href="#cb4-7"></a>    .reset_index()</span>
-<span id="cb4-8"><a href="#cb4-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-8"><a href="#cb4-8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, you’ll create an index to store this data.</p>
 </section>
 <section id="create-an-index" class="level2">
@@ -323,7 +328,7 @@ Subscribe to my newsletter
 <p>An index is a collection of documents that Elasticsearch stores and represents through a data structure called an <strong>inverted index</strong>. This data structure identifies the documents in which each unique word appears.</p>
 <p>Elasticsearch creates this inverted index when you index documents. This is how it can perform quick full-text searches.</p>
 <p>As you can imagine, you must first create an index before you can begin indexing documents. This is how you do it:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>mappings <span class="op">=</span> {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>mappings <span class="op">=</span> {</span>
 <span id="cb5-2"><a href="#cb5-2"></a>        <span class="st">"properties"</span>: {</span>
 <span id="cb5-3"><a href="#cb5-3"></a>            <span class="st">"title"</span>: {<span class="st">"type"</span>: <span class="st">"text"</span>, <span class="st">"analyzer"</span>: <span class="st">"english"</span>},</span>
 <span id="cb5-4"><a href="#cb5-4"></a>            <span class="st">"ethnicity"</span>: {<span class="st">"type"</span>: <span class="st">"text"</span>, <span class="st">"analyzer"</span>: <span class="st">"standard"</span>},</span>
@@ -336,7 +341,7 @@ Subscribe to my newsletter
 <span id="cb5-11"><a href="#cb5-11"></a>    }</span>
 <span id="cb5-12"><a href="#cb5-12"></a>}</span>
 <span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>es.indices.create(index<span class="op">=</span><span class="st">"movies"</span>, mappings<span class="op">=</span>mappings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-14"><a href="#cb5-14"></a>es.indices.create(index<span class="op">=</span><span class="st">"movies"</span>, mappings<span class="op">=</span>mappings)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will create a new index called <code>movies</code> using the cluster you set up earlier.</p>
 <p><strong>Lines 1 to 12</strong> define a mapping, which tells the index how the documents should be stored. A <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html">mapping</a> specifies the data types assigned to each field in the documents stored in your index.</p>
 <p>You can use either a <strong>dynamic</strong> or <strong>explicit mapping</strong>. In a dynamic mapping, Elasticsearch detects which data type should be used for each field. In an explicit mapping, each data type is manually defined. The latter allows you greater freedom in defining each field, which is why you used one in the code above.</p>
@@ -349,7 +354,7 @@ Subscribe to my newsletter
 <section id="using-es.index" class="level3">
 <h3 class="anchored" data-anchor-id="using-es.index">Using <code>es.index()</code></h3>
 <p>Here’s how you use <code>es.index()</code> to store your data:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> df.iterrows():</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> df.iterrows():</span>
 <span id="cb6-2"><a href="#cb6-2"></a>    doc <span class="op">=</span> {</span>
 <span id="cb6-3"><a href="#cb6-3"></a>        <span class="st">"title"</span>: row[<span class="st">"Title"</span>],</span>
 <span id="cb6-4"><a href="#cb6-4"></a>        <span class="st">"ethnicity"</span>: row[<span class="st">"Origin/Ethnicity"</span>],</span>
@@ -361,7 +366,7 @@ Subscribe to my newsletter
 <span id="cb6-10"><a href="#cb6-10"></a>        <span class="st">"wiki_page"</span>: row[<span class="st">"Wiki Page"</span>]</span>
 <span id="cb6-11"><a href="#cb6-11"></a>    }</span>
 <span id="cb6-12"><a href="#cb6-12"></a></span>
-<span id="cb6-13"><a href="#cb6-13"></a>    es.index(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">id</span><span class="op">=</span>i, document<span class="op">=</span>doc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13"></a>    es.index(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">id</span><span class="op">=</span>i, document<span class="op">=</span>doc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code iterates through the rows of the dataset you read earlier and adds to the index the relevant information from each row using <code>es.index()</code>. You use three parameters of that method:</p>
 <ul>
 <li><code>index="movies"</code>: this tells Elasticsearch which index to use to store the data. You can have multiple indexes in a cluster.</li>
@@ -372,7 +377,7 @@ Subscribe to my newsletter
 <section id="using-bulk" class="level3">
 <h3 class="anchored" data-anchor-id="using-bulk">Using <code>bulk()</code></h3>
 <p>Here’s how you use <code>bulk()</code> to store your data:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> elasticsearch.helpers <span class="im">import</span> bulk</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> elasticsearch.helpers <span class="im">import</span> bulk</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a>bulk_data <span class="op">=</span> []</span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="cf">for</span> i,row <span class="kw">in</span> df.iterrows():</span>
@@ -392,11 +397,11 @@ Subscribe to my newsletter
 <span id="cb7-18"><a href="#cb7-18"></a>            }</span>
 <span id="cb7-19"><a href="#cb7-19"></a>        }</span>
 <span id="cb7-20"><a href="#cb7-20"></a>    )</span>
-<span id="cb7-21"><a href="#cb7-21"></a>bulk(es, bulk_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-21"><a href="#cb7-21"></a>bulk(es, bulk_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>bulk()</code> requires the same information as <code>.index()</code>: the index’s name, the document’s ID, and the document itself. But instead of adding each item one by one, you must create a list of dictionaries with all the documents you want to add to the index. Then, you pass this information and the cluster object to <code>bulk()</code>.</p>
 <p>After you add the data, you can make sure it worked by counting the number of items in the index:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>es.indices.refresh(index<span class="op">=</span><span class="st">"movies"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>es.cat.count(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>es.indices.refresh(index<span class="op">=</span><span class="st">"movies"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>es.cat.count(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Your output should look like this:</p>
 <p><a href="images/elasticsearch-python/image-7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/elasticsearch-python/image-7.png" class="img-fluid"></a></p>
 </section>
@@ -405,7 +410,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="search-your-data-using-elasticsearch">Search Your Data Using Elasticsearch</h2>
 <p>Finally, you’ll want to start running searches using your index. Elasticsearch has a powerful <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">DSL</a> that lets you build many types of queries.</p>
 <p>Here’s an example of a search that looks for movies starring Jack Nicholson but whose director isn’t Roman Polanski:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>resp <span class="op">=</span> es.search(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>resp <span class="op">=</span> es.search(</span>
 <span id="cb9-2"><a href="#cb9-2"></a>    index<span class="op">=</span><span class="st">"movies"</span>,</span>
 <span id="cb9-3"><a href="#cb9-3"></a>    query<span class="op">=</span>{</span>
 <span id="cb9-4"><a href="#cb9-4"></a>            <span class="st">"bool"</span>: {</span>
@@ -418,20 +423,20 @@ Subscribe to my newsletter
 <span id="cb9-11"><a href="#cb9-11"></a>            },</span>
 <span id="cb9-12"><a href="#cb9-12"></a>        },</span>
 <span id="cb9-13"><a href="#cb9-13"></a>)</span>
-<span id="cb9-14"><a href="#cb9-14"></a>resp.body</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-14"><a href="#cb9-14"></a>resp.body</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When you run this code, you should get a very long response that looks something like this:</p>
 <p><img src="images/elasticsearch-python/image-8.png" class="img-fluid">Now it’s time for you to try and build your own searches. A good starting point is the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html">query DSL documentation</a>.</p>
 </section>
 <section id="delete-documents-from-the-index" class="level2">
 <h2 class="anchored" data-anchor-id="delete-documents-from-the-index">Delete Documents From the Index</h2>
 <p>You can use the following code to remove documents from the index:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>es.delete(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">id</span><span class="op">=</span><span class="st">"2500"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>es.delete(index<span class="op">=</span><span class="st">"movies"</span>, <span class="bu">id</span><span class="op">=</span><span class="st">"2500"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The code above will delete the document with ID 2500 from the index <em>movies.</em></p>
 </section>
 <section id="delete-an-index" class="level2">
 <h2 class="anchored" data-anchor-id="delete-an-index">Delete an Index</h2>
 <p>Finally, if for whatever reason, you’d like to delete an index (and all of its documents), here’s how you do it:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>es.indices.delete(index<span class="op">=</span><span class="st">'movies'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>es.indices.delete(index<span class="op">=</span><span class="st">'movies'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
@@ -510,13 +515,14 @@ Python.”</span> August 12, 2022. <a href="https://dylancastillo.co/posts/elast
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -124,7 +125,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -158,6 +159,10 @@ window.Quarto = {
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -289,15 +294,15 @@ Subscribe to my newsletter
 <li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
 <li>Create a <code>.env</code> file in the root directory of your project and add the following lines:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="va">LANGSMITH_TRACING</span><span class="op">=</span>true</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="va">LANGSMITH_PROJECT</span><span class="op">=</span>your_langchain_project_name</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li>Create a virtual environment in Python and install the following packages:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langchain-community langsmith jupyter chromadb python-dotenv nest_asyncio sentence-transformers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langchain-community langsmith jupyter chromadb python-dotenv nest_asyncio sentence-transformers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li>Download the People Group’s section from GitLab’s <a href="https://gitlab.com/gitlab-com/content-sites/handbook/-/tree/main/content/handbook/people-group">handbook</a>.</li>
 </ol>
@@ -321,13 +326,13 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>You’ll use <code>asyncio</code> in some of the code snippets, so you must enable <code>nest_asyncio</code> to run the code:</p>
 <div id="1e2a708d" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> nest_asyncio</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> nest_asyncio</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you can proceed as usual, importing the required packages:</p>
 <div id="f58b9d35" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> asyncio</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> os</span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="im">import</span> random</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
@@ -344,7 +349,7 @@ Subscribe to my newsletter
 <span id="cb4-15"><a href="#cb4-15"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
 <span id="cb4-16"><a href="#cb4-16"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> CrossEncoder</span>
 <span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-18"><a href="#cb4-18"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>These are the most important libraries you’ll use in this article:</p>
 <ul>
@@ -359,12 +364,12 @@ Subscribe to my newsletter
 <p>I chose this topic because there’s a pretty good source of data we can use for this: <a href="https://handbook.gitlab.com/">The GitLab Handbook</a>. We’ll just use the People Group section of the handbook, to keep costs manageable.</p>
 <p>Your next step is to load the data from the handbook:</p>
 <div id="66a8c9c6" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>loader <span class="op">=</span> DirectoryLoader(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>loader <span class="op">=</span> DirectoryLoader(</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="st">"../data/synthetic-data-rag/people-group/"</span>, glob<span class="op">=</span><span class="st">"**/*.md"</span>, loader_cls<span class="op">=</span>TextLoader</span>
 <span id="cb5-3"><a href="#cb5-3"></a>)</span>
 <span id="cb5-4"><a href="#cb5-4"></a>docs <span class="op">=</span> loader.load()</span>
 <span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="bu">len</span>(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="bu">len</span>(docs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>99</code></pre>
 </div>
@@ -377,13 +382,13 @@ Subscribe to my newsletter
 <p>A <strong>vector database</strong> is a database designed to efficiently store and query data as vector embeddings (numerical representations). Provided with a user query, it’s the engine you use to find the most similar data in your database.</p>
 <p>For this tutorial, you’ll use <a href="https://www.trychroma.com/">ChromaDB</a>. Let’s set it up:</p>
 <div id="c7df6e53" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>openai_ef <span class="op">=</span> OpenAIEmbeddingFunction(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>openai_ef <span class="op">=</span> OpenAIEmbeddingFunction(api_key<span class="op">=</span>os.getenv(<span class="st">"OPENAI_API_KEY"</span>))</span>
 <span id="cb7-2"><a href="#cb7-2"></a>client <span class="op">=</span> chromadb.PersistentClient(</span>
 <span id="cb7-3"><a href="#cb7-3"></a>    path<span class="op">=</span><span class="st">"../data/synthetic-data-rag/chroma"</span>,</span>
 <span id="cb7-4"><a href="#cb7-4"></a>)</span>
 <span id="cb7-5"><a href="#cb7-5"></a>collection <span class="op">=</span> client.get_or_create_collection(</span>
 <span id="cb7-6"><a href="#cb7-6"></a>    <span class="st">"gitlab-handbook"</span>, embedding_function<span class="op">=</span>openai_ef</span>
-<span id="cb7-7"><a href="#cb7-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code snippet:</p>
 <ol type="1">
@@ -394,18 +399,18 @@ Subscribe to my newsletter
 <p>Next, you should generate embeddings for the documents and store them in the vector database. But there’s a little catch: some documents are longer than the maximum token limit of the embedding model (8192 tokens). This will break the indexing process. To avoid this, you must split the documents into smaller chunks.</p>
 <p>You can do this with the following code snippet:</p>
 <div id="10523d7a" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>text_splitter <span class="op">=</span> MarkdownTextSplitter.from_tiktoken_encoder(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>text_splitter <span class="op">=</span> MarkdownTextSplitter.from_tiktoken_encoder(</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    model_name<span class="op">=</span><span class="st">"gpt-4o"</span>,</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    chunk_size<span class="op">=</span><span class="dv">400</span>,</span>
 <span id="cb8-4"><a href="#cb8-4"></a>    chunk_overlap<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb8-5"><a href="#cb8-5"></a>)</span>
-<span id="cb8-6"><a href="#cb8-6"></a>splits <span class="op">=</span> text_splitter.split_documents(docs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6"></a>splits <span class="op">=</span> text_splitter.split_documents(docs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The handbook is written using Markdown, so you can use the <code>MarkdownTextSplitter</code> to split the documents. This will use the headings in the files for the splitting in addition to the number of tokens. This generally results in better chunks, as they will be more likely to contain complete thoughts or sections of the document.</p>
 <p>The <code>from_tiktoken_encoder</code> method lets you do the splits based on the number of tokens, not characters which is the default behavior. You’ve set a chunk size of 400 tokens, with no overlap.</p>
 <p>After running the splitting code, you can check the number of chunks created by running this:</p>
 <div id="ba5cec1e" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">len</span>(splits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">len</span>(splits)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>999</code></pre>
 </div>
@@ -413,18 +418,18 @@ Subscribe to my newsletter
 <p>Now you have another problem: you have too many chunks. If you try to add all of them to the vector database at once—which also generates their embeddings—you’ll likely hit the OpenAI API rate limits.</p>
 <p>To solve this, let’s define a utility function that adds the chunks to the vector database in batches:</p>
 <div id="c5cc250f" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> create_batches(ids, documents, metadatas, batch_size<span class="op">=</span><span class="dv">100</span>):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> create_batches(ids, documents, metadatas, batch_size<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    batches <span class="op">=</span> []</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(ids), batch_size):</span>
 <span id="cb11-4"><a href="#cb11-4"></a>        batch_ids <span class="op">=</span> ids[i : i <span class="op">+</span> batch_size]</span>
 <span id="cb11-5"><a href="#cb11-5"></a>        batch_documents <span class="op">=</span> documents[i : i <span class="op">+</span> batch_size]</span>
 <span id="cb11-6"><a href="#cb11-6"></a>        batch_metadatas <span class="op">=</span> metadatas[i : i <span class="op">+</span> batch_size]</span>
 <span id="cb11-7"><a href="#cb11-7"></a>        batches.append((batch_ids, batch_metadatas, batch_documents))</span>
-<span id="cb11-8"><a href="#cb11-8"></a>    <span class="cf">return</span> batches</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-8"><a href="#cb11-8"></a>    <span class="cf">return</span> batches</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you can apply this function to the chunks you created earlier:</p>
 <div id="3287eb76" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>ids <span class="op">=</span> [<span class="ss">f"</span><span class="sc">{</span><span class="bu">str</span>(i)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(splits))]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>ids <span class="op">=</span> [<span class="ss">f"</span><span class="sc">{</span><span class="bu">str</span>(i)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(splits))]</span>
 <span id="cb12-2"><a href="#cb12-2"></a>documents <span class="op">=</span> [doc.page_content <span class="cf">for</span> doc <span class="kw">in</span> splits]</span>
 <span id="cb12-3"><a href="#cb12-3"></a>metadatas <span class="op">=</span> [doc.metadata <span class="cf">for</span> doc <span class="kw">in</span> splits]</span>
 <span id="cb12-4"><a href="#cb12-4"></a></span>
@@ -436,12 +441,12 @@ Subscribe to my newsletter
 <span id="cb12-10"><a href="#cb12-10"></a>    batches <span class="op">=</span> create_batches(ids<span class="op">=</span>ids, documents<span class="op">=</span>documents, metadatas<span class="op">=</span>metadatas)</span>
 <span id="cb12-11"><a href="#cb12-11"></a>    <span class="cf">for</span> i, batch <span class="kw">in</span> <span class="bu">enumerate</span>(batches):</span>
 <span id="cb12-12"><a href="#cb12-12"></a>        <span class="bu">print</span>(<span class="ss">f"Adding batch </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> of size </span><span class="sc">{</span><span class="bu">len</span>(batch[<span class="dv">0</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb12-13"><a href="#cb12-13"></a>        collection.add(ids<span class="op">=</span>batch[<span class="dv">0</span>], metadatas<span class="op">=</span>batch[<span class="dv">1</span>], documents<span class="op">=</span>batch[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-13"><a href="#cb12-13"></a>        collection.add(ids<span class="op">=</span>batch[<span class="dv">0</span>], metadatas<span class="op">=</span>batch[<span class="dv">1</span>], documents<span class="op">=</span>batch[<span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Feel free to adjust the batch size according to your needs. This should take a few seconds to run. Once it’s done, your vector database should be ready to use.</p>
 <p>Next, you’ll define a couple of functions to interact with the vector database and a data model to represent the retrieved documents you’ll be working with.</p>
 <div id="bb0baae9" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">class</span> RetrievedDoc(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">class</span> RetrievedDoc(BaseModel):</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    <span class="bu">id</span>: <span class="bu">str</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a>    path: <span class="bu">str</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a>    page_content: <span class="bu">str</span></span>
@@ -462,7 +467,7 @@ Subscribe to my newsletter
 <span id="cb13-19"><a href="#cb13-19"></a>    results <span class="op">=</span> collection.get(ids<span class="op">=</span>[doc_id])</span>
 <span id="cb13-20"><a href="#cb13-20"></a>    doc <span class="op">=</span> results[<span class="st">"documents"</span>][<span class="dv">0</span>]</span>
 <span id="cb13-21"><a href="#cb13-21"></a>    metadata <span class="op">=</span> results[<span class="st">"metadatas"</span>][<span class="dv">0</span>]</span>
-<span id="cb13-22"><a href="#cb13-22"></a>    <span class="cf">return</span> RetrievedDoc(<span class="bu">id</span><span class="op">=</span>doc_id, path<span class="op">=</span>metadata[<span class="st">"source"</span>], page_content<span class="op">=</span>doc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-22"><a href="#cb13-22"></a>    <span class="cf">return</span> RetrievedDoc(<span class="bu">id</span><span class="op">=</span>doc_id, path<span class="op">=</span>metadata[<span class="st">"source"</span>], page_content<span class="op">=</span>doc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this code snippet, you define two functions:</p>
 <ol type="1">
@@ -472,8 +477,8 @@ Subscribe to my newsletter
 <p><code>RetrievedDoc</code> is a Pydantic model that represents a retrieved document. It includes the document’s ID, file path, and the page content. This model will help you structure the data you retrieve from the vector database.</p>
 <p>Next, you can sample documents for the synthetic data generation:</p>
 <div id="4db2a9ca" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>golden_docs_idx <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(splits)), <span class="dv">200</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>golden_docs <span class="op">=</span> [get_doc_by_id(<span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> golden_docs_idx]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>golden_docs_idx <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(splits)), <span class="dv">200</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>golden_docs <span class="op">=</span> [get_doc_by_id(<span class="bu">str</span>(i)) <span class="cf">for</span> i <span class="kw">in</span> golden_docs_idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will result in 200 documents that you’ll use to generate the synthetic data.</p>
 </section>
@@ -493,7 +498,7 @@ Subscribe to my newsletter
 <p>The target chunk helps the generator come up with a synthetic question. The similar chunks provide distractors that help the generator include themes or keywords that are also present in other chunks (e.g., dystopian fiction), making the question more challenging.</p>
 <p>To do this, you can use the following prompts:</p>
 <div id="582a5b45" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>system_prompt_generate <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>system_prompt_generate <span class="op">=</span> dedent(</span>
 <span id="cb15-2"><a href="#cb15-2"></a>    <span class="st">"""</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="st">    You are a helpful assistant generating synthetic QA pairs for retrieval evaluation.</span></span>
 <span id="cb15-4"><a href="#cb15-4"></a></span>
@@ -517,12 +522,12 @@ Subscribe to my newsletter
 <span id="cb15-22"><a href="#cb15-22"></a><span class="st">    CONFOUNDING CHUNKS:</span></span>
 <span id="cb15-23"><a href="#cb15-23"></a><span class="st">    </span><span class="sc">{confounding_chunks}</span><span class="st"> </span></span>
 <span id="cb15-24"><a href="#cb15-24"></a><span class="st">    """</span></span>
-<span id="cb15-25"><a href="#cb15-25"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-25"><a href="#cb15-25"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>These prompts will be used to generate the synthetic data. The <code>system_prompt_generate</code> defines the generation process, explaining how to extract facts and generate questions, and <code>user_prompt_generate</code> provides the required context: target and confounding chunks.</p>
 <p>Then, you initialize the LLM, set up the response model, and define a function to format the documents for the LLM:</p>
 <div id="f5aab841" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> Response(BaseModel):</span>
 <span id="cb16-2"><a href="#cb16-2"></a>    fact: <span class="bu">str</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a>    confounding_terms: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> []</span>
 <span id="cb16-4"><a href="#cb16-4"></a>    question: <span class="bu">str</span></span>
@@ -538,11 +543,11 @@ Subscribe to my newsletter
 <span id="cb16-14"><a href="#cb16-14"></a><span class="kw">def</span> format_docs(chunks: <span class="bu">list</span>[RetrievedDoc]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
 <span id="cb16-15"><a href="#cb16-15"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(</span>
 <span id="cb16-16"><a href="#cb16-16"></a>        [<span class="ss">f"*** Filepath: </span><span class="sc">{</span>chunk<span class="sc">.</span>path<span class="sc">}</span><span class="ss"> ***</span><span class="ch">\n</span><span class="sc">{</span>chunk<span class="sc">.</span>page_content<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span> <span class="cf">for</span> chunk <span class="kw">in</span> chunks]</span>
-<span id="cb16-17"><a href="#cb16-17"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-17"><a href="#cb16-17"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, you can define a function to generate the synthetic data. This function will take a target chunk, retrieve the most similar chunks from the vector database, and generate a question from the target chunk using the similar chunks as distractors:</p>
 <div id="248ec536" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_qa_pair(chunk):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="cf">async</span> <span class="kw">def</span> generate_qa_pair(chunk):</span>
 <span id="cb17-2"><a href="#cb17-2"></a>    similar_chunks <span class="op">=</span> get_similar_docs(chunk.page_content)</span>
 <span id="cb17-3"><a href="#cb17-3"></a>    compiled_messages <span class="op">=</span> <span class="cf">await</span> messages.ainvoke(</span>
 <span id="cb17-4"><a href="#cb17-4"></a>        {</span>
@@ -551,15 +556,15 @@ Subscribe to my newsletter
 <span id="cb17-7"><a href="#cb17-7"></a>        }</span>
 <span id="cb17-8"><a href="#cb17-8"></a>    )</span>
 <span id="cb17-9"><a href="#cb17-9"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output.ainvoke(compiled_messages)</span>
-<span id="cb17-10"><a href="#cb17-10"></a>    <span class="cf">return</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-10"><a href="#cb17-10"></a>    <span class="cf">return</span> output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To speed up question generation, you can run this concurrently using <code>asyncio</code>:</p>
 <div id="3f3cf7ae" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>tasks <span class="op">=</span> [generate_qa_pair(random_split) <span class="cf">for</span> random_split <span class="kw">in</span> golden_docs]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>tasks <span class="op">=</span> [generate_qa_pair(random_split) <span class="cf">for</span> random_split <span class="kw">in</span> golden_docs]</span>
 <span id="cb18-2"><a href="#cb18-2"></a>qa_pairs <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
 <span id="cb18-3"><a href="#cb18-3"></a></span>
 <span id="cb18-4"><a href="#cb18-4"></a>df <span class="op">=</span> pd.DataFrame([qa_pair.<span class="bu">dict</span>() <span class="cf">for</span> qa_pair <span class="kw">in</span> qa_pairs])</span>
-<span id="cb18-5"><a href="#cb18-5"></a>df.to_excel(<span class="st">"../data/synthetic-data-rag/files/qa_pairs.xlsx"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-5"><a href="#cb18-5"></a>df.to_excel(<span class="st">"../data/synthetic-data-rag/files/qa_pairs.xlsx"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here are some of the resulting QA pairs:</p>
 <ol type="1">
@@ -582,7 +587,7 @@ Subscribe to my newsletter
 <p>For that, you should open the Excel file and manually review some of the generated Q&amp;A pairs and evaluate them for relevance. Then, you should provide those questions in a system prompt as examples to the LLM, asking it to assign a score to each question based on your evaluation criteria.</p>
 <p>Here’s an example of how to do that:</p>
 <div id="3eeec315" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>system_prompt_rate <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>system_prompt_rate <span class="op">=</span> dedent(</span>
 <span id="cb19-2"><a href="#cb19-2"></a>    <span class="st">"""</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="st">    You are an AI assistant helping us curate a high-quality dataset of questions for evaluating an company's internal handbook. We have generated synthetic questions and need to filter out those that are unrealistic or not representative of typical user queries.</span></span>
 <span id="cb19-4"><a href="#cb19-4"></a></span>
@@ -628,12 +633,12 @@ Subscribe to my newsletter
 <span id="cb19-44"><a href="#cb19-44"></a><span class="st">    **Generated Question to Evaluate:**</span></span>
 <span id="cb19-45"><a href="#cb19-45"></a><span class="st">    `</span><span class="sc">{question_to_evaluate}</span><span class="st">`</span></span>
 <span id="cb19-46"><a href="#cb19-46"></a><span class="st">    """</span></span>
-<span id="cb19-47"><a href="#cb19-47"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-47"><a href="#cb19-47"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hamel and Shreya generally discourage using Likert-type 1-5 scales for LLM judges. However, in this case, we’re not aiming for a very accurate judge, we’re just trying to have a method that works well enough to filter out the questions. We don’t need to make this overly complicated.</p>
 <p>Using the LLM judge, you can apply the filter to the generated questions:</p>
 <div id="dd0929e4" class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">class</span> ResponseFiltering(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">class</span> ResponseFiltering(BaseModel):</span>
 <span id="cb20-2"><a href="#cb20-2"></a>    explanation: <span class="bu">str</span></span>
 <span id="cb20-3"><a href="#cb20-3"></a>    rating: <span class="bu">int</span></span>
 <span id="cb20-4"><a href="#cb20-4"></a></span>
@@ -671,7 +676,7 @@ Subscribe to my newsletter
 <span id="cb20-36"><a href="#cb20-36"></a></span>
 <span id="cb20-37"><a href="#cb20-37"></a>df_rated_qa_pairs.to_excel(</span>
 <span id="cb20-38"><a href="#cb20-38"></a>    <span class="st">"../data/synthetic-data-rag/files/rated_qa_pairs.xlsx"</span>, index<span class="op">=</span><span class="va">False</span></span>
-<span id="cb20-39"><a href="#cb20-39"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-39"><a href="#cb20-39"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will result in a list of <code>ResponseFiltering</code> objects, each containing an explanation and a rating for the corresponding question.</p>
 <p>You can save the results to a file for later use.</p>
@@ -681,7 +686,7 @@ Subscribe to my newsletter
 <p>Now that we have the filtered QA pairs, it’s time to evaluate your RAG system. You’ll evaluate two parts of the RAG system: retrieval and generation.</p>
 <p>Let’s use LangSmith to store our evaluation results. Start by creating a dataset on LangSmith:</p>
 <div id="cfdfe231" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>langsmith_client <span class="op">=</span> Client()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>langsmith_client <span class="op">=</span> Client()</span>
 <span id="cb21-2"><a href="#cb21-2"></a>dataset_name <span class="op">=</span> <span class="st">"Gitlab Handbook QA Evaluation 2"</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a></span>
 <span id="cb21-4"><a href="#cb21-4"></a><span class="cf">try</span>:</span>
@@ -705,7 +710,7 @@ Subscribe to my newsletter
 <span id="cb21-22"><a href="#cb21-22"></a>    langsmith_client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
 <span id="cb21-23"><a href="#cb21-23"></a><span class="cf">except</span> <span class="pp">Exception</span>:</span>
 <span id="cb21-24"><a href="#cb21-24"></a>    <span class="bu">print</span>(<span class="st">"Dataset already exists, skipping creation."</span>)</span>
-<span id="cb21-25"><a href="#cb21-25"></a>    dataset <span class="op">=</span> langsmith_client.read_dataset(dataset_name<span class="op">=</span>dataset_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-25"><a href="#cb21-25"></a>    dataset <span class="op">=</span> langsmith_client.read_dataset(dataset_name<span class="op">=</span>dataset_name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will create a dataset on LangSmith with the rated QA pairs. Each example will include the question, answer, and the document from which the question was generated.</p>
 <section id="retrieval-metrics" class="level3">
@@ -732,7 +737,7 @@ Subscribe to my newsletter
 <p>In our specific case, since we only have one relevant document per query, Recall@k will be 1 if the relevant document is in the top k results, and 0 otherwise.</p>
 <p>You can define two LangSmith evaluators to calculate these metrics:</p>
 <div id="07239efe" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> mrr(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> mrr(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb22-2"><a href="#cb22-2"></a>    reference_docs <span class="op">=</span> [<span class="bu">str</span>(reference_outputs[<span class="st">"doc"</span>][<span class="st">"id"</span>])]</span>
 <span id="cb22-3"><a href="#cb22-3"></a>    docs <span class="op">=</span> outputs.get(<span class="st">"docs"</span>, [])</span>
 <span id="cb22-4"><a href="#cb22-4"></a>    <span class="cf">if</span> <span class="kw">not</span> docs:</span>
@@ -746,7 +751,7 @@ Subscribe to my newsletter
 <span id="cb22-12"><a href="#cb22-12"></a>    docs <span class="op">=</span> outputs.get(<span class="st">"docs"</span>, [])</span>
 <span id="cb22-13"><a href="#cb22-13"></a>    <span class="cf">if</span> <span class="kw">not</span> docs:</span>
 <span id="cb22-14"><a href="#cb22-14"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
-<span id="cb22-15"><a href="#cb22-15"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="bu">any</span>(doc <span class="kw">in</span> reference_docs <span class="cf">for</span> doc <span class="kw">in</span> docs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-15"><a href="#cb22-15"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="bu">any</span>(doc <span class="kw">in</span> reference_docs <span class="cf">for</span> doc <span class="kw">in</span> docs))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>LangSmith evaluators take <code>inputs</code>, <code>outputs</code>, and <code>reference_outputs</code> as arguments. The <code>inputs</code> are the user query and the retrieved documents, the <code>outputs</code> are the generated answers, and the <code>reference_outputs</code> are the target chunks.</p>
 <p>Using those values, you can use the formulas we discussed to compute the MRR and recall@k metrics.</p>
@@ -766,7 +771,7 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="answer-accuracy">Answer accuracy</h4>
 <p>This metric evaluates how accurate the generated answer is compared to the expected answer. It’s an LLM judge that scores the generated answer against a reference answer using a 0, 1, 2 scale:</p>
 <div id="07f60491" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>system_prompt_answer_accuracy <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>system_prompt_answer_accuracy <span class="op">=</span> dedent(</span>
 <span id="cb23-2"><a href="#cb23-2"></a>    <span class="st">"""</span></span>
 <span id="cb23-3"><a href="#cb23-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the accuracy of a User Answer against a Reference Answer, given a Question.</span></span>
 <span id="cb23-4"><a href="#cb23-4"></a></span>
@@ -820,7 +825,7 @@ Subscribe to my newsletter
 <span id="cb23-52"><a href="#cb23-52"></a>        }</span>
 <span id="cb23-53"><a href="#cb23-53"></a>    )</span>
 <span id="cb23-54"><a href="#cb23-54"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_answer_accuracy.ainvoke(compiled_messages)</span>
-<span id="cb23-55"><a href="#cb23-55"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="fl">2.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-55"><a href="#cb23-55"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="fl">2.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Similar to the retrieval evaluators, you can define LangSmith evaluators for the answer accuracy metric. The <code>inputs</code> will contain the user question, the <code>outputs</code> will have the generated answer, and the <code>reference_outputs</code> will have the expected answer.</p>
 </section>
@@ -828,7 +833,7 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="context-relevance">Context relevance</h4>
 <p>This metric evaluates if the context provided to the LLM is relevant to the user query. Similar to the answer accuracy metric, it uses an LLM judge that scores the context relevance against a reference answer using a 0, 1, 2 scale:</p>
 <div id="82c8f6b6" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>system_prompt_context_relevance <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>system_prompt_context_relevance <span class="op">=</span> dedent(</span>
 <span id="cb24-2"><a href="#cb24-2"></a>    <span class="st">"""</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the relevance of a Context in order to answer a Question. </span></span>
 <span id="cb24-4"><a href="#cb24-4"></a></span>
@@ -886,7 +891,7 @@ Subscribe to my newsletter
 <span id="cb24-56"><a href="#cb24-56"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_context_relevance.ainvoke(</span>
 <span id="cb24-57"><a href="#cb24-57"></a>        compiled_messages</span>
 <span id="cb24-58"><a href="#cb24-58"></a>    )</span>
-<span id="cb24-59"><a href="#cb24-59"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-59"><a href="#cb24-59"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can define a <code>context_relevance</code> evaluator. The <code>inputs</code> will contain the user question and from the <code>outputs</code> you’ll use the context provided to the LLM.</p>
 </section>
@@ -894,7 +899,7 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="groundedness">Groundedness</h4>
 <p>This metric evaluates if the answer is grounded in the provided context. Like before, you use an LLM judge that scores the groundedness of the answer against the context using a 0, 1, 2 scale:</p>
 <div id="32cef827" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>system_prompt_groundedness <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>system_prompt_groundedness <span class="op">=</span> dedent(</span>
 <span id="cb25-2"><a href="#cb25-2"></a>    <span class="st">"""</span></span>
 <span id="cb25-3"><a href="#cb25-3"></a><span class="st">    You are an expert evaluator. Your task is to evaluate the groundedness of an assertion against a context. </span></span>
 <span id="cb25-4"><a href="#cb25-4"></a></span>
@@ -946,7 +951,7 @@ Subscribe to my newsletter
 <span id="cb25-50"><a href="#cb25-50"></a>        }</span>
 <span id="cb25-51"><a href="#cb25-51"></a>    )</span>
 <span id="cb25-52"><a href="#cb25-52"></a>    output <span class="op">=</span> <span class="cf">await</span> llm_with_structured_output_groundedness.ainvoke(compiled_messages)</span>
-<span id="cb25-53"><a href="#cb25-53"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-53"><a href="#cb25-53"></a>    <span class="cf">return</span> output.rating <span class="op">/</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You use the same approach as before to define LangSmith evaluators for this metric. The <code>inputs</code> will contain the user question, the <code>outputs</code> will have the context provided to the LLM.</p>
 </section>
@@ -955,7 +960,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="run-evaluation">Run evaluation</h3>
 <p>Now we can run the full RAG pipeline and evaluate its results using the LangSmith evaluators.</p>
 <div id="ddb7581f" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>system_prompt_generation <span class="op">=</span> dedent(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>system_prompt_generation <span class="op">=</span> dedent(</span>
 <span id="cb26-2"><a href="#cb26-2"></a>    <span class="st">"""</span></span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="st">    You're a helpful assistant. Provided with a question and the most relevant documents, you must generate a concise and accurate answer based on the information in those documents.</span></span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="st">    """</span></span>
@@ -976,13 +981,13 @@ Subscribe to my newsletter
 <span id="cb26-19"><a href="#cb26-19"></a></span>
 <span id="cb26-20"><a href="#cb26-20"></a>llm_generation <span class="op">=</span> ChatOpenAI(</span>
 <span id="cb26-21"><a href="#cb26-21"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
-<span id="cb26-22"><a href="#cb26-22"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-22"><a href="#cb26-22"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A good starting point is to evaluate different values for the number of retrieved documents (K). For example, you could evaluate different values for the number of retrieved documents.</p>
 <p>Langsmith requires a wrapper or target function that encapsulates your RAG system. In your case, this function takes a user query, retrieves the most similar documents, generates an answer using the LLM, and returns the generated answer with the document IDs and context retrieved.</p>
 <p>I’ll run this code for K values of 3, 5, and 10, and compare the results.</p>
 <div id="9c0ddd40" class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="cf">for</span> K <span class="kw">in</span> [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>]:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="cf">for</span> K <span class="kw">in</span> [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>]:</span>
 <span id="cb27-2"><a href="#cb27-2"></a>    <span class="bu">print</span>(<span class="ss">f"Running evaluation for K=</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb27-3"><a href="#cb27-3"></a></span>
 <span id="cb27-4"><a href="#cb27-4"></a>    <span class="at">@traceable</span></span>
@@ -1008,7 +1013,7 @@ Subscribe to my newsletter
 <span id="cb27-24"><a href="#cb27-24"></a>        evaluators<span class="op">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
 <span id="cb27-25"><a href="#cb27-25"></a>        max_concurrency<span class="op">=</span><span class="dv">50</span>,</span>
 <span id="cb27-26"><a href="#cb27-26"></a>        experiment_prefix<span class="op">=</span><span class="ss">f"top-</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb27-27"><a href="#cb27-27"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-27"><a href="#cb27-27"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Using <code>aevaluate</code> you can speed up the evaluation process and run the evaluations concurrently. I got the following results:</p>
 <table class="table">
@@ -1068,21 +1073,21 @@ Subscribe to my newsletter
 <p>A quick way to improve your RAG system is to rerank the retrieved documents. In addition to doing retrieval using vector similarity or keyword search, you can have a reranking step that uses a more capable model to score and reorder the retrieved documents based on their relevance to the user query.</p>
 <p>Let’s use <code>sentence-transformers</code> with an open-source model to do this:</p>
 <div id="3ef76069" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>cross_encoder <span class="op">=</span> CrossEncoder(<span class="st">"mixedbread-ai/mxbai-rerank-xsmall-v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>cross_encoder <span class="op">=</span> CrossEncoder(<span class="st">"mixedbread-ai/mxbai-rerank-xsmall-v1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To rerank a set of documents, you take the results from the retrieval step and pass them to the reranker, which will return a new set of documents ordered by their relevance to the user query.</p>
 <p>Here’s an example:</p>
 <div id="481b2e0b" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>query <span class="op">=</span> <span class="st">"What is the process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>query <span class="op">=</span> <span class="st">"What is the process for creating a new learning hub for your team in Level Up at GitLab?"</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>hits <span class="op">=</span> get_similar_docs(query, top_k<span class="op">=</span><span class="dv">50</span>)</span>
 <span id="cb29-3"><a href="#cb29-3"></a>cross_inp <span class="op">=</span> [[query, h.page_content] <span class="cf">for</span> h <span class="kw">in</span> hits]</span>
 <span id="cb29-4"><a href="#cb29-4"></a>reranker_scores <span class="op">=</span> cross_encoder.predict(cross_inp)</span>
-<span id="cb29-5"><a href="#cb29-5"></a>sorted_hits <span class="op">=</span> <span class="bu">sorted</span>(hits, key<span class="op">=</span><span class="kw">lambda</span> x: reranker_scores[hits.index(x)], reverse<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-5"><a href="#cb29-5"></a>sorted_hits <span class="op">=</span> <span class="bu">sorted</span>(hits, key<span class="op">=</span><span class="kw">lambda</span> x: reranker_scores[hits.index(x)], reverse<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This takes the 50 most similar documents to the query and reranks them using a cross-encoder model. The <code>reranker_scores</code> are used to sort the documents in descending order of relevance.</p>
 <p>Now you can do the same evaluation as before (for k = 5), but including this new reranking step:</p>
 <div id="3411cd58" class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>K <span class="op">=</span> <span class="dv">5</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>K <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a></span>
 <span id="cb30-3"><a href="#cb30-3"></a><span class="kw">def</span> get_reranked_docs(</span>
 <span id="cb30-4"><a href="#cb30-4"></a>    query: <span class="bu">str</span>, similar_docs: <span class="bu">list</span>[RetrievedDoc]</span>
@@ -1119,7 +1124,7 @@ Subscribe to my newsletter
 <span id="cb30-35"><a href="#cb30-35"></a>    evaluators<span class="op">=</span>[recall, mrr, answer_accuracy, context_relevance, groundedness],</span>
 <span id="cb30-36"><a href="#cb30-36"></a>    max_concurrency<span class="op">=</span><span class="dv">50</span>,</span>
 <span id="cb30-37"><a href="#cb30-37"></a>    experiment_prefix<span class="op">=</span><span class="ss">f"top-</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">-reranked"</span>,</span>
-<span id="cb30-38"><a href="#cb30-38"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-38"><a href="#cb30-38"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here are the results of the original run with k=5 and the run with a reranker:</p>
 <table class="table">
@@ -1239,13 +1244,14 @@ System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

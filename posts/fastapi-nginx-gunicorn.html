@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -292,18 +297,18 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <section id="enable-automatic-updates" class="level3">
 <h3 class="anchored" data-anchor-id="enable-automatic-updates">Enable Automatic Updates</h3>
 <p>First, you should make sure your server has the latest software:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are common commands you’ll see when working with Debian-based servers:</p>
 <ul>
 <li><code>sudo apt update</code> updates the package list index on the user’s system.</li>
 <li><code>sudo apt upgrade</code> upgrades the installed packages to their latest versions. You provide the <code>-y</code> flag to proceed with the installation without requiring confirmation.</li>
 </ul>
 <p>Next, you should set up automatic security updates, so that you don’t have to do them manually. For that, you’ll need to install and enable <code>unnattended-upgrades</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">sudo</span> apt install unattended-upgrades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">sudo</span> apt install unattended-upgrades</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once the installation is finished, edit <code>/etc/apt/apt.conf.d/20auto-upgrades</code> to include the following lines:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">APT::Periodic::Update-Package-Lists</span> <span class="st">"1"</span><span class="kw">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">APT::Periodic::Update-Package-Lists</span> <span class="st">"1"</span><span class="kw">;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="ex">APT::Periodic::Unattended-Upgrade</span> <span class="st">"1"</span><span class="kw">;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">APT::Periodic::AutocleanInterval</span> <span class="st">"7"</span><span class="kw">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">APT::Periodic::AutocleanInterval</span> <span class="st">"7"</span><span class="kw">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These lines configure <code>unattended-upgrades</code> so that it runs automatically. Here’s what they do:</p>
 <ul>
 <li><code>APT::Periodic::Update-Package-Lists "1"</code> means that the list of packages will be automatically updated every day.</li>
@@ -311,31 +316,31 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <li><code>"APT::Periodic::AutocleanInterval "7"</code> means that the auto-clean operation, which gets rid of old and unnecessary package files, will run once a week.</li>
 </ul>
 <p>Lastly, edit <code>/etc/apt/apt.conf.d/50unattended-upgrades</code> to make sure the system automatically reboots when kernel updates require it:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">Unattended-Upgrade::Automatic-Reboot</span> <span class="st">"true"</span><span class="kw">;</span> <span class="co"># change to true</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">Unattended-Upgrade::Automatic-Reboot</span> <span class="st">"true"</span><span class="kw">;</span> <span class="co"># change to true</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can also configure your system to send emails when there are issues with the upgrades. If you want to do that, take a look at <a href="https://www.cyberciti.biz/faq/ubuntu-enable-setup-automatic-unattended-security-updates/">this</a> article.</p>
 <p>Whew! You’ve now ensured that your system is up to date and will remain so. Next, you’ll create a user to make sure you don’t give your app more permissions than it needs to run.</p>
 </section>
 <section id="create-a-non-root-user" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-non-root-user">Create a Non-root User</h3>
 <p>If your server ever gets hacked, having a non-root user reduces the damage the malicious actor can do. That, <a href="https://askubuntu.com/questions/1127174/purpose-of-creating-non-root-user">among other reasons</a>, justifies the creation of a non-root user.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sudo</span> adduser fastapi-user <span class="co"># replace fastapi-user with your preferred name</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sudo</span> adduser fastapi-user <span class="co"># replace fastapi-user with your preferred name</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">sudo</span> gpasswd <span class="at">-a</span> fastapi-user sudo <span class="co"># add to sudoers</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">su</span> <span class="at">-</span> fastapi-user <span class="co"># login as fastapi-user</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">su</span> <span class="at">-</span> fastapi-user <span class="co"># login as fastapi-user</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These commands will create a user name <code>fastapi-user</code>, add it to the <code>sudo</code> group (which contains all users with root privileges), and then log in as that user.</p>
 <p>Then, you will set up your server so that you connect to it using an SSH key instead of a password. It’s safer and faster, so you have nothing to lose.</p>
 <p>If you don’t already have an SSH key, open a new terminal <strong>on your local machine</strong> and run the following command. Otherwise, skip this step, and move directly to copy your public SSH key.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"username@email.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"username@email.com"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>‌This command will create and store an SSH key in your local machine. You employ two parameters:</p>
 <ol type="1">
 <li><code>-t ed25519</code> to specify which algorithm to use to generate the key. You went with <a href="https://ed25519.cr.yp.to/">ED25519</a>, which is a very safe and efficient algorithm.</li>
 <li><code>-C username@email.com</code> to append your email as a comment at the end of the key. Make sure to replace <code>username@email.com</code> it with your actual email.</li>
 </ol>
 <p>Then, copy your public SSH key by using this command and copying the output:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Go back to the <strong>remote server’s</strong> terminal and type in the following commands:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">mkdir</span> ~/.ssh/</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">mkdir</span> ~/.ssh/</span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">chmod</span> 700 <span class="at">-R</span> ~/.ssh/</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> vim ~/.ssh/authorized_keys</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> vim ~/.ssh/authorized_keys</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These commands will:</p>
 <ol type="1">
 <li>Create a <code>.ssh</code> directory</li>
@@ -343,11 +348,11 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <li>Open <code>authorized_keys</code> with an editor</li>
 </ol>
 <p>Paste your public SSH key into <code>authorized_keys</code>. Save the changes and close the editor. Make sure the changes worked by closing the terminal and logging back into your machine using the following command:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ssh</span> fastapi-user@your-server-ip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ssh</span> fastapi-user@your-server-ip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once you’ve tested that it works, you should disable the root login and use password authentication for SSH connections. To do this, you’ll have to update the following values in <code>/etc/ssh/sshd_config</code> using <strong>vim</strong> (or any other editor) using <code>sudo</code> privileges:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">PermitRootLogin</span> no <span class="co"># change to no</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">PermitRootLogin</span> no <span class="co"># change to no</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="ex">...</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="ex">PasswordAuthentication</span> no <span class="co"># change to no</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="ex">PasswordAuthentication</span> no <span class="co"># change to no</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These modifications will prohibit users from logging in as <code>root</code> and also disable the option of authenticating using a password rather than an SSH key.</p>
 </section>
 <section id="other-security-measures" class="level3">
@@ -359,37 +364,37 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <section id="step-2-install-software-tools" class="level2">
 <h2 class="anchored" data-anchor-id="step-2-install-software-tools">Step 2: Install Software Tools</h2>
 <p>You will require a few software tools. Begin by running the following commands to install Python:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="fu">sudo</span> apt update</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">sudo</span> apt install python3.11 python3.11-venv <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">sudo</span> apt install python3.11 python3.11-venv <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, install <strong>Supervisor</strong> and <strong>NGINX</strong>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">sudo</span> apt install supervisor nginx <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">sudo</span> apt install supervisor nginx <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Supervisor is a process control system for Unix-like operating systems, including Linux. It’s intended to monitor and manage the processes of programs, ensuring that they are always running and restarting them if they crash or shut down.</p>
 <p>NGINX,as mentioned before, is a popular multifaceted software, that’s often used as a reverse proxy when deploying web applications.</p>
 <p>Enable and start Supervisor:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">sudo</span> systemctl enable supervisor</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">sudo</span> systemctl start supervisor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">sudo</span> systemctl enable supervisor</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">sudo</span> systemctl start supervisor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>enable</code> will make sure Supervisor starts on boot, and <code>start</code> will start Supervisor right away.</p>
 </section>
 <section id="step-3-set-up-your-fastapi-app" class="level2">
 <h2 class="anchored" data-anchor-id="step-3-set-up-your-fastapi-app">Step 3: Set Up Your FastAPI App</h2>
 <p>Start by cloning the sample app into <code>/home/fastapi-user</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/fastapi-nginx-gunicorn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/fastapi-nginx-gunicorn</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will work with public repositories. If you want to deploy an app from a private GitHub repository, you should set up a <a href="https://dylancastillo.co/how-to-use-github-deploy-keys/">GitHub deploy key</a> and clone the repository using it.</p>
 <p>Next, create a virtual environment and activate it in the project directory:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="bu">cd</span> /home/fastapi-user/fastapi-nginx-gunicorn</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="bu">cd</span> /home/fastapi-user/fastapi-nginx-gunicorn</span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="ex">python3.11</span> <span class="at">-m</span> venv .venv</span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="bu">source</span> .venv/bin/activate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="bu">source</span> .venv/bin/activate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These commands will change your current location to the project directory, create a virtual environment in it, and activate it. From now on, you should see a <code>(.venv)</code> prefix in your command line.</p>
 <p>Now, use <code>pip</code> to install the libraries specified in <code>requirements.txt</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will install the packages in <code>requirements.txt</code>: <code>fastapi</code>, <code>gunicorn</code>, and <code>uvicorn</code>, in your current virtual environment.</p>
 <p>Verify that everything went well by running the application:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">uvicorn</span> main:app</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">uvicorn</span> main:app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You shouldn’t get any errors when you run this command. You can also verify that it’s working by opening a new terminal window, connecting to the server, and making a request with <code>curl</code>:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="ex">curl</span> http://localhost:8000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="ex">curl</span> http://localhost:8000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should get the following response:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">{</span><span class="st">"message"</span><span class="ex">:</span><span class="st">"It's working!"</span><span class="ex">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="ex">{</span><span class="st">"message"</span><span class="ex">:</span><span class="st">"It's working!"</span><span class="ex">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You’re halfway there. You got your FastAPI app running, next you’ll configure Gunicorn to serve as a WSGI server.</p>
 </section>
 <section id="step-4-configure-gunicorn" class="level2">
@@ -398,9 +403,9 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <section id="set-up-gunicorn" class="level3">
 <h3 class="anchored" data-anchor-id="set-up-gunicorn">Set Up Gunicorn</h3>
 <p>You’ll first create a file to define the parameters you’ll use when running Gunicorn. For that, create a file called <code>gunicorn_start</code> in the project directory:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="ex">vim</span> gunicorn_start</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="ex">vim</span> gunicorn_start</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, add the following content to it:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="va">NAME</span><span class="op">=</span>fastapi-app</span>
 <span id="cb21-4"><a href="#cb21-4"></a><span class="va">DIR</span><span class="op">=</span>/home/fastapi-user/fastapi-nginx-gunicorn</span>
@@ -423,7 +428,7 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <span id="cb21-21"><a href="#cb21-21"></a>  <span class="at">--group</span><span class="op">=</span><span class="va">$GROUP</span> <span class="dt">\</span></span>
 <span id="cb21-22"><a href="#cb21-22"></a>  <span class="at">--bind</span><span class="op">=</span><span class="va">$BIND</span> <span class="dt">\</span></span>
 <span id="cb21-23"><a href="#cb21-23"></a>  <span class="at">--log-level</span><span class="op">=</span><span class="va">$LOG_LEVEL</span> <span class="dt">\</span></span>
-<span id="cb21-24"><a href="#cb21-24"></a>  <span class="at">--log-file</span><span class="op">=</span>-</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-24"><a href="#cb21-24"></a>  <span class="at">--log-file</span><span class="op">=</span>-</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Here’s what you’re defining:</p>
 <ul>
 <li><strong>Line 1</strong> indicates that the script is to be run by the bash shell.</li>
@@ -437,48 +442,48 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <li><strong>Lines 16 to 24</strong> run Gunicorn with the specified parameters.</li>
 </ul>
 <p>Save and close the fine. Then, make it executable by running the following:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">chmod</span> u+x gunicorn_start</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">chmod</span> u+x gunicorn_start</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Finally, make a <code>run</code> folder in your project directory for the Unix socket file you defined in the <code>BIND</code> parameter:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">mkdir</span> run</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">mkdir</span> run</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When you have multiple servers communicating on the same machine, <a href="https://stackoverflow.com/questions/19916016/gunicorn-nginx-server-via-socket-or-proxy">using a Unix socket file is better</a>.</p>
 </section>
 <section id="configure-supervisor" class="level3">
 <h3 class="anchored" data-anchor-id="configure-supervisor">Configure <strong>Supervisor</strong></h3>
 <p>First, create a directory called <code>logs</code> in the project directory to store your application’s error logs:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">mkdir</span> logs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">mkdir</span> logs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, create a Supervisor’sconfiguration file by running the following command:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">sudo</span> vim /etc/supervisor/conf.d/fastapi-app.conf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">sudo</span> vim /etc/supervisor/conf.d/fastapi-app.conf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>There copy and paste the following:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1"></a><span class="ex">[program:fastapi-app]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1"></a><span class="ex">[program:fastapi-app]</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="va">command</span><span class="op">=</span>/home/fastapi-user/fastapi-nginx-gunicorn/gunicorn_start</span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="va">user</span><span class="op">=</span>fastapi-user</span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="va">autostart</span><span class="op">=</span>true</span>
 <span id="cb26-5"><a href="#cb26-5"></a><span class="va">autorestart</span><span class="op">=</span>true</span>
 <span id="cb26-6"><a href="#cb26-6"></a><span class="va">redirect_stderr</span><span class="op">=</span>true</span>
-<span id="cb26-7"><a href="#cb26-7"></a><span class="va">stdout_logfile</span><span class="op">=</span>/home/fastapi-user/fastapi-nginx-gunicorn/logs/gunicorn-error.log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="va">stdout_logfile</span><span class="op">=</span>/home/fastapi-user/fastapi-nginx-gunicorn/logs/gunicorn-error.log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This configuration file runs the file you created earlier, <code>gunicorn_start</code>, using the <code>fastapi-user</code>. Supervisor will start the application anytime the server starts, and will also restart it if it fails.</p>
 <p>This configuration file executes the <code>gunicorn_start</code> file you created earlier using <code>fastapi-user</code> as the user. Supervisor will launch the application whenever the server boots up and will restart it if the application fails. The errors are logged into <code>gunicorn-error.log</code> in <code>logs</code> in the project directory.</p>
 <p>Reread Supervisor’s configuration file and restart the service by running these commands:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">sudo</span> supervisorctl reread</span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">sudo</span> supervisorctl update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">sudo</span> supervisorctl reread</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="fu">sudo</span> supervisorctl update</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Finally, you can check the status of the program by running this command:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">sudo</span> supervisorctl status fastapi-app</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">sudo</span> supervisorctl status fastapi-app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything went well, the <code>fastapi-app</code> service status should be set to <code>RUNNING</code>.</p>
 <p>You can also test it by opening a new terminal window, connecting to the server, and issuing a GET request using <code>curl</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1"></a><span class="ex">curl</span> <span class="at">--unix-socket</span> /home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock localhost</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1"></a><span class="ex">curl</span> <span class="at">--unix-socket</span> /home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock localhost</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should see the following output:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">{</span> <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"It's working!"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">{</span> <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"It's working!"</span> <span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Finally, if you make changes to the code, you can restart the service to apply to changes by running this command:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">sudo</span> supervisorctl restart fastapi-app</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">sudo</span> supervisorctl restart fastapi-app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Way to go! You’ve got an ASGI server running using Gunicorn and Uvicorn. Next, you’ll set up a reverse proxy server using NGINX.</p>
 </section>
 </section>
 <section id="step-5-configure-nginx" class="level2">
 <h2 class="anchored" data-anchor-id="step-5-configure-nginx">Step 5: Configure NGINX</h2>
 <p>Create a new NGINX configuration file for your project:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sudo</span> vim /etc/nginx/sites-available/fastapi-app</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sudo</span> vim /etc/nginx/sites-available/fastapi-app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Open the NGINX configuration file and paste the following content:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a><span class="ex">upstream</span> app_server {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1"></a><span class="ex">upstream</span> app_server {</span>
 <span id="cb33-2"><a href="#cb33-2"></a>    <span class="ex">server</span> unix:/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock fail_timeout=0<span class="kw">;</span></span>
 <span id="cb33-3"><a href="#cb33-3"></a><span class="er">}</span></span>
 <span id="cb33-4"><a href="#cb33-4"></a></span>
@@ -505,7 +510,7 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <span id="cb33-25"><a href="#cb33-25"></a>            <span class="cf">break</span><span class="kw">;</span></span>
 <span id="cb33-26"><a href="#cb33-26"></a>        <span class="kw">}</span></span>
 <span id="cb33-27"><a href="#cb33-27"></a>    <span class="er">}</span></span>
-<span id="cb33-28"><a href="#cb33-28"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-28"><a href="#cb33-28"></a><span class="er">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is the NGINX configuration file. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 3</strong> define a cluster of servers called <code>app_server</code> that NGINX will proxy requests to. The requests are redirected to the Unix socket file located at <code>/home/fastapi-user/fastapi-nginx-gunicorn/run/gunicorn.sock</code>. Setting <code>fail_timeout=0</code> tells NGINX not to consider the server as failed even if it does not respond.</li>
@@ -515,17 +520,17 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <li><strong>Lines 18 to 27</strong> defines how NGINX will handle requests to the root directory <code>/</code>. You provide some specifications to handle headers, and set a directive to proxy the requests to the <code>app_server</code> you defined earlier.</li>
 </ul>
 <p>Enable the configuration of your site by creating a symbolic link from the file in <code>sites-available</code> into <code>sites-enabled</code> by running this command:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /etc/nginx/sites-available/fastapi-app /etc/nginx/sites-enabled/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /etc/nginx/sites-available/fastapi-app /etc/nginx/sites-enabled/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Test that the configuration file is OK and restart NGINX:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">sudo</span> nginx <span class="at">-t</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="fu">sudo</span> systemctl restart nginx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">sudo</span> nginx <span class="at">-t</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="fu">sudo</span> systemctl restart nginx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything went well, now you should be able to make a GET request successfully to the IP of your server from your browser or using <code>curl</code>. Once again, you should see the following output:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">{</span> <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"It's working!"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">{</span> <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"It's working!"</span> <span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You should have your FastAPI app running by now, as well as Gunicorn+Uvicorn as an ASGI server and NGINX in front of them as a reverse proxy.</p>
 <section id="permissions-error" class="level3">
 <h3 class="anchored" data-anchor-id="permissions-error">Permissions Error</h3>
 <p>If you get a permission error telling you that NGINX cannot access the unix socket, you can add the <code>www-data</code> user (which typically is the user running the NGINX processes) to the <code>fastapi-user</code> group. You can use the following command:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> fastapi-user www-data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> fastapi-user www-data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Good job! If you haven’t bought a domain name for your API, you can stop reading here. If you have one, proceed to the next step to obtain an SSL certificate and enable HTTPS.</p>
 </section>
 </section>
@@ -533,16 +538,16 @@ NGINX is often used as a reverse proxy in front of the app’s web server when w
 <h2 class="anchored" data-anchor-id="optional-step-6-obtain-a-free-ssl-certificate-using-certbot">(Optional) Step 6: Obtain a Free SSL Certificate Using Certbot</h2>
 <p>This only applies if you have a domain for which you want to obtain an SSL certificate.</p>
 <p>If you’re using Ubuntu, you can skip this step. Otherwise, you first need to install <code>snapd</code>:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">sudo</span> apt install snapd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">sudo</span> apt install snapd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, make sure you have the latest version available:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">sudo</span> snap install core<span class="kw">;</span> <span class="fu">sudo</span> snap refresh core</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">sudo</span> snap install core<span class="kw">;</span> <span class="fu">sudo</span> snap refresh core</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Install certbot and make sure the <code>cerbot</code> command is executable:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">sudo</span> snap install <span class="at">--classic</span> certbot</span>
-<span id="cb40-2"><a href="#cb40-2"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /snap/bin/certbot /usr/bin/certbot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">sudo</span> snap install <span class="at">--classic</span> certbot</span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /snap/bin/certbot /usr/bin/certbot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, generate a certificate for your domain interactively by running the following command:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">sudo</span> certbot <span class="at">--nginx</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">sudo</span> certbot <span class="at">--nginx</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Finally, Certbot will automatically handle the renewal of your certificate. To test that it works run the following:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">sudo</span> certbot renew <span class="at">--dry-run</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">sudo</span> certbot renew <span class="at">--dry-run</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If it worked as expected, you should see a <code>Congratulations, all simulated renewals succeeded...</code> message.</p>
 <p>If everything went well, you should be able to make a successful get request using HTTPS.</p>
 </section>
@@ -625,13 +630,14 @@ NGINX and Gunicorn.”</span> February 3, 2023. <a href="https://dylancastillo.c
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

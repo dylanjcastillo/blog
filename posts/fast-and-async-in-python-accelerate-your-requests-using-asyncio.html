@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -132,6 +133,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -270,7 +275,7 @@ Subscribe to my newsletter
 <section id="option-a-sequential-algorithm" class="level3">
 <h3 class="anchored" data-anchor-id="option-a-sequential-algorithm">Option A: Sequential Algorithm</h3>
 <p>A sequential version of that algorithm could look as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> requests</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> requests.exceptions <span class="im">import</span> HTTPError</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
@@ -330,7 +335,7 @@ Subscribe to my newsletter
 <span id="cb1-58"><a href="#cb1-58"></a>            <span class="bu">print</span>(<span class="ss">f"Response: </span><span class="sc">{</span>json<span class="sc">.</span>dumps(parsed_response, indent<span class="op">=</span><span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb1-59"><a href="#cb1-59"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> err:</span>
 <span id="cb1-60"><a href="#cb1-60"></a>            <span class="bu">print</span>(<span class="ss">f"Exception occured: </span><span class="sc">{</span>err<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-61"><a href="#cb1-61"></a>            <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-61"><a href="#cb1-61"></a>            <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Sequential version of algorithm</p>
 <p>Now, let’s breakdown the code to understand what’s going on.</p>
 <p>As usual, you start by importing the required libraries. Then, you define two variables:</p>
@@ -338,7 +343,7 @@ Subscribe to my newsletter
 <li><code>GOOGLE_BOOKS_URL</code> for specifying the URL of the Google’s API we’ll use for the requests. This is how a request to the Google Books API looks like: <a href="https://www.googleapis.com/books/v1/volumes?q=isbn:9780002005883" class="uri">https://www.googleapis.com/books/v1/volumes?q=isbn:9780002005883</a></li>
 <li><code>LIST_ISBN</code><em>,</em> which is a sample list of ISBNs for testing the program.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> requests</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> requests.exceptions <span class="im">import</span> HTTPError</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
@@ -354,9 +359,9 @@ Subscribe to my newsletter
 <span id="cb2-14"><a href="#cb2-14"></a>    <span class="st">'9780006353287'</span>,</span>
 <span id="cb2-15"><a href="#cb2-15"></a>    <span class="st">'9780006380832'</span>,</span>
 <span id="cb2-16"><a href="#cb2-16"></a>    <span class="st">'9780006470229'</span>,</span>
-<span id="cb2-17"><a href="#cb2-17"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-17"><a href="#cb2-17"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, you define the <code>extract_fields_from_response</code>function. This function takes as input the response from the API and extracts the fields we’re interested in.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> extract_fields_from_response(response):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> extract_fields_from_response(response):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">"""Extract fields from API's response"""</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>    item <span class="op">=</span> response.get(<span class="st">"items"</span>, [{}])[<span class="dv">0</span>]</span>
 <span id="cb3-4"><a href="#cb3-4"></a>    volume_info <span class="op">=</span> item.get(<span class="st">"volumeInfo"</span>, {})</span>
@@ -369,10 +374,10 @@ Subscribe to my newsletter
 <span id="cb3-11"><a href="#cb3-11"></a>        subtitle,</span>
 <span id="cb3-12"><a href="#cb3-12"></a>        description,</span>
 <span id="cb3-13"><a href="#cb3-13"></a>        published_date,</span>
-<span id="cb3-14"><a href="#cb3-14"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-14"><a href="#cb3-14"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Function for parsing response from the Google Books API</p>
 <p>The parsing process in <code>extract_fields_from_response</code> is based on the response’s structure from the Google Books API, which looks as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>{</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>{</span>
 <span id="cb4-2"><a href="#cb4-2"></a> <span class="st">"kind"</span>: <span class="st">"books#volumes"</span>,</span>
 <span id="cb4-3"><a href="#cb4-3"></a> <span class="st">"totalItems"</span>: <span class="dv">1</span>,</span>
 <span id="cb4-4"><a href="#cb4-4"></a> <span class="st">"items"</span>: [</span>
@@ -384,10 +389,10 @@ Subscribe to my newsletter
 <span id="cb4-10"><a href="#cb4-10"></a>   <span class="st">"volumeInfo"</span>: {</span>
 <span id="cb4-11"><a href="#cb4-11"></a>    <span class="st">"title"</span>: <span class="st">"Mapping the Big Picture"</span>,</span>
 <span id="cb4-12"><a href="#cb4-12"></a>    <span class="st">"subtitle"</span>: <span class="st">"Integrating Curriculum and Assessment, K-12"</span>,</span>
-<span id="cb4-13"><a href="#cb4-13"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-13"><a href="#cb4-13"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Sample response from the Google Books API</p>
 <p>Finally, take a look at the most relevant parts of the program: how you make requests to the Google Books API.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> get_book_details_seq(isbn, session):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> get_book_details_seq(isbn, session):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">"""Get book details using Google Books API (sequentially)"""</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>    url <span class="op">=</span> GOOGLE_BOOKS_URL <span class="op">+</span> isbn</span>
 <span id="cb5-4"><a href="#cb5-4"></a>    response <span class="op">=</span> <span class="va">None</span></span>
@@ -412,7 +417,7 @@ Subscribe to my newsletter
 <span id="cb5-23"><a href="#cb5-23"></a>            <span class="bu">print</span>(<span class="ss">f"Response: </span><span class="sc">{</span>json<span class="sc">.</span>dumps(parsed_response, indent<span class="op">=</span><span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb5-24"><a href="#cb5-24"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> err:</span>
 <span id="cb5-25"><a href="#cb5-25"></a>            <span class="bu">print</span>(<span class="ss">f"Exception occured: </span><span class="sc">{</span>err<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>            <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-26"><a href="#cb5-26"></a>            <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>How requests are executed to the Google Books API</p>
 <p>There are two major pieces here:</p>
 <ul>
@@ -424,7 +429,7 @@ Subscribe to my newsletter
 <section id="option-b-asynchronous-algorithm" class="level3">
 <h3 class="anchored" data-anchor-id="option-b-asynchronous-algorithm">Option B: Asynchronous Algorithm</h3>
 <p>An asynchronous version of the same algorithm may look something as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> aiohttp</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> aiohttp</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="im">import</span> asyncio</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="im">import</span> os</span>
 <span id="cb6-4"><a href="#cb6-4"></a></span>
@@ -488,7 +493,7 @@ Subscribe to my newsletter
 <span id="cb6-62"><a href="#cb6-62"></a>        <span class="cf">pass</span></span>
 <span id="cb6-63"><a href="#cb6-63"></a></span>
 <span id="cb6-64"><a href="#cb6-64"></a><span class="cf">async</span> <span class="cf">with</span> ClientSession() <span class="im">as</span> session:</span>
-<span id="cb6-65"><a href="#cb6-65"></a>    <span class="cf">await</span> asyncio.gather(<span class="op">*</span>[run_program(isbn, session) <span class="cf">for</span> isbn <span class="kw">in</span> LIST_ISBN])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-65"><a href="#cb6-65"></a>    <span class="cf">await</span> asyncio.gather(<span class="op">*</span>[run_program(isbn, session) <span class="cf">for</span> isbn <span class="kw">in</span> LIST_ISBN])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Asynchronous version of the program using asyncio and aiohttp</p>
 <p>First, check the <code>get_book_details_async</code> function. An <code>async</code> keyword prepends it. This keyword tells Python that your function is a coroutine. Then, in the function’s body, there are two await keywords. These tell that coroutine to suspend execution and give back control to the event loop, while the operation the couroutine is awaiting finishes.</p>
 <p>A <em>coroutine</em> is a type of generator function in Python that, instead of producing values, consumes values5. The interesting thing about it is that its execution pauses while waiting for new data being sent to it. In our case, this allows the execution of other parts of the program to continue in a <em>seemingly concurrent</em> manner.</p>
@@ -587,13 +592,14 @@ Accelerate Your Requests Using Asyncio.”</span> March 1, 2020. <a href="https:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

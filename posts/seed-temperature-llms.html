@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -124,7 +125,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -158,6 +159,10 @@ window.Quarto = {
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -342,7 +347,7 @@ Subscribe to my newsletter
 <p>Even though you cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
 <p>Let’s see a practical example of how temperature affects the probabilities of the tokens:</p>
 <div id="cell-4" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a>tokens <span class="op">=</span> [<span class="st">'Dynamite'</span>, <span class="st">'Venom'</span>, <span class="st">'Himself'</span>, <span class="st">'Radiation'</span>, <span class="st">'You'</span>]</span>
 <span id="cb1-4"><a href="#cb1-4"></a>logits <span class="op">=</span> np.array([<span class="fl">2.5</span>, <span class="fl">1.8</span>, <span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.3</span>, <span class="op">-</span><span class="fl">1.2</span>])</span>
@@ -357,7 +362,7 @@ Subscribe to my newsletter
 <span id="cb1-13"><a href="#cb1-13"></a>    <span class="bu">print</span>(<span class="st">"-----|------------|------------"</span>)</span>
 <span id="cb1-14"><a href="#cb1-14"></a>    <span class="cf">for</span> i, (token, prob) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(tokens, probs), <span class="dv">1</span>):</span>
 <span id="cb1-15"><a href="#cb1-15"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">:4d}</span><span class="ss"> | '</span><span class="sc">{</span>token<span class="sc">:10s}</span><span class="ss">' | </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16"></a>    <span class="bu">print</span>(<span class="ss">f"Sum of probabilities: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">sum</span>(probs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="bu">print</span>(<span class="ss">f"Sum of probabilities: </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">sum</span>(probs)<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code simulates the impact of different temperature values on the next token probability. Given some initial logits and assuming this is the full vocabulary, we can calculate the probabilities of the tokens for a given temperature.</p>
 <p>For a temperature of <strong>0.1</strong>, you get the following probabilities:</p>
@@ -438,7 +443,7 @@ Subscribe to my newsletter
 <p>In essence, temperature impacts the randomness of the output by changing the probabilities of selecting the next token. This should give you a good idea of how temperature works. But let’s try it with a real LLM instead of a simulation.</p>
 <p>First, let’s import the required libraries and load the model.</p>
 <div id="cell-6" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForCausalLM, AutoTokenizer</span>
@@ -449,11 +454,11 @@ Subscribe to my newsletter
 <span id="cb2-9"><a href="#cb2-9"></a>    model_name,</span>
 <span id="cb2-10"><a href="#cb2-10"></a>    torch_dtype<span class="op">=</span><span class="st">"auto"</span>,</span>
 <span id="cb2-11"><a href="#cb2-11"></a>    device_map<span class="op">=</span><span class="st">"auto"</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-12"><a href="#cb2-12"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>For the sake of this example, we’ll use <code>unsloth/Qwen3-1.7B</code>. But what you see here is applicable to most LLMs. We’ll use <code>generate_text</code> as our text generation function.</p>
 <div id="cell-8" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> generate_text(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> generate_text(prompt, temperature, seed<span class="op">=</span><span class="va">None</span>, print_top_k<span class="op">=</span><span class="va">False</span>):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="cf">if</span> seed:</span>
 <span id="cb3-3"><a href="#cb3-3"></a>        torch.manual_seed(seed)</span>
 <span id="cb3-4"><a href="#cb3-4"></a>        <span class="cf">if</span> torch.cuda.is_available():</span>
@@ -503,7 +508,7 @@ Subscribe to my newsletter
 <span id="cb3-48"><a href="#cb3-48"></a>        is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> idx.item() <span class="op">==</span> output_token_id <span class="cf">else</span> <span class="st">""</span></span>
 <span id="cb3-49"><a href="#cb3-49"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss">' (prob: </span><span class="sc">{</span>prob<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, logit: </span><span class="sc">{</span>outputs<span class="sc">.</span>scores[<span class="dv">0</span>][<span class="dv">0</span>][idx.item()]<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">) </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb3-50"><a href="#cb3-50"></a></span>
-<span id="cb3-51"><a href="#cb3-51"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-51"><a href="#cb3-51"></a>    <span class="cf">return</span> selected_token</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>On a high-level, this function takes a prompt, a temperature value, and a seed (which we’ll ignore for now), and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
 <ol type="1">
@@ -514,7 +519,7 @@ Subscribe to my newsletter
 <p>Similar to what you saw in the previous example, you can try low and high temperature values.</p>
 <p>This is what you get for a temperature of 0.1:</p>
 <div id="cell-10" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">0.1</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">0.1</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 1.0000, logit: 330.0000) ← SELECTED
@@ -530,7 +535,7 @@ Subscribe to my newsletter
 </div>
 </div>
 <div id="cell-11" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">1.99</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="fl">1.99</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 0.5742, logit: 16.5829) ← SELECTED
@@ -554,7 +559,7 @@ Subscribe to my newsletter
 <p>Let’s revisit the example from the previous section to see this in action. By setting the seed to a fixed value, you ensure the generation process is deterministic. This means you will get an identical result on every run, provided all other parameters (like temperature) remain the same in those runs.</p>
 <p>We can start by setting our seed to 42 and temperature to 1 to verify which token is generated.</p>
 <div id="cell-15" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top-10 most likely tokens:
   1. 'Why' (prob: 0.6792, logit: 33.0000) 
@@ -574,24 +579,24 @@ Subscribe to my newsletter
 </div>
 <p>In this case, the model selected “Sure” as the next token, even though its probability is lower than ‘Why’. Now, we can verify that this stays the same over multiple runs.</p>
 <div id="cell-17" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>tokens <span class="op">=</span> []</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>tokens <span class="op">=</span> []</span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb11-4"><a href="#cb11-4"></a>    tokens.append(token)</span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure'}</code></pre>
 </div>
 </div>
 <p>This code runs the text generation process 100 times and verifies that “Sure” was picked in all runs. Next, we should verify that this consistency is lost when we omit the seed parameter.</p>
 <div id="cell-19" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>tokens <span class="op">=</span> []</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>tokens <span class="op">=</span> []</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    token <span class="op">=</span> generate_text(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb13-4"><a href="#cb13-4"></a>    tokens.append(token)</span>
 <span id="cb13-5"><a href="#cb13-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure', 'Why'}</code></pre>
 </div>
@@ -599,7 +604,7 @@ Subscribe to my newsletter
 <p>In this case, you see that after the 100 generations, the model picked two different tokens: ‘Sure’ and ‘Why’. This is expected due to not setting a seed.</p>
 <p>You can also use test this with a propietary model. Let’s try it with <code>gpt-4.1-nano</code> from OpenAI.</p>
 <div id="cell-21" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="im">import</span> openai</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="im">import</span> openai</span>
 <span id="cb15-2"><a href="#cb15-2"></a></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
 <span id="cb15-4"><a href="#cb15-4"></a></span>
@@ -628,14 +633,14 @@ Subscribe to my newsletter
 <span id="cb15-27"><a href="#cb15-27"></a>            token_text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>idx<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">. '</span><span class="sc">{</span>token<span class="sc">}</span><span class="ss">': </span><span class="sc">{</span>prob<span class="sc">:.4f}</span><span class="ss"> (</span><span class="sc">{</span>logprob<span class="sc">:.4f}</span><span class="ss">)"</span></span>
 <span id="cb15-28"><a href="#cb15-28"></a>            is_selected <span class="op">=</span> <span class="st">"← SELECTED"</span> <span class="cf">if</span> token_info.token <span class="op">==</span> selected_token <span class="cf">else</span> <span class="st">""</span></span>
 <span id="cb15-29"><a href="#cb15-29"></a>            <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>token_text<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>is_selected<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-30"><a href="#cb15-30"></a>    <span class="cf">return</span> selected_token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-30"><a href="#cb15-30"></a>    <span class="cf">return</span> selected_token</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Similar to the previous function, you provide a prompt, a temperature value, and a seed, and the model will return a completion token and will print the top 10 most likely tokens.</p>
 <p>In this case, instead of providing you with the logits, OpenAI will provide you with <code>logprobs</code> which are the logaritmic probabilities of the tokens:</p>
 <p><span class="math display">\[logprob(w_i) = ln(P(w_i)) = ln(\frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}) \]</span></p>
 <p>First, let’s check the completion token we get for a temperature of 1 and a seed of 42.</p>
 <div id="cell-23" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top 10 most likely tokens:
 1. 'Why': 59.2600 (-0.5232) ← SELECTED
@@ -653,12 +658,12 @@ Subscribe to my newsletter
 <p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
 <p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
 <div id="cell-25" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>tokens <span class="op">=</span> []</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>tokens <span class="op">=</span> []</span>
 <span id="cb18-2"><a href="#cb18-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb18-3"><a href="#cb18-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>, seed<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb18-4"><a href="#cb18-4"></a>    tokens.append(token)</span>
 <span id="cb18-5"><a href="#cb18-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">==</span> <span class="dv">1</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Why'}</code></pre>
 </div>
@@ -667,12 +672,12 @@ Subscribe to my newsletter
 <p>This should <em>generally</em> work, but OpenAI doesn’t guarantee that the same seed will always produce the same output. It might occur that your request is handled by a model with a <a href="https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter">different configuration</a>, and you’ll get different results.</p>
 <p>You can also verify that not using a seed will result in different tokens.</p>
 <div id="cell-27" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>tokens <span class="op">=</span> []</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>tokens <span class="op">=</span> []</span>
 <span id="cb20-2"><a href="#cb20-2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb20-3"><a href="#cb20-3"></a>    token <span class="op">=</span> generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, temperature<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb20-4"><a href="#cb20-4"></a>    tokens.append(token)</span>
 <span id="cb20-5"><a href="#cb20-5"></a><span class="cf">assert</span> <span class="bu">len</span>(<span class="bu">set</span>(tokens)) <span class="op">&gt;</span> <span class="dv">1</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="bu">print</span>(<span class="bu">set</span>(tokens))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'Sure', 'Why'}</code></pre>
 </div>
@@ -693,7 +698,7 @@ Subscribe to my newsletter
 <p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so including the smallest set of tokens whose combined probability ≥ P. For example, top P = 0.9 picks from the smallest group of tokens that together cover at least 90% probability.</p>
 <p>This parameter is available for most providers.</p>
 <div id="cell-30" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, top_p<span class="op">=</span><span class="fl">0.50</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>generate_text_openai(<span class="st">"Tell me a joke about dogs"</span>, top_p<span class="op">=</span><span class="fl">0.50</span>, print_top_k<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top 10 most likely tokens:
 1. 'Why': 59.2600 (-0.5232) ← SELECTED
@@ -802,13 +807,14 @@ Temperature and Seed.”</span> June 25, 2025. <a href="https://dylancastillo.co
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

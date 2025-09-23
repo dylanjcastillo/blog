@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -138,6 +139,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -304,16 +309,16 @@ Subscribe to my newsletter
 <li>Sign up and generate an API key in <a href="https://smith.langchain.com/signup">LangSmith</a>.</li>
 <li>Create an <code>.env</code> file with the following variables:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>sk-...</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>sk-...</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="va">LANGCHAIN_TRACING_V2</span><span class="op">=</span>true</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>lsv2_...</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGCHAIN_PROJECT</span><span class="op">=</span><span class="st">"my-project"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGCHAIN_PROJECT</span><span class="op">=</span><span class="st">"my-project"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li>Create a virtual environment in Python and install the requirements:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="bu">source</span> venv/bin/activate</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">pip</span> install langchain langsmith pydantic langchain-openai python-dotenv jupyter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">pip</span> install langchain langsmith pydantic langchain-openai python-dotenv jupyter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once you’ve completed the steps above, you can run copy and paste the code from the next sections. You can also download the notebook from <a href="../posts/function-calling-structured-outputs.html">here</a>.</p>
 </section>
 <section id="examples" class="level2 page-columns page-full">
@@ -321,7 +326,7 @@ Subscribe to my newsletter
 <p>As usual, you’ll start by importing the necessary libraries.</p>
 <p>You’ll use LangChain to interact with the OpenAI API and Pydantic for data validation.</p>
 <div id="cell-4" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> textwrap <span class="im">import</span> dedent</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="im">import</span> requests</span>
@@ -332,7 +337,7 @@ Subscribe to my newsletter
 <span id="cb3-9"><a href="#cb3-9"></a><span class="im">from</span> langsmith <span class="im">import</span> traceable</span>
 <span id="cb3-10"><a href="#cb3-10"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
 <span id="cb3-11"><a href="#cb3-11"></a></span>
-<span id="cb3-12"><a href="#cb3-12"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now that you’ve imported the libraries, we’ll work on three examples:</p>
 <ol type="1">
@@ -344,7 +349,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="function-calling-with-a-single-tool">Function calling with a single tool</h3>
 <p>First you start by defining the model and the tool:</p>
 <div id="cell-7" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>model <span class="op">=</span> ChatOpenAI(model_name<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>model <span class="op">=</span> ChatOpenAI(model_name<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="at">@tool</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="kw">def</span> find_weather(latitude: <span class="bu">float</span>, longitude: <span class="bu">float</span>):</span>
@@ -360,7 +365,7 @@ Subscribe to my newsletter
 <span id="cb4-14"><a href="#cb4-14"></a>    <span class="st">"find_weather"</span>: find_weather,</span>
 <span id="cb4-15"><a href="#cb4-15"></a>}</span>
 <span id="cb4-16"><a href="#cb4-16"></a></span>
-<span id="cb4-17"><a href="#cb4-17"></a>model_with_tools <span class="op">=</span> model.bind_tools([find_weather])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-17"><a href="#cb4-17"></a>model_with_tools <span class="op">=</span> model.bind_tools([find_weather])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code sets up a <code>gpt-4.1-mini</code> model with a single tool. To define a tool, you must define a function and use the <code>@tool</code> decorator. This function must necessarily have a docstring because this will be used to describe the tool to the model. In this case, the tool is a function that takes latitude and longitude values and returns the weather for that location by making a call to the Open Meteo API.</p>
 <p>Next, you need to tell your code how to find and use your tools. This is the purpose of <code>tools_mapping</code>. It is a common point of confusion. The LLM doesn’t run the tools on its own. It only decides if a tool should be used. After the model makes its decision, your own code must make the actual tool call.</p>
@@ -368,7 +373,7 @@ Subscribe to my newsletter
 <p>Finally, you need to <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
 <p>Then, let’s define a function that lets you call the model with the tool.</p>
 <div id="cell-9" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@traceable</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@traceable</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>):</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    messages <span class="op">=</span> [</span>
 <span id="cb5-4"><a href="#cb5-4"></a>        SystemMessage(</span>
@@ -391,7 +396,7 @@ Subscribe to my newsletter
 <span id="cb5-21"><a href="#cb5-21"></a></span>
 <span id="cb5-22"><a href="#cb5-22"></a></span>
 <span id="cb5-23"><a href="#cb5-23"></a>response <span class="op">=</span> get_response(<span class="st">"What's the weather in Tokyo?"</span>)</span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="bu">print</span>(response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The current temperature in Tokyo is approximately 25.5°C. If you want more detailed weather information, please let me know!</code></pre>
 </div>
@@ -445,7 +450,7 @@ Subscribe to my newsletter
 <p>Similar to the previous example, you start by defining the tools (using the <code>@tool</code> decorator) and binding them to the model.</p>
 <p>In addition to <code>get_weather</code>, you’ll also define a tool to check if a response follows the company guidelines. In this case, the company guidelines are that responses should be written in the style of a haiku.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div id="cell-13" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>model <span class="op">=</span> ChatOpenAI(model_name<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>model <span class="op">=</span> ChatOpenAI(model_name<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="at">@tool</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="kw">def</span> get_weather(latitude: <span class="bu">float</span>, longitude: <span class="bu">float</span>):</span>
@@ -477,11 +482,11 @@ Subscribe to my newsletter
 <span id="cb7-30"><a href="#cb7-30"></a>    <span class="st">"check_guidelines"</span>: check_guidelines,</span>
 <span id="cb7-31"><a href="#cb7-31"></a>}</span>
 <span id="cb7-32"><a href="#cb7-32"></a></span>
-<span id="cb7-33"><a href="#cb7-33"></a>model_with_tools <span class="op">=</span> model.bind_tools([get_weather, check_guidelines])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-33"><a href="#cb7-33"></a>model_with_tools <span class="op">=</span> model.bind_tools([get_weather, check_guidelines])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code defines the tools and binds them to the model. Just like we did before, you also need to define a mapping of the tools, so that you can call the right tool when the model decides to use it.</p>
 <div id="cell-15" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="at">@traceable</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="at">@traceable</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>):</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    messages <span class="op">=</span> [</span>
 <span id="cb8-4"><a href="#cb8-4"></a>        SystemMessage(</span>
@@ -504,7 +509,7 @@ Subscribe to my newsletter
 <span id="cb8-21"><a href="#cb8-21"></a></span>
 <span id="cb8-22"><a href="#cb8-22"></a></span>
 <span id="cb8-23"><a href="#cb8-23"></a>response <span class="op">=</span> get_response(<span class="st">"What is the temperature in Madrid?"</span>)</span>
-<span id="cb8-24"><a href="#cb8-24"></a><span class="bu">print</span>(response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="bu">print</span>(response)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sunny Madrid basks,  
 Thirty-six degrees embrace,  
@@ -522,16 +527,16 @@ Summer's warm caress.</code></pre>
 <p>It’s easy to set up with proprietary models. With LangChain, you can define a <code>dict</code> or a <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic model</a> to describe the output. I recommend using Pydantic models.</p>
 <p>For example, let’s define a Pydantic model that will help us classify document into categories:</p>
 <div id="cell-19" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> DocumentInfo(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> DocumentInfo(BaseModel):</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    category: Literal[<span class="st">"financial"</span>, <span class="st">"legal"</span>, <span class="st">"marketing"</span>, <span class="st">"pets"</span>, <span class="st">"other"</span>] <span class="op">=</span> Field(</span>
 <span id="cb10-3"><a href="#cb10-3"></a>        description<span class="op">=</span><span class="st">"The category of the document"</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>    )</span>
-<span id="cb10-5"><a href="#cb10-5"></a>    summary: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"A short summary of the document"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-5"><a href="#cb10-5"></a>    summary: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"A short summary of the document"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This model defines the structured output we’ll get from the model. It has two fields: <code>category</code> and <code>summary</code>.</p>
 <p>Then, you can use the <code>with_structured_output</code> method to create a model that will return the structured output:</p>
 <div id="cell-21" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb11-2"><a href="#cb11-2"></a></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="kw">def</span> get_document_info(document: <span class="bu">str</span>) <span class="op">-&gt;</span> DocumentInfo:</span>
 <span id="cb11-4"><a href="#cb11-4"></a>    model_with_structure <span class="op">=</span> model.with_structured_output(DocumentInfo)</span>
@@ -544,7 +549,7 @@ Summer's warm caress.</code></pre>
 <span id="cb11-11"><a href="#cb11-11"></a><span class="st">"""</span></span>
 <span id="cb11-12"><a href="#cb11-12"></a>)</span>
 <span id="cb11-13"><a href="#cb11-13"></a>document_info <span class="op">=</span> get_document_info(<span class="st">"I'm a document about a cat"</span>)</span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="bu">print</span>(document_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="bu">print</span>(document_info)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>category='pets' summary='A document about a cat.'</code></pre>
 </div>
@@ -641,13 +646,14 @@ LLMs with LangChain and OpenAI.”</span> July 1, 2025. <a href="https://dylanca
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

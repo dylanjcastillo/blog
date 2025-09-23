@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -248,8 +253,7 @@ Subscribe to my newsletter
 </header>
 
 
-<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do.</p>
-<p>I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made Cursor agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do. I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made coding agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their “ultimate prompt” that it often feels closer to astrology than to engineering.</p>
 <p>This article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based applications, but will avoid you making obvious mistakes.</p>
 <p>Let’s get started!</p>
@@ -262,22 +266,22 @@ Subscribe to my newsletter
 </ol>
 <p>The system prompt gives the assistant a “role”, while the user prompt requests specific content within that framework.</p>
 <p>Prompts are usually provided as messages, which are a list of objects with a role and a content:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>messages <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>messages <span class="op">=</span> [</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What's the weather in Tokyo?"</span>}</span>
-<span id="cb1-4"><a href="#cb1-4"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em>, after combining the system and user prompts:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>&lt;|im_start|&gt;system</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>&lt;|im_start|&gt;system</span>
 <span id="cb2-2"><a href="#cb2-2"></a>You are a helpful assistant.</span>
 <span id="cb2-3"><a href="#cb2-3"></a>&lt;|im_end|&gt;</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
 <span id="cb2-5"><a href="#cb2-5"></a>&lt;|im_start|&gt;user</span>
 <span id="cb2-6"><a href="#cb2-6"></a>What's the weather in Tokyo?</span>
-<span id="cb2-7"><a href="#cb2-7"></a>&lt;|im_end|&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s response<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It looks like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>&lt;|im_start|&gt;assistant</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>&lt;|im_start|&gt;assistant</span>
 <span id="cb3-2"><a href="#cb3-2"></a>The weather in Tokyo is sunny.</span>
-<span id="cb3-3"><a href="#cb3-3"></a>&lt;|im_end|&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You’ll generally use the system and user prompts to instruct the model. But for some prompting techniques, such as few-shot prompting, people often use assistant messages to simulate model responses.</p>
 </section>
 <section id="components-of-a-good-prompt" class="level2">
@@ -298,7 +302,7 @@ Subscribe to my newsletter
 <p>This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: “If I didn’t have any background knowledge in this domain, could I complete this task based on the text that I just wrote in this prompt?”</p>
 <p>In addition to describing the task, you should also provide a role for the model. For example, if you’re classifying documents you can use a role like “You’re an expert in document classification” or if you’re dealing with financial data you can use a role like “You’re an expert in financial analysis”.</p>
 <p>Here’s an example of a clear and specific prompt:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>You're an expert in business writing. Please review and improve this email by addressing the following issues:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>You're an expert in business writing. Please review and improve this email by addressing the following issues:</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a>- Fix any grammatical errors and typos</span>
 <span id="cb4-4"><a href="#cb4-4"></a>- Improve clarity and conciseness</span>
@@ -307,7 +311,7 @@ Subscribe to my newsletter
 <span id="cb4-7"><a href="#cb4-7"></a>- Add a clear call-to-action if missing</span>
 <span id="cb4-8"><a href="#cb4-8"></a>- Format for better readability (bullets, paragraphs, etc.)</span>
 <span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a>&lt;EMAIL CONTENT&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-10"><a href="#cb4-10"></a>&lt;EMAIL CONTENT&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This information will let the LLM know which specific task you want it to perform. This should go in the system prompt.</p>
 </section>
 <section id="principle-2-provide-examples" class="level3">
@@ -315,7 +319,7 @@ Subscribe to my newsletter
 <p>One of the lowest hanging fruit in prompt engineering is to provide examples. It’s as simple as showing the model a few input and output pairs.</p>
 <p>This technique is formally known as “few shot prompt”. It’s a simple but effective way to improve the <a href="https://arxiv.org/abs/2009.03300">quality of the output</a> in many tasks.</p>
 <p>Here’s an example of a few-shot prompt:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.</span>
 <span id="cb5-2"><a href="#cb5-2"></a>Examples:</span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
 <span id="cb5-4"><a href="#cb5-4"></a>**Example 1**:</span>
@@ -328,7 +332,7 @@ Subscribe to my newsletter
 <span id="cb5-11"><a href="#cb5-11"></a></span>
 <span id="cb5-12"><a href="#cb5-12"></a>Input: 'Javier Dylan Christopher Joseph'</span>
 <span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>Output: 'RNRH'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-14"><a href="#cb5-14"></a>Output: 'RNRH'</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In my experience, it’s better to provide these examples directly in the system prompt because it’s easier to read and keep everything close together. However, as mentioned above, some people prefer to use assistant messages to provide examples.</p>
 </section>
 <section id="principle-3-let-models-think" class="level3">
@@ -339,13 +343,13 @@ Subscribe to my newsletter
 <p>Here are two examples of CoT prompts:</p>
 <section id="shot-cot-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="shot-cot-prompt">0-Shot CoT Prompt</h4>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>**Note:** think about your answer step by step</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a>**Note:** think about your answer step by step</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="shot-cot-prompt-1" class="level4">
 <h4 class="anchored" data-anchor-id="shot-cot-prompt-1">1-Shot CoT Prompt</h4>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>&lt;example&gt;</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>&lt;example&gt;</span>
 <span id="cb7-2"><a href="#cb7-2"></a>**Question:** Emily buys 3 notebooks at $4 each and 2 pens at $1.50 each. What's her total cost?</span>
 <span id="cb7-3"><a href="#cb7-3"></a>**Reasoning:**</span>
 <span id="cb7-4"><a href="#cb7-4"></a></span>
@@ -356,7 +360,7 @@ Subscribe to my newsletter
 <span id="cb7-9"><a href="#cb7-9"></a>**Answer:** $15</span>
 <span id="cb7-10"><a href="#cb7-10"></a>&lt;/example&gt;</span>
 <span id="cb7-11"><a href="#cb7-11"></a></span>
-<span id="cb7-12"><a href="#cb7-12"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-12"><a href="#cb7-12"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the full thinking tokens in the response. OpenAI will give you a summarized version of the thinking process and Anthropic will only give you the final answer.</p>
 </section>
 </section>
@@ -367,7 +371,7 @@ Subscribe to my newsletter
 <section id="system-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="system-prompt">System prompt</h4>
 <p>For system prompts, you can use the following structure:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>**Role and objective**</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>**Role and objective**</span>
 <span id="cb8-2"><a href="#cb8-2"></a></span>
 <span id="cb8-3"><a href="#cb8-3"></a>You’re an expert document classifier. Your goal is to classify this document…</span>
 <span id="cb8-4"><a href="#cb8-4"></a></span>
@@ -389,19 +393,19 @@ Subscribe to my newsletter
 <span id="cb8-20"><a href="#cb8-20"></a></span>
 <span id="cb8-21"><a href="#cb8-21"></a>**(Optional) Reiterate objective and elicit thinking**</span>
 <span id="cb8-22"><a href="#cb8-22"></a></span>
-<span id="cb8-23"><a href="#cb8-23"></a>Your goal is to XYZ… Before writing your answers, write your reasoning step by step.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-23"><a href="#cb8-23"></a>Your goal is to XYZ… Before writing your answers, write your reasoning step by step.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The headers are for reference only, you can skip them if you want. You also don’t need to include all of these sections in your prompt.</p>
 </section>
 <section id="user-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="user-prompt">User prompt</h4>
 <p>I’d recommend to keep user prompts short:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>**Context**</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>**Context**</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a>Input: [document text]</span>
 <span id="cb9-4"><a href="#cb9-4"></a></span>
 <span id="cb9-5"><a href="#cb9-5"></a>**Briefly reiterate objective**</span>
 <span id="cb9-6"><a href="#cb9-6"></a></span>
-<span id="cb9-7"><a href="#cb9-7"></a>Please classify this document into a category.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-7"><a href="#cb9-7"></a>Please classify this document into a category.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In it’s simplest form, you just provide the context the LLM needs to work with and reiterate the objective.</p>
 </section>
 </section>
@@ -417,7 +421,7 @@ Subscribe to my newsletter
 <section id="big-complex-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="big-complex-prompt">Big complex prompt</h4>
 <p>This prompt tries (and likely fails) to do two complex tasks at once.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
 <span id="cb10-2"><a href="#cb10-2"></a></span>
 <span id="cb10-3"><a href="#cb10-3"></a>- Medical</span>
 <span id="cb10-4"><a href="#cb10-4"></a>- Financial</span>
@@ -430,31 +434,31 @@ Subscribe to my newsletter
 <span id="cb10-11"><a href="#cb10-11"></a>...</span>
 <span id="cb10-12"><a href="#cb10-12"></a></span>
 <span id="cb10-13"><a href="#cb10-13"></a>If the document is classified as "Legal", extract the following entities:</span>
-<span id="cb10-14"><a href="#cb10-14"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-14"><a href="#cb10-14"></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="smaller-simpler-prompts" class="level4">
 <h4 class="anchored" data-anchor-id="smaller-simpler-prompts">Smaller, simpler prompts</h4>
 <p>This second approach splits the task into two smaller prompts that do each task separately.</p>
 <p><strong>Prompt 1: Document classification</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
 <span id="cb11-2"><a href="#cb11-2"></a></span>
 <span id="cb11-3"><a href="#cb11-3"></a>- Medical</span>
 <span id="cb11-4"><a href="#cb11-4"></a>- Financial</span>
-<span id="cb11-5"><a href="#cb11-5"></a>- Legal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-5"><a href="#cb11-5"></a>- Legal</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Prompt N: Entity extraction (one for each category)</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to extract the entities from the document.</span>
-<span id="cb12-2"><a href="#cb12-2"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to extract the entities from the document.</span>
+<span id="cb12-2"><a href="#cb12-2"></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="principle-6-with-long-contexts-repeat-instructions" class="level3">
 <h3 class="anchored" data-anchor-id="principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</h3>
 <p>LLMs often get confused when the context is too long and the instructions are complex. When context gets above a certain length, it’s better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts">30% performance improvement</a> when using this technique.</p>
 <p>You can use the following structure:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span>
 <span id="cb13-2"><a href="#cb13-2"></a></span>
 <span id="cb13-3"><a href="#cb13-3"></a>&lt;VERY LONG CONTEXT&gt;</span>
 <span id="cb13-4"><a href="#cb13-4"></a></span>
-<span id="cb13-5"><a href="#cb13-5"></a>Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-5"><a href="#cb13-5"></a>Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When dealing with long contexts, I generally reiterate the objective at the bottom of the system and user prompts.</p>
 </section>
 </section>
@@ -554,13 +558,14 @@ Castillo, Dylan. 2025. <span>“Prompt Engineering 101.”</span> June 26,
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

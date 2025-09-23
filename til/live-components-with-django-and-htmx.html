@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -224,7 +229,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 4, 2025</p>
+      <p class="date-modified">September 23, 2025</p>
     </div>
   </div>
     
@@ -238,7 +243,7 @@ Subscribe to my newsletter
 <p>I discovered <a href="https://github.com/EmilStenstrom/django-components/"><code>django-components</code></a> late last year and I quickly realized it was the missing piece in my Django + htmx workflow. It made my developer experience so much better, that I even started contributing to it.</p>
 <p><code>django-components</code> lets you build components that combine HTML, JS, and CSS in a single place. Plus, it now lets you use components as views. This feature allows you to keep all the logic for a part of your application in one place, giving you great <a href="https://htmx.org/essays/locality-of-behaviour/">locality of behavior</a>.</p>
 <p>A <a href="https://htmx.org/examples/click-to-load/">click-to-load</a> component would look something like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> django.core.paginator <span class="im">import</span> Paginator</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> django.core.paginator <span class="im">import</span> Paginator</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> django_components <span class="im">import</span> component</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> src.app.models <span class="im">import</span> Contact</span>
@@ -277,9 +282,9 @@ Subscribe to my newsletter
 <span id="cb1-37"><a href="#cb1-37"></a>        paginator <span class="op">=</span> Paginator(Contact.objects.order_by(<span class="st">"id"</span>), <span class="dv">3</span>)</span>
 <span id="cb1-38"><a href="#cb1-38"></a>        page_obj <span class="op">=</span> paginator.get_page(page)</span>
 <span id="cb1-39"><a href="#cb1-39"></a>        context <span class="op">=</span> {<span class="st">"page_obj"</span>: page_obj}</span>
-<span id="cb1-40"><a href="#cb1-40"></a>        <span class="cf">return</span> <span class="va">self</span>.render_to_response(context)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-40"><a href="#cb1-40"></a>        <span class="cf">return</span> <span class="va">self</span>.render_to_response(context)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can use this component in any view using <code>{% component 'click_to_load' page_obj=page_obj %}</code> or render it outside of a view by adding it to <code>urls.py</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> django.urls <span class="im">import</span> path</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> django.urls <span class="im">import</span> path</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> src.components.click_to_load.table <span class="im">import</span> ClickToLoadTableComponent</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
@@ -289,7 +294,7 @@ Subscribe to my newsletter
 <span id="cb2-8"><a href="#cb2-8"></a>        ClickToLoadTableComponent.as_view(),</span>
 <span id="cb2-9"><a href="#cb2-9"></a>        name<span class="op">=</span><span class="st">"contacts"</span>,</span>
 <span id="cb2-10"><a href="#cb2-10"></a>    ),</span>
-<span id="cb2-11"><a href="#cb2-11"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-11"><a href="#cb2-11"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Short and sweet, just like the best things in life.</p>
 <section id="django-live-components" class="level2">
 <h2 class="anchored" data-anchor-id="django-live-components">Django Live Components</h2>
@@ -299,7 +304,7 @@ Subscribe to my newsletter
 <p>I had a simple idea: set up a <a href="https://redis.io/docs/interact/pubsub/">Redis</a> <a href="https://redis.io/docs/interact/pubsub/">pub/sub channel</a> for server notifications. When the client loads the page, it subscribes to this notification channel. Each time the server publishes a new notification, the system reads it from the channel. Then, it renders the HTML and sends it to the client using Server-Sent Events (SSE).</p>
 <p>First, you need a notification component, with a streaming view that updates the client whenever a new notification occurs, and a way to subscribe to new notifications sent from the server.</p>
 <p>Here’s what I came up with:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> asyncio</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> json</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> typing <span class="im">import</span> AsyncGenerator</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
@@ -360,9 +365,9 @@ Subscribe to my newsletter
 <span id="cb3-59"><a href="#cb3-59"></a>        <span class="cf">return</span> StreamingHttpResponse(</span>
 <span id="cb3-60"><a href="#cb3-60"></a>            streaming_content<span class="op">=</span><span class="va">self</span>.streaming_response(),</span>
 <span id="cb3-61"><a href="#cb3-61"></a>            content_type<span class="op">=</span><span class="st">"text/event-stream"</span>,</span>
-<span id="cb3-62"><a href="#cb3-62"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-62"><a href="#cb3-62"></a>        )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>And you should include this in your <code>urls.py</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> django.urls <span class="im">import</span> path</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> django.urls <span class="im">import</span> path</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">from</span> components.notification <span class="im">import</span> NotificationComponent</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>urlpatterns <span class="op">=</span> [</span>
@@ -371,9 +376,9 @@ Subscribe to my newsletter
 <span id="cb4-7"><a href="#cb4-7"></a>        NotificationComponent.as_live_view(),</span>
 <span id="cb4-8"><a href="#cb4-8"></a>        name<span class="op">=</span><span class="st">"stream_notification"</span>,</span>
 <span id="cb4-9"><a href="#cb4-9"></a>    ),</span>
-<span id="cb4-10"><a href="#cb4-10"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-10"><a href="#cb4-10"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, you need a simple HTML template to show these notifications. I used the <a href="https://htmx.org/extensions/server-sent-events/">htmx SSE extension</a> to handle the SSE connection on the client. This was my template:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">&lt;!-- src/templates/index.html --&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">&lt;!-- src/templates/index.html --&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
@@ -394,9 +399,9 @@ Subscribe to my newsletter
 <span id="cb5-19"><a href="#cb5-19"></a><span class="ot">    </span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
 <span id="cb5-20"><a href="#cb5-20"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://unpkg.com/htmx.org/dist/ext/sse.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
 <span id="cb5-21"><a href="#cb5-21"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Finally, you need a script to simulate these server notifications:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># random_notifications.py</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># random_notifications.py</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="im">import</span> redis</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="im">import</span> json</span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="im">import</span> random</span>
@@ -433,7 +438,7 @@ Subscribe to my newsletter
 <span id="cb6-35"><a href="#cb6-35"></a>            publish_notification()</span>
 <span id="cb6-36"><a href="#cb6-36"></a>            time.sleep(<span class="dv">3</span>)</span>
 <span id="cb6-37"><a href="#cb6-37"></a>    <span class="cf">except</span> <span class="pp">KeyboardInterrupt</span>:</span>
-<span id="cb6-38"><a href="#cb6-38"></a>        <span class="bu">print</span>(<span class="st">"Stopped notification publisher"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-38"><a href="#cb6-38"></a>        <span class="bu">print</span>(<span class="st">"Stopped notification publisher"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can run Redis on Docker to run this script. It’ll start adding notifications to the Redis channel, that you’ll see flash on the page.</p>
 <p>This was fun. I ended up using a similar pattern in <a href="https://aitheneum.iwanalabs.com/">AItheneum</a>.</p>
 
@@ -502,13 +507,14 @@ Htmx.”</span> January 28, 2024. <a href="https://dylancastillo.co/til/live-com
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

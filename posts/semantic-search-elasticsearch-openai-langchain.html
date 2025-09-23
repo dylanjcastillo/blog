@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -285,23 +290,23 @@ Subscribe to my newsletter
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
 <li>Clone the project’s repository:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/semantic-search-elasticsearch-openai-langchain</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li><p>From the root folder of the project, install the dependencies:</p>
 <ul>
 <li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Open <code>src/.env-example</code>, add your secret OpenAI key, and save the file as <code>.env</code>.</p></li>
 </ol>
 <p>By now, you’ll have a virtual environment set up with the required libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">semantic-search-elasticsearch-openai-langchain</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">semantic-search-elasticsearch-openai-langchain</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="ex">├──</span> LICENSE</span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> poetry.lock</span>
@@ -318,7 +323,7 @@ Subscribe to my newsletter
 <span id="cb4-15"><a href="#cb4-15"></a><span class="ex">│&nbsp;&nbsp;</span> │       └── style.css</span>
 <span id="cb4-16"><a href="#cb4-16"></a><span class="ex">│&nbsp;&nbsp;</span> ├── indexer.py</span>
 <span id="cb4-17"><a href="#cb4-17"></a><span class="ex">│</span>   └── .env-example</span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the most relevant files and directories in the project:</p>
 <ul>
 <li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies and are used by Poetry to create a virtual environment.</li>
@@ -336,7 +341,7 @@ Subscribe to my newsletter
 <section id="start-a-local-elasticsearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="start-a-local-elasticsearch-cluster">Start a Local Elasticsearch Cluster</h2>
 <p>Before we get into the code, you should start a local Elasticsearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sh</span> run_elasticsearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sh</span> run_elasticsearch_docker.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything went well, a lengthy text string will appear on the terminal. For the rest of the tutorial, keep this terminal window open in the background.</p>
 </section>
 <section id="split-and-index-the-book" class="level2">
@@ -347,7 +352,7 @@ Subscribe to my newsletter
 <li>Index the text chunks you’ve generated (from now on called documents) in your Elasticsearch cluster.</li>
 </ol>
 <p>Take a look at <code>src/indexer.py</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> langchain.document_loaders <span class="im">import</span> BSHTMLLoader</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> langchain.document_loaders <span class="im">import</span> BSHTMLLoader</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="im">from</span> langchain.embeddings.openai <span class="im">import</span> OpenAIEmbeddings</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="im">from</span> langchain.text_splitter <span class="im">import</span> RecursiveCharacterTextSplitter</span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="im">from</span> langchain.vectorstores <span class="im">import</span> ElasticVectorSearch</span>
@@ -375,7 +380,7 @@ Subscribe to my newsletter
 <span id="cb6-26"><a href="#cb6-26"></a></span>
 <span id="cb6-27"><a href="#cb6-27"></a></span>
 <span id="cb6-28"><a href="#cb6-28"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb6-29"><a href="#cb6-29"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-29"><a href="#cb6-29"></a>    main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code takes Meditations, splits it into text chunks of 1,000 tokens, and then indexes those chunks in your Elasticsearch cluster. Here’s a detailed breakdown:</p>
 <ul>
 <li><strong>Lines 1 to 4</strong> import the required components from <code>langchain</code>:
@@ -391,10 +396,10 @@ Subscribe to my newsletter
 <li><strong>Lines 18 to 25</strong> initialize the embeddings function, create a new index, and index the documents generated by the text splitter. In <code>elasticsearch_url</code>, you specify the port where your application is running locally, and in <code>index_name</code> you specify the name of the index you’ll use. Finally, you print the Elasticsearch client information.</li>
 </ul>
 <p>To run this script, open a terminal, activate the virtual environment, and from <code>src</code> folder of your project, run the following command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># ../src/</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">python</span> indexer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># ../src/</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">python</span> indexer.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything went well, you should get an output that looks similar to this (but not properly formatted):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"0e1113eb2915"</span><span class="fu">,</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"cluster_name"</span><span class="fu">:</span> <span class="st">"docker-cluster"</span><span class="fu">,</span></span>
 <span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"cluster_uuid"</span><span class="fu">:</span> <span class="st">"og6mFMqwQtaJiv_3E_q2YQ"</span><span class="fu">,</span></span>
@@ -410,14 +415,14 @@ Subscribe to my newsletter
 <span id="cb8-14"><a href="#cb8-14"></a>    <span class="dt">"minimum_index_compatibility_version"</span><span class="fu">:</span> <span class="st">"7.0.0"</span></span>
 <span id="cb8-15"><a href="#cb8-15"></a>  <span class="fu">},</span></span>
 <span id="cb8-16"><a href="#cb8-16"></a>  <span class="dt">"tagline"</span><span class="fu">:</span> <span class="st">"You Know, for Search"</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, let’s create a simple FastAPI app, to interact with your cluster.</p>
 </section>
 <section id="create-a-search-application" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-search-application">Create a Search Application</h2>
 <p>In this step, you’ll create a simple application to interact with Meditations. You’ll connect to the Elasticsearch cluster, initialize the <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/vector_db_qa.html">Retrieval Questioning/Answering Chain</a>, and create an <code>/ask</code> endpoint that lets the user interact with the app.</p>
 <p>Take a look at the code of <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> langchain.chains <span class="im">import</span> RetrievalQA</span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> ChatOpenAI</span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="im">from</span> langchain.embeddings.openai <span class="im">import</span> OpenAIEmbeddings</span>
@@ -453,7 +458,7 @@ Subscribe to my newsletter
 <span id="cb9-34"><a href="#cb9-34"></a>    response <span class="op">=</span> qa.run(query)</span>
 <span id="cb9-35"><a href="#cb9-35"></a>    <span class="cf">return</span> {</span>
 <span id="cb9-36"><a href="#cb9-36"></a>        <span class="st">"response"</span>: response,</span>
-<span id="cb9-37"><a href="#cb9-37"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-37"><a href="#cb9-37"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code lets the user ask questions about Marcus Aurelius’ Meditations and provides answers back to the users. Let me show you how it works:</p>
 <ul>
 <li><strong>Lines 1 to 5</strong> import the required libraries:
@@ -474,7 +479,7 @@ Subscribe to my newsletter
 <li><strong>Lines 22 to 36</strong> initialize the FastAPI app and define two endpoints. The <code>/</code> endpoint provides users with information on how to use the application. The <code>/ask</code> endpoint takes a user’s question (<code>query</code> parameter) and returns an answer using the previously initialized chain.</li>
 </ul>
 <p>Finally, you can run the app from the terminal (using your virtual environment):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">uvicorn</span> app:app <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">uvicorn</span> app:app <span class="at">--reload</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, visit <code>http://127.0.0.1:8000/docs</code>, and test <code>/ask</code> by making a question about the book:</p>
 <p><a href="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/semantic-search-elasticsearch-openai-langchain/image-13.png" class="img-fluid"></a></p>
 <p>If everything went well, you should get something like this:</p>
@@ -570,13 +575,14 @@ OpenAI, and LangChain.”</span> April 27, 2023. <a href="https://dylancastillo.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

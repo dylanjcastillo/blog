@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -286,7 +291,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
 <p>I’d recommend you combine the snippets you need into a function. Then, you can use that function for pre-processing or tokenizing text. If you’re using <strong>pandas</strong>, you can apply that function to a specific column using the <code>.map</code> method of pandas’ <code>Series</code>.</p>
 <p>Take a look at the example below:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> re</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> string <span class="im">import</span> punctuation</span>
@@ -305,44 +310,44 @@ Subscribe to my newsletter
 <span id="cb1-17"><a href="#cb1-17"></a>    text <span class="op">=</span> <span class="st">" "</span>.join(text.split())  <span class="co"># Remove extra spaces, tabs, and new lines</span></span>
 <span id="cb1-18"><a href="#cb1-18"></a>    <span class="cf">return</span> text</span>
 <span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a>df[<span class="st">"text_col"</span>].<span class="bu">map</span>(preprocess_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-20"><a href="#cb1-20"></a>df[<span class="st">"text_col"</span>].<span class="bu">map</span>(preprocess_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="code-snippets" class="level2">
 <h2 class="anchored" data-anchor-id="code-snippets">Code snippets</h2>
 <p>Before testing the snippets, copy the following function at the top of your Python script or Jupyter notebook.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> print_text(sample, clean):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> print_text(sample, clean):</span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>sample<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    <span class="bu">print</span>(<span class="ss">f"After: </span><span class="sc">{</span>clean<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="bu">print</span>(<span class="ss">f"After: </span><span class="sc">{</span>clean<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="cleaning-text" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-text">Cleaning text</h3>
 <p>These are functions you can use to clean text using Python. Most of them just use Python’s standard libraries like <code>re</code> or <code>string</code>.</p>
 <section id="lowercase-text" class="level4">
 <h4 class="anchored" data-anchor-id="lowercase-text">Lowercase text</h4>
 <p>It’s fairly common to <a href="https://nlp.stanford.edu/IR-book/html/htmledition/capitalizationcase-folding-1.html">lowercase text for NLP tasks</a>. Luckily, Python strings include a <code>.lower()</code> method that makes that easy for you. Here’s how you use it:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>sample_text <span class="op">=</span> <span class="st">"THIS TEXT WILL BE LOWERCASED. THIS WON'T: ßßß"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>sample_text <span class="op">=</span> <span class="st">"THIS TEXT WILL BE LOWERCASED. THIS WON'T: ßßß"</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>clean_text <span class="op">=</span> sample_text.lower()</span>
 <span id="cb3-3"><a href="#cb3-3"></a>print_text(sample_text, clean_text)</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="co"># Before: THIS TEXT WILL BE LOWERCASED. THIS WON'T: ßßß</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># After: this text will be lowercased. this won't: ßßß</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># After: this text will be lowercased. this won't: ßßß</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-cases-useful-for-caseless-matching" class="level4">
 <h4 class="anchored" data-anchor-id="remove-cases-useful-for-caseless-matching">Remove cases (useful for caseless matching)</h4>
 <p>Case folding is a common approach for matching strings (especially in languages other than English). Python strings provide you with <code>.casefold()</code> for that. Here’s how to use it:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>sample_text <span class="op">=</span> <span class="st">"THIS TEXT WILL BE LOWERCASED. THIS too: ßßß"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>sample_text <span class="op">=</span> <span class="st">"THIS TEXT WILL BE LOWERCASED. THIS too: ßßß"</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>clean_text <span class="op">=</span> sample_text.casefold()</span>
 <span id="cb4-3"><a href="#cb4-3"></a>print_text(sample_text, clean_text)</span>
 <span id="cb4-4"><a href="#cb4-4"></a></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Before: THIS TEXT WILL BE LOWERCASED. THIS too: ßßß</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># After: this text will be lowercased. this too: ssssss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># After: this text will be lowercased. this too: ssssss</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-hyperlinks" class="level4">
 <h4 class="anchored" data-anchor-id="remove-hyperlinks">Remove hyperlinks</h4>
 <p>If you’re web scrapping, you’ll often deal with hyperlinks. It’s possible that you’d like to remove those to analyze the text. The easiest way to do that is by using regular expressions.</p>
 <p>Python’s <code>re</code> library is handy for those cases. This is how you’d remove hyperlinks using it:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> re</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a>sample_text <span class="op">=</span> <span class="st">"Some URLs: https://example.com http://example.io http://exam-ple.com More text"</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r"https</span><span class="op">?</span><span class="vs">://</span><span class="dv">\S</span><span class="op">+</span><span class="vs">"</span>, <span class="st">""</span>, sample_text)</span>
@@ -350,13 +355,13 @@ Subscribe to my newsletter
 <span id="cb5-6"><a href="#cb5-6"></a></span>
 <span id="cb5-7"><a href="#cb5-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a><span class="co"># Before: Some URLs: https://example.com http://example.io http://exam-ple.com More text</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># After: Some URLs:    More text</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co"># After: Some URLs:    More text</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-a-tags-but-keep-their-content" class="level4">
 <h4 class="anchored" data-anchor-id="remove-a-tags-but-keep-their-content">Remove <code>&lt;a&gt;</code> tags but keep their content</h4>
 <p>Similar to the previous case, if you’re doing web scrapping, you might often find dealing with tags. In some cases, such as <code>&lt;a&gt;</code>, you may want to remove the tag and its attributes but not its contents (e.g., the text it contains).</p>
 <p>You can use Python’s <code>re</code> for that. Here’s how you’d remove the <code>&lt;a&gt;</code> tag and its attributes while keeping its content:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> re</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>sample_text <span class="op">=</span> <span class="st">"Here's &lt;a href='https://example.com'&gt; a tag&lt;/a&gt;"</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r"&lt;a</span><span class="pp">[^&gt;]</span><span class="op">*</span><span class="vs">&gt;</span><span class="kw">(</span><span class="dv">.</span><span class="op">*?</span><span class="kw">)</span><span class="vs">&lt;/a&gt;"</span>, <span class="vs">r"</span><span class="ch">\1</span><span class="vs">"</span>, sample_text)</span>
@@ -364,13 +369,13 @@ Subscribe to my newsletter
 <span id="cb6-6"><a href="#cb6-6"></a></span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Before: Here's &lt;a href='https://example.com'&gt; a tag&lt;/a&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># After: Here's  a tag</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># After: Here's  a tag</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can also use this snippet as a starting point to remove other types of tags.</p>
 </section>
 <section id="remove-all-html-tags-but-keep-their-contents" class="level4">
 <h4 class="anchored" data-anchor-id="remove-all-html-tags-but-keep-their-contents">Remove all HTML tags but keep their contents</h4>
 <p>If you’re dealing with web pages and want to remove all the tags in a document, you can use a generalized version of the previous snippet. Here’s how you remove all the HTML tags using Python’s <code>re</code> library:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">import</span> re</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a>sample_text <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="st">&lt;body&gt;</span></span>
@@ -390,14 +395,14 @@ Subscribe to my newsletter
 <span id="cb7-18"><a href="#cb7-18"></a></span>
 <span id="cb7-19"><a href="#cb7-19"></a><span class="co"># After:</span></span>
 <span id="cb7-20"><a href="#cb7-20"></a></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#  This is a sample text with lots of tags</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#  This is a sample text with lots of tags</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-extra-spaces-tabs-and-line-breaks" class="level4">
 <h4 class="anchored" data-anchor-id="remove-extra-spaces-tabs-and-line-breaks">Remove extra spaces, tabs, and line breaks</h4>
 <p>You might think that the best approach to remove extra spaces, tabs, and line breaks would depend on regular expressions. But it doesn’t.</p>
 <p>The best approach consists of using a clever combination two string methods: <code>.split()</code> and <code>.join()</code>. First, you apply the <code>.split()</code> method to the string you want to clean. It will split the string by any whitespace and output a list. Then, you apply the <code>.join()</code> method on a string with a single whitespace (” “), using as input the list you generated. This will put back together the string you split but use a single whitespace as separator.</p>
 <p>Yes, I know it sounds a bit confusing. But, in reality, it’s fairly simple. Here’s how it looks in code:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>sample_text <span class="op">=</span> <span class="st">"     </span><span class="ch">\t\t</span><span class="st">A      text</span><span class="ch">\t\t\t\n\n</span><span class="st"> sample       "</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>sample_text <span class="op">=</span> <span class="st">"     </span><span class="ch">\t\t</span><span class="st">A      text</span><span class="ch">\t\t\t\n\n</span><span class="st"> sample       "</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>clean_text <span class="op">=</span> <span class="st">" "</span>.join(sample_text.split())</span>
 <span id="cb8-3"><a href="#cb8-3"></a>print_text(sample_text, clean_text)</span>
 <span id="cb8-4"><a href="#cb8-4"></a></span>
@@ -405,12 +410,12 @@ Subscribe to my newsletter
 <span id="cb8-6"><a href="#cb8-6"></a><span class="co"># Before:           A      text</span></span>
 <span id="cb8-7"><a href="#cb8-7"></a></span>
 <span id="cb8-8"><a href="#cb8-8"></a><span class="co">#  sample</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># After: A text sample</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># After: A text sample</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-punctuation" class="level4">
 <h4 class="anchored" data-anchor-id="remove-punctuation">Remove punctuation</h4>
 <p>Many NLP applications won’t work very well if you include punctuation. So it’s common to remove them. The easiest approach consists in using the <code>string</code> and <code>re</code> standard libraries are as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> re</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> string <span class="im">import</span> punctuation</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
 <span id="cb9-4"><a href="#cb9-4"></a>sample_text <span class="op">=</span> <span class="st">"A lot of !!!! .... ,,,, ;;;;;;;?????"</span></span>
@@ -419,12 +424,12 @@ Subscribe to my newsletter
 <span id="cb9-7"><a href="#cb9-7"></a></span>
 <span id="cb9-8"><a href="#cb9-8"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb9-9"><a href="#cb9-9"></a><span class="co"># Before: A lot of !!!! .... ,,,, ;;;;;;;?????</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="co"># After: A lot of</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co"># After: A lot of</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-numbers" class="level4">
 <h4 class="anchored" data-anchor-id="remove-numbers">Remove numbers</h4>
 <p>In some cases, you might want to remove numbers from text, when you don’t feel they’re very informative. You can use a regular expression for that:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> re</span>
 <span id="cb10-2"><a href="#cb10-2"></a></span>
 <span id="cb10-3"><a href="#cb10-3"></a>sample_text <span class="op">=</span> <span class="st">"Remove these numbers: 1919191 2229292 11.233 22/22/22. But don't remove this one H2O"</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r"</span><span class="dv">\b</span><span class="pp">[0-9]</span><span class="op">+</span><span class="dv">\b\s</span><span class="op">*</span><span class="vs">"</span>, <span class="st">""</span>, sample_text)</span>
@@ -432,37 +437,37 @@ Subscribe to my newsletter
 <span id="cb10-6"><a href="#cb10-6"></a></span>
 <span id="cb10-7"><a href="#cb10-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb10-8"><a href="#cb10-8"></a><span class="co"># Before: Remove these numbers: 1919191 2229292 11.233 22/22/22. But don't remove this one H2O</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co"># After: Remove these numbers: .//. But don't remove this one H2O</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co"># After: Remove these numbers: .//. But don't remove this one H2O</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-digits" class="level4">
 <h4 class="anchored" data-anchor-id="remove-digits">Remove digits</h4>
 <p>There are cases where you might want to remove digits instead of any number. For instance, when you want to remove numbers but not dates. Using a regular expression gets a bit trickier.</p>
 <p>In those cases, you can use the <code>.isdigit()</code> method of strings:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>sample_text <span class="op">=</span> <span class="st">"I want to keep this one: 10/10/20 but not this one 222333"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>sample_text <span class="op">=</span> <span class="st">"I want to keep this one: 10/10/20 but not this one 222333"</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>clean_text <span class="op">=</span> <span class="st">" "</span>.join([w <span class="cf">for</span> w <span class="kw">in</span> sample_text.split() <span class="cf">if</span> <span class="kw">not</span> w.isdigit()]) <span class="co"># Side effect: removes extra spaces</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>print_text(sample_text, clean_text)</span>
 <span id="cb11-4"><a href="#cb11-4"></a></span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="co"># Before: I want to keep this one: 10/10/20 but not this one 222333</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># After: I want to keep this one: 10/10/20 but not this one</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># After: I want to keep this one: 10/10/20 but not this one</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-non-alphabetic-characters" class="level4">
 <h4 class="anchored" data-anchor-id="remove-non-alphabetic-characters">Remove non-alphabetic characters</h4>
 <p>Sometimes, you’d like to remove non-alphabetic characters like numbers or punctuation. The <code>.isalpha()</code> method of Python strings will come in handy in those cases.</p>
 <p>Here’s how you use it:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>sample_text <span class="op">=</span> <span class="st">"Sample text with numbers 123455 and words !!!"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>sample_text <span class="op">=</span> <span class="st">"Sample text with numbers 123455 and words !!!"</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>clean_text <span class="op">=</span> <span class="st">" "</span>.join([w <span class="cf">for</span> w <span class="kw">in</span> sample_text.split() <span class="cf">if</span> w.isalpha()]) <span class="co"># Side effect: removes extra spaces</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a>print_text(sample_text, clean_text)</span>
 <span id="cb12-4"><a href="#cb12-4"></a></span>
 <span id="cb12-5"><a href="#cb12-5"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb12-6"><a href="#cb12-6"></a><span class="co"># Before: Sample text with numbers 123455 and words !!!</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># After: Sample text with numbers and words</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># After: Sample text with numbers and words</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-all-special-characters-and-punctuation" class="level4">
 <h4 class="anchored" data-anchor-id="remove-all-special-characters-and-punctuation">Remove all special characters and punctuation</h4>
 <p>In cases where you want to remove all characters except letters and numbers, you can use a regular expression.</p>
 <p>Here’s a quick way to do it:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="im">import</span> re</span>
 <span id="cb13-2"><a href="#cb13-2"></a></span>
 <span id="cb13-3"><a href="#cb13-3"></a>sample_text <span class="op">=</span> <span class="st">"Sample text 123 !!!! Haha.... !!!! ##$$$</span><span class="sc">%%%%</span><span class="st">"</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r"</span><span class="pp">[^A-Za-z0-9</span><span class="dv">\s</span><span class="pp">]</span><span class="op">+</span><span class="vs">"</span>, <span class="st">""</span>, sample_text)</span>
@@ -470,12 +475,12 @@ Subscribe to my newsletter
 <span id="cb13-6"><a href="#cb13-6"></a></span>
 <span id="cb13-7"><a href="#cb13-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb13-8"><a href="#cb13-8"></a><span class="co"># Before: Sample text 123 !!!! Haha.... !!!! ##$$$%%%%</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="co"># After: Sample text 123  Haha</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co"># After: Sample text 123  Haha</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-stopwords-from-a-list" class="level4">
 <h4 class="anchored" data-anchor-id="remove-stopwords-from-a-list">Remove stopwords from a list</h4>
 <p>There’s the case where you’d like to exclude words using a predefined list. A quick way to do it is by using <strong>list comprehensions</strong>. Here’s one way to do it:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>stopwords <span class="op">=</span> [<span class="st">"is"</span>, <span class="st">"a"</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>stopwords <span class="op">=</span> [<span class="st">"is"</span>, <span class="st">"a"</span>]</span>
 <span id="cb14-2"><a href="#cb14-2"></a>sample_text <span class="op">=</span> <span class="st">"this is a sample text"</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a>tokens <span class="op">=</span> sample_text.split()</span>
 <span id="cb14-4"><a href="#cb14-4"></a>clean_tokens <span class="op">=</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> <span class="kw">not</span> t <span class="kw">in</span> stopwords]</span>
@@ -484,12 +489,12 @@ Subscribe to my newsletter
 <span id="cb14-7"><a href="#cb14-7"></a></span>
 <span id="cb14-8"><a href="#cb14-8"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb14-9"><a href="#cb14-9"></a><span class="co"># Before: this is a sample text</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="co"># After: this sample text</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co"># After: this sample text</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-short-tokens" class="level4">
 <h4 class="anchored" data-anchor-id="remove-short-tokens">Remove short tokens</h4>
 <p>In some cases, you may want to remove tokens with few characters. In this case, using <strong>list comprehensions</strong> will make it easy:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>sample_text <span class="op">=</span> <span class="st">"this is a sample text. I'll remove the a"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>sample_text <span class="op">=</span> <span class="st">"this is a sample text. I'll remove the a"</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>tokens <span class="op">=</span> sample_text.split()</span>
 <span id="cb15-3"><a href="#cb15-3"></a>clean_tokens <span class="op">=</span> [t <span class="cf">for</span> t <span class="kw">in</span> tokens <span class="cf">if</span> <span class="bu">len</span>(t) <span class="op">&gt;</span> <span class="dv">1</span>]</span>
 <span id="cb15-4"><a href="#cb15-4"></a>clean_text <span class="op">=</span> <span class="st">" "</span>.join(clean_tokens)</span>
@@ -497,13 +502,13 @@ Subscribe to my newsletter
 <span id="cb15-6"><a href="#cb15-6"></a></span>
 <span id="cb15-7"><a href="#cb15-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb15-8"><a href="#cb15-8"></a><span class="co"># Before: this is a sample text. I'll remove the a</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co"># After: this is sample text. I'll remove the</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co"># After: this is sample text. I'll remove the</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="transform-emojis-into-characters" class="level4">
 <h4 class="anchored" data-anchor-id="transform-emojis-into-characters">Transform emojis into characters</h4>
 <p>If you’re processing social media data, there might be cases where you’d like to extract the meaning of emojis instead of simply removing them. An easy way to do that is by using the <a href="https://pypi.org/project/emoji/">emoji</a> library.</p>
 <p>Here’s how you do it:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">from</span> emoji <span class="im">import</span> demojize</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">from</span> emoji <span class="im">import</span> demojize</span>
 <span id="cb16-2"><a href="#cb16-2"></a></span>
 <span id="cb16-3"><a href="#cb16-3"></a>sample_text <span class="op">=</span> <span class="st">"I love 🥑"</span></span>
 <span id="cb16-4"><a href="#cb16-4"></a>clean_text <span class="op">=</span> demojize(sample_text)</span>
@@ -511,12 +516,12 @@ Subscribe to my newsletter
 <span id="cb16-6"><a href="#cb16-6"></a></span>
 <span id="cb16-7"><a href="#cb16-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb16-8"><a href="#cb16-8"></a><span class="co"># Before: I love 🥑</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="co"># After: I love :avocado:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co"># After: I love :avocado:</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="remove-repeated-characters" class="level4">
 <h4 class="anchored" data-anchor-id="remove-repeated-characters">Remove repeated characters</h4>
 <p>In some cases, you may want to remove repeated characters, so instead of “helloooo” you use “hello”. Here’s how you can do it (I got this code snippet from <a href="https://www.amazon.com/Data-Analysis-Machine-Learning-Kaggle-ebook/dp/B09F3STL34">The Kaggle Book</a>):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="im">import</span> re</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="im">import</span> re</span>
 <span id="cb17-2"><a href="#cb17-2"></a></span>
 <span id="cb17-3"><a href="#cb17-3"></a>sample_text <span class="op">=</span> <span class="st">"hellooooo"</span></span>
 <span id="cb17-4"><a href="#cb17-4"></a>clean_text <span class="op">=</span> re.sub(<span class="vs">r'</span><span class="kw">(</span><span class="dv">.</span><span class="kw">)</span><span class="ch">\1</span><span class="op">{3,}</span><span class="vs">'</span>,<span class="vs">r'</span><span class="ch">\1</span><span class="vs">'</span>, sample_text)</span>
@@ -524,7 +529,7 @@ Subscribe to my newsletter
 <span id="cb17-6"><a href="#cb17-6"></a></span>
 <span id="cb17-7"><a href="#cb17-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb17-8"><a href="#cb17-8"></a><span class="co"># Before: hellooooo</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a><span class="co"># After: hello</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co"># After: hello</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="nltk" class="level3">
@@ -532,7 +537,7 @@ Subscribe to my newsletter
 <p>Before using NLTK’s snippets, you need to install NLTK. You can do that as follows: <code>pip install nltk</code>.</p>
 <section id="tokenize-text-using-nltk" class="level4">
 <h4 class="anchored" data-anchor-id="tokenize-text-using-nltk">Tokenize text using NLTK</h4>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
 <span id="cb18-2"><a href="#cb18-2"></a></span>
 <span id="cb18-3"><a href="#cb18-3"></a>sample_text <span class="op">=</span> <span class="st">"this is a text ready to tokenize"</span></span>
 <span id="cb18-4"><a href="#cb18-4"></a>tokens <span class="op">=</span> word_tokenize(sample_text)</span>
@@ -540,11 +545,11 @@ Subscribe to my newsletter
 <span id="cb18-6"><a href="#cb18-6"></a></span>
 <span id="cb18-7"><a href="#cb18-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb18-8"><a href="#cb18-8"></a><span class="co"># Before: this is a text ready to tokenize</span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'ready', 'to', 'tokenize']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'ready', 'to', 'tokenize']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tokenize-tweets-using-nltk" class="level4">
 <h4 class="anchored" data-anchor-id="tokenize-tweets-using-nltk">Tokenize tweets using NLTK</h4>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> TweetTokenizer</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> TweetTokenizer</span>
 <span id="cb19-2"><a href="#cb19-2"></a></span>
 <span id="cb19-3"><a href="#cb19-3"></a>tweet_tokenizer <span class="op">=</span> TweetTokenizer()</span>
 <span id="cb19-4"><a href="#cb19-4"></a>sample_text <span class="op">=</span> <span class="st">"This is a tweet @jack #NLP"</span></span>
@@ -553,11 +558,11 @@ Subscribe to my newsletter
 <span id="cb19-7"><a href="#cb19-7"></a></span>
 <span id="cb19-8"><a href="#cb19-8"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb19-9"><a href="#cb19-9"></a><span class="co"># Before: This is a tweet @jack #NLP</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># After: ['This', 'is', 'a', 'tweet', '@jack', '#NLP']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># After: ['This', 'is', 'a', 'tweet', '@jack', '#NLP']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="split-text-into-sentences-using-nltk" class="level4">
 <h4 class="anchored" data-anchor-id="split-text-into-sentences-using-nltk">Split text into sentences using NLTK</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> sent_tokenize</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> sent_tokenize</span>
 <span id="cb20-2"><a href="#cb20-2"></a></span>
 <span id="cb20-3"><a href="#cb20-3"></a>sample_text <span class="op">=</span> <span class="st">"This is a sentence. This is another one!</span><span class="ch">\n</span><span class="st">And this is the last one."</span></span>
 <span id="cb20-4"><a href="#cb20-4"></a>sentences <span class="op">=</span> sent_tokenize(sample_text)</span>
@@ -566,12 +571,12 @@ Subscribe to my newsletter
 <span id="cb20-7"><a href="#cb20-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb20-8"><a href="#cb20-8"></a><span class="co"># Before: This is a sentence. This is another one!</span></span>
 <span id="cb20-9"><a href="#cb20-9"></a><span class="co"># And this is the last one.</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co"># After: ['This is a sentence.', 'This is another one!', 'And this is the last one.']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co"># After: ['This is a sentence.', 'This is another one!', 'And this is the last one.']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="remove-stopwords-using-nltk" class="level3">
 <h3 class="anchored" data-anchor-id="remove-stopwords-using-nltk">Remove stopwords using NLTK</h3>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="im">import</span> nltk</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="im">import</span> nltk</span>
 <span id="cb21-2"><a href="#cb21-2"></a></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
 <span id="cb21-4"><a href="#cb21-4"></a></span>
@@ -587,14 +592,14 @@ Subscribe to my newsletter
 <span id="cb21-14"><a href="#cb21-14"></a></span>
 <span id="cb21-15"><a href="#cb21-15"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb21-16"><a href="#cb21-16"></a><span class="co"># Before: this is a sample text</span></span>
-<span id="cb21-17"><a href="#cb21-17"></a><span class="co"># After: sample text</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-17"><a href="#cb21-17"></a><span class="co"># After: sample text</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="spacy" class="level3">
 <h3 class="anchored" data-anchor-id="spacy">spaCy</h3>
 <p>Before using spaCy’s snippets, you need to install the library as follows: <code>pip install spacy</code>. You also need to download a language model. For English, here’s how you do it: <code>python -m spacy download en_core_web_sm</code>.</p>
 <section id="tokenize-text-using-spacy" class="level4">
 <h4 class="anchored" data-anchor-id="tokenize-text-using-spacy">Tokenize text using spaCy</h4>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> spacy</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> spacy</span>
 <span id="cb22-2"><a href="#cb22-2"></a></span>
 <span id="cb22-3"><a href="#cb22-3"></a>nlp <span class="op">=</span> spacy.load(<span class="st">"en_core_web_sm"</span>)</span>
 <span id="cb22-4"><a href="#cb22-4"></a></span>
@@ -605,11 +610,11 @@ Subscribe to my newsletter
 <span id="cb22-9"><a href="#cb22-9"></a></span>
 <span id="cb22-10"><a href="#cb22-10"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb22-11"><a href="#cb22-11"></a><span class="co"># Before: this is a text ready to tokenize</span></span>
-<span id="cb22-12"><a href="#cb22-12"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'ready', 'to', 'tokenize']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'ready', 'to', 'tokenize']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="split-text-into-sentences-using-spacy" class="level4">
 <h4 class="anchored" data-anchor-id="split-text-into-sentences-using-spacy">Split text into sentences using spaCy</h4>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="im">import</span> spacy</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="im">import</span> spacy</span>
 <span id="cb23-2"><a href="#cb23-2"></a></span>
 <span id="cb23-3"><a href="#cb23-3"></a>nlp <span class="op">=</span> spacy.load(<span class="st">"en_core_web_sm"</span>)</span>
 <span id="cb23-4"><a href="#cb23-4"></a></span>
@@ -621,7 +626,7 @@ Subscribe to my newsletter
 <span id="cb23-10"><a href="#cb23-10"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb23-11"><a href="#cb23-11"></a><span class="co"># Before: This is a sentence. This is another one!</span></span>
 <span id="cb23-12"><a href="#cb23-12"></a><span class="co"># And this is the last one.</span></span>
-<span id="cb23-13"><a href="#cb23-13"></a><span class="co"># After: ['This is a sentence.', 'This is another one!\n', 'And this is the last one.']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-13"><a href="#cb23-13"></a><span class="co"># After: ['This is a sentence.', 'This is another one!\n', 'And this is the last one.']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="keras" class="level3">
@@ -629,7 +634,7 @@ Subscribe to my newsletter
 <p>Before using Keras’ snippets, you need to install the library as follows: <code>pip install tensorflow &amp;&amp; pip install keras</code>.</p>
 <section id="tokenize-text-using-keras" class="level4">
 <h4 class="anchored" data-anchor-id="tokenize-text-using-keras">Tokenize text using Keras</h4>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="im">from</span> keras.preprocessing.text <span class="im">import</span> text_to_word_sequence</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="im">from</span> keras.preprocessing.text <span class="im">import</span> text_to_word_sequence</span>
 <span id="cb24-2"><a href="#cb24-2"></a></span>
 <span id="cb24-3"><a href="#cb24-3"></a>sample_text <span class="op">=</span> <span class="st">'This is a text you want to tokenize using KERAS!!'</span></span>
 <span id="cb24-4"><a href="#cb24-4"></a>tokens <span class="op">=</span> text_to_word_sequence(sample_text)</span>
@@ -637,7 +642,7 @@ Subscribe to my newsletter
 <span id="cb24-6"><a href="#cb24-6"></a></span>
 <span id="cb24-7"><a href="#cb24-7"></a><span class="co"># ----- Expected output -----</span></span>
 <span id="cb24-8"><a href="#cb24-8"></a><span class="co"># Before: This is a text you want to tokenize using KERAS!!</span></span>
-<span id="cb24-9"><a href="#cb24-9"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'you', 'want', 'to', 'tokenize', 'using', 'keras']</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co"># After: ['this', 'is', 'a', 'text', 'you', 'want', 'to', 'tokenize', 'using', 'keras']</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -706,13 +711,14 @@ Python.”</span> December 10, 2020. <a href="https://dylancastillo.co/posts/nlp
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

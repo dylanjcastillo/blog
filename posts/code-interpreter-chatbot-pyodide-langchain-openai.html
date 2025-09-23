@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -283,23 +288,23 @@ Subscribe to my newsletter
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
 <li>Clone the project’s repository:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li><p>From the root folder of the project, install the dependencies:</p>
 <ul>
 <li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Open <code>src/.env-example</code>, add your OpenAI secret key in the corresponding variable, and save the file as <code>.env</code>.</p></li>
 </ol>
 <p>You should now have a virtual environment set up with the necessary libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">chatbot-code-interpreter</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">chatbot-code-interpreter</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="ex">├──</span> LICENSE</span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> poetry.lock</span>
@@ -317,7 +322,7 @@ Subscribe to my newsletter
 <span id="cb4-16"><a href="#cb4-16"></a><span class="ex">│</span>   │   └── index.html</span>
 <span id="cb4-17"><a href="#cb4-17"></a><span class="ex">│</span>   ├── utils.py</span>
 <span id="cb4-18"><a href="#cb4-18"></a><span class="ex">│</span>   └── .env-example</span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the most relevant files and directories in the project:</p>
 <ul>
 <li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies. They’re used by Poetry to create a virtual environment.</li>
@@ -337,7 +342,7 @@ Subscribe to my newsletter
 <p>In this step, you’ll configure Pyodide to run Python in the browser. You’ll load <code>pyodide.js</code>, start it, import the required libraries, and define an event handler to process the questions asked by the user.</p>
 <p>To make the analysis simpler, I’ll split the code of <code>src/templates/index.html</code> into two sections. In the first section, you’ll only look at the contents of <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>, and in the second part, you’ll go through the JavaScript code defined in <code>&lt;script&gt;</code>.</p>
 <p>Here’s part one:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
@@ -368,7 +373,7 @@ Subscribe to my newsletter
 <span id="cb5-29"><a href="#cb5-29"></a>      <span class="op">&lt;!--</span> SECOND PART OF CODE <span class="op">--&gt;</span></span>
 <span id="cb5-30"><a href="#cb5-30"></a>    <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
 <span id="cb5-31"><a href="#cb5-31"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This section of code loads the necessary libraries and styles, as well as defines the chatbot’s user interface. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 5 to 10</strong> set a title for the page, load <code>pyodide.js</code> and <code>pico.css</code> (a minimal CSS framework), and define a couple of standard <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta">meta tags</a>.</li>
@@ -376,7 +381,7 @@ Subscribe to my newsletter
 </ul>
 <p>Then, let’s go through the JavaScript code defined in <code>&lt;script&gt;</code>. This code will load Pyodide, install the required libraries, make the data available for use in Pyodide, and set an event handler to process the user’s question.</p>
 <p>Here’s how it looks:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">const</span> queryTextArea <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"query"</span>)<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">const</span> queryTextArea <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"query"</span>)<span class="op">;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="kw">const</span> outputElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"output"</span>)<span class="op">;</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="kw">const</span> askBtn <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"ask-btn"</span>)<span class="op">;</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a></span>
@@ -427,7 +432,7 @@ Subscribe to my newsletter
 <span id="cb6-49"><a href="#cb6-49"></a>  } <span class="cf">catch</span> (error) {</span>
 <span id="cb6-50"><a href="#cb6-50"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error:"</span><span class="op">,</span> error)<span class="op">;</span></span>
 <span id="cb6-51"><a href="#cb6-51"></a>  }</span>
-<span id="cb6-52"><a href="#cb6-52"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-52"><a href="#cb6-52"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code loads Pyodide, installs the necessary libraries, makes the data accessible in Pyodide, and finally sets an event handler to process the user’s question. It works as follows:</p>
 <ul>
 <li><strong>Lines 1 to 3</strong> select the elements of the DOM that you’ll be interacting with.</li>
@@ -444,7 +449,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="create-the-chatbot">Create the Chatbot</h2>
 <p>Now, you’ll create a simple application that will allow users to make questions to the chatbot about the dataset.</p>
 <p>Take a look at the code in <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="im">from</span> langchain <span class="im">import</span> LLMChain</span>
@@ -508,7 +513,7 @@ Subscribe to my newsletter
 <span id="cb7-62"><a href="#cb7-62"></a>    template_config<span class="op">=</span>TemplateConfig(</span>
 <span id="cb7-63"><a href="#cb7-63"></a>        engine<span class="op">=</span>JinjaTemplateEngine, directory<span class="op">=</span>Path(<span class="st">"templates"</span>)</span>
 <span id="cb7-64"><a href="#cb7-64"></a>    ),</span>
-<span id="cb7-65"><a href="#cb7-65"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-65"><a href="#cb7-65"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code provides users with a straightforward interface, allowing them to interact with the chatbot and ask questions about the dataset. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 16</strong> import the required libraries. The application uses <a href="https://docs.litestar.dev/2/">Litestar</a>, which is a bit verbose; hence, you’ll notice many import statements. But there’s no real mystery to it, it’s <a href="https://docs.litestar.dev/2/migration/index.html">pretty similar to FastAPI or Flask</a>.</li>
@@ -518,7 +523,7 @@ Subscribe to my newsletter
 <li><strong>Lines 57 to 65</strong> set up the Litestar app, incorporating the previously defined routes and the locations of the templates and static files.</li>
 </ul>
 <p>To test the app, <code>cd</code> into <code>src/</code> and run this code in a terminal within the virtual environment:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">litestar</span> run <span class="at">--reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">litestar</span> run <span class="at">--reload</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything goes well, you’ll see an output similar to this one:</p>
 <p><a href="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></a></p>
 <p>Next, open <code>http://127.0.0.1:8000</code> on your browser. You should see the app’s UI.</p>
@@ -610,13 +615,14 @@ Pyodide, LangChain, and OpenAI.”</span> May 12, 2023. <a href="https://dylanca
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

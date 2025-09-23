@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -289,19 +294,19 @@ Subscribe to my newsletter
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s not mandatory but I highly recommend it.</li>
 <li>Clone the repository with the sample app:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-chatgpt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-chatgpt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li><p>Go to the root folder of the project and install the dependencies with:</p>
 <ul>
 <li><strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -317,7 +322,7 @@ Note
 </div>
 </div>
 <p>If everything went well, you should have a virtual environment with all of the necessary libraries and a project structure that looks like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">ai-search-fastapi-qdrant-gpt3</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">ai-search-fastapi-qdrant-gpt3</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="ex">│</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> config.py</span>
@@ -338,7 +343,7 @@ Note
 <span id="cb4-19"><a href="#cb4-19"></a><span class="ex">├──</span> pyproject.toml</span>
 <span id="cb4-20"><a href="#cb4-20"></a><span class="ex">├──</span> requirements.txt</span>
 <span id="cb4-21"><a href="#cb4-21"></a><span class="ex">├──</span> .env-example</span>
-<span id="cb4-22"><a href="#cb4-22"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is your project’s structure. Let me explain the purpose of the most important files and directories:</p>
 <ul>
 <li><code>config.py</code>: This file contains project configuration specifications such as Qdrant’s host, port, and API key (read from a <code>.env</code> file)</li>
@@ -360,9 +365,9 @@ Note
 <p>Create an account at <a href="https://cloud.qdrant.io/">Qdrant</a>, if you don’t already have one. Then, on your account page go to <em>Clusters &gt; Create,</em> and create a cluster of 1GB of RAM, 0.5 vCPU, and 20GB Disk. Qdrant has a generous free tier, and it’s free to run a cluster with those specifications.</p>
 <p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-1.png" class="img-fluid"></a></p>
 <p>Next, paste the host and API key you obtained when you created your cluster into <code>.env</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="va">QDRANT_HOST</span><span class="op">=&lt;</span>your_qdrant_host<span class="op">&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="va">QDRANT_API_KEY</span><span class="op">=&lt;</span>your_qdrant_api_key<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="va">QDRANT_API_KEY</span><span class="op">=&lt;</span>your_qdrant_api_key<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you didn’t copy the key, you can still create a new one in <em>Access.</em></p>
 <p>Finally, you can test that everything went well by running the first three cells in <code>vectorize_data.ipynb</code>.</p>
 </section>
@@ -371,10 +376,10 @@ Note
 <p>If you don’t have an OpenAI account, <a href="https://platform.openai.com/login">create one</a>. After that, go to <em>Manage account &gt; API keys &gt; &nbsp;+ Create new secret key.</em></p>
 <p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-4.png" class="img-fluid"></a></p>
 <p>Then, paste the generated key in <code>.env</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="va">QDRANT_PORT</span><span class="op">=</span>6333</span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="va">QDRANT_HOST</span><span class="op">=&lt;</span>your_qdrant_host<span class="op">&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="va">QDRANT_API_KEY</span><span class="op">=&lt;</span>your_qdrant_api_key<span class="op">&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>your_openai_api_key<span class="op">&gt;</span> <span class="co"># new</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="va">OPENAI_API_KEY</span><span class="op">=&lt;</span>your_openai_api_key<span class="op">&gt;</span> <span class="co"># new</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That’s it! Let’s continue.</p>
 </section>
 </section>
@@ -388,7 +393,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <li><strong>Production:</strong> For real-world scenarios, you should think about how frequently you’ll be extracting and ingesting data, adapting your pipeline for different data sources (e.g., scraping, APIs), and building pipeline monitors, among other things. In this example, because data extraction is a one-time event, I’m using jupyter notebooks, which isn’t always a good idea.</li>
 </ol>
 <p>Here’s a sneak peek at the <a href="https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-gpt3/blob/main/data/processed/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe.json">data</a> from this tutorial:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">{</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="dt">"book_title"</span><span class="fu">:</span> <span class="st">"Meditations by Marcus Aurelius"</span><span class="fu">,</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>    <span class="dt">"url"</span><span class="fu">:</span> <span class="st">"https://en.wikisource.org/wiki/Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe"</span><span class="fu">,</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>    <span class="dt">"data"</span><span class="fu">:</span> <span class="ot">[</span></span>
@@ -403,7 +408,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb7-13"><a href="#cb7-13"></a>    <span class="er">...</span></span>
 <span id="cb7-14"><a href="#cb7-14"></a>        <span class="er">}</span></span>
 <span id="cb7-15"><a href="#cb7-15"></a>    <span class="ot">]</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-16"><a href="#cb7-16"></a> <span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The tutorial’s data includes general metadata such as the book title and source URL, as well as information from each chapter with the sentences you’ll index.</p>
 <p>If you want to take a look at how I extracted the data used in this tutorial, check out the <code>[extract_data.ipynb](https://github.com/dylanjcastillo/ai-search-fastapi-qdrant-gpt3/blob/main/notebooks/extract_text.ipynb)</code>.</p>
 </section>
@@ -417,7 +422,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 </ol>
 <p>You can find the code for this section in <code>notebooks/vectorize_data.ipynb</code>.</p>
 <p>As usual, you start by importing the required libraries:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">import</span> json</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">import</span> json</span>
 <span id="cb8-2"><a href="#cb8-2"></a></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -429,14 +434,14 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb8-10"><a href="#cb8-10"></a></span>
 <span id="cb8-11"><a href="#cb8-11"></a><span class="im">from</span> tqdm.notebook <span class="im">import</span> tqdm</span>
 <span id="cb8-12"><a href="#cb8-12"></a></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="im">from</span> config <span class="im">import</span> QDRANT_HOST, QDRANT_PORT, QDRANT_API_KEY, DATA, COLLECTION_NAME</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="im">from</span> config <span class="im">import</span> QDRANT_HOST, QDRANT_PORT, QDRANT_API_KEY, DATA, COLLECTION_NAME</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code imports all the libraries and configuration variables you need to vectorize and index the data. Here are some things worth mentioning:</p>
 <ul>
 <li><code>qdrant_client</code> and <code>qdrant_client.http</code> let you interact with Qdrant’s client, so that you can insert and retrieve data from the <strong>collection.</strong></li>
 <li><code>sentence_transformers</code> let you generate the vectors from text, using pretrained models.</li>
 </ul>
 <p>Next, you read the data as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>BOOK_FILENAME <span class="op">=</span> <span class="st">"Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>BOOK_FILENAME <span class="op">=</span> <span class="st">"Marcus_Aurelius_Antoninus_-_His_Meditations_concerning_himselfe"</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f"</span><span class="sc">{</span>DATA<span class="sc">}</span><span class="ss">/processed/</span><span class="sc">{</span>BOOK_FILENAME<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>BOOK_FILENAME<span class="sc">}</span><span class="ss">.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
 <span id="cb9-4"><a href="#cb9-4"></a>    meditations_json <span class="op">=</span> json.load(<span class="bu">file</span>)</span>
@@ -456,7 +461,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb9-18"><a href="#cb9-18"></a>    data<span class="op">=</span>rows, columns<span class="op">=</span>[<span class="st">"title"</span>, <span class="st">"url"</span>, <span class="st">"sentence"</span>]</span>
 <span id="cb9-19"><a href="#cb9-19"></a>)</span>
 <span id="cb9-20"><a href="#cb9-20"></a></span>
-<span id="cb9-21"><a href="#cb9-21"></a>df <span class="op">=</span> df[df[<span class="st">"sentence"</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">15</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-21"><a href="#cb9-21"></a>df <span class="op">=</span> df[df[<span class="st">"sentence"</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">15</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code reads the previously processed data and removes short sentences. It works as follows:</p>
 <ul>
 <li><strong>Lines 1 to 4</strong> read the JSON file you generated for Meditations, and save it as <code>meditations_json</code>.</li>
@@ -464,7 +469,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <li><strong>Lines 17 to 21</strong> create a DataFrame with the data from <code>rows</code> and removes the sentences with less than 15 words.</li>
 </ul>
 <p>Next, you create a collection in your vector database:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Create collection</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Create collection</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>client <span class="op">=</span> QdrantClient(</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    host<span class="op">=</span>QDRANT_HOST, port<span class="op">=</span>QDRANT_PORT, api_key<span class="op">=</span>QDRANT_API_KEY</span>
 <span id="cb10-4"><a href="#cb10-4"></a>)</span>
@@ -474,11 +479,11 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb10-8"><a href="#cb10-8"></a>        size<span class="op">=</span><span class="dv">384</span>,</span>
 <span id="cb10-9"><a href="#cb10-9"></a>        distance<span class="op">=</span>models.Distance.COSINE</span>
 <span id="cb10-10"><a href="#cb10-10"></a>    ),</span>
-<span id="cb10-11"><a href="#cb10-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-11"><a href="#cb10-11"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code connects to your Qdrant’s cluster and creates a collection based on the name and settings you provide. In this case, you set the <code>size</code> to 384 based on the needs of the <a href="https://huggingface.co/sentence-transformers/msmarco-MiniLM-L-6-v3">model</a> you’ll use for vectorizing the sentences. You also set <code>distance</code> to use <a href="https://en.wikipedia.org/wiki/Cosine_similarity">Cosine distance</a>, which will define how the similarity between vectors is computed.</p>
 <p>The next step is to generate the vectors (embeddings) from the text. You’ll use a pretrained model from Sentence Transformers to generate them instead of OpenAI-based embeddings. <a href="https://medium.com/@nils_reimers/openai-gpt-3-text-embeddings-really-a-new-state-of-the-art-in-dense-text-embeddings-6571fe3ec9d9">The latter are more expensive and not necessarily better.</a></p>
 <p>To accomplish this, you load the pretrained model, generate the embeddings from the DataFrame sentences, and insert them into the collection you created:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>model <span class="op">=</span> SentenceTransformer(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>model <span class="op">=</span> SentenceTransformer(</span>
 <span id="cb11-2"><a href="#cb11-2"></a>    <span class="st">"msmarco-MiniLM-L-6-v3"</span>,</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    device<span class="op">=</span><span class="st">"cuda"</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a>    <span class="cf">if</span> torch.cuda.is_available()</span>
@@ -520,7 +525,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb11-40"><a href="#cb11-40"></a>        ],</span>
 <span id="cb11-41"><a href="#cb11-41"></a>        vectors<span class="op">=</span>[v.tolist() <span class="cf">for</span> v <span class="kw">in</span> vectors],</span>
 <span id="cb11-42"><a href="#cb11-42"></a>    ),</span>
-<span id="cb11-43"><a href="#cb11-43"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-43"><a href="#cb11-43"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code loads the model, generates vectors from the sentences in the DataFrame, and inserts them into the collection you created. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 8</strong> load the <code>msmarco-MiniLM-L-6-v3</code> sentence transformer model, and set the correct device in case you have a GPU available.</li>
@@ -532,7 +537,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <h2 class="anchored" data-anchor-id="create-a-server-with-fastapi">Create a Server with FastAPI</h2>
 <p>Next, you will create the FastAPI application that will let the user interact with your vector database and ChatGPT. The code for this section is in <code>main.py</code>.</p>
 <p>You start by importing the required dependencies, setting up your Qdrant client, and loading the model:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">import</span> openai</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">import</span> openai</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
 <span id="cb12-3"><a href="#cb12-3"></a><span class="im">from</span> qdrant_client <span class="im">import</span> QdrantClient</span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
@@ -555,10 +560,10 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb12-21"><a href="#cb12-21"></a></span>
 <span id="cb12-22"><a href="#cb12-22"></a>retrieval_model <span class="op">=</span> SentenceTransformer(<span class="st">"msmarco-MiniLM-L-6-v3"</span>)</span>
 <span id="cb12-23"><a href="#cb12-23"></a></span>
-<span id="cb12-24"><a href="#cb12-24"></a>app <span class="op">=</span> FastAPI()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-24"><a href="#cb12-24"></a>app <span class="op">=</span> FastAPI()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code imports the libraries and configuration settings, initializes the Qdrant client, and loads the model to memory (the same one you used for vectorizing the sentences). You load your model globally so that you don’t slow down requests by loading it each time someone asks a question.</p>
 <p>Next, you define a function to help you create the prompt that you’ll use to get ChatGPT to generate a coherent answer based on the most relevant passages from Meditations:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> build_prompt(question: <span class="bu">str</span>, references: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> build_prompt(question: <span class="bu">str</span>, references: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]:</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    prompt <span class="op">=</span> <span class="ss">f"""</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="ss">    You're Marcus Aurelius, emperor of Rome. You're giving advice to a friend who has asked you the following question: '</span><span class="sc">{</span>question<span class="sc">}</span><span class="ss">'</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a></span>
@@ -577,10 +582,10 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb13-17"><a href="#cb13-17"></a>        references_text</span>
 <span id="cb13-18"><a href="#cb13-18"></a>        <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">How to cite a reference: This is a citation [1]. This one too [3]. And this is sentence with many citations [2][3].</span><span class="ch">\n</span><span class="st">Answer:"</span></span>
 <span id="cb13-19"><a href="#cb13-19"></a>    )</span>
-<span id="cb13-20"><a href="#cb13-20"></a>    <span class="cf">return</span> prompt, references_text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-20"><a href="#cb13-20"></a>    <span class="cf">return</span> prompt, references_text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will combine a prompt to make ChatGPT “simulate” Marcus Aurelius answering a user-supplied question with a list of references previously obtained from your vector database. Then it will return the generated prompt, and a list of the references to add to the answer sent to the user.</p>
 <p>Then you create two endpoints as follows:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="at">@app.get</span>(<span class="st">"/"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="at">@app.get</span>(<span class="st">"/"</span>)</span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="kw">def</span> read_root():</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    <span class="cf">return</span> {</span>
 <span id="cb14-4"><a href="#cb14-4"></a>        <span class="st">"message"</span>: <span class="st">"Make a post request to /ask to ask a question about Meditations by Marcus Aurelius"</span></span>
@@ -610,7 +615,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <span id="cb14-28"><a href="#cb14-28"></a>    <span class="cf">return</span> {</span>
 <span id="cb14-29"><a href="#cb14-29"></a>        <span class="st">"response"</span>: response[<span class="st">"choices"</span>][<span class="dv">0</span>][<span class="st">"text"</span>],</span>
 <span id="cb14-30"><a href="#cb14-30"></a>        <span class="st">"references"</span>: references,</span>
-<span id="cb14-31"><a href="#cb14-31"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-31"><a href="#cb14-31"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the two endpoints that you’ll use in your app. Here’s what each line does:</p>
 <ul>
 <li><strong>Lines 1 to 5</strong> set up an endpoint that accepts <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET</a> requests on “/”. It returns a JSON response with a <code>message</code> key telling the user to use the “/ask” endpoint.</li>
@@ -618,7 +623,7 @@ Here are some useful guidelines to keep in mind when doing so:</p>
 <li><strong>Lines 19 to 32</strong> combine the documents you got from the vector database with your prompt and make a request to the ChatGPT API. You set <code>max_tokens=250</code> to keep answers short and set <code>temperature=0.2</code>, to prevent the model from getting “too creative” with its responses. Finally, you extract the answer from the ChatGPT API response and return it to the user, along with the references.</li>
 </ul>
 <p>If you want to test it locally, type the following command into a terminal (inside the project’s virtual environment):</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>uvicorn main:app <span class="op">--</span><span class="bu">reload</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>uvicorn main:app <span class="op">--</span><span class="bu">reload</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In your browser, navigate to <code>localhost:8000/docs</code> to test your <code>/ask</code> endpoint:</p>
 <p><a href="images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/ai-search-engine-fastapi-qdrant-chatgpt/image-5.png" class="img-fluid"></a></p>
 <p>A successful response will look as follows:</p>
@@ -712,13 +717,14 @@ Qdrant, and ChatGPT.”</span> March 3, 2023. <a href="https://dylancastillo.co/
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

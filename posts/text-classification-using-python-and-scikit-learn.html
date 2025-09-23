@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -133,6 +134,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -260,20 +265,20 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>Before we start, you need to install some libraries. The best way to do that is to create a new virtual environment and install the packages there.</p>
 <p>If you’re using <code>venv</code>, run these commands:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .textcl</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .textcl</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> .textcl/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">python3</span> <span class="at">-m</span> pip install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you’re using <code>conda</code>, this is how you do it:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">conda</span> create <span class="at">--name</span> textcl</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">conda</span> create <span class="at">--name</span> textcl</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="ex">conda</span> activate textcl</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">conda</span> install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">conda</span> install pandas==1.4.3 notebook==6.3.0 numpy==1.23.2 scikit-learn==1.1.2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That’s it! These commands will create a virtual environment, activate it, and install the required packages.</p>
 <p>Finally, start a Jupyter Notebook session by executing <code>jupyter notebook</code> on the same terminal where you ran the previous commands and create a new notebook.</p>
 </section>
 <section id="import-the-required-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="import-the-required-libraries">Import the Required Libraries</h2>
 <p>The first step, as always, is to import the necessary libraries. Create a new cell in your notebook, paste the following code in it, and run the cell:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> joblib</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> joblib</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> re</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="im">import</span> string</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
@@ -284,7 +289,7 @@ Subscribe to my newsletter
 <span id="cb3-9"><a href="#cb3-9"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
 <span id="cb3-10"><a href="#cb3-10"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, cohen_kappa_score, f1_score, classification_report</span>
 <span id="cb3-11"><a href="#cb3-11"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> StratifiedKFold, train_test_split</span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will import the required libraries. Here’s why you need them:</p>
 <ul>
 <li>You import <code>joblib</code> to save your model <a href="https://h2o.ai/wiki/artifacts/">artifacts</a>.</li>
@@ -298,7 +303,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="read-the-data">Read the Data</h2>
 <p>Start by reading the data. You’ll use a dataset included in <code>scikit-learn</code> called <strong>20 newsgroups</strong>. This dataset consists of roughly 20,000 newsgroup documents, split into 20 categories. For the sake of simplicity, you’ll only use five of those categories in this example.</p>
 <p>Create a new cell and paste this code to read the data:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>categories <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>categories <span class="op">=</span> [</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="st">"alt.atheism"</span>,</span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"misc.forsale"</span>,</span>
 <span id="cb4-4"><a href="#cb4-4"></a>    <span class="st">"sci.space"</span>,</span>
@@ -316,7 +321,7 @@ Subscribe to my newsletter
 <span id="cb4-16"><a href="#cb4-16"></a>        target<span class="op">=</span>news_group_data[<span class="st">"target"</span>]</span>
 <span id="cb4-17"><a href="#cb4-17"></a>    )</span>
 <span id="cb4-18"><a href="#cb4-18"></a>)</span>
-<span id="cb4-19"><a href="#cb4-19"></a>df[<span class="st">"target"</span>] <span class="op">=</span> df.target.<span class="bu">map</span>(<span class="kw">lambda</span> x: categories[x])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a>df[<span class="st">"target"</span>] <span class="op">=</span> df.target.<span class="bu">map</span>(<span class="kw">lambda</span> x: categories[x])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code reads the 20 newsgroups dataset. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 7:</strong> Define a list of categories, which are the different newsgroup categories used in the analysis: <code>alt.atheism</code>, <code>misc.forsale</code>, <code>sci.space</code>, <code>soc.religion.christian</code>, and <code>talk.politics.guns</code>.</li>
@@ -331,7 +336,7 @@ Subscribe to my newsletter
 <section id="clean-the-text-column" class="level3">
 <h3 class="anchored" data-anchor-id="clean-the-text-column">Clean the Text Column</h3>
 <p>Use this code to clean the text. It’ll remove the punctuation marks and multiple adjacent spaces:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> process_text(text):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> process_text(text):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    text <span class="op">=</span> <span class="bu">str</span>(text).lower()</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    text <span class="op">=</span> re.sub(</span>
 <span id="cb5-4"><a href="#cb5-4"></a>        <span class="ss">f"[</span><span class="sc">{</span>re<span class="sc">.</span>escape(string.punctuation)<span class="sc">}</span><span class="ss">]"</span>, <span class="st">" "</span>, text</span>
@@ -339,13 +344,13 @@ Subscribe to my newsletter
 <span id="cb5-6"><a href="#cb5-6"></a>    text <span class="op">=</span> <span class="st">" "</span>.join(text.split())</span>
 <span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> text</span>
 <span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>df[<span class="st">"clean_text"</span>] <span class="op">=</span> df.text.<span class="bu">map</span>(process_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9"></a>df[<span class="st">"clean_text"</span>] <span class="op">=</span> df.text.<span class="bu">map</span>(process_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code lowercases the text and removes any punctuation marks or duplicated spaces, and stores the results in a new column called <code>clean_text</code>. For that, you use <code>process_text</code>, which takes a string as input, lowercases it, replaces all punctuation marks with spaces, and removes the duplicated spaces.</p>
 </section>
 <section id="split-the-data-into-train-and-test-sets" class="level3">
 <h3 class="anchored" data-anchor-id="split-the-data-into-train-and-test-sets">Split the Data Into Train and Test Sets</h3>
 <p>Next, you’ll split the dataset into a training and a testing set:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>df_train, df_test <span class="op">=</span> train_test_split(df, test_size<span class="op">=</span><span class="fl">0.20</span>, stratify<span class="op">=</span>df.target)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>df_train, df_test <span class="op">=</span> train_test_split(df, test_size<span class="op">=</span><span class="fl">0.20</span>, stratify<span class="op">=</span>df.target)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>train_test_split</code> is used to split a dataset into training and testing sets. You provide the data frame you wish to split to the function and specify the following parameters:</p>
 <ul>
 <li><code>test_size=0.20</code>: this defines the size of the test set to 20% of the total.</li>
@@ -401,7 +406,7 @@ Subscribe to my newsletter
 </table>
 <p>Once you have this numerical representation, you can pass this dataset to your machine learning model. This is what you’ll do with the documents in the 20 newsgroup dataset. Keep in mind that because the dataset has so many documents, you’ll end up with a matrix with many more columns than the example above.</p>
 <p>To create a bag of words representation in <code>scikit-learn</code> , you must use <code>CountVectorizer</code>. You can use this code:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>vec <span class="op">=</span> CountVectorizer(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>vec <span class="op">=</span> CountVectorizer(</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    ngram_range<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
 <span id="cb7-3"><a href="#cb7-3"></a>    stop_words<span class="op">=</span><span class="st">"english"</span>,</span>
 <span id="cb7-4"><a href="#cb7-4"></a>)</span>
@@ -410,7 +415,7 @@ Subscribe to my newsletter
 <span id="cb7-7"><a href="#cb7-7"></a>X_test <span class="op">=</span> vec.transform(df_test.clean_text)</span>
 <span id="cb7-8"><a href="#cb7-8"></a></span>
 <span id="cb7-9"><a href="#cb7-9"></a>y_train <span class="op">=</span> df_train.target</span>
-<span id="cb7-10"><a href="#cb7-10"></a>y_test <span class="op">=</span> df_test.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-10"><a href="#cb7-10"></a>y_test <span class="op">=</span> df_test.target</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>CountVectorizer</code> turns text into numerical features. Here’s what’s happening in the code above:</p>
 <ul>
 <li><strong>Lines 1 to 4:</strong> You use <code>CountVectorizer</code> to build a bag of words representation of <code>clean_text</code>. You specify two parameters: <code>ngram_range</code> and <code>stop_words</code>. <code>ngram_range</code> is the range of n-grams that the function will use. An n-gram is a sequence of <em>n</em> words. <code>(1, 3)</code> means that the function will use sequences of 1, 2, and 3 words to generate the counts. <code>stop_words</code> is a list of words that the function will ignore. In this case, the list “english” means that the function will ignore the most common words in English.</li>
@@ -423,11 +428,11 @@ Subscribe to my newsletter
 <section id="train-and-evaluate-the-model" class="level2">
 <h2 class="anchored" data-anchor-id="train-and-evaluate-the-model">Train and Evaluate the Model</h2>
 <p>Finally, you can train the model by running this code:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>nb <span class="op">=</span> MultinomialNB()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>nb <span class="op">=</span> MultinomialNB()</span>
 <span id="cb8-2"><a href="#cb8-2"></a>nb.fit(X_train, y_train)</span>
 <span id="cb8-3"><a href="#cb8-3"></a></span>
 <span id="cb8-4"><a href="#cb8-4"></a>preds <span class="op">=</span> nb.predict(X_test)</span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="bu">print</span>(classification_report(y_test, preds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="bu">print</span>(classification_report(y_test, preds))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In <strong>lines 1 and 2</strong>, you train a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html">Multinomial Naive Bayes</a> model. This simple probabilistic model is commonly used in cases with discrete features such as word counts.</p>
 <p>Then, in <strong>lines 4 and 5</strong>, you evaluate the model’s results by computing the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_recall_fscore_support.html">precision, recall, and f1 scores</a>.</p>
 <p>After you run the code, you’ll get an output that will look something like this:</p>
@@ -438,10 +443,10 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="saving-and-loading-the-model">Saving and Loading the Model</h2>
 <p>If you’d like to save the model for later, then you can use <code>joblib</code>. You’ll need to save all the artifacts required to run the model, which in this case would be the vectorizer <code>vec</code> and the model <code>nb</code>.</p>
 <p>You can use the following code to save your model artifacts:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>joblib.dump(nb, <span class="st">"nb.joblib"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>joblib.dump(vec, <span class="st">"vec.joblib"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>joblib.dump(nb, <span class="st">"nb.joblib"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>joblib.dump(vec, <span class="st">"vec.joblib"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you want to reuse your model later, simply read it and use it to classify new data samples as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>nb_saved <span class="op">=</span> joblib.load(<span class="st">"nb.joblib"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>nb_saved <span class="op">=</span> joblib.load(<span class="st">"nb.joblib"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a>vec_saved <span class="op">=</span> joblib.load(<span class="st">"vec.joblib"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
 <span id="cb10-4"><a href="#cb10-4"></a>sample_text <span class="op">=</span> [<span class="st">"Space, Stars, Planets and Astronomy!"</span>]</span>
@@ -449,7 +454,7 @@ Subscribe to my newsletter
 <span id="cb10-6"><a href="#cb10-6"></a><span class="co"># Process the text in the same way you did when you trained it!</span></span>
 <span id="cb10-7"><a href="#cb10-7"></a>clean_sample_text <span class="op">=</span> process_text(sample_text)</span>
 <span id="cb10-8"><a href="#cb10-8"></a>sample_vec <span class="op">=</span> vec_saved.transform(sample_text)</span>
-<span id="cb10-9"><a href="#cb10-9"></a>nb_saved.predict(sample_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-9"><a href="#cb10-9"></a>nb_saved.predict(sample_vec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The code above will read the previously saved artifacts into <code>nb_saved</code> and <code>vec_saved</code>. Then you can apply them to new samples of text you’d like to classify.</p>
 <p>That’s all! You’ve learned how to use Python and Scikit-learn to train a text classification model. Let me offer some suggestions for what you could do next.</p>
 </section>
@@ -540,13 +545,14 @@ Scikit-Learn.”</span> August 23, 2022. <a href="https://dylancastillo.co/posts
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/kbd/kbd.js"></script>
 <link href="../site_libs/quarto-contrib/kbd/kbd.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
@@ -140,6 +141,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -248,7 +253,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 4, 2025</p>
+      <p class="date-modified">September 23, 2025</p>
     </div>
   </div>
     
@@ -271,7 +276,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="installing-alacritty">Installing Alacritty</h2>
 <p>Alacritty is a terminal emulator, similar to <a href="https://iterm2.com/">Iterm2</a> and others. It’s selling point is that it’s very fast due to GPU-acceleration. Plus, you also get 256 colors support by default.</p>
 <p>The best way to install it is using Homebrew:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> alacritty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> alacritty</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, you you can customize it to your liking by creating a <code>~/.config/alacritty/alacritty.toml</code> file.</p>
 <p>I ended up modifying just a couple of things:</p>
 <ol type="1">
@@ -283,7 +288,7 @@ Subscribe to my newsletter
 <summary>
 Show the code
 </summary>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">[</span><span class="at">window</span><span class="kw">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">[</span><span class="at">window</span><span class="kw">]</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="at">padding.x = 16</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="at">padding.y = 14</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="at">decorations = "none"</span><span class="co"> # Removes the window decoration (title bar, etc.)</span></span>
@@ -334,11 +339,11 @@ Show the code
 <span id="cb2-49"><a href="#cb2-49"></a><span class="at">blue = '0x61afef'</span></span>
 <span id="cb2-50"><a href="#cb2-50"></a><span class="at">magenta = '0xc678dd'</span></span>
 <span id="cb2-51"><a href="#cb2-51"></a><span class="at">cyan = '0x56b6c2'</span></span>
-<span id="cb2-52"><a href="#cb2-52"></a><span class="at">white = '0x828791'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="at">white = '0x828791'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>I use <a href="https://github.com/tonsky/FiraCode">FiraCode</a> Nerd Font. <a href="https://www.nerdfonts.com/">Nerd Fonts</a> are a collection of fonts that include glyphs such as icons that represent folders, file types, <a href="https://github.com/ryanoasis/powerline-extra-symbols/blob/master/img/fontforge.png?raw=true">weird arrows</a>, etc.</p>
 <p>You can install them using Homebrew:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">brew</span> install font-<span class="op">&lt;</span>name-of-the-font<span class="op">&gt;</span>-nerd-font <span class="co"># For example, font-fira-code-nerd-font</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">brew</span> install font-<span class="op">&lt;</span>name-of-the-font<span class="op">&gt;</span>-nerd-font <span class="co"># For example, font-fira-code-nerd-font</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="installing-zellij" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="installing-zellij">Installing Zellij</h2>
@@ -351,10 +356,10 @@ Show the code
 </figure>
 </div>
 <p>Same as before, the best way to install it is using Homebrew.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">brew</span> install zellij</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">brew</span> install zellij</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can customize it by creating a <code>~/.config/zellij/config.kdl</code> file.</p>
 <p>I just copied the <a href="https://github.com/zellij-org/zellij/blob/main/zellij-utils/assets/themes/one-half-dark.kdl">One Half Dark</a> theme they provide.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource kdl number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>theme "one-half-dark"</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource kdl number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>theme "one-half-dark"</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a>themes {</span>
 <span id="cb5-4"><a href="#cb5-4"></a>    one-half-dark {</span>
@@ -370,13 +375,13 @@ Show the code
 <span id="cb5-14"><a href="#cb5-14"></a>        white 192 202 245</span>
 <span id="cb5-15"><a href="#cb5-15"></a>        orange 255 158 100</span>
 <span id="cb5-16"><a href="#cb5-16"></a>    }</span>
-<span id="cb5-17"><a href="#cb5-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-17"><a href="#cb5-17"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Is One Half Dark the same as One Dark? I don’t really know. I like to live dangerously.</p>
 <section id="making-zellij-play-nice-with-alacritty" class="level3">
 <h3 class="anchored" data-anchor-id="making-zellij-play-nice-with-alacritty">Making Zellij play nice with Alacritty</h3>
 <p>Getting Alacritty to work with Zellij took me a while to figure out. But luckily it’s as simple as adding the full path to the <code>zellij</code> binary in the <code>~/.config/alacritty/alacritty.toml</code> file.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">[</span><span class="at">terminal.shell</span><span class="kw">]</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="at">     program = "/opt/homebrew/bin/zellij"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">[</span><span class="at">terminal.shell</span><span class="kw">]</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="at">     program = "/opt/homebrew/bin/zellij"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="installing-neovim-and-lazyvim" class="level2">
@@ -385,17 +390,17 @@ Show the code
 <p><a href="https://github.com/LazyVim/starter">LazyVim</a> is a premade configuration for Neovim. The purists will probably hate it, but it’s a good start.</p>
 <p>I had my own <code>.vimrc</code>, and after trying LazyVim for 30 minutes or so, I realized my config sucked.</p>
 <p>First, install Neovim using Homebrew.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">brew</span> install neovim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">brew</span> install neovim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then, install LazyVim.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">git</span> clone https://github.com/LazyVim/starter ~/.config/nvim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">git</span> clone https://github.com/LazyVim/starter ~/.config/nvim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>So far, I’ve only made a few changes:</p>
 <ul>
 <li>Installed <a href="https://github.com/github/copilot.vim">Copilot</a>, <a href="https://github.com/CopilotC-Nvim/CopilotChat.nvim">CopilotChat</a>, and <a href="https://github.com/echasnovski/mini.surround">mini-surround</a>.</li>
 <li>Installed <a href="https://github.com/navarasu/onedark.nvim">One Dark</a> color scheme.</li>
 </ul>
-<p>The plugins I mentioned are available in <code>:LazyExtras</code>, so it’s very easy to install them. Run <code>:LazyExtras</code>, select the plugins, and then install them with <kbd aria-hidden="true">I</kbd><span class="visually-hidden">I</span>.</p>
+<p>The plugins I mentioned are available in <code>:LazyExtras</code>, so it’s very easy to install them. Run <code>:LazyExtras</code>, select the plugins, and then install them with <kbd title="I" aria-hidden="true">I</kbd><span class="visually-hidden">I</span>.</p>
 <p>To install <code>One Dark</code>, you must create a new file in <code>~/.config/nvim/lua/plugins/</code> containing the following code:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource lua number-lines code-with-copy"><code class="sourceCode lua"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">return</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource lua number-lines code-with-copy"><code class="sourceCode lua"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">return</span> <span class="op">{</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="op">{</span> <span class="st">"navarasu/onedark.nvim"</span> <span class="op">},</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
 <span id="cb9-4"><a href="#cb9-4"></a>  <span class="co">-- Configure LazyVim to load One Dark</span></span>
@@ -405,7 +410,7 @@ Show the code
 <span id="cb9-8"><a href="#cb9-8"></a>      <span class="va">colorscheme</span> <span class="op">=</span> <span class="st">"onedark"</span><span class="op">,</span></span>
 <span id="cb9-9"><a href="#cb9-9"></a>    <span class="op">},</span></span>
 <span id="cb9-10"><a href="#cb9-10"></a>  <span class="op">},</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="other-useful-tools" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="other-useful-tools">Other useful tools</h2>
@@ -438,10 +443,10 @@ Show the code
 <h3 class="anchored" data-anchor-id="eza">eza</h3>
 <p><a href="https://github.com/eza-community/eza">eza</a> is an improved version of <code>ls</code>.</p>
 <p>I also added a couple of aliases from Omakub:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="bu">alias</span> ls=<span class="st">'eza -lh --group-directories-first --icons --hyperlink'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="bu">alias</span> ls=<span class="st">'eza -lh --group-directories-first --icons --hyperlink'</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="bu">alias</span> lsa=<span class="st">'ls -a'</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="bu">alias</span> lt=<span class="st">'eza --tree --level=2 --long --icons --git'</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="bu">alias</span> lta=<span class="st">'lt -a'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="bu">alias</span> lta=<span class="st">'lt -a'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you run <code>lta</code> you’ll get a nice view of the current directory.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -530,13 +535,14 @@ in macOS.”</span> June 8, 2024. <a href="https://dylancastillo.co/til/install-
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

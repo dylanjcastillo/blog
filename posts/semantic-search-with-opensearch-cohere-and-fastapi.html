@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -132,6 +133,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -288,14 +293,14 @@ Subscribe to my newsletter
 <li>Install <a href="https://www.python.org/downloads/">Python 3.11</a>.</li>
 <li>Clone the repository with the sample app:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/opensearch-cohere-semantic-search</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li>Go to the root folder of the project and create a virtual environment with the dependencies using <strong>venv and pip:</strong></li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">python3.11</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">python3.11</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Assuming all went smoothly, you should have a virtual environment set up with the required libraries and the following project structure:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">opensearch-cohere-semantic-search</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">opensearch-cohere-semantic-search</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="ex">├──</span> LICENSE</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="ex">├──</span> README.md</span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="ex">├──</span> data</span>
@@ -312,7 +317,7 @@ Subscribe to my newsletter
 <span id="cb3-15"><a href="#cb3-15"></a><span class="ex">│</span>   ├── indexer.py</span>
 <span id="cb3-16"><a href="#cb3-16"></a><span class="ex">│</span>   └── vectorizer.py</span>
 <span id="cb3-17"><a href="#cb3-17"></a><span class="ex">├──</span> .env-example</span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="ex">└──</span> .venv/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The project is organized into several key files and directories, as described below</p>
 <ul>
 <li><code>data/</code>: This directory contains the project’s data. It contains the <a href="https://www.kaggle.com/datasets/szymonjanowski/internet-articles-data-with-users-engagement">original dataset</a> downloaded from Kaggle, and a sample, which you’ll use in the tutorial.</li>
@@ -330,14 +335,14 @@ Subscribe to my newsletter
 <section id="run-a-local-opensearch-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="run-a-local-opensearch-cluster">Run a Local OpenSearch Cluster</h2>
 <p>Before we get into the code, you should start a local OpenSearch cluster. Open a new terminal, navigate to the project’s root folder, and run:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">sh</span> run_opensearch_docker.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">sh</span> run_opensearch_docker.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will launch a local OpenSearch cluster. If everything went well, the terminal will show a long string of text. Keep the terminal open in the background and move on to the next step.</p>
 </section>
 <section id="vectorize-the-articles" class="level2">
 <h2 class="anchored" data-anchor-id="vectorize-the-articles">Vectorize the Articles</h2>
 <p>You’ll start by transforming the news articles into vectors (embeddings). There are many approaches you could take such as using <a href="https://dylancastillo.co/nlp-snippets-cluster-documents-using-word2vec/#cluster-documents-using--mini-batches--k-means">Word2Vec</a>, <a href="https://sbert.net/docs/pretrained_models.html">Sentence-Transformers</a>, or LLM-based <a href="https://platform.openai.com/docs/guides/embeddings">embedding</a> <a href="https://docs.cohere.ai/reference/embed">services</a>. In this case, you’ll use <a href="https://cohere.ai/">Cohere</a>.</p>
 <p>Use <code>src/vectorizer.py</code> for that:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> cohere</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> cohere</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
 <span id="cb5-4"><a href="#cb5-4"></a></span>
@@ -372,7 +377,7 @@ Subscribe to my newsletter
 <span id="cb5-33"><a href="#cb5-33"></a></span>
 <span id="cb5-34"><a href="#cb5-34"></a></span>
 <span id="cb5-35"><a href="#cb5-35"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb5-36"><a href="#cb5-36"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-36"><a href="#cb5-36"></a>    main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code reads the news articles dataset, splits it into batches, and generates embeddings for each individual article. It works as follows:</p>
 <ul>
 <li><strong>Lines 1 to 5</strong> import the required Python libraries and the configuration settings from <code>config.py</code>.</li>
@@ -380,14 +385,14 @@ Subscribe to my newsletter
 <li><strong>Lines 30 to 32</strong> create a new column in the DataFrame to store the vectors and save the new dataset into your filesystem.</li>
 </ul>
 <p>You can run this script by opening a terminal in <code>src</code> and running:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>python vectorizer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>python vectorizer.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next, you’ll create an index to store the embeddings.</p>
 </section>
 <section id="index-the-vectors-and-metadata" class="level2">
 <h2 class="anchored" data-anchor-id="index-the-vectors-and-metadata">Index the Vectors and Metadata</h2>
 <p>After you’ve created embeddings of each article, you’ll store them, and their metadata (title, content, description), in an index in your OpenSearch cluster.</p>
 <p>You can use <code>src/indexer.py</code> for that:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="im">from</span> opensearchpy <span class="im">import</span> OpenSearch, NotFoundError</span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="im">from</span> config <span class="im">import</span> NEWS_WITH_VECTORS_DATASET, INDEX_NAME</span>
 <span id="cb7-4"><a href="#cb7-4"></a></span>
@@ -447,7 +452,7 @@ Subscribe to my newsletter
 <span id="cb7-58"><a href="#cb7-58"></a></span>
 <span id="cb7-59"><a href="#cb7-59"></a></span>
 <span id="cb7-60"><a href="#cb7-60"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb7-61"><a href="#cb7-61"></a>    main()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-61"><a href="#cb7-61"></a>    main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code will create a new index in your OpenSearch cluster, and store the vectors and metadata in it. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 5</strong> import the required Python libraries and the predefined configuration settings from <code>config.py</code>.</li>
@@ -456,14 +461,14 @@ Subscribe to my newsletter
 <li><strong>Lines 35 to 54</strong> create the index (and delete any previous ones), and add each document one by one. You index the <code>id</code>, <code>title</code>, <code>description</code>, and <code>embedding</code> for each document.</li>
 </ul>
 <p>You can run this script by opening a terminal in <code>src</code> and running:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>python indexer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>python indexer.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>So far, you’ve created embeddings for each document and indexed them in your OpenSearch cluster. Next, you’ll run a search client to interact with them.</p>
 </section>
 <section id="create-a-search-client" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-search-client">Create a Search Client</h2>
 <p>Finally, you’ll create a search client so that users can search the articles you indexed using FastAPI. It’ll let users provide a search term, and give them back the 10 most similar documents based on that term.</p>
 <p>The code is available in <code>src/app.py</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> cohere</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> cohere</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="im">from</span> config <span class="im">import</span> COHERE_API_KEY, INDEX_NAME</span>
@@ -511,7 +516,7 @@ Subscribe to my newsletter
 <span id="cb9-46"><a href="#cb9-46"></a></span>
 <span id="cb9-47"><a href="#cb9-47"></a>    <span class="cf">return</span> {</span>
 <span id="cb9-48"><a href="#cb9-48"></a>        <span class="st">"response"</span>: response,</span>
-<span id="cb9-49"><a href="#cb9-49"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-49"><a href="#cb9-49"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code lets users search through the index. It works as follows:</p>
 <ul>
 <li><strong>Lines 1 to 6</strong> import the required Python libraries, and the configuration defined in <code>config.py</code>.</li>
@@ -602,13 +607,14 @@ and FastAPI.”</span> April 11, 2023. <a href="https://dylancastillo.co/posts/s
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -140,6 +141,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -311,16 +316,16 @@ Subscribe to my newsletter
 <li>Set the API key as an environment variable called <code>OPENAI_API_KEY</code>.</li>
 <li>Create a virtual environment in Python and install the requirements:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">pip</span> install langchain langchain-openai langchain-community langgraph jupyter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">pip</span> install langchain langchain-openai langchain-community langgraph jupyter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Once you’ve completed the steps above, you can run the code from this article. You can also download the notebook from <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/react-agent-langgraph.ipynb">here</a>.</p>
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p>As usual, you must start by importing the necessary libraries and loading the environment variables. You’ll use the same model in all the examples, so you’ll define it once here:</p>
 <div id="cell-4" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image, display</span>
@@ -331,7 +336,7 @@ Subscribe to my newsletter
 <span id="cb2-9"><a href="#cb2-9"></a></span>
 <span id="cb2-10"><a href="#cb2-10"></a>load_dotenv()</span>
 <span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-12"><a href="#cb2-12"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code:</p>
 <ol type="1">
@@ -345,7 +350,7 @@ Subscribe to my newsletter
 <p><strong>You should not use this in production</strong>. This tool can run arbitrary Python code on your device, and that’s not something you want to expose to random people on the internet.</p>
 <p>First, let’s define the <code>run_python_code</code> tool.</p>
 <div id="cell-8" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@tool</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@tool</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="kw">def</span> run_python_code(code: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">"""Run arbitrary Python code including imports, assignments, and statements. Do not use any external libraries. Save your results as a variable.</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
@@ -387,7 +392,7 @@ Subscribe to my newsletter
 <span id="cb3-40"><a href="#cb3-40"></a></span>
 <span id="cb3-41"><a href="#cb3-41"></a>tools <span class="op">=</span> [run_python_code]</span>
 <span id="cb3-42"><a href="#cb3-42"></a>tools_mapping <span class="op">=</span> {tool.name: tool <span class="cf">for</span> tool <span class="kw">in</span> tools}</span>
-<span id="cb3-43"><a href="#cb3-43"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-43"><a href="#cb3-43"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code defines a tool. In <code>LangChain</code> tools are defined as functions decorated with <code>@tool</code>. These functions must have a <em>docstring</em> because it will be used to describe the tool to the LLM.</p>
 <p><code>run_python_code</code> is a function that takes a code string and returns the result of executing that code.</p>
@@ -396,7 +401,7 @@ Subscribe to my newsletter
 <p>Finally, you <em>bind</em> the tool to the model. The binding makes the model aware of the tool, so that it can use it.</p>
 <p>Then, let’s define a function that encapsulates the logic of the agent.</p>
 <div id="cell-10" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> run_agent(question: <span class="bu">str</span>):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> run_agent(question: <span class="bu">str</span>):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    messages <span class="op">=</span> [</span>
 <span id="cb4-3"><a href="#cb4-3"></a>        SystemMessage(</span>
 <span id="cb4-4"><a href="#cb4-4"></a>            <span class="st">"You're a helpful assistant. Use the tools provided when relevant."</span></span>
@@ -414,7 +419,7 @@ Subscribe to my newsletter
 <span id="cb4-16"><a href="#cb4-16"></a>        ai_message <span class="op">=</span> model_with_tools.invoke(messages)</span>
 <span id="cb4-17"><a href="#cb4-17"></a>        messages.append(ai_message)</span>
 <span id="cb4-18"><a href="#cb4-18"></a></span>
-<span id="cb4-19"><a href="#cb4-19"></a>    <span class="cf">return</span> messages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="cf">return</span> messages</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This function takes a question from a user, comes up with a python script, uses <code>run_python_code</code> to execute it and returns the result.</p>
 <p>It works as follows:</p>
@@ -425,10 +430,10 @@ Subscribe to my newsletter
 <p>This is the core idea behind how agents work. You provide the assistant with a question and one or more tools. Then you let the assistant decide which tool to use, until it has all the information it needs to answer the question.</p>
 <p>You can try it out by running the following code:</p>
 <div id="cell-12" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>messages <span class="op">=</span> run_agent(<span class="st">"Generate 10 random numbers between 1 and 100"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>messages <span class="op">=</span> run_agent(<span class="st">"Generate 10 random numbers between 1 and 100"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="cf">for</span> m <span class="kw">in</span> messages:</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    m.pretty_print()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4"></a>    m.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> System Message </span>================================
@@ -483,7 +488,7 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 <h3 class="anchored" data-anchor-id="langgraph-react-agent">LangGraph ReAct agent</h3>
 <p>Like, in the previous example, you start by defining the tools you want to use. You’ll use the same <code>run_python_code</code> tool.</p>
 <div id="cell-16" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@tool</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@tool</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="kw">def</span> run_python_code(code: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
 <span id="cb6-3"><a href="#cb6-3"></a>    <span class="co">"""Run arbitrary Python code including imports, assignments, and statements. Do not use any external libraries. Save your results as a variable.</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a></span>
@@ -525,12 +530,12 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 <span id="cb6-40"><a href="#cb6-40"></a></span>
 <span id="cb6-41"><a href="#cb6-41"></a>tools <span class="op">=</span> [run_python_code]</span>
 <span id="cb6-42"><a href="#cb6-42"></a>tools_by_name <span class="op">=</span> {tool.name: tool <span class="cf">for</span> tool <span class="kw">in</span> tools}</span>
-<span id="cb6-43"><a href="#cb6-43"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-43"><a href="#cb6-43"></a>model_with_tools <span class="op">=</span> model.bind_tools(tools)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>With langgraph you also need to you define the tools in the same way: set up the functions, add <code>@tool</code>, and create the tool mapping. Then, <em>bind</em> the tools to the model.</p>
 <p>Next, you need to define the functions (nodes) that correspond to the steps the agent will take:</p>
 <div id="cell-18" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> call_llm(state: MessagesState):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> call_llm(state: MessagesState):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    messages <span class="op">=</span> [</span>
 <span id="cb7-3"><a href="#cb7-3"></a>        SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that can run python code."</span>),</span>
 <span id="cb7-4"><a href="#cb7-4"></a>    ] <span class="op">+</span> state[<span class="st">"messages"</span>]</span>
@@ -551,7 +556,7 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 <span id="cb7-19"><a href="#cb7-19"></a>    last_message <span class="op">=</span> messages[<span class="op">-</span><span class="dv">1</span>]</span>
 <span id="cb7-20"><a href="#cb7-20"></a>    <span class="cf">if</span> last_message.tool_calls:</span>
 <span id="cb7-21"><a href="#cb7-21"></a>        <span class="cf">return</span> <span class="st">"Action"</span></span>
-<span id="cb7-22"><a href="#cb7-22"></a>    <span class="cf">return</span> END</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-22"><a href="#cb7-22"></a>    <span class="cf">return</span> END</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is how it works:</p>
 <ol type="1">
@@ -561,7 +566,7 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 </ol>
 <p><code>call_llm</code> and <code>call_tool</code> take <code>MessagesState</code> as input and return a the message key with the new message. This updates the <code>messages</code> key in the <code>MessagesState</code>. <code>should_continue</code> takes <code>MessagesState</code> act as a router, so it decides if a tool should be executed or if the conversation should end.</p>
 <div id="cell-20" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>agent_builder <span class="op">=</span> StateGraph(MessagesState)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>agent_builder <span class="op">=</span> StateGraph(MessagesState)</span>
 <span id="cb8-2"><a href="#cb8-2"></a></span>
 <span id="cb8-3"><a href="#cb8-3"></a>agent_builder.add_node(<span class="st">"llm"</span>, call_llm)</span>
 <span id="cb8-4"><a href="#cb8-4"></a>agent_builder.add_node(<span class="st">"environment"</span>, call_tool)</span>
@@ -577,12 +582,12 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 <span id="cb8-14"><a href="#cb8-14"></a>)</span>
 <span id="cb8-15"><a href="#cb8-15"></a>agent_builder.add_edge(<span class="st">"environment"</span>, <span class="st">"llm"</span>)</span>
 <span id="cb8-16"><a href="#cb8-16"></a></span>
-<span id="cb8-17"><a href="#cb8-17"></a>agent <span class="op">=</span> agent_builder.<span class="bu">compile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-17"><a href="#cb8-17"></a>agent <span class="op">=</span> agent_builder.<span class="bu">compile</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This code sets up the logic of the agent. It starts with a call to the LLM. The LLM then decides whether to use a tool or to finish the task. If it uses a tool, the tool’s output is sent back to the LLM for the next step. This “think-act” loop continues until the agent decides the task is complete.</p>
 <p>You can use <code>LangGraph</code> to visualize the agent’s flow:</p>
 <div id="cell-22" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>display(Image(agent.get_graph(xray<span class="op">=</span><span class="va">True</span>).draw_mermaid_png()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>display(Image(agent.get_graph(xray<span class="op">=</span><span class="va">True</span>).draw_mermaid_png()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -593,17 +598,17 @@ Here are 10 random numbers between 1 and 100: 74, 75, 58, 19, 90, 45, 44, 52, 90
 </div>
 <p>Finally, you can run the agent by invoking the graph. For that, you’ll need to pass a list of messages to the graph.</p>
 <div id="cell-24" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messages <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>messages <span class="op">=</span> [</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    SystemMessage(content<span class="op">=</span><span class="st">"You are a helpful assistant that can run python code."</span>),</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    HumanMessage(content<span class="op">=</span><span class="st">"Generate 10 random numbers between 1 and 100"</span>),</span>
 <span id="cb10-4"><a href="#cb10-4"></a>]</span>
 <span id="cb10-5"><a href="#cb10-5"></a></span>
-<span id="cb10-6"><a href="#cb10-6"></a>messages <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: messages})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-6"><a href="#cb10-6"></a>messages <span class="op">=</span> agent.invoke({<span class="st">"messages"</span>: messages})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can review the process by printing the messages:</p>
 <div id="cell-26" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="cf">for</span> m <span class="kw">in</span> messages[<span class="st">"messages"</span>]:</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    m.pretty_print()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="cf">for</span> m <span class="kw">in</span> messages[<span class="st">"messages"</span>]:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    m.pretty_print()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>================================<span class="ansi-bold"> System Message </span>================================
@@ -728,13 +733,14 @@ LangGraph.”</span> July 4, 2025. <a href="https://dylancastillo.co/posts/react
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

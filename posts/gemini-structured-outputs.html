@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -148,6 +149,10 @@ require(['plotly'], function(Plotly) {
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -365,9 +370,9 @@ Figure&nbsp;1: Best results for Gemini 1.5 Flash.
 <p>When running the three benchmarks, I quickly ran into a performance issue with <em>FC</em> and <em>JSON-Schema</em>. In all tasks, both showed double-digit performance drops compared to <em>NL</em>.</p>
 <p>This didn’t make a lot of sense, so I started investigating.</p>
 <p>I was using the following response schema for all structured outputs:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Response(BaseModel):</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    reasoning: <span class="bu">str</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    answer: <span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a>    answer: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The prompts were similar to the one below, adjusted according to the task:</p>
 <blockquote class="blockquote">
 <p>You are an expert in solving grade school math tasks. You will be presented with a grade-school math word problem and be asked to solve it.</p>
@@ -393,7 +398,7 @@ Figure&nbsp;1: Best results for Gemini 1.5 Flash.
 <style type="text/css">
 </style>
 
-<table id="T_cfc97" class="do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_cfc97" class="do-not-create-environment cell table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
@@ -412,58 +417,58 @@ Figure&nbsp;1: Best results for Gemini 1.5 Flash.
 </thead>
 <tbody>
 <tr class="odd">
-<td rowspan="3" id="T_cfc97_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">GSM8K</td>
-<td id="T_cfc97_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">Tam et al.</td>
+<th rowspan="3" id="T_cfc97_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">GSM8K</th>
+<th id="T_cfc97_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">Tam et al.</th>
 <td id="T_cfc97_row0_col0" class="data row0 col0">89.33</td>
 <td id="T_cfc97_row0_col1" class="data row0 col1">89.21</td>
 <td id="T_cfc97_row0_col2" class="data row0 col2">47.78</td>
 </tr>
 <tr class="even">
-<td id="T_cfc97_level1_row1" class="row_heading level1 row1" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<th id="T_cfc97_level1_row1" class="row_heading level1 row1" data-quarto-table-cell-role="th">Me, 0-shot</th>
 <td id="T_cfc97_row1_col0" class="data row1 col0">93.71</td>
 <td id="T_cfc97_row1_col1" class="data row1 col1">93.78</td>
 <td id="T_cfc97_row1_col2" class="data row1 col2">93.03</td>
 </tr>
 <tr class="odd">
-<td id="T_cfc97_level1_row2" class="row_heading level1 row2" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<th id="T_cfc97_level1_row2" class="row_heading level1 row2" data-quarto-table-cell-role="th">Me, 3-shot</th>
 <td id="T_cfc97_row2_col0" class="data row2 col0">94.84</td>
 <td id="T_cfc97_row2_col1" class="data row2 col1">94.16</td>
 <td id="T_cfc97_row2_col2" class="data row2 col2">93.63</td>
 </tr>
 <tr class="even">
-<td rowspan="3" id="T_cfc97_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Last Letter</td>
-<td id="T_cfc97_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">Tam et al.</td>
+<th rowspan="3" id="T_cfc97_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Last Letter</th>
+<th id="T_cfc97_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">Tam et al.</th>
 <td id="T_cfc97_row3_col0" class="data row3 col0">65.45</td>
 <td id="T_cfc97_row3_col1" class="data row3 col1">77.02</td>
 <td id="T_cfc97_row3_col2" class="data row3 col2">0.67</td>
 </tr>
 <tr class="odd">
-<td id="T_cfc97_level1_row4" class="row_heading level1 row4" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<th id="T_cfc97_level1_row4" class="row_heading level1 row4" data-quarto-table-cell-role="th">Me, 0-shot</th>
 <td id="T_cfc97_row4_col0" class="data row4 col0">82.67</td>
 <td id="T_cfc97_row4_col1" class="data row4 col1">80.00</td>
 <td id="T_cfc97_row4_col2" class="data row4 col2">81.33</td>
 </tr>
 <tr class="even">
-<td id="T_cfc97_level1_row5" class="row_heading level1 row5" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<th id="T_cfc97_level1_row5" class="row_heading level1 row5" data-quarto-table-cell-role="th">Me, 3-shot</th>
 <td id="T_cfc97_row5_col0" class="data row5 col0">80.00</td>
 <td id="T_cfc97_row5_col1" class="data row5 col1">82.00</td>
 <td id="T_cfc97_row5_col2" class="data row5 col2">80.67</td>
 </tr>
 <tr class="odd">
-<td rowspan="3" id="T_cfc97_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Shuffled Obj.</td>
-<td id="T_cfc97_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">Tam et al.</td>
+<th rowspan="3" id="T_cfc97_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Shuffled Obj.</th>
+<th id="T_cfc97_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">Tam et al.</th>
 <td id="T_cfc97_row6_col0" class="data row6 col0">58.21</td>
 <td id="T_cfc97_row6_col1" class="data row6 col1">65.07</td>
 <td id="T_cfc97_row6_col2" class="data row6 col2">N/A</td>
 </tr>
 <tr class="even">
-<td id="T_cfc97_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">Me, 0-shot</td>
+<th id="T_cfc97_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">Me, 0-shot</th>
 <td id="T_cfc97_row7_col0" class="data row7 col0">97.15</td>
 <td id="T_cfc97_row7_col1" class="data row7 col1">92.28</td>
 <td id="T_cfc97_row7_col2" class="data row7 col2">86.18</td>
 </tr>
 <tr class="odd">
-<td id="T_cfc97_level1_row8" class="row_heading level1 row8" data-quarto-table-cell-role="th">Me, 3-shot</td>
+<th id="T_cfc97_level1_row8" class="row_heading level1 row8" data-quarto-table-cell-role="th">Me, 3-shot</th>
 <td id="T_cfc97_row8_col0" class="data row8 col0">92.68</td>
 <td id="T_cfc97_row8_col1" class="data row8 col1">98.37</td>
 <td id="T_cfc97_row8_col2" class="data row8 col2">84.96</td>
@@ -569,13 +574,14 @@ Gemini’s Structured Outputs.”</span> December 27, 2024. <a href="https://dyl
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

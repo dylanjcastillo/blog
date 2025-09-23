@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -138,6 +139,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -240,7 +245,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 4, 2025</p>
+      <p class="date-modified">September 23, 2025</p>
     </div>
   </div>
     
@@ -263,7 +268,7 @@ Subscribe to my newsletter
 <section id="setting-up-your-blog" class="level3">
 <h3 class="anchored" data-anchor-id="setting-up-your-blog">Setting up your blog</h3>
 <p>First, install <a href="https://quarto.org/">Quarto</a> and create a blog in an empty repository:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">quarto</span> create project blog myblog</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">quarto</span> create project blog myblog</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The resulting <code>myblog</code> folder will contain the barebones configuration for a Quarto blog and a <code>posts</code> folder with some example posts. You can remove those posts. Later on, you’ll add your own.</p>
 </section>
 <section id="exporting-your-ghosts-blog-content" class="level3 page-columns page-full">
@@ -283,7 +288,7 @@ Subscribe to my newsletter
 <summary>
 Show the code
 </summary>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> json</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> json</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> os</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
@@ -358,7 +363,7 @@ Show the code
 <span id="cb2-73"><a href="#cb2-73"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
 <span id="cb2-74"><a href="#cb2-74"></a>    <span class="cf">with</span> <span class="bu">open</span>(BLOG_JSON_DUMP) <span class="im">as</span> <span class="bu">file</span>:</span>
 <span id="cb2-75"><a href="#cb2-75"></a>        data <span class="op">=</span> json.load(<span class="bu">file</span>)</span>
-<span id="cb2-76"><a href="#cb2-76"></a>    process_posts(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-76"><a href="#cb2-76"></a>    process_posts(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <p>When you run the script, it will create a folder with all the posts in .md format and their images. Feel free to adapt it to your needs.</p>
 </section>
@@ -373,12 +378,12 @@ Show the code
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
 </div>
-<div class="sourceCode" id="cb3" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">website</span><span class="kw">:</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="co"> # The title of your blog</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="at">  </span><span class="fu">site-url</span><span class="kw">:</span><span class="co"> # For the RSS feed that no one will read</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="at">  </span><span class="fu">favicon</span><span class="kw">:</span><span class="co"> # Add a favicon to the blog</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="at">  </span><span class="fu">navbar</span><span class="kw">:</span><span class="co"> # Customize the navbar if you want</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="at">  </span><span class="fu">page-footer</span><span class="kw">:</span><span class="co"> # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="at">  </span><span class="fu">page-footer</span><span class="kw">:</span><span class="co"> # Add a page footer like "Copyright 2024, Saul Goodman" to sound legit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="2" type="1">
 <li>Added custom CSS and JS and a custom theme:</li>
@@ -387,7 +392,7 @@ Show the code
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="at">    </span><span class="fu">include-in-header</span><span class="kw">:</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="kw">      - </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="ch">|</span></span>
@@ -397,7 +402,7 @@ Show the code
 <span id="cb4-8"><a href="#cb4-8"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="co"> # Pick a theme and customize it in `custom.scss`</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a><span class="at">      </span><span class="kw">-</span><span class="at"> &lt;YOUR_THEME&gt;</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a><span class="at">      </span><span class="kw">-</span><span class="at"> custom.scss</span><span class="co"> # Add your custom CSS here</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="at">    </span><span class="fu">code-line-numbers</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co"> # Add line numbers to code blocks</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="at">    </span><span class="fu">code-line-numbers</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co"> # Add line numbers to code blocks</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="3" type="1">
 <li>For each post, I used this front matter:</li>
@@ -406,7 +411,7 @@ Show the code
 <div class="code-with-filename-file">
 <pre><strong>&lt;POST_SLUG&gt;.md</strong></pre>
 </div>
-<div class="sourceCode" id="cb5" data-filename="<POST_SLUG>.md"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="<POST_SLUG>.md"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp">---</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"&lt;POST_TITLE&gt;"</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="fu">aliases</span><span class="kw">:</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="at">  </span><span class="kw">-</span><span class="at"> /&lt;POST_SLUG&gt;/</span><span class="co"> # Add an alias to the previous post's URL</span></span>
@@ -429,7 +434,7 @@ Show the code
 <span id="cb5-21"><a href="#cb5-21"></a><span class="at">  </span><span class="fu">utterances</span><span class="kw">:</span><span class="co"> # For comments</span></span>
 <span id="cb5-22"><a href="#cb5-22"></a><span class="at">    </span><span class="fu">repo</span><span class="kw">:</span><span class="at"> &lt;YOUR_GITHUB_USERNAME&gt;/&lt;YOUR_GITHUB_REPO&gt;</span></span>
 <span id="cb5-23"><a href="#cb5-23"></a><span class="at">    </span><span class="fu">issue-term</span><span class="kw">:</span><span class="at"> pathname</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>See my <a href="https://github.com/dylanjcastillo/blog/blob/main/_quarto.yml">settings</a> for an example and a recent post <a href="https://github.com/dylanjcastillo/blog/blob/main/posts/create-a-kamal-ready-vps-on-hetzner-using-terraform.qmd">source</a> for reference.</p>
 <p>For the CSS, I copied <a href="https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/formats/html/bootstrap/themes/darkly.scss">darkly</a> and created a custom <code>custom.scss</code> file to modify some Bootstrap styles. I just changed some colors and a couple of styles to make the blog look closer to my Ghost theme. It was super easy.</p>
@@ -442,11 +447,11 @@ Show the code
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">execute</span><span class="kw">:</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">execute</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="at">  </span><span class="fu">freeze</span><span class="kw">:</span><span class="at"> auto</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then I ran this command to automatically generate the workflow <code>.github/workflows/publish.yml</code> for me:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">quarto</span> publish gh-pages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">quarto</span> publish gh-pages</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Since then, every time I push changes to the <code>main</code> branch, GitHub Actions automatically renders the website and updates the <code>gh-pages</code> branch.</p>
 </section>
 <section id="using-a-custom-domain" class="level3">
@@ -458,17 +463,17 @@ Show the code
 <div class="code-with-filename-file">
 <pre><strong>CNAME</strong></pre>
 </div>
-<div class="sourceCode" id="cb8" data-filename="CNAME"><pre class="sourceCode numberSource txt number-lines code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1"></a>dylancastillo.co</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="CNAME"><pre class="sourceCode numberSource txt number-lines code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1"></a>dylancastillo.co</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, I added this to <code>_quarto.yml</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>_quarto.yml</strong></pre>
 </div>
-<div class="sourceCode" id="cb9" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="_quarto.yml"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">project</span><span class="kw">:</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span><span class="co"> # New</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="at">    </span><span class="kw">-</span><span class="at"> CNAME</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="at">    </span><span class="kw">-</span><span class="at"> CNAME</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And that worked!</p>
 </section>
@@ -550,13 +555,14 @@ Quarto.”</span> June 16, 2024. <a href="https://dylancastillo.co/til/migrate-b
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

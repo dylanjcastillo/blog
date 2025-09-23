@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -129,6 +130,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -259,7 +264,7 @@ Subscribe to my newsletter
 <p>So, how do you make a <em>figure</em>?</p>
 <p>There are multiple ways to do it. The lowest-level approach is to use Python dictionaries, and the highest-level one is using the <em>Plotly Express</em> interface<em>.</em> I tend to use a mid-level interface called <em>Figure Constructor</em>. It’s easier to debug than using Python dictionaries, and it’s more flexible than <em>Plotly Express</em>.</p>
 <p>The code for making a graph using the <em>Figure Constructor</em> looks as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
@@ -279,7 +284,7 @@ Subscribe to my newsletter
 <span id="cb1-18"><a href="#cb1-18"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
 <span id="cb1-19"><a href="#cb1-19"></a>    layout<span class="op">=</span>layout</span>
 <span id="cb1-20"><a href="#cb1-20"></a>)</span>
-<span id="cb1-21"><a href="#cb1-21"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-21"><a href="#cb1-21"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>How to make make a line chart using Plotly</p>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/658.embed?autosize=true&amp;link=false">
@@ -303,7 +308,7 @@ Basic plot in Plotly
 <h3 class="anchored" data-anchor-id="remove-gridlines-and-background-color">#1: Remove gridlines and background color</h3>
 <p>Gridlines are lines that cross the chart to show axis divisions. They help the viewer visualize the value represented by an unlabeled data point fast. However, gridlines are not very useful when working with interactive graphs. You can hover over a data point and see its value. So more often than not, I remove gridlines when working with Plotly.</p>
 <p>Here’s how you can do it:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-3"><a href="#cb2-3"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
@@ -331,7 +336,7 @@ Basic plot in Plotly
 <span id="cb2-26"><a href="#cb2-26"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
 <span id="cb2-27"><a href="#cb2-27"></a>    layout<span class="op">=</span>layout</span>
 <span id="cb2-28"><a href="#cb2-28"></a>)</span>
-<span id="cb2-29"><a href="#cb2-29"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-29"><a href="#cb2-29"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Code snippet to remove grid lines</p>
 <p>And this is how it looks:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/627.embed?autosize=true&amp;link=false">
@@ -345,7 +350,7 @@ Line chart without gridlines
 <p>When working with categories, there are two things people usually like to do. First, they want to assign some specific colors to each group. For instance, if you are analyzing electoral results in the US, you probably want to use particular blue and red variations to identify the Democratic and Republican parties.</p>
 <p>Second, you want this color to remain consistent across all the graphs you do. For example, if you are analyzing some real-world companies, you may want to use their distinctive colors to plot their prices but also when you analyze their returns.</p>
 <p>Here’s how you can do that using Plotly:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-3"><a href="#cb3-3"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
@@ -422,7 +427,7 @@ Line chart without gridlines
 <span id="cb3-75"><a href="#cb3-75"></a>    data.append(histogram)</span>
 <span id="cb3-76"><a href="#cb3-76"></a></span>
 <span id="cb3-77"><a href="#cb3-77"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb3-78"><a href="#cb3-78"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-78"><a href="#cb3-78"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/671.embed?autosize=true&amp;link=false">
 </iframe>
 <figcaption>
@@ -436,7 +441,7 @@ Consistent colors across graphs
 <section id="use-spike-lines-to-compare-data-points" class="level3">
 <h3 class="anchored" data-anchor-id="use-spike-lines-to-compare-data-points">#3: Use spike lines to compare data points</h3>
 <p>A spike line is a vertical or horizontal line that appears when hovering on data. It’s useful for comparing values in line charts and scatter plots. This is how you can add those using Plotly:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-3"><a href="#cb4-3"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb4-4"><a href="#cb4-4"></a></span>
@@ -495,7 +500,7 @@ Consistent colors across graphs
 <span id="cb4-57"><a href="#cb4-57"></a>    data.append(line_chart)</span>
 <span id="cb4-58"><a href="#cb4-58"></a></span>
 <span id="cb4-59"><a href="#cb4-59"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb4-60"><a href="#cb4-60"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-60"><a href="#cb4-60"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Code snippet to add spike lines to chart</p>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/700.embed?autosize=true&amp;link=false">
@@ -509,7 +514,7 @@ Chart with spike lines
 <p>I’m not too fond of the floating menu that Plotly adds to your chart by default. It makes graphs look <em>cool</em>, but I’ve rarely seen people using it. It has so many options that it’s just confusing for someone looking at a graph for the first time. Usually, I remove it.</p>
 <p>Also, I like to re-define two other user interaction parameters. I prefer to limit the users’ ability to zoom in and change the behavior of clicking on a trace in the legend. In Plotly, by default, if you want to inspect a trace on its own, you have to double-click on the trace, instead of just clicking on it. That’s not very intuitive, so I tend to invert that behavior.</p>
 <p>This is how you can apply those changes:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-3"><a href="#cb5-3"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb5-4"><a href="#cb5-4"></a></span>
@@ -566,7 +571,7 @@ Chart with spike lines
 <span id="cb5-55"><a href="#cb5-55"></a>    data.append(line_chart)</span>
 <span id="cb5-56"><a href="#cb5-56"></a></span>
 <span id="cb5-57"><a href="#cb5-57"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb5-58"><a href="#cb5-58"></a>fig.show(config<span class="op">=</span>{<span class="st">"displayModeBar"</span>: <span class="va">False</span>, <span class="st">"showTips"</span>: <span class="va">False</span>}) <span class="co"># Remove floating menu and unnecesary dialog box</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-58"><a href="#cb5-58"></a>fig.show(config<span class="op">=</span>{<span class="st">"displayModeBar"</span>: <span class="va">False</span>, <span class="st">"showTips"</span>: <span class="va">False</span>}) <span class="co"># Remove floating menu and unnecesary dialog box</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/716.embed?autosize=true&amp;link=false&amp;modebar=false">
 </iframe>
@@ -654,13 +659,14 @@ Plotly.”</span> May 25, 2020. <a href="https://dylancastillo.co/posts/4-ways-t
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

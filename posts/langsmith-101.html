@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -263,15 +268,15 @@ Subscribe to my newsletter
 <li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
 <li>Create a <code>.env</code> file in the root directory of your project and add the following lines:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="va">LANGSMITH_TRACING</span><span class="op">=</span>true</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="va">LANGSMITH_PROJECT</span><span class="op">=</span>your_langchain_project_name</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li>Create a virtual environment in Python and install the following packages:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I’m assuming you’re familiar with the basics of LLMs. If you need a refresher, you can check out some of <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">my</a> <a href="https://dylancastillo.co/posts/key-parameters-llms.html">older</a> <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">posts</a>. Also, if you don’t want to copy and paste the code, you can download this post’s <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/synthetic-data-rag.ipynb">notebook</a> and follow along.</p>
 <p>Let’s go!</p>
 </section>
@@ -279,7 +284,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>As usual, you should start by importing the necessary libraries:</p>
 <div id="cell-3" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
@@ -289,7 +294,7 @@ Subscribe to my newsletter
 <span id="cb3-8"><a href="#cb3-8"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
 <span id="cb3-9"><a href="#cb3-9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
 <span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a>load_dotenv()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-11"><a href="#cb3-11"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will import all the libraries required for the next sections:</p>
 <ol type="1">
@@ -314,7 +319,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
 <p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
 <div id="cell-7" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="at">@traceable</span></span>
@@ -338,7 +343,7 @@ Subscribe to my newsletter
 <span id="cb4-22"><a href="#cb4-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
 <span id="cb4-23"><a href="#cb4-23"></a></span>
 <span id="cb4-24"><a href="#cb4-24"></a></span>
-<span id="cb4-25"><a href="#cb4-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-25"><a href="#cb4-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will automatically log the input and ouput of the functions decorated with <code>traceable</code>. It will also handle the nesting for you, so that <code>format_messages</code> and <code>call_llm</code> are steps within the <code>run_pipeline</code> function.</p>
 <p>In <code>traceable</code> you can customize xyz.</p>
@@ -347,7 +352,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
 <p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
 <div id="cell-11" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>client <span class="op">=</span> OpenAI()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="at">@traceable</span></span>
@@ -370,7 +375,7 @@ Subscribe to my newsletter
 <span id="cb5-21"><a href="#cb5-21"></a>    messages <span class="op">=</span> format_messages(app_inputs[<span class="st">"question"</span>])</span>
 <span id="cb5-22"><a href="#cb5-22"></a>    response <span class="op">=</span> call_llm(messages)</span>
 <span id="cb5-23"><a href="#cb5-23"></a>    output <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb5-24"><a href="#cb5-24"></a>    rt.end(outputs<span class="op">=</span>{<span class="st">"output"</span>: output})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-24"><a href="#cb5-24"></a>    rt.end(outputs<span class="op">=</span>{<span class="st">"output"</span>: output})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will generate a trace called “LLM Pipeline” with the input and output of the entire pipeline. Within this trace, you will find the individual traces for each function call.</p>
 </section>
@@ -378,7 +383,7 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
 <p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
 <div id="cell-14" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="at">@traceable</span></span>
@@ -402,7 +407,7 @@ Subscribe to my newsletter
 <span id="cb6-22"><a href="#cb6-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
 <span id="cb6-23"><a href="#cb6-23"></a></span>
 <span id="cb6-24"><a href="#cb6-24"></a></span>
-<span id="cb6-25"><a href="#cb6-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-25"><a href="#cb6-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will automatically log the LLM calls made within <code>run_pipeline</code>, so you no longer need to add the <code>traceable</code> decorator to each call.</p>
 </section>
@@ -411,7 +416,7 @@ Subscribe to my newsletter
 <p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
 <p>Here’s the <code>RunTree</code> version of the previous example:</p>
 <div id="cell-17" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>, parent_run: RunTree):</span>
@@ -452,7 +457,7 @@ Subscribe to my newsletter
 <span id="cb7-39"><a href="#cb7-39"></a>    parent_run.patch()</span>
 <span id="cb7-40"><a href="#cb7-40"></a></span>
 <span id="cb7-41"><a href="#cb7-41"></a></span>
-<span id="cb7-42"><a href="#cb7-42"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-42"><a href="#cb7-42"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will result in a similar trace, but in this case you have more control over when/what to send in each step.</p>
 <p>For all of these methods, you should’ve obtained a trace that looks like this:</p>
@@ -477,7 +482,7 @@ Subscribe to my newsletter
 <p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
 <p>You should start by creating a dataset on LangSmith:</p>
 <div id="cell-22" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>examples <span class="op">=</span> [</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    {<span class="st">"inputs"</span>: {<span class="st">"question"</span>: d[<span class="st">"problem"</span>]}, <span class="st">"outputs"</span>: {<span class="st">"answer"</span>: <span class="bu">int</span>(d[<span class="st">"answer"</span>])}}</span>
 <span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">for</span> d <span class="kw">in</span> ds[<span class="st">"train"</span>]</span>
@@ -492,7 +497,7 @@ Subscribe to my newsletter
 <span id="cb8-13"><a href="#cb8-13"></a>    client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
 <span id="cb8-14"><a href="#cb8-14"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
 <span id="cb8-15"><a href="#cb8-15"></a>    <span class="bu">print</span>(<span class="ss">f"Dataset </span><span class="sc">{</span>dataset_name<span class="sc">}</span><span class="ss"> already exists. Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-16"><a href="#cb8-16"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-16"><a href="#cb8-16"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dataset AIME Example Dataset (sample) already exists. Error: Conflict for /datasets. HTTPError('409 Client Error: Conflict for url: https://api.smith.langchain.com/datasets', '{"detail":"Dataset with this name already exists."}')</code></pre>
 </div>
@@ -507,7 +512,7 @@ Subscribe to my newsletter
 </div>
 <p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
 <div id="cell-24" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> Response(BaseModel):</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    answer: <span class="bu">int</span> <span class="op">=</span> Field(</span>
 <span id="cb10-4"><a href="#cb10-4"></a>        description<span class="op">=</span><span class="st">"The answer to the question. It should be an integer."</span></span>
@@ -533,19 +538,19 @@ Subscribe to my newsletter
 <span id="cb10-24"><a href="#cb10-24"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
 <span id="cb10-25"><a href="#cb10-25"></a>            <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb10-26"><a href="#cb10-26"></a>            <span class="cf">continue</span></span>
-<span id="cb10-27"><a href="#cb10-27"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Failed to get a valid response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-27"><a href="#cb10-27"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Failed to get a valid response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
 <p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
 <div id="cell-26" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
 <p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
 <p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
 <div id="cell-28" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
 <span id="cb12-2"><a href="#cb12-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3"></a>    clarity: <span class="bu">int</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The clarity of the explanation"</span>, ge<span class="op">=</span><span class="dv">1</span>, le<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb12-4"><a href="#cb12-4"></a></span>
@@ -559,19 +564,19 @@ Subscribe to my newsletter
 <span id="cb12-12"><a href="#cb12-12"></a>    ]</span>
 <span id="cb12-13"><a href="#cb12-13"></a>    model_with_clarity_structure <span class="op">=</span> model.with_structured_output(ClarityResponse)</span>
 <span id="cb12-14"><a href="#cb12-14"></a>    response <span class="op">=</span> model_with_clarity_structure.invoke(messages)</span>
-<span id="cb12-15"><a href="#cb12-15"></a>    <span class="cf">return</span> response.clarity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-15"><a href="#cb12-15"></a>    <span class="cf">return</span> response.clarity</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
 <p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
 <div id="cell-30" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    response <span class="op">=</span> get_response(inputs[<span class="st">"question"</span>])</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    <span class="cf">return</span> response.model_dump()</span>
 <span id="cb13-4"><a href="#cb13-4"></a></span>
 <span id="cb13-5"><a href="#cb13-5"></a></span>
 <span id="cb13-6"><a href="#cb13-6"></a>experiment_results <span class="op">=</span> client.aevaluate(</span>
 <span id="cb13-7"><a href="#cb13-7"></a>    ls_wrapper, data<span class="op">=</span>dataset_name, evaluators<span class="op">=</span>[accuracy, clarity], max_concurrency<span class="op">=</span><span class="dv">15</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-8"><a href="#cb13-8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>LangSmith requires you to define a function that wraps your pipeline function. It should take an input dictionary that contains the necessary parameters for your pipeline and return a dictionary with the results. You can also specify a <code>evaluators</code> parameter that includes the evaluation metrics you want to use.</p>
 <p>After you’ve run the evaluation, you’ll be able to inspect the results of the experiment:</p>
@@ -667,13 +672,14 @@ Castillo, Dylan. 2025. <span>“LangSmith 101.”</span> August 10, 2025. <a hre
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

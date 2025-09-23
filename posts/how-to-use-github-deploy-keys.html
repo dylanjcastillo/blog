@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,14 +71,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../images/logo.webp" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-befe23ebd2f54d8af2c8a89d1a1611f1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0cfac4a239bb34ffc26db60e36580ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6a9ea499b5d1c93e13605064a2c27ff3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -136,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+  </div>
             <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
@@ -262,7 +267,7 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="create-an-ssh-key-on-your-server">Create an SSH Key on Your Server</h2>
 <p>A GitHub deploy key is, ultimately, an SSH key. So you’ll start by creating an SSH key on your server.</p>
 <p>First, connect to your server and open a terminal. Once you’re in, create an SSH key by executing the following command:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"USERNAME@EMAIL.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"USERNAME@EMAIL.com"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>‌This command will create and store an SSH key. You use two parameters:</p>
 <ol type="1">
 <li><code>-t ed25519</code> to specify which algorithm to use to generate the key. You chose &nbsp;<a href="https://ed25519.cr.yp.to/">ED25519</a>, a very secure and efficient algorithm.</li>
@@ -275,16 +280,16 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="add-the-key-to-ssh-config">Add the Key to SSH Config</h2>
 <p>Next, you’ll create an <a href="https://man.openbsd.org/ssh_config.5"><strong>SSH config file</strong></a>. This file allows you to define the instructions required to connect to remote servers using SSH. It’s an easy way to manage multiple servers’ SSH keys or to keep deploy keys of different repositories in the same server.</p>
 <p>You can create and edit the SSH config file by running these commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">touch</span> ~/.ssh/config</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">touch</span> ~/.ssh/config</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">chmod</span> 600 ~/.ssh/config</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">vim</span> ~/.ssh/config <span class="co"># Or: nano ~/.ssh/config</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">vim</span> ~/.ssh/config <span class="co"># Or: nano ~/.ssh/config</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These commands will create an SSH config file, set the correct permissions, and open it using <em>vim</em>. You can also use <em>nano</em> to open the file if you’re unfamiliar with vim’s shortcuts.</p>
 <p>An SSH config file consists of sections specifying the instructions required for each server you’ll connect to. So, in this case, you’ll provide the instructions needed to connect to your repository. For that, copy this text to the file:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">Host</span> github-YOUR-APP</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">Host</span> github-YOUR-APP</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="ex">HostName</span> github.com</span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="ex">AddKeysToAgent</span> yes</span>
 <span id="cb3-4"><a href="#cb3-4"></a>    <span class="ex">PreferredAuthentications</span> publickey</span>
-<span id="cb3-5"><a href="#cb3-5"></a>    <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>‌In the code snippet above, you provide the settings required to connect to GitHub using the SSH key you just created. You specify the following parameters:</p>
 <ul>
 <li><strong>Host:</strong> the name you’ll use in the terminal when referring to this server. Choose a name that’s easy to remember.</li>
@@ -298,16 +303,16 @@ Subscribe to my newsletter
 <section id="create-a-deploy-key-on-github" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-deploy-key-on-github">Create a Deploy Key on GitHub</h2>
 <p>First, copy the <strong>public key</strong> from the SSH key you created earlier. The easiest way of doing that is to run:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Then select and copy the resulting text from the command line. It should look something like this:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">ssh-ed25519</span> AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">ssh-ed25519</span> AAAAC3NzaC1lZDI1NTE5AAAAILs35pzG5jZakTEHDWeRErgkAmabhQj2yj/onxlIQgli USERNAME@EMAIL.com</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>‌Next, open your preferred browser and go to the repository with your app’s code on GitHub. Click on <em>Settings</em>, select <em>Deploy keys,</em> and then click on <em>Add deploy key.</em></p>
 <p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.07.18.png" class="img-fluid"></a></p>
 <p>Add deploy key on GitHub</p>
 <p>Copy the key in the <em>Key</em> textbox and set a title to the key. You can leave <em>Allow write access</em> unchecked and click on <em>Add key</em>. <em>Allow write access</em> allows you to make changes to the repository using the deploy key. For security reasons, you don’t want to do that in most cases.</p>
 <p><a href="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/how-to-use-github-deploy-keys/Screenshot-2023-01-26-at-20.14.37.png" class="img-fluid"></a></p>
 <p>Next, you can go back to your server’s terminal and clone your repository. You can do that by running this command:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">git</span> clone git@github-YOUR-APP:dylanjcastillo/random.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will clone your app’s repository to your server. Please remember to replace <code>github-YOUR-APP</code> by the <code>Host</code> you specified in the SSH config file. Otherwise, it won’t work.</p>
 <p>That’s all!</p>
 </section>
@@ -387,13 +392,14 @@ October 7, 2021. <a href="https://dylancastillo.co/posts/how-to-use-github-deplo
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
