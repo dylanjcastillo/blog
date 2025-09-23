@@ -11,9 +11,7 @@ categories:
   - python
 ---
 
-I've tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do.
-
-I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made Cursor agents call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw) to ensure they follow my repo's rules^[It didn't work, but I felt much better about myself.].
+I've tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do. I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made coding agents call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw) to ensure they follow my repo's rules^[It didn't work, but I felt much better about myself.].
 
 All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their "ultimate prompt" that it often feels closer to astrology than to engineering.
 
