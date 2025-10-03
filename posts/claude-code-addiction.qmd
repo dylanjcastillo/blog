@@ -1,0 +1,17 @@
+---
+title: "Claude Code addiction"
+date: 2025-10-03
+date-modified: "2025-10-03"
+---
+
+You can't stop using Claude Code not because it makes you more productive, but because it eases the *pain* of thinking. 
+
+All those charts comparing how much better or worse people do with AI coding tools don't matter.
+
+Even if you were 50% less productive, you'd still use Claude Code, Cursor, Kilo Code, or whatever new coding tool some guys in SF come up with.
+
+It takes me twice as long to complete the task. But I don't need to be *there*.
+
+We only talk about adoption driven by productivity because companies care about that, but people don't.
+
+People want comfort and AI coding tools are the warm bed in a cold night of winter for developers.
