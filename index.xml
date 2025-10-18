@@ -26,7 +26,7 @@
 
 
 <p>Hi, I’m Dylan, and I’m a ClaudeCodeholic.</p>
-<p>I’m not addicted because Claude Code makes me more productive. I’m addicted because it dulls the <em>pain</em> of thinking and makes development a never ending bet of “if I change the prompt just one more time, it’ll finally get it right.”</p>
+<p>I’m not addicted because Claude Code makes me more productive. I’m addicted because it dulls the <em>pain</em> of thinking and makes development an endless betting game of “if I change the prompt just one more time, it’ll get it right.”</p>
 <p>I don’t care about those studies comparing how much better or worse people do with AI coding tools. I’d still use it, even if I was 50% less productive.</p>
 <p>It might take twice as long to finish what I’m trying to build. Maybe I never finish it at all. But I feel I’m making progress. Most importantly, I hardly need to be <em>there</em>.</p>
 <p>Companies worship productivity. I worship comfort. And Claude Code is my warm bed on a cold night of winter.</p>
@@ -47,6 +47,41 @@ Castillo, Dylan. 2025. <span>“ClaudeCodeholic.”</span> October 18, 2025.
 </div></div></section></div> ]]></description>
   <category>essay</category>
   <guid>https://dylancastillo.co/posts/claudecodeholic.html</guid>
+  <pubDate>Sat, 18 Oct 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>New line in Claude Code in Alacritty</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>To make <code>Shift+Enter</code> create a new line in Claude Code when working with <a href="https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html">Alacritty/Zellij</a>, you need to add the following lines to <code>~/.config/alacritty.toml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1">[keyboard]</span>
+<span id="cb1-2">bindings = [</span>
+<span id="cb1-3">    { key = "Return", mods = "Shift", chars = "\n" } </span>
+<span id="cb1-4">]</span></code></pre></div></div>
+<p>I found the solution in this <a href="https://github.com/anthropics/claude-code/issues/1300">GitHub issue</a>.</p>
+<p>Running <code>/terminal-setup</code> didn’t work for me.</p>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {New Line in {Claude} {Code} in {Alacritty}},
+  date = {2025-10-18},
+  url = {https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“New Line in Claude Code in
+Alacritty.”</span> October 18, 2025. <a href="https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html">https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>claude-code</category>
+  <guid>https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</guid>
   <pubDate>Sat, 18 Oct 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
@@ -14331,276 +14366,6 @@ Performance of LLMs.”</span> December 8, 2024. <a href="https://dylancastillo.
   <category>python</category>
   <guid>https://dylancastillo.co/posts/say-what-you-mean-sometimes.html</guid>
   <pubDate>Sun, 08 Dec 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Transform any image to WebP from the terminal</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/transforming-images-to-webp.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I was annoyed by the file size of my photo in the <a href="https://dylanjcastillo.com/about/">About page</a>, because it was slowing down the page load.</p>
-<p>Is it important? No.</p>
-<p>Don’t I have better things to do on a Saturday afternoon? Yes.</p>
-<p>But it’s like going to bed with the closet door open—you know there’s nothing in there, but you just can’t shake the feeling that the devil (or <a href="https://es.wikipedia.org/wiki/Diosdado_Cabello">Diosdado Cabello</a>) might jump out and kill you in your sleep unless you get up and shut it.</p>
-<p>So I got o1-mini to write a simple script for me, and thought others might find it useful.</p>
-<p>Here it is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"> img2webp()</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">{</span></span>
-<span id="cb1-2"></span>
-<span id="cb1-3">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check if the input file is provided or if help is requested</span></span>
-<span id="cb1-4">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[[</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$#</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-lt</span> 1 <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">||</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$1</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"--help"</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">||</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$1</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"-h"</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]];</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">then</span></span>
-<span id="cb1-5">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Usage: img2webp input_image [quality]"</span></span>
-<span id="cb1-6">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"  input_image: Path to the input image file"</span></span>
-<span id="cb1-7">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"  quality: Quality of the output WebP image (0-100, default is 80)"</span></span>
-<span id="cb1-8">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb1-9">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fi</span></span>
-<span id="cb1-10"></span>
-<span id="cb1-11">  <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">local</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">input</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$1</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb1-12">  <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">local</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">quality</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${2</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:-</span>80<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">}</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Default quality is 80 if not specified</span></span>
-<span id="cb1-13">  <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">local</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">output</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">${input</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%</span>.<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">*</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">}</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">.webp"</span></span>
-<span id="cb1-14"></span>
-<span id="cb1-15">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Convert the image to WebP using ffmpeg</span></span>
-<span id="cb1-16">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ffmpeg</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-i</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$input</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-qscale:v</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$quality</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$output</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb1-17"></span>
-<span id="cb1-18">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check if the conversion was successful</span></span>
-<span id="cb1-19">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">[[</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$?</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-eq</span> 0 <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">]];</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">then</span></span>
-<span id="cb1-20">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Successfully converted '</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$input</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">' to '</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$output</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">' with quality </span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$quality</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">."</span></span>
-<span id="cb1-21">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span></span>
-<span id="cb1-22">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Failed to convert '</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$input</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">' to WebP."</span></span>
-<span id="cb1-23">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb1-24">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fi</span></span>
-<span id="cb1-25"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>If you’re using MacOS, you first need to install <code>ffmpeg</code> using Homebrew:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">brew</span> install ffmpeg</span></code></pre></div></div>
-<p>Then you can add it to your <code>.zshrc</code> and use it by running <code>img2webp &lt;path_to_image&gt; [quality]</code>.</p>
-<p>Just as reference, keeping the same quality, I decreased my profile picture from 234KB to 36KB by just changing from PNG to WebP.</p>
-<p>Hope you found this useful.</p>
-
-
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
-  author = {Castillo, Dylan},
-  title = {Transform Any Image to {WebP} from the Terminal},
-  date = {2024-11-23},
-  url = {https://dylancastillo.co/til/transforming-images-to-webp.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2024. <span>“Transform Any Image to WebP from the
-Terminal.”</span> November 23, 2024. <a href="https://dylancastillo.co/til/transforming-images-to-webp.html">https://dylancastillo.co/til/transforming-images-to-webp.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>webp</category>
-  <category>bash</category>
-  <category>ffmpeg</category>
-  <guid>https://dylancastillo.co/til/transforming-images-to-webp.html</guid>
-  <pubDate>Sat, 23 Nov 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
