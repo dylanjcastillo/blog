@@ -1,7 +1,7 @@
 ---
 title: "ClaudeCodeholic"
 date: 2025-10-18
-date-modified: "2025-10-18"
+date-modified: 2025-10-18
 categories:
     - essay
 ---
@@ -12,7 +12,7 @@ I'm not addicted because Claude Code makes me more productive. I'm addicted beca
 
 I don't care about those studies comparing how much better or worse people do with AI coding tools. I'd still use it, even if I was 50% less productive.
 
-It might take twice as long to finish what I’m trying to build. Maybe I never finish it at all. But I feel I'm making progress. Above all, I hardly need to be *there*.
+It might take twice as long to finish what I’m trying to build. Maybe I never finish it at all. But I feel I'm making progress. Most importantly, I hardly need to be *there*.
 
 Companies worship productivity. I worship comfort. And Claude Code is my warm bed on a cold night of winter.
 
