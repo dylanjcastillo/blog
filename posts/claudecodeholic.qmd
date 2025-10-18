@@ -8,7 +8,7 @@ categories:
 
 Hi, I'm Dylan, and I'm a ClaudeCodeholic.
 
-I'm not addicted because Claude Code makes me more productive. I'm addicted because it dulls the *pain* of thinking and makes development a never ending bet of "if I change the prompt just one more time, it'll finally get it right."
+I'm not addicted because Claude Code makes me more productive. I'm addicted because it dulls the *pain* of thinking and makes development an endless betting game of "if I change the prompt just one more time, it'll get it right."
 
 I don't care about those studies comparing how much better or worse people do with AI coding tools. I'd still use it, even if I was 50% less productive.
 
