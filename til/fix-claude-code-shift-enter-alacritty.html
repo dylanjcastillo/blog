@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2024-06-22">
-<meta name="description" content="Simple setup for a Django app using Poetry and Docker.">
+<meta name="dcterms.date" content="2024-08-15">
+<meta name="description" content="Configure Alacritty so Shift+Enter inserts a newline in Claude Code on macOS.">
 
-<title>A Dockerfile for a Django app using Poetry – Dylan Castillo</title>
+<title>New line in Claude Code in Alacritty – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -112,11 +112,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="A Dockerfile for a Django app using Poetry – Dylan Castillo">
+<meta property="og:title" content="New line in Claude Code in Alacritty – Dylan Castillo">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="A Dockerfile for a Django app using Poetry – Dylan Castillo">
+<meta name="twitter:title" content="New line in Claude Code in Alacritty – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
@@ -174,17 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#project-structure" id="toc-project-structure" class="nav-link active" data-scroll-target="#project-structure">Project structure</a></li>
-  <li><a href="#dockerfile" id="toc-dockerfile" class="nav-link" data-scroll-target="#dockerfile">Dockerfile</a></li>
-  <li><a href="#entrypoint" id="toc-entrypoint" class="nav-link" data-scroll-target="#entrypoint">Entrypoint</a></li>
-  <li><a href="#docker-compose" id="toc-docker-compose" class="nav-link" data-scroll-target="#docker-compose">Docker-compose</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul>
-</nav>
+        
     <div class="quarto-margin-footer"><div class="margin-footer-item">
 <button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
 Subscribe to my newsletter
@@ -195,11 +185,10 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">A Dockerfile for a Django app using Poetry</h1>
+<h1 class="title">New line in Claude Code in Alacritty</h1>
   <div class="quarto-categories">
     <div class="quarto-category">til</div>
-    <div class="quarto-category">python</div>
-    <div class="quarto-category">django</div>
+    <div class="quarto-category">claude-code</div>
   </div>
   </div>
 
@@ -226,7 +215,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 22, 2024</p>
+      <p class="date">August 15, 2024</p>
     </div>
   </div>
   
@@ -244,171 +233,26 @@ Subscribe to my newsletter
 </header>
 
 
-<p><a href="https://levels.io/">Pieter Levels</a> makes over $100k/month with a single VPS using PHP and jQuery. And until very recently, his deployment process was simply <a href="https://news.ycombinator.com/item?id=28838537">uploading files via FTP</a>.</p>
-<p>If you focus on what your users want and know how to market your product, you can make a lot of money.</p>
-<p>Which is why I decided to stay poor and spent an inordinate amount of time improving my deployment process.</p>
-<p>Who needs money when you can get the satisfaction of that beautiful green check mark after you’ve run your CI/CD pipeline?</p>
-<p>Anyways…</p>
-<p>These days, I’m using <a href="https://kamal-deploy.org/">kamal</a> to deploy most of my projects.</p>
-<p>I used to hate Docker. But, like with Gollum, I’ve come to realize that it’s not that bad after all.</p>
-<p>I wanted to create a simple Dockerfile to run a Django app using Poetry, with a SQLite database, and hot reload. Additionally, I wanted to switch between the development and production versions of the container.</p>
-<p>So here’s a simple Dockerfile that does just that.</p>
-<section id="project-structure" class="level2">
-<h2 class="anchored" data-anchor-id="project-structure">Project structure</h2>
-<p>This is my project structure:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="bu">.</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">├──</span> db/</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">├──</span> src/</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="ex">├──</span> entrypoint.sh</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="ex">├──</span> Dockerfile</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="ex">├──</span> docker-compose.yml</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="ex">├──</span> poetry.lock</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="ex">└──</span> pyproject.toml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>src/</code> directory contains the Django project. The <code>db/</code> directory contains the SQLite database. The <code>entrypoint.sh</code> file is the entrypoint for the Docker container.</p>
-<p>If your project is not structured in a similar way, you might need to adapt the files below to your needs.</p>
-</section>
-<section id="dockerfile" class="level2">
-<h2 class="anchored" data-anchor-id="dockerfile">Dockerfile</h2>
-<p>I created a <code>Dockerfile</code> that fulfilled this:</p>
-<ol type="1">
-<li>A base stage with Python 3.10 and Poetry installed.</li>
-<li>A builder stage that installs the dependencies.</li>
-<li>A runner stage that copies the virtual environment from the builder stage.</li>
-<li>A development stage that runs the entrypoint as a root user.</li>
-<li>A production stage that runs the entrypoint as a non-root user.</li>
-</ol>
-<p>Here’s the full <code>Dockerfile</code>:</p>
-<details>
-<summary>
-Dockerfile
-</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource dockerfile number-lines code-with-copy"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">FROM</span> python:3.10-slim <span class="kw">AS</span> base</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">ENV</span> POETRY_HOME=/opt/poetry</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">ENV</span> PATH=${POETRY_HOME}/bin:${PATH}</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">RUN</span> <span class="ex">apt-get</span> update <span class="dt">\</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">--no-install-recommends</span> <span class="at">-y</span> <span class="dt">\</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>    curl <span class="dt">\</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>    <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> clean <span class="dt">\</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">&amp;&amp;</span> <span class="fu">rm</span> <span class="at">-rf</span> /var/lib/apt/lists/<span class="pp">*</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">RUN</span> <span class="ex">curl</span> <span class="at">-sSL</span> https://install.python-poetry.org <span class="kw">|</span> <span class="ex">python3</span> <span class="at">-</span> <span class="kw">&amp;&amp;</span> <span class="ex">poetry</span> <span class="at">--version</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">FROM</span> base <span class="kw">AS</span> builder</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="kw">WORKDIR</span> /app</span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">COPY</span> poetry.lock pyproject.toml ./</span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="kw">RUN</span> <span class="ex">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="kw">RUN</span> <span class="ex">poetry</span> install <span class="at">--only</span> main <span class="at">--no-interaction</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="kw">FROM</span> base <span class="kw">AS</span> runner</span>
-<span id="cb2-22"><a href="#cb2-22"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a><span class="kw">WORKDIR</span> /app</span>
-<span id="cb2-24"><a href="#cb2-24"></a><span class="kw">COPY</span> <span class="op">--from=builder</span> /app/.venv/ /app/.venv/</span>
-<span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="kw">COPY</span> . /app</span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="kw">RUN</span> <span class="fu">mkdir</span> <span class="at">-p</span> /db</span>
-<span id="cb2-28"><a href="#cb2-28"></a></span>
-<span id="cb2-29"><a href="#cb2-29"></a><span class="kw">EXPOSE</span> 8000</span>
-<span id="cb2-30"><a href="#cb2-30"></a></span>
-<span id="cb2-31"><a href="#cb2-31"></a><span class="kw">RUN</span> <span class="fu">chmod</span> +x /app/src/entrypoint.sh</span>
-<span id="cb2-32"><a href="#cb2-32"></a></span>
-<span id="cb2-33"><a href="#cb2-33"></a><span class="kw">FROM</span> runner <span class="kw">AS</span> development</span>
-<span id="cb2-34"><a href="#cb2-34"></a></span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="kw">WORKDIR</span> /app/src</span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="kw">ENTRYPOINT</span> [ <span class="st">"/app/src/entrypoint.sh"</span> ]</span>
-<span id="cb2-37"><a href="#cb2-37"></a></span>
-<span id="cb2-38"><a href="#cb2-38"></a><span class="kw">FROM</span> runner <span class="kw">AS</span> production</span>
-<span id="cb2-39"><a href="#cb2-39"></a></span>
-<span id="cb2-40"><a href="#cb2-40"></a><span class="co"># Set user and group</span></span>
-<span id="cb2-41"><a href="#cb2-41"></a><span class="kw">ARG</span> user=django</span>
-<span id="cb2-42"><a href="#cb2-42"></a><span class="kw">ARG</span> group=django</span>
-<span id="cb2-43"><a href="#cb2-43"></a><span class="kw">ARG</span> uid=1000</span>
-<span id="cb2-44"><a href="#cb2-44"></a><span class="kw">ARG</span> gid=1000</span>
-<span id="cb2-45"><a href="#cb2-45"></a><span class="kw">RUN</span> <span class="ex">groupadd</span> <span class="at">-g</span> <span class="va">${gid}</span> <span class="va">${group}</span></span>
-<span id="cb2-46"><a href="#cb2-46"></a><span class="kw">RUN</span> <span class="ex">useradd</span> <span class="at">-u</span> <span class="va">${uid}</span> <span class="at">-g</span> <span class="va">${group}</span> <span class="at">-s</span> /bin/sh <span class="at">-m</span> <span class="va">${user}</span></span>
-<span id="cb2-47"><a href="#cb2-47"></a></span>
-<span id="cb2-48"><a href="#cb2-48"></a><span class="co"># Switch to user</span></span>
-<span id="cb2-49"><a href="#cb2-49"></a><span class="kw">RUN</span> <span class="fu">chown</span> <span class="at">-R</span> <span class="va">${uid}</span>:<span class="va">${gid}</span> /app</span>
-<span id="cb2-50"><a href="#cb2-50"></a><span class="kw">RUN</span> <span class="fu">chown</span> <span class="at">-R</span> <span class="va">${uid}</span>:<span class="va">${gid}</span> /db</span>
-<span id="cb2-51"><a href="#cb2-51"></a></span>
-<span id="cb2-52"><a href="#cb2-52"></a><span class="kw">USER</span> ${uid}:${gid}</span>
-<span id="cb2-53"><a href="#cb2-53"></a></span>
-<span id="cb2-54"><a href="#cb2-54"></a><span class="kw">WORKDIR</span> /app/src</span>
-<span id="cb2-55"><a href="#cb2-55"></a><span class="kw">ENTRYPOINT</span> [ <span class="st">"/app/src/entrypoint.sh"</span> ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</section>
-<section id="entrypoint" class="level2">
-<h2 class="anchored" data-anchor-id="entrypoint">Entrypoint</h2>
-<p>For <code>entrypoint.sh</code> I use this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#!/bin/sh</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$ENVIRONMENT</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"production"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>    <span class="bu">echo</span> <span class="st">"Running in production mode"</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>    <span class="bu">exec</span> poetry run gunicorn <span class="at">-c</span> gunicorn.conf.py</span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="cf">elif</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$ENVIRONMENT</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"development"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="bu">echo</span> <span class="st">"Running in development mode"</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>    <span class="bu">exec</span> poetry run python manage.py runserver 0.0.0.0:8000</span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="cf">else</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>    <span class="bu">echo</span> <span class="st">"ENVIRONMENT variable is not set"</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="cf">fi</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>If <code>ENVIRONMENT</code> is set to <code>production</code>, the container will run the production server using gunicorn. If it is <code>development</code>, the container will run Django’s development server.</p>
-</section>
-<section id="docker-compose" class="level2">
-<h2 class="anchored" data-anchor-id="docker-compose">Docker-compose</h2>
-<p>Then, I have a docker-compose that lets you run the development and production containers:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">services</span><span class="kw">:</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="at">  </span><span class="fu">app</span><span class="kw">:</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="at">      </span><span class="fu">context</span><span class="kw">:</span><span class="at"> .</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="at">      </span><span class="fu">target</span><span class="kw">:</span><span class="at"> ${ENVIRONMENT}</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="at">    </span><span class="fu">platform</span><span class="kw">:</span><span class="at"> linux/amd64</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_DEBUG=${DJANGO_DEBUG}</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SECURE_SSL_REDIRECT=${DJANGO_SECURE_SSL_REDIRECT}</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SECURE_HSTS_SECONDS=${DJANGO_SECURE_HSTS_SECONDS}</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=${DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS}</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SECURE_HSTS_PRELOAD=${DJANGO_SECURE_HSTS_PRELOAD}</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_SESSION_COOKIE_SECURE=${DJANGO_SESSION_COOKIE_SECURE}</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="at">      </span><span class="kw">-</span><span class="at"> DJANGO_CSRF_COOKIE_SECURE=${DJANGO_CSRF_COOKIE_SECURE}</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="at">      </span><span class="kw">-</span><span class="at"> CACHE_REDIS_URL=${CACHE_REDIS_URL}</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ENVIRONMENT=${ENVIRONMENT}</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="at">    </span><span class="fu">env_file</span><span class="kw">:</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="at">      </span><span class="kw">-</span><span class="at"> .env</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"8000:8000"</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">"./db/:/app/db/"</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="at">    </span><span class="fu">develop</span><span class="kw">:</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="at">      </span><span class="fu">watch</span><span class="kw">:</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">action</span><span class="kw">:</span><span class="at"> sync</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ./src/</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a><span class="at">          </span><span class="fu">target</span><span class="kw">:</span><span class="at"> /app/src</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">action</span><span class="kw">:</span><span class="at"> rebuild</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> pyproject.toml</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In this <code>docker-compose</code>, I use <code>ENVIRONMENT</code> to switch between the development and production containers.</p>
-<p>I also use the <a href="https://docs.docker.com/compose/file-watch/">Compose Watch</a> to reload the container when I make changes to the code and to rebuild the container when I make changes to the <code>pyproject.toml</code> file.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>That’s it. I hope you find this useful.</p>
-<p>And remember, while Pieter is busy counting his cash, here you are counting the number of successful builds.</p>
+<p>To make <code>Shift+Enter</code> create a new line in Claude Code when working with <a href="https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html">Alacritty/Zellij</a>, you need to add the following lines to <code>~/.config/alacritty.toml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>[keyboard]</span>
+<span id="cb1-2"><a href="#cb1-2"></a>bindings = [</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    { key = "Return", mods = "Shift", chars = "\n" } </span>
+<span id="cb1-4"><a href="#cb1-4"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>I found the solution in this <a href="https://github.com/anthropics/claude-code/issues/1300">GitHub issue</a>.</p>
+<p>Running <code>/terminal-setup</code> didn’t work for me.</p>
 
 
-</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2024,
   author = {Castillo, Dylan},
-  title = {A {Dockerfile} for a {Django} App Using {Poetry}},
-  date = {2024-06-22},
-  url = {https://dylancastillo.co/til/django-poetry-dockerfile.html},
+  title = {New Line in {Claude} {Code} in {Alacritty}},
+  date = {2024-08-15},
+  url = {https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2024. <span>“A Dockerfile for a Django App Using
-Poetry.”</span> June 22, 2024. <a href="https://dylancastillo.co/til/django-poetry-dockerfile.html">https://dylancastillo.co/til/django-poetry-dockerfile.html</a>.
+Castillo, Dylan. 2024. <span>“New Line in Claude Code in
+Alacritty.”</span> August 15, 2024. <a href="https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html">https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
