@@ -1,6 +1,6 @@
 ---
 title: "New line in Claude Code in Alacritty"
-date: "08/15/2024"
+date: 2025-10-18 
 description-meta: "Configure Alacritty so Shift+Enter inserts a newline in Claude Code on macOS."
 categories:
   - til
