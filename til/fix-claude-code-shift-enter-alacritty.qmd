@@ -1,0 +1,21 @@
+---
+title: "New line in Claude Code in Alacritty"
+date: "08/15/2024"
+description-meta: "Configure Alacritty so Shift+Enter inserts a newline in Claude Code on macOS."
+categories:
+  - til
+  - claude-code
+---
+
+To make `Shift+Enter` create a new line in Claude Code when working with [Alacritty/Zellij](https://dylancastillo.co/til/install-alacritty-and-zellij-in-macos.html), you need to add the following lines to `~/.config/alacritty.toml`:
+
+```shell
+[keyboard]
+bindings = [
+    { key = "Return", mods = "Shift", chars = "\n" } 
+]
+```
+
+I found the solution in this [GitHub issue](https://github.com/anthropics/claude-code/issues/1300).
+
+Running `/terminal-setup` didn't work for me. 
