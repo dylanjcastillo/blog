@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2025-06-26">
 <meta name="description" content="How to convince LLMs to do what you want them to do.">
 
-<title>Prompt engineering 101 – Dylan Castillo</title>
+<title>Persuading LLMs 101 – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6a08a436909ab9c39530cb669e04cff8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-2e9c458a5435dd30c4dfef76aa08dbf9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -112,11 +112,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Prompt engineering 101 – Dylan Castillo">
+<meta property="og:title" content="Persuading LLMs 101 – Dylan Castillo">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Prompt engineering 101 – Dylan Castillo">
+<meta name="twitter:title" content="Persuading LLMs 101 – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
@@ -184,9 +184,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#principle-1-be-clear-and-specific" id="toc-principle-1-be-clear-and-specific" class="nav-link" data-scroll-target="#principle-1-be-clear-and-specific">Principle 1: Be clear and specific</a></li>
   <li><a href="#principle-2-provide-examples" id="toc-principle-2-provide-examples" class="nav-link" data-scroll-target="#principle-2-provide-examples">Principle 2: Provide examples</a></li>
   <li><a href="#principle-3-let-models-think" id="toc-principle-3-let-models-think" class="nav-link" data-scroll-target="#principle-3-let-models-think">Principle 3: Let models think</a></li>
-  <li><a href="#principle-4-structure-prompts-into-sections" id="toc-principle-4-structure-prompts-into-sections" class="nav-link" data-scroll-target="#principle-4-structure-prompts-into-sections">Principle 4: Structure prompts into sections</a></li>
+  <li><a href="#principle-4-structure-prompts-into-sections-and-use-delimiters" id="toc-principle-4-structure-prompts-into-sections-and-use-delimiters" class="nav-link" data-scroll-target="#principle-4-structure-prompts-into-sections-and-use-delimiters">Principle 4: Structure prompts into sections and use delimiters</a></li>
   <li><a href="#principle-5-split-complex-tasks-into-smaller-steps" id="toc-principle-5-split-complex-tasks-into-smaller-steps" class="nav-link" data-scroll-target="#principle-5-split-complex-tasks-into-smaller-steps">Principle 5: Split complex tasks into smaller steps</a></li>
-  <li><a href="#principle-6-with-long-contexts-repeat-instructions" id="toc-principle-6-with-long-contexts-repeat-instructions" class="nav-link" data-scroll-target="#principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</a></li>
+  <li><a href="#principle-6-repeat-instructions-when-the-context-is-long" id="toc-principle-6-repeat-instructions-when-the-context-is-long" class="nav-link" data-scroll-target="#principle-6-repeat-instructions-when-the-context-is-long">Principle 6: Repeat instructions when the context is long</a></li>
   </ul></li>
   <li><a href="#other-advanced-prompting-techniques" id="toc-other-advanced-prompting-techniques" class="nav-link" data-scroll-target="#other-advanced-prompting-techniques">Other advanced prompting techniques</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
@@ -202,7 +202,7 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Prompt engineering 101</h1>
+<h1 class="title">Persuading LLMs 101</h1>
   <div class="quarto-categories">
     <div class="quarto-category">llm</div>
     <div class="quarto-category">openai</div>
@@ -242,7 +242,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 29, 2025</p>
+      <p class="date-modified">October 20, 2025</p>
     </div>
   </div>
     
@@ -253,24 +253,24 @@ Subscribe to my newsletter
 </header>
 
 
-<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do. I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made coding agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their “ultimate prompt” that it often feels closer to astrology than to engineering.</p>
-<p>This article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based applications, but will avoid you making obvious mistakes.</p>
+<p>I’ve tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of <a href="https://www.youtube.com/watch?v=8g7a0IWKDRE&amp;t=500s">physical violence</a>. I’ve offered bribes. I’ve even made coding agents call me <a href="https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw">big daddy</a> to ensure they follow my repo’s rules<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bullet-proof prompting technique that it often feels closer to astrology than to engineering.</p>
+<p>This article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid making obvious mistakes.</p>
 <p>Let’s get started!</p>
 <section id="what-is-a-prompt" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-prompt">What is a prompt?</h2>
-<p>Prompts are instructions sent as text to an LLM. Most models work with two types of instructions:</p>
+<p>A prompt is any text you send to an LLM to guide its behavior or generate a response. Most chat-based models work with two types of instructions:</p>
 <ol type="1">
 <li><strong>System/developer prompt</strong>: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”</li>
-<li><strong>User prompt</strong>: The actual question end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents”</li>
+<li><strong>User prompt</strong>: The actual question the end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents.”</li>
 </ol>
-<p>The system prompt gives the assistant a “role”, while the user prompt requests specific content within that framework.</p>
-<p>Prompts are usually provided as messages, which are a list of objects with a role and a content:</p>
+<p>The system prompt gives the assistant a “role,” while the user prompt requests specific content within that framework.</p>
+<p>Prompts are provided as messages, which are a list of objects with a role and a content:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>messages <span class="op">=</span> [</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What's the weather in Tokyo?"</span>}</span>
 <span id="cb1-4"><a href="#cb1-4"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em>, after combining the system and user prompts:</p>
+<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em> after combining the system and user prompts:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>&lt;|im_start|&gt;system</span>
 <span id="cb2-2"><a href="#cb2-2"></a>You are a helpful assistant.</span>
 <span id="cb2-3"><a href="#cb2-3"></a>&lt;|im_end|&gt;</span>
@@ -278,74 +278,80 @@ Subscribe to my newsletter
 <span id="cb2-5"><a href="#cb2-5"></a>&lt;|im_start|&gt;user</span>
 <span id="cb2-6"><a href="#cb2-6"></a>What's the weather in Tokyo?</span>
 <span id="cb2-7"><a href="#cb2-7"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s response<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It looks like this:</p>
+<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s reply<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It looks like this:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>&lt;|im_start|&gt;assistant</span>
 <span id="cb3-2"><a href="#cb3-2"></a>The weather in Tokyo is sunny.</span>
 <span id="cb3-3"><a href="#cb3-3"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You’ll generally use the system and user prompts to instruct the model. But for some prompting techniques, such as few-shot prompting, people often use assistant messages to simulate model responses.</p>
+<p>You’ll generally only set the system and user prompts to instruct the model. But for some prompting techniques, such as <a href="https://www.promptingguide.ai/techniques/fewshot">few-shot prompting</a>, you might include assistant messages to simulate model responses.</p>
 </section>
 <section id="components-of-a-good-prompt" class="level2">
 <h2 class="anchored" data-anchor-id="components-of-a-good-prompt">Components of a good prompt</h2>
 <p>There are many useful free resources online you can use to learn more about prompt engineering. I recommend <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#prompt-engineering-tutorial">this article</a> by Anthropic or <a href="https://platform.openai.com/docs/guides/text?api-mode=responses">this one</a> by OpenAI.</p>
-<p>Most of the advice boils down to these 6 principles:</p>
+<p>Most of the advice boils down to these six principles:</p>
 <ol type="1">
 <li>Be clear and specific</li>
 <li>Provide examples</li>
 <li>Let models think</li>
-<li>Structure prompts into sections and use clear delimiters</li>
+<li>Structure prompts into sections and use delimiters</li>
 <li>Split complex tasks into smaller steps</li>
 <li>Repeat instructions when the context is long</li>
 </ol>
-<p>Let’s go through each of these principles in more detail.</p>
+<p>Let’s go through each of these in more detail.</p>
 <section id="principle-1-be-clear-and-specific" class="level3">
 <h3 class="anchored" data-anchor-id="principle-1-be-clear-and-specific">Principle 1: Be clear and specific</h3>
-<p>This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: “If I didn’t have any background knowledge in this domain, could I complete this task based on the text that I just wrote in this prompt?”</p>
-<p>In addition to describing the task, you should also provide a role for the model. For example, if you’re classifying documents you can use a role like “You’re an expert in document classification” or if you’re dealing with financial data you can use a role like “You’re an expert in financial analysis”.</p>
-<p>Here’s an example of a clear and specific prompt:</p>
+<p>This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: “If I didn’t have any background knowledge in this domain, could I complete this task based on the text I just wrote in this prompt?”</p>
+<p>In addition to describing the task, you should also provide a role for the model. For example, if you’re classifying documents, you can use a role like “You’re an expert in document classification.” Or if you’re dealing with financial data, you can use a role like “You’re an expert in financial analysis.”</p>
+<p>Here’s an example of this principle in practice:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>You're an expert in business writing. Please review and improve this email by addressing the following issues:</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a>- Fix any grammatical errors and typos</span>
 <span id="cb4-4"><a href="#cb4-4"></a>- Improve clarity and conciseness</span>
-<span id="cb4-5"><a href="#cb4-5"></a>- Ensure professional tone throughout</span>
+<span id="cb4-5"><a href="#cb4-5"></a>- Ensure a professional tone throughout</span>
 <span id="cb4-6"><a href="#cb4-6"></a>- Strengthen the subject line to be more specific</span>
 <span id="cb4-7"><a href="#cb4-7"></a>- Add a clear call-to-action if missing</span>
 <span id="cb4-8"><a href="#cb4-8"></a>- Format for better readability (bullets, paragraphs, etc.)</span>
 <span id="cb4-9"><a href="#cb4-9"></a></span>
 <span id="cb4-10"><a href="#cb4-10"></a>&lt;EMAIL CONTENT&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This information will let the LLM know which specific task you want it to perform. This should go in the system prompt.</p>
+<p>This information will tell the LLM its role and the specific task you want it to perform. This should go in the system prompt.</p>
 </section>
 <section id="principle-2-provide-examples" class="level3">
 <h3 class="anchored" data-anchor-id="principle-2-provide-examples">Principle 2: Provide examples</h3>
-<p>One of the lowest hanging fruit in prompt engineering is to provide examples. It’s as simple as showing the model a few input and output pairs.</p>
-<p>This technique is formally known as “few shot prompt”. It’s a simple but effective way to improve the <a href="https://arxiv.org/abs/2009.03300">quality of the output</a> in many tasks.</p>
+<p>One of the lowest-hanging fruits in prompt engineering is to provide examples. It’s as simple as showing the model a couple of input and output pairs.</p>
+<p>This technique is formally known as a “few-shot prompt.” It’s a simple but effective way to improve the <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#evaluating-gpt-4o-mini">quality of the output</a> in many tasks.</p>
 <p>Here’s an example of a few-shot prompt:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.</span>
-<span id="cb5-2"><a href="#cb5-2"></a>Examples:</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a>**Example 1**:</span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a>Input: 'Ian Peter Bernard Stephen'</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>Output: 'NRDN'</span>
-<span id="cb5-9"><a href="#cb5-9"></a></span>
-<span id="cb5-10"><a href="#cb5-10"></a>**Example 2**:</span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a>Input: 'Javier Dylan Christopher Joseph'</span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>Output: 'RNRH'</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In my experience, it’s better to provide these examples directly in the system prompt because it’s easier to read and keep everything close together. However, as mentioned above, some people prefer to use assistant messages to provide examples.</p>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>## Examples</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>**Example 1**:</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>Input: 'Ian Peter Bernard Stephen'</span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>Output: 'NRDN'</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>**Example 2**:</span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a>Input: 'Javier Dylan Christopher Joseph'</span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a>Output: 'RNRH'</span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a>## Task</span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a>Input: 'Maria Julia Pedro Joe'</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In my experience, it’s better to provide these examples directly in the system prompt because it’s easier to read, keeps everything close together, and — if the prompt is long enough — you’ll often benefit from caching.</p>
+<p>Some people prefer to use assistant messages to provide examples. In those cases, I’d recommend having the examples first and then the task.</p>
 </section>
 <section id="principle-3-let-models-think" class="level3">
 <h3 class="anchored" data-anchor-id="principle-3-let-models-think">Principle 3: Let models think</h3>
 <p>LLMs think in tokens. If you want them to achieve better results, you should let them use tokens to reason about the problem before generating the final answer.</p>
-<p>This process is formally known as “Chain of Thought” (CoT) prompting. Similar to few shot prompts, it’s a powerful way to improve the <a href="https://arxiv.org/abs/2201.11903">quality of results</a> in many tasks.</p>
-<p>A 0-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means you provide two examples, etc.).</p>
+<p>This process is formally known as “Chain of Thought” (CoT) prompting. Similar to few-shot prompts, it’s a powerful way to improve the <a href="https://arxiv.org/abs/2201.11903">quality of results</a> in many tasks.</p>
+<p>A zero-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means two examples, etc.).</p>
 <p>Here are two examples of CoT prompts:</p>
 <section id="shot-cot-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="shot-cot-prompt">0-Shot CoT Prompt</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>**Note:** think about your answer step by step</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-3"><a href="#cb6-3"></a>**Note:** Think about your answer step by step.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="shot-cot-prompt-1" class="level4">
 <h4 class="anchored" data-anchor-id="shot-cot-prompt-1">1-Shot CoT Prompt</h4>
@@ -361,13 +367,13 @@ Subscribe to my newsletter
 <span id="cb7-10"><a href="#cb7-10"></a>&lt;/example&gt;</span>
 <span id="cb7-11"><a href="#cb7-11"></a></span>
 <span id="cb7-12"><a href="#cb7-12"></a>**Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini gives you access to the full thinking tokens in the response. OpenAI will give you a summarized version of the thinking process and Anthropic will only give you the final answer.</p>
+<p>These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models, you can use models from the o-family (e.g., o3, o3-mini, o4-mini) or GPT-5. For Anthropic and Gemini, you can configure Claude 3.7+ or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I’m writing this, only Gemini and Claude 3.7 gives you access to the full thinking tokens in the response. OpenAI and Anthropic latest models will give you a summarized version of the thinking process.</p>
 </section>
 </section>
-<section id="principle-4-structure-prompts-into-sections" class="level3">
-<h3 class="anchored" data-anchor-id="principle-4-structure-prompts-into-sections">Principle 4: Structure prompts into sections</h3>
-<p>It’s a common practice to structure system and user prompts into sections. Some people like to use markdown formatting to make the prompt more readable, others use xml tags. You can also use reverse backticks (```) to delimit code blocks or JSON objects. Regardless of the method you use, make sure to do it consistently.</p>
-<p>I really haven’t checked if there is any hard evidence that proves this really improves performance because it just <em>feels right</em>. It also helps with readability. You will spend a lot of time iterating on prompts, so making them easy to read is already a good investment on its own.</p>
+<section id="principle-4-structure-prompts-into-sections-and-use-delimiters" class="level3">
+<h3 class="anchored" data-anchor-id="principle-4-structure-prompts-into-sections-and-use-delimiters">Principle 4: Structure prompts into sections and use delimiters</h3>
+<p>It’s a common practice to structure system and user prompts into sections. Some people like to use Markdown formatting to make the prompt more readable, while others use XML tags. You can also use triple backticks (```) to delimit code blocks or JSON objects. There’s no clear better way between delimiters. The only problem is not doing it consistently.</p>
+<p>I really haven’t checked if there’s any hard evidence proving this improves performance. It just <em>feels right</em> and makes prompts easier to read. You’ll spend a lot of time iterating on prompts, so being able to read them quickly is already a good investment on its own.</p>
 <section id="system-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="system-prompt">System prompt</h4>
 <p>For system prompts, you can use the following structure:</p>
@@ -383,8 +389,8 @@ Subscribe to my newsletter
 <span id="cb8-10"><a href="#cb8-10"></a></span>
 <span id="cb8-11"><a href="#cb8-11"></a>**Examples**</span>
 <span id="cb8-12"><a href="#cb8-12"></a></span>
-<span id="cb8-13"><a href="#cb8-13"></a>Input: [document text]</span>
-<span id="cb8-14"><a href="#cb8-14"></a>Classification: [document category]</span>
+<span id="cb8-13"><a href="#cb8-13"></a>Input: [document text]  </span>
+<span id="cb8-14"><a href="#cb8-14"></a>Classification: [document category]  </span>
 <span id="cb8-15"><a href="#cb8-15"></a>…</span>
 <span id="cb8-16"><a href="#cb8-16"></a></span>
 <span id="cb8-17"><a href="#cb8-17"></a>**Output**</span>
@@ -394,11 +400,11 @@ Subscribe to my newsletter
 <span id="cb8-21"><a href="#cb8-21"></a>**(Optional) Reiterate objective and elicit thinking**</span>
 <span id="cb8-22"><a href="#cb8-22"></a></span>
 <span id="cb8-23"><a href="#cb8-23"></a>Your goal is to XYZ… Before writing your answers, write your reasoning step by step.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The headers are for reference only, you can skip them if you want. You also don’t need to include all of these sections in your prompt.</p>
+<p>The headers are for reference only, you you can modify them or even skip them. You also don’t need to include all of these sections in your prompt.</p>
 </section>
 <section id="user-prompt" class="level4">
 <h4 class="anchored" data-anchor-id="user-prompt">User prompt</h4>
-<p>I’d recommend to keep user prompts short:</p>
+<p>I prefer to keep user prompts short:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>**Context**</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a>Input: [document text]</span>
@@ -406,16 +412,16 @@ Subscribe to my newsletter
 <span id="cb9-5"><a href="#cb9-5"></a>**Briefly reiterate objective**</span>
 <span id="cb9-6"><a href="#cb9-6"></a></span>
 <span id="cb9-7"><a href="#cb9-7"></a>Please classify this document into a category.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In it’s simplest form, you just provide the context the LLM needs to work with and reiterate the objective.</p>
+<p>In its simplest form, you just provide the context the LLM needs to work with and reiterate the objective.</p>
 </section>
 </section>
 <section id="principle-5-split-complex-tasks-into-smaller-steps" class="level3">
 <h3 class="anchored" data-anchor-id="principle-5-split-complex-tasks-into-smaller-steps">Principle 5: Split complex tasks into smaller steps</h3>
 <p>LLMs often get confused when the <a href="https://arxiv.org/abs/2307.03172">context is too long</a> and/or the instructions are complex.</p>
-<p>For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does the document classification and the entity extraction, you can split the task into two steps:</p>
+<p>For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does both the document classification and the entity extraction, you can split the task into two steps:</p>
 <ol type="1">
-<li>First, you classify the document into a category.</li>
-<li>Then, you extract the entities from the document, based on the category.</li>
+<li>First, classify the document into a category.</li>
+<li>Then, extract the entities from the document based on the category.</li>
 </ol>
 <p>Here’s an example of the same task split into two steps.</p>
 <section id="big-complex-prompt" class="level4">
@@ -440,7 +446,7 @@ Subscribe to my newsletter
 <h4 class="anchored" data-anchor-id="smaller-simpler-prompts">Smaller, simpler prompts</h4>
 <p>This second approach splits the task into two smaller prompts that do each task separately.</p>
 <p><strong>Prompt 1: Document classification</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>You're an expert document classifier. First, classify the document into the following categories:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>You're an expert document classifier. Classify the document into the following categories:</span>
 <span id="cb11-2"><a href="#cb11-2"></a></span>
 <span id="cb11-3"><a href="#cb11-3"></a>- Medical</span>
 <span id="cb11-4"><a href="#cb11-4"></a>- Financial</span>
@@ -450,27 +456,27 @@ Subscribe to my newsletter
 <span id="cb12-2"><a href="#cb12-2"></a>...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="principle-6-with-long-contexts-repeat-instructions" class="level3">
-<h3 class="anchored" data-anchor-id="principle-6-with-long-contexts-repeat-instructions">Principle 6: With long contexts, repeat instructions</h3>
-<p>LLMs often get confused when the context is too long and the instructions are complex. When context gets above a certain length, it’s better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts">30% performance improvement</a> when using this technique.</p>
+<section id="principle-6-repeat-instructions-when-the-context-is-long" class="level3">
+<h3 class="anchored" data-anchor-id="principle-6-repeat-instructions-when-the-context-is-long">Principle 6: Repeat instructions when the context is long</h3>
+<p>LLMs often get confused when the context is too long and the instructions are complex. When the context exceeds a certain length, it’s better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to a <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts">30% performance improvement</a> when using this technique.</p>
 <p>You can use the following structure:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>You're an expert in entity extraction in the &lt;CATEGORY&gt; domain. Your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span>
 <span id="cb13-2"><a href="#cb13-2"></a></span>
 <span id="cb13-3"><a href="#cb13-3"></a>&lt;VERY LONG CONTEXT&gt;</span>
 <span id="cb13-4"><a href="#cb13-4"></a></span>
 <span id="cb13-5"><a href="#cb13-5"></a>Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>When dealing with long contexts, I generally reiterate the objective at the bottom of the system and user prompts.</p>
+<p>When dealing with long contexts, I generally reiterate the objective at the bottom of both the system and user prompts.</p>
 </section>
 </section>
 <section id="other-advanced-prompting-techniques" class="level2">
 <h2 class="anchored" data-anchor-id="other-advanced-prompting-techniques">Other advanced prompting techniques</h2>
-<p>After you’ve mastered the basics, you’re 90% of the way there. There are other more advanced techniques that might also be worth trying out:</p>
+<p>After you’ve mastered the basics, you’re 90% of the way there. There are other, more advanced techniques that might also be worth trying:</p>
 <ol type="1">
-<li><strong>Exemplar Selection KNN (ES-KNN):</strong> Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has shown to <a href="https://arxiv.org/abs/2506.05614">improve the quality of the results</a> in many tasks.</li>
-<li><strong>Self-consistency (SC):</strong> You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has shown to <a href="https://arxiv.org/abs/2203.11171">boost the performance</a> of CoT prompting.</li>
-<li><strong>Thread of Thought (ThoT):</strong> It’s a <a href="https://arxiv.org/abs/2311.08734">two-tiered prompting system</a> that first asks the LLM to do an analytical dissection of the context, step by step, and summarizing intermediate results. Then, it uses another prompt to distill the analysis into a final answer.</li>
+<li><strong>Exemplar Selection KNN (ES-KNN):</strong> Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has been shown to <a href="https://arxiv.org/abs/2506.05614">improve the quality of results</a> in many tasks.</li>
+<li><strong>Self-consistency (SC):</strong> You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has been shown to <a href="https://arxiv.org/abs/2203.11171">boost performance</a> in CoT prompting.</li>
+<li><strong>Thread of Thought (ThoT):</strong> This is a <a href="https://arxiv.org/abs/2311.08734">two-tiered prompting system</a> that first asks the LLM to do an analytical dissection of the context, step by step, and summarize intermediate results. Then, it uses another prompt to distill the analysis into a final answer.</li>
 </ol>
-<p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al is a good starting point.</p>
+<p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al.&nbsp;is a good starting point.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
@@ -479,11 +485,11 @@ Subscribe to my newsletter
 <li>Be clear and specific</li>
 <li>Provide examples</li>
 <li>Let models think</li>
-<li>Structure prompts into sections and use clear delimiters</li>
+<li>Structure prompts into sections and use delimiters</li>
 <li>Split complex tasks into smaller steps</li>
 <li>Repeat instructions when the context is long</li>
 </ol>
-<p>These principles will not solve all the problems in your agentic workflow or LLM-based applications. But they will help you get started.</p>
+<p>These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path. Or maybe not, who knows? People lie on the internet all the time.</p>
 <p>I hope you found this article useful. If you have any questions or feedback, leave a comment below.</p>
 
 
@@ -498,13 +504,13 @@ Subscribe to my newsletter
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Prompt Engineering 101},
+  title = {Persuading {LLMs} 101},
   date = {2025-06-26},
   url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2025. <span>“Prompt Engineering 101.”</span> June 26,
+Castillo, Dylan. 2025. <span>“Persuading LLMs 101.”</span> June 26,
 2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
