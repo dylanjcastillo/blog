@@ -1,7 +1,7 @@
 ---
-title: "Prompt engineering 101"
+title: "Persuading LLMs 101"
 date: 2025-06-26
-date-modified: "2025-06-29"
+date-modified: 2025-10-20
 description-meta: "How to convince LLMs to do what you want them to do."
 categories:
   - llm
@@ -11,24 +11,24 @@ categories:
   - python
 ---
 
-I've tried every trick in the book to get Large Language Models (LLMs) to do what I want them to do. I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made coding agents call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw) to ensure they follow my repo's rules^[It didn't work, but I felt much better about myself.].
+I've tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of [physical violence](https://www.youtube.com/watch?v=8g7a0IWKDRE&t=500s). I’ve offered bribes. I’ve even made coding agents call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw) to ensure they follow my repo's rules^[It didn't work, but I felt much better about myself.].
 
-All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their "ultimate prompt" that it often feels closer to astrology than to engineering.
+All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bullet-proof prompting technique that it often feels closer to astrology than to engineering.
 
-This article is a no-BS guide to help you get the basics right. It won't solve all the problems in your agentic workflow or LLM-based applications, but will avoid you making obvious mistakes.
+This article is a no-BS guide to help you get the basics right. It won't solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid making obvious mistakes.
 
 Let's get started!
 
 ## What is a prompt?
 
-Prompts are instructions sent as text to an LLM. Most models work with two types of instructions:
+A prompt is any text you send to an LLM to guide its behavior or generate a response. Most chat-based models work with two types of instructions:
 
 1. **System/developer prompt**: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”
-2. **User prompt**: The actual question end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents”
+2. **User prompt**: The actual question the end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents.”
 
-The system prompt gives the assistant a “role”, while the user prompt requests specific content within that framework.
+The system prompt gives the assistant a “role,” while the user prompt requests specific content within that framework.
 
-Prompts are usually provided as messages, which are a list of objects with a role and a content:
+Prompts are provided as messages, which are a list of objects with a role and a content:
 
 ```python
 messages = [
@@ -37,7 +37,7 @@ messages = [
 ]
 ```
 
-Then, these are passed through a [chat template](https://huggingface.co/docs/transformers/en/chat_templating) and converted into a single string that is sent to the model. For example, this is the resulting message text used by _Qwen3_, after combining the system and user prompts:
+Then, these are passed through a [chat template](https://huggingface.co/docs/transformers/en/chat_templating) and converted into a single string that is sent to the model. For example, this is the resulting message text used by *Qwen3* after combining the system and user prompts:
 
 ```text
 <|im_start|>system
@@ -49,7 +49,7 @@ What's the weather in Tokyo?
 <|im_end|>
 ```
 
-After you make the request, the model will respond with an _assistant_ message that contains the model's response^[I removed the thinking tokens for brevity.]. It looks like this:
+After you make the request, the model will respond with an *assistant* message that contains the model's reply^[I removed the thinking tokens for brevity.]. It looks like this:
 
 ```text
 <|im_start|>assistant
@@ -57,37 +57,37 @@ The weather in Tokyo is sunny.
 <|im_end|>
 ```
 
-You'll generally use the system and user prompts to instruct the model. But for some prompting techniques, such as few-shot prompting, people often use assistant messages to simulate model responses.
+You'll generally only set the system and user prompts to instruct the model. But for some prompting techniques, such as [few-shot prompting](https://www.promptingguide.ai/techniques/fewshot), you might include assistant messages to simulate model responses.
 
 ## Components of a good prompt
 
 There are many useful free resources online you can use to learn more about prompt engineering. I recommend [this article](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#prompt-engineering-tutorial) by Anthropic or [this one](https://platform.openai.com/docs/guides/text?api-mode=responses) by OpenAI.
 
-Most of the advice boils down to these 6 principles:
+Most of the advice boils down to these six principles:
 
 1. Be clear and specific
 2. Provide examples
 3. Let models think
-4. Structure prompts into sections and use clear delimiters
+4. Structure prompts into sections and use delimiters
 5. Split complex tasks into smaller steps
 6. Repeat instructions when the context is long
 
-Let's go through each of these principles in more detail.
+Let's go through each of these in more detail.
 
 ### Principle 1: Be clear and specific
 
-This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: "If I didn't have any background knowledge in this domain, could I complete this task based on the text that I just wrote in this prompt?"
+This is the most important principle. If you cannot describe in detail the task you want to perform, the model will not be able to perform it. Whenever you write a prompt, ask yourself: "If I didn't have any background knowledge in this domain, could I complete this task based on the text I just wrote in this prompt?"
 
-In addition to describing the task, you should also provide a role for the model. For example, if you're classifying documents you can use a role like "You're an expert in document classification" or if you're dealing with financial data you can use a role like "You're an expert in financial analysis".
+In addition to describing the task, you should also provide a role for the model. For example, if you're classifying documents, you can use a role like "You're an expert in document classification." Or if you're dealing with financial data, you can use a role like "You're an expert in financial analysis."
 
-Here's an example of a clear and specific prompt:
+Here's an example of this principle in practice:
 
 ```text
 You're an expert in business writing. Please review and improve this email by addressing the following issues:
 
 - Fix any grammatical errors and typos
 - Improve clarity and conciseness
-- Ensure professional tone throughout
+- Ensure a professional tone throughout
 - Strengthen the subject line to be more specific
 - Add a clear call-to-action if missing
 - Format for better readability (bullets, paragraphs, etc.)
@@ -95,19 +95,20 @@ You're an expert in business writing. Please review and improve this email by ad
 <EMAIL CONTENT>
 ```
 
-This information will let the LLM know which specific task you want it to perform. This should go in the system prompt.
+This information will tell the LLM its role and the specific task you want it to perform. This should go in the system prompt.
 
 ### Principle 2: Provide examples
 
-One of the lowest hanging fruit in prompt engineering is to provide examples. It's as simple as showing the model a few input and output pairs.
+One of the lowest-hanging fruits in prompt engineering is to provide examples. It's as simple as showing the model a couple of input and output pairs.
 
-This technique is formally known as "few shot prompt". It's a simple but effective way to improve the [quality of the output](https://arxiv.org/abs/2009.03300) in many tasks.
+This technique is formally known as a "few-shot prompt." It's a simple but effective way to improve the [quality of the output](https://dylancastillo.co/posts/say-what-you-mean-sometimes.html#evaluating-gpt-4o-mini) in many tasks.
 
 Here's an example of a few-shot prompt:
 
 ```text
 You are an expert in solving simple word puzzles using reasoning steps. Provided with a list of 4 names, you will concatenate the last letters into a word.
-Examples:
+
+## Examples
 
 **Example 1**:
 
@@ -120,17 +121,23 @@ Output: 'NRDN'
 Input: 'Javier Dylan Christopher Joseph'
 
 Output: 'RNRH'
+
+## Task
+
+Input: 'Maria Julia Pedro Joe'
 ```
 
-In my experience, it's better to provide these examples directly in the system prompt because it's easier to read and keep everything close together. However, as mentioned above, some people prefer to use assistant messages to provide examples.
+In my experience, it's better to provide these examples directly in the system prompt because it's easier to read, keeps everything close together, and — if the prompt is long enough — you'll often benefit from caching.
+
+Some people prefer to use assistant messages to provide examples. In those cases, I'd recommend having the examples first and then the task.
 
 ### Principle 3: Let models think
 
 LLMs think in tokens. If you want them to achieve better results, you should let them use tokens to reason about the problem before generating the final answer.
 
-This process is formally known as "Chain of Thought" (CoT) prompting. Similar to few shot prompts, it's a powerful way to improve the [quality of results](https://arxiv.org/abs/2201.11903) in many tasks.
+This process is formally known as "Chain of Thought" (CoT) prompting. Similar to few-shot prompts, it's a powerful way to improve the [quality of results](https://arxiv.org/abs/2201.11903) in many tasks.
 
-A 0-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don't provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means you provide two examples, etc.).
+A zero-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means two examples, etc.).
 
 Here are two examples of CoT prompts:
 
@@ -139,7 +146,7 @@ Here are two examples of CoT prompts:
 ```text
 **Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?
 
-**Note:** think about your answer step by step
+**Note:** Think about your answer step by step.
 ```
 
 #### 1-Shot CoT Prompt
@@ -159,13 +166,13 @@ Here are two examples of CoT prompts:
 **Question:** A cinema sold 120 tickets at $8 each. What was the total revenue?
 ```
 
-These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models you can use models from the o-family (e.g., o3, o3-mini, o4-mini). For Anthropic and Gemini, you can configure Claude 3.7/4 or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I'm writing this, only Gemini gives you access to the full thinking tokens in the response. OpenAI will give you a summarized version of the thinking process and Anthropic will only give you the final answer.
+These days, most providers have options to let models think without explicitly asking them to do so in the prompt. With OpenAI models, you can use models from the o-family (e.g., o3, o3-mini, o4-mini) or GPT-5. For Anthropic and Gemini, you can configure Claude 3.7+ or Gemini 2.5 models to use thinking tokens by setting a specific parameter. However, as I'm writing this, only Gemini and Claude 3.7 gives you access to the full thinking tokens in the response. OpenAI and Anthropic latest models will give you a summarized version of the thinking process. 
 
-### Principle 4: Structure prompts into sections
+### Principle 4: Structure prompts into sections and use delimiters
 
-It's a common practice to structure system and user prompts into sections. Some people like to use markdown formatting to make the prompt more readable, others use xml tags. You can also use reverse backticks (```) to delimit code blocks or JSON objects. Regardless of the method you use, make sure to do it consistently.
+It's a common practice to structure system and user prompts into sections. Some people like to use Markdown formatting to make the prompt more readable, while others use XML tags. You can also use triple backticks (```) to delimit code blocks or JSON objects. There's no clear better way between delimiters. The only problem is not doing it consistently.
 
-I really haven't checked if there is any hard evidence that proves this really improves performance because it just _feels right_. It also helps with readability. You will spend a lot of time iterating on prompts, so making them easy to read is already a good investment on its own.
+I really haven't checked if there’s any hard evidence proving this improves performance. It just *feels right* and makes prompts easier to read. You’ll spend a lot of time iterating on prompts, so being able to read them quickly is already a good investment on its own.
 
 #### System prompt
 
@@ -184,8 +191,8 @@ You’re an expert document classifier. Your goal is to classify this document�
 
 **Examples**
 
-Input: [document text]
-Classification: [document category]
+Input: [document text]  
+Classification: [document category]  
 …
 
 **Output**
@@ -197,11 +204,11 @@ You should generate a JSON object with this structure: [JSON schema]
 Your goal is to XYZ… Before writing your answers, write your reasoning step by step.
 ```
 
-The headers are for reference only, you can skip them if you want. You also don't need to include all of these sections in your prompt.
+The headers are for reference only, you you can modify them or even skip them. You also don't need to include all of these sections in your prompt.
 
 #### User prompt
 
-I'd recommend to keep user prompts short:
+I prefer to keep user prompts short:
 
 ```text
 **Context**
@@ -213,16 +220,16 @@ Input: [document text]
 Please classify this document into a category.
 ```
 
-In it's simplest form, you just provide the context the LLM needs to work with and reiterate the objective.
+In its simplest form, you just provide the context the LLM needs to work with and reiterate the objective.
 
 ### Principle 5: Split complex tasks into smaller steps
 
 LLMs often get confused when the [context is too long](https://arxiv.org/abs/2307.03172) and/or the instructions are complex.
 
-For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does the document classification and the entity extraction, you can split the task into two steps:
+For example, you might have a document classifier that precedes a conditional entity extraction. Instead of doing a single LLM call with a prompt that does both the document classification and the entity extraction, you can split the task into two steps:
 
-1. First, you classify the document into a category.
-2. Then, you extract the entities from the document, based on the category.
+1. First, classify the document into a category.
+2. Then, extract the entities from the document based on the category.
 
 Here's an example of the same task split into two steps.
 
@@ -254,7 +261,7 @@ This second approach splits the task into two smaller prompts that do each task 
 **Prompt 1: Document classification**
 
 ```text
-You're an expert document classifier. First, classify the document into the following categories:
+You're an expert document classifier. Classify the document into the following categories:
 
 - Medical
 - Financial
@@ -268,9 +275,9 @@ You're an expert in entity extraction in the <CATEGORY> domain. Your goal is to 
 ...
 ```
 
-### Principle 6: With long contexts, repeat instructions
+### Principle 6: Repeat instructions when the context is long
 
-LLMs often get confused when the context is too long and the instructions are complex. When context gets above a certain length, it's better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to [30% performance improvement](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts) when using this technique.
+LLMs often get confused when the context is too long and the instructions are complex. When the context exceeds a certain length, it's better to repeat the instructions at the bottom of the prompt. Anthropic has reported up to a [30% performance improvement](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview#essential-tips-for-long-context-prompts) when using this technique.
 
 You can use the following structure:
 
@@ -282,17 +289,17 @@ You're an expert in entity extraction in the <CATEGORY> domain. Your goal is to 
 Remember, your goal is to classify the document into the following categories: "Medical", "Financial", "Legal".
 ```
 
-When dealing with long contexts, I generally reiterate the objective at the bottom of the system and user prompts.
+When dealing with long contexts, I generally reiterate the objective at the bottom of both the system and user prompts.
 
 ## Other advanced prompting techniques
 
-After you've mastered the basics, you're 90% of the way there. There are other more advanced techniques that might also be worth trying out:
+After you've mastered the basics, you're 90% of the way there. There are other, more advanced techniques that might also be worth trying:
 
-1. **Exemplar Selection KNN (ES-KNN):** Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has shown to [improve the quality of the results](https://arxiv.org/abs/2506.05614) in many tasks.
-2. **Self-consistency (SC):** You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has shown to [boost the performance](https://arxiv.org/abs/2203.11171) of CoT prompting.
-3. **Thread of Thought (ThoT):** It's a [two-tiered prompting system](https://arxiv.org/abs/2311.08734) that first asks the LLM to do an analytical dissection of the context, step by step, and summarizing intermediate results. Then, it uses another prompt to distill the analysis into a final answer.
+1. **Exemplar Selection KNN (ES-KNN):** Instead of having a fixed selection of examples, you can embed the user query and the examples, and then use a KNN algorithm to select the most relevant examples. This has been shown to [improve the quality of results](https://arxiv.org/abs/2506.05614) in many tasks.
+2. **Self-consistency (SC):** You use the model to generate multiple responses and then select the most consistent one by marginalizing over the noise. This has been shown to [boost performance](https://arxiv.org/abs/2203.11171) in CoT prompting.
+3. **Thread of Thought (ThoT):** This is a [two-tiered prompting system](https://arxiv.org/abs/2311.08734) that first asks the LLM to do an analytical dissection of the context, step by step, and summarize intermediate results. Then, it uses another prompt to distill the analysis into a final answer.
 
-There are more advanced techniques that I'm not going to cover here. This [paper](https://arxiv.org/abs/2506.05614) by E.G. Santana et al is a good starting point.
+There are more advanced techniques that I'm not going to cover here. This [paper](https://arxiv.org/abs/2506.05614) by E.G. Santana et al. is a good starting point.
 
 ## Conclusion
 
@@ -301,10 +308,10 @@ This article is a short guide to help you write better prompts. Good prompt engi
 1. Be clear and specific
 2. Provide examples
 3. Let models think
-4. Structure prompts into sections and use clear delimiters
+4. Structure prompts into sections and use delimiters
 5. Split complex tasks into smaller steps
 6. Repeat instructions when the context is long
 
-These principles will not solve all the problems in your agentic workflow or LLM-based applications. But they will help you get started.
+These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path. Or maybe not, who knows? People lie on the internet all the time. 
 
 I hope you found this article useful. If you have any questions or feedback, leave a comment below.
