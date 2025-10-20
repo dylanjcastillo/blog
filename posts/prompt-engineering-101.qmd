@@ -1,5 +1,5 @@
 ---
-title: "Persuading LLMs 101"
+title: "Persuading LLMs (or how to write prompts)"
 date: 2025-06-26
 date-modified: 2025-10-20
 description-meta: "How to convince LLMs to do what you want them to do."
@@ -11,7 +11,7 @@ categories:
   - python
 ---
 
-I've tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of [physical violence](https://www.youtube.com/watch?v=8g7a0IWKDRE&t=500s), offered bribes, and even made a coding agent call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw)^[It helped the agent follow the repo's rules... ehem... and me deal with some deeply rooted self-esteem issues].
+I've tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of [physical violence](https://www.youtube.com/watch?v=8g7a0IWKDRE&t=500s), offered bribes, and even made a coding agent call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw)^[It helped the agent follow the repo's rules... and me deal with some deeply rooted self-esteem issues.].
 
 After all that trial and error, I've learned a few things about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bulletproof prompting techniques that the whole thing feels closer to astrology than to engineering.
 
@@ -21,7 +21,7 @@ Let's get started!
 
 ## What is a prompt?
 
-A prompt is any text you send to an LLM to guide its behavior or generate a response. Most chat-based models work with two types of instructions:
+A prompt is any text you send to an LLM to guide its behavior or generate a response. Chat-based models work with two types of instructions:
 
 1. **System/developer prompt**: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”
 2. **User prompt**: The actual question the end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents.”
@@ -37,7 +37,9 @@ messages = [
 ]
 ```
 
-Then, these are passed through a [chat template](https://huggingface.co/docs/transformers/en/chat_templating) and converted into a single string that is sent to the model. For example, this is the resulting message text used by *Qwen3* after combining the system and user prompts:
+These messages are passed through a [chat template](https://huggingface.co/docs/transformers/en/chat_templating) and converted into a single string that is sent to the model to generate a response. 
+
+For example, this is the resulting message text used by *Qwen3* after combining the system and user prompts:
 
 ```text
 <|im_start|>system
@@ -49,7 +51,9 @@ What's the weather in Tokyo?
 <|im_end|>
 ```
 
-After you make the request, the model will respond with an *assistant* message that contains the model's reply^[I removed the thinking tokens for brevity.]. It looks like this:
+After you make the request, the model will respond with an *assistant* message that contains the model's reply^[I removed the thinking tokens for brevity.]. 
+
+It looks like this:
 
 ```text
 <|im_start|>assistant
@@ -57,7 +61,7 @@ The weather in Tokyo is sunny.
 <|im_end|>
 ```
 
-You'll generally only set the system and user prompts to instruct the model. But for some prompting techniques, such as [few-shot prompting](https://www.promptingguide.ai/techniques/fewshot), you might include assistant messages to simulate model responses.
+You'll generally only set the system and user prompts to instruct the model. But for some prompting techniques, such as [few-shot prompting](https://www.promptingguide.ai/techniques/fewshot), you might include assistant messages to simulate model responses. 
 
 ## Components of a good prompt
 
@@ -300,6 +304,12 @@ After you've mastered the basics, you're 90% of the way there. There are other, 
 3. **Thread of Thought (ThoT):** This is a [two-tiered prompting system](https://arxiv.org/abs/2311.08734) that first asks the LLM to do an analytical dissection of the context, step by step, and summarize intermediate results. Then, it uses another prompt to distill the analysis into a final answer.
 
 There are more advanced techniques that I'm not going to cover here. This [paper](https://arxiv.org/abs/2506.05614) by E.G. Santana et al. is a good starting point.
+
+## Using LLMs to write prompts
+
+This is something I don't like highlighting too much because people tend to abuse it: you can use LLMs to help you write prompts faster.
+
+But please, don't just copy-paste what the model generates. You'll often get generic prompts that sound impressive but don't actually help. Always review and refine the output yourself, especially if performance matters for your task. I haven't found cases where letting an LLM write my prompts without supervision gives me better results than doing it myself. 
 
 ## Conclusion
 
