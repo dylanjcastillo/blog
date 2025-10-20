@@ -4642,318 +4642,6 @@ AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/evaluator-opti
   <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Prompt chaining workflow with Pydantic AI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
-<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
-<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
-<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<section id="what-is-prompt-chaining" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
-<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
-<p>It looks like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    In --&gt; LLM1["LLM Call 1"]
-    LLM1 -- "Output 1" --&gt; Gate{Gate}
-    Gate -- Pass --&gt; LLM2["LLM Call 2"]
-    Gate -- Fail --&gt; Exit[Exit]
-    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
-    LLM3 --&gt; Out
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Examples:</strong></p>
-<ul>
-<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
-<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
-</ul>
-<p>Let’s get to it!</p>
-</section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
-<ol type="1">
-<li>Generate a table of contents for the article</li>
-<li>Generate the content of the article</li>
-<li>Update the content of the article if it’s too long</li>
-</ol>
-<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
-<div id="2a607486" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> nest_asyncio</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">apply</span>()</span></code></pre></div></div>
-</div>
-<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
-<div id="4081c493" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Literal</span>
-<span id="cb2-3"></span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> logfire</span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Agent, RunContext</span>
-<span id="cb2-8"></span>
-<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>True</code></pre>
-</div>
-</div>
-<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
-<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
-<div id="014a1f88" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
-<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb4-3">)</span>
-<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
-<div class="cell-output cell-output-stderr">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
-</pre>
-</div>
-</div>
-</div>
-<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
-</section>
-<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
-<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
-<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
-<p>Here’s the code:</p>
-<div id="97be7efe" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
-<span id="cb5-5">    ),</span>
-<span id="cb5-6">)</span>
-<span id="cb5-7"></span>
-<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-9">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-11">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
-<span id="cb5-12">    ),</span>
-<span id="cb5-13">)</span>
-<span id="cb5-14"></span>
-<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-16">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-18">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
-<span id="cb5-19">    ),</span>
-<span id="cb5-20">)</span>
-<span id="cb5-21"></span>
-<span id="cb5-22"></span>
-<span id="cb5-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Run workflow"</span>)</span>
-<span id="cb5-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>:</span>
-<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-27">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>:</span>
-<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-29">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> revised_content.output</span>
-<span id="cb5-30">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> content.output</span>
-<span id="cb5-31"></span>
-<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>18:54:00.987 Run workflow
-18:54:00.988   toc_agent run
-18:54:00.989     chat gpt-4.1-mini
-18:54:02.911   article_agent run
-18:54:02.911     chat gpt-4.1-mini
-18:54:18.621   editor_agent run
-18:54:18.622     chat gpt-4.1-mini</code></pre>
-</div>
-</div>
-<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
-<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
-</figure>
-</div>
-<p>And here’s the output:</p>
-<div id="1ee5bd83" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(output)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
-</div>
-</div>
-<p>That’s all!</p>
-<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<p>If you have any questions or feedback, please let me know in the comments below.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
-  date = {2025-07-08},
-  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
-AI.”</span> July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>llm</category>
-  <category>pydantic-ai</category>
-  <category>workflows</category>
-  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
-  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
   <title>Routing workflow with Pydantic AI</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/routing-pydantic-ai.html</link>
@@ -5333,6 +5021,318 @@ July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">ht
   <category>pydantic-ai</category>
   <category>workflows</category>
   <guid>https://dylancastillo.co/til/routing-pydantic-ai.html</guid>
+  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Prompt chaining workflow with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
+<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<section id="what-is-prompt-chaining" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
+<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In --&gt; LLM1["LLM Call 1"]
+    LLM1 -- "Output 1" --&gt; Gate{Gate}
+    Gate -- Pass --&gt; LLM2["LLM Call 2"]
+    Gate -- Fail --&gt; Exit[Exit]
+    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
+<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
+</ul>
+<p>Let’s get to it!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
+<ol type="1">
+<li>Generate a table of contents for the article</li>
+<li>Generate the content of the article</li>
+<li>Update the content of the article if it’s too long</li>
+</ol>
+<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div></div>
+</div>
+<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
+<div id="4081c493" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
+</pre>
+</div>
+</div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
+<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
+<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
+<p>Here’s the code:</p>
+<div id="97be7efe" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span>
+<span id="cb5-14"></span>
+<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
+<span id="cb5-19">    ),</span>
+<span id="cb5-20">)</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"></span>
+<span id="cb5-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>:</span>
+<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> revised_content.output</span>
+<span id="cb5-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> content.output</span>
+<span id="cb5-31"></span>
+<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18:54:00.987 Run workflow
+18:54:00.988   toc_agent run
+18:54:00.989     chat gpt-4.1-mini
+18:54:02.911   article_agent run
+18:54:02.911     chat gpt-4.1-mini
+18:54:18.621   editor_agent run
+18:54:18.622     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
+<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
+</figure>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
+  date = {2025-07-08},
+  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
+AI.”</span> July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
   <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
@@ -10766,6 +10766,143 @@ LLMs with LangChain and OpenAI.”</span> July 1, 2025. <a href="https://dylanca
   <pubDate>Tue, 01 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Key parameters of LLMs</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/key-parameters-llms.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.</p>
+<p>These are the parameters that you will usually use when building LLM-based products:</p>
+<ul>
+<li>Model</li>
+<li>Messages/prompts</li>
+<li>Temperature</li>
+<li>Seed</li>
+<li>Top-P Sampling</li>
+<li>Logprobs</li>
+<li>Logit biases</li>
+<li>Max completion tokens</li>
+<li>Response format</li>
+<li>Streaming</li>
+<li>Tools</li>
+</ul>
+<p>In the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter.</p>
+</div>
+</div>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<p>When choosing a model, consider the following factors:</p>
+<ul>
+<li>Complexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?</li>
+<li>Speed: How important is it that the model replies quickly? Is this something that I can run on the background?</li>
+<li>Cost: How much do I want to spend on this task?</li>
+<li>Provider: Which providers do I have access to? Do I need to self-host?</li>
+</ul>
+<p>Right now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.</p>
+<p>The best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models.</p>
+</section>
+<section id="messagesprompts" class="level2">
+<h2 class="anchored" data-anchor-id="messagesprompts">Messages/prompts</h2>
+<p>The messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompt engineering</a> that covers the basics of how to write good prompts.</p>
+</section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>The temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.</p>
+<p>I wrote a <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random.</p>
+</section>
+<section id="seed" class="level2">
+<h2 class="anchored" data-anchor-id="seed">Seed</h2>
+<p>The seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.</p>
+<p>This is only available in OpenAI, Gemini, and open-weight models. Check my <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> for more details.</p>
+</section>
+<section id="top-p-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="top-p-sampling">Top-P Sampling</h2>
+<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.</p>
+<p>I rarely use this parameter.</p>
+</section>
+<section id="logit-biases" class="level2">
+<h2 class="anchored" data-anchor-id="logit-biases">Logit biases</h2>
+<p>Logits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.</p>
+<p>This is often used for document classification tasks or <a href="https://cookbook.openai.com/examples/search_reranking_with_cross-encoders">LLM-based rerankers</a>.</p>
+</section>
+<section id="logprobs" class="level2">
+<h2 class="anchored" data-anchor-id="logprobs">Logprobs</h2>
+<p>Logprobs are the logarithmic probabilities of the tokens. They are defined as:</p>
+<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
+<p>Where:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?w_i"> is the <img src="https://latex.codecogs.com/png.latex?i">-th token in the vocabulary.</li>
+<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
+<li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
+</ul>
+<p>You can use this parameter in OpenAI models. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅). Anthropic doesn’t provide them.</p>
+<p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
+</section>
+<section id="max-completion-tokens" class="level2">
+<h2 class="anchored" data-anchor-id="max-completion-tokens">Max completion tokens</h2>
+<p>This parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output.</p>
+</section>
+<section id="response-format" class="level2">
+<h2 class="anchored" data-anchor-id="response-format">Response format</h2>
+<p>You can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:</p>
+<ul>
+<li><a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured outputs can hurt the performance of LLMs</a></li>
+<li><a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">The good, the bad, and the ugly of Gemini’s structured outputs</a></li>
+<li><a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">Structured outputs: don’t put the cart before the horse</a></li>
+</ul>
+<p>Open-weight models allow for more flexible structured output formats. For example, using <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> lets you define custom regEx patterns to extract the data you need.</p>
+</section>
+<section id="streaming" class="level2">
+<h2 class="anchored" data-anchor-id="streaming">Streaming</h2>
+<p>This parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated.</p>
+</section>
+<section id="tools" class="level2">
+<h2 class="anchored" data-anchor-id="tools">Tools</h2>
+<p>Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This was a very short post about the key parameters for LLMs. I hope you found it useful.</p>
+<p>Let me know if you have any questions or feedback.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Key Parameters of {LLMs}},
+  date = {2025-06-29},
+  url = {https://dylancastillo.co/posts/key-parameters-llms.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Key Parameters of LLMs.”</span> June 29,
+2025. <a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
+</div></div></section></div> ]]></description>
+  <category>llm</category>
+  <category>openai</category>
+  <category>anthropic</category>
+  <category>gemini</category>
+  <category>python</category>
+  <guid>https://dylancastillo.co/posts/key-parameters-llms.html</guid>
+  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>What is Retrieval Augmented Generation (RAG)?</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/what-is-rag.html</link>
@@ -11581,143 +11718,6 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Key parameters of LLMs</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/key-parameters-llms.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I recently did a workshop about building agents. During the workshop I discussed the key parameters for LLMs, so I thought it’d be useful to write a short post about it.</p>
-<p>These are the parameters that you will usually use when building LLM-based products:</p>
-<ul>
-<li>Model</li>
-<li>Messages/prompts</li>
-<li>Temperature</li>
-<li>Seed</li>
-<li>Top-P Sampling</li>
-<li>Logprobs</li>
-<li>Logit biases</li>
-<li>Max completion tokens</li>
-<li>Response format</li>
-<li>Streaming</li>
-<li>Tools</li>
-</ul>
-<p>In the next sections, I’ll go over each of these parameters in more detail and provide some suggestions about how to use them.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Each provider has a slightly different name for the same parameter, but the concept is the same. You’ll have to check the documentation of the provider you’re using to see the exact name of the parameter.</p>
-</div>
-</div>
-<section id="model" class="level2">
-<h2 class="anchored" data-anchor-id="model">Model</h2>
-<p>When choosing a model, consider the following factors:</p>
-<ul>
-<li>Complexity of task: Am I solving a problem that requires reasoning capabilities? Or is it a simple task?</li>
-<li>Speed: How important is it that the model replies quickly? Is this something that I can run on the background?</li>
-<li>Cost: How much do I want to spend on this task?</li>
-<li>Provider: Which providers do I have access to? Do I need to self-host?</li>
-</ul>
-<p>Right now, my go-to models are Gemini 2.5 Pro or Claude 4 for complex tasks. For simpler tasks, I use Gemini 2.5 Flash or OpenAI’s gpt-4.1 family.</p>
-<p>The best way to pick a model is to start with the most capable models and then scale down to the simplest models that still capable of solving the task. Otherwise, you could end up spending a lot of time trying to solve an issue that you simply cannot solve reliably with smaller models.</p>
-</section>
-<section id="messagesprompts" class="level2">
-<h2 class="anchored" data-anchor-id="messagesprompts">Messages/prompts</h2>
-<p>The messages/prompts you send to the LLM will determine the context and instructions for the LLM to follow. I wrote a guide on <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">prompt engineering</a> that covers the basics of how to write good prompts.</p>
-</section>
-<section id="temperature" class="level2">
-<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
-<p>The temperature parameter controls the randomness of the model’s output. A temperature of 0 will make the model more deterministic, while a temperature of 1 will make the model more random.</p>
-<p>I wrote a <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> about how temperature affects the output of LLMs. For tasks where consistency is important, use a temperature of 0. For tasks where creativity is important, use a temperature above 0. I’ve found that anything above 1.3-4 is too random.</p>
-</section>
-<section id="seed" class="level2">
-<h2 class="anchored" data-anchor-id="seed">Seed</h2>
-<p>The seed parameter is used to initialize the random number generator that is then used to sample the next token. If you want to maximize reproducibility, set a seed value.</p>
-<p>This is only available in OpenAI, Gemini, and open-weight models. Check my <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">post</a> for more details.</p>
-</section>
-<section id="top-p-sampling" class="level2">
-<h2 class="anchored" data-anchor-id="top-p-sampling">Top-P Sampling</h2>
-<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary by first selecting the smallest group of tokens whose combined probability ≥ P. For example, top P = 0.9 picks the next token from the smallest group of tokens that together cover at least 90% probability.</p>
-<p>I rarely use this parameter.</p>
-</section>
-<section id="logit-biases" class="level2">
-<h2 class="anchored" data-anchor-id="logit-biases">Logit biases</h2>
-<p>Logits are the raw scores that the model assigns to each token. You can use biases to change the odds of a token being selected. Positive biases increase the odds of the token being selected, while negative biases do the opposite.</p>
-<p>This is often used for document classification tasks or <a href="https://cookbook.openai.com/examples/search_reranking_with_cross-encoders">LLM-based rerankers</a>.</p>
-</section>
-<section id="logprobs" class="level2">
-<h2 class="anchored" data-anchor-id="logprobs">Logprobs</h2>
-<p>Logprobs are the logarithmic probabilities of the tokens. They are defined as:</p>
-<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
-<p>Where:</p>
-<ul>
-<li><img src="https://latex.codecogs.com/png.latex?w_i"> is the <img src="https://latex.codecogs.com/png.latex?i">-th token in the vocabulary.</li>
-<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
-<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit of the <img src="https://latex.codecogs.com/png.latex?i">-th token.</li>
-<li><img src="https://latex.codecogs.com/png.latex?n"> is the number of tokens in the vocabulary.</li>
-</ul>
-<p>You can use this parameter in OpenAI models. Gemini provides a <a href="https://discuss.ai.google.dev/t/get-logprobs-at-output-token-level/54418/15">single request with logprobs per day</a> (yes, I’m not kidding 😅). Anthropic doesn’t provide them.</p>
-<p>Open-weight models don’t provide logprobs. They provide logits instead, that you can use to calculate the probabilities of the tokens.</p>
-</section>
-<section id="max-completion-tokens" class="level2">
-<h2 class="anchored" data-anchor-id="max-completion-tokens">Max completion tokens</h2>
-<p>This parameter limits the number of tokens that the model can generate. This is useful to control costs and length of the output.</p>
-</section>
-<section id="response-format" class="level2">
-<h2 class="anchored" data-anchor-id="response-format">Response format</h2>
-<p>You can use this parameter to specify the format of the response. Anthropic, OpenAI, and Gemini support structured outputs in the form of JSON schemas. I’ve written multiple posts on this topic:</p>
-<ul>
-<li><a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">Structured outputs can hurt the performance of LLMs</a></li>
-<li><a href="https://dylancastillo.co/posts/gemini-structured-outputs.html">The good, the bad, and the ugly of Gemini’s structured outputs</a></li>
-<li><a href="https://dylancastillo.co/posts/llm-pydantic-order-matters.html">Structured outputs: don’t put the cart before the horse</a></li>
-</ul>
-<p>Open-weight models allow for more flexible structured output formats. For example, using <a href="https://dottxt-ai.github.io/outlines/latest/">outlines</a> lets you define custom regEx patterns to extract the data you need.</p>
-</section>
-<section id="streaming" class="level2">
-<h2 class="anchored" data-anchor-id="streaming">Streaming</h2>
-<p>This parameter is used to stream the response from the model. This improves the user experience as it allows you to see the output as it’s being generated.</p>
-</section>
-<section id="tools" class="level2">
-<h2 class="anchored" data-anchor-id="tools">Tools</h2>
-<p>Tools are a way to extend the capabilities of the model by providing it with external tools. This is critical for building agents.</p>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>This was a very short post about the key parameters for LLMs. I hope you found it useful.</p>
-<p>Let me know if you have any questions or feedback.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Key Parameters of {LLMs}},
-  date = {2025-06-29},
-  url = {https://dylancastillo.co/posts/key-parameters-llms.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Key Parameters of LLMs.”</span> June 29,
-2025. <a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
-</div></div></section></div> ]]></description>
-  <category>llm</category>
-  <category>openai</category>
-  <category>anthropic</category>
-  <category>gemini</category>
-  <category>python</category>
-  <guid>https://dylancastillo.co/posts/key-parameters-llms.html</guid>
-  <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
   <title>Japanese is the most expensive language in terms of input tokens</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/counting-tokens.html</link>
@@ -12026,7 +12026,7 @@ Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.c
   <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Persuading LLMs (or how to write prompts)</title>
+  <title>Persuading LLMs (or how to write good prompts)</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/prompt-engineering-101.html</link>
   <description><![CDATA[ 
@@ -12295,7 +12295,7 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <li>Split complex tasks into smaller steps</li>
 <li>Repeat instructions when the context is long</li>
 </ol>
-<p>These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path. Or maybe not, who knows? People lie on the internet all the time.</p>
+<p>These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path<sup>3</sup>.</p>
 <p>I hope you found this article useful. If you have any questions or feedback, leave a comment below.</p>
 
 
@@ -12307,16 +12307,17 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <ol>
 <li id="fn1"><p>It helped the agent follow the repo’s rules… and me deal with some deeply rooted self-esteem issues.↩︎</p></li>
 <li id="fn2"><p>I removed the thinking tokens for brevity.↩︎</p></li>
+<li id="fn3"><p>Or maybe not, who knows? People lie on the internet all the time.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Persuading {LLMs} (or How to Write Prompts)},
+  title = {Persuading {LLMs} (or How to Write Good Prompts)},
   date = {2025-06-26},
   url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Persuading LLMs (or How to Write
+Castillo, Dylan. 2025. <span>“Persuading LLMs (or How to Write Good
 Prompts).”</span> June 26, 2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
