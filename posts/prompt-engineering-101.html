@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2025-06-26">
 <meta name="description" content="How to convince LLMs to do what you want them to do.">
 
-<title>Persuading LLMs 101 – Dylan Castillo</title>
+<title>Persuading LLMs (or how to write prompts) – Dylan Castillo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -112,11 +112,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="Persuading LLMs 101 – Dylan Castillo">
+<meta property="og:title" content="Persuading LLMs (or how to write prompts) – Dylan Castillo">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="Persuading LLMs 101 – Dylan Castillo">
+<meta name="twitter:title" content="Persuading LLMs (or how to write prompts) – Dylan Castillo">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
@@ -189,6 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#principle-6-repeat-instructions-when-the-context-is-long" id="toc-principle-6-repeat-instructions-when-the-context-is-long" class="nav-link" data-scroll-target="#principle-6-repeat-instructions-when-the-context-is-long">Principle 6: Repeat instructions when the context is long</a></li>
   </ul></li>
   <li><a href="#other-advanced-prompting-techniques" id="toc-other-advanced-prompting-techniques" class="nav-link" data-scroll-target="#other-advanced-prompting-techniques">Other advanced prompting techniques</a></li>
+  <li><a href="#using-llms-to-write-prompts" id="toc-using-llms-to-write-prompts" class="nav-link" data-scroll-target="#using-llms-to-write-prompts">Using LLMs to write prompts</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
@@ -202,7 +203,7 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Persuading LLMs 101</h1>
+<h1 class="title">Persuading LLMs (or how to write prompts)</h1>
   <div class="quarto-categories">
     <div class="quarto-category">llm</div>
     <div class="quarto-category">openai</div>
@@ -259,7 +260,7 @@ Subscribe to my newsletter
 <p>Let’s get started!</p>
 <section id="what-is-a-prompt" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-prompt">What is a prompt?</h2>
-<p>A prompt is any text you send to an LLM to guide its behavior or generate a response. Most chat-based models work with two types of instructions:</p>
+<p>A prompt is any text you send to an LLM to guide its behavior or generate a response. Chat-based models work with two types of instructions:</p>
 <ol type="1">
 <li><strong>System/developer prompt</strong>: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”</li>
 <li><strong>User prompt</strong>: The actual question the end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents.”</li>
@@ -270,7 +271,8 @@ Subscribe to my newsletter
 <span id="cb1-2"><a href="#cb1-2"></a>    {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">"What's the weather in Tokyo?"</span>}</span>
 <span id="cb1-4"><a href="#cb1-4"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em> after combining the system and user prompts:</p>
+<p>These messages are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model to generate a response.</p>
+<p>For example, this is the resulting message text used by <em>Qwen3</em> after combining the system and user prompts:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>&lt;|im_start|&gt;system</span>
 <span id="cb2-2"><a href="#cb2-2"></a>You are a helpful assistant.</span>
 <span id="cb2-3"><a href="#cb2-3"></a>&lt;|im_end|&gt;</span>
@@ -278,7 +280,8 @@ Subscribe to my newsletter
 <span id="cb2-5"><a href="#cb2-5"></a>&lt;|im_start|&gt;user</span>
 <span id="cb2-6"><a href="#cb2-6"></a>What's the weather in Tokyo?</span>
 <span id="cb2-7"><a href="#cb2-7"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s reply<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It looks like this:</p>
+<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s reply<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>It looks like this:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>&lt;|im_start|&gt;assistant</span>
 <span id="cb3-2"><a href="#cb3-2"></a>The weather in Tokyo is sunny.</span>
 <span id="cb3-3"><a href="#cb3-3"></a>&lt;|im_end|&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -478,6 +481,11 @@ Subscribe to my newsletter
 </ol>
 <p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al.&nbsp;is a good starting point.</p>
 </section>
+<section id="using-llms-to-write-prompts" class="level2">
+<h2 class="anchored" data-anchor-id="using-llms-to-write-prompts">Using LLMs to write prompts</h2>
+<p>This is something I don’t like highlighting too much because people tend to abuse it: you can use LLMs to help you write prompts faster.</p>
+<p>But please, don’t just copy-paste what the model generates. You’ll often get generic prompts that sound impressive but don’t actually help. Always review and refine the output yourself, especially if performance matters for your task. I haven’t found cases where letting an LLM write my prompts without supervision gives me better results than doing it myself.</p>
+</section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>This article is a short guide to help you write better prompts. Good prompt engineering can be summarized in 6 key principles:</p>
@@ -499,19 +507,19 @@ Subscribe to my newsletter
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>It helped the agent follow the repo’s rules… ehem… and me deal with some deeply rooted self-esteem issues<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>It helped the agent follow the repo’s rules… and me deal with some deeply rooted self-esteem issues.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>I removed the thinking tokens for brevity.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Persuading {LLMs} 101},
+  title = {Persuading {LLMs} (or How to Write Prompts)},
   date = {2025-06-26},
   url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2025. <span>“Persuading LLMs 101.”</span> June 26,
-2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
+Castillo, Dylan. 2025. <span>“Persuading LLMs (or How to Write
+Prompts).”</span> June 26, 2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

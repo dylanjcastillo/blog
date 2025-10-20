@@ -12026,7 +12026,7 @@ Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.c
   <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Persuading LLMs 101</title>
+  <title>Persuading LLMs (or how to write prompts)</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/posts/prompt-engineering-101.html</link>
   <description><![CDATA[ 
@@ -12040,7 +12040,7 @@ Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.c
 <p>Let’s get started!</p>
 <section id="what-is-a-prompt" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-prompt">What is a prompt?</h2>
-<p>A prompt is any text you send to an LLM to guide its behavior or generate a response. Most chat-based models work with two types of instructions:</p>
+<p>A prompt is any text you send to an LLM to guide its behavior or generate a response. Chat-based models work with two types of instructions:</p>
 <ol type="1">
 <li><strong>System/developer prompt</strong>: Sets the “big picture” or high-level rules for the entire conversation. Examples: “You are a helpful assistant.”; “Always answer in haiku.”</li>
 <li><strong>User prompt</strong>: The actual question the end-user types and any additional context. Examples: “What’s today’s weather in Dublin?”; “Summarize the following documents.”</li>
@@ -12069,7 +12069,8 @@ font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <span id="cb1-4">]</span></code></pre></div></div>
-<p>Then, these are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model. For example, this is the resulting message text used by <em>Qwen3</em> after combining the system and user prompts:</p>
+<p>These messages are passed through a <a href="https://huggingface.co/docs/transformers/en/chat_templating">chat template</a> and converted into a single string that is sent to the model to generate a response.</p>
+<p>For example, this is the resulting message text used by <em>Qwen3</em> after combining the system and user prompts:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1">&lt;|im_start|&gt;system</span>
 <span id="cb2-2">You are a helpful assistant.</span>
 <span id="cb2-3">&lt;|im_end|&gt;</span>
@@ -12077,7 +12078,8 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <span id="cb2-5">&lt;|im_start|&gt;user</span>
 <span id="cb2-6">What's the weather in Tokyo?</span>
 <span id="cb2-7">&lt;|im_end|&gt;</span></code></pre></div></div>
-<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s reply<sup>2</sup>. It looks like this:</p>
+<p>After you make the request, the model will respond with an <em>assistant</em> message that contains the model’s reply<sup>2</sup>.</p>
+<p>It looks like this:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1">&lt;|im_start|&gt;assistant</span>
 <span id="cb3-2">The weather in Tokyo is sunny.</span>
 <span id="cb3-3">&lt;|im_end|&gt;</span></code></pre></div></div>
@@ -12277,6 +12279,11 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 </ol>
 <p>There are more advanced techniques that I’m not going to cover here. This <a href="https://arxiv.org/abs/2506.05614">paper</a> by E.G. Santana et al.&nbsp;is a good starting point.</p>
 </section>
+<section id="using-llms-to-write-prompts" class="level2">
+<h2 class="anchored" data-anchor-id="using-llms-to-write-prompts">Using LLMs to write prompts</h2>
+<p>This is something I don’t like highlighting too much because people tend to abuse it: you can use LLMs to help you write prompts faster.</p>
+<p>But please, don’t just copy-paste what the model generates. You’ll often get generic prompts that sound impressive but don’t actually help. Always review and refine the output yourself, especially if performance matters for your task. I haven’t found cases where letting an LLM write my prompts without supervision gives me better results than doing it myself.</p>
+</section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>This article is a short guide to help you write better prompts. Good prompt engineering can be summarized in 6 key principles:</p>
@@ -12298,19 +12305,19 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>It helped the agent follow the repo’s rules… ehem… and me deal with some deeply rooted self-esteem issues↩︎</p></li>
+<li id="fn1"><p>It helped the agent follow the repo’s rules… and me deal with some deeply rooted self-esteem issues.↩︎</p></li>
 <li id="fn2"><p>I removed the thinking tokens for brevity.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
   author = {Castillo, Dylan},
-  title = {Persuading {LLMs} 101},
+  title = {Persuading {LLMs} (or How to Write Prompts)},
   date = {2025-06-26},
   url = {https://dylancastillo.co/posts/prompt-engineering-101.html},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Persuading LLMs 101.”</span> June 26,
-2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
+Castillo, Dylan. 2025. <span>“Persuading LLMs (or How to Write
+Prompts).”</span> June 26, 2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>openai</category>
