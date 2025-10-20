@@ -322,6 +322,6 @@ This article is a short guide to help you write better prompts. Good prompt engi
 5. Split complex tasks into smaller steps
 6. Repeat instructions when the context is long
 
-These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path. Or maybe not, who knows? People lie on the internet all the time. 
+These principles will not make your crappy LLM pipeline go from barely usable to raising millions from VC firms. But they will definitely get you on the right path^[Or maybe not, who knows? People lie on the internet all the time.].
 
 I hope you found this article useful. If you have any questions or feedback, leave a comment below.
