@@ -1474,7 +1474,7 @@
     "href": "posts/prompt-engineering-101.html",
     "title": "Persuading LLMs 101",
     "section": "",
-    "text": "I’ve tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of physical violence. I’ve offered bribes. I’ve even made coding agents call me big daddy to ensure they follow my repo’s rules1.\nAll this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bullet-proof prompting technique that it often feels closer to astrology than to engineering.\nThis article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid making obvious mistakes.\nLet’s get started!"
+    "text": "I’ve tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of physical violence, offered bribes, and even made a coding agent call me big daddy1.\nAfter all that trial and error, I’ve learned a few things about writing prompts. This is a key part of using LLMs, but it’s also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bulletproof prompting techniques that the whole thing feels closer to astrology than to engineering.\nThis article is a no-BS guide to help you get the basics right. It won’t solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid the most obvious mistakes.\nLet’s get started!"
   },
   {
     "objectID": "posts/prompt-engineering-101.html#what-is-a-prompt",
@@ -1509,7 +1509,7 @@
     "href": "posts/prompt-engineering-101.html#footnotes",
     "title": "Persuading LLMs 101",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nIt didn’t work, but I felt much better about myself.↩︎\nI removed the thinking tokens for brevity.↩︎"
+    "text": "Footnotes\n\n\nIt helped the agent follow the repo’s rules… ehem… and me deal with some deeply rooted self-esteem issues↩︎\nI removed the thinking tokens for brevity.↩︎"
   },
   {
     "objectID": "posts/python-pyscript-101.html",
