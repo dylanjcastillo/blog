@@ -11,11 +11,11 @@ categories:
   - python
 ---
 
-I've tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of [physical violence](https://www.youtube.com/watch?v=8g7a0IWKDRE&t=500s). I’ve offered bribes. I’ve even made coding agents call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw) to ensure they follow my repo's rules^[It didn't work, but I felt much better about myself.].
+I've tried every trick in the book to get Large Language Models (LLMs) to follow my instructions. I’ve resorted to threats of [physical violence](https://www.youtube.com/watch?v=8g7a0IWKDRE&t=500s), offered bribes, and even made a coding agent call me [big daddy](https://www.reddit.com/r/cursor/comments/1joapwk/comment/mkqg8aw)^[It helped the agent follow the repo's rules... ehem... and me deal with some deeply rooted self-esteem issues].
 
-All this trial and error has taught me a trick or two about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bullet-proof prompting technique that it often feels closer to astrology than to engineering.
+After all that trial and error, I've learned a few things about writing prompts. This is a key part of using LLMs, but it's also one of the most hyped and abused techniques. There are so many AI influencers selling and sharing their bulletproof prompting techniques that the whole thing feels closer to astrology than to engineering.
 
-This article is a no-BS guide to help you get the basics right. It won't solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid making obvious mistakes.
+This article is a no-BS guide to help you get the basics right. It won't solve all the problems in your agentic workflow or LLM-based apps, but it will help you avoid the most obvious mistakes.
 
 Let's get started!
 
