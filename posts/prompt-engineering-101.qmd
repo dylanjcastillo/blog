@@ -143,6 +143,8 @@ This process is formally known as "Chain of Thought" (CoT) prompting. Similar to
 
 A zero-shot CoT prompt means that you explicitly ask the model to think step by step to solve the problem but don’t provide any examples of how it should reason about it. A few-shot CoT prompt means that you provide examples of how the model should reason about the problem (e.g., 1-shot means you provide one example, 2-shot means two examples, etc.).
 
+Although this approach has seemingly become less relevant with the release of reasoning models, I still see it often in practice because providers either do not provide the full reasoning process or limit how you can use/access it. 
+
 Here are two examples of CoT prompts:
 
 #### 0-Shot CoT Prompt
