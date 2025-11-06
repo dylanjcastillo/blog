@@ -1143,9 +1143,11 @@ Castillo, Dylan. 2025. <span>“LangSmith 101.”</span> August 10, 2025. <a hre
 
 
 
-<p>I’ve been catching up on Hamel Husain and Shreya Shankar’s <a href="https://maven.com/parlance-labs/evals">AI Evals for Engineers &amp; PMs</a> course. If you’re thinking of taking it, I highly recommend it. There’s no better material on evaluating AI systems out there.</p>
-<p>One part that I found particularly interesting was the section on generating synthetic data for bootstrapping the evaluation of RAG systems. I’ve worked on several AI projects, but in all of them, we had real data to work with, so I hadn’t had the chance to generate synthetic data for this purpose.</p>
-<p>I decided to work through a simple example and write some notes about it. In this article, I’ll walk you through the process of bootstrapping your RAG system evals using synthetic data.</p>
+<p>One of the coolest ideas I’ve come across when building Retrieval-Augmented Generation (RAG) systems is that you can actually start without any real data at all. You can bootstrap your system (and its evaluation process) using synthetic data.</p>
+<p>In the projects I’ve worked on, we usually had enough data to train and evaluate our pipelines, so generating synthetic data wasn’t a concern. But I’ve been curious about this idea for a while. So I decided to dig into it.</p>
+<p>I used Hamel Husain and Shreya Shankar’s <a href="https://maven.com/parlance-labs/evals">AI Evals for Engineers &amp; PMs</a> course materials to guide my exploration. If you’re interested in building and evaluating LLM systems, I highly recommend checking out their course.</p>
+<p>In this article, I’ll walk you through the process of bootstrapping your RAG system evals using synthetic data.</p>
+<p>Let’s get started!</p>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>If you plan to follow along, you’ll need to:</p>

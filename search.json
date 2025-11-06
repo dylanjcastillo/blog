@@ -1033,7 +1033,7 @@
     "href": "posts/synthetic-data-rag.html",
     "title": "Using synthetic data to bootstrap your RAG system evals",
     "section": "",
-    "text": "I’ve been catching up on Hamel Husain and Shreya Shankar’s AI Evals for Engineers & PMs course. If you’re thinking of taking it, I highly recommend it. There’s no better material on evaluating AI systems out there.\nOne part that I found particularly interesting was the section on generating synthetic data for bootstrapping the evaluation of RAG systems. I’ve worked on several AI projects, but in all of them, we had real data to work with, so I hadn’t had the chance to generate synthetic data for this purpose.\nI decided to work through a simple example and write some notes about it. In this article, I’ll walk you through the process of bootstrapping your RAG system evals using synthetic data."
+    "text": "One of the coolest ideas I’ve come across when building Retrieval-Augmented Generation (RAG) systems is that you can actually start without any real data at all. You can bootstrap your system (and its evaluation process) using synthetic data.\nIn the projects I’ve worked on, we usually had enough data to train and evaluate our pipelines, so generating synthetic data wasn’t a concern. But I’ve been curious about this idea for a while. So I decided to dig into it.\nI used Hamel Husain and Shreya Shankar’s AI Evals for Engineers & PMs course materials to guide my exploration. If you’re interested in building and evaluating LLM systems, I highly recommend checking out their course.\nIn this article, I’ll walk you through the process of bootstrapping your RAG system evals using synthetic data.\nLet’s get started!"
   },
   {
     "objectID": "posts/synthetic-data-rag.html#prerequisites",
