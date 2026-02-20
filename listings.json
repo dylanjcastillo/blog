@@ -6,6 +6,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/ai-side-projects.html",
       "/posts/claudecodeholic.html",
       "/posts/langsmith-101.html",
       "/posts/synthetic-data-rag.html",
