@@ -1,6 +1,6 @@
 - title: "kasipa (deepsheet v2)"
   path: https://kasipa.com/
-  date: 2025-02-21
+  date: 2026-02-21
   categories: [NextJS, Pyodide, Mistral, Plotly]
   description: |
     AI data analyst that helps you analyze data and make graphs. It's the successor of deepsheet.
