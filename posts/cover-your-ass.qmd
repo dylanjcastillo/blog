@@ -1,0 +1,35 @@
+---
+title: "Cover Your Ass"
+date: 2026-02-22
+date-modified: 2026-02-22
+categories:
+    - essay
+---
+
+A simple hack that will make your life easier at work:
+
+1. Always cover your ass (CYA).
+2. Always assume others will do the same.
+
+CYA has a [bad rep](https://www.investopedia.com/terms/c/cover-your-ass.asp), because lazy people use it to deflect blame onto others. But CYA is just a communication style. It asks you to do two things: make priorities explicit and flag potential issues early.
+
+I've worked for all sorts of organizations: tech, consulting, public, big, small. As a freelancer, I have a high rate of repeat clients, and, until now, I’ve always received positive feedback about my work, including intros to other clients. This approach has served me well.
+
+After organizations reach a certain size, successful projects become vehicles for promotions, and failing projects become express tickets to career purgatory. Picking winners from losers isn’t something you can always do. But you can always choose to CYA. On winners, CYA isn’t always a big issue: people are happy, and no one’s looking to point fingers. On losers, it can be the difference between “project X sucked, but Dylan always fought to keep the boat afloat” and “project X sucked, but Dylan sucked even more.”
+
+Take a simple case that I see all the time:
+
+Boss goes to Jane and asks, “Hey Jane, can you fix bug X?” Jane responds, “Yes, sure!” After some research, Jane realizes that bug X is caused by another bug in a system owned by John. Jane is also a good person, and knows that John is overworked, so she asks if he can look at it when he has some time. He replies affirmatively. So she goes to work on some of her other tasks while she waits for John to get back to her.
+
+A week later, Boss asks Jane, “Jane, did you fix bug X?” and Jane responds, “Not yet. The issue is caused by another bug, and I’m waiting for John to investigate that one.” Then Boss tells Jane, “That was a critical bug that needed fixing ASAP. We just lost $20M. You suck!”
+
+Ok, the last bit was too much, but you get the idea. Jane had a task that depended on someone else. She didn’t know the priority of that task in the grand scheme of things, and assumed it could wait until John had time to investigate it. Then, when it was already too late, she realized how critical it was.
+
+Jane left her ass uncovered by:
+
+1. Not clarifying the priority of the task from the start
+2. Not reporting that the task was blocked, and might require escalation to get it sorted out
+
+You might think that the problem was Jane’s boss, who didn’t communicate the priority right away. And you’d be right. But, once again, you don’t get to pick your boss most of the time. And you should assume that they will also cover their ass by throwing you under the bus if needed.
+
+So, follow your dreams, but cover your ass. It's not by chance that humans have been doing so --literally and figuratively-- for hundreds of thousands of years. 
