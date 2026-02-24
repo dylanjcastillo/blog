@@ -14,7 +14,7 @@ When I read [Let Me Speak Freely?](https://arxiv.org/abs/2408.02442) by Tam et a
 
 In both the original study and their recent update, Tam et al. concluded that is the case. They found that "structured generation constraints significantly impact LLM performance across various tasks".
 
-But the study had major flaws. The [.txt](https://dottxt.co/) team wrote a very compelling [rebuttal](https://dottxt.co/blog/let-me-speak-freely) to the paper. For _Llama-3-8B-Instruct_, they demonstrate that Tam, et al. results were mostly due to poor prompting, unfair comparisons and the improper use of an "AI parser" rather than the use of structured outputs.
+But the study had major flaws. The [.txt](https://dottxt.co/) team wrote a very compelling [rebuttal](https://blog.dottxt.ai/say-what-you-mean.html) to the paper. For _Llama-3-8B-Instruct_, they demonstrate that Tam, et al. results were mostly due to poor prompting, unfair comparisons and the improper use of an "AI parser" rather than the use of structured outputs.
 
 I liked the rebuttal but it still left me wondering how well their results generalize. They focused on a single model[^1], which represents a small fraction of the LLMs powering applications in production today. Open-weight models offer more flexibility on how to _structure_ your output, such as letting users specify [regex expressions](https://dottxt-ai.github.io/outlines/latest/reference/generation/regex/) to constrain the output. Proprietary models lack this. Right now, JSON is the only structured output format guaranteed to work across most popular providers.
 
