@@ -15,7 +15,115 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 22 Feb 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 24 Feb 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>2025: Personal Snapshot</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/2025-personal-snapshot.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m an independent AI consultant, trying to grow my business. This is my annual review. If it’s me rereading this, welcome back. This is Dylan from 2025.</p>
+<section id="money-work" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="money-work">Money &amp; work</h2>
+<p>This was the year I made the most money. I grew my revenue by 13%. Growth came mostly from working on more projects with previous clients. I worked on 11 projects, with 6 clients. I did 6 deliverable-based projects and 5 time-based projects. Deliverable-based projects accounted for 57% of my revenue.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/2025-personal-snapshot/revenue-over-time.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Revenue over time"><img src="https://dylancastillo.co/posts/images/2025-personal-snapshot/revenue-over-time.png" class="img-fluid figure-img" alt="Revenue over time"></a></p>
+<figcaption class="margin-caption">Revenue over time</figcaption>
+</figure>
+</div>
+<p>It became obvious to me that expanding your projects with existing clients is a lot easier than selling to new clients.</p>
+<p>I also reduced costs by 11%. Most of the cost reduction came from firing a frontend developer that I had hired in 2024. I let him go because of AI progress. I could use Claude Code to get a better, cheaper, and faster version of the same services he was providing me. It didn’t make financial sense to keep him on board.</p>
+<p>Still, I felt bad about it. He was a good guy, but he wasn’t a good fit. I also felt I didn’t do a good job during the hiring process. This cost me resources and time, so I’ll be more careful with the next hires.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/2025-personal-snapshot/github.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="GitHub contributions"><img src="https://dylancastillo.co/posts/images/2025-personal-snapshot/github.webp" class="img-fluid figure-img" alt="GitHub contributions"></a></p>
+<figcaption class="margin-caption">GitHub contributions</figcaption>
+</figure>
+</div>
+<p>This year I more than doubled my number of commits and wrote code 312 days of the year. It helped that some of the paid work I did was the <a href="https://github.com/IBEX-TUDelft/econagents">econagents</a> open source Python library. Sometimes I cheated, because I was tired and all I did was merge Dependabot’s PRs. I feel like I coded and learned quite a bit more than last year, but not as much as it looks.</p>
+<p>Throughout the year, a recurring dilemma was whether to build a product or keep focusing on services. For the first half of the year, I dedicated quite a bit of time to Namemancer, a tool meant to help trademark lawyers speed up their research process. However, I kept seeing more market pull for services and struggled to make meaningful progress on it. I kept hoping I could magically advance on both fronts, but eventually had to face reality and decided to kill Namemancer.</p>
+<p>And I felt relieved. I’ve come to understand that I need to be more disciplined and should focus on fewer things. I often end up spreading myself thin by taking on too many things at once and do a poor job at most of them.</p>
+</section>
+<section id="life" class="level2">
+<h2 class="anchored" data-anchor-id="life">Life</h2>
+<p>In late February, my wife, Maria, and I moved to Cork, Ireland for three months. This got off to a rocky start. We had been having some differences since the end of 2024, and the first few weeks in Ireland put this on steroids. We’ve been together for 15 years, eight of them married. We’ve had our share of difficult stretches, but this was one of the toughest.</p>
+<p>Through many tough conversations and commitment from both sides, we successfully worked through it and grew closer together. Ireland went from a rocky start to one of the best experiences we’ve had as a couple. We traveled around the country, went for runs during sunset, tried every dairy product available, and really became a team again. We still cherish our time in Ireland, and even considered moving there!</p>
+<div class="custom-gallery-container" data-images="[
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/airport-leaving.jpg&quot;, &quot;caption&quot;: &quot;On our way to Ireland&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-university.jpg&quot;, &quot;caption&quot;: &quot;Cork I&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-bbq.jpg&quot;, &quot;caption&quot;: &quot;Cork II&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/ireland-biking.jpeg&quot;, &quot;caption&quot;: &quot;Cork III&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-friends.jpeg&quot;, &quot;caption&quot;: &quot;Cork IV&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-cold-water.jpeg&quot;, &quot;caption&quot;: &quot;Cork V&quot;}
+     ]">
+<img class="gallery-image" src="" alt="">
+<div class="gallery-caption">
+
+</div>
+</div>
+<p>We went back to Madrid in May, and then in July we moved to Salamanca, a small city to the north of Madrid. Maria found a good job opportunity, and since I can work from anywhere, we decided to pack our bags and go. We spent a good chunk of July and August moving. We went from a small, old 2-bedroom apartment to a newly renovated 4-bedroom apartment. It was a good change, especially for me, given that I work from home.</p>
+<div class="custom-gallery-container" data-images="[
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/bathroom.jpeg&quot;, &quot;caption&quot;: &quot;Proud builder of cabinets&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-salamanca.jpeg&quot;, &quot;caption&quot;: &quot;Salamanca I&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/salamanca.jpeg&quot;, &quot;caption&quot;: &quot;Salamanca II&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-luciano.jpeg&quot;, &quot;caption&quot;: &quot;Salamanca III&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/salamanca-2.jpeg&quot;, &quot;caption&quot;: &quot;Salamanca IV&quot;}
+     ]">
+<img class="gallery-image" src="" alt="">
+<div class="gallery-caption">
+
+</div>
+</div>
+<p>It was also a good year for reconnecting. I got to see friends I hadn’t seen in a while, we made <a href="https://en.wikipedia.org/wiki/Hallaca">hallacas</a> again, and I spent a lot of time with my family. We had an especially fun Christmas and New Year’s.</p>
+<div class="custom-gallery-container" data-images="[
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/family.jpeg&quot;, &quot;caption&quot;: &quot;Family&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-alejandro.jpeg&quot;, &quot;caption&quot;: &quot;Old friends I&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-victor-cris.jpeg&quot;, &quot;caption&quot;: &quot;Old friends II&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/olympics-dani.jpeg&quot;, &quot;caption&quot;: &quot;Old friends IV&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/christmas.jpeg&quot;, &quot;caption&quot;: &quot;Christmas&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/new-years-eve.jpeg&quot;, &quot;caption&quot;: &quot;New Years Eve&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/party.jpeg&quot;, &quot;caption&quot;: &quot;Fun party!&quot;}
+     ]">
+<img class="gallery-image" src="" alt="">
+<div class="gallery-caption">
+
+</div>
+</div>
+</section>
+<section id="health" class="level2">
+<h2 class="anchored" data-anchor-id="health">Health</h2>
+<p>I lifted more weights this year but did less cardio. After we moved to Ireland, I started going to the gym instead of training at home. I kept doing this even after coming back to Spain. It’s been good for my mental health, as otherwise I’d often spend days without leaving my house. I’ve also gained more muscle mass compared to previous years.</p>
+<p>My RHR is now at 56 bpm and VO2 max is at 46 ml/kg/min. Both are pretty much the same compared to last year. I think I need more cardio and better rest to move these markers.</p>
+<p>The biggest health concern this year was sleeping issues and neck/back pain. The sleeping issues started a few weeks after I arrived in Ireland. It was a mix of stress and working from the same room where I was sleeping. On good days it takes me 15–20 minutes to fall asleep. On bad days, it can take me 2–3 hours. I’ve been able to improve this over time, but I still need to be careful with my sleep hygiene.</p>
+<p>I have some small protrusions in my neck that get worse when I don’t sleep well or exercise. The last 3 months of the year were pretty stressful, so this got bad. It improved after I changed my home desk setup, did rehab exercises, and started going to the physio regularly.</p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s next?</h2>
+<p>No big lessons this year, besides the same one I’ve struggled with in the past: I still don’t know how to properly regulate myself. I have a hard time managing stress and that often lead to trouble sleeping and depression. I keep postponing looking for a long-term solution for this as I always find a way to push through, but I don’t think my current approach will work forever.</p>
+<p>On the bright side, some exciting projects have come up for 2026. If things go well, I might finally grow my consulting practice beyond a one-man operation. You’ll have to come back next year to see how it goes.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
+  author = {Castillo, Dylan},
+  title = {2025: {Personal} {Snapshot}},
+  date = {2026-02-24},
+  url = {https://dylancastillo.co/posts/2025-personal-snapshot.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2026. <span>“2025: Personal Snapshot.”</span> February
+24, 2026. <a href="https://dylancastillo.co/posts/2025-personal-snapshot.html">https://dylancastillo.co/posts/2025-personal-snapshot.html</a>.
+</div></div></section></div> ]]></description>
+  <category>personal-snapshot</category>
+  <guid>https://dylancastillo.co/posts/2025-personal-snapshot.html</guid>
+  <pubDate>Tue, 24 Feb 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Cover Your Ass</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -3714,6 +3822,398 @@ System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/
   <pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Evaluator-optimizer workflow with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I’m doing a deep dive into Pydantic AI, so I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-evaluator-optimizer">evaluator-optimizer</a> workflow. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<section id="what-is-evaluator-optimizer" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-evaluator-optimizer">What is evaluator-optimizer?</h2>
+<p>Evaluator-optimizer is a pattern that has an LLM generator and an LLM evaluator. The generator generates a solution and the evaluator evaluates if the solution is good enough. If it’s not, the generator is given feedback and it generates a new solution. This process is repeated until the solution is good enough.</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In([In]) --&gt; Gen["Generator (LLM)"]
+    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]
+    Eval -- "Accepted" --&gt; Out([Out])
+    Eval -- "Rejected + Feedback" --&gt; Gen
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Content generation that must match certain guidelines such as writing with a particular style.</li>
+<li>Improving search results iteratively</li>
+</ul>
+<p>Let’s see how this looks in practice.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I will implement a simple workflow:</p>
+<ol type="1">
+<li>Generate a candidate article</li>
+<li>Evaluate if the article is good enough</li>
+<li>If it’s not, provide feedback and generate a new article</li>
+<li>Repeat until the article is good enough</li>
+</ol>
+<p>Before we start, because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div></div>
+</div>
+<p>Then, you need to import the required libraries. I’m using <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> to monitor the workflow.</p>
+<div id="4081c493" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BaseModel, Field</span>
+<span id="cb2-9"></span>
+<span id="cb2-10">load_dotenv()</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="evaluator-optimizer-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="evaluator-optimizer-workflow">Evaluator-optimizer workflow</h2>
+<p>The workflow is composed of two steps:</p>
+<ul>
+<li><code>Text generator</code>: Generates a candidate article.</li>
+<li><code>Evaluator</code>: Evaluates if the article is good enough.</li>
+</ul>
+<p>I’ll split the text generation into two agents: <code>generator</code> and <code>fixer</code>. The <code>generator</code> will generate a candidate article and the <code>fixer</code> will fix the article, when provided with feedback.</p>
+<div id="18ec377f" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">generator <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer. Provided with a topic, you will generate an engaging article with less than 500 words"</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">fixer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer. Provided with a text and feedback, you wil improve the text."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Logfire</span> project URL: <a href="https://logfire-us.pydantic.dev/dylanjcastillo/blog" target="_blank"><span style="color: #008080; text-decoration-color: #008080; text-decoration: underline">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span></a>
+</pre>
+</div>
+</div>
+<p>Next, I’ll create the <code>Evaluator</code> agent. It will take a text and it will evaluate if it’s good enough. It’ll produce an <code>Evaluation</code> object as the output.</p>
+<div id="2dd08409" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> Evaluation(BaseModel):</span>
+<span id="cb6-2">    explanation: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-3">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Explain why the text evaluated matches or not the evaluation criteria"</span></span>
+<span id="cb6-4">    )</span>
+<span id="cb6-5">    feedback: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-6">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Provide feedback to the writer to improve the text"</span></span>
+<span id="cb6-7">    )</span>
+<span id="cb6-8">    is_correct: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">bool</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Field(</span>
+<span id="cb6-9">        description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Whether the text evaluated matches or not the evaluation criteria"</span></span>
+<span id="cb6-10">    )</span>
+<span id="cb6-11"></span>
+<span id="cb6-12">evaluator <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb6-13">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb6-14">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb6-15">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert evaluator. Provided with a text, you will evaluate if it's written in British English and if it's appropriate for a young audience. The text must always use British spelling and grammar. Make sure the text doesn't include any em dashes."</span></span>
+<span id="cb6-16">    ),</span>
+<span id="cb6-17">    output_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Evaluation,</span>
+<span id="cb6-18">)</span></code></pre></div></div>
+</div>
+<p>Finally, you can encapsulate all the logic in a single function:</p>
+<div id="97be7efe" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb7-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb7-3">    text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> generator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate an article about '</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'"</span>)</span>
+<span id="cb7-4">    evaluation <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>):</span>
+<span id="cb7-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> evaluation.output.is_correct:</span>
+<span id="cb7-7">            text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fixer.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Fix the text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following feedback: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>evaluation<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>feedback<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-8">            evaluation <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb7-9">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb7-10">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text.output</span>
+<span id="cb7-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> text.output</span>
+<span id="cb7-12"></span>
+<span id="cb7-13">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Consumption of hard drugs"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11:28:25.995 Run workflow
+11:28:25.995   generator run
+11:28:25.996     chat gpt-4.1-mini
+11:28:36.293   evaluator run
+11:28:36.294     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>**The Complex Reality of Hard Drug Consumption**
+
+Hard drugs — substances such as heroin, cocaine, methamphetamines, and crack — have long been a subject of concern worldwide due to their profound impact on individuals and society. The consumption of these drugs is not merely a matter of personal choice but a complex issue influenced by social, economic, psychological, and cultural factors.
+
+**Understanding Hard Drugs and Their Effects**
+
+Hard drugs are characterized by their high potential for addiction and severe physical and psychological effects. Unlike softer substances such as marijuana or alcohol (when consumed responsibly), hard drugs often disrupt brain function dramatically, leading to addiction, mental health disorders, and significant physical health problems. Users may experience paranoia, hallucinations, heart issues, and even fatal overdoses.
+
+The allure of hard drugs often stems from their ability to produce intense euphoria or numb emotional pain temporarily. However, this fleeting escape comes at a steep cost. Dependence quickly sets in, making cessation incredibly difficult and often trapping users in a cycle of abuse.
+
+**Social and Economic Implications**
+
+The ramifications of hard drug consumption ripple beyond the individual. Families endure emotional and financial strain, communities face increased crime rates and reduced public safety, and healthcare systems are burdened with treating overdoses and long-term complications. Moreover, productivity declines as addiction interferes with employment, contributing to broader economic challenges.
+
+Many users come from marginalized backgrounds, where poverty, trauma, and lack of education or opportunity make drugs seem like a refuge or an escape. This correlation highlights that addressing drug consumption isn't only a matter of law enforcement but of social equity and support.
+
+**Challenges in Addressing Hard Drug Use**
+
+Efforts to reduce hard drug consumption have varied widely, from strict punitive measures to harm reduction strategies. While criminalization seeks to deter use, it often leads to overcrowded prisons and can exacerbate social stigma, making it harder for users to seek help. Conversely, approaches like supervised consumption sites, needle exchange programs, and accessible addiction treatment aim to minimize harm and promote recovery.
+
+Prevention and education are critical components. Informing communities about the risks of hard drugs and providing mental health support can reduce initial experimentation and help those at risk before addiction takes hold.
+
+**Moving Towards Compassionate Solutions**
+
+Ultimately, the consumption of hard drugs is a multifaceted issue requiring balanced and compassionate responses. Policymakers, healthcare providers, and communities must work together to create environments that prioritize treatment over punishment, recognize addiction as a health issue, and promote social support.
+
+By understanding the complex realities behind hard drug use, society can better address its consequences and help those affected find a path to recovery and hope.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Evaluator-Optimizer Workflow with {Pydantic} {AI}},
+  date = {2025-07-09},
+  url = {https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Evaluator-Optimizer Workflow with Pydantic
+AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</guid>
+  <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Parallelization and orchestrator-workers workflows with Pydantic AI</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</link>
@@ -4331,710 +4831,6 @@ Workflows with Pydantic AI.”</span> July 9, 2025. <a href="https://dylancastil
   <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Evaluator-optimizer workflow with Pydantic AI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>I’m doing a deep dive into Pydantic AI, so I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
-<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-evaluator-optimizer">evaluator-optimizer</a> workflow. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
-<section id="what-is-evaluator-optimizer" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-evaluator-optimizer">What is evaluator-optimizer?</h2>
-<p>Evaluator-optimizer is a pattern that has an LLM generator and an LLM evaluator. The generator generates a solution and the evaluator evaluates if the solution is good enough. If it’s not, the generator is given feedback and it generates a new solution. This process is repeated until the solution is good enough.</p>
-<p>It looks like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    In([In]) --&gt; Gen["Generator (LLM)"]
-    Gen -- "Solution" --&gt; Eval["Evaluator (LLM)"]
-    Eval -- "Accepted" --&gt; Out([Out])
-    Eval -- "Rejected + Feedback" --&gt; Gen
-
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Examples:</strong></p>
-<ul>
-<li>Content generation that must match certain guidelines such as writing with a particular style.</li>
-<li>Improving search results iteratively</li>
-</ul>
-<p>Let’s see how this looks in practice.</p>
-</section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>I will implement a simple workflow:</p>
-<ol type="1">
-<li>Generate a candidate article</li>
-<li>Evaluate if the article is good enough</li>
-<li>If it’s not, provide feedback and generate a new article</li>
-<li>Repeat until the article is good enough</li>
-</ol>
-<p>Before we start, because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
-<div id="2a607486" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> nest_asyncio</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">apply</span>()</span></code></pre></div></div>
-</div>
-<p>Then, you need to import the required libraries. I’m using <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> to monitor the workflow.</p>
-<div id="4081c493" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Literal</span>
-<span id="cb2-3"></span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> logfire</span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Agent, RunContext</span>
-<span id="cb2-8"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pydantic <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> BaseModel, Field</span>
-<span id="cb2-9"></span>
-<span id="cb2-10">load_dotenv()</span></code></pre></div></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>True</code></pre>
-</div>
-</div>
-<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
-<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
-<div id="014a1f88" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
-<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb4-3">)</span>
-<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
-</div>
-<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
-</section>
-<section id="evaluator-optimizer-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="evaluator-optimizer-workflow">Evaluator-optimizer workflow</h2>
-<p>The workflow is composed of two steps:</p>
-<ul>
-<li><code>Text generator</code>: Generates a candidate article.</li>
-<li><code>Evaluator</code>: Evaluates if the article is good enough.</li>
-</ul>
-<p>I’ll split the text generation into two agents: <code>generator</code> and <code>fixer</code>. The <code>generator</code> will generate a candidate article and the <code>fixer</code> will fix the article, when provided with feedback.</p>
-<div id="18ec377f" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">generator <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer. Provided with a topic, you will generate an engaging article with less than 500 words"</span></span>
-<span id="cb5-5">    ),</span>
-<span id="cb5-6">)</span>
-<span id="cb5-7"></span>
-<span id="cb5-8">fixer <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-9">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-11">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer. Provided with a text and feedback, you wil improve the text."</span></span>
-<span id="cb5-12">    ),</span>
-<span id="cb5-13">)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Logfire</span> project URL: <a href="https://logfire-us.pydantic.dev/dylanjcastillo/blog" target="_blank"><span style="color: #008080; text-decoration-color: #008080; text-decoration: underline">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span></a>
-</pre>
-</div>
-</div>
-<p>Next, I’ll create the <code>Evaluator</code> agent. It will take a text and it will evaluate if it’s good enough. It’ll produce an <code>Evaluation</code> object as the output.</p>
-<div id="2dd08409" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">class</span> Evaluation(BaseModel):</span>
-<span id="cb6-2">    explanation: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Field(</span>
-<span id="cb6-3">        description<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Explain why the text evaluated matches or not the evaluation criteria"</span></span>
-<span id="cb6-4">    )</span>
-<span id="cb6-5">    feedback: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Field(</span>
-<span id="cb6-6">        description<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Provide feedback to the writer to improve the text"</span></span>
-<span id="cb6-7">    )</span>
-<span id="cb6-8">    is_correct: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">bool</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Field(</span>
-<span id="cb6-9">        description<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Whether the text evaluated matches or not the evaluation criteria"</span></span>
-<span id="cb6-10">    )</span>
-<span id="cb6-11"></span>
-<span id="cb6-12">evaluator <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb6-13">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb6-14">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb6-15">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert evaluator. Provided with a text, you will evaluate if it's written in British English and if it's appropriate for a young audience. The text must always use British spelling and grammar. Make sure the text doesn't include any em dashes."</span></span>
-<span id="cb6-16">    ),</span>
-<span id="cb6-17">    output_type<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>Evaluation,</span>
-<span id="cb6-18">)</span></code></pre></div></div>
-</div>
-<p>Finally, you can encapsulate all the logic in a single function:</p>
-<div id="97be7efe" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Run workflow"</span>)</span>
-<span id="cb7-2"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>:</span>
-<span id="cb7-3">    text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generator.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate an article about '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'"</span>)</span>
-<span id="cb7-4">    evaluation <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb7-5">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>):</span>
-<span id="cb7-6">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">not</span> evaluation.output.is_correct:</span>
-<span id="cb7-7">            text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> fixer.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Fix the text: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following feedback: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>evaluation<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>feedback<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb7-8">            evaluation <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> evaluator.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Evaluate the following text: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>text<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb7-9">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span>:</span>
-<span id="cb7-10">            <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> text.output</span>
-<span id="cb7-11">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> text.output</span>
-<span id="cb7-12"></span>
-<span id="cb7-13">output <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Consumption of hard drugs"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>11:28:25.995 Run workflow
-11:28:25.995   generator run
-11:28:25.996     chat gpt-4.1-mini
-11:28:36.293   evaluator run
-11:28:36.294     chat gpt-4.1-mini</code></pre>
-</div>
-</div>
-<p>And here’s the output:</p>
-<div id="1ee5bd83" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(output)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>**The Complex Reality of Hard Drug Consumption**
-
-Hard drugs — substances such as heroin, cocaine, methamphetamines, and crack — have long been a subject of concern worldwide due to their profound impact on individuals and society. The consumption of these drugs is not merely a matter of personal choice but a complex issue influenced by social, economic, psychological, and cultural factors.
-
-**Understanding Hard Drugs and Their Effects**
-
-Hard drugs are characterized by their high potential for addiction and severe physical and psychological effects. Unlike softer substances such as marijuana or alcohol (when consumed responsibly), hard drugs often disrupt brain function dramatically, leading to addiction, mental health disorders, and significant physical health problems. Users may experience paranoia, hallucinations, heart issues, and even fatal overdoses.
-
-The allure of hard drugs often stems from their ability to produce intense euphoria or numb emotional pain temporarily. However, this fleeting escape comes at a steep cost. Dependence quickly sets in, making cessation incredibly difficult and often trapping users in a cycle of abuse.
-
-**Social and Economic Implications**
-
-The ramifications of hard drug consumption ripple beyond the individual. Families endure emotional and financial strain, communities face increased crime rates and reduced public safety, and healthcare systems are burdened with treating overdoses and long-term complications. Moreover, productivity declines as addiction interferes with employment, contributing to broader economic challenges.
-
-Many users come from marginalized backgrounds, where poverty, trauma, and lack of education or opportunity make drugs seem like a refuge or an escape. This correlation highlights that addressing drug consumption isn't only a matter of law enforcement but of social equity and support.
-
-**Challenges in Addressing Hard Drug Use**
-
-Efforts to reduce hard drug consumption have varied widely, from strict punitive measures to harm reduction strategies. While criminalization seeks to deter use, it often leads to overcrowded prisons and can exacerbate social stigma, making it harder for users to seek help. Conversely, approaches like supervised consumption sites, needle exchange programs, and accessible addiction treatment aim to minimize harm and promote recovery.
-
-Prevention and education are critical components. Informing communities about the risks of hard drugs and providing mental health support can reduce initial experimentation and help those at risk before addiction takes hold.
-
-**Moving Towards Compassionate Solutions**
-
-Ultimately, the consumption of hard drugs is a multifaceted issue requiring balanced and compassionate responses. Policymakers, healthcare providers, and communities must work together to create environments that prioritize treatment over punishment, recognize addiction as a health issue, and promote social support.
-
-By understanding the complex realities behind hard drug use, society can better address its consequences and help those affected find a path to recovery and hope.</code></pre>
-</div>
-</div>
-<p>That’s all!</p>
-<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<p>If you have any questions or feedback, please let me know in the comments below.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Evaluator-Optimizer Workflow with {Pydantic} {AI}},
-  date = {2025-07-09},
-  url = {https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Evaluator-Optimizer Workflow with Pydantic
-AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>llm</category>
-  <category>pydantic-ai</category>
-  <category>workflows</category>
-  <guid>https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</guid>
-  <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Prompt chaining workflow with Pydantic AI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
-<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
-<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
-<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<section id="what-is-prompt-chaining" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
-<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
-<p>It looks like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    In --&gt; LLM1["LLM Call 1"]
-    LLM1 -- "Output 1" --&gt; Gate{Gate}
-    Gate -- Pass --&gt; LLM2["LLM Call 2"]
-    Gate -- Fail --&gt; Exit[Exit]
-    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
-    LLM3 --&gt; Out
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Examples:</strong></p>
-<ul>
-<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
-<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
-</ul>
-<p>Let’s get to it!</p>
-</section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
-<ol type="1">
-<li>Generate a table of contents for the article</li>
-<li>Generate the content of the article</li>
-<li>Update the content of the article if it’s too long</li>
-</ol>
-<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
-<div id="2a607486" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> nest_asyncio</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">apply</span>()</span></code></pre></div></div>
-</div>
-<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
-<div id="4081c493" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Literal</span>
-<span id="cb2-3"></span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> logfire</span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Agent, RunContext</span>
-<span id="cb2-8"></span>
-<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>True</code></pre>
-</div>
-</div>
-<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
-<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
-<div id="014a1f88" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
-<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb4-3">)</span>
-<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
-<div class="cell-output cell-output-stderr">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
-</pre>
-</div>
-</div>
-</div>
-<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
-</section>
-<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
-<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
-<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
-<p>Here’s the code:</p>
-<div id="97be7efe" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
-<span id="cb5-5">    ),</span>
-<span id="cb5-6">)</span>
-<span id="cb5-7"></span>
-<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-9">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-11">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
-<span id="cb5-12">    ),</span>
-<span id="cb5-13">)</span>
-<span id="cb5-14"></span>
-<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-16">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-18">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
-<span id="cb5-19">    ),</span>
-<span id="cb5-20">)</span>
-<span id="cb5-21"></span>
-<span id="cb5-22"></span>
-<span id="cb5-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Run workflow"</span>)</span>
-<span id="cb5-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>:</span>
-<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-27">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>:</span>
-<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-29">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> revised_content.output</span>
-<span id="cb5-30">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> content.output</span>
-<span id="cb5-31"></span>
-<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>18:54:00.987 Run workflow
-18:54:00.988   toc_agent run
-18:54:00.989     chat gpt-4.1-mini
-18:54:02.911   article_agent run
-18:54:02.911     chat gpt-4.1-mini
-18:54:18.621   editor_agent run
-18:54:18.622     chat gpt-4.1-mini</code></pre>
-</div>
-</div>
-<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
-<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
-</figure>
-</div>
-<p>And here’s the output:</p>
-<div id="1ee5bd83" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(output)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
-</div>
-</div>
-<p>That’s all!</p>
-<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<p>If you have any questions or feedback, please let me know in the comments below.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
-  date = {2025-07-08},
-  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
-AI.”</span> July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>llm</category>
-  <category>pydantic-ai</category>
-  <category>workflows</category>
-  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
-  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
   <title>Routing workflow with Pydantic AI</title>
   <dc:creator>Dylan Castillo</dc:creator>
   <link>https://dylancastillo.co/til/routing-pydantic-ai.html</link>
@@ -5414,6 +5210,318 @@ July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">ht
   <category>pydantic-ai</category>
   <category>workflows</category>
   <guid>https://dylancastillo.co/til/routing-pydantic-ai.html</guid>
+  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Prompt chaining workflow with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
+<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<section id="what-is-prompt-chaining" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
+<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In --&gt; LLM1["LLM Call 1"]
+    LLM1 -- "Output 1" --&gt; Gate{Gate}
+    Gate -- Pass --&gt; LLM2["LLM Call 2"]
+    Gate -- Fail --&gt; Exit[Exit]
+    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
+<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
+</ul>
+<p>Let’s get to it!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
+<ol type="1">
+<li>Generate a table of contents for the article</li>
+<li>Generate the content of the article</li>
+<li>Update the content of the article if it’s too long</li>
+</ol>
+<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div></div>
+</div>
+<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
+<div id="4081c493" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
+</pre>
+</div>
+</div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
+<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
+<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
+<p>Here’s the code:</p>
+<div id="97be7efe" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span>
+<span id="cb5-14"></span>
+<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
+<span id="cb5-19">    ),</span>
+<span id="cb5-20">)</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"></span>
+<span id="cb5-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>:</span>
+<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> revised_content.output</span>
+<span id="cb5-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> content.output</span>
+<span id="cb5-31"></span>
+<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18:54:00.987 Run workflow
+18:54:00.988   toc_agent run
+18:54:00.989     chat gpt-4.1-mini
+18:54:02.911   article_agent run
+18:54:02.911     chat gpt-4.1-mini
+18:54:18.621   editor_agent run
+18:54:18.622     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
+<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
+</figure>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
+  date = {2025-07-08},
+  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
+AI.”</span> July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
   <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
@@ -13646,184 +13754,6 @@ Temperature and Seed.”</span> June 25, 2025. <a href="https://dylancastillo.co
   <category>python</category>
   <guid>https://dylancastillo.co/posts/seed-temperature-llms.html</guid>
   <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2024: Personal Snapshot</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/2024-personal-snapshot.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This is my annual review. I use it as a way to reflect on the past year and get a snapshot of “who I am” at the time of writing.</p>
-<p>If it’s me rereading this, welcome back. This is Dylan from 2024.</p>
-<p>In previous snapshots, I listed what went well and what didn’t. This year, I’m trying something new: a chronological approach. 2024 went through three distinct phases, and I found it easier to reflect on each one.</p>
-<section id="early-2024" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="early-2024">Early 2024</h2>
-<p>This was my “I’m lost, and I don’t know what to do” phase.</p>
-<p>In my last snapshot, I said that I was going to focus on building a consulting practice in 2024. Then I came up with a new product idea 😅 and spent a big chunk of the first two months of the year building a prototype.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2024-personal-snapshot/aitheneum.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="At least I generated some cool AI book covers."><img src="https://dylancastillo.co/posts/images/2024-personal-snapshot/aitheneum.webp" class="img-fluid figure-img" alt="At least I generated some cool AI book covers."></a></p>
-<figcaption class="margin-caption">At least I generated some cool AI book covers.</figcaption>
-</figure>
-</div>
-<p><a href="https://aitheneum.iwanalabs.com/">AItheneum</a><sup>1</sup> is a tool that helps you read classic philosophy books by making them easier to understand using AI. I pitched it as a way to make classic books more accessible to modern readers.</p>
-<p>I had fun working on it, but it wasn’t really solving anyone’s problem. It was a vitamin, not a painkiller. By the time I released it, it was clear nobody cared about it (not even me!).</p>
-<p>During this time, I was also contributing to <a href="https://github.com/django-components/django-components">django-components</a> and half-assing talking to potential clients for freelance work and doing cold outreach to get clients. The former was fun, the latter wasn’t.</p>
-<p>Later in the year, after reading Alex Hormozi’s <a href="https://www.amazon.com/100M-Leads-Strangers-Stuff-Acquisition-com-ebook/dp/B0CFDR3TYV">100M Leads</a>, I realized that cold outreach at this stage was mostly a waste of time. When you’re just starting out, you should rely on warm introductions or referrals. If you haven’t built credibility yet, you’ll waste a lot of time trying to convince strangers to work with you.</p>
-<p>I essentially spent the first two months of the year focusing on the wrong things.</p>
-<p>On a more positive note, I was also doing open mic sets almost every week. I’m not sure if this was “good”, but I had a lot of fun performing stand-up comedy.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="images/2024-personal-snapshot/jokes.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="My last stand-up set"><img src="https://dylancastillo.co/posts/images/2024-personal-snapshot/jokes.webp" class="img-fluid figure-img" alt="My last stand-up set"></a></p>
-<figcaption class="margin-caption">My last stand-up set</figcaption>
-</figure>
-</div>
-<p>As you might expect, I bombed a few times. But I also had a few good sets. A professional (but not famous) comedian even invited me to open for him at a show in a nearby city. I didn’t go, but it was flattering.</p>
-<p>One thing that surprised me about stand-up comedy is that it follows a somewhat scientific process. Your joke is a hypothesis about what your audience will find funny. You test it by performing it in front of people. If it doesn’t work, you adjust it and test it again. You do this over and over until you find something that works.</p>
-<p>The other thing I liked about it is that it’s very meritocratic. If you’re funny, you’ll get laughs. There’s no way to fake it. It’s very easy to figure out who’s good and who’s not. You might not like someone’s style, but if they’re good you cannot deny it.</p>
-<p>However, after a few months, I realized it wasn’t sustainable:</p>
-<ol type="1">
-<li>To get good at stand-up, you have to make time for it. That means writing everyday, and performing as often as possible.</li>
-<li>Open mics take a lot of time. To practice an 8 minute set, I’d often have to commute for 1 hour and stay for 1-2 hours of show (during which I did my 8 minutes).</li>
-<li>As a beginner, you’ll only get spots during weekday evenings. Which isn’t great if you want to get enough sleep to be productive the next day.</li>
-</ol>
-<p>Even so, I didn’t fully decide to quit until we had a health crisis at home. My wife and I weren’t prioritizing our health in the first months of the year, and it took its toll.</p>
-<p>Stand-up was fun, but it was distracting me from more important things. So I stopped.</p>
-<p>I’m not sad or regretful about it, I’m happy that I’ve tried it and that I’ve learned that it’s not what I want to do right now. I’d love to return to it in the future, once I have less pressing things to focus on.</p>
-</section>
-<section id="mid-2024" class="level2">
-<h2 class="anchored" data-anchor-id="mid-2024">Mid 2024</h2>
-<p>This was the “work hard and mental health struggles” phase.</p>
-<p>I worked with clients on AI projects in various industries, including legal, construction, consumer packaged goods, and finance. I also started blogging again.</p>
-<p>I frequently put in 12-hour workdays and worked most weekends. I stopped going to the gym, and switched to home workouts. I rarely went to social events. Life passed by rapidly, and looking back, it all feels like a blur.</p>
-<p>I struggled with my mental health. I experienced episodes of depression and anxiety.</p>
-<p>Depression has been part of my life for the past twenty years. Though, I’m much better at dealing with it than I used to be. I’ve learned to recognize early warning signs and adjust my approach accordingly.</p>
-<p>For that reason, I try to keep track of the “bad days”. Because when they occur too often, my brain is telling me I should take action. During this phase of the year, I had a lot more of those than I’d like.</p>
-<p>Eventually, things settled down. I became more conscious of my own limits. I learned to regulate the intensity I put into things. I could push myself hard when I needed to, but also learned to feel comfortable with taking a break and not do anything when I needed to.</p>
-<p>I also met some clients in person. While I’m a fan of remote work, seeing people face to face makes you more empathetic toward the people you’re working with. This was a lot more fun than I expected.</p>
-<p>During this time I also hired external support to help me develop some of my product ideas and support my consulting work.</p>
-</section>
-<section id="late-2024" class="level2">
-<h2 class="anchored" data-anchor-id="late-2024">Late 2024</h2>
-<p>This was the “force myself to stay focused and in motion” phase.</p>
-<p>The last few months were still intense, but less focused. I was working with clients while also making time to think about the future. I had a few moments of “what if I drop the consulting thing and go back to product development?”, but decided against it every time.</p>
-<p>I did more sales outreach, managed multiple projects, and kept writing blog posts. I wrote a <a href="https://dylancastillo.co/posts/say-what-you-mean-sometimes.html">post about using Structured Outputs in LLMs</a> and fixed a security vulnerability in a <a href="https://github.com/instructor-ai/instructor/pull/1168">Python package</a> that gets more than 1M downloads per month.</p>
-<p>I also traveled to Venezuela for the first time in eight years. It was both wonderful and unsettling.</p>
-<p>During the first week of the trip, we stayed in a nice hotel in <a href="https://en.wikipedia.org/wiki/Margarita_Island">Margarita</a>, with great food, gym, pools, and a private beach. But if you talked with anyone working at the hotel, you’d learn they were making less than $200/month and did not routinely have access to clean water or electricity. After almost a decade of living in Europe, it felt strange to witness once again such a disparity.</p>
-<p>I also met old friends and family there. It made me nostalgic for my childhood and university days, but it also made me realize how much I’ve changed since then. When I was a teenager, I often thought I might end up alone and without friends, as I had extreme social anxiety. Now I’m married, have a great group of friends, and can even tell jokes in public!</p>
-<p>After I came back from Venezuela, I started going through more academic research and refreshing my <a href="https://mathacademy.com/">math skills</a>. I’ve always felt that some of my base math skills were lacking and I wanted to fix that. So far, it’s going great.</p>
-<p>My father-in-law also moved with us for this part of the year. It was a big change for us, but it’s been a great experience.</p>
-</section>
-<section id="stats-photos" class="level2">
-<h2 class="anchored" data-anchor-id="stats-photos">Stats &amp; Photos</h2>
-<p>Here are the stats for the year:</p>
-<ul>
-<li><strong>💻 Code and blogging</strong>:
-<ul>
-<li>I committed code on 322 out of 365 days.</li>
-<li>I wrote 14 blog posts.</li>
-</ul></li>
-<li><strong>💰 Financials</strong>:
-<ul>
-<li>Revenue doubled from last year. So far, my best year.</li>
-<li>Costs increased by 155% from last year.</li>
-<li>66% of my revenue comes from time-based billing (daily, hourly).</li>
-<li>My biggest client represented 33% of my revenue.</li>
-</ul></li>
-<li><strong>📝 Sales</strong>:
-<ul>
-<li>I worked on 9 projects with 7 different clients.</li>
-<li>I got 3 new clients.</li>
-<li>Success rate of proposals: 67%.</li>
-</ul></li>
-<li><strong>💪 Health &amp; Fitness</strong>:
-<ul>
-<li>112 strength training sessions (2.2 sessions/week).</li>
-<li>3,488 minutes of cardio (~60 minutes/week).</li>
-<li>VO2 max: 46 ml/kg/min.</li>
-<li>RHR: 57 bpm.</li>
-</ul></li>
-</ul>
-<p>These are some photos from the year:</p>
-<div class="custom-gallery-container" data-images="[
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/27394352-8BDD-47EF-AB8D-5B7EEABDD1BE_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;A good stand-up set&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/9BAE2624-4DB5-4D53-8F74-922E25AE2E11_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;A so-so stand-up set&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/281F5B0F-07D6-478C-83E9-73D136A31088_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;The day Edu and Leo decided to never do Airsoft again&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/24E61471-8D7B-4F37-992C-F3428FB46DCA_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Morocco ❤️&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/4BCF78E3-3FE8-475B-AFB2-D2E9AC358234_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Old friends 1&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/0CA7E896-69E6-4A2D-BC49-67B3DB5F6618_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Primos&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/6D90D345-B819-4AD3-865E-249B86EAB6D3_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Home team&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/08C29CCA-8FCF-4794-8A13-FA31F97CA59F_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, family 1&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/FDC40C8A-EA95-42D5-A927-8ED1801AD182_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, Margarita 😎&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/AE334898-D23D-4F3D-9004-FC1B489A33C9_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, old friends 2&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/451B688D-070E-4E92-BB27-25170A8973A4_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, old friends 3&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/D38E3BF7-4BAC-47B2-83BB-E2CD7216D2E3_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, humming-birds 🐦&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/EC982C3C-B649-4FE9-8E31-812AB9888C32_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, Home&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/D7F82391-78E2-4BDA-8B17-5584DF01F911_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, Zena ❤️&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/F8ECF562-9F0B-4B9E-9B0C-B922D0B826A9_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Venezuela, Napo's getting old 😢&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/CE02055B-B5A9-454A-9736-B2D86DD17AA7_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;The Colombiano Libertario&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/29408D6A-A961-4004-853A-2959C7A5E636_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;High 🥩 Poker&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/A3D6DCF0-D65B-40C6-A630-FA219AAC0981_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Tía Mary ❤️&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/2EB0D748-F8AF-49F9-BEF0-3906D7AB017E_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Family 2&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/PHOTO-2024-12-20-10-02-34.jpg&quot;, &quot;caption&quot;: &quot;Old friends 4&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/609AB45C-8EFC-4DC6-9BFD-241245DD2269_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Friends (Luciano's farewell 🇦🇷)&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/20A01D83-C0AB-4460-9484-6F32A72E703D_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Family 3&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/E7FECC11-00B8-4124-9519-82F9ED68C0ED_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;The Dukes of Bocangel ❤️&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/6D91F2D8-D302-4467-A3DC-681CD5D372AE_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Karaoke 😂&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/2B2543F7-F99E-4D44-BCEA-45AB683A55BF_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Last run of the year 1&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/89B92C0E-C70F-4660-A0A4-3DA2EEA54B63_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;Last run of the year 2&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2024-personal-snapshot/C9917576-0866-46C3-A500-1E680A24E24F_1_105_c.jpeg&quot;, &quot;caption&quot;: &quot;❤️&quot;}
-     ]">
-<img class="gallery-image" src="" alt="">
-<div class="gallery-caption">
-
-</div>
-</div>
-<p>I don’t like taking pictures, but looking back, I regret not capturing more key moments from the year. That’s a small lesson I’ll take into next year.</p>
-</section>
-<section id="lessons-learned" class="level2">
-<h2 class="anchored" data-anchor-id="lessons-learned">Lessons Learned</h2>
-<p>The three biggest lessons I took away from 2024 are focus, intensity, and action.</p>
-<p><strong>Focus</strong> is about figuring out what are the right things to prioritize. It’s easy to say that, but it’s hard to do. Life is full of distractions, and it’s easy to get lost in the noise.</p>
-<p>When I’m not sure what to do, I use one heuristic that works well: I prioritize things that will help me on my way regardless of their outcome. For example, if I dedicate more time to writing technical posts, I learn through the act of writing, but I also attract clients who are interested in those posts. The same with sales: I might not get a client from a sales call, but I learn a lot about the process and get better at it. So, regardless of the outcome, I win.</p>
-<p><strong>Intensity</strong> is about working hard and taking ownership. This year I handled more work than ever. My brain fought back. At times I felt anxious, depressed, out of energy, and unable to focus. Eventually, my brain accepted that I wouldn’t back down. It stopped fighting against me and began working for me.</p>
-<p>It’s not pretty. It’s deeply uncomfortable. But it’s worth it.</p>
-<p><strong>Action</strong> is about staying in motion. Being too busy is better than being too idle. When you’re busy, you’re constantly learning, forced to prioritize, and often become more creative under pressure.</p>
-<p>I used to think that being “too busy” would prevent me from focusing on the right things. But I eventually realized it was the other way around. The busier I got, the clearer my priorities became. I learned more, and the better I became at what I was doing, the more time I had for the things I really wanted to do.</p>
-<p>Being busy made me better and more productive.</p>
-</section>
-<section id="whats-next" class="level2">
-<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
-<p>I’ve realized I’m not great at predicting what I’ll want to do, nor am I a great planner.</p>
-<p>Right now, my biggest priority is growing my consulting practice. I also finally found a painkiller product idea that I’ve been slowly working on. If I find enough traction, I’ll pivot to it. But until then, my focus is on consulting.</p>
-<p>The only thing I’m sure is that I’ll keep myself busy.</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>yes, I know, what a terrible name.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {2024: {Personal} {Snapshot}},
-  date = {2025-01-05},
-  url = {https://dylancastillo.co/posts/2024-personal-snapshot.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“2024: Personal Snapshot.”</span> January
-5, 2025. <a href="https://dylancastillo.co/posts/2024-personal-snapshot.html">https://dylancastillo.co/posts/2024-personal-snapshot.html</a>.
-</div></div></section></div> ]]></description>
-  <category>personal-snapshot</category>
-  <guid>https://dylancastillo.co/posts/2024-personal-snapshot.html</guid>
-  <pubDate>Sun, 05 Jan 2025 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
