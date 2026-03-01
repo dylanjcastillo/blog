@@ -51,8 +51,8 @@ Through many tough conversations and commitment from both sides, we successfully
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-university.jpg", "caption": "Cork I"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-bbq.jpg", "caption": "Cork II"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/ireland-biking.jpeg", "caption": "Cork III"},
-       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-friends.jpeg", "caption": "Cork IV"},
-       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-cold-water.jpeg", "caption": "Cork V"}
+       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-friends.JPG", "caption": "Cork IV"},
+       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-cold-water.JPG", "caption": "Cork V"}
      ]'>
   <img class="gallery-image" src="" alt="" />
   <div class="gallery-caption"></div>
