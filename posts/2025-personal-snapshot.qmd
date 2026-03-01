@@ -79,7 +79,7 @@ It was also a good year for reconnecting. I got to see friends I hadn't seen in 
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/family.jpeg", "caption": "Family"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-alejandro.jpeg", "caption": "Old friends I"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-victor-cris.jpeg", "caption": "Old friends II"},
-       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/olympics-dani.jpeg", "caption": "Old friends IV"},
+       {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/olympics-dani.jpeg", "caption": "Old friends III"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/christmas.jpeg", "caption": "Christmas"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/new-years-eve.jpeg", "caption": "New Years Eve"},
        {"url": "https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/party.jpeg", "caption": "Fun party!"}
