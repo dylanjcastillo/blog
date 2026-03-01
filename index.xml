@@ -57,8 +57,8 @@
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-university.jpg&quot;, &quot;caption&quot;: &quot;Cork I&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-bbq.jpg&quot;, &quot;caption&quot;: &quot;Cork II&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/ireland-biking.jpeg&quot;, &quot;caption&quot;: &quot;Cork III&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-friends.jpeg&quot;, &quot;caption&quot;: &quot;Cork IV&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-cold-water.jpeg&quot;, &quot;caption&quot;: &quot;Cork V&quot;}
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-friends.JPG&quot;, &quot;caption&quot;: &quot;Cork IV&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/cork-cold-water.JPG&quot;, &quot;caption&quot;: &quot;Cork V&quot;}
      ]">
 <img class="gallery-image" src="" alt="">
 <div class="gallery-caption">
@@ -83,7 +83,7 @@
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/family.jpeg&quot;, &quot;caption&quot;: &quot;Family&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-alejandro.jpeg&quot;, &quot;caption&quot;: &quot;Old friends I&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/friends-victor-cris.jpeg&quot;, &quot;caption&quot;: &quot;Old friends II&quot;},
-       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/olympics-dani.jpeg&quot;, &quot;caption&quot;: &quot;Old friends IV&quot;},
+       {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/olympics-dani.jpeg&quot;, &quot;caption&quot;: &quot;Old friends III&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/christmas.jpeg&quot;, &quot;caption&quot;: &quot;Christmas&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/new-years-eve.jpeg&quot;, &quot;caption&quot;: &quot;New Years Eve&quot;},
        {&quot;url&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/2025-personal-snapshot/party.jpeg&quot;, &quot;caption&quot;: &quot;Fun party!&quot;}
