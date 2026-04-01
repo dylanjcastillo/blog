@@ -1,0 +1,50 @@
+---
+title: "The last shall be (slighly) safer"
+date: 2026-04-01
+description-meta: "Better to be last and safe, than first and not safe"
+categories:
+  - til
+  - security
+---
+
+While I use Claude Code to build [crappy forms](https://estimator.dylancastillo.co/), real hackers use it to make money.
+
+[Supply](https://futuresearch.ai/blog/litellm-attack-transcript/) [chain](https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan) [attacks](https://www.paloaltonetworks.com/blog/cloud-security/trivy-supply-chain-attack/) have become so common these days that I had to learn they’re not about an Amazon delivery guy crashing into my front door.
+
+I know I’ll inevitably become a victim of one (a supply chain attack, not an Amazon delivery guy), but I’m not handing over my $50 in BTC to North Korea without a fight. So I took this measure, courtesy of some random guy on Hacker News:
+
+> PSA: npm/bun/pnpm/uv now all support setting a minimum release age for packages.
+>
+>  I also have `ignore-scripts=true` in my ~/.npmrc. Based on the analysis, that alone would have mitigated the vulnerability. bun and pnpm do not execute lifecycle scripts by default.
+>
+>  Here's how to set global configs to set min release age to 7 days:
+>
+>    ~/.config/uv/uv.toml
+>    exclude-newer = "7 days"
+>
+>    ~/.npmrc
+>    min-release-age=7 # days
+>    ignore-scripts=true
+>    
+>    ~/Library/Preferences/pnpm/rc
+>    minimum-release-age=10080 # minutes
+>    
+>    ~/.bunfig.toml
+>    [install]
+>    minimumReleaseAge = 604800 # seconds
+>
+>  (Side note, it's wild that npm, bun, and pnpm have all decided to use different time units for this configuration.)
+>
+>  If you're developing with LLM agents, you should also update your AGENTS.md/CLAUDE.md file with some guidance on how to handle failures stemming from this config as they will cause the agent to unproductively spin its wheels.
+
+This gives researchers and security teams time to analyze new releases and flag malicious ones.
+
+Then, I thought it'd be a bad idea if everyone uses the same value, so I cowardly changed mine to 8 days. Sadly, others quickly realized this: 
+
+> that's why people are telling others to use 7 days but using 8 days themselves :)
+
+So I picked 9... and kept scrolling:
+
+> brb, switching everything to 9 days
+
+Oh, fuck.
