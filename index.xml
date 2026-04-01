@@ -14,8 +14,60 @@
 <title>Dylan Castillo</title>
 <link>https://dylancastillo.co/</link>
 </image>
-<generator>quarto-1.8.27</generator>
-<lastBuildDate>Tue, 24 Feb 2026 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.9.36</generator>
+<lastBuildDate>Wed, 01 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>The last shall be (slighly) safer</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/securing-package-managers.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>While I use Claude Code to build <a href="https://estimator.dylancastillo.co/">crappy forms</a>, real hackers use it to make money.</p>
+<p><a href="https://futuresearch.ai/blog/litellm-attack-transcript/">Supply</a> <a href="https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan">chain</a> <a href="https://www.paloaltonetworks.com/blog/cloud-security/trivy-supply-chain-attack/">attacks</a> have become so common these days that I had to learn they’re not about an Amazon delivery guy crashing into my front door.</p>
+<p>I know I’ll inevitably become a victim of one (a supply chain attack, not an Amazon delivery guy), but I’m not handing over my $50 in BTC to North Korea without a fight. So I took this measure, courtesy of some random guy on Hacker News:</p>
+<blockquote class="blockquote">
+<p>PSA: npm/bun/pnpm/uv now all support setting a minimum release age for packages.</p>
+<p>I also have <code>ignore-scripts=true</code> in my ~/.npmrc. Based on the analysis, that alone would have mitigated the vulnerability. bun and pnpm do not execute lifecycle scripts by default.</p>
+<p>Here’s how to set global configs to set min release age to 7 days:</p>
+<p>~/.config/uv/uv.toml exclude-newer = “7 days”</p>
+<p>~/.npmrc min-release-age=7 # days ignore-scripts=true</p>
+<p>~/Library/Preferences/pnpm/rc minimum-release-age=10080 # minutes</p>
+<p>~/.bunfig.toml [install] minimumReleaseAge = 604800 # seconds</p>
+<p>(Side note, it’s wild that npm, bun, and pnpm have all decided to use different time units for this configuration.)</p>
+<p>If you’re developing with LLM agents, you should also update your AGENTS.md/CLAUDE.md file with some guidance on how to handle failures stemming from this config as they will cause the agent to unproductively spin its wheels.</p>
+</blockquote>
+<p>This gives researchers and security teams time to analyze new releases and flag malicious ones.</p>
+<p>Then, I thought it’d be a bad idea if everyone uses the same value, so I cowardly changed mine to 8 days. Sadly, others quickly realized this:</p>
+<blockquote class="blockquote">
+<p>that’s why people are telling others to use 7 days but using 8 days themselves :)</p>
+</blockquote>
+<p>So I picked 9… and kept scrolling:</p>
+<blockquote class="blockquote">
+<p>brb, switching everything to 9 days</p>
+</blockquote>
+<p>Oh, fuck.</p>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
+  author = {Castillo, Dylan},
+  title = {The Last Shall Be (Slighly) Safer},
+  date = {2026-04-01},
+  url = {https://dylancastillo.co/til/securing-package-managers.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2026. <span>“The Last Shall Be (Slighly) Safer.”</span>
+April 1. <a href="https://dylancastillo.co/til/securing-package-managers.html">https://dylancastillo.co/til/securing-package-managers.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>security</category>
+  <guid>https://dylancastillo.co/til/securing-package-managers.html</guid>
+  <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>2025: Personal Snapshot</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -118,7 +170,7 @@
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2026. <span>“2025: Personal Snapshot.”</span> February
-24, 2026. <a href="https://dylancastillo.co/posts/2025-personal-snapshot.html">https://dylancastillo.co/posts/2025-personal-snapshot.html</a>.
+24. <a href="https://dylancastillo.co/posts/2025-personal-snapshot.html">https://dylancastillo.co/posts/2025-personal-snapshot.html</a>.
 </div></div></section></div> ]]></description>
   <category>personal-snapshot</category>
   <guid>https://dylancastillo.co/posts/2025-personal-snapshot.html</guid>
@@ -163,8 +215,7 @@ Castillo, Dylan. 2026. <span>“2025: Personal Snapshot.”</span> February
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2026. <span>“Cover Your Ass.”</span> February 22, 2026.
-<a href="https://dylancastillo.co/posts/cover-your-ass.html">https://dylancastillo.co/posts/cover-your-ass.html</a>.
+Castillo, Dylan. 2026. <span>“Cover Your Ass.”</span> February 22. <a href="https://dylancastillo.co/posts/cover-your-ass.html">https://dylancastillo.co/posts/cover-your-ass.html</a>.
 </div></div></section></div> ]]></description>
   <category>essay</category>
   <guid>https://dylancastillo.co/posts/cover-your-ass.html</guid>
@@ -197,7 +248,7 @@ Castillo, Dylan. 2026. <span>“Cover Your Ass.”</span> February 22, 2026.
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2026. <span>“I Hate AI Side Projects.”</span> February
-20, 2026. <a href="https://dylancastillo.co/posts/ai-side-projects.html">https://dylancastillo.co/posts/ai-side-projects.html</a>.
+20. <a href="https://dylancastillo.co/posts/ai-side-projects.html">https://dylancastillo.co/posts/ai-side-projects.html</a>.
 </div></div></section></div> ]]></description>
   <category>essay</category>
   <guid>https://dylancastillo.co/posts/ai-side-projects.html</guid>
@@ -229,8 +280,7 @@ Castillo, Dylan. 2026. <span>“I Hate AI Side Projects.”</span> February
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“ClaudeCodeholic.”</span> October 18, 2025.
-<a href="https://dylancastillo.co/posts/claudecodeholic.html">https://dylancastillo.co/posts/claudecodeholic.html</a>.
+Castillo, Dylan. 2025. <span>“ClaudeCodeholic.”</span> October 18. <a href="https://dylancastillo.co/posts/claudecodeholic.html">https://dylancastillo.co/posts/claudecodeholic.html</a>.
 </div></div></section></div> ]]></description>
   <category>essay</category>
   <guid>https://dylancastillo.co/posts/claudecodeholic.html</guid>
@@ -264,7 +314,7 @@ Castillo, Dylan. 2025. <span>“ClaudeCodeholic.”</span> October 18, 2025.
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“New Line in Claude Code in
-Alacritty.”</span> October 18, 2025. <a href="https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html">https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</a>.
+Alacritty.”</span> October 18. <a href="https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html">https://dylancastillo.co/til/fix-claude-code-shift-enter-alacritty.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>claude-code</category>
@@ -1312,7 +1362,7 @@ font-style: inherit;">15</span></span>
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“LangSmith 101.”</span> August 10, 2025. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
+Castillo, Dylan. 2025. <span>“LangSmith 101.”</span> August 10. <a href="https://dylancastillo.co/posts/langsmith-101.html">https://dylancastillo.co/posts/langsmith-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
@@ -3812,7 +3862,7 @@ font-style: inherit;">-reranked"</span>,</span>
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Using Synthetic Data to Bootstrap Your RAG
-System Evals.”</span> August 7, 2025. <a href="https://dylancastillo.co/posts/synthetic-data-rag.html">https://dylancastillo.co/posts/synthetic-data-rag.html</a>.
+System Evals.”</span> August 7. <a href="https://dylancastillo.co/posts/synthetic-data-rag.html">https://dylancastillo.co/posts/synthetic-data-rag.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
@@ -4204,7 +4254,7 @@ By understanding the complex realities behind hard drug use, society can better 
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Evaluator-Optimizer Workflow with Pydantic
-AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</a>.
+AI.”</span> July 9. <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>llm</category>
@@ -4821,7 +4871,7 @@ font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Parallelization and Orchestrator-Workers
-Workflows with Pydantic AI.”</span> July 9, 2025. <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</a>.
+Workflows with Pydantic AI.”</span> July 9. <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>llm</category>
@@ -4829,6 +4879,318 @@ Workflows with Pydantic AI.”</span> July 9, 2025. <a href="https://dylancastil
   <category>workflows</category>
   <guid>https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html</guid>
   <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Prompt chaining workflow with Pydantic AI</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
+<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
+<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
+<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<section id="what-is-prompt-chaining" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
+<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
+<p>It looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    In --&gt; LLM1["LLM Call 1"]
+    LLM1 -- "Output 1" --&gt; Gate{Gate}
+    Gate -- Pass --&gt; LLM2["LLM Call 2"]
+    Gate -- Fail --&gt; Exit[Exit]
+    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
+    LLM3 --&gt; Out
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
+<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
+</ul>
+<p>Let’s get to it!</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
+<ol type="1">
+<li>Generate a table of contents for the article</li>
+<li>Generate the content of the article</li>
+<li>Update the content of the article if it’s too long</li>
+</ol>
+<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
+<div id="2a607486" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> nest_asyncio</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">apply</span>()</span></code></pre></div></div>
+</div>
+<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
+<div id="4081c493" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Literal</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> logfire</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Agent, RunContext</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
+<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
+<div id="014a1f88" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
+<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3">)</span>
+<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
+</pre>
+</div>
+</div>
+</div>
+<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
+</section>
+<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
+<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
+<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
+<p>Here’s the code:</p>
+<div id="97be7efe" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
+<span id="cb5-5">    ),</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
+<span id="cb5-12">    ),</span>
+<span id="cb5-13">)</span>
+<span id="cb5-14"></span>
+<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Agent(</span>
+<span id="cb5-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(</span>
+<span id="cb5-18">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
+<span id="cb5-19">    ),</span>
+<span id="cb5-20">)</span>
+<span id="cb5-21"></span>
+<span id="cb5-22"></span>
+<span id="cb5-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run workflow"</span>)</span>
+<span id="cb5-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>:</span>
+<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>:</span>
+<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> revised_content.output</span>
+<span id="cb5-30">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> content.output</span>
+<span id="cb5-31"></span>
+<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18:54:00.987 Run workflow
+18:54:00.988   toc_agent run
+18:54:00.989     chat gpt-4.1-mini
+18:54:02.911   article_agent run
+18:54:02.911     chat gpt-4.1-mini
+18:54:18.621   editor_agent run
+18:54:18.622     chat gpt-4.1-mini</code></pre>
+</div>
+</div>
+<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
+<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
+</figure>
+</div>
+<p>And here’s the output:</p>
+<div id="1ee5bd83" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(output)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
+</div>
+</div>
+<p>That’s all!</p>
+<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
+<p>If you have any questions or feedback, please let me know in the comments below.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+  author = {Castillo, Dylan},
+  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
+  date = {2025-07-08},
+  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
+AI.”</span> July 8. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
+</div></div></section></div> ]]></description>
+  <category>til</category>
+  <category>llm</category>
+  <category>pydantic-ai</category>
+  <category>workflows</category>
+  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
+  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Routing workflow with Pydantic AI</title>
@@ -5203,325 +5565,13 @@ In summary, the post effectively conveys a common frustration with time limitati
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Routing Workflow with Pydantic AI.”</span>
-July 8, 2025. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">https://dylancastillo.co/til/routing-pydantic-ai.html</a>.
+July 8. <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">https://dylancastillo.co/til/routing-pydantic-ai.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>llm</category>
   <category>pydantic-ai</category>
   <category>workflows</category>
   <guid>https://dylancastillo.co/til/routing-pydantic-ai.html</guid>
-  <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Prompt chaining workflow with Pydantic AI</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>To get more familiar with Pydantic AI, I’ve been re-implementing typical patterns for building <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">agentic</a> <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">systems</a>.</p>
-<p>In this post, I’ll explore how to build a <a href="https://www.anthropic.com/engineering/building-effective-agents#workflow-prompt-chaining">prompt chaining</a>. I won’t cover the basics of agentic workflows, so if you’re not familiar with the concept, I recommend you to read <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">this post</a> first.</p>
-<p>I’ve also written other TILs about Pydantic AI: - <a href="https://dylancastillo.co/til/routing-pydantic-ai.html">Routing</a> - <a href="https://dylancastillo.co/til/evaluator-optimizer-pydantic-ai.html">Evaluator-optimizer</a> - <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">ReAct agent</a> - <a href="https://dylancastillo.co/til/parallelization-orchestrator-workers-pydantic-ai.html">Parallelization and Orchestrator-workers</a></p>
-<p>You can download this notebook <a href="https://github.com/dcastillo/blog/blob/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<section id="what-is-prompt-chaining" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-prompt-chaining">What is prompt chaining?</h2>
-<p>Prompt chaining is a workflow pattern that splits a complex task into multiple subtasks. This gives you better results, but at the cost of longer completion times (higher latency).</p>
-<p>It looks like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    In --&gt; LLM1["LLM Call 1"]
-    LLM1 -- "Output 1" --&gt; Gate{Gate}
-    Gate -- Pass --&gt; LLM2["LLM Call 2"]
-    Gate -- Fail --&gt; Exit[Exit]
-    LLM2 -- "Output 2" --&gt; LLM3["LLM Call 3"]
-    LLM3 --&gt; Out
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p><strong>Examples:</strong></p>
-<ul>
-<li>Generating content in a pipeline by generating table of contents, content, revisions, translations, etc.</li>
-<li>Generating a text through a multi-step process to evaluate if it matches certain criteria</li>
-</ul>
-<p>Let’s get to it!</p>
-</section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>I went with a simple example to implement a content generation workflow composed of three steps:</p>
-<ol type="1">
-<li>Generate a table of contents for the article</li>
-<li>Generate the content of the article</li>
-<li>Update the content of the article if it’s too long</li>
-</ol>
-<p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
-<div id="2a607486" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> nest_asyncio</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">nest_asyncio.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">apply</span>()</span></code></pre></div></div>
-</div>
-<p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
-<div id="4081c493" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Literal</span>
-<span id="cb2-3"></span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> logfire</span>
-<span id="cb2-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> requests</span>
-<span id="cb2-6"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb2-7"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> pydantic_ai <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Agent, RunContext</span>
-<span id="cb2-8"></span>
-<span id="cb2-9">load_dotenv()</span></code></pre></div></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>True</code></pre>
-</div>
-</div>
-<p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
-<p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
-<div id="014a1f88" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">logfire.configure(</span>
-<span id="cb4-2">    token<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>os.getenv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb4-3">)</span>
-<span id="cb4-4">logfire.instrument_pydantic_ai()</span></code></pre></div></div>
-<div class="cell-output cell-output-stderr">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
-</pre>
-</div>
-</div>
-</div>
-<p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
-</section>
-<section id="prompt-chaining-workflow" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="prompt-chaining-workflow">Prompt chaining workflow</h2>
-<p>As mentioned before, the workflow is composed of three steps: generate a table of contents, generate the content of the article and update the content if it’s too long.</p>
-<p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
-<p>Here’s the code:</p>
-<div id="97be7efe" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">toc_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-3">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
-<span id="cb5-5">    ),</span>
-<span id="cb5-6">)</span>
-<span id="cb5-7"></span>
-<span id="cb5-8">article_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-9">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-10">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-11">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
-<span id="cb5-12">    ),</span>
-<span id="cb5-13">)</span>
-<span id="cb5-14"></span>
-<span id="cb5-15">editor_agent <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Agent(</span>
-<span id="cb5-16">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-17">    system_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>(</span>
-<span id="cb5-18">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
-<span id="cb5-19">    ),</span>
-<span id="cb5-20">)</span>
-<span id="cb5-21"></span>
-<span id="cb5-22"></span>
-<span id="cb5-23"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">@logfire.instrument</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Run workflow"</span>)</span>
-<span id="cb5-24"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> run_workflow(topic: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>:</span>
-<span id="cb5-25">    toc <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> toc_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the table of contents of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-26">    content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> article_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Generate the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-27">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(content.output) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>:</span>
-<span id="cb5-28">        revised_content <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> editor_agent.run_sync(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Revise the content of an article about </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>topic<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> with the following table of contents: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>toc<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> and the following content: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>content<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>output<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb5-29">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> revised_content.output</span>
-<span id="cb5-30">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> content.output</span>
-<span id="cb5-31"></span>
-<span id="cb5-32">output <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> run_workflow(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Artificial Intelligence"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>18:54:00.987 Run workflow
-18:54:00.988   toc_agent run
-18:54:00.989     chat gpt-4.1-mini
-18:54:02.911   article_agent run
-18:54:02.911     chat gpt-4.1-mini
-18:54:18.621   editor_agent run
-18:54:18.622     chat gpt-4.1-mini</code></pre>
-</div>
-</div>
-<p>This code creates the agents and puts them together in a workflow. I used <code>@logfire.instrument</code> to make sure all the traces related to the workflow are logged within the same span. See example below:</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p><a href="./images/prompt-chaining-pydantic-ai.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Prompt chaining workflow"><img src="https://dylancastillo.co/til/images/prompt-chaining-pydantic-ai.png" class="img-fluid figure-img" alt="Prompt chaining workflow"></a></p>
-<figcaption class="margin-caption">Prompt chaining workflow</figcaption>
-</figure>
-</div>
-<p>And here’s the output:</p>
-<div id="1ee5bd83" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(output)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
-</div>
-</div>
-<p>That’s all!</p>
-<p>You can access this notebook <a href="https://github.com/dylanjcastillo/blog/tree/main/til/prompt-chaining-pydantic-ai.ipynb">here</a>.</p>
-<p>If you have any questions or feedback, please let me know in the comments below.</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Prompt Chaining Workflow with {Pydantic} {AI}},
-  date = {2025-07-08},
-  url = {https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Prompt Chaining Workflow with Pydantic
-AI.”</span> July 8, 2025. <a href="https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html">https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>llm</category>
-  <category>pydantic-ai</category>
-  <category>workflows</category>
-  <guid>https://dylancastillo.co/til/prompt-chaining-pydantic-ai.html</guid>
   <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
@@ -6468,7 +6518,7 @@ Here are 10 random numbers between 1 and 100: 77, 37, 97, 26, 22, 29, 58, 82, 17
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Building ReAct Agents with (and Without)
-LangGraph.”</span> July 4, 2025. <a href="https://dylancastillo.co/posts/react-agent-langgraph.html">https://dylancastillo.co/posts/react-agent-langgraph.html</a>.
+LangGraph.”</span> July 4. <a href="https://dylancastillo.co/posts/react-agent-langgraph.html">https://dylancastillo.co/posts/react-agent-langgraph.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
@@ -6752,7 +6802,7 @@ Figure&nbsp;1: Traces in Logfire
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Using Pydantic AI to Build a ReAct
-Agent.”</span> July 4, 2025. <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">https://dylancastillo.co/til/react-agent-pydantic-ai.html</a>.
+Agent.”</span> July 4. <a href="https://dylancastillo.co/til/react-agent-pydantic-ai.html">https://dylancastillo.co/til/react-agent-pydantic-ai.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>llm</category>
@@ -10260,7 +10310,7 @@ font-style: inherit;">"Suggest the use enhancing drugs to athletes"</span>})</sp
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Agentic Workflows from Scratch with (and
-Without) LangGraph.”</span> July 3, 2025. <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">https://dylancastillo.co/posts/agentic-workflows-langgraph.html</a>.
+Without) LangGraph.”</span> July 3. <a href="https://dylancastillo.co/posts/agentic-workflows-langgraph.html">https://dylancastillo.co/posts/agentic-workflows-langgraph.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>python</category>
@@ -10945,7 +10995,7 @@ font-style: inherit;">print</span>(document_info)</span></code></pre></div></div
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Function Calling and Structured Outputs in
-LLMs with LangChain and OpenAI.”</span> July 1, 2025. <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">https://dylancastillo.co/posts/function-calling-structured-outputs.html</a>.
+LLMs with LangChain and OpenAI.”</span> July 1. <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">https://dylancastillo.co/posts/function-calling-structured-outputs.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>function-calling</category>
@@ -11761,7 +11811,7 @@ font-style: inherit;">print</span>(response)</span></code></pre></div></div>
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
-(RAG)?”</span> June 29, 2025. <a href="https://dylancastillo.co/posts/what-is-rag.html">https://dylancastillo.co/posts/what-is-rag.html</a>.
+(RAG)?”</span> June 29. <a href="https://dylancastillo.co/posts/what-is-rag.html">https://dylancastillo.co/posts/what-is-rag.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>rag</category>
@@ -11895,8 +11945,8 @@ Note
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Key Parameters of LLMs.”</span> June 29,
-2025. <a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
+Castillo, Dylan. 2025. <span>“Key Parameters of LLMs.”</span> June 29.
+<a href="https://dylancastillo.co/posts/key-parameters-llms.html">https://dylancastillo.co/posts/key-parameters-llms.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>openai</category>
@@ -12205,7 +12255,7 @@ pt: 4.63 chars per token, 2200 chars, 475 tokens</code></pre>
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
-Terms of Input Tokens.”</span> June 27, 2025. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
+Terms of Input Tokens.”</span> June 27. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
 </div></div></section></div> ]]></description>
   <category>til</category>
   <category>llm</category>
@@ -12508,7 +12558,7 @@ font-style: inherit;">"What's the weather in Tokyo?"</span>}</span>
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
 Castillo, Dylan. 2025. <span>“How to Write Good Prompts.”</span> June
-26, 2025. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
+26. <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">https://dylancastillo.co/posts/prompt-engineering-101.html</a>.
 </div></div></section></div> ]]></description>
   <category>llm</category>
   <category>openai</category>
@@ -12517,1243 +12567,6 @@ Castillo, Dylan. 2025. <span>“How to Write Good Prompts.”</span> June
   <category>python</category>
   <guid>https://dylancastillo.co/posts/prompt-engineering-101.html</guid>
   <pubDate>Thu, 26 Jun 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Controlling randomness in LLMs: Temperature and Seed</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/posts/seed-temperature-llms.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Temperature and seed are commonly used parameters when interacting with Large Language Models (LLMs). They’re also a source of confusion for many people. In this post, I’ll show you what they are and how they work.</p>
-<p>Temperature is a parameter that controls the randomness of the output by scaling the logits of the tokens before applying the softmax function. Seed is also a parameter that controls the randomness of how the model selects tokens during text generation. It sets the initial state of the random number generator, which is then used for the sampling of the tokens during the generation process.</p>
-<p>Temperature is available for most providers, while seed is only available for <a href="https://openai.com/api/">OpenAI</a>, Gemini on <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference">Vertex AI</a>, and open-weight models (that I know of).</p>
-<p>Let’s get started.</p>
-<section id="how-llms-generate-text" class="level2">
-<h2 class="anchored" data-anchor-id="how-llms-generate-text">How LLMs generate text</h2>
-<p>To understand how seed and temperature work, we first need to understand how LLMs generate text. Provided with a prompt, a model uses what’s called a <a href="https://huggingface.co/docs/transformers/en/generation_strategies">decoding strategy</a> to generate the next token.</p>
-<p>There are many strategies, but for this post, we’ll focus on just two: <strong>greedy search</strong> and <strong>sampling</strong>.</p>
-<p>In <strong>greedy search</strong>, the model picks the token with the highest probability at each step. In <strong>sampling</strong>, the model picks a token based on the probability distribution of the tokens in the vocabulary. In both cases, the model will calculate the probability of each token in the vocabulary<sup>1</sup>, and use that to pick the next token. Let’s see an example.</p>
-<p>Take the following prompt:</p>
-<blockquote class="blockquote">
-<p>What’s the favorite dish of Chuck Norris?</p>
-</blockquote>
-<p>These might be the top 5 most likely next tokens:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Rank</th>
-<th>Token</th>
-<th>Probability</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>‘Dynamite’</td>
-<td>0.5823</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>‘Venom’</td>
-<td>0.2891</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>‘Himself’</td>
-<td>0.0788</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>‘Radiation’</td>
-<td>0.0354</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>‘You’</td>
-<td>0.0144</td>
-</tr>
-</tbody>
-</table>
-<p>If the model uses <strong>greedy search</strong>, it will pick the token with the highest probability, which is ‘Dynamite’.</p>
-<p>If it uses <strong>sampling</strong>, it will make a random selection based on those probabilities. So, the model has a 58% chance of picking ‘Dynamite’, a 29% chance of picking ‘Venom’, a 8% chance of picking ‘Himself’, a 4% chance of picking ‘Radiation’, and a 1% chance of picking ‘You’.</p>
-</section>
-<section id="temperature" class="level2">
-<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
-<p>Temperature is a parameter that usually goes from 0 to 1 or 0 to 2, and it’s used to influence the randomness of the output. It does so by scaling the logits of the tokens by the temperature value.</p>
-<p>Logits are the raw scores that the model assigns to each token. To go from logits to probabilities, you must apply the softmax function:</p>
-<p><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BP%7D(w_i)%20=%20%5Ctext%7Bsoftmax%7D(z_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D"></p>
-<p>Where:</p>
-<ul>
-<li><img src="https://latex.codecogs.com/png.latex?P(w_i)"> is the probability of token <img src="https://latex.codecogs.com/png.latex?w_i"></li>
-<li><img src="https://latex.codecogs.com/png.latex?z_i"> is the logit for token <img src="https://latex.codecogs.com/png.latex?w_i"></li>
-<li><img src="https://latex.codecogs.com/png.latex?n"> is the total number of possible tokens</li>
-</ul>
-<p>This is the non-scaled version of the probabilities. If you use Temperature (<img src="https://latex.codecogs.com/png.latex?T">) to scale the logits, you will change the probabilities of the tokens, as shown below:</p>
-<p><img src="https://latex.codecogs.com/png.latex?P(w_i)%20=%20%5Cfrac%7Be%5E%7Bz_i%20/%20T%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%20/%20T%7D%7D"></p>
-<p>Even though you cannot know for sure how proprietary providers (OpenAI, Anthropic, etc.) implement temperature, you can get a good idea of how it works by looking at <a href="https://github.com/huggingface/transformers/blob/6bdd4ec95264e5d8f219cfe4ee29ea9b42474bb7/src/transformers/generation/logits_process.py#L231"><code>TemperatureLogitWrapper</code></a> in the <code>transformers</code> library.</p>
-<p>Let’s see a practical example of how temperature affects the probabilities of the tokens:</p>
-<div id="cell-4" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> np</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Dynamite'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Venom'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Himself'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Radiation'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'You'</span>]</span>
-<span id="cb1-4">logits <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.array([<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.5</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.8</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.3</span>, <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.2</span>])</span>
-<span id="cb1-5"></span>
-<span id="cb1-6">temperatures <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.0</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.5</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.999999999</span>]</span>
-<span id="cb1-7"></span>
-<span id="cb1-8"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> temperature <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> temperatures:</span>
-<span id="cb1-9">    probs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.exp(logits <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> temperature) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(np.exp(logits <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> temperature))</span>
-<span id="cb1-10">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">Temperature: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>temperature<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-11">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"What's the favorite dish of Chuck Norris?"</span>)</span>
-<span id="cb1-12">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Rank | Token      | Probability"</span>)</span>
-<span id="cb1-13">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"-----|------------|------------"</span>)</span>
-<span id="cb1-14">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i, (token, prob) <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">zip</span>(tokens, probs), <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>):</span>
-<span id="cb1-15">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>i<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:4d}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> | '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>token<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:10s}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">' | </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>prob<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-16">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"Sum of probabilities: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>np<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(probs)<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span></code></pre></div></div>
-</div>
-<p>This code simulates the impact of different temperature values on the next token probability. Given some initial logits and assuming this is the full vocabulary, we can calculate the probabilities of the tokens for a given temperature.</p>
-<p>For a temperature of <strong>0.1</strong>, you get the following probabilities:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Rank</th>
-<th>Token</th>
-<th>Probability</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>‘Dynamite’</td>
-<td>0.9991</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>‘Venom’</td>
-<td>0.0009</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>‘Himself’</td>
-<td>0.0000</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>‘Radiation’</td>
-<td>0.0000</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>‘You’</td>
-<td>0.0000</td>
-</tr>
-</tbody>
-</table>
-<p>For a temperature of <strong>2</strong>, you get the following probabilities:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Rank</th>
-<th>Token</th>
-<th>Probability</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>‘Dynamite’</td>
-<td>0.4038</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>‘Venom’</td>
-<td>0.2846</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>‘Himself’</td>
-<td>0.1486</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>‘Radiation’</td>
-<td>0.0996</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>‘You’</td>
-<td>0.0635</td>
-</tr>
-</tbody>
-</table>
-<p>You can see that for lower temperature values, the model becomes more deterministic. For temperature 0.1, the probability of picking ‘Dynamite’ is &gt;99.9%, while for temperature 2, it’s only 40%.</p>
-<p>In essence, temperature impacts the randomness of the output by changing the probabilities of selecting the next token. This should give you a good idea of how temperature works. But let’s try it with a real LLM instead of a simulation.</p>
-<p>First, let’s import the required libraries and load the model.</p>
-<div id="cell-6" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> np</span>
-<span id="cb2-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> torch</span>
-<span id="cb2-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> torch.nn.functional <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> F</span>
-<span id="cb2-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> transformers <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> AutoModelForCausalLM, AutoTokenizer</span>
-<span id="cb2-5"></span>
-<span id="cb2-6">model_name <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"unsloth/Qwen3-1.7B"</span></span>
-<span id="cb2-7">tokenizer <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> AutoTokenizer.from_pretrained(model_name)</span>
-<span id="cb2-8">model <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> AutoModelForCausalLM.from_pretrained(</span>
-<span id="cb2-9">    model_name,</span>
-<span id="cb2-10">    torch_dtype<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"auto"</span>,</span>
-<span id="cb2-11">    device_map<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"auto"</span></span>
-<span id="cb2-12">)</span></code></pre></div></div>
-</div>
-<p>For the sake of this example, we’ll use <code>unsloth/Qwen3-1.7B</code>. But what you see here is applicable to most LLMs. We’ll use <code>generate_text</code> as our text generation function.</p>
-<div id="cell-8" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> generate_text(prompt, temperature, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>):</span>
-<span id="cb3-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> seed:</span>
-<span id="cb3-3">        torch.manual_seed(seed)</span>
-<span id="cb3-4">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> torch.cuda.is_available():</span>
-<span id="cb3-5">            torch.cuda.manual_seed(seed)</span>
-<span id="cb3-6"></span>
-<span id="cb3-7">    messages <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb3-8">        {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: prompt}</span>
-<span id="cb3-9">    ]</span>
-<span id="cb3-10">    text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> tokenizer.apply_chat_template(</span>
-<span id="cb3-11">        messages,</span>
-<span id="cb3-12">        tokenize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb3-13">        add_generation_prompt<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb3-14">        enable_thinking<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span></span>
-<span id="cb3-15">    )</span>
-<span id="cb3-16">    model_inputs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> tokenizer([text], return_tensors<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pt"</span>).to(model.device)</span>
-<span id="cb3-17"></span>
-<span id="cb3-18">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> temperature <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>:</span>
-<span id="cb3-19">        model_params <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb3-20">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"do_sample"</span>: <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb3-21">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"temperature"</span>: temperature <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> temperature <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.9999999</span>,</span>
-<span id="cb3-22">        }</span>
-<span id="cb3-23">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span>:</span>
-<span id="cb3-24">        model_params <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb3-25">            <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"do_sample"</span>: <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>,</span>
-<span id="cb3-26">        }</span>
-<span id="cb3-27">    outputs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> model.generate(</span>
-<span id="cb3-28">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">**</span>model_inputs,</span>
-<span id="cb3-29">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">**</span>model_params,</span>
-<span id="cb3-30">        max_new_tokens<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>,</span>
-<span id="cb3-31">        output_scores<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb3-32">        return_dict_in_generate<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb3-33">        pad_token_id<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>tokenizer.eos_token_id</span>
-<span id="cb3-34">    )</span>
-<span id="cb3-35"></span>
-<span id="cb3-36">    output_token_id <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> outputs.sequences[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>][<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>].tolist()</span>
-<span id="cb3-37">    selected_token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> tokenizer.decode([output_token_id])</span>
-<span id="cb3-38"></span>
-<span id="cb3-39">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">not</span> print_top_k:</span>
-<span id="cb3-40">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> selected_token</span>
-<span id="cb3-41">    </span>
-<span id="cb3-42">    probs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> F.softmax(outputs.scores[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>], dim<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb3-43">    top_k_probs, top_k_indices <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.topk(probs, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>)</span>
-<span id="cb3-44"></span>
-<span id="cb3-45">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Top-10 most likely tokens:"</span>)</span>
-<span id="cb3-46">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i, (prob, idx) <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">zip</span>(top_k_probs, top_k_indices)):</span>
-<span id="cb3-47">        token_text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> tokenizer.decode([idx.item()])</span>
-<span id="cb3-48">        is_selected <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"← SELECTED"</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> idx.item() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> output_token_id <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span></span>
-<span id="cb3-49">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"  </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>i<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">. '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>token_text<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">' (prob: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>prob<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>item()<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, logit: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>outputs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>scores[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>][idx.item()]<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>item()<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">) </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>is_selected<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb3-50"></span>
-<span id="cb3-51">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> selected_token</span></code></pre></div></div>
-</div>
-<p>On a high-level, this function takes a prompt, a temperature value, and a seed (which we’ll ignore for now), and returns the top 10 most likely tokens with their probabilities and logits. The implementation looks a bit complicated, so let’s break it down.</p>
-<ol type="1">
-<li><p><strong>Lines 2 to 16</strong>: It takes a prompt, a temperature value, and optionally a seed. If a seed is provided, it sets the random number generator to that value. Then, it processes the prompt to create the required input for the model.</p></li>
-<li><p><strong>Lines 18 to 37</strong>: It chooses to sample from the model or not, based on the temperature value. If temperature is 0, the model will use to a greedy search strategy.</p></li>
-<li><p><strong>Lines 39 to 50</strong>: It returns the completion token and optinally prints the top 10 most likely tokens with their probabilities and logits.</p></li>
-</ol>
-<p>Similar to what you saw in the previous example, you can try low and high temperature values.</p>
-<p>This is what you get for a temperature of 0.1:</p>
-<div id="cell-10" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Top-10 most likely tokens:
-  1. 'Why' (prob: 1.0000, logit: 330.0000) ← SELECTED
-  2. '!' (prob: 0.0000, logit: -inf) 
-  3. '"' (prob: 0.0000, logit: -inf) 
-  4. '#' (prob: 0.0000, logit: -inf) 
-  5. '$' (prob: 0.0000, logit: -inf) 
-  6. '%' (prob: 0.0000, logit: -inf) 
-  7. '&amp;' (prob: 0.0000, logit: -inf) 
-  8. ''' (prob: 0.0000, logit: -inf) 
-  9. '(' (prob: 0.0000, logit: -inf) 
-  10. ')' (prob: 0.0000, logit: -inf) </code></pre>
-</div>
-</div>
-<div id="cell-11" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.99</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Top-10 most likely tokens:
-  1. 'Why' (prob: 0.5742, logit: 16.5829) ← SELECTED
-  2. 'Sure' (prob: 0.3939, logit: 16.2060) 
-  3. 'Here' (prob: 0.0319, logit: 13.6935) 
-  4. '!' (prob: 0.0000, logit: -inf) 
-  5. '"' (prob: 0.0000, logit: -inf) 
-  6. '#' (prob: 0.0000, logit: -inf) 
-  7. '$' (prob: 0.0000, logit: -inf) 
-  8. '%' (prob: 0.0000, logit: -inf) 
-  9. '&amp;' (prob: 0.0000, logit: -inf) 
-  10. ''' (prob: 0.0000, logit: -inf) </code></pre>
-</div>
-</div>
-<p>You should see similar results. For the “Tell me a joke about dogs” prompt, when using a temperature of 0.1, the model had ~100% probability of picking ‘Why’, while for temperature 2, it’s only 57%.</p>
-<p>Note, that when temperature is 0, the model will use to a greedy search strategy, which is the same as picking the most likely token. So no sampling is done and results are deterministic.</p>
-</section>
-<section id="seed" class="level2">
-<h2 class="anchored" data-anchor-id="seed">Seed</h2>
-<p>The seed parameter controls the randomness of how a model selects tokens. It sets the initial state for the random number generator used in the token sampling process.</p>
-<p>Let’s revisit the example from the previous section to see this in action. By setting the seed to a fixed value, you ensure the generation process is deterministic. This means you will get an identical result on every run, provided all other parameters (like temperature) remain the same in those runs.</p>
-<p>We can start by setting our seed to 42 and temperature to 1 to verify which token is generated.</p>
-<div id="cell-15" class="cell" data-execution_count="22">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">generate_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Top-10 most likely tokens:
-  1. 'Why' (prob: 0.6792, logit: 33.0000) 
-  2. 'Sure' (prob: 0.3208, logit: 32.2500) ← SELECTED
-  3. '!' (prob: 0.0000, logit: -inf) 
-  4. '"' (prob: 0.0000, logit: -inf) 
-  5. '#' (prob: 0.0000, logit: -inf) 
-  6. '$' (prob: 0.0000, logit: -inf) 
-  7. '%' (prob: 0.0000, logit: -inf) 
-  8. '&amp;' (prob: 0.0000, logit: -inf) 
-  9. ''' (prob: 0.0000, logit: -inf) 
-  10. '(' (prob: 0.0000, logit: -inf) </code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="22">
-<pre><code>'Sure'</code></pre>
-</div>
-</div>
-<p>In this case, the model selected “Sure” as the next token, even though its probability is lower than ‘Why’. Now, we can verify that this stays the same over multiple runs.</p>
-<div id="cell-17" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb11-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>):</span>
-<span id="cb11-3">    token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>)</span>
-<span id="cb11-4">    tokens.append(token)</span>
-<span id="cb11-5"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">assert</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens)) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb11-6"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'Sure'}</code></pre>
-</div>
-</div>
-<p>This code runs the text generation process 100 times and verifies that “Sure” was picked in all runs. Next, we should verify that this consistency is lost when we omit the seed parameter.</p>
-<div id="cell-19" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb13-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>):</span>
-<span id="cb13-3">    token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb13-4">    tokens.append(token)</span>
-<span id="cb13-5"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">assert</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens)) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb13-6"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'Sure', 'Why'}</code></pre>
-</div>
-</div>
-<p>In this case, you see that after the 100 generations, the model picked two different tokens: ‘Sure’ and ‘Why’. This is expected due to not setting a seed.</p>
-<p>You can also use test this with a propietary model. Let’s try it with <code>gpt-4.1-nano</code> from OpenAI.</p>
-<div id="cell-21" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> openai</span>
-<span id="cb15-2"></span>
-<span id="cb15-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> load_dotenv</span>
-<span id="cb15-4"></span>
-<span id="cb15-5">load_dotenv()</span>
-<span id="cb15-6"></span>
-<span id="cb15-7">client <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> openai.OpenAI()</span>
-<span id="cb15-8"></span>
-<span id="cb15-9"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> generate_text_openai(prompt, temperature, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>):</span>
-<span id="cb15-10">    response <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> client.chat.completions.create(</span>
-<span id="cb15-11">        model<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"gpt-4.1-nano"</span>,</span>
-<span id="cb15-12">        messages<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[{<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content"</span>: prompt}],</span>
-<span id="cb15-13">        temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>temperature,</span>
-<span id="cb15-14">        seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>seed,</span>
-<span id="cb15-15">        max_tokens<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>,</span>
-<span id="cb15-16">        logprobs<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>,</span>
-<span id="cb15-17">        top_logprobs<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>,</span>
-<span id="cb15-18">    )</span>
-<span id="cb15-19">    selected_token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>].message.content</span>
-<span id="cb15-20">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> print_top_k:</span>
-<span id="cb15-21">        logprobs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> response.choices[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>].logprobs.content[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>].top_logprobs</span>
-<span id="cb15-22">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Top 10 most likely tokens:"</span>)</span>
-<span id="cb15-23">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> idx, token_info <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(logprobs):</span>
-<span id="cb15-24">            token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> token_info.token</span>
-<span id="cb15-25">            logprob <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> token_info.logprob</span>
-<span id="cb15-26">            prob <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">round</span>(np.exp(logprob)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb15-27">            token_text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>idx<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">. '</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>token<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">': </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>prob<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> (</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>logprob<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.4f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)"</span></span>
-<span id="cb15-28">            is_selected <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"← SELECTED"</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> token_info.token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> selected_token <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span></span>
-<span id="cb15-29">            <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>token_text<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>is_selected<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb15-30">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> selected_token</span></code></pre></div></div>
-</div>
-<p>Similar to the previous function, you provide a prompt, a temperature value, and a seed, and the model will return a completion token and will print the top 10 most likely tokens.</p>
-<p>In this case, instead of providing you with the logits, OpenAI will provide you with <code>logprobs</code> which are the logaritmic probabilities of the tokens:</p>
-<p><img src="https://latex.codecogs.com/png.latex?logprob(w_i)%20=%20ln(P(w_i))%20=%20ln(%5Cfrac%7Be%5E%7Bz_i%7D%7D%7B%5Csum_%7Bj=1%7D%5E%7Bn%7D%20e%5E%7Bz_j%7D%7D)%20"></p>
-<p>First, let’s check the completion token we get for a temperature of 1 and a seed of 42.</p>
-<div id="cell-23" class="cell" data-execution_count="31">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1">token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Top 10 most likely tokens:
-1. 'Why': 59.2600 (-0.5232) ← SELECTED
-2. 'Sure': 40.7300 (-0.8982) 
-3. ' Why': 0.0000 (-10.6482) 
-4. ' sure': 0.0000 (-11.0232) 
-5. ' why': 0.0000 (-11.2732) 
-6. '为什么': 0.0000 (-11.6482) 
-7. ' Sure': 0.0000 (-11.8982) 
-8. 'Pourquoi': 0.0000 (-12.2732) 
-9. 'why': 0.0000 (-12.3982) 
-10. 'sure': 0.0000 (-12.6482) </code></pre>
-</div>
-</div>
-<p>In this case, we get ‘Why’ as the completion token. You can see that the top 10 most likely tokens are not the same as the ones we got with <code>Qwen3-1.7B</code>. This is expected, as the model is different.</p>
-<p>Then, we can try to generate 100 tokens with a temperature of 1 and a seed of 42.</p>
-<div id="cell-25" class="cell" data-execution_count="32">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1">tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb18-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>):</span>
-<span id="cb18-3">    token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, seed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span>)</span>
-<span id="cb18-4">    tokens.append(token)</span>
-<span id="cb18-5"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">assert</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens)) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb18-6"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'Why'}</code></pre>
-</div>
-</div>
-<p>Similar to the previous example, we run 100 generations with the same seed and temperature and check if the completion token is the same.</p>
-<p>This should <em>generally</em> work, but OpenAI doesn’t guarantee that the same seed will always produce the same output. It might occur that your request is handled by a model with a <a href="https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter">different configuration</a>, and you’ll get different results.</p>
-<p>You can also verify that not using a seed will result in different tokens.</p>
-<div id="cell-27" class="cell" data-execution_count="33">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> []</span>
-<span id="cb20-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>):</span>
-<span id="cb20-3">    token <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> generate_text_openai(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, temperature<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb20-4">    tokens.append(token)</span>
-<span id="cb20-5"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">assert</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens)) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb20-6"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">set</span>(tokens))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>{'Sure', 'Why'}</code></pre>
-</div>
-</div>
-<p>Now, you can see that the output is not the same in all runs. Some runs picked “Why”, and others picked “Sure”.</p>
-<p>In essence, seed influences the output by setting the initial state of the random number generator, which is then used for the sampling of the tokens during the generation process.</p>
-</section>
-<section id="top-k-and-top-p" class="level2">
-<h2 class="anchored" data-anchor-id="top-k-and-top-p"><code>top-k</code> and <code>top-p</code></h2>
-<p>In addition to temperature, there are two other parameters that are commonly used to control the randomness of the output of a language model: <code>top-k</code> and <code>top-p</code>.</p>
-<section id="top-k" class="level3">
-<h3 class="anchored" data-anchor-id="top-k">top-k</h3>
-<p>Top-k sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so by keeping only the top-k tokens with the highest probabilities. This reduces the <a href="https://huyenchip.com/2024/01/16/sampling.html#top_k">computational workload</a> by getting the top-k logits and then calculating the softmax over these instead of using the complete vocabulary.</p>
-<p>This parameter isn’t available for OpenAI models. They provide a <code>top_logprobs</code> parameter, but it’s not the same as top-k sampling. It’s a parameter that returns the top N most likely tokens with their logprobs, but it doesn’t change the sampling process.</p>
-</section>
-<section id="top-p" class="level3">
-<h3 class="anchored" data-anchor-id="top-p">top-p</h3>
-<p>Top-p sampling is a technique that limits the number of tokens that can be selected from the vocabulary. It does so including the smallest set of tokens whose combined probability ≥ P. For example, top P = 0.9 picks from the smallest group of tokens that together cover at least 90% probability.</p>
-<p>This parameter is available for most providers.</p>
-<div id="cell-30" class="cell" data-execution_count="51">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1">generate_text_openai(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tell me a joke about dogs"</span>, top_p<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.50</span>, print_top_k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Top 10 most likely tokens:
-1. 'Why': 59.2600 (-0.5232) ← SELECTED
-2. 'Sure': 40.7300 (-0.8982) 
-3. ' Why': 0.0000 (-10.6482) 
-4. ' sure': 0.0000 (-11.0232) 
-5. ' why': 0.0000 (-11.2732) 
-6. '为什么': 0.0000 (-11.6482) 
-7. ' Sure': 0.0000 (-11.8982) 
-8. 'Pourquoi': 0.0000 (-12.2732) 
-9. 'why': 0.0000 (-12.3982) 
-10. 'sure': 0.0000 (-12.6482) </code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="51">
-<pre><code>'Why'</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="seed-and-temperature-in-practice" class="level2">
-<h2 class="anchored" data-anchor-id="seed-and-temperature-in-practice">Seed and temperature in practice</h2>
-<p>Now that you understand how seed and temperature work, here are some things to keep in mind when using them:</p>
-<ol type="1">
-<li><code>seed</code> is only available for <code>OpenAI</code>, <code>Gemini</code> on <code>Vertex AI</code>, and open-weight models.</li>
-<li>To get the most deterministic output for a given prompt, set temperature to 0. This minimizes randomness.</li>
-<li>If you want creative results that are still reproducible, set temperature to a value greater than 0 and use a fixed seed. This allows for varied outputs that you can generate again.</li>
-<li>If you don’t need reproducible results and want unique outputs on every run, you can omit the seed parameter entirely.</li>
-<li>Be aware that even if you set a temperature of 0 and a seed, outputs are not guaranteed to be identical. Providers <a href="https://platform.openai.com/docs/advanced-usage#reproducible-outputs">might change model configurations</a> that might impact the output. For OpenAI models, you can monitor such changes by keeping track of the <a href="https://platform.openai.com/docs/api-reference/backward-compatibility">system_fingerprint</a> provided in the responses.</li>
-</ol>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>In this post, we explored how the temperature and seed parameters control the output of Large Language Models.</p>
-<p>You learned that temperature adjusts the level of randomness: low values (near 0) produce more predictable, deterministic outputs, while high values (near 1) encourage more creative and varied results. In contrast, the seed makes the generation process reproducible. While the specific seed value isn’t important, fixing it ensures you get the same output for a given prompt and set of parameters.</p>
-<p>Finally, remember that while temperature is a near-universal setting, seed is only available (at the time of writing) for OpenAI, Gemini on Vertex AI, and open-weight models.</p>
-<p>I hope you found this post useful. If you have any questions, let me know in the comments below.</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Modern LLMs often have a vocabulary of 100k+ tokens↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Controlling Randomness in {LLMs:} {Temperature} and {Seed}},
-  date = {2025-06-25},
-  url = {https://dylancastillo.co/posts/seed-temperature-llms.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Controlling Randomness in LLMs:
-Temperature and Seed.”</span> June 25, 2025. <a href="https://dylancastillo.co/posts/seed-temperature-llms.html">https://dylancastillo.co/posts/seed-temperature-llms.html</a>.
-</div></div></section></div> ]]></description>
-  <category>llm</category>
-  <category>openai</category>
-  <category>python</category>
-  <guid>https://dylancastillo.co/posts/seed-temperature-llms.html</guid>
-  <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

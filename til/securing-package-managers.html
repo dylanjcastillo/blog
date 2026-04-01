@@ -7,9 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dylan Castillo">
-<meta name="dcterms.date" content="2025-10-18">
+<meta name="dcterms.date" content="2026-04-01">
+<meta name="description" content="Better to be last and safe, than first and not safe">
 
-<title>ClaudeCodeholic – Dylan Castillo</title>
+<title>The last shall be (slighly) safer – Dylan Castillo</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,13 +79,13 @@ ul.task-list li input[type="checkbox"] {
 <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
 
 
-<meta property="og:title" content="ClaudeCodeholic – Dylan Castillo">
+<meta property="og:title" content="The last shall be (slighly) safer – Dylan Castillo">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta property="og:site_name" content="Dylan Castillo">
-<meta name="twitter:title" content="ClaudeCodeholic – Dylan Castillo">
+<meta name="twitter:title" content="The last shall be (slighly) safer – Dylan Castillo">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:image" content="https://dylancastillo.co/til/images/social_media_card.webp">
 <meta name="twitter:creator" content="@dylanjcastillo">
 <meta name="twitter:site" content="@dylanjcastillo">
 <meta name="twitter:card" content="summary_large_image">
@@ -147,9 +148,10 @@ Subscribe to my newsletter
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ClaudeCodeholic</h1>
+<h1 class="title">The last shall be (slighly) safer</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">essay</div>
+    <div class="quarto-category">til</div>
+    <div class="quarto-category">security</div>
   </div>
   </div>
 
@@ -176,14 +178,14 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 18, 2025</p>
+      <p class="date">April 1, 2026</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 18, 2025</p>
+      <p class="date-modified">April 1, 2026</p>
     </div>
   </div>
     
@@ -194,24 +196,43 @@ Subscribe to my newsletter
 </header>
 
 
-<p>Hi, I’m Dylan, and I’m a ClaudeCodeholic.</p>
-<p>I’m not addicted because Claude Code makes me more productive. I’m addicted because it dulls the <em>pain</em> of thinking and makes development an endless betting game of “if I change the prompt just one more time, it’ll get it right.”</p>
-<p>I don’t care about those studies comparing how much better or worse people do with AI coding tools. I’d still use it, even if I was 50% less productive.</p>
-<p>It might take twice as long to finish what I’m trying to build. Maybe I never finish it at all. But I feel I’m making progress. Most importantly, I hardly need to be <em>there</em>.</p>
-<p>Companies worship productivity. I worship comfort. And Claude Code is my warm bed on a cold night of winter.</p>
-<p>Now, if you’ll excuse me, I have a prompt to finish, before I can continue doomscrolling on reddit.</p>
+<p>While I use Claude Code to build <a href="https://estimator.dylancastillo.co/">crappy forms</a>, real hackers use it to make money.</p>
+<p><a href="https://futuresearch.ai/blog/litellm-attack-transcript/">Supply</a> <a href="https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan">chain</a> <a href="https://www.paloaltonetworks.com/blog/cloud-security/trivy-supply-chain-attack/">attacks</a> have become so common these days that I had to learn they’re not about an Amazon delivery guy crashing into my front door.</p>
+<p>I know I’ll inevitably become a victim of one (a supply chain attack, not an Amazon delivery guy), but I’m not handing over my $50 in BTC to North Korea without a fight. So I took this measure, courtesy of some random guy on Hacker News:</p>
+<blockquote class="blockquote">
+<p>PSA: npm/bun/pnpm/uv now all support setting a minimum release age for packages.</p>
+<p>I also have <code>ignore-scripts=true</code> in my ~/.npmrc. Based on the analysis, that alone would have mitigated the vulnerability. bun and pnpm do not execute lifecycle scripts by default.</p>
+<p>Here’s how to set global configs to set min release age to 7 days:</p>
+<p>~/.config/uv/uv.toml exclude-newer = “7 days”</p>
+<p>~/.npmrc min-release-age=7 # days ignore-scripts=true</p>
+<p>~/Library/Preferences/pnpm/rc minimum-release-age=10080 # minutes</p>
+<p>~/.bunfig.toml [install] minimumReleaseAge = 604800 # seconds</p>
+<p>(Side note, it’s wild that npm, bun, and pnpm have all decided to use different time units for this configuration.)</p>
+<p>If you’re developing with LLM agents, you should also update your AGENTS.md/CLAUDE.md file with some guidance on how to handle failures stemming from this config as they will cause the agent to unproductively spin its wheels.</p>
+</blockquote>
+<p>This gives researchers and security teams time to analyze new releases and flag malicious ones.</p>
+<p>Then, I thought it’d be a bad idea if everyone uses the same value, so I cowardly changed mine to 8 days. Sadly, others quickly realized this:</p>
+<blockquote class="blockquote">
+<p>that’s why people are telling others to use 7 days but using 8 days themselves :)</p>
+</blockquote>
+<p>So I picked 9… and kept scrolling:</p>
+<blockquote class="blockquote">
+<p>brb, switching everything to 9 days</p>
+</blockquote>
+<p>Oh, fuck.</p>
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
   author = {Castillo, Dylan},
-  title = {ClaudeCodeholic},
-  date = {2025-10-18},
-  url = {https://dylancastillo.co/posts/claudecodeholic.html},
+  title = {The Last Shall Be (Slighly) Safer},
+  date = {2026-04-01},
+  url = {https://dylancastillo.co/til/securing-package-managers.html},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Castillo, Dylan. 2025. <span>“ClaudeCodeholic.”</span> October 18. <a href="https://dylancastillo.co/posts/claudecodeholic.html">https://dylancastillo.co/posts/claudecodeholic.html</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2026. <span>“The Last Shall Be (Slighly) Safer.”</span>
+April 1. <a href="https://dylancastillo.co/til/securing-package-managers.html">https://dylancastillo.co/til/securing-package-managers.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
