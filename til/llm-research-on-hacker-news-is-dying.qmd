@@ -6,13 +6,13 @@ categories:
     - til
 ---
 
-I thought I was seeing fewer arxiv papers on the front page of Hacker News (HN) these days, and I wanted to check if that was real.
+I thought I was seeing fewer arXiv papers on the front page of Hacker News (HN) these days, and I wanted to check if that was real.
 
-So I asked Claude to run a quick analysis: track the share of arxiv stories on HN over time. It queried the [BigQuery HN dataset](https://console.cloud.google.com/marketplace/product/y-combinator/hacker-news), bucketed the stories by month, and plotted the series:
+So I asked Claude to run a quick analysis: track the share of arXiv stories on HN over time. It queried the [BigQuery HN dataset](https://console.cloud.google.com/marketplace/product/y-combinator/hacker-news), bucketed the stories by month, and plotted the series:
 
-![Percentage of HN stories linking to arxiv](./images/arxiv-hacker-news/hn_arxiv_share.png)
+![Percentage of HN stories linking to arXiv](./images/arXiv-hacker-news/hn_arXiv_share.png)
 
-That confirmed my hunch. But it also showed another peak around 2019, and I wanted to know what drove it.
+That confirmed my hunch. arXiv posts have been decreasing rapidly in teh last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.
 
 I asked Claude to pull the top 100 papers by upvotes from 2019. It was the deep learning peak. 41% of the top 100 were about deep learning.
 
@@ -20,7 +20,7 @@ Then I ran the same query for 2023-2026, to see how dominant LLMs were. 59% of t
 
 So I asked him to make a nice chart with all of this: 
 
-![Distribution of topics or arxiv stories](./images/arxiv-hacker-news/hn_arxiv_topics.png)
+![Distribution of topics or arXiv stories](./images/arXiv-hacker-news/hn_arXiv_topics.png)
 
 Then I wanted to see which 2019 papers aged well, so I asked Claude to pull the ones that held up from the top 100. Here's what he got:
 
