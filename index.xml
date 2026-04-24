@@ -25,22 +25,22 @@
 
 
 
-<p>I thought I was seeing fewer arxiv papers on the front page of Hacker News (HN) these days, and I wanted to check if that was real.</p>
-<p>So I asked Claude to run a quick analysis: track the share of arxiv stories on HN over time. It queried the <a href="https://console.cloud.google.com/marketplace/product/y-combinator/hacker-news">BigQuery HN dataset</a>, bucketed the stories by month, and plotted the series:</p>
+<p>I thought I was seeing fewer arXiv papers on the front page of Hacker News (HN) these days, and I wanted to check if that was real.</p>
+<p>So I asked Claude to run a quick analysis: track the share of arXiv stories on HN over time. It queried the <a href="https://console.cloud.google.com/marketplace/product/y-combinator/hacker-news">BigQuery HN dataset</a>, bucketed the stories by month, and plotted the series:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="./images/arxiv-hacker-news/hn_arxiv_share.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Percentage of HN stories linking to arxiv"><img src="https://dylancastillo.co/til/images/arxiv-hacker-news/hn_arxiv_share.png" class="img-fluid figure-img" alt="Percentage of HN stories linking to arxiv"></a></p>
-<figcaption class="margin-caption">Percentage of HN stories linking to arxiv</figcaption>
+<p><a href="./images/arXiv-hacker-news/hn_arXiv_share.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Percentage of HN stories linking to arXiv"><img src="https://dylancastillo.co/til/images/arXiv-hacker-news/hn_arXiv_share.png" class="img-fluid figure-img" alt="Percentage of HN stories linking to arXiv"></a></p>
+<figcaption class="margin-caption">Percentage of HN stories linking to arXiv</figcaption>
 </figure>
 </div>
-<p>That confirmed my hunch. But it also showed another peak around 2019, and I wanted to know what drove it.</p>
+<p>That confirmed my hunch. arXiv posts have been decreasing rapidly in teh last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.</p>
 <p>I asked Claude to pull the top 100 papers by upvotes from 2019. It was the deep learning peak. 41% of the top 100 were about deep learning.</p>
 <p>Then I ran the same query for 2023-2026, to see how dominant LLMs were. 59% of the top 100 upvoted papers were about LLMs or AI.</p>
 <p>So I asked him to make a nice chart with all of this:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="./images/arxiv-hacker-news/hn_arxiv_topics.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Distribution of topics or arxiv stories"><img src="https://dylancastillo.co/til/images/arxiv-hacker-news/hn_arxiv_topics.png" class="img-fluid figure-img" alt="Distribution of topics or arxiv stories"></a></p>
-<figcaption class="margin-caption">Distribution of topics or arxiv stories</figcaption>
+<p><a href="./images/arXiv-hacker-news/hn_arXiv_topics.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Distribution of topics or arXiv stories"><img src="https://dylancastillo.co/til/images/arXiv-hacker-news/hn_arXiv_topics.png" class="img-fluid figure-img" alt="Distribution of topics or arXiv stories"></a></p>
+<figcaption class="margin-caption">Distribution of topics or arXiv stories</figcaption>
 </figure>
 </div>
 <p>Then I wanted to see which 2019 papers aged well, so I asked Claude to pull the ones that held up from the top 100. Here’s what he got:</p>
