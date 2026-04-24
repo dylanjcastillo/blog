@@ -29,7 +29,7 @@
 <p>So I asked Claude to run a quick analysis: track the share of arXiv stories on HN over time. It queried the <a href="https://console.cloud.google.com/marketplace/product/y-combinator/hacker-news">BigQuery HN dataset</a>, bucketed the stories by month, and plotted the series:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="./images/arXiv-hacker-news/hn_arXiv_share.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Percentage of HN stories linking to arXiv"><img src="https://dylancastillo.co/til/images/arXiv-hacker-news/hn_arXiv_share.png" class="img-fluid figure-img" alt="Percentage of HN stories linking to arXiv"></a></p>
+<p><a href="./images/arxiv-hacker-news/hn_arxiv_share.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Percentage of HN stories linking to arXiv"><img src="https://dylancastillo.co/til/images/arxiv-hacker-news/hn_arxiv_share.png" class="img-fluid figure-img" alt="Percentage of HN stories linking to arXiv"></a></p>
 <figcaption class="margin-caption">Percentage of HN stories linking to arXiv</figcaption>
 </figure>
 </div>
@@ -39,8 +39,8 @@
 <p>So I asked him to make a nice chart with all of this:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
-<p><a href="./images/arXiv-hacker-news/hn_arXiv_topics.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Distribution of topics or arXiv stories"><img src="https://dylancastillo.co/til/images/arXiv-hacker-news/hn_arXiv_topics.png" class="img-fluid figure-img" alt="Distribution of topics or arXiv stories"></a></p>
-<figcaption class="margin-caption">Distribution of topics or arXiv stories</figcaption>
+<p><a href="./images/arxiv-hacker-news/hn_arxiv_topics.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Distribution of topics of arXiv stories"><img src="https://dylancastillo.co/til/images/arxiv-hacker-news/hn_arxiv_topics.png" class="img-fluid figure-img" alt="Distribution of topics of arXiv stories"></a></p>
+<figcaption class="margin-caption">Distribution of topics of arXiv stories</figcaption>
 </figure>
 </div>
 <p>Then I wanted to see which 2019 papers aged well, so I asked Claude to pull the ones that held up from the top 100. Here’s what he got:</p>
