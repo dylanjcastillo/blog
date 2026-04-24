@@ -12,7 +12,7 @@ So I asked Claude to run a quick analysis: track the share of arXiv stories on H
 
 ![Percentage of HN stories linking to arXiv](./images/arXiv-hacker-news/hn_arXiv_share.png)
 
-That confirmed my hunch. arXiv posts have been decreasing rapidly in teh last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.
+That confirmed my hunch. arXiv posts have been decreasing rapidly in the last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.
 
 I asked Claude to pull the top 100 papers by upvotes from 2019. It was the deep learning peak. 41% of the top 100 were about deep learning.
 
