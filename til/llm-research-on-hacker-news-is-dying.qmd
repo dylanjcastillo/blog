@@ -20,7 +20,7 @@ Then I ran the same query for 2023-2026, to see how dominant LLMs were. 59% of t
 
 So I asked him to make a nice chart with all of this: 
 
-![Distribution of topics or arXiv stories](./images/arxiv-hacker-news/hn_arxiv_topics.png)
+![Distribution of topics of arXiv stories](./images/arxiv-hacker-news/hn_arxiv_topics.png)
 
 Then I wanted to see which 2019 papers aged well, so I asked Claude to pull the ones that held up from the top 100. Here's what he got:
 
