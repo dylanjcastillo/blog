@@ -33,8 +33,8 @@
 <figcaption class="margin-caption">Percentage of HN stories linking to arXiv</figcaption>
 </figure>
 </div>
-<p>That confirmed my hunch. arXiv posts have been decreasing rapidly in teh last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.</p>
-<p>I asked Claude to pull the top 100 papers by upvotes from 2019. It was the deep learning peak. 41% of the top 100 were about deep learning.</p>
+<p>That confirmed my hunch. arXiv posts have been decreasing rapidly in the last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.</p>
+<p>I asked Claude to pull the top 100 papers by upvotes from 2019 and group them by topic. It was the deep learning peak. 41% of the top 100 were about deep learning.</p>
 <p>Then I ran the same query for 2023-2026, to see how dominant LLMs were. 59% of the top 100 upvoted papers were about LLMs or AI.</p>
 <p>So I asked him to make a nice chart with all of this:</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
