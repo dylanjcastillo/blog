@@ -14,7 +14,7 @@ So I asked Claude to run a quick analysis: track the share of arXiv stories on H
 
 That confirmed my hunch. arXiv posts have been decreasing rapidly in the last few months. Interestingly, it also showed another peak around 2019, and I wanted to know what drove it.
 
-I asked Claude to pull the top 100 papers by upvotes from 2019. It was the deep learning peak. 41% of the top 100 were about deep learning.
+I asked Claude to pull the top 100 papers by upvotes from 2019 and group them by topic. It was the deep learning peak. 41% of the top 100 were about deep learning.
 
 Then I ran the same query for 2023-2026, to see how dominant LLMs were. 59% of the top 100 upvoted papers were about LLMs or AI.
 
