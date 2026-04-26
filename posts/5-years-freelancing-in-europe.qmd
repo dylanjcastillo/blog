@@ -6,12 +6,81 @@ categories:
     - personal
 ---
 
+I'm a freelance data scientist and AI engineer living in Spain. I started freelancing in 2021 and here's my honest recap of the process: how I got in, how much I make, how I find clients, and what I'd do differently.
+
 ## How I got into freelancing
 
-## How I find gigs
+In 2019 I joined a platform that promised you a better-paying job in exchange for a cut of your future earnings. The way it worked was that they'd put you in touch with
+someone already doing the job you wanted, which in my case was freelancing, and that person would help you get there. In practice, I barely got any help from them. But the introduction to this one guy did turn out to be useful for a different reason.
+
+In one of our first conversations, he mentioned almost in passing that he was charging €500 a day. At the time, that was mind-blowing to me. He was doing roughly the same work I was doing, and making
+so much more money. I asked him how to find a freelance contract, and he told me to more or less spam people on LinkedIn.
+
+So that's what I did. I set up a bot that messaged pretty much everyone involved in Data Science in Europe — from recruiters to junior data analysts. Most people ignored me. A few wrote
+back to ask whether what I was doing was even legal. Most recruiters dismissed because I had no prior freelancing experience to point to.
+
+![Me spamming people on LinkedIn](images/5-years-freelancing-in-Europe/linkedin-spam.png)
+
+The approach didn't bear fruit, and I quickly realized he wasn't really committed to helping. I was a bit too naive, but he didn't warn me or care if my LinkedIn account got blocked from the bot activity. So we parted ways. But the idea that I could make more money without leaving Spain doing the same work I was doing stuck with me.
+
+Two years later, in 2021, the freelance market in Europe exploded. A friend at the European Commission put me in touch with someone there. I also got into multiple hiring processes around the same time. My first gig was with the European Commission, and shortly after I switched to Deliveroo. And the rest is history!
+
+## What kind of work I do
+
+Over the last five years I've worked on a pretty wide mix of things. Early on, I built clustering algorithms to identify trends across European research projects and the NLP layer of a public-sector knowledge database. I then spent close to two years building data pipelines that processed millions of data points a day to track competitors, and improving the ML models that powered them.
+
+Since 2023, most of my work has shifted to LLMs and AI products. I've built RAG and LLM-based systems for a range of B2B clients. From revamping existing products to incorporate AI, helping startups ship the first versions of their AI products, and supporting academic research groups working on AI. I've also been the technical lead for personalization at a global organization, where I've shipped a range of AI workflows. On top of that, I've been involved in experimentation work for several clients.
+
+I'm something of a AI-Data-Scientist-Backend Engineer, with some product management skills.
+
+## The good and bad of freelancing 
+
+Freelancing isn't so different from regular employment. But it has some slight differences.
+
+**The good parts**
+
+The biggest upside is freedom. I work fully remotely from home, skip most the useless corporate meetings, and don't sit through 360 feedback cycles with managers. Clients mostly care that I deliver value. I've always though that most of the 360 stuff, the recurrent "how are you feeling?" meetings, and similar things are mostly peformative. So I'm happy that I don't need to attend them.  
+
+The second upside is variety. I get to wear many different hats, sometimes within the same week. On one project I'm acting as a PM, figuring out how to scope and build a specific product. On another I'm a data scientist, planning and analyzing experiments. On another I'm an AI engineer, shipping features for workflows or agents. The intellectual range of the work has been one of the most enjoyable things about freelancing. 
+
+The third upside is the room it has given me to work on my own things. Because I could work intensely for a few months, save enough to coast for the rest of the year, and then step away, I had real time to try out business ideas and side projects. That's how I ended up launching several ideas: Namemancer, [Kasipa](https://kasipa.com/), and Lystinct. None of them worked out, but I'm happy that I got a chance to try them out. 
+
+**The downsides**
+
+The first downside is uncertainty. Compared to full-time employees, I'm always operating with shorter horizons. Projects typically run three to six months, and I rarely know in advance whether a contract will be extended — or whether I even want to stay past it. That forces me into a permanent "always be selling" mode, where part of my brain is constantly scanning for the next gig even while I'm fully engaged with the current one. It gets tiring in a way that took me a while to recognize.
+
+The second downside — and this one is on me — is that I never specialized. My rates did grow over the years, but I've hit a ceiling I cannot push past. Clients hire me because I am a "get-things-done" type of guy, but not because I was *the* search guy, or *the* recommendation engines guy, or *the* AI agents guy. Being a strong generalist definitely helps you get in the door. But I think I left real growth on the table by never going too deep into something. 
+
+The third downside is that the exit plan might not be as good.
 
 ## How much money I've made
 
-## What I want to do next
+I won't go into precise numbers here, but I'll share a rough idea of how much you can make in this space. 
 
-## Pros and cons
+My first freelance contract paid €350 a day. From there, rates grew quickly. For most of the last few years, I've been working at somewhere between €600 and €900 a day. On very short engagements, I often double my rates. 
+
+I've also experimented with switching from day rates to deliverable-based pricing on certain projects, and I generally prefer it. When the contract is structured around an outcome rather than time, my rate effectively goes up, and my icentives and the client incentives line up. The client doesn't care much about how many hours I'm putting in. They care about what they get. The only downside is that you can often end up in tricky situations if you're not sure you can deliver what you promised in a reasonable amount of time. 
+
+Overall, I'm happy with how this has gone, especially in a country like Spain, where these numbers go a long way. But I also think there's real margin to grow. As I mentioned earlier, if I commit to the path of specializing further, I think I could substantially increase what I charge.
+
+## How I find gigs
+
+These days, work mostly comes to me. But it took a few years and a few different channels to get here.
+
+In the early days, a lot of it came from posting on LinkedIn. Some of those posts caught real traction. Ask Seneca, in particular, did well. It ended up on the front page of Hacker News, and this and other smaller projects got picked up by outlets like *The Economist* and the *Financial Times*. That visibility translated directly into people reaching out to me about work.
+
+Another big channel has been personal relationships. Friends from Entrepreneur First or previous companies I've worked with have reached out when they had projects I'd be a good fit for. Former clients have come back to me once they started a new initiative or once I was wrapping up something else. Even old employers have reached out from time to time with contract work.
+
+What I don't do much of these days — and probably should — is active content marketing. I've gotten a bit lazy on that front because most of my contracts right now come through referrals or past clients. But I do feel I'm missing out on opportunities and potentially higher rates by not putting more out there. 
+
+## What's next 
+
+A few things worry me about what comes next. A few things excite me. I've never felt so uncertain.
+
+On the optimistic side, I'm starting to grow my practice. By the end of this year, I'm hoping it'll be more than just me at [Iwana Labs](https://iwanalabs.com). I've previously sold projects where I collaborated with other freelancers, but I haven't done this so regularly. I'm partnering up to make this happen and we already have a good number of projects in the pipeline. 
+
+The scary part is that I genuinely don't know what's going to happen to the software industry. The changes from AI have been amazing to watch. My best guess, though, is that we're heading toward a much more unequal distribution of the profits. I worry that the economics are shifting from 80% of the value getting captured by 20%, to something like 90% of the value getting captured by 1%. And the honest question is whether I'm in that 1%. I'm optimistic about my skills, but you have to be realistic. There's tons of amazing and highly motiviated individuals there. We're in an industry with virtually none barriers to entry, that makes a lot of money, and that's highly tuned to be done with AI. It feels like if you don't specialize, it's a race to the bottom.   
+
+There's also the broader market context. The freelance market is much tighter than when I started. Five years ago you could basically do nothing and still have opportunities flowing in every day. Now the volume is way down and the offers that do come through tend to pay less.
+
+So the next chapter is partly about responding to all of that. Growing the practice, finding the right people to grow it with, and figuring out whether I can finally plant a flag in something specific rather than staying a generalist. Five years in, I loved what I've learned through freelancing and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But I believe that the next five years will need to look different from the last five, if I want to make it alive in what's coming.   
