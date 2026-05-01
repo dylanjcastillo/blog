@@ -15,7 +15,107 @@
 <link>https://dylancastillo.co/</link>
 </image>
 <generator>quarto-1.9.37</generator>
-<lastBuildDate>Fri, 24 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 25 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>5 Years of Freelancing in Europe</title>
+  <dc:creator>Dylan Castillo</dc:creator>
+  <link>https://dylancastillo.co/posts/5-years-freelancing-in-europe.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Five years ago, freelancing felt like arbitrage: do the same work I was already doing, charge much more for it, and barely change my lifestyle. So I left my full-time job in the middle of the pandemic and gave it a shot.</p>
+<p>Since then, I’ve worked with startups, scaleups, public institutions and global organizations. I moved from data science and ML into LLMs and AI products. Freelancing gave me more freedom, more variety, and more time to work on the things I care about. But it also came with uncertainty, a constant pressure to sell, and a ceiling I’ve struggled to push past.</p>
+<p>This is my recap of how I got in, how the money worked, where I found clients, and what I’d do differently.</p>
+<section id="how-i-got-into-freelancing" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="how-i-got-into-freelancing">How I got into freelancing</h2>
+<p>I started thinking about freelancing in 2019, two years before I landed my first contract. That year, I joined a platform that promised you a better-paying job in exchange for a cut of your future earnings. The idea was simple: they would introduce you to people already doing the kind of work you wanted to do, and those people would help you land a similar job.</p>
+<p>In practice, I barely got any help from the platform. But they did suggest a few introductions. The most interesting one was with a freelance data scientist.</p>
+<p>In one of our first chats, my newly appointed mentor, mentioned almost in passing that he was charging over €500 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked him how to find a freelance contract, and he told me to more or less spam people on LinkedIn.</p>
+<p>So that’s what I did. I set up a bot that messaged pretty much everyone involved in Data Science in Europe: DS managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience to point to.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/5-years-freelancing-in-Europe/linkedin-spam.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Me spamming people on LinkedIn"><img src="https://dylancastillo.co/posts/images/5-years-freelancing-in-Europe/linkedin-spam.png" class="img-fluid figure-img" alt="Me spamming people on LinkedIn"></a></p>
+<figcaption class="margin-caption">Me spamming people on LinkedIn</figcaption>
+</figure>
+</div>
+<p>Not surprisingly, the approach didn’t bear fruit. I eventually realized my mentor wasn’t reallty committed. His plan was basically for me to spray LinkedIn messages across Europe and hope something worked. If I landed a job, he’d get a nice bonus. If LinkedIn blocked my account, that was my problem. So we parted ways.</p>
+<p>Two years later, in 2021, the freelance market in Europe exploded. A friend at the European Commission put me in touch with a recruiter, and I quickly got an offer. I also got into multiple hiring processes for contractors around the same time. My first gig was with the European Commission, and shortly after I switched to Deliveroo.</p>
+<p>All it took was a failed spam campaign, two years of waiting, and a pandemic.</p>
+</section>
+<section id="what-kind-of-work-i-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-kind-of-work-i-do">What kind of work I do</h2>
+<p>Over the last five years, I’ve worked across data science, data engineering, ML, backend systems, and LLMs and AI products.</p>
+<p>Early on, the work was mostly classic data and ML. I built clustering algorithms to identify trends across European research projects, worked on the NLP layer of a public-sector knowledge database, and spent close to two years building data pipelines that processed millions of data points a day to track competitors and improve the models behind them.</p>
+<p>Since 2023, most of my work has shifted to LLMs and AI products. I’ve built AI workflows and agents for B2B clients, helped startups ship AI features, supported academic research groups working on AI, taught courses on these topics, and led technical work on personalization and experimentation.</p>
+<p>In practice, I’ve become an AI engineer / data scientist / data engineer / backend engineer hybrid, with some product management mixed in. I get hired because I can get things over the finish line, not because I’m the obvious expert in one specific area. This is one of the biggest trade-offs of my freelancing career: for better or worse, I’m a generalist.</p>
+</section>
+<section id="the-good-and-bad-of-freelancing" class="level2">
+<h2 class="anchored" data-anchor-id="the-good-and-bad-of-freelancing">The good and bad of freelancing</h2>
+<p>I wouldn’t trade the experience I’ve gained from freelancing for a full-time job. But it has had its rough patches.</p>
+<p><strong>The good parts</strong></p>
+<p>The biggest upside is freedom. I work fully remotely from home, can skip most of the useless corporate meetings, and can often set my own schedule. Clients mostly care that I deliver value. I’ve always thought that most of the 360 stuff, the recurrent “how are you feeling?” meetings, and similar things are mostly performative. So I’m happy I don’t need to attend them.</p>
+<p>The second upside is variety. I get to wear many different hats, sometimes within the same week. On one project I’m acting as a PM, scoping a product and figuring out what should be built. On another I’m a data scientist, planning and analyzing experiments. On another I’m an AI engineer, shipping features for workflows or agents. I love the intellectual range of things I get to do.</p>
+<p>The third upside is the room it has given me to work on my own things. Because I could work intensely for a few months, save enough to coast for the rest of the year, and then step away, I had real time to try out business ideas and side projects. That’s how I ended up launching several ideas: Namemancer, <a href="https://aitheneum.iwanalabs.com/">AItheneum</a>, <a href="https://kasipa.com/">Kasipa</a>, and Lystinct. None of them worked out, but I got a chance to try them out!</p>
+<p><strong>The downsides</strong></p>
+<p>The first downside is uncertainty. Compared to full-time employees, I’m always operating with shorter horizons. Projects typically run three to six months, and I rarely know in advance whether a contract will be extended — or whether I even want to stay past it. That forces me into a permanent “always be selling” mode, where part of my brain is constantly scanning for the next gig even while I’m fully engaged with the current one. It gets tiring in a way that took me a while to recognize.</p>
+<p>The second downside — and this one is on me — is that I never specialized nor found a way to position myself so as not to be just another freelancer. My rates did grow over the years, but I’ve hit a ceiling I cannot push past. Clients hire me because I’m a “get-things-done” type of guy, but not because I’m <em>the</em> search guy, or <em>the</em> recommendation engines guy, or <em>the</em> AI agents guy. I’ve left real growth on the table by never going too deep into something.</p>
+</section>
+<section id="how-much-do-i-charge" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="how-much-do-i-charge">How much do I charge</h2>
+<p>My first freelance contract paid €350 a day. From there, my rates grew quickly. For the last few years, I’ve usually charged between €600 and €900 a day. For very short engagements, I generally charge more. In the US or parts of Northern Europe, good freelancers can definitely do better.</p>
+<p>For a bit of market context, I once took part in a survey of AI freelancers. Among the Europeans in that group, median yearly take-home was around €85k. For the US-based freelancers, it was closer to $150k. If you want to freelance from Europe, client location matters a lot. Northern European clients usually pay much better than Southern European ones.</p>
+<p>I’ve also experimented with switching from day rates to deliverable-based pricing on certain projects, and I generally prefer it. When the contract is structured around an outcome rather than time, my effective rate goes up, and my incentives and the client’s incentives line up. The client doesn’t care much about how many hours I’m putting in. They care about what they get.</p>
+<p>The only risk is the scope. If you misjudge the work, you can accidentally sell yourself a very stressful unpaid internship.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><a href="images/5-years-freelancing-in-Europe/revenue-over-time.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Gross revenue over time"><img src="https://dylancastillo.co/posts/images/5-years-freelancing-in-Europe/revenue-over-time.png" class="img-fluid figure-img" alt="Gross revenue over time"></a></p>
+<figcaption class="margin-caption">Gross revenue over time</figcaption>
+</figure>
+</div>
+<p>Every year since I started freelancing, I’ve made quite a bit more than I did in my last full-time job. But my income has still varied a lot depending on how much time I chose to spend on client work. In 2022 and 2023, I spent a lot of time on business ideas (that didn’t work!), and that shows in the numbers. In 2024 and 2025, I worked my ass off. That shows too.</p>
+<p>I like that freelancing is quite meritocratic in that sense. Work hard, and you will be rewarded accordingly.</p>
+</section>
+<section id="how-i-find-gigs" class="level2">
+<h2 class="anchored" data-anchor-id="how-i-find-gigs">How I find gigs</h2>
+<p>These days, I have a decent number of recruiters and past clients who stay in touch about projects. But it took a few years, and a few different channels, to get here.</p>
+<p>In the early days, a lot of it came from being active on LinkedIn. Some of my posts got good traction. For example, <a href="https://seneca.dylancastillo.co/">Ask Seneca</a>, a small demo that showcased a simple RAG system in the early days of LLMs, did pretty well. It ended up on the front page of Hacker News and got mentioned in The Economist. Other projects had similar effects. That visibility translated into people reaching out about work.</p>
+<p>Another big channel has been personal relationships. Friends from <a href="https://dylancastillo.co/posts/my-entrepreneur-first-experience.html">Entrepreneur First</a>, past clients, and former employers have reached out when they had projects I’d be a good fit for. These are the best types of leads because they require very little effort to close.</p>
+<p>I’m also in a couple of freelance platforms (á la <a href="https://www.toptal.com/">Toptal</a>). They can be useful for lead flow, but over time the rates have gotten worse. Platforms make comparison very easy, so you become a commodity. That is bad for your pocket.</p>
+<p>What I don’t do much of these days — and probably should — is active content marketing. I once heard <a href="https://x.com/jxnlco/">Jason Liu</a> summarize the best way to charge high consulting rates: “be famous.” I agree. There’s a world of difference between someone wanting to hire “an AI engineer” and someone wanting to hire Dylan Castillo. No one can outcompete me at being me.</p>
+<p>I’ve gotten a bit lazy on that front because I’m rarely out of projects. But I’m probably missing out on better opportunities, clearer positioning, and higher rates by not putting more work into the world.</p>
+<p>Finally, if I had to give one piece of advice for finding freelance work, it would be this: use your network. And by that, I don’t mean LinkedIn randos. Reach out to former colleagues, old bosses, past clients, and people who already know your work. That’s the simplest way to get started. Most people avoid it because it feels awkward.</p>
+</section>
+<section id="whats-next-for-me" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next-for-me">What’s next for me</h2>
+<p>I’ve never felt this uncertain about the future – for reasons both good and bad.</p>
+<p>On the optimistic side, <a href="https://iwanalabs.com/">Iwana Labs</a> is starting to change. Until now, it has mostly been a vehicle for my own freelance work, with occasional projects where I brought in collaborators. Some of those collaborations have kept growing, and by the end of the year, I hope to go from a one-man show to a small, focused team.</p>
+<p>The goal is not just to become an AI development agency that sells whatever clients ask for. We already have a few areas where we’ve built expertise over the years, and we’re trying to position ourselves around them. But that positioning will take time to earn.</p>
+<p>On the scary side, I genuinely don’t know what’s going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we’re heading toward a much more unequal distribution of the profits. I worry that the economics are shifting from maybe the top 20% capturing 80% of the value to the top 1% capturing 99% of it.</p>
+<p>We’ve already seen the <a href="https://www.nytimes.com/2026/04/02/technology/ai-billion-dollar-company-medvi.html?unlocked_article_code=1.X1A.fHR4.4vekZY08eLvB&amp;smid=url-share">$1B one-man company</a> and companies with <a href="https://sacra.com/research/cursor-at-100m-arr/">crazy growth rates</a>. Work that used to require a full team can increasingly be done by fewer people with better tools. Maybe the amount of work to be done will keep growing even faster than the supply of people able to do it. I hope so. But I’m not sure.</p>
+<p>When AI gives everyone the ability to build, being “pretty good at building” becomes less valuable. You need taste, distribution, deeper expertise, and stronger relationships.</p>
+<p>And honestly, I have to ask myself whether I’ll make it into that top 1%. I’m optimistic about my skills, but the real world doesn’t care about that. There are tons of amazing, highly motivated people out there. We’re in an industry with almost no barriers to entry, where the money has been good so far, and where AI can already do a lot of the work. What was already an extremely competitive industry just got much more competitive.</p>
+<p>So the next chapter is partly about responding to all of that. Finding the right people to grow with, and figuring out where we can plant a flag. Five years in, I love what freelancing has taught me and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But the next five years will need to look different from the last five if I want to come out the other side of what’s coming.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
+  author = {Castillo, Dylan},
+  title = {5 {Years} of {Freelancing} in {Europe}},
+  date = {2026-04-25},
+  url = {https://dylancastillo.co/posts/5-years-freelancing-in-europe.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas">
+Castillo, Dylan. 2026. <span>“5 Years of Freelancing in Europe.”</span>
+April 25. <a href="https://dylancastillo.co/posts/5-years-freelancing-in-europe.html">https://dylancastillo.co/posts/5-years-freelancing-in-europe.html</a>.
+</div></div></section></div> ]]></description>
+  <category>personal</category>
+  <guid>https://dylancastillo.co/posts/5-years-freelancing-in-europe.html</guid>
+  <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>LLM research on Hacker News is drying up</title>
   <dc:creator>Dylan Castillo</dc:creator>
@@ -12017,314 +12117,6 @@ Castillo, Dylan. 2025. <span>“What Is Retrieval Augmented Generation
   <category>python</category>
   <guid>https://dylancastillo.co/posts/what-is-rag.html</guid>
   <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Japanese is the most expensive language in terms of input tokens</title>
-  <dc:creator>Dylan Castillo</dc:creator>
-  <link>https://dylancastillo.co/til/counting-tokens.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>OpenAI mentions in their documentation that <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">1 token corresponds to roughly 4 characters</a>.</p>
-<p>I was curious how this would work for different languages, so:</p>
-<ol type="1">
-<li>I took a small section of Paul Graham’s <a href="https://www.paulgraham.com/greatwork.html">How to Do Great Work</a></li>
-<li>Translated it into 7 different languages: English, Spanish, French, German, Japanese, Chinese, and Hindi</li>
-<li>Counted the tokens</li>
-<li>compared the results.</li>
-</ol>
-<section id="code" class="level2">
-<h2 class="anchored" data-anchor-id="code">Code</h2>
-<p>Here’s the code:</p>
-<div id="cell-2" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> tiktoken</span>
-<span id="cb1-2"></span>
-<span id="cb1-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> read_text(file_path):</span>
-<span id="cb1-4">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">with</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(file_path, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"r"</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>:</span>
-<span id="cb1-5">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>.read()</span>
-<span id="cb1-6"></span>
-<span id="cb1-7">text_en <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/en.md"</span>)</span>
-<span id="cb1-8">text_es <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/es.md"</span>)</span>
-<span id="cb1-9">text_fr <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/fr.md"</span>)</span>
-<span id="cb1-10">text_de <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/de.md"</span>)</span>
-<span id="cb1-11">text_jp <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/jp.md"</span>)</span>
-<span id="cb1-12">text_zh <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/zh.md"</span>)</span>
-<span id="cb1-13">text_hi <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/hi.md"</span>)</span>
-<span id="cb1-14">text_ru <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/ru.md"</span>)</span>
-<span id="cb1-15">text_pt <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> read_text(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"../_extras/counting-tokens/pt.md"</span>)</span>
-<span id="cb1-16"></span>
-<span id="cb1-17"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> count_tokens(text):</span>
-<span id="cb1-18">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(tiktoken.encoding_for_model(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"gpt-4o"</span>).encode(text))</span>
-<span id="cb1-19"></span>
-<span id="cb1-20">chars_count <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb1-21">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"en"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_en),</span>
-<span id="cb1-22">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"es"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_es),</span>
-<span id="cb1-23">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fr"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_fr),</span>
-<span id="cb1-24">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"de"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_de),</span>
-<span id="cb1-25">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jp"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_jp),</span>
-<span id="cb1-26">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zh"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_zh),</span>
-<span id="cb1-27">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hi"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_hi),</span>
-<span id="cb1-28">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ru"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_ru),</span>
-<span id="cb1-29">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pt"</span>: <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">len</span>(text_pt),</span>
-<span id="cb1-30">}</span>
-<span id="cb1-31"></span>
-<span id="cb1-32">tokens_count <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {</span>
-<span id="cb1-33">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"en"</span>: count_tokens(text_en),</span>
-<span id="cb1-34">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"es"</span>: count_tokens(text_es),</span>
-<span id="cb1-35">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fr"</span>: count_tokens(text_fr),</span>
-<span id="cb1-36">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"de"</span>: count_tokens(text_de),</span>
-<span id="cb1-37">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jp"</span>: count_tokens(text_jp),</span>
-<span id="cb1-38">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zh"</span>: count_tokens(text_zh),</span>
-<span id="cb1-39">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hi"</span>: count_tokens(text_hi),</span>
-<span id="cb1-40">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ru"</span>: count_tokens(text_ru),</span>
-<span id="cb1-41">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pt"</span>: count_tokens(text_pt),</span>
-<span id="cb1-42">}</span></code></pre></div></div>
-</div>
-<p>This reads the text from the file, and uses <code>tiktoken</code> to count the tokens. I also counted the number of characters in the text.</p>
-<p>Then I calculated the ratio of tokens to characters for each language.</p>
-<div id="cell-4" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> lang <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> [<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"en"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"es"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fr"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"de"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jp"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zh"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hi"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ru"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pt"</span>]:</span>
-<span id="cb2-2">    chars <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> chars_count[lang]</span>
-<span id="cb2-3">    tokens <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> tokens_count[lang]</span>
-<span id="cb2-4">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>lang<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>chars <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> tokens<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> chars per token, </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>chars<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> chars, </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>tokens<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> tokens"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>en: 4.75 chars per token, 2053 chars, 432 tokens
-es: 4.56 chars per token, 2271 chars, 498 tokens
-fr: 4.69 chars per token, 2689 chars, 573 tokens
-de: 4.46 chars per token, 2479 chars, 556 tokens
-jp: 1.41 chars per token, 1081 chars, 767 tokens
-zh: 1.33 chars per token, 707 chars, 531 tokens
-hi: 3.51 chars per token, 2194 chars, 625 tokens
-ru: 4.02 chars per token, 2275 chars, 566 tokens
-pt: 4.63 chars per token, 2200 chars, 475 tokens</code></pre>
-</div>
-</div>
-</section>
-<section id="results" class="level2">
-<h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>I found this interesting:</p>
-<ul>
-<li>English is the most efficient language in terms of characters per token, with 4.75 characters per token.</li>
-<li>Mandarin Chinese (1.33 characters per token) is the least efficient language in terms of characters per token, followed by Japanese (1.41 characters per token).</li>
-<li>The same text in Japanese uses 77% more tokens than in English, making it the most expensive language in terms of input tokens.</li>
-<li>Even though Chinese is less efficient than Japanese in terms of characters per token, it’s more efficient in terms of information conveyed per character. The article took 2053 characters in English, 707 characters in Chinese, and 1081 characters in Japanese. This explains why Chinese isn’t also the most expensive language.</li>
-<li>Languages that use a latin alphabet (English, Spanish, French, German, Portuguese) are more efficient than languages that use a non-latin alphabet (Japanese, Chinese, Hindi, Russian). Russian is the most efficient language of these, with 4.02 characters per token.</li>
-</ul>
-</section>
-<section id="limitations" class="level2">
-<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
-<p>This analysis has some clear limitations:</p>
-<ol type="1">
-<li>The text might not be a good example of the types of texts you’re working with.</li>
-<li>The translations might not be good enough to truly reflect the information conveyed per character.</li>
-</ol>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2025,
-  author = {Castillo, Dylan},
-  title = {Japanese Is the Most Expensive Language in Terms of Input
-    Tokens},
-  date = {2025-06-27},
-  url = {https://dylancastillo.co/til/counting-tokens.html},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2025" class="csl-entry quarto-appendix-citeas">
-Castillo, Dylan. 2025. <span>“Japanese Is the Most Expensive Language in
-Terms of Input Tokens.”</span> June 27. <a href="https://dylancastillo.co/til/counting-tokens.html">https://dylancastillo.co/til/counting-tokens.html</a>.
-</div></div></section></div> ]]></description>
-  <category>til</category>
-  <category>llm</category>
-  <category>openai</category>
-  <category>tiktoken</category>
-  <guid>https://dylancastillo.co/til/counting-tokens.html</guid>
-  <pubDate>Fri, 27 Jun 2025 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
