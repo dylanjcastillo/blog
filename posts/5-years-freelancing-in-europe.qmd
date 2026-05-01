@@ -2,7 +2,6 @@
 title: "5 Years of Freelancing in Europe"
 date: 2026-04-25
 date-modified: 2026-04-25
-draft: true
 categories:
     - personal
 ---
@@ -15,11 +14,11 @@ This is my recap of how I got in, how the money worked, where I found clients, a
 
 ## How I got into freelancing
 
-I started thinking about freelancing in 2019, two years before I landed my first contract. That year, I joined a platform that promised to help people get better-paying jobs in exchange for a cut of their future earnings. The idea was simple: they would introduce you to people already doing the kind of work you wanted to do, and those people would help you land a similar job.
+I started thinking about freelancing in 2019, two years before I landed my first contract. That year, I joined a platform that promised you a better-paying job in exchange for a cut of your future earnings. The idea was simple: they would introduce you to people already doing the kind of work you wanted to do, and those people would help you land a similar job.
 
 In practice, I barely got any help from the platform. But they did suggest a few introductions. The most interesting one was with a freelance data scientist.
 
-In one of our first chats, he mentioned almost in passing that he was charging over €500 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked him how to find a freelance contract, and he told me to more or less spam people on LinkedIn.
+In one of our first chats, my newly appointed mentor, mentioned almost in passing that he was charging over €500 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked him how to find a freelance contract, and he told me to more or less spam people on LinkedIn.
 
 So that's what I did. I set up a bot that messaged pretty much everyone involved in Data Science in Europe: DS managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience to point to.
 
