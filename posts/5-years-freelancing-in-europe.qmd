@@ -18,7 +18,7 @@ I started thinking about freelancing in 2019, two years before I landed my first
 
 In practice, I barely got any help from the platform. But they did suggest a few introductions, and one of them stuck with me: a freelance data scientist.
 
-In of our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked if he’d mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.
+In our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked if he’d mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.
 
 So that's what I did. I set up a bot that messaged pretty much everyone involved in data science in Europe: managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience to point to.
 
@@ -32,7 +32,7 @@ Then COVID hit.
 
 In 2021, the freelance market in Europe exploded. A friend at the European Commission put me in touch with a recruiter, and I quickly got an offer. I also got into multiple hiring processes for contractors around the same time. My first gig was with the European Commission, and shortly after I switched to Deliveroo.
 
-I thought getting into freelancing would be hard. I just didn’t expect the path to involve a failed spam campaign, two years of waiting, and a global virus. 
+I thought getting into freelancing would be hard. I just didn’t expect the path to involve a failed spam campaign, two years of waiting, and a global pandemic. 
 
 ## What kind of work I do
 
@@ -102,7 +102,7 @@ On the optimistic side, [Iwana Labs](https://iwanalabs.com/) is starting to chan
 
 The goal is not just to become an AI development agency that sells whatever clients ask for. We already have a few areas where we've built expertise over the years, and we’re trying to position ourselves around them. But that positioning will take time to earn.
 
-On the scary side, I genuinely don't know what's going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we're heading toward a much more unequal distribution of the profits. I worry that the economics are shifting from maybe the top 20% capturing 80% of the value to the top 1% capturing 99% of it. 
+On the scary side, I genuinely don't know what's going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we're heading toward a much more unequal distribution of the profits. I worry the economics are shifting from something like the top 20% capturing 80% of the value to something closer to the top 1% capturing 99%.
 
 We've already seen the [$1B one-man company](https://www.nytimes.com/2026/04/02/technology/ai-billion-dollar-company-medvi.html?unlocked_article_code=1.X1A.fHR4.4vekZY08eLvB&smid=url-share) and companies with [crazy growth rates](https://sacra.com/research/cursor-at-100m-arr/). Work that used to require a full team can increasingly be done by fewer people with better tools. Maybe the amount of work to be done will keep growing even faster than the supply of people able to do it. I hope so. But I’m not sure.
 
@@ -110,4 +110,4 @@ When AI gives everyone the ability to build, being “pretty good at building”
 
 And honestly, I have to ask myself whether I’ll make it into that top 1%. I’m optimistic about my skills, but the real world doesn’t care about that. There are tons of amazing, highly motivated people out there. We’re in an industry with almost no barriers to entry, where the money has been good so far, and where AI can already do a lot of the work. What was already an extremely competitive industry just got much more competitive.
 
-So the next chapter is partly about responding to all of that. Finding the right people to grow with, and figuring out where we can plant a flag. Five years in, I love what freelancing has taught me and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But the next five years will need to look different from the last five if I want to come out the other side of what's coming.   
+So the next chapter is partly about responding to all of that. Finding the right people to grow with, and figuring out where we can plant a flag. Five years in, I love what freelancing has taught me and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But the next five years will need to look different from the last five if I want to stay relevant through what’s coming.
