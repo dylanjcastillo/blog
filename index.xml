@@ -25,14 +25,14 @@
 
 
 
-<p>Five years ago, freelancing felt like arbitrage: do the same work I was already doing, charge much more for it, and barely change my lifestyle. So I left my full-time job in the middle of the pandemic and gave it a shot.</p>
-<p>Since then, I’ve worked with startups, scaleups, public institutions and global organizations. I moved from data science and ML into LLMs and AI products. Freelancing gave me more freedom, more variety, and more time to work on the things I care about. But it also came with uncertainty, a constant pressure to sell, and a ceiling I’ve struggled to push past.</p>
+<p>Five years ago, freelancing looked like the perfect arbitrage: same work, better pay, and almost no change to my lifestyle. So I left my full-time job in the middle of the pandemic and gave it a shot.</p>
+<p>Since then, I’ve worked with scrappy startups and global organizations. I moved from classic data science and ML into AI products. Freelancing gave me more freedom, more variety, and more time to work on the things I care about. But it also made it too easy to chase the next gig instead of specializing. I’ve now hit a ceiling I can’t seem to push past.</p>
 <p>This is my recap of how I got in, how the money worked, where I found clients, and what I’d do differently.</p>
-<section id="how-i-got-into-freelancing" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="how-i-got-into-freelancing">How I got into freelancing</h2>
+<section id="how-i-got-in" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="how-i-got-in">How I got in</h2>
 <p>I started thinking about freelancing in 2019, two years before I landed my first contract. That year, I joined a platform that promised you a better-paying job in exchange for a cut of your future earnings. The idea was simple: they would introduce you to people already doing the kind of work you wanted to do, and those people would help you land a similar job.</p>
 <p>In practice, I barely got any help from the platform. But they did suggest a few introductions, and one of them stuck with me: a freelance data scientist.</p>
-<p>In of our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked if he’d mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.</p>
+<p>In our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked if he’d mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.</p>
 <p>So that’s what I did. I set up a bot that messaged pretty much everyone involved in data science in Europe: managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience to point to.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -42,32 +42,21 @@
 </div>
 <p>I grew from 500 connections to close to 4,000, but the approach didn’t bear fruit. Eventually, I realized our incentives weren’t aligned. My mentor’s plan was for me to spray LinkedIn messages across Europe and hope something worked. If I landed a job, he’d get a nice bonus. If LinkedIn blocked my account, that was my problem. So we parted ways.</p>
 <p>Instead of doing that, I decided to start a blog, share useful information on LinkedIn, and apply to contracting opportunities with the hopes that something would pan out. For a while, nothing did.</p>
-<p>Then COVID happened.</p>
+<p>Then COVID hit.</p>
 <p>In 2021, the freelance market in Europe exploded. A friend at the European Commission put me in touch with a recruiter, and I quickly got an offer. I also got into multiple hiring processes for contractors around the same time. My first gig was with the European Commission, and shortly after I switched to Deliveroo.</p>
-<p>I thought getting into freelancing would be hard. I just didn’t expect the path to involve a failed spam campaign, two years of waiting, and a global virus.</p>
+<p>I thought getting into freelancing would be hard. I just didn’t expect the path to involve a failed spam campaign, two years of waiting, and a global pandemic.</p>
 </section>
 <section id="what-kind-of-work-i-do" class="level2">
 <h2 class="anchored" data-anchor-id="what-kind-of-work-i-do">What kind of work I do</h2>
 <p>Over the last five years, I’ve worked across data science, data engineering, ML, backend systems, and LLMs and AI products.</p>
 <p>Early on, the work was mostly classic data and ML. I built clustering algorithms to identify trends across European research projects, worked on the NLP layer of a public-sector knowledge database, and spent close to two years building data pipelines that processed millions of data points a day to track competitors and improve the models behind them.</p>
 <p>Since 2023, most of my work has shifted to LLMs and AI products. I’ve built AI workflows and agents for B2B clients, helped startups ship AI features, supported academic research groups working on AI, taught courses on these topics, and led technical work on personalization and experimentation.</p>
-<p>In practice, I’ve become an AI engineer / data scientist / data engineer / backend engineer hybrid, with some product management mixed in. I get hired because I can get things over the finish line, not because I’m the obvious expert in one specific area. This is one of the biggest trade-offs of my freelancing career: for better or worse, I’m a generalist.</p>
+<p>In practice, I’ve become an AI engineer / data scientist / data engineer / backend engineer hybrid, with some product management mixed in. I get hired because I can drag messy projects over the finish line, not because I’m the obvious expert in one narrow thing. This is one of the biggest trade-offs of my freelancing career: for better or worse, I’m a generalist.</p>
 </section>
-<section id="the-good-and-bad-of-freelancing" class="level2">
-<h2 class="anchored" data-anchor-id="the-good-and-bad-of-freelancing">The good and bad of freelancing</h2>
-<p>I wouldn’t trade the experience I’ve gained from freelancing for a full-time job. But it has had its rough patches.</p>
-<p><strong>The good parts</strong></p>
-<p>The biggest upside is freedom. I work fully remotely from home, can skip most of the useless corporate meetings, and can often set my own schedule. Clients mostly care that I deliver value. I’ve always thought that most of the 360 stuff, the recurrent “how are you feeling?” meetings, and similar things are mostly performative. So I’m happy I don’t need to attend them.</p>
-<p>The second upside is variety. I get to wear many different hats, sometimes within the same week. On one project I’m acting as a PM, scoping a product and figuring out what should be built. On another I’m a data scientist, planning and analyzing experiments. On another I’m an AI engineer, shipping features for workflows or agents. I love the intellectual range of things I get to do.</p>
-<p>The third upside is the room it has given me to work on my own things. Because I could work intensely for a few months, save enough to coast for the rest of the year, and then step away, I had real time to try out business ideas and side projects. That’s how I ended up launching several ideas: Namemancer, <a href="https://aitheneum.iwanalabs.com/">AItheneum</a>, <a href="https://kasipa.com/">Kasipa</a>, and Lystinct. None of them worked out, but I got a chance to try them out!</p>
-<p><strong>The downsides</strong></p>
-<p>The first downside is uncertainty. Compared to full-time employees, I’m always operating with shorter horizons. Projects typically run three to six months, and I rarely know in advance whether a contract will be extended — or whether I even want to stay past it. That forces me into a permanent “always be selling” mode, where part of my brain is constantly scanning for the next gig even while I’m fully engaged with the current one. It gets tiring in a way that took me a while to recognize.</p>
-<p>The second downside — and this one is on me — is that I never specialized nor found a way to position myself so as not to be just another freelancer. My rates did grow over the years, but I’ve hit a ceiling I cannot push past. Clients hire me because I’m a “get-things-done” type of guy, but not because I’m <em>the</em> search guy, or <em>the</em> recommendation engines guy, or <em>the</em> AI agents guy. I’ve left real growth on the table by never going too deep into something.</p>
-</section>
-<section id="how-much-do-i-charge" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="how-much-do-i-charge">How much do I charge</h2>
+<section id="how-much-i-make" class="level1 page-columns page-full">
+<h1>How much I make</h1>
 <p>My first freelance contract paid €350 a day. From there, my rates grew quickly. For the last few years, I’ve usually charged between €600 and €900 a day. For very short engagements, I generally charge more. In the US or parts of Northern Europe, good freelancers can definitely do better.</p>
-<p>For a bit of market context, I once took part in a survey of AI freelancers. Among the Europeans in that group, median yearly take-home was around €85k. For the US-based freelancers, it was closer to $150k. If you want to freelance from Europe, client location matters a lot. Northern European clients usually pay much better than Southern European ones.</p>
+<p>For a bit of market context, I once took part in a survey of AI freelancers. Among the Europeans in that group, median yearly gross revenue was around €85k. For the US-based freelancers, it was closer to $150k (€~128k). If you want to freelance from Europe, client location matters a lot. Northern European clients usually pay much better than Southern European ones.</p>
 <p>I’ve also experimented with switching from day rates to deliverable-based pricing on certain projects, and I generally prefer it. When the contract is structured around an outcome rather than time, my effective rate goes up, and my incentives and the client’s incentives line up. The client doesn’t care much about how many hours I’m putting in. They care about what they get.</p>
 <p>The only risk is the scope. If you misjudge the work, you can accidentally sell yourself a very stressful unpaid internship.</p>
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -77,30 +66,53 @@
 </figure>
 </div>
 <p>Every year since I started freelancing, I’ve made quite a bit more than I did in my last full-time job. But my income has still varied a lot depending on how much time I chose to spend on client work. In 2022 and 2023, I spent a lot of time on business ideas (that didn’t work!), and that shows in the numbers. In 2024 and 2025, I worked my ass off. That shows too.</p>
-<p>I like that freelancing is quite meritocratic in that sense. Work hard, and you will be rewarded accordingly.</p>
+<p>If you have a good lead flow, freelancing will give you a very direct link between effort and income. Work hard, and you will be rewarded accordingly.</p>
+<section id="the-good-and-bad-of-freelancing" class="level2">
+<h2 class="anchored" data-anchor-id="the-good-and-bad-of-freelancing">The good and bad of freelancing</h2>
+<p>I wouldn’t trade the experience I’ve gained from freelancing for a full-time job. But it has had its rough patches.</p>
+<p><strong>Pros</strong></p>
+<p>The biggest upside is freedom. I work fully remotely from home and can often set my own schedule. I also avoid most corporate theater: 360 reviews or recurring “how are you feeling?” meetings. Clients care that I deliver value.</p>
+<p>The second upside is variety. I get to wear many different hats, sometimes within the same week. On one project I’m acting as a PM, scoping a product and figuring out what should be built. On another I’m a data scientist, planning and analyzing experiments. On another I’m an AI engineer, shipping features for workflows or agents. I love the intellectual range of things I get to do.</p>
+<p>The third upside is money without moving out. Me and my wife are immigrants and provide financial support for my family and extended family. I care about money. I also wanted an option that would increase my income without forcing me to leave Spain, as my wife’s line of work makes it hard to relocate abroad. Freelancing has given me this option.</p>
+<p>The fourth upside is the room it has given me to work on my own things. Because I could work intensely for a few months, save enough to coast for the rest of the year, and then step away, I had real time to try out business ideas and side projects. That’s how I ended up launching several ideas: Namemancer, <a href="https://aitheneum.iwanalabs.com/">AItheneum</a>, <a href="https://kasipa.com/">Kasipa</a>, and Lystinct. None of them worked out, but I got a chance to try them out!</p>
+<p><strong>Cons</strong></p>
+<p>The first downside is uncertainty. Compared to full-time employees, I’m always operating with shorter horizons. Projects typically run three to six months, and I rarely know in advance whether a contract will be extended — or whether I even want to stay past it. That forces me into a permanent “always be selling” mode, where part of my brain is constantly scanning for the next gig even while I’m fully engaged with the current one. It gets tiring in a way that took me a while to recognize.</p>
+<p>The second downside — and this one is partly on me — is that freelancer often makes it harder to specialize, if you’re not careful. By design, freelancing contracts tend to be short, and I never found ways to position myself so as not to be just another freelancer. I picked contract based on what I find interesting and daily rate. But I really never made a proper plan of what I wanted to become, and how I’d position myself.</p>
+<p>My rates did grow over the years, but I’ve hit a ceiling I cannot push past. Clients hire me because I’m a “get-things-done” type of guy, but not because I’m <em>the</em> search guy, or <em>the</em> recommendation engines guy, or <em>the</em> AI agents guy. I’ve left real growth on the table by never going too deep into something.</p>
 </section>
 <section id="how-i-find-gigs" class="level2">
 <h2 class="anchored" data-anchor-id="how-i-find-gigs">How I find gigs</h2>
 <p>These days, I have a decent number of recruiters and past clients who stay in touch about projects. But it took a few years, and a few different channels, to get here.</p>
 <p>In the early days, a lot of it came from being active on LinkedIn. Some of my posts got good traction. For example, <a href="https://seneca.dylancastillo.co/">Ask Seneca</a>, a small demo that showcased a simple RAG system in the early days of LLMs, did pretty well. It ended up on the front page of Hacker News and got mentioned in The Economist. Other projects had similar effects. That visibility translated into people reaching out about work.</p>
 <p>Another big channel has been personal relationships. Friends from <a href="https://dylancastillo.co/posts/my-entrepreneur-first-experience.html">Entrepreneur First</a>, past clients, and former employers have reached out when they had projects I’d be a good fit for. These are the best types of leads because they require very little effort to close.</p>
-<p>I’m also in a couple of freelance platforms (á la <a href="https://www.toptal.com/">Toptal</a>). They can be useful for lead flow, but over time the rates have gotten worse. Platforms make comparison very easy, so you become a commodity. That is bad for your pocket.</p>
-<p>What I don’t do much of these days — and probably should — is active content marketing. I once heard <a href="https://x.com/jxnlco/">Jason Liu</a> summarize the best way to charge high consulting rates: “be famous.” I agree. There’s a world of difference between someone wanting to hire “an AI engineer” and someone wanting to hire Dylan Castillo. No one can outcompete me at being me.</p>
+<p>I’m also in a couple of freelance platforms (á la <a href="https://www.toptal.com/">Toptal</a>). They can be useful for lead flow, but over time the rates have gotten worse. Platforms make comparison easy, and comparison turns you into a commodity. That is bad for your pocket.</p>
+<p>The thing I have neglected lately is content. Which is stupid, because that’s how you build authority and get strangers to trust you. I once heard <a href="https://x.com/jxnlco/">Jason Liu</a> summarize the best way to charge high consulting rates: “be famous.” I agree. There’s a world of difference between someone wanting to hire “an AI engineer” and someone wanting to hire Dylan Castillo. No one can outcompete me at being me.</p>
 <p>I’ve gotten a bit lazy on that front because I’m rarely out of projects. But I’m probably missing out on better opportunities, clearer positioning, and higher rates by not putting more work into the world.</p>
 <p>Finally, if I had to give one piece of advice for finding freelance work, it would be this: use your network. And by that, I don’t mean LinkedIn randos. Reach out to former colleagues, old bosses, past clients, and people who already know your work. That’s the simplest way to get started. Most people avoid it because it feels awkward.</p>
+</section>
+<section id="what-id-do-differently" class="level2">
+<h2 class="anchored" data-anchor-id="what-id-do-differently">What I’d do differently</h2>
+<p>If I were to start over, here are the things I’d change:</p>
+<ol type="1">
+<li>Don’t start with cold outreach. Reach out to former colleagues and past employers. Join a freelancing platform such as toptal.</li>
+<li>Pick a lane and write a new post / make a new video every month.</li>
+<li>Figure out a clear positioning for my services.</li>
+<li>Spend less time working on random products on the side, and more on understanding which of the things I’m already doing could be productized.</li>
+</ol>
 </section>
 <section id="whats-next-for-me" class="level2">
 <h2 class="anchored" data-anchor-id="whats-next-for-me">What’s next for me</h2>
 <p>I’ve never felt this uncertain about the future – for reasons both good and bad.</p>
 <p>On the optimistic side, <a href="https://iwanalabs.com/">Iwana Labs</a> is starting to change. Until now, it has mostly been a vehicle for my own freelance work, with occasional projects where I brought in collaborators. Some of those collaborations have kept growing, and by the end of the year, I hope to go from a one-man show to a small, focused team.</p>
 <p>The goal is not just to become an AI development agency that sells whatever clients ask for. We already have a few areas where we’ve built expertise over the years, and we’re trying to position ourselves around them. But that positioning will take time to earn.</p>
-<p>On the scary side, I genuinely don’t know what’s going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we’re heading toward a much more unequal distribution of the profits. I worry that the economics are shifting from maybe the top 20% capturing 80% of the value to the top 1% capturing 99% of it.</p>
+<p>On the scary side, I genuinely don’t know what’s going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we’re heading toward a much more unequal distribution of the profits. I worry the economics are shifting from something like the top 20% capturing 80% of the value to something closer to the top 1% capturing 99%.</p>
 <p>We’ve already seen the <a href="https://www.nytimes.com/2026/04/02/technology/ai-billion-dollar-company-medvi.html?unlocked_article_code=1.X1A.fHR4.4vekZY08eLvB&amp;smid=url-share">$1B one-man company</a> and companies with <a href="https://sacra.com/research/cursor-at-100m-arr/">crazy growth rates</a>. Work that used to require a full team can increasingly be done by fewer people with better tools. Maybe the amount of work to be done will keep growing even faster than the supply of people able to do it. I hope so. But I’m not sure.</p>
 <p>When AI gives everyone the ability to build, being “pretty good at building” becomes less valuable. You need taste, distribution, deeper expertise, and stronger relationships.</p>
 <p>And honestly, I have to ask myself whether I’ll make it into that top 1%. I’m optimistic about my skills, but the real world doesn’t care about that. There are tons of amazing, highly motivated people out there. We’re in an industry with almost no barriers to entry, where the money has been good so far, and where AI can already do a lot of the work. What was already an extremely competitive industry just got much more competitive.</p>
-<p>So the next chapter is partly about responding to all of that. Finding the right people to grow with, and figuring out where we can plant a flag. Five years in, I love what freelancing has taught me and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But the next five years will need to look different from the last five if I want to come out the other side of what’s coming.</p>
+<p>So the next chapter is partly about responding to all of that. Finding the right people to grow with, and figuring out where we can plant a flag. Five years in, I love what freelancing has taught me and the opportunities it has given me: the freedom, the variety, and the time to build my own things. But the next five years will need to look different from the last five if I want to stay relevant through what’s coming.</p>
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
