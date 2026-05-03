@@ -68,7 +68,7 @@ The only risk is the scope. If you misjudge the work, you can accidentally sell 
 
 But pricing only matters if you have demand. Without lead flow, you have no leverage. For me, that demand has come from a few places.
 
-After the first contract, many projects came from being active on LinkedIn. Some of my posts got good traction. For example, [Ask Seneca](https://seneca.dylancastillo.co/), a small demo that showcased a simple RAG system in the early days of LLMs, did pretty well. It ended up on the front page of Hacker News and got mentioned in The Economist. Other projects had similar effects. That visibility translated into people reaching out about work.
+After the first contract, many projects came from being active on LinkedIn. Some of my posts got good traction. For example, [Ask Seneca](https://seneca.dylancastillo.co/), a small demo that showcased a simple RAG system in the early days of LLMs. It ended up on the front page of Hacker News and got mentioned in The Economist. Other projects followed similar paths. That visibility translated into people reaching out about work.
 
 Another big channel has been personal relationships. Friends from [Entrepreneur First](https://dylancastillo.co/posts/my-entrepreneur-first-experience.html), past clients, and former employers have reached out when they had projects I'd be a good fit for. These are the best types of leads because they require very little effort to close.
 
