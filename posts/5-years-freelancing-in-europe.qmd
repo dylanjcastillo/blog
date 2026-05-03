@@ -44,7 +44,7 @@ Since 2023, most of my work has shifted to LLMs and AI products. I’ve built AI
 
 In practice, I’ve become an AI engineer / data scientist / data engineer / backend engineer hybrid, with some product management mixed in. I get hired because I can drag messy projects over the finish line, not because I’m the obvious expert in one narrow thing. This is one of the biggest trade-offs of my freelancing career: for better or worse, I’m a generalist.
 
-# How much I make
+## How much I make
 
 My first freelance contract paid €350 a day. From there, my rates grew quickly. For the last few years, I’ve usually charged between €600 and €900 a day. For very short engagements, I generally charge more. In the US or parts of Northern Europe, good freelancers can definitely do better.
 
