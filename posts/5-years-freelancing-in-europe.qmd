@@ -1,5 +1,5 @@
 ---
-title: "5 Years of Freelancing - A Recap"
+title: "5 Years of Freelancing: same work, better pay, and a ceiling"
 date: 2026-04-25
 date-modified: 2026-05-03
 categories:
@@ -92,7 +92,7 @@ That is the trade-off I've been struggling with. Clients generally hire me becau
 
 Freelancing made it easy to stay that way. Contracts tend to be short, and I usually picked projects based on what I found interesting and what paid well. I never made a proper plan for what I wanted to become. So even as my rates grew, I never found a way to stop looking like just another freelancer.
 
-That is the ceiling I’ve hit. I can still find work. But I don’t yet have a strong enough answer to “Why you?” to go above the rates I'm charge now. At higher rates, clients want more than competence. They want reputation, expertise, and trust. I haven’t found the right way to position myself for that yet.
+That is the ceiling I’ve hit. I can still find work. but I don’t yet have a strong enough answer to “Why you?” to go above the rates I charge now. At higher rates, clients want more than competence. They want reputation, expertise, and trust. I haven’t found the right way to position myself for that yet.
 
 ## What I'd do differently
 
@@ -112,7 +112,7 @@ I've never felt this uncertain about the future – for reasons both good and ba
 
 On the optimistic side, [Iwana Labs](https://iwanalabs.com/) is starting to change. Until now, it has mostly been a vehicle for my own freelance work, with occasional projects where I brought in collaborators. Some of those collaborations have kept growing, and by the end of the year, I hope to go from a one-man show to a small team.
 
-The goal is not just to become an AI development agency that sells whatever clients ask for. We already have a few areas where we've built expertise over the years, and we're trying to position ourselves around them. But that positioning will take time to build. 
+We don't want to be just another AI development agency™. That's pretty common trope, but we have a few areas where we've built expertise over the years, and I hope we can position ourselves around them. But that will take time to get right. 
 
 On the scary side, I genuinely don't know what's going to happen to the software industry. The changes from AI have been amazing to watch. But my best guess is that we're heading toward a much more unequal distribution of the profits. I worry the economics are shifting from something like the top 20% capturing 80% of the value to something closer to the top 1% capturing 99%.
 
