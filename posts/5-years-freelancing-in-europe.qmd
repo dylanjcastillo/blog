@@ -1,30 +1,30 @@
 ---
-title: "5 Years of Freelancing: same work, better pay, and a ceiling"
+title: "Five Years of Freelancing in Europe"
 date: 2026-04-25
 date-modified: 2026-05-03
 categories:
     - personal
 ---
 
-Five years ago, freelancing looked like arbitrage: same work, better pay, and barely any lifestyle change. So I left my full-time job in the middle of the pandemic and gave it a shot.
+Five years ago, freelancing in Europe felt like arbitrage: same work, better pay, without leaving Spain. So I left my full-time job in the middle of the pandemic and gave it a shot.
 
-It worked. Since then, I've worked with scrappy startups and global organizations. I moved from classic data science and ML into building AI products. Freelancing gave me more freedom, more variety, and more time to work on the things I care about.
+It worked. I made more money, had more freedom, and worked with all sorts of companies on interesting projects across data science, ML, and AI products.
 
-But it also trapped me by rewarding me for staying broad. I chased interesting projects, optimized for pay, and avoided going too deep into any topic. Now, I’ve hit a ceiling I can’t seem to push past.
+But that was also the problem. Freelancing rewarded my flexibility and never forced me to pick a lane. Eventually, that flexibility became a ceiling.
 
-This is a recap of how I got in, what freelancing gave me, how the business actually works, and where I think I went wrong.
+This is a recap of how I got in, how much I made, how I found gigs, and what I've learned in the process.
 
 ## How I got in
 
 I started thinking about freelancing in 2019, two years before I landed my first contract. That year, I joined a platform that promised you a better-paying job in exchange for a cut of your future earnings. The idea was simple: they would introduce you to people already doing the kind of work you wanted to do, and those people would help you land a similar job.
 
-In practice, I barely got any help from the platform. But they did suggest a few introductions, and one of them stuck with me: a freelance data scientist.
+They suggested a few introductions, and one of them stuck with me: a freelance data scientist.
 
-In our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money. I asked if he'd mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.
+In our first chat, he mentioned almost in passing that he was charging over €600 a day. That blew my mind. He was doing the same work I was doing, but making much more money, and he didn't have to leave his hometown! I asked if he'd mentor me and help me land a freelance contract. He said yes, then shared his secret sauce: spam people on LinkedIn.
 
 So that's what I did. 
 
-I set up a bot that messaged pretty much everyone involved in data science in Europe: managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience to point to.
+I set up a bot that messaged pretty much everyone involved in data science in Europe: managers, recruiters, and a few confused interns. Most people ignored me. A few wrote back to ask whether what I was doing was even legal. Most recruiters dismissed me because I had no prior freelancing experience.
 
 ![Me spamming people on LinkedIn](images/5-years-freelancing-in-Europe/linkedin-spam.png)
 
@@ -36,7 +36,7 @@ Then COVID hit.
 
 By early 2021, the freelance market in Europe exploded. A friend at the European Commission made an intro, and I got my first contract offer within a couple of days. I also got into multiple hiring processes for contractors around the same time. My first gig was with the [European Commission](https://commission.europa.eu/index_en), and shortly after I switched to [Deliveroo](https://deliveroo.co.uk/).
 
-I thought getting into freelancing would be hard. I just didn't expect the path to involve a failed spam campaign, two years of waiting, and a global pandemic.
+I expected getting into freelancing to be hard. I just didn’t expect the path to involve a failed spam campaign, two years of waiting, and a global pandemic.
 
 ## What freelancing gave me
 
@@ -50,21 +50,21 @@ If you have a good lead flow, freelancing gives you a very direct link between e
 
 That matters to me. My wife and I are immigrants, and we provide financial support for my family and extended family. So yes, I care about money. I also wanted to earn more without leaving Spain, because my wife's work makes relocating difficult. Freelancing gave me that option.
 
-The second thing it gave me is freedom and comfort. I work fully remotely from home and can often set my own schedule. I stay healthy: I hit the gym four days a week and walk 12,000 steps every day with my walking pad while I work. I also avoid most corporate theater: 360 reviews or recurring "how are you feeling?" meetings. Clients care that I deliver value.
+The second thing it gave me is freedom and comfort. I work fully remotely from home and can often set my own schedule. I stay healthy: I hit the gym four days a week and walk 12,000 steps every day with my walking pad while I work. I also avoid most corporate theater: 360 reviews or recurring "how are you feeling?" meetings. 
 
-The third is variety. On one project I'm acting as a PM, scoping a product and figuring out what should be built. On another I'm a data scientist, planning and analyzing experiments. On another I'm an AI engineer, shipping features for workflows or agents. I love the intellectual range of things I get to do.
+The third is variety. On one project I'm acting as a technical product manager, scoping a product and figuring out what should be built. On another I'm a data scientist, planning and analyzing experiments. On another I'm an AI engineer, shipping features for workflows or agents. I love the intellectual range of things I get to do.
 
 The fourth is the room it has given me to work on my own things. Because I could work intensely for a few months, save enough to coast for the rest of the year, and then step away, I had real time to try out business ideas and side projects. None of my business ideas worked out, but I'm glad I got to try.
 
 ## How I got work
 
-How much you make heavily depends on where your clients are. In Europe, Northern European clients usually pay much better than Southern European ones. So I rarely work with local clients. 
+How much you make heavily depends on where your clients are. In Europe, Northern European clients usually pay much better than Southern European ones. Even while living in Spain, most of my clients are not local. 
 
 For a bit of wider market context, I once took part in a survey of AI freelancers. Among the Europeans in that group, median yearly gross revenue was around €85k. For the US-based freelancers, it was closer to $150k (roughly €128k). 
 
-Pricing model matters too. I've also experimented with switching from day rates to deliverable-based pricing on certain projects, and I usually prefer it. When the contract is structured around an outcome rather than time, my effective rate goes up, and my incentives and the client's incentives line up. The client doesn't care much about how many hours I'm putting in. They care about what they get.
+Pricing model matters too. I’ve experimented with deliverable-based pricing, and I usually prefer it. When the contract is tied to an outcome rather than time, my effective rate goes up and the incentives are cleaner: the client cares less about my hours and more about the result.
 
-The only risk is the scope. If you misjudge the work, you can accidentally sell yourself a very stressful unpaid internship.
+The danger is scope. If you misjudge the work, you can accidentally sell yourself a very stressful unpaid internship.
 
 But pricing only matters if you have demand. Without lead flow, you have no leverage. For me, that demand has come from a few places.
 
