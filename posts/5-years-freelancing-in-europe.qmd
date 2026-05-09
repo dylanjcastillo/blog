@@ -1,12 +1,12 @@
 ---
-title: "Five Years of Freelancing in Europe"
+title: "Five Years of Freelancing from Spain"
 date: 2026-04-25
 date-modified: 2026-05-03
 categories:
     - personal
 ---
 
-Five years ago, freelancing in Europe felt like arbitrage: same work, better pay, without leaving Spain. So I left my full-time job in the middle of the pandemic and gave it a shot.
+Five years ago, freelancing from Spain felt like arbitrage: same work, better pay, no lifestyle changes. So I left my full-time job in the middle of the pandemic and gave it a shot.
 
 It worked. I made more money, had more freedom, and worked with all sorts of companies on interesting projects across data science, ML, and AI products.
 
