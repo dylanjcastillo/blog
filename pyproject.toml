@@ -35,6 +35,10 @@ dependencies = [
     "openpyxl>=3.1.5",
     "sentence-transformers>=5.0.0",
     "quarto-cli>=1.7.32",
+    "cairosvg>=2.9.0",
+    "matplotlib>=3.11.1",
+    "statsmodels>=0.14.6",
+    "pyfixest>=0.60.0",
 ]
 
 [dependency-groups]
