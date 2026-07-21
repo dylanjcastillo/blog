@@ -165,3 +165,12 @@ cython_debug/
 /_site/
 /data/
 chroma/
+
+# pelicanmaxxing: keep the analysis tables, skip the 113MB of raw artifacts
+_extras/pelicanmaxxing/data/*
+!_extras/pelicanmaxxing/data/analysis/
+_extras/pelicanmaxxing/data/analysis/*
+!_extras/pelicanmaxxing/data/analysis/*.csv
+
+# Quarto intermediate notebooks
+*.quarto_ipynb
