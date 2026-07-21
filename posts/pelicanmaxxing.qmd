@@ -20,9 +20,9 @@ For the past few years, [Simon Willison](https://simonwillison.net/tags/pelican-
 
 What began as a tongue-in-cheek benchmark has become one of the most famous informal benchmarks in AI. Simon’s pelican-on-a-bicycle results are often among the most upvoted comments on Hacker News threads announcing new releases from AI labs.
 
-The benchmark is now famous enough that there's [plenty of](https://news.ycombinator.com/item?id=48994217) [discussion](https://news.ycombinator.com/item?id=48956159) about its usefulness and about whether AI labs might be benchmaxxing^[the practice of optimizing AI models to achive high scores on popular benchmarks.] on it. When billions or even trillions of dollars are at stake, and a strong result could help persuade users, wouldn’t it be tempting to pelicanmaxx your model just a bit?
+The benchmark is now famous enough that there's [plenty of](https://news.ycombinator.com/item?id=48994217) [discussion](https://news.ycombinator.com/item?id=48956159) about its usefulness and about whether AI labs might be benchmaxxing^[the practice of optimizing AI models to achieve high scores on popular benchmarks.] on it. When billions or even trillions of dollars are at stake, and a strong result could help persuade users, wouldn’t it be tempting to pelicanmaxx your model just a bit?
 
-I wanted to find out, so I put together a small experiment. I generated 1,008 SVGs across seven frontier models, an LLM judge and Claude Fable 5 for the analysis.  
+I wanted to find out, so I put together a small experiment. I generated 1,008 SVGs across seven frontier models, scored them with an LLM judge, and used Claude Fable 5 for the analysis.  
 
 This article presents the results. All the code is available on [Github](https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing).
 
@@ -33,9 +33,9 @@ I built a grid of 8 animals × 6 vehicles = 48 prompts, where the famous prompt 
 1. **Animals**: pelican, flamingo, heron, otter, raccoon, antelope, whale, cat
 2. **Vehicles**: bicycle, unicycle, skateboard, scooter, plane, boat
 
-Every prompt uses almost identical phrasing to Simon's, only switching the animal and vehicle. The animal and vehicle selection wasn't done in a very rigorous manner but they try to combine similarity and complexity to the original prompt. Flamingo and heron are quite similar to pelicans, cat, raccoon, and otter are easy cases, antelope is hard, and whale is as different as you can get. 
+Every prompt uses almost identical phrasing to Simon's, only switching the animal and vehicle. The animal and vehicle selection wasn't done in a very rigorous manner, but I tried to vary both similarity to the original prompt and difficulty. Flamingo and heron are quite similar to pelicans; cat, raccoon, and otter are easy cases; antelope is hard; and whale is as different as you can get. 
 
-I tested 7 models through [OpenRouter](https://openrouter.ai/): _GPT-5.6 Terra_, _Claude Sonnet 5_, _Gemini 3.5 Flash_, _Grok 4.5_, _Qwen3.7-Max_, _GLM-5.2_, and _DeepSeek V4 Pro_. I generated 3 samples per prompt, at temperature 1.0, requesting the same reasoning effort from every model. That resulted in 1,008 SVGs. 
+I tested seven models through [OpenRouter](https://openrouter.ai/): _GPT-5.6 Terra_, _Claude Sonnet 5_, _Gemini 3.5 Flash_, _Grok 4.5_, _Qwen3.7-Max_, _GLM-5.2_, and _DeepSeek V4 Pro_. I generated 3 samples per prompt, at temperature 1.0, requesting the same reasoning effort from every model. That resulted in 1,008 SVGs. 
 
 Then I ran each image through a three-stage pipeline:
 
@@ -43,9 +43,9 @@ Then I ran each image through a three-stage pipeline:
 2. **Judging**: _GPT-5.6 Luna_ scores each image against its prompt, producing 1-5 ratings for the animal, the vehicle, and the action.
 3. **Blind feature extraction**: To extract some potentially useful data for a more detailed analysis, I also passed each rendered image to _Gemini 3.1 Flash-Lite_ and extracted the animal and vehicle it recognized, which way the subject faces, and an open-ended list of scene elements. 
 
-My hypothesis is that if a lab trained on the benchmark, it should show up in some combination of: the pelican row scoring above what the animal deserves, the bicycle column scoring above what the vehicle deserves, the specific pelican-bicycle cell beating both.
+My hypothesis is that if a lab trained on the benchmark, it should show up in some combination of the pelican row scoring above what the animal deserves, the bicycle column scoring above what the vehicle deserves, or the specific pelican-bicycle cell beating both.
 
-# Browse the images
+# Show me the SVG 
 
 Pick a lab to see everything it drew, with the judge's score under each image (click to open full size):
 
@@ -73,7 +73,9 @@ Pick a lab to see everything it drew, with the judge's score under each image (c
 import sys
 
 sys.path.insert(0, "../_extras/pelicanmaxxing")
-import charts
+import figures
+
+figures.init()
 ```
 
 ## Evidence #1: Labs are not better at drawing pelicans
@@ -84,7 +86,7 @@ Here's the mean judge score per animal, pooled across all models:
 #| label: fig-animal-scores
 #| fig-cap: "Mean judge score by animal, all models pooled."
 #| echo: false
-_ = charts.chart_animal_scores()
+figures.fig_animal_scores()
 ```
 
 The pelican is 4th of 8, behind cat, flamingo and raccoon. If AI labs were training on the benchmark, you'd expect pelicans at the top. Instead they're mid-tier: six of the seven labs draw cats better than pelicans (the exception is _Grok 4.5_), and four of seven draw flamingos better.
@@ -99,14 +101,14 @@ Bicycles fare even worse. They're the second-to-worst vehicle in the ranking, ah
 #| label: fig-vehicle-scores
 #| fig-cap: "Mean vehicle rating by vehicle, all models pooled."
 #| echo: false
-_ = charts.chart_vehicle_scores()
+figures.fig_vehicle_scores()
 ```
 
 If labs were training on the benchmark, the bicycle should be their best vehicle, not their second-worst.
 
 The same caveat applies here. A bicycle has much more unforgiving geometry than a skateboard, so a lab could train on bicycles and still land near the bottom of this ranking.
 
-One note on the last place, though: "plane" wasn't a great choice as often models often read it geometrically, drawing the animal standing on a flat surface instead of flying an aircraft. The plane is the only vehicle where the blind extractor sometimes found no vehicle at all (25 of 168 images, against zero for the other five), and 17% of plane images scored a 1 or 2 on the vehicle, versus at most 1% everywhere else. The plane's last place is partly my fault for not writing "airplane".
+One note on the last place, though: "plane" wasn't a great choice, because models often read it geometrically, drawing the animal standing on a flat surface instead of flying an aircraft. The plane is the only vehicle where the blind extractor sometimes found no vehicle at all (25 of 168 images, against zero for the other five), and 17% of plane images scored a 1 or 2 on the vehicle rating, versus at most 1% everywhere else. The plane's last place is partly my fault for not writing "airplane".
 
 ## Evidence #3: Labs are not better at drawing pelicans on bicycles, even adjusting for difficulty
 
@@ -116,10 +118,10 @@ Put the two together and the "pelican on a bicycle" ends up in the lower half of
 #| label: fig-cell-ranking
 #| fig-cap: "All 48 combos ranked; pelican + bicycle highlighted."
 #| echo: false
-_ = charts.chart_cell_ranking()
+figures.fig_cell_ranking()
 ```
 
-But that's still a raw ranking, and doesn't adjust for difficulty.
+But that's still a raw ranking, and it doesn't adjust for difficulty.
 
 To account for that, I fit a fixed-effects regression on all 1,008 images: score ~ lab + animal + vehicle, plus per-lab interaction terms for pelican, bicycle, and the pelican-bicycle cell, with robust standard errors. The animal and vehicle terms absorb the inherent complexity of each. The interactions measure each lab's benchmark-specific boost, with confidence intervals.
 
@@ -136,20 +138,20 @@ Here are the full per-lab estimates. A pelicanmaxxing lab would show dots to the
 #| label: fig-regression-effects
 #| fig-cap: "Difficulty-adjusted effects per lab, with 95% confidence intervals. Highlighted intervals exclude zero."
 #| echo: false
-_ = charts.chart_regression_effects()
+figures.fig_regression_effects()
 ```
 
 Every pelican effect and every cell effect contains zero. The three intervals that don't are all in the bicycle column (_Gemini_ and _Claude_ positive, _Grok_ negative), and none survives a multiple-comparisons correction: the Bonferroni threshold across the 21 tests is 0.05/21 ≈ 0.002, and the smallest p-value among them is 0.005. The full table of estimates and p-values is in [the repo](https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing).
 
-What this can't do is rule out a *small* boost. The width of those intervals puts the minimum detectable effect at roughly 0.7 judge points for a single lab's pelican-bicycle cell, 0.3 for the pelican effects and 0.25 for the bicycle effects, on a 1-5 scale. A lab that bought itself a tenth of a point on the famous prompt would be invisible here. One that bought itself a full point would not.
+However, the width of those intervals puts the minimum detectable effect at roughly 0.7 judge points for a single lab's pelican-bicycle cell, on a 1-5 scale. This means that smaller effects than that might go undetected by this approach. 
 
 ## Evidence #4: Labs don't draw pelicans on bicycles any differently
 
-Some have implied that the pelican on a bicycle often seems like a memorized composition because there are frequent patterns such as the pelican facing right, a sun, or a scarf. So I checked compositional fingerprints using the extracted features. 
+Some have suggested that the pelican on a bicycle looks like a memorized composition, pointing to recurring patterns such as the pelican facing right, a sun, or a scarf. So I wanted to know if this was true. 
 
-**Direction**: All 21 pelican-bicycle images, across all seven labs, face right. No other animal/vehicle combination did that.
+**Direction**: All 21 pelican-bicycle images, across all seven labs, face right. No other animal/vehicle combination does that.
 
-However, facing right is quite frequent depending on the animal and vehicle, with 60% of all 1,008 images do it. Bicycles are one of the two vehicles where it's strongest: 
+However, facing right is common across the board: 60% of all 1,008 images do it. How common depends on the animal and the vehicle, and bicycles are one of the two vehicles where it's strongest: 
 
 | vehicle | left | right | ambiguous |
 |---|---|---|---|
@@ -160,7 +162,7 @@ However, facing right is quite frequent depending on the animal and vehicle, wit
 | unicycle | 22% | 45% | 33% |
 | boat | 33% | 35% | 32% |
 
-Pelicans are also among the animals who tend to face right:
+Pelicans are also among the animals that tend to face right:
 
 | animal | left | right | ambiguous |
 |---|---|---|---|
@@ -173,7 +175,7 @@ Pelicans are also among the animals who tend to face right:
 | cat | 8% | 40% | 52% |
 | raccoon | 3% | 36% | 61% |
 
-It's hard to draw a pelican or a bycicle facing front, which is why both have a very low % of ambiguous images. So it's hard to draw a strong conclusion from this, as this might have simply happened by chance, given the base rates.
+It's hard to draw a pelican or a bicycle facing forward, which is why both have such a low share of ambiguous images. Given those base rates, the result could have happened by chance, but it's hard to conclude much from it.
 
 **Scene elements**: I let the extractor name any element it saw in the image. These are the counts:
 
@@ -181,22 +183,26 @@ It's hard to draw a pelican or a bycicle facing front, which is why both have a 
 #| label: fig-top-elements
 #| fig-cap: "Share of images containing each element, from the open-ended extraction pass."
 #| echo: false
-_ = charts.chart_top_elements()
+figures.fig_top_elements()
 ```
 
-A memorized scene would show up as *repetition*: the same combination drawing the same picture over and over. I went looking for that — within each lab's own samples, and across labs that shouldn't have anything in common — and didn't find it. Nothing shows up consistently in the pelican-on-a-bicycle images that doesn't show up just as consistently somewhere else in the grid.
+A memorized scene would show up as the same set of elements recurring picture after picture. I went looking for that, but pelican-on-a-bicycle images had no elements that recurred more consistently than in other animal-vehicle combinations.
 
 ## Limitations
 
-1. **Using a single LLM judge for scoring** _GPT-5.6 Luna_ scored everything, including _GPT-5.6 Terra_, which happens to top the overall leaderboard. The pelicanmaxxing conclusions rest on within-model comparisons where judge bias largely cancels, but take any cross-model ranking with a grain of salt. This also assumes that models can reliably judge the quality of an image.
-2. **Pelicanmaxxing, not SVGmaxxing.** A lab that optimized SVG generation *as a whole* rises on every cell at once and looks identical to a lab that's just good. Some labs, such as Google/DeepMind, openly do this.
-3. **Limited budget.** The whole experiment ran on roughly $60 of API credits. That capped the experiment at 3 samples per cell, a single judge, and 7 models.
-4. **Plane instead of airpane.** I used plane instead of airplane in the vehicles. That often lead to a wrong interpretation of the image. However, removing airplane does not substantially change the results. I decided not to re-run due to budget concerns. 
+1. **Using an LLM judge for scoring.** This article's conclusions rest on being able to trust that an LLM can reliably judge the quality of an image.
+2. **SVGmaxxing.** A lab that optimized SVG generation *as a whole* rises on every cell at once and looks identical to a lab that's just good. Some labs, such as Google/DeepMind, openly do this. This experiment won't capture that.
+3. **Limited budget.** The whole experiment ran on roughly $60 of API credits. That capped it at 3 samples per cell, a single judge, and 7 models.
+4. **"Plane" instead of "airplane".** I used "plane" instead of "airplane" in the vehicles, and models often read it geometrically. However, dropping the plane cells and refitting does not substantially change the results. I didn't re-run the generations with "airplane" because of budget.
 
 ## Conclusion
 
-Sorry, Hacker News haters but there's no evidence that AI labs are pelicanmaxxing. Or at least they're not doing it in a plainly obvious manner.
+Sorry, HN haters, but there's little evidence that AI labs are pelicanmaxxing. Or at least they're not doing it in a plainly obvious manner.
 
-The more plausible story is SVGmaxxing. Google does a version of this openly. Other labs might be doing it more quietly. This experiment can't say who's doing it. But it can say that whatever labs are optimizing, it isn't the pelican.
+Pelicans aren't drawn any better than the rest of animals. Bicycles aren't drawn any better than other vehicles. The combination doesn't beat what each lab's pelican and bicycle skills predict, and its scenes aren't any more repetitive than the rest of the grid's.
 
-If you want to look at the data yourself, the full pipeline (generation, rendering, blind extraction, judging, and analysis) is in the [repo](https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing). 
+The one exception is direction. All 21 pelican-bicycle images face right, and no other combination is unanimous. But it doesn't seem that strange. Facing right is the norm across the experiment. Three other combinations land at 90% or above, and with 48 of them, I'm not surprised one reached 21 out of 21.
+
+The more plausible story is SVGmaxxing. Google does a version of this openly. Other labs might be doing it more quietly. Sadly, this experiment can't say who's doing it. But at least you can sleep tonight knowing that AI labs are not producing terabytes of pelicans on bicycles just to trick Simon Willison. 
+
+If you want to look at the data yourself, the full pipeline is in the [repo](https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing). 

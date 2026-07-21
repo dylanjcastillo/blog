@@ -1,0 +1,8 @@
+model,images,total_retries,max_attempts,rendered
+anthropic/claude-sonnet-5,144,0,1,1.0
+deepseek/deepseek-v4-pro,144,1,2,1.0
+google/gemini-3.5-flash,144,6,2,1.0
+openai/gpt-5.6-terra,144,0,1,1.0
+qwen/qwen3.7-max,144,0,1,1.0
+x-ai/grok-4.5,144,2,2,1.0
+z-ai/glm-5.2,144,2,2,1.0
