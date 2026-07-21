@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2026-07-18">
+<meta name="description" content="I generated 1,000+ SVGs across 7 frontier models to test whether AI labs are training on Simon Willison’s pelican-riding-a-bicycle benchmark.">
+
+<title>Are AI labs pelicanmaxxing? – Dylan Castillo</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-159d9a8203b30488c807ac6eef239583.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+<link rel="stylesheet" href="../custom/pelican-explorer.css">
+
+
+<meta property="og:title" content="Are AI labs pelicanmaxxing? – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta name="twitter:title" content="Are AI labs pelicanmaxxing? – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/social_media_card.webp">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:github" aria-label="Icon github from fa6-brands Iconify.design set." title="Icon github from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="fa6-brands:linkedin" aria-label="Icon linkedin from fa6-brands Iconify.design set." title="Icon linkedin from fa6-brands Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-i-tested-it" id="toc-how-i-tested-it" class="nav-link active" data-scroll-target="#how-i-tested-it">How I tested it</a></li>
+  <li><a href="#show-me-the-svg" id="toc-show-me-the-svg" class="nav-link" data-scroll-target="#show-me-the-svg">Show me the SVG</a>
+  <ul class="collapse">
+  <li><a href="#evidence-1-labs-are-not-better-at-drawing-pelicans" id="toc-evidence-1-labs-are-not-better-at-drawing-pelicans" class="nav-link" data-scroll-target="#evidence-1-labs-are-not-better-at-drawing-pelicans">Evidence #1: Labs are not better at drawing pelicans</a></li>
+  <li><a href="#evidence-2-labs-are-not-better-at-drawing-bicycles" id="toc-evidence-2-labs-are-not-better-at-drawing-bicycles" class="nav-link" data-scroll-target="#evidence-2-labs-are-not-better-at-drawing-bicycles">Evidence #2: Labs are not better at drawing bicycles</a></li>
+  <li><a href="#evidence-3-labs-are-not-better-at-drawing-pelicans-on-bicycles-even-adjusting-for-difficulty" id="toc-evidence-3-labs-are-not-better-at-drawing-pelicans-on-bicycles-even-adjusting-for-difficulty" class="nav-link" data-scroll-target="#evidence-3-labs-are-not-better-at-drawing-pelicans-on-bicycles-even-adjusting-for-difficulty">Evidence #3: Labs are not better at drawing pelicans on bicycles, even adjusting for difficulty</a></li>
+  <li><a href="#evidence-4-labs-dont-draw-pelicans-on-bicycles-any-differently" id="toc-evidence-4-labs-dont-draw-pelicans-on-bicycles-any-differently" class="nav-link" data-scroll-target="#evidence-4-labs-dont-draw-pelicans-on-bicycles-any-differently">Evidence #4: Labs don’t draw pelicans on bicycles any differently</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Are AI labs pelicanmaxxing?</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">evals</div>
+    <div class="quarto-category">python</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 18, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">July 21, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>For the past few years, <a href="https://simonwillison.net/tags/pelican-riding-a-bicycle/">Simon Willison</a> has tested every major LLM release with the same prompt: “Generate an SVG of a pelican riding a bicycle”.</p>
+<p>What began as a tongue-in-cheek benchmark has become one of the most famous informal benchmarks in AI. Simon’s pelican-on-a-bicycle results are often among the most upvoted comments on Hacker News threads announcing new releases from AI labs.</p>
+<p>The benchmark is now famous enough that there’s <a href="https://news.ycombinator.com/item?id=48994217">plenty of</a> <a href="https://news.ycombinator.com/item?id=48956159">discussion</a> about its usefulness and about whether AI labs might be benchmaxxing<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> on it. When billions or even trillions of dollars are at stake, and a strong result could help persuade users, wouldn’t it be tempting to pelicanmaxx your model just a bit?</p>
+<p>I wanted to find out, so I put together a small experiment. I generated 1,008 SVGs across seven frontier models, scored them with an LLM judge, and used Claude Fable 5 for the analysis.</p>
+<p>This article presents the results. All the code is available on <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing">Github</a>.</p>
+<section id="how-i-tested-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-i-tested-it">How I tested it</h2>
+<p>I built a grid of 8 animals × 6 vehicles = 48 prompts, where the famous prompt is one cell:</p>
+<ol type="1">
+<li><strong>Animals</strong>: pelican, flamingo, heron, otter, raccoon, antelope, whale, cat</li>
+<li><strong>Vehicles</strong>: bicycle, unicycle, skateboard, scooter, plane, boat</li>
+</ol>
+<p>Every prompt uses almost identical phrasing to Simon’s, only switching the animal and vehicle. The animal and vehicle selection wasn’t done in a very rigorous manner, but I tried to vary both similarity to the original prompt and difficulty. Flamingo and heron are quite similar to pelicans; cat, raccoon, and otter are easy cases; antelope is hard; and whale is as different as you can get.</p>
+<p>I tested seven models through <a href="https://openrouter.ai/">OpenRouter</a>: <em>GPT-5.6 Terra</em>, <em>Claude Sonnet 5</em>, <em>Gemini 3.5 Flash</em>, <em>Grok 4.5</em>, <em>Qwen3.7-Max</em>, <em>GLM-5.2</em>, and <em>DeepSeek V4 Pro</em>. I generated 3 samples per prompt, at temperature 1.0, requesting the same reasoning effort from every model. That resulted in 1,008 SVGs.</p>
+<p>Then I ran each image through a three-stage pipeline:</p>
+<ol type="1">
+<li><strong>Rendering</strong>: Each SVG is rendered to PNG. If a model returns no SVG or one that fails to render, I regenerate until it produces a valid one, and record the number of attempts. There were only 11 retries across the 1,008 generations.</li>
+<li><strong>Judging</strong>: <em>GPT-5.6 Luna</em> scores each image against its prompt, producing 1-5 ratings for the animal, the vehicle, and the action.</li>
+<li><strong>Blind feature extraction</strong>: To extract some potentially useful data for a more detailed analysis, I also passed each rendered image to <em>Gemini 3.1 Flash-Lite</em> and extracted the animal and vehicle it recognized, which way the subject faces, and an open-ended list of scene elements.</li>
+</ol>
+<p>My hypothesis is that if a lab trained on the benchmark, it should show up in some combination of the pelican row scoring above what the animal deserves, the bicycle column scoring above what the vehicle deserves, or the specific pelican-bicycle cell beating both.</p>
+</section>
+<section id="show-me-the-svg" class="level1 page-columns page-full">
+<h1>Show me the SVG</h1>
+<p>Pick a lab to see everything it drew, with the judge’s score under each image (click to open full size):</p>
+<div class="pelican-explorer" data-config="{
+       &quot;base&quot;: &quot;https://s3.eu-west-1.amazonaws.com/images.dylancastillo.co/pelicanmaxxing&quot;,
+       &quot;models&quot;: [
+         {&quot;slug&quot;: &quot;openai__gpt-5.6-terra&quot;, &quot;name&quot;: &quot;GPT-5.6 Terra&quot;},
+         {&quot;slug&quot;: &quot;anthropic__claude-sonnet-5&quot;, &quot;name&quot;: &quot;Claude Sonnet 5&quot;},
+         {&quot;slug&quot;: &quot;google__gemini-3.5-flash&quot;, &quot;name&quot;: &quot;Gemini 3.5 Flash&quot;},
+         {&quot;slug&quot;: &quot;x-ai__grok-4.5&quot;, &quot;name&quot;: &quot;Grok 4.5&quot;},
+         {&quot;slug&quot;: &quot;qwen__qwen3.7-max&quot;, &quot;name&quot;: &quot;Qwen3.7-Max&quot;},
+         {&quot;slug&quot;: &quot;z-ai__glm-5.2&quot;, &quot;name&quot;: &quot;GLM-5.2&quot;},
+         {&quot;slug&quot;: &quot;deepseek__deepseek-v4-pro&quot;, &quot;name&quot;: &quot;DeepSeek V4 Pro&quot;}
+       ],
+       &quot;animals&quot;: [&quot;pelican&quot;, &quot;flamingo&quot;, &quot;heron&quot;, &quot;otter&quot;, &quot;raccoon&quot;, &quot;antelope&quot;, &quot;whale&quot;, &quot;cat&quot;],
+       &quot;vehicles&quot;: [&quot;bicycle&quot;, &quot;unicycle&quot;, &quot;skateboard&quot;, &quot;scooter&quot;, &quot;plane&quot;, &quot;boat&quot;],
+       &quot;samples&quot;: 3
+     }">
+
+</div>
+<section id="evidence-1-labs-are-not-better-at-drawing-pelicans" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evidence-1-labs-are-not-better-at-drawing-pelicans">Evidence #1: Labs are not better at drawing pelicans</h2>
+<p>Here’s the mean judge score per animal, pooled across all models:</p>
+<div id="cell-fig-animal-scores" class="cell page-columns page-full" data-execution_count="2">
+<div id="fig-animal-scores" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-animal-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="b03773f0-1ee6-4466-b60e-5a6a1705f101" class="plotly-graph-div" style="height:340px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("b03773f0-1ee6-4466-b60e-5a6a1705f101")) {                    Plotly.newPlot(                        "b03773f0-1ee6-4466-b60e-5a6a1705f101",                        [{"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003e%{x:.2f} out of 5\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#71717a","#71717a","#71717a","#71717a","#eb841b","#71717a","#71717a","#71717a"]},"orientation":"h","text":["3.93","4.16","4.17","4.18","4.38","4.41","4.43","4.56"],"textfont":{"color":"#a1a1aa","size":12},"textposition":"outside","width":0.6,"x":{"dtype":"f8","bdata":"MnfI3CFzD0D9KfWn1J8QQC3LsizLshBAWCtgrYC1EEBiGIZhGIYRQBPaS2gvoRFAQnsJ7SW0EUDlo5OPTj4SQA=="},"y":["antelope","otter","whale","heron","pelican","raccoon","flamingo","cat"],"type":"bar"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Mean judge score by animal (1-5)","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":340,"showlegend":false,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false,"showticklabels":false,"visible":false,"range":[0,5.244973544973544]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false}},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('b03773f0-1ee6-4466-b60e-5a6a1705f101');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-animal-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Mean judge score by animal, all models pooled.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The pelican is 4th of 8, behind cat, flamingo and raccoon. If AI labs were training on the benchmark, you’d expect pelicans at the top. Instead they’re mid-tier: six of the seven labs draw cats better than pelicans (the exception is <em>Grok 4.5</em>), and four of seven draw flamingos better.</p>
+<p>However, you might argue that the pelican may simply be a harder animal to draw than a cat. A lab could train on pelicans and still not push them past the easy animals. We’ll account for that in a later section.</p>
+</section>
+<section id="evidence-2-labs-are-not-better-at-drawing-bicycles" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evidence-2-labs-are-not-better-at-drawing-bicycles">Evidence #2: Labs are not better at drawing bicycles</h2>
+<p>Bicycles fare even worse. They’re the second-to-worst vehicle in the ranking, ahead of only planes:</p>
+<div id="cell-fig-vehicle-scores" class="cell page-columns page-full" data-execution_count="3">
+<div id="fig-vehicle-scores" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-vehicle-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="779a36ce-c8a6-4c1a-8f4c-538e976ec891" class="plotly-graph-div" style="height:300px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("779a36ce-c8a6-4c1a-8f4c-538e976ec891")) {                    Plotly.newPlot(                        "779a36ce-c8a6-4c1a-8f4c-538e976ec891",                        [{"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003e%{x:.2f} out of 5\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#71717a","#eb841b","#71717a","#71717a","#71717a","#71717a"]},"orientation":"h","text":["3.67","4.29","4.32","4.32","4.57","4.64"],"textfont":{"color":"#a1a1aa","size":12},"textposition":"outside","width":0.6,"x":{"dtype":"f8","bdata":"F4ZhGIZhDUBJkiRJkiQRQJIkSZIkSRFAkiRJkiRJEUCSJEmSJEkSQCVJkiRJkhJA"},"y":["plane","bicycle","scooter","unicycle","boat","skateboard"],"type":"bar"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Mean vehicle rating by vehicle (1-5)","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":300,"showlegend":false,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false,"showticklabels":false,"visible":false,"range":[0,5.339285714285714]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false}},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('779a36ce-c8a6-4c1a-8f4c-538e976ec891');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-vehicle-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Mean vehicle rating by vehicle, all models pooled.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>If labs were training on the benchmark, the bicycle should be their best vehicle, not their second-worst.</p>
+<p>The same caveat applies here. A bicycle has much more unforgiving geometry than a skateboard, so a lab could train on bicycles and still land near the bottom of this ranking.</p>
+<p>One note on the last place, though: “plane” wasn’t a great choice, because models often read it geometrically, drawing the animal standing on a flat surface instead of flying an aircraft. The plane is the only vehicle where the blind extractor sometimes found no vehicle at all (25 of 168 images, against zero for the other five), and 17% of plane images scored a 1 or 2 on the vehicle rating, versus at most 1% everywhere else. The plane’s last place is partly my fault for not writing “airplane”.</p>
+</section>
+<section id="evidence-3-labs-are-not-better-at-drawing-pelicans-on-bicycles-even-adjusting-for-difficulty" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evidence-3-labs-are-not-better-at-drawing-pelicans-on-bicycles-even-adjusting-for-difficulty">Evidence #3: Labs are not better at drawing pelicans on bicycles, even adjusting for difficulty</h2>
+<p>Put the two together and the “pelican on a bicycle” ends up in the lower half of the ranking, at #33 of 48:</p>
+<div id="cell-fig-cell-ranking" class="cell page-columns page-full" data-execution_count="4">
+<div id="fig-cell-ranking" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-cell-ranking-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="eabc9bf3-6228-44bb-b0a9-22a45bc64941" class="plotly-graph-div" style="height:950px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("eabc9bf3-6228-44bb-b0a9-22a45bc64941")) {                    Plotly.newPlot(                        "eabc9bf3-6228-44bb-b0a9-22a45bc64941",                        [{"hoverinfo":"skip","line":{"color":"#3f3f46","width":1},"mode":"lines","x":[1,3.1904761904761907,null,1,3.3174603174603177,null,1,3.9206349206349205,null,1,3.9523809523809526,null,1,3.9841269841269837,null,1,3.984126984126984,null,1,4.0,null,1,4.015873015873016,null,1,4.0476190476190474,null,1,4.07936507936508,null,1,4.111111111111111,null,1,4.111111111111111,null,1,4.158730158730158,null,1,4.158730158730158,null,1,4.222222222222221,null,1,4.222222222222222,null,1,4.253968253968254,null,1,4.26984126984127,null,1,4.26984126984127,null,1,4.26984126984127,null,1,4.26984126984127,null,1,4.285714285714286,null,1,4.301587301587301,null,1,4.301587301587301,null,1,4.317460317460318,null,1,4.317460317460318,null,1,4.333333333333333,null,1,4.333333333333333,null,1,4.349206349206349,null,1,4.365079365079366,null,1,4.380952380952381,null,1,4.380952380952381,null,1,4.396825396825396,null,1,4.412698412698413,null,1,4.444444444444445,null,1,4.444444444444445,null,1,4.476190476190476,null,1,4.476190476190476,null,1,4.492063492063492,null,1,4.492063492063492,null,1,4.507936507936508,null,1,4.507936507936508,null,1,4.555555555555555,null,1,4.555555555555555,null,1,4.603174603174604,null,1,4.714285714285714,null,1,4.809523809523809,null,1,4.92063492063492,null],"y":["antelope + plane","antelope + plane",null,"heron + plane","heron + plane",null,"antelope + scooter","antelope + scooter",null,"otter + plane","otter + plane",null,"antelope + bicycle","antelope + bicycle",null,"whale + bicycle","whale + bicycle",null,"whale + plane","whale + plane",null,"antelope + unicycle","antelope + unicycle",null,"otter + bicycle","otter + bicycle",null,"flamingo + plane","flamingo + plane",null,"otter + unicycle","otter + unicycle",null,"otter + scooter","otter + scooter",null,"whale + scooter","whale + scooter",null,"antelope + skateboard","antelope + skateboard",null,"raccoon + bicycle","raccoon + bicycle",null,"pelican + bicycle","pelican + bicycle",null,"pelican + plane","pelican + plane",null,"raccoon + plane","raccoon + plane",null,"whale + skateboard","whale + skateboard",null,"otter + skateboard","otter + skateboard",null,"heron + bicycle","heron + bicycle",null,"heron + unicycle","heron + unicycle",null,"whale + boat","whale + boat",null,"pelican + scooter","pelican + scooter",null,"antelope + boat","antelope + boat",null,"raccoon + scooter","raccoon + scooter",null,"whale + unicycle","whale + unicycle",null,"heron + scooter","heron + scooter",null,"flamingo + bicycle","flamingo + bicycle",null,"raccoon + unicycle","raccoon + unicycle",null,"heron + skateboard","heron + skateboard",null,"flamingo + unicycle","flamingo + unicycle",null,"cat + bicycle","cat + bicycle",null,"pelican + unicycle","pelican + unicycle",null,"flamingo + scooter","flamingo + scooter",null,"otter + boat","otter + boat",null,"heron + boat","heron + boat",null,"cat + scooter","cat + scooter",null,"pelican + boat","pelican + boat",null,"flamingo + skateboard","flamingo + skateboard",null,"cat + plane","cat + plane",null,"cat + unicycle","cat + unicycle",null,"raccoon + skateboard","raccoon + skateboard",null,"cat + skateboard","cat + skateboard",null,"pelican + skateboard","pelican + skateboard",null,"raccoon + boat","raccoon + boat",null,"flamingo + boat","flamingo + boat",null,"cat + boat","cat + boat",null],"type":"scatter"},{"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003e%{x:.2f} out of 5\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#eb841b","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a"],"size":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,13,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]},"mode":"markers","x":{"dtype":"f8","bdata":"YhiGYRiGCUCjKIqiKIoKQNd1Xdd1XQ9A6Hme53meD0D3fd\u002f3fd8PQPh93\u002fd93w9AAAAAAAAAEEAEQRAEQRAQQAzDMAzDMBBAFUVRFEVREEAcx3Ecx3EQQBzHcRzHcRBAKIqiKIqiEEAoiqIoiqIQQDiO4ziO4xBAOY7jOI7jEEBBEARBEAQRQEVRFEVRFBFARVEURVEUEUBFURRFURQRQEVRFEVRFBFASZIkSZIkEUBN0zRN0zQRQE3TNE3TNBFAUhRFURRFEUBSFEVRFEURQFVVVVVVVRFAVVVVVVVVEUBZlmVZlmURQF7XdV3XdRFAYhiGYRiGEUBiGIZhGIYRQGVZlmVZlhFAapqmaZqmEUByHMdxHMcRQHIcx3EcxxFAep7neZ7nEUB6nud5nucRQH7f933f9xFAft\u002f3fd\u002f3EUCCIAiCIAgSQIIgCIIgCBJAjuM4juM4EkCO4ziO4zgSQJumaZqmaRJAt23btm3bEkDP8zzP8zwTQOu6ruu6rhNA"},"y":["antelope + plane","heron + plane","antelope + scooter","otter + plane","antelope + bicycle","whale + bicycle","whale + plane","antelope + unicycle","otter + bicycle","flamingo + plane","otter + unicycle","otter + scooter","whale + scooter","antelope + skateboard","raccoon + bicycle","pelican + bicycle","pelican + plane","raccoon + plane","whale + skateboard","otter + skateboard","heron + bicycle","heron + unicycle","whale + boat","pelican + scooter","antelope + boat","raccoon + scooter","whale + unicycle","heron + scooter","flamingo + bicycle","raccoon + unicycle","heron + skateboard","flamingo + unicycle","cat + bicycle","pelican + unicycle","flamingo + scooter","otter + boat","heron + boat","cat + scooter","pelican + boat","flamingo + skateboard","cat + plane","cat + unicycle","raccoon + skateboard","cat + skateboard","pelican + skateboard","raccoon + boat","flamingo + boat","cat + boat"],"type":"scatter"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"All 48 combos ranked — pelican + bicycle is #33","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":950,"showlegend":false,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"color":"#a1a1aa"},"text":"Mean judge score (1-5)"},"range":[1,5]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickfont":{"size":11},"showgrid":false}},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('eabc9bf3-6228-44bb-b0a9-22a45bc64941');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-cell-ranking-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: All 48 combos ranked; pelican + bicycle highlighted.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>But that’s still a raw ranking, and it doesn’t adjust for difficulty.</p>
+<p>To account for that, I fit a fixed-effects regression on all 1,008 images: score ~ lab + animal + vehicle, plus per-lab interaction terms for pelican, bicycle, and the pelican-bicycle cell, with robust standard errors. The animal and vehicle terms absorb the inherent complexity of each. The interactions measure each lab’s benchmark-specific boost, with confidence intervals.</p>
+<p>The results:</p>
+<ol type="1">
+<li>Every per-lab pelican effect (the lab’s boost on pelicans across all six vehicles) lands between -0.09 and +0.06 judge points (all p ≥ 0.40).</li>
+<li>The per-lab bicycle effects (the lab’s boost on bicycles across all eight animals) run from <em>Grok 4.5</em> at -0.22 (p=0.022) to <em>Gemini 3.5 Flash</em> at +0.24 (p=0.005). Three of the seven clear p &lt; 0.05, and they point in both directions.</li>
+<li>No pelican-bicycle cell effect (the <em>extra</em> boost on the specific combination, on top of the lab’s pelican and bicycle effects) is significant. The closest is <em>Grok 4.5</em> at +0.32 (p=0.061); the rest sit between -0.24 and +0.06.</li>
+<li>The average benchmark-cell effect across labs is -0.09 (p=0.39). If anything, the famous prompt slightly underperforms what each lab’s pelican and bicycle skills predict.</li>
+</ol>
+<p>Here are the full per-lab estimates. A pelicanmaxxing lab would show dots to the right of the zero line across its whole row:</p>
+<div id="cell-fig-regression-effects" class="cell page-columns page-full" data-execution_count="5">
+<div id="fig-regression-effects" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-regression-effects-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="985cf591-97f1-4f27-b380-08a5801bca57" class="plotly-graph-div" style="height:420px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("985cf591-97f1-4f27-b380-08a5801bca57")) {                    Plotly.newPlot(                        "985cf591-97f1-4f27-b380-08a5801bca57",                        [{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.2024372441601132,0.2831628677428798],"y":["deepseek-v4-pro","deepseek-v4-pro"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003edeepseek-v4-pro\u003c\u002fb\u003e\u003cbr\u003e+0.04 judge points\u003cbr\u003e95% CI -0.20 to +0.28\u003cbr\u003ep = 0.745"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0403628117913832],"y":["deepseek-v4-pro"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.298264481151403,0.1186726444167074],"y":["claude-sonnet-5","claude-sonnet-5"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eclaude-sonnet-5\u003c\u002fb\u003e\u003cbr\u003e-0.09 judge points\u003cbr\u003e95% CI -0.30 to +0.12\u003cbr\u003ep = 0.399"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.0897959183673478],"y":["claude-sonnet-5"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.196367863402909,0.2516966615888502],"y":["gpt-5.6-terra","gpt-5.6-terra"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egpt-5.6-terra\u003c\u002fb\u003e\u003cbr\u003e+0.03 judge points\u003cbr\u003e95% CI -0.20 to +0.25\u003cbr\u003ep = 0.809"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0276643990929706],"y":["gpt-5.6-terra"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.2812031228561833,0.2476430321532335],"y":["qwen3.7-max","qwen3.7-max"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eqwen3.7-max\u003c\u002fb\u003e\u003cbr\u003e-0.02 judge points\u003cbr\u003e95% CI -0.28 to +0.25\u003cbr\u003ep = 0.901"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.0167800453514748],"y":["qwen3.7-max"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.2716550831837442,0.1365076908934956],"y":["gemini-3.5-flash","gemini-3.5-flash"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egemini-3.5-flash\u003c\u002fb\u003e\u003cbr\u003e-0.07 judge points\u003cbr\u003e95% CI -0.27 to +0.14\u003cbr\u003ep = 0.516"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.0675736961451243],"y":["gemini-3.5-flash"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.164045553148197,0.2828664148262069],"y":["glm-5.2","glm-5.2"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eglm-5.2\u003c\u002fb\u003e\u003cbr\u003e+0.06 judge points\u003cbr\u003e95% CI -0.16 to +0.28\u003cbr\u003ep = 0.602"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0594104308390049],"y":["glm-5.2"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.1886147681134328,0.2820388043946091],"y":["grok-4.5","grok-4.5"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egrok-4.5\u003c\u002fb\u003e\u003cbr\u003e+0.05 judge points\u003cbr\u003e95% CI -0.19 to +0.28\u003cbr\u003ep = 0.697"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0467120181405881],"y":["grok-4.5"],"type":"scatter","xaxis":"x","yaxis":"y"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.1964454882847059,0.1284182774003549],"y":["deepseek-v4-pro","deepseek-v4-pro"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003edeepseek-v4-pro\u003c\u002fb\u003e\u003cbr\u003e-0.03 judge points\u003cbr\u003e95% CI -0.20 to +0.13\u003cbr\u003ep = 0.681"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.0340136054421755],"y":["deepseek-v4-pro"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#eb841b","width":2},"mode":"lines","x":[0.0353455678678918,0.3601192847398112],"y":["claude-sonnet-5","claude-sonnet-5"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eclaude-sonnet-5\u003c\u002fb\u003e\u003cbr\u003e+0.20 judge points\u003cbr\u003e95% CI +0.04 to +0.36\u003cbr\u003ep = 0.017"],"marker":{"color":"#eb841b","size":9},"mode":"markers","x":[0.1977324263038515],"y":["claude-sonnet-5"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.1794916079978564,0.098765984415091],"y":["gpt-5.6-terra","gpt-5.6-terra"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egpt-5.6-terra\u003c\u002fb\u003e\u003cbr\u003e-0.04 judge points\u003cbr\u003e95% CI -0.18 to +0.10\u003cbr\u003ep = 0.570"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.0403628117913827],"y":["gpt-5.6-terra"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.2945210000150253,0.0106207732576575],"y":["qwen3.7-max","qwen3.7-max"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eqwen3.7-max\u003c\u002fb\u003e\u003cbr\u003e-0.14 judge points\u003cbr\u003e95% CI -0.29 to +0.01\u003cbr\u003ep = 0.068"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.1419501133786838],"y":["qwen3.7-max"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#eb841b","width":2},"mode":"lines","x":[0.0714303217746322,0.4065742133727629],"y":["gemini-3.5-flash","gemini-3.5-flash"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egemini-3.5-flash\u003c\u002fb\u003e\u003cbr\u003e+0.24 judge points\u003cbr\u003e95% CI +0.07 to +0.41\u003cbr\u003ep = 0.005"],"marker":{"color":"#eb841b","size":9},"mode":"markers","x":[0.2390022675736975],"y":["gemini-3.5-flash"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.181468967647001,0.1832830266039165],"y":["glm-5.2","glm-5.2"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eglm-5.2\u003c\u002fb\u003e\u003cbr\u003e+0.00 judge points\u003cbr\u003e95% CI -0.18 to +0.18\u003cbr\u003ep = 0.992"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0009070294784577],"y":["glm-5.2"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#eb841b","width":2},"mode":"lines","x":[-0.4104156379712751,-0.0322147475162544],"y":["grok-4.5","grok-4.5"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egrok-4.5\u003c\u002fb\u003e\u003cbr\u003e-0.22 judge points\u003cbr\u003e95% CI -0.41 to -0.03\u003cbr\u003ep = 0.022"],"marker":{"color":"#eb841b","size":9},"mode":"markers","x":[-0.2213151927437648],"y":["grok-4.5"],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.9947183380832672,0.5103645965866666],"y":["deepseek-v4-pro","deepseek-v4-pro"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003edeepseek-v4-pro\u003c\u002fb\u003e\u003cbr\u003e-0.24 judge points\u003cbr\u003e95% CI -0.99 to +0.51\u003cbr\u003ep = 0.528"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.2421768707483003],"y":["deepseek-v4-pro"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.6968617448046391,0.2823492731493167],"y":["claude-sonnet-5","claude-sonnet-5"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eclaude-sonnet-5\u003c\u002fb\u003e\u003cbr\u003e-0.21 judge points\u003cbr\u003e95% CI -0.70 to +0.28\u003cbr\u003ep = 0.407"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[-0.2072562358276612],"y":["claude-sonnet-5"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.3718050758919112,0.3890386359826092],"y":["gpt-5.6-terra","gpt-5.6-terra"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egpt-5.6-terra\u003c\u002fb\u003e\u003cbr\u003e+0.01 judge points\u003cbr\u003e95% CI -0.37 to +0.39\u003cbr\u003ep = 0.965"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0086167800453489],"y":["gpt-5.6-terra"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.544722636888232,0.5873530223757629],"y":["qwen3.7-max","qwen3.7-max"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eqwen3.7-max\u003c\u002fb\u003e\u003cbr\u003e+0.02 judge points\u003cbr\u003e95% CI -0.54 to +0.59\u003cbr\u003ep = 0.941"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0213151927437655],"y":["qwen3.7-max"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.3368363916378529,0.4175620152206135],"y":["gemini-3.5-flash","gemini-3.5-flash"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egemini-3.5-flash\u003c\u002fb\u003e\u003cbr\u003e+0.04 judge points\u003cbr\u003e95% CI -0.34 to +0.42\u003cbr\u003ep = 0.834"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0403628117913803],"y":["gemini-3.5-flash"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.4510738056410791,0.5635454609698805],"y":["glm-5.2","glm-5.2"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003eglm-5.2\u003c\u002fb\u003e\u003cbr\u003e+0.06 judge points\u003cbr\u003e95% CI -0.45 to +0.56\u003cbr\u003ep = 0.828"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.0562358276644006],"y":["glm-5.2"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"#71717a","width":2},"mode":"lines","x":[-0.0142750668772973,0.6600800555394295],"y":["grok-4.5","grok-4.5"],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"%{hovertext}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["\u003cb\u003egrok-4.5\u003c\u002fb\u003e\u003cbr\u003e+0.32 judge points\u003cbr\u003e95% CI -0.01 to +0.66\u003cbr\u003ep = 0.061"],"marker":{"color":"#71717a","size":9},"mode":"markers","x":[0.3229024943310661],"y":["grok-4.5"],"type":"scatter","xaxis":"x3","yaxis":"y3"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,0.3133333333333333],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"color":"#a1a1aa","size":11}},"range":[-1.0941901718915938,1.0941901718915938],"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickfont":{"size":11},"showgrid":false},"xaxis2":{"anchor":"y2","domain":[0.34333333333333327,0.6566666666666665],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"color":"#a1a1aa","size":11},"text":"Judge points (dot = estimate, line = 95% CI)"},"range":[-1.0941901718915938,1.0941901718915938],"showgrid":false},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"matches":"y","showticklabels":false,"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickfont":{"size":11},"showgrid":false},"xaxis3":{"anchor":"y3","domain":[0.6866666666666665,0.9999999999999998],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"color":"#a1a1aa","size":11}},"range":[-1.0941901718915938,1.0941901718915938],"showgrid":false},"yaxis3":{"anchor":"x3","domain":[0.0,1.0],"matches":"y","showticklabels":false,"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickfont":{"size":11},"showgrid":false},"annotations":[{"font":{"size":12,"color":"#e4e4e7"},"showarrow":false,"text":"Pelican effect","x":0.15666666666666665,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":12,"color":"#e4e4e7"},"showarrow":false,"text":"Bicycle effect","x":0.4999999999999999,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":12,"color":"#e4e4e7"},"showarrow":false,"text":"Pelican-bicycle cell effect","x":0.8433333333333332,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"shapes":[{"line":{"color":"#3f3f46","width":1},"type":"line","x0":0,"x1":0,"xref":"x","y0":0,"y1":1,"yref":"y domain"},{"line":{"color":"#3f3f46","width":1},"type":"line","x0":0,"x1":0,"xref":"x2","y0":0,"y1":1,"yref":"y2 domain"},{"line":{"color":"#3f3f46","width":1},"type":"line","x0":0,"x1":0,"xref":"x3","y0":0,"y1":1,"yref":"y3 domain"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Difficulty-adjusted effects per lab","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":420,"showlegend":false,"dragmode":false},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('985cf591-97f1-4f27-b380-08a5801bca57');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-regression-effects-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Difficulty-adjusted effects per lab, with 95% confidence intervals. Highlighted intervals exclude zero.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Every pelican effect and every cell effect contains zero. The three intervals that don’t are all in the bicycle column (<em>Gemini</em> and <em>Claude</em> positive, <em>Grok</em> negative), and none survives a multiple-comparisons correction: the Bonferroni threshold across the 21 tests is 0.05/21 ≈ 0.002, and the smallest p-value among them is 0.005. The full table of estimates and p-values is in <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing">the repo</a>.</p>
+<p>However, the width of those intervals puts the minimum detectable effect at roughly 0.7 judge points for a single lab’s pelican-bicycle cell, on a 1-5 scale. This means that smaller effects than that might go undetected by this approach.</p>
+</section>
+<section id="evidence-4-labs-dont-draw-pelicans-on-bicycles-any-differently" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="evidence-4-labs-dont-draw-pelicans-on-bicycles-any-differently">Evidence #4: Labs don’t draw pelicans on bicycles any differently</h2>
+<p>Some have suggested that the pelican on a bicycle looks like a memorized composition, pointing to recurring patterns such as the pelican facing right, a sun, or a scarf. So I wanted to know if this was true.</p>
+<p><strong>Direction</strong>: All 21 pelican-bicycle images, across all seven labs, face right. No other animal/vehicle combination does that.</p>
+<p>However, facing right is common across the board: 60% of all 1,008 images do it. How common depends on the animal and the vehicle, and bicycles are one of the two vehicles where it’s strongest:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>vehicle</th>
+<th>left</th>
+<th>right</th>
+<th>ambiguous</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>scooter</td>
+<td>9%</td>
+<td>83%</td>
+<td>8%</td>
+</tr>
+<tr class="even">
+<td>bicycle</td>
+<td>11%</td>
+<td>81%</td>
+<td>8%</td>
+</tr>
+<tr class="odd">
+<td>skateboard</td>
+<td>19%</td>
+<td>60%</td>
+<td>21%</td>
+</tr>
+<tr class="even">
+<td>plane</td>
+<td>21%</td>
+<td>58%</td>
+<td>21%</td>
+</tr>
+<tr class="odd">
+<td>unicycle</td>
+<td>22%</td>
+<td>45%</td>
+<td>33%</td>
+</tr>
+<tr class="even">
+<td>boat</td>
+<td>33%</td>
+<td>35%</td>
+<td>32%</td>
+</tr>
+</tbody>
+</table>
+<p>Pelicans are also among the animals that tend to face right:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>animal</th>
+<th>left</th>
+<th>right</th>
+<th>ambiguous</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>antelope</td>
+<td>21%</td>
+<td>78%</td>
+<td>1%</td>
+</tr>
+<tr class="even">
+<td>pelican</td>
+<td>22%</td>
+<td>78%</td>
+<td>0%</td>
+</tr>
+<tr class="odd">
+<td>heron</td>
+<td>22%</td>
+<td>77%</td>
+<td>1%</td>
+</tr>
+<tr class="even">
+<td>whale</td>
+<td>34%</td>
+<td>65%</td>
+<td>1%</td>
+</tr>
+<tr class="odd">
+<td>flamingo</td>
+<td>36%</td>
+<td>64%</td>
+<td>0%</td>
+</tr>
+<tr class="even">
+<td>otter</td>
+<td>8%</td>
+<td>45%</td>
+<td>47%</td>
+</tr>
+<tr class="odd">
+<td>cat</td>
+<td>8%</td>
+<td>40%</td>
+<td>52%</td>
+</tr>
+<tr class="even">
+<td>raccoon</td>
+<td>3%</td>
+<td>36%</td>
+<td>61%</td>
+</tr>
+</tbody>
+</table>
+<p>It’s hard to draw a pelican or a bicycle facing forward, which is why both have such a low share of ambiguous images. Given those base rates, the result could have happened by chance, but it’s hard to conclude much from it.</p>
+<p><strong>Scene elements</strong>: I let the extractor name any element it saw in the image. These are the counts:</p>
+<div id="cell-fig-top-elements" class="cell page-columns page-full" data-execution_count="6">
+<div id="fig-top-elements" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-top-elements-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="fd98ccf6-a6ed-4dab-984c-e1e842d55e44" class="plotly-graph-div" style="height:430px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("fd98ccf6-a6ed-4dab-984c-e1e842d55e44")) {                    Plotly.newPlot(                        "fd98ccf6-a6ed-4dab-984c-e1e842d55e44",                        [{"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003e%{x:.0%} of images\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":["#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a","#71717a"]},"orientation":"h","text":["4%","5%","5%","6%","9%","10%","11%","12%","14%","14%","16%","16%","18%","45%","46%"],"textfont":{"color":"#a1a1aa","size":12},"textposition":"outside","width":0.6,"x":{"dtype":"f8","bdata":"sW3btm3bpj\u002fSdV3XdV2nPzeO4ziO46g\u002fed\u002f3fd\u002f3rT\u002fjeZ7neZ63P6aqqqqqqro\u002fHMdxHMdxvD\u002fO8zzP8zy\u002fP38gCIIgCMI\u002foSiKoiiKwj81TdM0TdPEP0JRFEVRFMU\u002f1nVd13Vdxz8kSZIkSZLcP27btm3btt0\u002f"},"y":["hill","helmet","road","circle","bird","line","scarf","motion line","grass","star","sky","ground","water","cloud","sun"],"type":"bar"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Share of images containing each element","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":430,"showlegend":false,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false,"showticklabels":false,"visible":false,"range":[0,0.5339285714285714]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"showgrid":false}},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('fd98ccf6-a6ed-4dab-984c-e1e842d55e44');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+<figcaption class="quarto-float-caption-margin quarto-float-caption quarto-float-fig margin-caption" id="fig-top-elements-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Share of images containing each element, from the open-ended extraction pass.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>A memorized scene would show up as the same set of elements recurring picture after picture. I went looking for that, but pelican-on-a-bicycle images had no elements that recurred more consistently than in other animal-vehicle combinations.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ol type="1">
+<li><strong>Using an LLM judge for scoring.</strong> This article’s conclusions rest on being able to trust that an LLM can reliably judge the quality of an image.</li>
+<li><strong>SVGmaxxing.</strong> A lab that optimized SVG generation <em>as a whole</em> rises on every cell at once and looks identical to a lab that’s just good. Some labs, such as Google/DeepMind, openly do this. This experiment won’t capture that.</li>
+<li><strong>Limited budget.</strong> The whole experiment ran on roughly $60 of API credits. That capped it at 3 samples per cell, a single judge, and 7 models.</li>
+<li><strong>“Plane” instead of “airplane”.</strong> I used “plane” instead of “airplane” in the vehicles, and models often read it geometrically. However, dropping the plane cells and refitting does not substantially change the results. I didn’t re-run the generations with “airplane” because of budget.</li>
+</ol>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Sorry, HN haters, but there’s little evidence that AI labs are pelicanmaxxing. Or at least they’re not doing it in a plainly obvious manner.</p>
+<p>Pelicans aren’t drawn any better than the rest. Bicycles aren’t drawn any better than other vehicles. The combination doesn’t beat what each lab’s pelican and bicycle skills predict, and its scenes aren’t any more repetitive than the rest of the grid’s.</p>
+<p>The one exception is direction. All 21 pelican-bicycle images face right, and no other combination is unanimous. But it doesn’t seem that strange. Facing right is the norm across the experiment, and strongest exactly where the famous prompt sits. Three other combinations land at 90% or above, and with 48 of them, I’m not surprised one reached 21 out of 21.</p>
+<p>The more plausible story is SVGmaxxing. Google does a version of this openly. Other labs might be doing it more quietly. Sadly, this experiment can’t say who’s doing it. But at least you can sleep tonight knowing that AI labs are not producing terabytes of pelicans on bicycles just to trick Simon Willison.</p>
+<p>If you want to look at the data yourself, the full pipeline is in the <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/pelicanmaxxing">repo</a>.</p>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>the practice of optimizing AI models to achieve high scores on popular benchmarks.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
+  author = {Castillo, Dylan},
+  title = {Are {AI} Labs Pelicanmaxxing?},
+  date = {2026-07-18},
+  url = {https://dylancastillo.co/posts/pelicanmaxxing.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2026. <span>“Are AI Labs Pelicanmaxxing?”</span> July
+18. <a href="https://dylancastillo.co/posts/pelicanmaxxing.html">https://dylancastillo.co/posts/pelicanmaxxing.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2025, Dylan Castillo</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script defer="" src="../custom/pelican-explorer.js"></script>
+
+
+
+
+</body></html>

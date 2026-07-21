@@ -1,0 +1,103 @@
+.pelican-explorer {
+  margin: 1.5rem 0;
+}
+
+.pe-controls {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+
+.pe-select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.pe-select-wrapper select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.pe-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pe-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.pe-mean {
+  font-weight: 400;
+  opacity: 0.7;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.pe-score {
+  text-align: center;
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-top: 2px;
+  cursor: default;
+}
+
+.pe-card-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+}
+
+.pe-cell-label {
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+
+.pe-cell img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  background: white;
+  cursor: zoom-in;
+  transition: transform 0.15s ease;
+}
+
+.pe-cell img:hover {
+  transform: scale(1.02);
+}
+
+.pe-failed {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  border: 1px dashed rgba(128, 128, 128, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 600px) {
+  .pe-card-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+  }
+}
