@@ -61,10 +61,10 @@ def save(fig, name: str) -> None:
 
 
 def chart_animal_scores() -> plt.Figure:
-    """Mean judge score per animal, all models pooled. If labs trained extra
-    on pelicans, the pelican bar should top this chart."""
-    df = pd.read_csv(ANALYSIS_DIR / "dataset.csv").dropna(subset=["overall"])
-    data = df.groupby("animal")["overall"].mean().sort_values()
+    """Mean judge animal rating per animal, all models pooled. If labs trained
+    extra on pelicans, the pelican bar should top this chart."""
+    df = pd.read_csv(ANALYSIS_DIR / "dataset.csv").dropna(subset=["animal_rating"])
+    data = df.groupby("animal")["animal_rating"].mean().sort_values()
 
     fig, ax = plt.subplots(figsize=(7, 3.2))
     colors = [ACCENT if a == "pelican" else GRAY for a in data.index]
@@ -78,7 +78,7 @@ def chart_animal_scores() -> plt.Figure:
     ax.set_xlim(0, 5.3)
     ax.set_xticks([])
     ax.spines["bottom"].set_visible(False)
-    ax.set_title("Mean judge score by animal (1-5)")
+    ax.set_title("Mean animal rating by animal (1-5)")
     fig.tight_layout()
     return fig
 

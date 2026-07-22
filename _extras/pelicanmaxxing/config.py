@@ -13,9 +13,9 @@ ANALYSIS_DIR = DATA_DIR / "analysis"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
-# All LLM calls are traced to this LangSmith project (overrides LANGCHAIN_PROJECT
-# from .env so experiment traces don't mix with other work).
-LANGSMITH_PROJECT = "pelicanmaxxing"
+# LangSmith tracing is configured entirely from .env (LANGSMITH_TRACING,
+# LANGSMITH_PROJECT). Turn it off before a full run if the monthly trace quota
+# matters: a judging pass is 1,008 traces.
 
 # Verify slugs against https://openrouter.ai/models before a full run:
 #   uv run python _extras/pelicanmaxxing/generate.py --check-models
@@ -42,7 +42,7 @@ REASONING = {"effort": "medium"}
 
 N_SAMPLES = 3
 TEMPERATURE = 1.0
-MAX_CONCURRENCY = 8  # vision calls (extract/judge)
+MAX_CONCURRENCY = 24  # vision calls (extract/judge)
 MODEL_CONCURRENCY = 10  # concurrent generation requests per contestant model
 RENDER_WIDTH = 800
 

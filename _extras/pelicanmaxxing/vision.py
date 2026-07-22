@@ -13,18 +13,16 @@ from langsmith.wrappers import wrap_openai
 from openai import AsyncOpenAI
 from tqdm import tqdm
 
-from config import LANGSMITH_PROJECT, OPENROUTER_BASE_URL
+from config import OPENROUTER_BASE_URL
 
 JSON_RE = re.compile(r"\{.*\}", re.DOTALL)
 
 
 def make_client() -> AsyncOpenAI:
-    load_dotenv()
+    load_dotenv(override=True)
     key = os.environ.get("OPENROUTER_API_KEY")
     if not key:
         sys.exit("OPENROUTER_API_KEY not set (add it to .env)")
-    os.environ.setdefault("LANGSMITH_TRACING", "true")
-    os.environ["LANGSMITH_PROJECT"] = os.environ["LANGCHAIN_PROJECT"] = LANGSMITH_PROJECT
     # max_retries=0: retrying is handled explicitly by callers; the SDK's own
     # silent retries would multiply with ours on hanging requests.
     return wrap_openai(AsyncOpenAI(base_url=OPENROUTER_BASE_URL, api_key=key, max_retries=0))

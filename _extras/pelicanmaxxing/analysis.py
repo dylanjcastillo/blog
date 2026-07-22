@@ -1,6 +1,6 @@
 """Assemble a tidy dataset and compute the headline analyses:
 
-1. Animal scores — mean judge score per animal: are pelicans drawn better?
+1. Animal scores — mean animal rating per animal: are pelicans drawn better?
 2. Vehicle scores — mean vehicle rating per vehicle: are bicycles drawn better?
 3. Interaction residual — does pelican-bicycle beat what the model's pelican
    row and bicycle column predict?
@@ -93,7 +93,12 @@ def load_dataset() -> pd.DataFrame:
 
 
 def animal_scores(df: pd.DataFrame) -> pd.Series:
-    return df.dropna(subset=["overall"]).groupby("animal")["overall"].mean().sort_values(ascending=False)
+    # animal_rating, not `overall`: the question is how well the animal itself
+    # is drawn, and `overall` mixes in the vehicle and action ratings. Mirrors
+    # vehicle_scores() so the two rankings are the same kind of measurement.
+    if "animal_rating" not in df.columns:
+        return pd.Series(dtype=float)
+    return df.dropna(subset=["animal_rating"]).groupby("animal")["animal_rating"].mean().sort_values(ascending=False)
 
 
 def vehicle_scores(df: pd.DataFrame) -> pd.Series:
@@ -215,11 +220,18 @@ def per_lab_favoritism(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def difficulty_adjusted_effects(df: pd.DataFrame) -> pd.DataFrame:
-    """Two-way fixed-effects regressions: rating ~ lab + animal + vehicle,
-    plus per-lab interactions for pelican, bicycle, and the pelican-bicycle
-    cell. Animal/vehicle terms absorb intrinsic complexity; the interactions
-    are each lab's benchmark-specific boost relative to the average lab, with
-    95% CIs. Sum coding so deviations are vs the panel mean, not one lab.
+    """Fixed-effects regression: rating ~ lab + animal x vehicle, plus per-lab
+    interactions for pelican, bicycle, and the pelican-bicycle cell. The full
+    animal x vehicle term absorbs the intrinsic difficulty of every one of the
+    48 combinations, so each interaction is that lab's benchmark-specific
+    boost relative to the average lab, with 95% CIs. Sum coding so deviations
+    are vs the panel mean, not one lab.
+
+    Because every lab draws the same 48 combinations, a benchmark effect
+    shared by all labs is indistinguishable from that combination simply being
+    easy or hard to draw: the pooled pelican-bicycle term is absorbed by the
+    cell term, and what remains identified is each lab's deviation from the
+    panel. The raw cell ranking covers the pooled question instead.
 
     Fit on the raw images, one row per generation: the samples within a cell
     are independent draws at temperature 1.0 from the same prompt, and each
@@ -233,7 +245,7 @@ def difficulty_adjusted_effects(df: pd.DataFrame) -> pd.DataFrame:
     data["is_bicycle"] = (data["vehicle"] == "bicycle").astype(int)
     data["is_pb"] = data["is_pelican"] * data["is_bicycle"]
     fit = smf.ols(
-        "overall ~ C(model, Sum) + C(animal) + C(vehicle) + is_pb"
+        "overall ~ C(model, Sum) + C(animal)*C(vehicle)"
         " + C(model, Sum):is_pelican + C(model, Sum):is_bicycle + C(model, Sum):is_pb",
         data=data,
     ).fit(cov_type="HC3")
@@ -241,14 +253,14 @@ def difficulty_adjusted_effects(df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     ci = fit.conf_int()
     for term in fit.params.index:
-        if ":is_" not in term and term != "is_pb":
+        if ":is_" not in term:
             continue
         if "[mean" in term:  # collinear with the animal/vehicle difficulty terms
             continue
         label = term.replace("C(model, Sum)[S.", "").replace("]", "")
         rows.append(
             {
-                "term": label if term != "is_pb" else "pelican-bicycle cell (avg lab)",
+                "term": label,
                 "coef": fit.params[term],
                 "ci_low": ci.loc[term, 0],
                 "ci_high": ci.loc[term, 1],
@@ -356,7 +368,7 @@ def main() -> None:
     print(reliability.round(3).to_string())
     reliability.to_csv(ANALYSIS_DIR / "reliability.csv")
 
-    print("\n=== Mean judge score by animal ===")
+    print("\n=== Mean animal rating by animal ===")
     a_scores = animal_scores(df)
     print(a_scores.round(2).to_string())
     a_scores.to_csv(ANALYSIS_DIR / "animal_scores.csv")
