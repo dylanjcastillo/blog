@@ -20,7 +20,7 @@ For the past few years, [Simon Willison](https://simonwillison.net/tags/pelican-
 
 What began as a tongue-in-cheek benchmark has become one of the most famous informal benchmarks in AI. Simon's pelican-on-a-bicycle results are often among the most upvoted comments on Hacker News threads announcing new releases from AI labs.
 
-The benchmark is now famous enough that there's [plenty](https://news.ycombinator.com/item?id=48445168) [of](https://news.ycombinator.com/item?id=48994217) [discussion](https://news.ycombinator.com/item?id=48956159) about its usefulness and about whether AI labs might be benchmaxxing^[the practice of optimizing AI models to achieve high scores on popular benchmarks.] on it. When billions or even trillions of dollars are at stake, and a strong result could help persuade users, wouldn't it be tempting to *pelicanmaxx* your model just a bit?
+The benchmark is now famous enough that there's [plenty](https://news.ycombinator.com/item?id=48445168) [of](https://news.ycombinator.com/item?id=48994217) [discussion](https://news.ycombinator.com/item?id=48956159) about its usefulness and about whether AI labs might be benchmaxxing^[the practice of optimizing AI models to achieve high scores on popular benchmarks.] on it. When billions or even trillions of dollars are at stake, and a strong result could help persuade users, wouldn't it be tempting to _pelicanmaxx_ your model just a bit?
 
 I wanted to find out, so I put together a small experiment. I generated 1,008 SVGs across seven frontier models, scored them with an LLM judge, and used Claude Fable 5 for the analysis.  
 
