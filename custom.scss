@@ -34,7 +34,7 @@ $inline-code-color-bg: #363b43 !default;
 // Body
 
 $body-bg: $gray-900 !default;
-$body-color: $gray-200 !default;
+$body-color: $gray-100 !default;
 @function body-mix($weight) {
   @return mix($body-bg, $body-color, $weight);
 }
@@ -65,7 +65,6 @@ $font-family-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI",
   Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
   "Segoe UI Emoji", "Segoe UI Symbol" !default;
 $font-size-base: 1.05rem !default;
-$line-height-base: 1.65 !default;
 $h1-font-size: 2rem !default;
 $h2-font-size: 1.5rem !default;
 $h3-font-size: 1.25rem !default;
@@ -127,17 +126,18 @@ $navbar-light-toggler-border-color: rgba($body-bg, 0.1) !default;
 
 // Pagination
 
-$pagination-color: $body-color !default;
-$pagination-bg: $success !default;
+$pagination-color: $gray-300 !default;
+$pagination-bg: transparent !default;
 $pagination-border-width: 0 !default;
 $pagination-border-color: transparent !default;
-$pagination-hover-color: $body-color !default;
-$pagination-hover-bg: lighten($success, 15%) !default;
+$pagination-hover-color: $white !default;
+$pagination-hover-bg: $gray-800 !default;
 $pagination-hover-border-color: transparent !default;
-$pagination-active-bg: $pagination-hover-bg !default;
+$pagination-active-color: $white !default;
+$pagination-active-bg: $orange !default;
 $pagination-active-border-color: transparent !default;
-$pagination-disabled-color: $body-color !default;
-$pagination-disabled-bg: darken($success, 15%) !default;
+$pagination-disabled-color: $gray-600 !default;
+$pagination-disabled-bg: transparent !default;
 $pagination-disabled-border-color: transparent !default;
 
 // Cards
@@ -203,8 +203,10 @@ $code-block-bg: black;
 
 // Navbar
 .navbar {
-  background-color: $body-bg;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba($gray-900, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   max-width: 1000px;
   margin: 0 auto;
   .navbar-container {
@@ -221,6 +223,16 @@ $code-block-bg: black;
   }
 }
 
+// Categories/TOC sidebar: hide its scrollbar so it doesn't clash with the
+// navbar (it still scrolls with the trackpad/wheel)
+#quarto-margin-sidebar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .quarto-title {
   color: $white;
 }
@@ -234,8 +246,60 @@ h6 {
   color: $white;
 }
 
+// Section headings: underline matching the site's divider style.
+// The id selector is needed to beat Quarto's h2:first-of-type overrides.
+#quarto-content h2:not(#toc-title) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.4rem;
+  margin-top: 2.5rem;
+}
+
+// Cleaner listings: no header row, subtle dividers, muted metadata
 .quarto-listing-table {
-  border-top: unset;
+  border: none;
+
+  thead {
+    display: none;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.6rem 0;
+    vertical-align: baseline;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .listing-date,
+  .listing-reading-time {
+    color: $gray-300;
+    font-size: 0.9em;
+  }
+
+  td:has(.listing-date) {
+    padding-right: 1.25rem;
+    white-space: nowrap;
+  }
+
+  td:has(.listing-reading-time) {
+    text-align: right;
+    padding-left: 1.25rem;
+    white-space: nowrap;
+  }
+
+  tr:hover .listing-title {
+    text-decoration: underline;
+  }
+
+  // Projects: give the title column a fixed share so descriptions read cleanly
+  tr:has(.listing-description) td:first-child {
+    width: 30%;
+    padding-right: 1.5rem;
+    vertical-align: top;
+  }
 }
 
 .quarto-about-jolla .content {
@@ -256,13 +320,22 @@ p code:not(.sourceCode),
 li code:not(.sourceCode),
 td code:not(.sourceCode) {
   background-color: $inline-code-color-bg;
+  border-radius: 6px;
 }
 
-// Variables
+// Softer chrome on code blocks and images
+div.sourceCode,
+pre.sourceCode {
+  border: none;
+  border-radius: 8px;
+}
 
-$web-font-path: "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap" !default;
-@if $web-font-path {
-  @import url($web-font-path);
+.code-with-filename div.sourceCode {
+  border-radius: 0 0 8px 8px;
+}
+
+main.content img {
+  border-radius: 8px;
 }
 
 // Typography
@@ -309,8 +382,15 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0
 }
 
 .pagination {
+  gap: 0.25rem;
+
   a:hover {
     text-decoration: none;
+  }
+
+  .page-link {
+    border-radius: 6px;
+    font-size: 0.9em;
   }
 }
 
@@ -356,15 +436,16 @@ kbd,
   white-space: nowrap;
 }
 
-// Keep listing tables from forcing horizontal overflow on small screens
+// On small screens: drop the reading-time column, keep dates on one line
 @media (max-width: 767.98px) {
-  .listing-date {
-    white-space: normal;
-  }
   .quarto-listing-table {
     display: block;
     max-width: 100%;
     overflow-x: auto;
+
+    td:has(.listing-reading-time) {
+      display: none;
+    }
   }
 }
 // Show plotly graphs
