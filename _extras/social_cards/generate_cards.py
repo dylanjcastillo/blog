@@ -108,7 +108,7 @@ def render_site_card(out_path):
     draw.text((MARGIN_X, top), "Dylan Castillo", font=name_font, fill=WHITE)
     draw.text(
         (MARGIN_X, top + 84 + 24),
-        "AI consultant | Builder of random things",
+        "AI Consultant | Serial tinkerer",
         font=sub_font,
         fill=GRAY,
     )
