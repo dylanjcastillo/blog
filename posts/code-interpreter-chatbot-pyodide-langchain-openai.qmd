@@ -1,5 +1,6 @@
 ---
 title: "Create a Code Interpreter Chatbot with Pyodide, LangChain, and OpenAI"
+image: "images/cards/code-interpreter-chatbot-pyodide-langchain-openai.png"
 aliases:
   - /code-interpreter-chatbot-pyodide-langchain-openai/
 description-meta: "Learn how to build your own code interpreter chatbot using Pyodide, LangChain, and OpenAI."

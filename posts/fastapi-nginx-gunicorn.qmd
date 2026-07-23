@@ -1,5 +1,6 @@
 ---
 title: "How to Securely Deploy a FastAPI app with NGINX and Gunicorn"
+image: "images/cards/fastapi-nginx-gunicorn.png"
 aliases:
   - /fastapi-nginx-gunicorn/
 description-meta: "In this tutorial, you'll learn how to use NGINX, and Gunicorn+Uvicorn to deploy a FastAPI app, and generate a free SSL certificate for it."

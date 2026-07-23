@@ -1,5 +1,6 @@
 ---
 title: "How to Use Elasticsearch in Python"
+image: "images/cards/elasticseach-python.png"
 aliases:
   - /elasticsearch-python/
 description-meta: "This tutorial will teach you the basics of using Elasticsearch in Python. You'll learn how to set up an Elasticsearch cluster in your machine, to create an index, add data to that index, and search your data."

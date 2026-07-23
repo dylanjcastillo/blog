@@ -1,5 +1,6 @@
 ---
 title: "How to Plot with Python: 8 Popular Graphs Made with pandas, matplotlib, seaborn, and plotly.express"
+image: "images/cards/how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express.png"
 aliases:
   - /how-to-plot-with-python-popular-graphs-using-pandas-matplotlib-seaborn-and-plotly-express/
 description-meta: "In this tutorial, you'll learn how to make some of the most popular types of charts with four data visualization libraries: pandas, matplotlib, seaborn, and plotly.express."

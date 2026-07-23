@@ -1,5 +1,6 @@
 ---
 title: "Deploying a Django app with Kamal 2, AWS ECR, and Github Actions"
+image: "images/cards/deploy-a-django-app-with-kamal-aws-ecr-and-github-actions.png"
 date: 2024-09-15
 date-modified: "2025-06-29"
 description-meta: "A guide to deploy a Django app with Kamal 2, AWS ECR, and Github Actions"

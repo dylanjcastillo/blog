@@ -1,12 +1,13 @@
 project:
   type: website
+  pre-render: uv run python _extras/social_cards/generate_cards.py
   resources:
     - CNAME
 
 website:
   title: Dylan Castillo
   site-url: https://dylancastillo.co
-  image: images/social_media_card.webp
+  image: /images/social_media_card.png
   favicon: images/logo.webp
   open-graph: true
   twitter-card:

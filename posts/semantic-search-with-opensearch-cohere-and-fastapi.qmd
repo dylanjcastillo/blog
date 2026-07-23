@@ -1,5 +1,6 @@
 ---
 title: "Semantic Search with OpenSearch, Cohere, and FastAPI"
+image: "images/cards/semantic-search-with-opensearch-cohere-and-fastapi.png"
 aliases:
   - /semantic-search-with-opensearch-cohere-and-fastapi/
 description-meta: "In this tutorial, I'll you'll learn how to build a semantic search service using OpenSearch, Cohere, and FastAPI. You'll create an app that lets users search through news articles to find the ones that are most relevant to their query."

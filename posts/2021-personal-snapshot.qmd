@@ -1,5 +1,6 @@
 ---
 title: "2021: Personal Snapshot"
+image: "images/cards/2021-personal-snapshot.png"
 aliases:
   - /2021-personal-snapshot/
 date: "01/31/2022"

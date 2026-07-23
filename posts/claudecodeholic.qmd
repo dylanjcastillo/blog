@@ -1,5 +1,6 @@
 ---
 title: "ClaudeCodeholic"
+image: "images/cards/claudecodeholic.png"
 date: 2025-10-18
 date-modified: 2025-10-18
 categories:

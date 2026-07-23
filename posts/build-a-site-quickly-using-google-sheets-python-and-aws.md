@@ -1,5 +1,6 @@
 ---
 title: "Use Google Sheets, S3, and Python to Build a Website Quickly"
+image: "images/cards/build-a-site-quickly-using-google-sheets-python-and-aws.png"
 aliases:
   - /build-a-site-quickly-using-google-sheets-python-and-aws/
 description-meta: "We will set up a Python script that reads data from Google Sheets, generates a static site using a predefined template, and deploys it to an S3 bucket."

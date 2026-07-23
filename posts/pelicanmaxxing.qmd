@@ -1,5 +1,6 @@
 ---
 title: "Are AI labs pelicanmaxxing?"
+image: "images/cards/pelicanmaxxing.png"
 date: "07/18/2026"
 description-meta: "I generated 1,000+ SVGs across 7 frontier models to test whether AI labs are training on Simon Willison's pelican-riding-a-bicycle benchmark."
 categories:

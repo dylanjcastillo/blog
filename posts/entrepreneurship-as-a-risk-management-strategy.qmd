@@ -1,5 +1,6 @@
 ---
 title: "Entrepreneurship as a Risk Management Strategy"
+image: "images/cards/entrepreneurship-as-a-risk-management-strategy.png"
 aliases:
   - /entrepreneurship-as-a-risk-management-strategy/
 description-meta: "Entrepreneurship, contrary to popular belief, is a great risk management strategy. Here I explain why."

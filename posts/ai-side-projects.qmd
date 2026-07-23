@@ -1,5 +1,6 @@
 ---
 title: "I hate AI side projects"
+image: "images/cards/ai-side-projects.png"
 date: 2026-02-20
 date-modified: 2026-02-20
 categories:

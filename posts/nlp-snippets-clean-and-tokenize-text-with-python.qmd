@@ -1,5 +1,6 @@
 ---
 title: "Clean and Tokenize Text With Python"
+image: "images/cards/nlp-snippets-clean-and-tokenize-text-with-python.png"
 aliases:
   - /nlp-snippets-clean-and-tokenize-text-with-python/
 description-meta: "The first step in a Machine Learning project is cleaning the data. In this article, you'll find 20 code snippets to clean and tokenize text data using Python."

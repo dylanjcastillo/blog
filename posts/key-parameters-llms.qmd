@@ -1,5 +1,6 @@
 ---
 title: "Key parameters of LLMs"
+image: "images/cards/key-parameters-llms.png"
 date: 2025-06-29
 date-modified: "2025-06-29"
 description-meta: "What are the most commonly used parameters when working with LLMs?"

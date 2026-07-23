@@ -1,5 +1,6 @@
 ---
 title: "Build an AI Search Engine Using FastAPI, Qdrant, and ChatGPT"
+image: "images/cards/ai-search-engine-fastapi-qdrant-chatgpt.png"
 aliases:
   - /ai-search-engine-fastapi-qdrant-chatgpt/
 description-meta: "In this tutorial, you'll learn how to use FastAPI, Qdrant, Sentence Transformers, and ChatGPT to create an AI search engine."

@@ -1,5 +1,6 @@
 ---
 title: "How to Use OpenSearch in Python"
+image: "images/cards/opensearch-python.png"
 aliases:
   - /opensearch-python/
 description-meta: "This tutorial covers the basics of using OpenSearch in Python. You'll learn how to set up a local development cluster, create an index, and store and search your data."

@@ -1,5 +1,6 @@
 ---
 title: "Cover Your Ass"
+image: "images/cards/cover-your-ass.png"
 date: 2026-02-22
 date-modified: 2026-02-22
 categories:

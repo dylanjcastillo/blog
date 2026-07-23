@@ -1,5 +1,6 @@
 ---
 title: "How to Cluster Documents Using Word2Vec and K-means"
+image: "images/cards/nlp-snippets-cluster-documents-using-word2vec.png"
 aliases:
   - /nlp-snippets-cluster-documents-using-word2vec/
 description-meta: "Learn how to cluster documents using Word2Vec. In this tutorial, you'll train a Word2Vec model, generate word embeddings, and use K-means to create groups of news articles."

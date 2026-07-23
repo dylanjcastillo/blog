@@ -1,5 +1,6 @@
 ---
 title: "Five Years of Freelancing"
+image: "images/cards/5-years-freelancing-in-europe.png"
 date: 2026-04-25
 date-modified: 2026-05-03
 categories:

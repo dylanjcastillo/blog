@@ -1,5 +1,6 @@
 ---
 title: "Fine-tuning Won't Add New Knowledge To Your Model"
+image: "images/cards/fine-tuning-vs-rag.png"
 aliases:
   - /fine-tuning-vs-rag/
 description-meta: "Learn why you should not fine-tune a model to add new knowledge to it, and what's the right approach for that."

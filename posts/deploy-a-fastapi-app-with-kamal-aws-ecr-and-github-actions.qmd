@@ -1,5 +1,6 @@
 ---
 title: "Deploying a FastAPI app with Kamal, AWS ECR, and Github Actions"
+image: "images/cards/deploy-a-fastapi-app-with-kamal-aws-ecr-and-github-actions.png"
 date: "09/21/2024"
 date-modified: "2024-12-16"
 description-meta: "A guide to deploying a FastAPI app with Kamal, AWS ECR, and Github Actions"

@@ -1,5 +1,6 @@
 ---
 title: "How to write good prompts"
+image: "images/cards/prompt-engineering-101.png"
 date: 2025-06-26
 date-modified: 2025-10-20
 description-meta: "How to convince LLMs to do what you want them to do."

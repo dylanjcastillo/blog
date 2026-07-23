@@ -1,5 +1,6 @@
 ---
 title: "Semantic Search with Elasticsearch, OpenAI, and LangChain"
+image: "images/cards/semantic-search-elasticsearch-openai-langchain.png"
 aliases:
   - /semantic-search-elasticsearch-openai-langchain/
 description-meta: "In this tutorial, I'll walk you through building a semantic search service using Elasticsearch, OpenAI, LangChain, and FastAPI."

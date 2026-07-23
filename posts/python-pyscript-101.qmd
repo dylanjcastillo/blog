@@ -1,5 +1,6 @@
 ---
 title: "PyScript 101"
+image: "images/cards/python-pyscript-101.png"
 aliases:
   - /python-pyscript-101/
 description-meta: "PyScript is a framework that lets users create Python apps in the browser. This tutorial will teach you the basics to get you started with it."
