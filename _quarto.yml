@@ -1,6 +1,6 @@
 project:
   type: website
-  pre-render: uv run python _extras/social_cards/generate_cards.py
+  pre-render: bash _extras/social_cards/prerender.sh
   resources:
     - CNAME
 
