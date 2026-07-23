@@ -51,7 +51,7 @@ def wrap_title(draw, title, font, max_width):
 
 
 def fit_title(draw, title, max_width):
-    for size in range(112, 46, -4):
+    for size in range(96, 46, -4):
         font = ImageFont.truetype(str(TITLE_FONT), size)
         lines = wrap_title(draw, title, font, max_width)
         if (
