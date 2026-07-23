@@ -1,0 +1,7 @@
+---
+title: "Page not found"
+---
+
+Nothing to see here! Please disperse!
+
+You can go back to the [homepage](/), or check out my [posts](/#posts) and [projects](/projects).

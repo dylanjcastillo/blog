@@ -2,9 +2,6 @@
 title: "Projects"
 aliases:
   - /projects/
-author: "Dylan Castillo"
-date: "09/10/2022"
-date-modified: last-modified
 listing:
   - id: projects
     contents: projects.yml
