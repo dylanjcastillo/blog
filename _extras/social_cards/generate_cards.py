@@ -36,32 +36,45 @@ TITLE_FONT = FONTS_DIR / "Lato-Black.ttf"
 FOOTER_FONT = FONTS_DIR / "Lato-Bold.ttf"
 
 
-def wrap_title(draw, title, font, max_width):
-    lines, line = [], ""
-    for word in title.split():
-        candidate = f"{line} {word}".strip()
-        if draw.textlength(candidate, font=font) <= max_width or not line:
-            line = candidate
-        else:
-            lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
-    return lines
+def balanced_wrap(draw, words, font, n_lines, max_width):
+    """Split words into n_lines minimizing the widest line; None if impossible."""
+    from itertools import combinations
+
+    if n_lines > len(words):
+        return None
+    best, best_width = None, None
+    for breaks in combinations(range(1, len(words)), n_lines - 1):
+        bounds = [0, *breaks, len(words)]
+        lines = [" ".join(words[a:b]) for a, b in zip(bounds, bounds[1:])]
+        width = max(draw.textlength(l, font=font) for l in lines)
+        if width <= max_width and (best_width is None or width < best_width):
+            best, best_width = lines, width
+    return best
 
 
 def fit_title(draw, title, max_width):
-    for size in range(96, 46, -4):
-        font = ImageFont.truetype(str(TITLE_FONT), size)
-        lines = wrap_title(draw, title, font, max_width)
-        if (
-            len(lines) <= 3
-            and len(lines) * size * 1.22 <= 340
-            and all(draw.textlength(l, font=font) <= max_width for l in lines)
-        ):
-            return font, lines, size
-    font = ImageFont.truetype(str(TITLE_FONT), 46)
-    return font, wrap_title(draw, title, font, max_width), 46
+    """Pick the layout (line count + size) that best fills the card.
+
+    Fewer lines are preferred: each extra line costs 10%, so a title that
+    fits on one line at a slightly smaller size beats an awkward wrap.
+    """
+    words = title.split()
+    best = None
+    for n_lines in (1, 2, 3):
+        for size in range(96, 44, -2):
+            if n_lines * size * 1.22 > 340:
+                continue
+            font = ImageFont.truetype(str(TITLE_FONT), size)
+            lines = balanced_wrap(draw, words, font, n_lines, max_width)
+            if lines:
+                score = size * 0.9 ** (n_lines - 1)
+                if best is None or score > best[0]:
+                    best = (score, font, lines, size)
+                break
+    if best:
+        return best[1], best[2], best[3]
+    font = ImageFont.truetype(str(TITLE_FONT), 44)
+    return font, balanced_wrap(draw, words, font, 3, max_width * 1.5) or [title], 44
 
 
 def render_card(title, out_path):
