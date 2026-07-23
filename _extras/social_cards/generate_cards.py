@@ -93,6 +93,31 @@ def render_card(title, out_path):
     img.save(out_path, "PNG", optimize=True)
 
 
+def render_site_card(out_path):
+    """Render the site-wide fallback card (used by homepage, about, TIL, etc.)."""
+    img = Image.new("RGB", (WIDTH, HEIGHT), BG)
+    draw = ImageDraw.Draw(img)
+    for x in range(720, WIDTH - 40, 44):
+        for y in range(56, 300, 44):
+            draw.ellipse((x, y, x + 5, y + 5), fill=DOT)
+    draw.rectangle((0, 0, WIDTH, 8), fill=ORANGE)
+
+    name_font = ImageFont.truetype(str(TITLE_FONT), 84)
+    sub_font = ImageFont.truetype(str(FONTS_DIR / "Lato-Regular.ttf"), 36)
+    top = (HEIGHT - 130 - 84 - 24 - 36) // 2 + 20
+    draw.text((MARGIN_X, top), "Dylan Castillo", font=name_font, fill=WHITE)
+    draw.text(
+        (MARGIN_X, top + 84 + 24),
+        "AI consultant | Builder of random things",
+        font=sub_font,
+        fill=GRAY,
+    )
+
+    footer_font = ImageFont.truetype(str(FOOTER_FONT), 30)
+    draw.text((MARGIN_X, HEIGHT - 92), "dylancastillo.co", font=footer_font, fill=GRAY)
+    img.save(out_path, "PNG", optimize=True)
+
+
 def read_frontmatter(path):
     """Return (frontmatter_dict, raw_yaml_text) or (None, None)."""
     if path.suffix == ".ipynb":
@@ -154,7 +179,16 @@ def main():
     parser.add_argument("--only", help="only process the post with this filename stem")
     parser.add_argument("--force", action="store_true", help="re-render existing cards")
     parser.add_argument("--no-patch", action="store_true", help="don't edit frontmatter")
+    parser.add_argument(
+        "--site-card", action="store_true", help="render the site-wide fallback card"
+    )
     args = parser.parse_args()
+
+    if args.site_card:
+        out = ROOT / "images" / "social_media_card.png"
+        render_site_card(out)
+        print(f"rendered:            {out.relative_to(ROOT)}")
+        return
 
     posts = sorted(
         p
