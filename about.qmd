@@ -5,7 +5,7 @@ aliases:
   - /author/dylan/
 about:
   template: jolla
-  image: images/profile_pic.webp
+  image: images/profile_pic_boat.webp
   links:
     - icon: github
       text: Github
