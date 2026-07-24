@@ -3,6 +3,7 @@ project:
   pre-render: bash _extras/social_cards/prerender.sh
   resources:
     - CNAME
+    - fonts/
 
 website:
   title: Dylan Castillo
@@ -41,6 +42,7 @@ format:
   html:
     include-in-header:
       - text: |
+          <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
           <script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer></script>
     page-layout: "article"
     theme:

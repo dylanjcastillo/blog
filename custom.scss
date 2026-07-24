@@ -61,10 +61,9 @@ $link-color: $success !default;
 // Fonts
 
 // stylelint-disable-next-line value-keyword-case
-$font-family-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI",
-  Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-  "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-size-base: 1.05rem !default;
+$font-family-sans-serif: "IBM Plex Sans", -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !default;
 $h1-font-size: 2rem !default;
 $h2-font-size: 1.5rem !default;
 $h3-font-size: 1.25rem !default;
@@ -194,6 +193,30 @@ $code-block-bg: black;
 
 /*-- scss:rules --*/
 
+// Self-hosted IBM Plex Sans (variable font, latin subset only; other scripts
+// fall back to the system stack via unicode-range)
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: italic;
+  font-weight: 100 700;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-sans-latin-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 // Body
 
 * {
@@ -201,25 +224,124 @@ $code-block-bg: black;
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Navbar
+// Navbar: lay it out on the same page-columns grid as the content, so the
+// first nav link shares the content column's left edge on every page type
+// and breakpoint
 .navbar {
+  @extend .page-columns;
   background-color: rgba($gray-900, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  max-width: 1000px;
-  margin: 0 auto;
+  // Horizontal padding would shift the grid columns relative to
+  // #quarto-content's; keep only the top padding — the bottom 1rem comes
+  // from the ::after row so the border can sit at the navbar's bottom edge
+  // while spanning only the content columns, not the full viewport
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  &::after {
+    content: "";
+    grid-column: body-content-start / page-end;
+    height: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    // While collapsed to a hamburger the navbar reads as an app bar, so the
+    // border goes full-bleed like the background
+    @media (max-width: 991.98px) {
+      grid-column: screen-start / screen-end;
+    }
+  }
   .navbar-container {
     padding: 0;
+    grid-column: body-content-start / page-end;
   }
   .navbar-title {
     font-weight: 600;
   }
-  // Align the first nav link with the content column
+  // Optical alignment: align the visible glyphs (not the buttons' boxes)
+  // with the grid edges. The hamburger SVG carries ~4px of internal
+  // whitespace plus a 1px border; the search icon sits ~8px inside its
+  // button. The touch targets bleed outward, which is fine.
+  .navbar-toggler {
+    margin-left: -5px;
+  }
+  #quarto-search {
+    margin-right: -8px;
+  }
+  // On phones the single-column grid can't absorb horizontal padding the way
+  // the desktop template's outer fr columns do, so Quarto's
+  // `#quarto-header > nav { padding-left/right: 1em }` (id selector, beats
+  // .navbar) would shift the navbar off the content column
+  @at-root #quarto-header > nav.navbar {
+    padding-left: 0;
+    padding-right: 0;
+  }
   @media (min-width: 992px) {
+    // Strip the edge links' own padding so text sits exactly on the grid lines
     .navbar-nav:first-child .nav-item:first-child .nav-link {
       padding-left: 0;
     }
+    .navbar-nav:last-child .nav-item:last-child .nav-link {
+      padding-right: 0;
+    }
+  }
+}
+
+// Listing pages place main.content one gutter left of the article content
+// column (column-page-left spans page-start/body-content-end); pin it to the
+// body-content column instead so all pages share the same left edge
+main.content.column-page-left {
+  grid-column: body-content-start / body-content-end;
+}
+
+// Pages without margin content (about, projects) get Quarto's "fullcontent"
+// grid, which centers the body column ~80px right of the other pages and
+// would make the navbar shift between pages. Mirror the default article
+// template (copied from Quarto's generated `body .page-columns` rules) so
+// every page shares the same column positions. Revisit if the grid config
+// in _quarto.yml changes.
+@media (min-width: 992px) {
+  body.fullcontent:not(.floating):not(.docked) .page-columns {
+    grid-template-columns:
+      [screen-start] 24px [screen-start-inset] 5fr
+      [page-start page-start-inset] 0px [body-start-outset] 0px
+      [body-start] 24px
+      [body-content-start] minmax(500px, calc(750px - 48px))
+      [body-content-end] 24px [body-end] 38.64px
+      [body-end-outset] minmax(82.8px, 160.08px)
+      [page-end-inset] 38.64px [page-end] 5fr
+      [screen-end-inset] 24px [screen-end];
+  }
+}
+
+// On phones, Quarto's tablet grid rules outrank its own single-column
+// template for the navbar (#quarto-content wins that tie through its id;
+// the navbar has none), which pushes the toggler off the content edge.
+// Reassert the phone template for the navbar on every page type.
+@media (max-width: 767.98px) {
+  body .navbar,
+  body.fullcontent:not(.floating):not(.docked) .navbar {
+    grid-template-columns:
+      [screen-start] 24px
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0px, 1fr)
+      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset] 24px
+      [screen-end];
+  }
+}
+
+// Lower bound matters: without it this outranks Quarto's single-column
+// phone template (same specificity, later in the cascade) and would force a
+// 500px column onto small screens
+@media (min-width: 768px) and (max-width: 991.98px) {
+  body.fullcontent:not(.floating):not(.docked) .page-columns {
+    grid-template-columns:
+      [screen-start] 24px
+      [screen-start-inset page-start page-start-inset body-start-outset] 5fr
+      [body-start] 24px
+      [body-content-start] minmax(500px, calc(700px - 48px))
+      [body-content-end] 24px [body-end] 38.64px
+      [body-end-outset] minmax(82.8px, 160.08px)
+      [page-end-inset] 38.64px [page-end] 5fr
+      [screen-end-inset] 24px [screen-end];
   }
 }
 
