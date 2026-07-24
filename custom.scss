@@ -226,10 +226,50 @@ $code-block-bg: black;
 // Categories/TOC sidebar: hide its scrollbar so it doesn't clash with the
 // navbar (it still scrolls with the trackpad/wheel)
 #quarto-margin-sidebar {
+  // main.content has margin-top: 1em; match it so both columns start level
+  margin-top: 1em;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+// Listing pages render an empty title header that still takes up margin,
+// pushing the content below the categories sidebar; collapse it
+#title-block-header:empty {
+  display: none;
+}
+
+// Categories: muted text list matching the listing metadata style
+// Keep Quarto's default label look (normal case, semibold, heading color);
+// only match the body text's first-line height so the top aligns with the
+// adjacent content column. Id selector beats Quarto's .sidebar.margin-sidebar.
+#quarto-margin-sidebar .quarto-listing-category-title {
+  line-height: $font-size-base * 1.5;
+}
+
+.quarto-listing-category {
+  .category {
+    padding: 0.15rem 0;
+    // Same computed size/color as .listing-date/.listing-reading-time
+    font-size: $font-size-base * 0.9;
+    color: $gray-300;
+    cursor: pointer;
+
+    &:hover {
+      color: $white;
+      text-decoration: underline;
+    }
+
+    &.active {
+      color: $orange;
+    }
+
+    .quarto-category-count {
+      opacity: 0.6;
+      font-size: 0.9em;
+    }
   }
 }
 
