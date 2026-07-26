@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -257,128 +260,128 @@ Subscribe to my newsletter
 <p>Suppose I have a physical, solid, equilateral triangle, and I make two cuts. The two cuts are from two parallel lines, and both cuts pass through the interior of the triangle. How many pieces are there after the cuts? Think step by step, and then put your answer in <strong>bold</strong> as a single integer (for example, <strong>0</strong>). If you don’t know, guess.</p>
 </blockquote>
 <p>Let’s say I write a simple system prompt and two Pydantic models to format the responses:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>system_prompt <span class="op">=</span> (</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
-<span id="cb1-8"><a href="#cb1-8"></a>    reasoning: <span class="bu">str</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>    answer: <span class="bu">str</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
-<span id="cb1-12"><a href="#cb1-12"></a>    answer: <span class="bu">str</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>system_prompt <span class="op">=</span> (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>    reasoning: <span class="bu">str</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a>    answer: <span class="bu">str</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>    answer: <span class="bu">str</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Do you think that there will be a difference in performance between <code>ResponseFormatA</code> and <code>ResponseFormatB</code>? If so, which one do you think will perform better?</p>
 <p>Not sure? Well, you’re in luck! Let’s run some experiments to find out.</p>
 <section id="set-up-the-environment" class="level2">
 <h2 class="anchored" data-anchor-id="set-up-the-environment">Set up the environment</h2>
 <p>First, start by importing the necessary libraries:</p>
 <div id="cell-5" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> json</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> asyncio <span class="im">import</span> Semaphore</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> langsmith <span class="im">import</span> traceable</span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="im">from</span> openai <span class="im">import</span> AsyncOpenAI</span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb2-17"><a href="#cb2-17"></a></span>
-<span id="cb2-18"><a href="#cb2-18"></a>load_dotenv()</span>
-<span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>client <span class="op">=</span> wrap_openai(AsyncOpenAI())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="im">import</span> asyncio</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="im">import</span> json</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a><span class="im">from</span> asyncio <span class="im">import</span> Semaphore</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a><span class="im">from</span> langsmith <span class="im">import</span> traceable</span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a><span class="im">from</span> openai <span class="im">import</span> AsyncOpenAI</span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-label="17"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-label="18"></a>load_dotenv()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-label="19"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-label="20"></a>client <span class="op">=</span> wrap_openai(AsyncOpenAI())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will set up all the necessary infrastructure to run the experiments. I like using <a href="https://www.langchain.com/langsmith">LangSmith</a> to track <a href="https://smith.langchain.com/public/11545ceb-70d3-4213-9f05-89891586b809/r?runtab=0">runs</a>.</p>
 <p>To run the experiment, you need some data. I ended up using a subset of the <a href="https://huggingface.co/datasets/livebench/reasoning">reasoning questions</a> from LiveBench. You can download it and save it in the <code>data</code> directory.</p>
 <p>Then, you can read it into a pandas <code>DataFrame</code>:</p>
 <div id="cell-7" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>data_dir <span class="op">=</span> Path().absolute().parent <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"live_bench"</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>reasoning_dir <span class="op">=</span> data_dir <span class="op">/</span> <span class="st">"reasoning"</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>live_bench_json <span class="op">=</span> reasoning_dir <span class="op">/</span> <span class="st">"question.jsonl"</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a>df <span class="op">=</span> (</span>
-<span id="cb3-6"><a href="#cb3-6"></a>    pd.read_json(live_bench_json, lines<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-7"><a href="#cb3-7"></a>    .query(<span class="st">"livebench_release_date == '2024-07-26'"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>    .assign(</span>
-<span id="cb3-9"><a href="#cb3-9"></a>        turns_str<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>], </span>
-<span id="cb3-10"><a href="#cb3-10"></a>        expects_integer<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>].<span class="bu">str</span>.contains(<span class="st">"integer"</span>, case<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb3-11"><a href="#cb3-11"></a>    )</span>
-<span id="cb3-12"><a href="#cb3-12"></a>    .reset_index()</span>
-<span id="cb3-13"><a href="#cb3-13"></a>    .rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"data_point_id"</span>})</span>
-<span id="cb3-14"><a href="#cb3-14"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>data_dir <span class="op">=</span> Path().absolute().parent <span class="op">/</span> <span class="st">"data"</span> <span class="op">/</span> <span class="st">"live_bench"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>reasoning_dir <span class="op">=</span> data_dir <span class="op">/</span> <span class="st">"reasoning"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>live_bench_json <span class="op">=</span> reasoning_dir <span class="op">/</span> <span class="st">"question.jsonl"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a>df <span class="op">=</span> (</span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a>    pd.read_json(live_bench_json, lines<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a>    .query(<span class="st">"livebench_release_date == '2024-07-26'"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>    .assign(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a>        turns_str<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>], </span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a>        expects_integer<span class="op">=</span><span class="kw">lambda</span> x: x.turns.<span class="bu">str</span>[<span class="dv">0</span>].<span class="bu">str</span>.contains(<span class="st">"integer"</span>, case<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a>    )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-label="12"></a>    .reset_index()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-label="13"></a>    .rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"data_point_id"</span>})</span>
+<span id="cb3-14"><a href="#cb3-14" aria-label="14"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, define the system prompt and the Pydantic models you’ll use to format the responses:</p>
 <div id="cell-9" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>system_prompt_template <span class="op">=</span> (</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>)</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    reasoning: <span class="bu">str</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>    answer: <span class="bu">str</span> </span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    answer: <span class="bu">str</span> </span>
-<span id="cb4-13"><a href="#cb4-13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>system_prompt_template <span class="op">=</span> (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>    <span class="st">"You're a helpful assistant. You will help me answer a question."</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>    <span class="st">"</span><span class="ch">\n</span><span class="st">You will use this JSON schema for your response:"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>    <span class="st">"</span><span class="ch">\n</span><span class="sc">{response_format}</span><span class="st">"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a><span class="kw">class</span> ResponseFormatA(BaseModel):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a>    reasoning: <span class="bu">str</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a>    answer: <span class="bu">str</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a><span class="kw">class</span> ResponseFormatB(BaseModel):</span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a>    answer: <span class="bu">str</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a>    reasoning: <span class="bu">str</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In the system prompt you send to the LLM, you’ll replace <code>{response_format}</code> with the JSON schema of the response format you want to use.</p>
 <p>Then, let’s define a few helper functions to run the experiment:</p>
 <div id="cell-11" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> validate_response(response_json, response_format):</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    response_dict <span class="op">=</span> json.loads(response_json)</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    expected_keys <span class="op">=</span> <span class="bu">list</span>(response_format.model_json_schema()[<span class="st">"properties"</span>].keys())</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    actual_keys <span class="op">=</span> <span class="bu">list</span>(response_dict.keys())</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="cf">if</span> actual_keys <span class="op">!=</span> expected_keys:</span>
-<span id="cb5-6"><a href="#cb5-6"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Response keys </span><span class="sc">{</span>actual_keys<span class="sc">}</span><span class="ss"> do not match expected keys </span><span class="sc">{</span>expected_keys<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> response_format.model_validate_json(response_json)</span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="at">@traceable</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="cf">async</span> <span class="kw">def</span> process_row(</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    row: pd.Series, </span>
-<span id="cb5-12"><a href="#cb5-12"></a>    response_format: ResponseFormatA <span class="op">|</span> ResponseFormatB, </span>
-<span id="cb5-13"><a href="#cb5-13"></a>    semaphore: Semaphore</span>
-<span id="cb5-14"><a href="#cb5-14"></a>) <span class="op">-&gt;</span> ResponseFormatA <span class="op">|</span> ResponseFormatB:</span>
-<span id="cb5-15"><a href="#cb5-15"></a>    system_prompt <span class="op">=</span> system_prompt_template.<span class="bu">format</span>(</span>
-<span id="cb5-16"><a href="#cb5-16"></a>        response_format<span class="op">=</span>response_format.model_json_schema()</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    )</span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="cf">async</span> <span class="cf">with</span> semaphore:</span>
-<span id="cb5-19"><a href="#cb5-19"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
-<span id="cb5-20"><a href="#cb5-20"></a>            <span class="cf">try</span>:</span>
-<span id="cb5-21"><a href="#cb5-21"></a>                response <span class="op">=</span> <span class="cf">await</span> client.chat.completions.create(</span>
-<span id="cb5-22"><a href="#cb5-22"></a>                    model<span class="op">=</span><span class="st">"gpt-4o"</span>, </span>
-<span id="cb5-23"><a href="#cb5-23"></a>                    messages<span class="op">=</span>[</span>
-<span id="cb5-24"><a href="#cb5-24"></a>                        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: system_prompt},</span>
-<span id="cb5-25"><a href="#cb5-25"></a>                        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="ss">f"Question:</span><span class="ch">\n</span><span class="sc">{</span>row<span class="sc">.</span>turns_str<span class="sc">}</span><span class="ss">"</span>}</span>
-<span id="cb5-26"><a href="#cb5-26"></a>                    ],</span>
-<span id="cb5-27"><a href="#cb5-27"></a>                    response_format<span class="op">=</span>{<span class="st">"type"</span>: <span class="st">"json_object"</span>}</span>
-<span id="cb5-28"><a href="#cb5-28"></a>                )</span>
-<span id="cb5-29"><a href="#cb5-29"></a>                response_json <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb5-30"><a href="#cb5-30"></a>                <span class="cf">return</span> validate_response(response_json, response_format)</span>
-<span id="cb5-31"><a href="#cb5-31"></a>            <span class="cf">except</span> <span class="pp">Exception</span>:</span>
-<span id="cb5-32"><a href="#cb5-32"></a>                <span class="cf">pass</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Failed to generate a valid response"</span>)</span>
-<span id="cb5-34"><a href="#cb5-34"></a></span>
-<span id="cb5-35"><a href="#cb5-35"></a><span class="at">@traceable</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a><span class="cf">async</span> <span class="kw">def</span> main(df, response_format, concurrency: <span class="bu">int</span> <span class="op">=</span> <span class="dv">30</span>):</span>
-<span id="cb5-37"><a href="#cb5-37"></a>    semaphore <span class="op">=</span> Semaphore(concurrency)</span>
-<span id="cb5-38"><a href="#cb5-38"></a>    tasks <span class="op">=</span> [process_row(row, response_format, semaphore) <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows()]</span>
-<span id="cb5-39"><a href="#cb5-39"></a>    responses <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
-<span id="cb5-40"><a href="#cb5-40"></a></span>
-<span id="cb5-41"><a href="#cb5-41"></a>    <span class="cf">return</span> responses</span>
-<span id="cb5-42"><a href="#cb5-42"></a></span>
-<span id="cb5-43"><a href="#cb5-43"></a><span class="kw">def</span> extract_answer(answer):</span>
-<span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).replace(<span class="st">"**"</span>, <span class="st">""</span>).strip()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="kw">def</span> validate_response(response_json, response_format):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>    response_dict <span class="op">=</span> json.loads(response_json)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>    expected_keys <span class="op">=</span> <span class="bu">list</span>(response_format.model_json_schema()[<span class="st">"properties"</span>].keys())</span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>    actual_keys <span class="op">=</span> <span class="bu">list</span>(response_dict.keys())</span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>    <span class="cf">if</span> actual_keys <span class="op">!=</span> expected_keys:</span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Response keys </span><span class="sc">{</span>actual_keys<span class="sc">}</span><span class="ss"> do not match expected keys </span><span class="sc">{</span>expected_keys<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>    <span class="cf">return</span> response_format.model_validate_json(response_json)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a><span class="at">@traceable</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a><span class="cf">async</span> <span class="kw">def</span> process_row(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a>    row: pd.Series, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-label="12"></a>    response_format: ResponseFormatA <span class="op">|</span> ResponseFormatB, </span>
+<span id="cb5-13"><a href="#cb5-13" aria-label="13"></a>    semaphore: Semaphore</span>
+<span id="cb5-14"><a href="#cb5-14" aria-label="14"></a>) <span class="op">-&gt;</span> ResponseFormatA <span class="op">|</span> ResponseFormatB:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-label="15"></a>    system_prompt <span class="op">=</span> system_prompt_template.<span class="bu">format</span>(</span>
+<span id="cb5-16"><a href="#cb5-16" aria-label="16"></a>        response_format<span class="op">=</span>response_format.model_json_schema()</span>
+<span id="cb5-17"><a href="#cb5-17" aria-label="17"></a>    )</span>
+<span id="cb5-18"><a href="#cb5-18" aria-label="18"></a>    <span class="cf">async</span> <span class="cf">with</span> semaphore:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-label="19"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb5-20"><a href="#cb5-20" aria-label="20"></a>            <span class="cf">try</span>:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-label="21"></a>                response <span class="op">=</span> <span class="cf">await</span> client.chat.completions.create(</span>
+<span id="cb5-22"><a href="#cb5-22" aria-label="22"></a>                    model<span class="op">=</span><span class="st">"gpt-4o"</span>, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-label="23"></a>                    messages<span class="op">=</span>[</span>
+<span id="cb5-24"><a href="#cb5-24" aria-label="24"></a>                        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: system_prompt},</span>
+<span id="cb5-25"><a href="#cb5-25" aria-label="25"></a>                        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="ss">f"Question:</span><span class="ch">\n</span><span class="sc">{</span>row<span class="sc">.</span>turns_str<span class="sc">}</span><span class="ss">"</span>}</span>
+<span id="cb5-26"><a href="#cb5-26" aria-label="26"></a>                    ],</span>
+<span id="cb5-27"><a href="#cb5-27" aria-label="27"></a>                    response_format<span class="op">=</span>{<span class="st">"type"</span>: <span class="st">"json_object"</span>}</span>
+<span id="cb5-28"><a href="#cb5-28" aria-label="28"></a>                )</span>
+<span id="cb5-29"><a href="#cb5-29" aria-label="29"></a>                response_json <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb5-30"><a href="#cb5-30" aria-label="30"></a>                <span class="cf">return</span> validate_response(response_json, response_format)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-label="31"></a>            <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb5-32"><a href="#cb5-32" aria-label="32"></a>                <span class="cf">pass</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-label="33"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Failed to generate a valid response"</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-label="34"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-label="35"></a><span class="at">@traceable</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-label="36"></a><span class="cf">async</span> <span class="kw">def</span> main(df, response_format, concurrency: <span class="bu">int</span> <span class="op">=</span> <span class="dv">30</span>):</span>
+<span id="cb5-37"><a href="#cb5-37" aria-label="37"></a>    semaphore <span class="op">=</span> Semaphore(concurrency)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-label="38"></a>    tasks <span class="op">=</span> [process_row(row, response_format, semaphore) <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows()]</span>
+<span id="cb5-39"><a href="#cb5-39" aria-label="39"></a>    responses <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-label="40"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-label="41"></a>    <span class="cf">return</span> responses</span>
+<span id="cb5-42"><a href="#cb5-42" aria-label="42"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-label="43"></a><span class="kw">def</span> extract_answer(answer):</span>
+<span id="cb5-44"><a href="#cb5-44" aria-label="44"></a>    <span class="cf">return</span> <span class="bu">str</span>(answer).replace(<span class="st">"**"</span>, <span class="st">""</span>).strip()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this code, <code>validate_response</code> is used to check if the response is valid (i.e.&nbsp;it matches the JSON schema in the same order). If it is, it returns the response. Otherwise, it raises an exception.</p>
 <p><code>extract_answer</code> is used to remove ** from the answer if it exists in the response. Some of the questions in the LiveBench dataset included instructions to put the answer in bold, which is why we need to remove it.</p>
@@ -389,74 +392,74 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="running-the-experiment">Running the experiment</h2>
 <p>Now, you can run the experiment using the two response formats:</p>
 <div id="cell-14" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>n_runs <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>df_runs <span class="op">=</span> []</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="cf">for</span> run <span class="kw">in</span> <span class="bu">range</span>(n_runs):</span>
-<span id="cb6-5"><a href="#cb6-5"></a>    <span class="bu">print</span>(<span class="ss">f"Run </span><span class="sc">{</span>run <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n_runs<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    df_copy <span class="op">=</span> df.copy()</span>
-<span id="cb6-7"><a href="#cb6-7"></a>    </span>
-<span id="cb6-8"><a href="#cb6-8"></a>    responses_A <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatA))</span>
-<span id="cb6-9"><a href="#cb6-9"></a>    df_copy[<span class="st">"raw_answer_A"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_A]</span>
-<span id="cb6-10"><a href="#cb6-10"></a>    df_copy[<span class="st">"response_A"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_A"</span>].<span class="bu">apply</span>(extract_answer)</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    df_copy[<span class="st">"is_correct_A"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_A"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    </span>
-<span id="cb6-13"><a href="#cb6-13"></a>    responses_B <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatB))</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    df_copy[<span class="st">"raw_answer_B"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_B]</span>
-<span id="cb6-15"><a href="#cb6-15"></a>    df_copy[<span class="st">"response_B"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_B"</span>].<span class="bu">apply</span>(extract_answer)</span>
-<span id="cb6-16"><a href="#cb6-16"></a>    df_copy[<span class="st">"is_correct_B"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_B"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
-<span id="cb6-17"><a href="#cb6-17"></a>    </span>
-<span id="cb6-18"><a href="#cb6-18"></a>    df_copy[<span class="st">"run"</span>] <span class="op">=</span> run</span>
-<span id="cb6-19"><a href="#cb6-19"></a>    df_run <span class="op">=</span> df_copy[[<span class="st">"data_point_id"</span>, <span class="st">"ground_truth"</span>, <span class="st">"is_correct_A"</span>, <span class="st">"is_correct_B"</span>, <span class="st">"run"</span>]]</span>
-<span id="cb6-20"><a href="#cb6-20"></a>    </span>
-<span id="cb6-21"><a href="#cb6-21"></a>    df_runs.append(df_run)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>n_runs <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>df_runs <span class="op">=</span> []</span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a><span class="cf">for</span> run <span class="kw">in</span> <span class="bu">range</span>(n_runs):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a>    <span class="bu">print</span>(<span class="ss">f"Run </span><span class="sc">{</span>run <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n_runs<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a>    df_copy <span class="op">=</span> df.copy()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a>    responses_A <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatA))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a>    df_copy[<span class="st">"raw_answer_A"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_A]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-label="10"></a>    df_copy[<span class="st">"response_A"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_A"</span>].<span class="bu">apply</span>(extract_answer)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>    df_copy[<span class="st">"is_correct_A"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_A"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a>    responses_B <span class="op">=</span> asyncio.run(main(df_copy, ResponseFormatB))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-label="14"></a>    df_copy[<span class="st">"raw_answer_B"</span>] <span class="op">=</span> [r.answer <span class="cf">for</span> r <span class="kw">in</span> responses_B]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a>    df_copy[<span class="st">"response_B"</span>] <span class="op">=</span> df_copy[<span class="st">"raw_answer_B"</span>].<span class="bu">apply</span>(extract_answer)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-label="16"></a>    df_copy[<span class="st">"is_correct_B"</span>] <span class="op">=</span> (df_copy[<span class="st">"response_B"</span>] <span class="op">==</span> df_copy[<span class="st">"ground_truth"</span>]).astype(<span class="bu">int</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-label="17"></a>    </span>
+<span id="cb6-18"><a href="#cb6-18" aria-label="18"></a>    df_copy[<span class="st">"run"</span>] <span class="op">=</span> run</span>
+<span id="cb6-19"><a href="#cb6-19" aria-label="19"></a>    df_run <span class="op">=</span> df_copy[[<span class="st">"data_point_id"</span>, <span class="st">"ground_truth"</span>, <span class="st">"is_correct_A"</span>, <span class="st">"is_correct_B"</span>, <span class="st">"run"</span>]]</span>
+<span id="cb6-20"><a href="#cb6-20" aria-label="20"></a>    </span>
+<span id="cb6-21"><a href="#cb6-21" aria-label="21"></a>    df_runs.append(df_run)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We run the experiment multiple times with the same inputs to account for the randomness in the LLM’s responses. Ideally, we should run it more than three times, but I’m poor. So, we’ll just do it 3 times.</p>
 <div id="cell-16" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>df_all_runs <span class="op">=</span> pd.concat(df_runs, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a>n_bootstraps <span class="op">=</span> <span class="dv">10000</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>bootstrap_accuracies_A <span class="op">=</span> []</span>
-<span id="cb7-5"><a href="#cb7-5"></a>bootstrap_accuracies_B <span class="op">=</span> []</span>
-<span id="cb7-6"><a href="#cb7-6"></a></span>
-<span id="cb7-7"><a href="#cb7-7"></a>data_point_ids <span class="op">=</span> df_all_runs[<span class="st">'data_point_id'</span>].unique()</span>
-<span id="cb7-8"><a href="#cb7-8"></a>n_data_points <span class="op">=</span> <span class="bu">len</span>(data_point_ids)</span>
-<span id="cb7-9"><a href="#cb7-9"></a></span>
-<span id="cb7-10"><a href="#cb7-10"></a>grouped_A <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_A'</span>]</span>
-<span id="cb7-11"><a href="#cb7-11"></a>grouped_B <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_B'</span>]</span>
-<span id="cb7-12"><a href="#cb7-12"></a></span>
-<span id="cb7-13"><a href="#cb7-13"></a>df_correct_counts_A <span class="op">=</span> grouped_A.<span class="bu">sum</span>()</span>
-<span id="cb7-14"><a href="#cb7-14"></a>df_total_counts_A <span class="op">=</span> grouped_A.count()</span>
-<span id="cb7-15"><a href="#cb7-15"></a>df_correct_counts_B <span class="op">=</span> grouped_B.<span class="bu">sum</span>()</span>
-<span id="cb7-16"><a href="#cb7-16"></a>df_total_counts_B <span class="op">=</span> grouped_B.count()</span>
-<span id="cb7-17"><a href="#cb7-17"></a></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_bootstraps):</span>
-<span id="cb7-19"><a href="#cb7-19"></a>    sampled_ids <span class="op">=</span> np.random.choice(data_point_ids, size<span class="op">=</span>n_data_points, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-20"><a href="#cb7-20"></a>    sampled_counts <span class="op">=</span> pd.Series(sampled_ids).value_counts()</span>
-<span id="cb7-21"><a href="#cb7-21"></a>    counts_index <span class="op">=</span> sampled_counts.index</span>
-<span id="cb7-22"><a href="#cb7-22"></a>    </span>
-<span id="cb7-23"><a href="#cb7-23"></a>    total_correct_counts_A <span class="op">=</span> (df_correct_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
-<span id="cb7-24"><a href="#cb7-24"></a>    total_observations_A <span class="op">=</span> (df_total_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
-<span id="cb7-25"><a href="#cb7-25"></a>    mean_accuracy_A <span class="op">=</span> total_correct_counts_A <span class="op">/</span> total_observations_A</span>
-<span id="cb7-26"><a href="#cb7-26"></a>    bootstrap_accuracies_A.append(mean_accuracy_A)</span>
-<span id="cb7-27"><a href="#cb7-27"></a>    </span>
-<span id="cb7-28"><a href="#cb7-28"></a>    total_correct_counts_B <span class="op">=</span> (df_correct_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
-<span id="cb7-29"><a href="#cb7-29"></a>    total_observations_B <span class="op">=</span> (df_total_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
-<span id="cb7-30"><a href="#cb7-30"></a>    mean_accuracy_B <span class="op">=</span> total_correct_counts_B <span class="op">/</span> total_observations_B</span>
-<span id="cb7-31"><a href="#cb7-31"></a>    bootstrap_accuracies_B.append(mean_accuracy_B)</span>
-<span id="cb7-32"><a href="#cb7-32"></a></span>
-<span id="cb7-33"><a href="#cb7-33"></a>ci_A <span class="op">=</span> np.percentile(bootstrap_accuracies_A, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
-<span id="cb7-34"><a href="#cb7-34"></a>ci_B <span class="op">=</span> np.percentile(bootstrap_accuracies_B, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
-<span id="cb7-35"><a href="#cb7-35"></a></span>
-<span id="cb7-36"><a href="#cb7-36"></a>mean_accuracy_A <span class="op">=</span> df_all_runs[<span class="st">'is_correct_A'</span>].mean()</span>
-<span id="cb7-37"><a href="#cb7-37"></a>mean_accuracy_B <span class="op">=</span> df_all_runs[<span class="st">'is_correct_B'</span>].mean()</span>
-<span id="cb7-38"><a href="#cb7-38"></a></span>
-<span id="cb7-39"><a href="#cb7-39"></a><span class="bu">print</span>(</span>
-<span id="cb7-40"><a href="#cb7-40"></a>    <span class="ss">f"Response format A - Mean: </span><span class="sc">{</span>mean_accuracy_A <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_A[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_A[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
-<span id="cb7-41"><a href="#cb7-41"></a>)</span>
-<span id="cb7-42"><a href="#cb7-42"></a><span class="bu">print</span>(</span>
-<span id="cb7-43"><a href="#cb7-43"></a>    <span class="ss">f"Response format B - Mean: </span><span class="sc">{</span>mean_accuracy_B <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_B[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_B[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
-<span id="cb7-44"><a href="#cb7-44"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>df_all_runs <span class="op">=</span> pd.concat(df_runs, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a>n_bootstraps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-label="4"></a>bootstrap_accuracies_A <span class="op">=</span> []</span>
+<span id="cb7-5"><a href="#cb7-5" aria-label="5"></a>bootstrap_accuracies_B <span class="op">=</span> []</span>
+<span id="cb7-6"><a href="#cb7-6" aria-label="6"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-label="7"></a>data_point_ids <span class="op">=</span> df_all_runs[<span class="st">'data_point_id'</span>].unique()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a>n_data_points <span class="op">=</span> <span class="bu">len</span>(data_point_ids)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-label="9"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-label="10"></a>grouped_A <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_A'</span>]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-label="11"></a>grouped_B <span class="op">=</span> df_all_runs.groupby(<span class="st">'data_point_id'</span>)[<span class="st">'is_correct_B'</span>]</span>
+<span id="cb7-12"><a href="#cb7-12" aria-label="12"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-label="13"></a>df_correct_counts_A <span class="op">=</span> grouped_A.<span class="bu">sum</span>()</span>
+<span id="cb7-14"><a href="#cb7-14" aria-label="14"></a>df_total_counts_A <span class="op">=</span> grouped_A.count()</span>
+<span id="cb7-15"><a href="#cb7-15" aria-label="15"></a>df_correct_counts_B <span class="op">=</span> grouped_B.<span class="bu">sum</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-label="16"></a>df_total_counts_B <span class="op">=</span> grouped_B.count()</span>
+<span id="cb7-17"><a href="#cb7-17" aria-label="17"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-label="18"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_bootstraps):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-label="19"></a>    sampled_ids <span class="op">=</span> np.random.choice(data_point_ids, size<span class="op">=</span>n_data_points, replace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-label="20"></a>    sampled_counts <span class="op">=</span> pd.Series(sampled_ids).value_counts()</span>
+<span id="cb7-21"><a href="#cb7-21" aria-label="21"></a>    counts_index <span class="op">=</span> sampled_counts.index</span>
+<span id="cb7-22"><a href="#cb7-22" aria-label="22"></a>    </span>
+<span id="cb7-23"><a href="#cb7-23" aria-label="23"></a>    total_correct_counts_A <span class="op">=</span> (df_correct_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-24"><a href="#cb7-24" aria-label="24"></a>    total_observations_A <span class="op">=</span> (df_total_counts_A.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-25"><a href="#cb7-25" aria-label="25"></a>    mean_accuracy_A <span class="op">=</span> total_correct_counts_A <span class="op">/</span> total_observations_A</span>
+<span id="cb7-26"><a href="#cb7-26" aria-label="26"></a>    bootstrap_accuracies_A.append(mean_accuracy_A)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-label="27"></a>    </span>
+<span id="cb7-28"><a href="#cb7-28" aria-label="28"></a>    total_correct_counts_B <span class="op">=</span> (df_correct_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-29"><a href="#cb7-29" aria-label="29"></a>    total_observations_B <span class="op">=</span> (df_total_counts_B.loc[counts_index] <span class="op">*</span> sampled_counts).<span class="bu">sum</span>()</span>
+<span id="cb7-30"><a href="#cb7-30" aria-label="30"></a>    mean_accuracy_B <span class="op">=</span> total_correct_counts_B <span class="op">/</span> total_observations_B</span>
+<span id="cb7-31"><a href="#cb7-31" aria-label="31"></a>    bootstrap_accuracies_B.append(mean_accuracy_B)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-label="32"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-label="33"></a>ci_A <span class="op">=</span> np.percentile(bootstrap_accuracies_A, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
+<span id="cb7-34"><a href="#cb7-34" aria-label="34"></a>ci_B <span class="op">=</span> np.percentile(bootstrap_accuracies_B, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
+<span id="cb7-35"><a href="#cb7-35" aria-label="35"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-label="36"></a>mean_accuracy_A <span class="op">=</span> df_all_runs[<span class="st">'is_correct_A'</span>].mean()</span>
+<span id="cb7-37"><a href="#cb7-37" aria-label="37"></a>mean_accuracy_B <span class="op">=</span> df_all_runs[<span class="st">'is_correct_B'</span>].mean()</span>
+<span id="cb7-38"><a href="#cb7-38" aria-label="38"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-label="39"></a><span class="bu">print</span>(</span>
+<span id="cb7-40"><a href="#cb7-40" aria-label="40"></a>    <span class="ss">f"Response format A - Mean: </span><span class="sc">{</span>mean_accuracy_A <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_A[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_A[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-label="41"></a>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-label="42"></a><span class="bu">print</span>(</span>
+<span id="cb7-43"><a href="#cb7-43" aria-label="43"></a>    <span class="ss">f"Response format B - Mean: </span><span class="sc">{</span>mean_accuracy_B <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% CI: </span><span class="sc">{</span>ci_B[<span class="dv">0</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">% - </span><span class="sc">{</span>ci_B[<span class="dv">1</span>] <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-label="44"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you can build bootstrap confidence intervals for the accuracies of the two response formats. Given that I’m asking the LLM the same question multiple times, I went with an approach called <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5965657/">cluster bootstrapping</a>, which accounts for the fact that the data points are not independent.</p>
 <p>It should take a few seconds to run. Once it’s done, you should see output like the following:</p>
@@ -481,15 +484,15 @@ Subscribe to my newsletter
 <p>These results suggest that the order of the fields in the JSON schema does matter.</p>
 <p>But if you’re still unsure, you can perform a t-test to see if the two response formats are statistically different:</p>
 <div id="cell-18" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>accuracies_A <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_A'</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>accuracies_B <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_B'</span>)</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a>mean_accuracies_A <span class="op">=</span> accuracies_A.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb8-5"><a href="#cb8-5"></a>mean_accuracies_B <span class="op">=</span> accuracies_B.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a>t_stat, p_value <span class="op">=</span> stats.ttest_rel(mean_accuracies_A, mean_accuracies_B, alternative<span class="op">=</span><span class="st">'greater'</span>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>accuracies_A <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_A'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>accuracies_B <span class="op">=</span> df_all_runs.pivot(index<span class="op">=</span><span class="st">'data_point_id'</span>, columns<span class="op">=</span><span class="st">'run'</span>, values<span class="op">=</span><span class="st">'is_correct_B'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>mean_accuracies_A <span class="op">=</span> accuracies_A.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>mean_accuracies_B <span class="op">=</span> accuracies_B.mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a>t_stat, p_value <span class="op">=</span> stats.ttest_rel(mean_accuracies_A, mean_accuracies_B, alternative<span class="op">=</span><span class="st">'greater'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a><span class="bu">print</span>(<span class="ss">f"t-statistic: </span><span class="sc">{</span>t_stat<span class="sc">}</span><span class="ss">, p-value: </span><span class="sc">{</span>p_value<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I got a p-value &lt;0.01, meaning I can reject the null hypothesis that the two response formats are the same.</p>
 </section>

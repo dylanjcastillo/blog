@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -269,36 +272,36 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="how-to-use-pyscript">How to Use PyScript</h2>
 <p>The good thing about PyScript is that there isn’t any installation required. You just need to add it to the <code>head</code> of your HTML file.</p>
 <p>I’ll assume you have a file named <code>index.html</code> with this content for this and the following sections:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&lt;!</span>DOCTYPE html<span class="op">&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&lt;</span>html lang<span class="op">=</span><span class="st">"en"</span><span class="op">&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="op">&lt;</span>head<span class="op">&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>        <span class="op">&lt;</span>meta charset<span class="op">=</span><span class="st">"UTF-8"</span><span class="op">&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>        <span class="op">&lt;</span>meta http<span class="op">-</span>equiv<span class="op">=</span><span class="st">"X-UA-Compatible"</span> content<span class="op">=</span><span class="st">"IE=edge"</span><span class="op">&gt;</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>        <span class="op">&lt;</span>meta name<span class="op">=</span><span class="st">"viewport"</span> content<span class="op">=</span><span class="st">"width=device-width, initial-scale=1.0"</span><span class="op">&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>        <span class="op">&lt;</span>title<span class="op">&gt;</span>My Awesome app<span class="op">!&lt;/</span>title<span class="op">&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>    <span class="op">&lt;/</span>head<span class="op">&gt;</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="op">&lt;</span>body<span class="op">&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a>    <span class="op">&lt;/</span>body<span class="op">&gt;</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="op">&lt;/</span>html<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="op">&lt;!</span>DOCTYPE html<span class="op">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="op">&lt;</span>html lang<span class="op">=</span><span class="st">"en"</span><span class="op">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>    <span class="op">&lt;</span>head<span class="op">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>        <span class="op">&lt;</span>meta charset<span class="op">=</span><span class="st">"UTF-8"</span><span class="op">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>        <span class="op">&lt;</span>meta http<span class="op">-</span>equiv<span class="op">=</span><span class="st">"X-UA-Compatible"</span> content<span class="op">=</span><span class="st">"IE=edge"</span><span class="op">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>        <span class="op">&lt;</span>meta name<span class="op">=</span><span class="st">"viewport"</span> content<span class="op">=</span><span class="st">"width=device-width, initial-scale=1.0"</span><span class="op">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>        <span class="op">&lt;</span>title<span class="op">&gt;</span>My Awesome app<span class="op">!&lt;/</span>title<span class="op">&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>    <span class="op">&lt;/</span>head<span class="op">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a>    <span class="op">&lt;</span>body<span class="op">&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>    <span class="op">&lt;/</span>body<span class="op">&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a><span class="op">&lt;/</span>html<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The code above is a minimal example we’ll use as a starting point. Next, I’ll show you how to use PyScript. You can do it in two ways:</p>
 <ol type="1">
 <li><a href="https://github.com/pyscript/pyscript/archive/refs/heads/main.zip">Download a copy</a> of the latest version of PyScript, and add the required files to <code>head</code> in your HTML document:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  ...</span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"path/to/pyscript.css"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> defer src</span><span class="op">=</span><span class="st">"path/to/pyscript.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>  ...</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"path/to/pyscript.css"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> defer src</span><span class="op">=</span><span class="st">"path/to/pyscript.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="1">
 <li>Add the CDN version of PyScript’s JS and CSS files to <code>head</code> in your HTML document:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  ...</span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://pyscript.net/latest/pyscript.css"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> defer src</span><span class="op">=</span><span class="st">"https://pyscript.net/latest/pyscript.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>  ...</span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://pyscript.net/latest/pyscript.css"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> defer src</span><span class="op">=</span><span class="st">"https://pyscript.net/latest/pyscript.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>PyScript is still under heavy development. If you use the second method, your app may break when new versions are released.</p>
 <p>To test your changes locally, use <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> if you like working with VS Code or try any of <a href="https://stackoverflow.com/questions/38497334/how-to-run-html-file-on-localhost">these methods</a> if you prefer other code editors.</p>
 </section>
@@ -311,85 +314,85 @@ Subscribe to my newsletter
 <ol type="1">
 <li>Wrap your code with a <code>py-script</code> tag.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  ...</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span>print("Hello, world!")<span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  ...</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>  ...</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span>print("Hello, world!")<span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>  ...</span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="1">
 <li>Load an external script using the <code>src</code> attribute from the <code>py-script</code> tag:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>    ...</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">&lt;</span><span class="kw">py-script</span><span class="ot"> src</span><span class="op">=</span><span class="st">'path/to/script.py'</span><span class="dt">&gt;&lt;/</span><span class="kw">pyscript</span><span class="dt">&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>    ...</span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>    ...</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>    <span class="dt">&lt;</span><span class="kw">py-script</span><span class="ot"> src</span><span class="op">=</span><span class="st">'path/to/script.py'</span><span class="dt">&gt;&lt;/</span><span class="kw">pyscript</span><span class="dt">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>    ...</span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The latter is usually preferred to avoid having formatting issues. If you use an HTML auto-formatter, it may break the python code you put inside <code>py-script</code>.</p>
 </section>
 <section id="py-repl" class="level3">
 <h3 class="anchored" data-anchor-id="py-repl"><code>py-repl</code></h3>
 <p>You can also run code using an interactive interpreter, usually known as read–eval–print loop (REPL). Using a REPL makes it feel like you’re running code in a Jupyter notebook.</p>
 <p>You can create a REPL with PyScript using the <code>py-repl</code> tag as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">&lt;</span><span class="kw">py-repl</span><span class="dt">&gt;</span>print("Hello, world!")<span class="dt">&lt;/</span><span class="kw">py-repl</span><span class="dt">&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>  <span class="dt">&lt;</span><span class="kw">py-repl</span><span class="dt">&gt;</span>print("Hello, world!")<span class="dt">&lt;/</span><span class="kw">py-repl</span><span class="dt">&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you try using multiple <code>py-script</code> and <code>py-repl</code> in the same page, you may find some unexpected behavior in the output. I came across <a href="https://github.com/pyscript/pyscript/issues/758#issuecomment-1244091704">two</a> <a href="https://github.com/pyscript/pyscript/issues/735">issues</a> related to this but it looks like they’ll get fixed soon.</p>
 </section>
 </section>
 <section id="how-to-import-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-import-libraries">How to Import Libraries</h2>
 <p>You can make Python libraries available in your environment when your app loads by specifying them in the <code>py-env</code> tag as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  ...</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">&lt;</span><span class="kw">py-env</span><span class="dt">&gt;</span> - numpy - pandas - seaborn <span class="dt">&lt;/</span><span class="kw">py-env</span><span class="dt">&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a>  ...</span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">py-env</span><span class="dt">&gt;</span> - numpy - pandas - seaborn <span class="dt">&lt;/</span><span class="kw">py-env</span><span class="dt">&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-label="4"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or you can load them programmatically using <code>micropip</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1"></a><span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  async def main(): await micropip.install(["numpy", "pandas", "seaborn]) await</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  loop.run_until_complete(main())</span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>  async def main(): await micropip.install(["numpy", "pandas", "seaborn]) await</span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>  loop.run_until_complete(main())</span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a><span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="how-to-interact-with-html-elements" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-interact-with-html-elements">How to Interact With HTML Elements</h2>
 <p>PyScript automatically imports a few things from JavaScript’s global namespace into your Python environment. This means that you can use use these elements without having to import them beforehand. The most important ones are <code>window</code>, <code>document</code>, and <code>console</code>.</p>
 <p><code>window</code>, and <code>document</code>, let you read and make changes to elements from the Document Object Model (DOM). While <code>console</code> lets you interact with your browser’s integrated console.</p>
 <p>For example, you could use <code>document</code> to select a specific element from the DOM:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  ...</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>    # Select an element using its ID document.getElementById("input-code") #</span>
-<span id="cb9-5"><a href="#cb9-5"></a>    Select an element using its class document.querySelector(".table")</span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>  ...</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a>  ...</span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a>    # Select an element using its ID document.getElementById("input-code") #</span>
+<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a>    Select an element using its class document.querySelector(".table")</span>
+<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-label="7"></a>  ...</span>
+<span id="cb9-8"><a href="#cb9-8" aria-label="8"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or use<code>document</code> to read attributes from elements and make changes to them, and print information using <code>console</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> id</span><span class="op">=</span><span class="st">"users-list"</span><span class="dt">&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Dylan<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>John<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Paul<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Jane<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>  <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a>    users = ["Dylan", "John", "Jane"] ul = document.querySelectorAll("ul &gt; li")</span>
-<span id="cb10-10"><a href="#cb10-10"></a>    for li in ul: if li.innerHTML not in users: console.log(li.innerHTML)</span>
-<span id="cb10-11"><a href="#cb10-11"></a>    li.remove()</span>
-<span id="cb10-12"><a href="#cb10-12"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> id</span><span class="op">=</span><span class="st">"users-list"</span><span class="dt">&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Dylan<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>John<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-label="5"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Paul<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-label="6"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;</span>Jane<span class="dt">&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-label="7"></a>  <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-label="8"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-label="9"></a>    users = ["Dylan", "John", "Jane"] ul = document.querySelectorAll("ul &gt; li")</span>
+<span id="cb10-10"><a href="#cb10-10" aria-label="10"></a>    for li in ul: if li.innerHTML not in users: console.log(li.innerHTML)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-label="11"></a>    li.remove()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-label="12"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-label="13"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You could also make your Python code react to changes in the DOM. But that requires some magic to work because the web browser cannot natively handle Python functions when an event such as a click on a button happens.</p>
 <p>For those cases, Pyodide lets you create proxies that bridge Python functions and JavaScript callbacks. You could use <code>create_proxy</code> to make your Python code react to changes as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">""</span><span class="ot"> id</span><span class="op">=</span><span class="st">"input-text"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"button-submit"</span><span class="ot"> for</span><span class="op">=</span><span class="st">"input-text"</span><span class="dt">&gt;</span>Submit!<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"text-length"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>    from pyodide import create_proxy input_button =</span>
-<span id="cb11-7"><a href="#cb11-7"></a>    document.getElementById("button-submit") def get_text_length(x):</span>
-<span id="cb11-8"><a href="#cb11-8"></a>    document.getElementById("text-length").innerHTML =</span>
-<span id="cb11-9"><a href="#cb11-9"></a>    len(document.getElementById("input-text").value)</span>
-<span id="cb11-10"><a href="#cb11-10"></a>    input_button.addEventListener("click", create_proxy(get_text_length))</span>
-<span id="cb11-11"><a href="#cb11-11"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">""</span><span class="ot"> id</span><span class="op">=</span><span class="st">"input-text"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"button-submit"</span><span class="ot"> for</span><span class="op">=</span><span class="st">"input-text"</span><span class="dt">&gt;</span>Submit!<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"text-length"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>  <span class="dt">&lt;</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-label="6"></a>    from pyodide import create_proxy input_button =</span>
+<span id="cb11-7"><a href="#cb11-7" aria-label="7"></a>    document.getElementById("button-submit") def get_text_length(x):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-label="8"></a>    document.getElementById("text-length").innerHTML =</span>
+<span id="cb11-9"><a href="#cb11-9" aria-label="9"></a>    len(document.getElementById("input-text").value)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-label="10"></a>    input_button.addEventListener("click", create_proxy(get_text_length))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-label="11"></a>  <span class="dt">&lt;/</span><span class="kw">py-script</span><span class="dt">&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-label="12"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The code lets the user input a text and run the <code>get_text_length</code> Python function, after he or she clicks on the button on the screen. This function calculates the length of the text that the user entered.</p>
 <p>Finally, it’s worth mentioning that PyScript also provides you with the <code>[Element](https://realpython.com/pyscript-python-in-browser/#pyscripts-adapter-for-javascript-proxy)</code> class. It’s a basic interface that lets you select elements by ID and do certain operations on them. I found it a bit limited, which is why I didn’t cover it in this section.</p>
 </section>

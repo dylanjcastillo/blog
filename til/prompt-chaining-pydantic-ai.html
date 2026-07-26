@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -247,7 +250,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 24, 2026</p>
+      <p class="date-modified">July 26, 2026</p>
     </div>
   </div>
     
@@ -301,21 +304,21 @@ Subscribe to my newsletter
 </ol>
 <p>Because Pydantic AI uses <code>asyncio</code> under the hood, you need to enable <code>nest_asyncio</code> to use it in a notebook:</p>
 <div id="2a607486" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">import</span> nest_asyncio</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you need to import the required libraries. <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> is part of the Pydantic ecosystem, so I thought it’d be good to use it for observability.</p>
 <div id="4081c493" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">import</span> logfire</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> requests</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent, RunContext</span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="im">import</span> logfire</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="im">import</span> requests</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent, RunContext</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>True</code></pre>
 </div>
@@ -323,10 +326,10 @@ Subscribe to my newsletter
 <p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
 <p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
 <div id="014a1f88" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>logfire.configure(</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    token<span class="op">=</span>os.getenv(<span class="st">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb4-3"><a href="#cb4-3"></a>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>logfire.configure(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>    token<span class="op">=</span>os.getenv(<span class="st">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-bold">Logfire</span> project URL: ]8;id=13458;https://logfire-us.pydantic.dev/dylanjcastillo/blog\<span style="text-decoration:underline" class="ansi-cyan-fg">https://logfire-us.pydantic.dev/dylanjcastillo/blog</span>]8;;\
@@ -342,38 +345,38 @@ Subscribe to my newsletter
 <p>So I created three <code>Agent</code> instances. Each one takes care of one of the steps.</p>
 <p>Here’s the code:</p>
 <div id="97be7efe" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>toc_agent <span class="op">=</span> Agent(</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb5-4"><a href="#cb5-4"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    ),</span>
-<span id="cb5-6"><a href="#cb5-6"></a>)</span>
-<span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>article_agent <span class="op">=</span> Agent(</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb5-11"><a href="#cb5-11"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>    ),</span>
-<span id="cb5-13"><a href="#cb5-13"></a>)</span>
-<span id="cb5-14"><a href="#cb5-14"></a></span>
-<span id="cb5-15"><a href="#cb5-15"></a>editor_agent <span class="op">=</span> Agent(</span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb5-18"><a href="#cb5-18"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a>    ),</span>
-<span id="cb5-20"><a href="#cb5-20"></a>)</span>
-<span id="cb5-21"><a href="#cb5-21"></a></span>
-<span id="cb5-22"><a href="#cb5-22"></a></span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb5-25"><a href="#cb5-25"></a>    toc <span class="op">=</span> toc_agent.run_sync(<span class="ss">f"Generate the table of contents of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>    content <span class="op">=</span> article_agent.run_sync(<span class="ss">f"Generate the content of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following table of contents: </span><span class="sc">{</span>toc<span class="sc">.</span>output<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-27"><a href="#cb5-27"></a>    <span class="cf">if</span> <span class="bu">len</span>(content.output) <span class="op">&gt;</span> <span class="dv">1000</span>:</span>
-<span id="cb5-28"><a href="#cb5-28"></a>        revised_content <span class="op">=</span> editor_agent.run_sync(<span class="ss">f"Revise the content of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following table of contents: </span><span class="sc">{</span>toc<span class="sc">.</span>output<span class="sc">}</span><span class="ss"> and the following content: </span><span class="sc">{</span>content<span class="sc">.</span>output<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-29"><a href="#cb5-29"></a>        <span class="cf">return</span> revised_content.output</span>
-<span id="cb5-30"><a href="#cb5-30"></a>    <span class="cf">return</span> content.output</span>
-<span id="cb5-31"><a href="#cb5-31"></a></span>
-<span id="cb5-32"><a href="#cb5-32"></a>output <span class="op">=</span> run_workflow(<span class="st">"Artificial Intelligence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a>toc_agent <span class="op">=</span> Agent(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the table of contents for a short article."</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>    ),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a>article_agent <span class="op">=</span> Agent(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic and a table of contents, you will generate the content of the article."</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-label="12"></a>    ),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-label="13"></a>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-label="14"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-label="15"></a>editor_agent <span class="op">=</span> Agent(</span>
+<span id="cb5-16"><a href="#cb5-16" aria-label="16"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-label="17"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-label="18"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, a table of contents and a content, you will revise the content of the article to make it less than 1000 characters."</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-label="19"></a>    ),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-label="20"></a>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-label="21"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-label="22"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-label="23"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-label="24"></a><span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb5-25"><a href="#cb5-25" aria-label="25"></a>    toc <span class="op">=</span> toc_agent.run_sync(<span class="ss">f"Generate the table of contents of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-label="26"></a>    content <span class="op">=</span> article_agent.run_sync(<span class="ss">f"Generate the content of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following table of contents: </span><span class="sc">{</span>toc<span class="sc">.</span>output<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-label="27"></a>    <span class="cf">if</span> <span class="bu">len</span>(content.output) <span class="op">&gt;</span> <span class="dv">1000</span>:</span>
+<span id="cb5-28"><a href="#cb5-28" aria-label="28"></a>        revised_content <span class="op">=</span> editor_agent.run_sync(<span class="ss">f"Revise the content of an article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following table of contents: </span><span class="sc">{</span>toc<span class="sc">.</span>output<span class="sc">}</span><span class="ss"> and the following content: </span><span class="sc">{</span>content<span class="sc">.</span>output<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-label="29"></a>        <span class="cf">return</span> revised_content.output</span>
+<span id="cb5-30"><a href="#cb5-30" aria-label="30"></a>    <span class="cf">return</span> content.output</span>
+<span id="cb5-31"><a href="#cb5-31" aria-label="31"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-label="32"></a>output <span class="op">=</span> run_workflow(<span class="st">"Artificial Intelligence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>18:54:00.987 Run workflow
 18:54:00.988   toc_agent run
@@ -393,7 +396,7 @@ Subscribe to my newsletter
 </div>
 <p>And here’s the output:</p>
 <div id="1ee5bd83" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Artificial Intelligence (AI) simulates human intelligence in machines capable of learning, problem-solving, and decision-making. Originating as a formal discipline in the 1950s, AI evolved from rule-based systems to advanced machine learning and deep learning, now integral to daily life. AI types include Narrow AI for specific tasks, General AI with human-level cognition, and theoretical Superintelligent AI. Key technologies include machine learning, deep learning, natural language processing, and computer vision. AI transforms sectors like healthcare, finance, transportation, and education by automating tasks and improving decisions. Benefits include increased efficiency and innovation, while challenges involve data privacy, bias, job displacement, and transparency. Future trends highlight explainable AI, edge computing, and human-AI collaboration. Ethical concerns focus on accountability, fairness, and user privacy. Responsible AI development promises a transformative, inclusive future.</code></pre>
 </div>

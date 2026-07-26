@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -270,15 +273,15 @@ Subscribe to my newsletter
 <li>Sign up and generate <a href="https://platform.openai.com/docs/overview">OpenAI</a> and <a href="https://smith.langchain.com/">LangSmith</a> API keys.</li>
 <li>Create a <code>.env</code> file in the root directory of your project and add the following lines:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="va">LANGSMITH_TRACING</span><span class="op">=</span>true</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="va">LANGSMITH_PROJECT</span><span class="op">=</span>your_langchain_project_name</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="va">OPENAI_API_KEY</span><span class="op">=</span>your_openai_api_key</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="va">LANGSMITH_TRACING</span><span class="op">=</span>true</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="va">LANGSMITH_PROJECT</span><span class="op">=</span>your_langchain_project_name</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="va">LANGSMITH_API_KEY</span><span class="op">=</span>your_langsmith_api_key</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li>Create a virtual environment in Python and install the following packages:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">uv</span> venv</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="ex">uv</span> venv</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="ex">uv</span> add langchain langchain-openai langsmith openai jupyter python-dotenv </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I’m assuming you’re familiar with the basics of LLMs. If you need a refresher, you can check out some of <a href="https://dylancastillo.co/posts/function-calling-structured-outputs.html">my</a> <a href="https://dylancastillo.co/posts/key-parameters-llms.html">older</a> <a href="https://dylancastillo.co/posts/prompt-engineering-101.html">posts</a>. Also, if you don’t want to copy and paste the code, you can download this post’s <a href="https://github.com/dylanjcastillo/blog/tree/main/posts/synthetic-data-rag.ipynb">notebook</a> and follow along.</p>
 <p>Let’s go!</p>
 </section>
@@ -286,17 +289,17 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>As usual, you should start by importing the necessary libraries:</p>
 <div id="cell-3" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="im">from</span> langsmith <span class="im">import</span> Client, trace, traceable</span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="im">from</span> langsmith.run_trees <span class="im">import</span> RunTree</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
-<span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a><span class="im">from</span> langchain_core.messages <span class="im">import</span> HumanMessage, SystemMessage</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a><span class="im">from</span> langchain_openai <span class="im">import</span> ChatOpenAI</span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a><span class="im">from</span> langsmith <span class="im">import</span> Client, trace, traceable</span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a><span class="im">from</span> langsmith.run_trees <span class="im">import</span> RunTree</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a><span class="im">from</span> langsmith.wrappers <span class="im">import</span> wrap_openai</span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will import all the libraries required for the next sections:</p>
 <ol type="1">
@@ -321,31 +324,31 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-traceable">Using <code>@traceable</code></h3>
 <p>The simplest way is to encapsulate your pipeline in a function and use the <code>traceable</code> decorator:</p>
 <div id="cell-7" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="at">@traceable</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    <span class="cf">return</span> [</span>
-<span id="cb4-7"><a href="#cb4-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
-<span id="cb4-8"><a href="#cb4-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    ]</span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
-<span id="cb4-15"><a href="#cb4-15"></a>    <span class="cf">return</span> response</span>
-<span id="cb4-16"><a href="#cb4-16"></a></span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="at">@traceable</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
-<span id="cb4-20"><a href="#cb4-20"></a>    messages <span class="op">=</span> format_messages(question)</span>
-<span id="cb4-21"><a href="#cb4-21"></a>    response <span class="op">=</span> call_llm(messages)</span>
-<span id="cb4-22"><a href="#cb4-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb4-23"><a href="#cb4-23"></a></span>
-<span id="cb4-24"><a href="#cb4-24"></a></span>
-<span id="cb4-25"><a href="#cb4-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a><span class="at">@traceable</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a>    <span class="cf">return</span> [</span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a>    ]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb4-14"><a href="#cb4-14" aria-label="14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-label="15"></a>    <span class="cf">return</span> response</span>
+<span id="cb4-16"><a href="#cb4-16" aria-label="16"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-label="17"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-label="18"></a><span class="at">@traceable</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-label="19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb4-20"><a href="#cb4-20" aria-label="20"></a>    messages <span class="op">=</span> format_messages(question)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-label="21"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-label="22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb4-23"><a href="#cb4-23" aria-label="23"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-label="24"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-label="25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will automatically log the input and ouput of the functions decorated with <code>traceable</code>. It will also handle the nesting for you, so that <code>format_messages</code> and <code>call_llm</code> are steps within the <code>run_pipeline</code> function.</p>
 <p>In <code>traceable</code> you can customize xyz.</p>
@@ -354,30 +357,30 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-a-trace-context-manager">Using a <code>trace</code> context manager</h3>
 <p>In addition, to the <code>traceable</code> decorator, you can also use the <code>trace</code> context manager to create traces. You can easily combine both as shown below:</p>
 <div id="cell-11" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>client <span class="op">=</span> OpenAI()</span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="at">@traceable</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
-<span id="cb5-6"><a href="#cb5-6"></a>    <span class="cf">return</span> [</span>
-<span id="cb5-7"><a href="#cb5-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
-<span id="cb5-8"><a href="#cb5-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    ]</span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
-<span id="cb5-14"><a href="#cb5-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
-<span id="cb5-15"><a href="#cb5-15"></a>    <span class="cf">return</span> response</span>
-<span id="cb5-16"><a href="#cb5-16"></a></span>
-<span id="cb5-17"><a href="#cb5-17"></a></span>
-<span id="cb5-18"><a href="#cb5-18"></a>app_inputs <span class="op">=</span> {<span class="st">"question"</span>: <span class="st">"Who are you?"</span>}</span>
-<span id="cb5-19"><a href="#cb5-19"></a></span>
-<span id="cb5-20"><a href="#cb5-20"></a><span class="cf">with</span> trace(<span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>app_inputs) <span class="im">as</span> rt:</span>
-<span id="cb5-21"><a href="#cb5-21"></a>    messages <span class="op">=</span> format_messages(app_inputs[<span class="st">"question"</span>])</span>
-<span id="cb5-22"><a href="#cb5-22"></a>    response <span class="op">=</span> call_llm(messages)</span>
-<span id="cb5-23"><a href="#cb5-23"></a>    output <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb5-24"><a href="#cb5-24"></a>    rt.end(outputs<span class="op">=</span>{<span class="st">"output"</span>: output})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a><span class="at">@traceable</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>    <span class="cf">return</span> [</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a>    ]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-label="12"></a><span class="at">@traceable</span>(run_type<span class="op">=</span><span class="st">"llm"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-label="13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb5-14"><a href="#cb5-14" aria-label="14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-label="15"></a>    <span class="cf">return</span> response</span>
+<span id="cb5-16"><a href="#cb5-16" aria-label="16"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-label="17"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-label="18"></a>app_inputs <span class="op">=</span> {<span class="st">"question"</span>: <span class="st">"Who are you?"</span>}</span>
+<span id="cb5-19"><a href="#cb5-19" aria-label="19"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-label="20"></a><span class="cf">with</span> trace(<span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>app_inputs) <span class="im">as</span> rt:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-label="21"></a>    messages <span class="op">=</span> format_messages(app_inputs[<span class="st">"question"</span>])</span>
+<span id="cb5-22"><a href="#cb5-22" aria-label="22"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-label="23"></a>    output <span class="op">=</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb5-24"><a href="#cb5-24" aria-label="24"></a>    rt.end(outputs<span class="op">=</span>{<span class="st">"output"</span>: output})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will generate a trace called “LLM Pipeline” with the input and output of the entire pipeline. Within this trace, you will find the individual traces for each function call.</p>
 </section>
@@ -385,31 +388,31 @@ Subscribe to my newsletter
 <h3 class="anchored" data-anchor-id="using-a-wrapped-client">Using a wrapped client</h3>
 <p>For <code>OpenAI</code> and <code>Anthropic</code> models, LangSmith offers a wrapped client that automatically instruments calls to the API with tracing. Any call to the LLM will automatically handled by LangSmith. This plays well with using <code>traceable</code> for the rest of the part in your pipeline. For example:</p>
 <div id="cell-14" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="at">@traceable</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">return</span> [</span>
-<span id="cb6-7"><a href="#cb6-7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
-<span id="cb6-8"><a href="#cb6-8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
-<span id="cb6-9"><a href="#cb6-9"></a>    ]</span>
-<span id="cb6-10"><a href="#cb6-10"></a></span>
-<span id="cb6-11"><a href="#cb6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># Removed @traceable</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
-<span id="cb6-15"><a href="#cb6-15"></a>    <span class="cf">return</span> response</span>
-<span id="cb6-16"><a href="#cb6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17"></a></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="at">@traceable</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
-<span id="cb6-20"><a href="#cb6-20"></a>    messages <span class="op">=</span> format_messages(question)</span>
-<span id="cb6-21"><a href="#cb6-21"></a>    response <span class="op">=</span> call_llm(messages)</span>
-<span id="cb6-22"><a href="#cb6-22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
-<span id="cb6-23"><a href="#cb6-23"></a></span>
-<span id="cb6-24"><a href="#cb6-24"></a></span>
-<span id="cb6-25"><a href="#cb6-25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>client <span class="op">=</span> wrap_openai(OpenAI())  <span class="co"># Added client wrapper</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a><span class="at">@traceable</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">dict</span>]:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a>    <span class="cf">return</span> [</span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You're a helpful assistant"</span>},</span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a>    ]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-label="10"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a><span class="co"># Removed @traceable</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>]):</span>
+<span id="cb6-14"><a href="#cb6-14" aria-label="14"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a>    <span class="cf">return</span> response</span>
+<span id="cb6-16"><a href="#cb6-16" aria-label="16"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-label="17"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-label="18"></a><span class="at">@traceable</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-label="19"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-label="20"></a>    messages <span class="op">=</span> format_messages(question)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-label="21"></a>    response <span class="op">=</span> call_llm(messages)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-label="22"></a>    <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb6-23"><a href="#cb6-23" aria-label="23"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-label="24"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-label="25"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will automatically log the LLM calls made within <code>run_pipeline</code>, so you no longer need to add the <code>traceable</code> decorator to each call.</p>
 </section>
@@ -418,48 +421,48 @@ Subscribe to my newsletter
 <p>If you want to have more control over the tracing, you can use <a href="https://docs.smith.langchain.com/reference/python/run_trees/langsmith.run_trees.RunTree"><code>RunTree</code></a>. It provides the most flexibility but requires more setup.</p>
 <p>Here’s the <code>RunTree</code> version of the previous example:</p>
 <div id="cell-17" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>client <span class="op">=</span> OpenAI()</span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>, parent_run: RunTree):</span>
-<span id="cb7-5"><a href="#cb7-5"></a>    format_message_step <span class="op">=</span> parent_run.create_child(</span>
-<span id="cb7-6"><a href="#cb7-6"></a>        name<span class="op">=</span><span class="st">"format_messages"</span>, run_type<span class="op">=</span><span class="st">"tool"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question}</span>
-<span id="cb7-7"><a href="#cb7-7"></a>    )</span>
-<span id="cb7-8"><a href="#cb7-8"></a>    format_message_step.post()</span>
-<span id="cb7-9"><a href="#cb7-9"></a>    messages <span class="op">=</span> [</span>
-<span id="cb7-10"><a href="#cb7-10"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
-<span id="cb7-11"><a href="#cb7-11"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
-<span id="cb7-12"><a href="#cb7-12"></a>    ]</span>
-<span id="cb7-13"><a href="#cb7-13"></a>    format_message_step.end(outputs<span class="op">=</span>{<span class="st">"messages"</span>: messages})</span>
-<span id="cb7-14"><a href="#cb7-14"></a>    format_message_step.patch()</span>
-<span id="cb7-15"><a href="#cb7-15"></a>    <span class="cf">return</span> messages</span>
-<span id="cb7-16"><a href="#cb7-16"></a></span>
-<span id="cb7-17"><a href="#cb7-17"></a></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>], parent_run: RunTree):</span>
-<span id="cb7-19"><a href="#cb7-19"></a>    call_llm_step <span class="op">=</span> parent_run.create_child(</span>
-<span id="cb7-20"><a href="#cb7-20"></a>        name<span class="op">=</span><span class="st">"call_llm"</span>,</span>
-<span id="cb7-21"><a href="#cb7-21"></a>        run_type<span class="op">=</span><span class="st">"llm"</span>,</span>
-<span id="cb7-22"><a href="#cb7-22"></a>        inputs<span class="op">=</span>{<span class="st">"messages"</span>: messages},</span>
-<span id="cb7-23"><a href="#cb7-23"></a>    )</span>
-<span id="cb7-24"><a href="#cb7-24"></a>    call_llm_step.post()</span>
-<span id="cb7-25"><a href="#cb7-25"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
-<span id="cb7-26"><a href="#cb7-26"></a>    call_llm_step.end(outputs<span class="op">=</span>response)</span>
-<span id="cb7-27"><a href="#cb7-27"></a>    call_llm_step.patch()</span>
-<span id="cb7-28"><a href="#cb7-28"></a>    <span class="cf">return</span> response</span>
-<span id="cb7-29"><a href="#cb7-29"></a></span>
-<span id="cb7-30"><a href="#cb7-30"></a></span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
-<span id="cb7-32"><a href="#cb7-32"></a>    parent_run <span class="op">=</span> RunTree(name<span class="op">=</span><span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question})</span>
-<span id="cb7-33"><a href="#cb7-33"></a>    parent_run.post()</span>
-<span id="cb7-34"><a href="#cb7-34"></a></span>
-<span id="cb7-35"><a href="#cb7-35"></a>    messages <span class="op">=</span> format_messages(question, parent_run)</span>
-<span id="cb7-36"><a href="#cb7-36"></a>    response <span class="op">=</span> call_llm(messages, parent_run)</span>
-<span id="cb7-37"><a href="#cb7-37"></a></span>
-<span id="cb7-38"><a href="#cb7-38"></a>    parent_run.end(outputs<span class="op">=</span>{<span class="st">"answer"</span>: response.choices[<span class="dv">0</span>].message.content})</span>
-<span id="cb7-39"><a href="#cb7-39"></a>    parent_run.patch()</span>
-<span id="cb7-40"><a href="#cb7-40"></a></span>
-<span id="cb7-41"><a href="#cb7-41"></a></span>
-<span id="cb7-42"><a href="#cb7-42"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-label="4"></a><span class="kw">def</span> format_messages(question: <span class="bu">str</span>, parent_run: RunTree):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-label="5"></a>    format_message_step <span class="op">=</span> parent_run.create_child(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-label="6"></a>        name<span class="op">=</span><span class="st">"format_messages"</span>, run_type<span class="op">=</span><span class="st">"tool"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-label="7"></a>    )</span>
+<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a>    format_message_step.post()</span>
+<span id="cb7-9"><a href="#cb7-9" aria-label="9"></a>    messages <span class="op">=</span> [</span>
+<span id="cb7-10"><a href="#cb7-10" aria-label="10"></a>        {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant."</span>},</span>
+<span id="cb7-11"><a href="#cb7-11" aria-label="11"></a>        {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: question},</span>
+<span id="cb7-12"><a href="#cb7-12" aria-label="12"></a>    ]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-label="13"></a>    format_message_step.end(outputs<span class="op">=</span>{<span class="st">"messages"</span>: messages})</span>
+<span id="cb7-14"><a href="#cb7-14" aria-label="14"></a>    format_message_step.patch()</span>
+<span id="cb7-15"><a href="#cb7-15" aria-label="15"></a>    <span class="cf">return</span> messages</span>
+<span id="cb7-16"><a href="#cb7-16" aria-label="16"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-label="17"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-label="18"></a><span class="kw">def</span> call_llm(messages: <span class="bu">list</span>[<span class="bu">dict</span>], parent_run: RunTree):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-label="19"></a>    call_llm_step <span class="op">=</span> parent_run.create_child(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-label="20"></a>        name<span class="op">=</span><span class="st">"call_llm"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-label="21"></a>        run_type<span class="op">=</span><span class="st">"llm"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-label="22"></a>        inputs<span class="op">=</span>{<span class="st">"messages"</span>: messages},</span>
+<span id="cb7-23"><a href="#cb7-23" aria-label="23"></a>    )</span>
+<span id="cb7-24"><a href="#cb7-24" aria-label="24"></a>    call_llm_step.post()</span>
+<span id="cb7-25"><a href="#cb7-25" aria-label="25"></a>    response <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, messages<span class="op">=</span>messages)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-label="26"></a>    call_llm_step.end(outputs<span class="op">=</span>response)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-label="27"></a>    call_llm_step.patch()</span>
+<span id="cb7-28"><a href="#cb7-28" aria-label="28"></a>    <span class="cf">return</span> response</span>
+<span id="cb7-29"><a href="#cb7-29" aria-label="29"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-label="30"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-label="31"></a><span class="kw">def</span> run_pipeline(question: <span class="bu">str</span>):</span>
+<span id="cb7-32"><a href="#cb7-32" aria-label="32"></a>    parent_run <span class="op">=</span> RunTree(name<span class="op">=</span><span class="st">"run_pipeline"</span>, inputs<span class="op">=</span>{<span class="st">"question"</span>: question})</span>
+<span id="cb7-33"><a href="#cb7-33" aria-label="33"></a>    parent_run.post()</span>
+<span id="cb7-34"><a href="#cb7-34" aria-label="34"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-label="35"></a>    messages <span class="op">=</span> format_messages(question, parent_run)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-label="36"></a>    response <span class="op">=</span> call_llm(messages, parent_run)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-label="37"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-label="38"></a>    parent_run.end(outputs<span class="op">=</span>{<span class="st">"answer"</span>: response.choices[<span class="dv">0</span>].message.content})</span>
+<span id="cb7-39"><a href="#cb7-39" aria-label="39"></a>    parent_run.patch()</span>
+<span id="cb7-40"><a href="#cb7-40" aria-label="40"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-label="41"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-label="42"></a>run_pipeline(<span class="st">"Who are you?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will result in a similar trace, but in this case you have more control over when/what to send in each step.</p>
 <p>For all of these methods, you should’ve obtained a trace that looks like this:</p>
@@ -484,22 +487,22 @@ Subscribe to my newsletter
 <p>Let’s explore this by running a set of evals on a sample dataset. You’ll use the <a href="https://huggingface.co/datasets/AI-MO/aimo-validation-aime"><code>AIMO Validation AIME</code></a> dataset that contains questions, answers and detailed solutions from the 2022, 2023, and 2024 AIME competitions.</p>
 <p>You should start by creating a dataset on LangSmith:</p>
 <div id="cell-22" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>examples <span class="op">=</span> [</span>
-<span id="cb8-3"><a href="#cb8-3"></a>    {<span class="st">"inputs"</span>: {<span class="st">"question"</span>: d[<span class="st">"problem"</span>]}, <span class="st">"outputs"</span>: {<span class="st">"answer"</span>: <span class="bu">int</span>(d[<span class="st">"answer"</span>])}}</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">for</span> d <span class="kw">in</span> ds[<span class="st">"train"</span>]</span>
-<span id="cb8-5"><a href="#cb8-5"></a>][:<span class="dv">15</span>]</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a>client <span class="op">=</span> Client()</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a>dataset_name <span class="op">=</span> <span class="st">"AIME Example Dataset (sample)"</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="cf">try</span>:</span>
-<span id="cb8-12"><a href="#cb8-12"></a>    dataset <span class="op">=</span> client.create_dataset(dataset_name)</span>
-<span id="cb8-13"><a href="#cb8-13"></a>    client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb8-15"><a href="#cb8-15"></a>    <span class="bu">print</span>(<span class="ss">f"Dataset </span><span class="sc">{</span>dataset_name<span class="sc">}</span><span class="ss"> already exists. Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-16"><a href="#cb8-16"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>ds <span class="op">=</span> load_dataset(<span class="st">"AI-MO/aimo-validation-aime"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>examples <span class="op">=</span> [</span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>    {<span class="st">"inputs"</span>: {<span class="st">"question"</span>: d[<span class="st">"problem"</span>]}, <span class="st">"outputs"</span>: {<span class="st">"answer"</span>: <span class="bu">int</span>(d[<span class="st">"answer"</span>])}}</span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>    <span class="cf">for</span> d <span class="kw">in</span> ds[<span class="st">"train"</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a>][:<span class="dv">15</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a>client <span class="op">=</span> Client()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a>dataset_name <span class="op">=</span> <span class="st">"AIME Example Dataset (sample)"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-label="10"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-label="11"></a><span class="cf">try</span>:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-label="12"></a>    dataset <span class="op">=</span> client.create_dataset(dataset_name)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-label="13"></a>    client.create_examples(dataset_id<span class="op">=</span>dataset.<span class="bu">id</span>, examples<span class="op">=</span>examples)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-label="14"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb8-15"><a href="#cb8-15" aria-label="15"></a>    <span class="bu">print</span>(<span class="ss">f"Dataset </span><span class="sc">{</span>dataset_name<span class="sc">}</span><span class="ss"> already exists. Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-label="16"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dataset AIME Example Dataset (sample) already exists. Error: Conflict for /datasets. HTTPError('409 Client Error: Conflict for url: https://api.smith.langchain.com/datasets', '{"detail":"Dataset with this name already exists."}')</code></pre>
 </div>
@@ -514,71 +517,71 @@ Subscribe to my newsletter
 </div>
 <p>Then, you’ll define a pipeline that takes the user question, and provides a response using a structured output:</p>
 <div id="cell-24" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> Response(BaseModel):</span>
-<span id="cb10-2"><a href="#cb10-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    answer: <span class="bu">int</span> <span class="op">=</span> Field(</span>
-<span id="cb10-4"><a href="#cb10-4"></a>        description<span class="op">=</span><span class="st">"The answer to the question. It should be an integer."</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>    )</span>
-<span id="cb10-6"><a href="#cb10-6"></a></span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb10-9"><a href="#cb10-9"></a>model_with_structure <span class="op">=</span> model.with_structured_output(Response, method<span class="op">=</span><span class="st">"function_calling"</span>)</span>
-<span id="cb10-10"><a href="#cb10-10"></a></span>
-<span id="cb10-11"><a href="#cb10-11"></a></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>) <span class="op">-&gt;</span> Response:</span>
-<span id="cb10-13"><a href="#cb10-13"></a>    max_retries <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb10-14"><a href="#cb10-14"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_retries):</span>
-<span id="cb10-15"><a href="#cb10-15"></a>        <span class="cf">try</span>:</span>
-<span id="cb10-16"><a href="#cb10-16"></a>            messages <span class="op">=</span> [</span>
-<span id="cb10-17"><a href="#cb10-17"></a>                SystemMessage(</span>
-<span id="cb10-18"><a href="#cb10-18"></a>                    <span class="st">"You're a math expert. You will always respond in a JSON format with the following fields: explanation and answer."</span></span>
-<span id="cb10-19"><a href="#cb10-19"></a>                ),</span>
-<span id="cb10-20"><a href="#cb10-20"></a>                HumanMessage(question),</span>
-<span id="cb10-21"><a href="#cb10-21"></a>            ]</span>
-<span id="cb10-22"><a href="#cb10-22"></a>            response <span class="op">=</span> model_with_structure.invoke(messages)</span>
-<span id="cb10-23"><a href="#cb10-23"></a>            <span class="cf">return</span> response</span>
-<span id="cb10-24"><a href="#cb10-24"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb10-25"><a href="#cb10-25"></a>            <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb10-26"><a href="#cb10-26"></a>            <span class="cf">continue</span></span>
-<span id="cb10-27"><a href="#cb10-27"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Failed to get a valid response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="kw">class</span> Response(BaseModel):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>    answer: <span class="bu">int</span> <span class="op">=</span> Field(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>        description<span class="op">=</span><span class="st">"The answer to the question. It should be an integer."</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-label="5"></a>    )</span>
+<span id="cb10-6"><a href="#cb10-6" aria-label="6"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-label="7"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-label="8"></a>model <span class="op">=</span> ChatOpenAI(model<span class="op">=</span><span class="st">"gpt-4.1-mini"</span>, temperature<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-label="9"></a>model_with_structure <span class="op">=</span> model.with_structured_output(Response, method<span class="op">=</span><span class="st">"function_calling"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-label="10"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-label="11"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-label="12"></a><span class="kw">def</span> get_response(question: <span class="bu">str</span>) <span class="op">-&gt;</span> Response:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-label="13"></a>    max_retries <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-label="14"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_retries):</span>
+<span id="cb10-15"><a href="#cb10-15" aria-label="15"></a>        <span class="cf">try</span>:</span>
+<span id="cb10-16"><a href="#cb10-16" aria-label="16"></a>            messages <span class="op">=</span> [</span>
+<span id="cb10-17"><a href="#cb10-17" aria-label="17"></a>                SystemMessage(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-label="18"></a>                    <span class="st">"You're a math expert. You will always respond in a JSON format with the following fields: explanation and answer."</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-label="19"></a>                ),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-label="20"></a>                HumanMessage(question),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-label="21"></a>            ]</span>
+<span id="cb10-22"><a href="#cb10-22" aria-label="22"></a>            response <span class="op">=</span> model_with_structure.invoke(messages)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-label="23"></a>            <span class="cf">return</span> response</span>
+<span id="cb10-24"><a href="#cb10-24" aria-label="24"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb10-25"><a href="#cb10-25" aria-label="25"></a>            <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-label="26"></a>            <span class="cf">continue</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-label="27"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Failed to get a valid response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I included a simple retry mechanism, as I often found that the model sometime failed to generate a valid response.</p>
 <p>Next, you should define the evaluation metrics you’ll use to measure the performance of your pipeline. You could define a simple accuracy metric that checks if the answer is the same as the expected answer:</p>
 <div id="cell-26" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="kw">def</span> accuracy(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>    <span class="cf">return</span> outputs[<span class="st">"answer"</span>] <span class="op">==</span> reference_outputs[<span class="st">"answer"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To define an evaluation metric in LangSmith, you must create a function that takes the inputs, outputs, and reference outputs as arguments and returns a boolean or a numeric value.</p>
 <p>For accuracy, the function checks if the answer provided by the model matches the expected answer from the dataset, and returns a boolean value indicating whether the evaluation passed or failed.</p>
 <p>You can also define more complex metrics, such as an LLM judge to evaluate the clarity of the solution:</p>
 <div id="cell-28" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>    clarity: <span class="bu">int</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The clarity of the explanation"</span>, ge<span class="op">=</span><span class="dv">1</span>, le<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb12-4"><a href="#cb12-4"></a></span>
-<span id="cb12-5"><a href="#cb12-5"></a></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">def</span> clarity(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb12-7"><a href="#cb12-7"></a>    messages <span class="op">=</span> [</span>
-<span id="cb12-8"><a href="#cb12-8"></a>        SystemMessage(</span>
-<span id="cb12-9"><a href="#cb12-9"></a>            content<span class="op">=</span><span class="st">"You are a helpful assistant that evaluates the clarity of the explanation of the answer. You will always return a number between 1 and 5, where 1 is the lowest clarity and 5 is the highest clarity."</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a>        ),</span>
-<span id="cb12-11"><a href="#cb12-11"></a>        HumanMessage(content<span class="op">=</span><span class="ss">f"Explanation: </span><span class="sc">{</span>outputs[<span class="st">'explanation'</span>]<span class="sc">}</span><span class="ss">"</span>),</span>
-<span id="cb12-12"><a href="#cb12-12"></a>    ]</span>
-<span id="cb12-13"><a href="#cb12-13"></a>    model_with_clarity_structure <span class="op">=</span> model.with_structured_output(ClarityResponse)</span>
-<span id="cb12-14"><a href="#cb12-14"></a>    response <span class="op">=</span> model_with_clarity_structure.invoke(messages)</span>
-<span id="cb12-15"><a href="#cb12-15"></a>    <span class="cf">return</span> response.clarity</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="kw">class</span> ClarityResponse(BaseModel):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>    explanation: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The explanation of the answer"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>    clarity: <span class="bu">int</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The clarity of the explanation"</span>, ge<span class="op">=</span><span class="dv">1</span>, le<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a><span class="kw">def</span> clarity(inputs: <span class="bu">dict</span>, outputs: <span class="bu">dict</span>, reference_outputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb12-7"><a href="#cb12-7" aria-label="7"></a>    messages <span class="op">=</span> [</span>
+<span id="cb12-8"><a href="#cb12-8" aria-label="8"></a>        SystemMessage(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-label="9"></a>            content<span class="op">=</span><span class="st">"You are a helpful assistant that evaluates the clarity of the explanation of the answer. You will always return a number between 1 and 5, where 1 is the lowest clarity and 5 is the highest clarity."</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-label="10"></a>        ),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-label="11"></a>        HumanMessage(content<span class="op">=</span><span class="ss">f"Explanation: </span><span class="sc">{</span>outputs[<span class="st">'explanation'</span>]<span class="sc">}</span><span class="ss">"</span>),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-label="12"></a>    ]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-label="13"></a>    model_with_clarity_structure <span class="op">=</span> model.with_structured_output(ClarityResponse)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-label="14"></a>    response <span class="op">=</span> model_with_clarity_structure.invoke(messages)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-label="15"></a>    <span class="cf">return</span> response.clarity</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This <code>clarity</code> metric evaluates the clarity of the explanation provided by the model. It uses a scale from 1 to 5, where 1 indicates low clarity and 5 indicates high clarity.</p>
 <p>Finally, you can run the evaluation using <code>client.evaluate()</code>:</p>
 <div id="cell-30" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
-<span id="cb13-2"><a href="#cb13-2"></a>    response <span class="op">=</span> get_response(inputs[<span class="st">"question"</span>])</span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="cf">return</span> response.model_dump()</span>
-<span id="cb13-4"><a href="#cb13-4"></a></span>
-<span id="cb13-5"><a href="#cb13-5"></a></span>
-<span id="cb13-6"><a href="#cb13-6"></a>experiment_results <span class="op">=</span> client.aevaluate(</span>
-<span id="cb13-7"><a href="#cb13-7"></a>    ls_wrapper, data<span class="op">=</span>dataset_name, evaluators<span class="op">=</span>[accuracy, clarity], max_concurrency<span class="op">=</span><span class="dv">15</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="kw">def</span> ls_wrapper(inputs: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>    response <span class="op">=</span> get_response(inputs[<span class="st">"question"</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>    <span class="cf">return</span> response.model_dump()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>experiment_results <span class="op">=</span> client.aevaluate(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-label="7"></a>    ls_wrapper, data<span class="op">=</span>dataset_name, evaluators<span class="op">=</span>[accuracy, clarity], max_concurrency<span class="op">=</span><span class="dv">15</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-label="8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>LangSmith requires you to define a function that wraps your pipeline function. It should take an input dictionary that contains the necessary parameters for your pipeline and return a dictionary with the results. You can also specify a <code>evaluators</code> parameter that includes the evaluation metrics you want to use.</p>
 <p>After you’ve run the evaluation, you’ll be able to inspect the results of the experiment:</p>

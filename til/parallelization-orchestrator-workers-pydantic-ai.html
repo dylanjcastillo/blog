@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -247,7 +250,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 24, 2026</p>
+      <p class="date-modified">July 26, 2026</p>
     </div>
   </div>
     
@@ -336,24 +339,24 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>Pydantic AI uses <code>asyncio</code> under the hood, so you’ll need to enable <code>nest_asyncio</code> to run this notebook:</p>
 <div id="2a607486" class="cell" data-execution_count="24">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">import</span> nest_asyncio</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you need to import the required libraries. I’m using <strong><a href="https://logfire.pydantic.dev/">Logfire</a></strong> to monitor the workflow.</p>
 <div id="4081c493" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> asyncio</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> os</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> typing <span class="im">import</span> Literal, Optional</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="im">import</span> logfire</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="im">import</span> requests</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent, RunContext</span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="im">import</span> asyncio</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="im">from</span> typing <span class="im">import</span> Literal, Optional</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a><span class="im">import</span> logfire</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="im">import</span> requests</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent, RunContext</span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>True</code></pre>
 </div>
@@ -361,10 +364,10 @@ Subscribe to my newsletter
 <p><strong>PydanticAI</strong> is compatible with OpenTelemetry (OTel). So it’s pretty easy to use it with Logfire or with any other OTel-compatible observability tool (e.g., <a href="https://langfuse.com/">Langfuse</a>).</p>
 <p>To enable tracking, create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
 <div id="014a1f88" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>logfire.configure(</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    token<span class="op">=</span>os.getenv(<span class="st">"LOGFIRE_TOKEN"</span>),</span>
-<span id="cb4-3"><a href="#cb4-3"></a>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>logfire.configure(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>    token<span class="op">=</span>os.getenv(<span class="st">"LOGFIRE_TOKEN"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The first time you run this, it will ask you to create a project in Logfire. From it, it will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
 </section>
@@ -372,41 +375,41 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="parallelization-example">Parallelization example</h2>
 <p>In this example, I’ll show you how to build a workflow that runs the same evaluator in parallel and then aggregates the results.</p>
 <div id="4a49b93b" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">class</span> Evaluation(BaseModel):</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    explanation: <span class="bu">str</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>    is_appropiate: <span class="bu">bool</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">class</span> AggregatedResults(BaseModel):</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    summary: <span class="bu">str</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>    is_appropiate: <span class="bu">bool</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="kw">class</span> Evaluation(BaseModel):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>    explanation: <span class="bu">str</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>    is_appropiate: <span class="bu">bool</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a><span class="kw">class</span> AggregatedResults(BaseModel):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>    summary: <span class="bu">str</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a>    is_appropiate: <span class="bu">bool</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then you can create the agents and encapsulate the logic in a function:</p>
 <div id="3db5d8a9" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>evaluator <span class="op">=</span> Agent(</span>
-<span id="cb6-2"><a href="#cb6-2"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3"></a>    output_type<span class="op">=</span>Evaluation,</span>
-<span id="cb6-4"><a href="#cb6-4"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb6-5"><a href="#cb6-5"></a>        <span class="st">"You are an expert evaluator. Provided with a text, you will evaluate if it's appropriate for a general audience."</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>    ),</span>
-<span id="cb6-7"><a href="#cb6-7"></a>)</span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a>aggregator <span class="op">=</span> Agent(</span>
-<span id="cb6-10"><a href="#cb6-10"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11"></a>    output_type<span class="op">=</span>AggregatedResults,</span>
-<span id="cb6-12"><a href="#cb6-12"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb6-13"><a href="#cb6-13"></a>        <span class="st">"You are an expert evaluator. Provided with a list of evaluations, you will summarize them and provide a final evaluation."</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a>    ),</span>
-<span id="cb6-15"><a href="#cb6-15"></a>)</span>
-<span id="cb6-16"><a href="#cb6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="cf">async</span> <span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb6-19"><a href="#cb6-19"></a>    tasks <span class="op">=</span> [evaluator.run(<span class="ss">f"Evaluate the following text: </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
-<span id="cb6-20"><a href="#cb6-20"></a>    evaluations <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
-<span id="cb6-21"><a href="#cb6-21"></a>    aggregated_results <span class="op">=</span> <span class="cf">await</span> aggregator.run(<span class="ss">f"Summarize the following evaluations:</span><span class="ch">\n\n</span><span class="sc">{</span>[(<span class="bu">eval</span>.output.explanation, <span class="bu">eval</span>.output.is_appropiate) <span class="cf">for</span> <span class="bu">eval</span> <span class="kw">in</span> evaluations]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-22"><a href="#cb6-22"></a>    <span class="cf">return</span> aggregated_results.output</span>
-<span id="cb6-23"><a href="#cb6-23"></a></span>
-<span id="cb6-24"><a href="#cb6-24"></a>output <span class="op">=</span> <span class="cf">await</span> run_workflow(<span class="st">"Athletes should consume enhancing drugs to improve their performance."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>evaluator <span class="op">=</span> Agent(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>    output_type<span class="op">=</span>Evaluation,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a>        <span class="st">"You are an expert evaluator. Provided with a text, you will evaluate if it's appropriate for a general audience."</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a>    ),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a>aggregator <span class="op">=</span> Agent(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-label="10"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>    output_type<span class="op">=</span>AggregatedResults,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a>        <span class="st">"You are an expert evaluator. Provided with a list of evaluations, you will summarize them and provide a final evaluation."</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-label="14"></a>    ),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-label="16"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-label="17"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-label="18"></a><span class="cf">async</span> <span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-label="19"></a>    tasks <span class="op">=</span> [evaluator.run(<span class="ss">f"Evaluate the following text: </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb6-20"><a href="#cb6-20" aria-label="20"></a>    evaluations <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-label="21"></a>    aggregated_results <span class="op">=</span> <span class="cf">await</span> aggregator.run(<span class="ss">f"Summarize the following evaluations:</span><span class="ch">\n\n</span><span class="sc">{</span>[(<span class="bu">eval</span>.output.explanation, <span class="bu">eval</span>.output.is_appropiate) <span class="cf">for</span> <span class="bu">eval</span> <span class="kw">in</span> evaluations]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-label="22"></a>    <span class="cf">return</span> aggregated_results.output</span>
+<span id="cb6-23"><a href="#cb6-23" aria-label="23"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-label="24"></a>output <span class="op">=</span> <span class="cf">await</span> run_workflow(<span class="st">"Athletes should consume enhancing drugs to improve their performance."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>15:28:36.289 Run workflow
 15:28:36.290   agent run
@@ -427,7 +430,7 @@ Subscribe to my newsletter
 </div>
 <p>Finally, you can run the workflow. You should get an output like this:</p>
 <div id="48f317fe" class="cell" data-execution_count="29">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>pprint(output.model_dump())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>pprint(output.model_dump())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'is_appropiate': False,
  'summary': 'All evaluations agree that the text promotes the consumption of '
@@ -446,54 +449,54 @@ Subscribe to my newsletter
 <p>In this example, I’ll show you how to build a workflow that given a topic generates a table of contents, then writes each section of the article by making an individual request to an LLM.</p>
 <p>First, you must define the data structures we’ll use for the workflow outputs.</p>
 <div id="65b82dff" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span> Section(BaseModel):</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    name: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The name of the section"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>    description: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The description of the section"</span>)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="kw">class</span> CompletedSection(BaseModel):</span>
-<span id="cb11-7"><a href="#cb11-7"></a>    name: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The name of the section"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8"></a>    content: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The content of the section"</span>)</span>
-<span id="cb11-9"><a href="#cb11-9"></a></span>
-<span id="cb11-10"><a href="#cb11-10"></a></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="kw">class</span> Sections(BaseModel):</span>
-<span id="cb11-12"><a href="#cb11-12"></a>    sections: <span class="bu">list</span>[Section] <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The sections of the article"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="kw">class</span> Section(BaseModel):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>    name: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The name of the section"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>    description: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The description of the section"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-label="6"></a><span class="kw">class</span> CompletedSection(BaseModel):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-label="7"></a>    name: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The name of the section"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-label="8"></a>    content: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The content of the section"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-label="9"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-label="10"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-label="11"></a><span class="kw">class</span> Sections(BaseModel):</span>
+<span id="cb11-12"><a href="#cb11-12" aria-label="12"></a>    sections: <span class="bu">list</span>[Section] <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The sections of the article"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, we’ll define the agents we’ll use in the workflow.</p>
 <div id="797497f4" class="cell" data-execution_count="31">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>orchestrator <span class="op">=</span> Agent(</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
-<span id="cb12-3"><a href="#cb12-3"></a>    output_type<span class="op">=</span>Sections,</span>
-<span id="cb12-4"><a href="#cb12-4"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb12-5"><a href="#cb12-5"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the sections for a short article."</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a>    ),</span>
-<span id="cb12-7"><a href="#cb12-7"></a>)</span>
-<span id="cb12-8"><a href="#cb12-8"></a></span>
-<span id="cb12-9"><a href="#cb12-9"></a>worker <span class="op">=</span> Agent(</span>
-<span id="cb12-10"><a href="#cb12-10"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
-<span id="cb12-11"><a href="#cb12-11"></a>    output_type<span class="op">=</span>CompletedSection,</span>
-<span id="cb12-12"><a href="#cb12-12"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb12-13"><a href="#cb12-13"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic and a section, you will generate the content of the section."</span></span>
-<span id="cb12-14"><a href="#cb12-14"></a>    ),</span>
-<span id="cb12-15"><a href="#cb12-15"></a>)</span>
-<span id="cb12-16"><a href="#cb12-16"></a></span>
-<span id="cb12-17"><a href="#cb12-17"></a><span class="kw">def</span> synthesizer(sections: <span class="bu">list</span>[CompletedSection]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb12-18"><a href="#cb12-18"></a>    completed_sections_str <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(</span>
-<span id="cb12-19"><a href="#cb12-19"></a>        [section.content <span class="cf">for</span> section <span class="kw">in</span> sections]</span>
-<span id="cb12-20"><a href="#cb12-20"></a>    )</span>
-<span id="cb12-21"><a href="#cb12-21"></a>    <span class="cf">return</span> completed_sections_str</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>orchestrator <span class="op">=</span> Agent(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>    output_type<span class="op">=</span>Sections,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic, you will generate the sections for a short article."</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a>    ),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-label="7"></a>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-label="8"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-label="9"></a>worker <span class="op">=</span> Agent(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-label="10"></a>    <span class="st">"openai:gpt-4.1-mini"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-label="11"></a>    output_type<span class="op">=</span>CompletedSection,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-label="12"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb12-13"><a href="#cb12-13" aria-label="13"></a>        <span class="st">"You are an expert writer specialized in SEO. Provided with a topic and a section, you will generate the content of the section."</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-label="14"></a>    ),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-label="15"></a>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-label="16"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-label="17"></a><span class="kw">def</span> synthesizer(sections: <span class="bu">list</span>[CompletedSection]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb12-18"><a href="#cb12-18" aria-label="18"></a>    completed_sections_str <span class="op">=</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(</span>
+<span id="cb12-19"><a href="#cb12-19" aria-label="19"></a>        [section.content <span class="cf">for</span> section <span class="kw">in</span> sections]</span>
+<span id="cb12-20"><a href="#cb12-20" aria-label="20"></a>    )</span>
+<span id="cb12-21"><a href="#cb12-21" aria-label="21"></a>    <span class="cf">return</span> completed_sections_str</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, you can define a function that orchestrates the workflow:</p>
 <div id="71597e02" class="cell" data-execution_count="39">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="cf">async</span> <span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb13-3"><a href="#cb13-3"></a>    orchestrator_output <span class="op">=</span> <span class="cf">await</span> orchestrator.run(<span class="ss">f"Generate the sections for a short article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>    tasks <span class="op">=</span> [worker.run(<span class="ss">f"Write the section </span><span class="sc">{</span>section<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following description: </span><span class="sc">{</span>section<span class="sc">.</span>description<span class="sc">}</span><span class="ss">"</span>) <span class="cf">for</span> section <span class="kw">in</span> orchestrator_output.output.sections]</span>
-<span id="cb13-5"><a href="#cb13-5"></a>    completed_sections <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
-<span id="cb13-6"><a href="#cb13-6"></a>    full_article <span class="op">=</span> synthesizer([c.output <span class="cf">for</span> c <span class="kw">in</span> completed_sections])</span>
-<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">return</span> full_article</span>
-<span id="cb13-8"><a href="#cb13-8"></a></span>
-<span id="cb13-9"><a href="#cb13-9"></a>output <span class="op">=</span> <span class="cf">await</span> run_workflow(<span class="st">"Artificial Intelligence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="at">@logfire.instrument</span>(<span class="st">"Run workflow"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a><span class="cf">async</span> <span class="kw">def</span> run_workflow(topic: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>    orchestrator_output <span class="op">=</span> <span class="cf">await</span> orchestrator.run(<span class="ss">f"Generate the sections for a short article about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>    tasks <span class="op">=</span> [worker.run(<span class="ss">f"Write the section </span><span class="sc">{</span>section<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> about </span><span class="sc">{</span>topic<span class="sc">}</span><span class="ss"> with the following description: </span><span class="sc">{</span>section<span class="sc">.</span>description<span class="sc">}</span><span class="ss">"</span>) <span class="cf">for</span> section <span class="kw">in</span> orchestrator_output.output.sections]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>    completed_sections <span class="op">=</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>tasks)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>    full_article <span class="op">=</span> synthesizer([c.output <span class="cf">for</span> c <span class="kw">in</span> completed_sections])</span>
+<span id="cb13-7"><a href="#cb13-7" aria-label="7"></a>    <span class="cf">return</span> full_article</span>
+<span id="cb13-8"><a href="#cb13-8" aria-label="8"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-label="9"></a>output <span class="op">=</span> <span class="cf">await</span> run_workflow(<span class="st">"Artificial Intelligence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>15:32:13.934 Run workflow
 15:32:13.936   orchestrator run

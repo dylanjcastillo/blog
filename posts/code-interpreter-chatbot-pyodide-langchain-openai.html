@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -290,41 +293,41 @@ Subscribe to my newsletter
 <li>Install <a href="https://python-poetry.org/docs/#installation">Poetry</a>. It’s optional but highly recommended.</li>
 <li>Clone the project’s repository:</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">git</span> clone https://github.com/dylanjcastillo/chatbot-code-interpreter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="4" type="1">
 <li><p>From the root folder of the project, install the dependencies:</p>
 <ul>
 <li>Using <strong>Poetry:</strong> Create the virtual environment in the same directory as the project and install the dependencies:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="ex">poetry</span> config virtualenvs.in-project true</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Using <strong>venv and pip:</strong> Create a virtual environment and install the dependencies listed in <code>requirements.txt</code>:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="ex">python3.10</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Open <code>src/.env-example</code>, add your OpenAI secret key in the corresponding variable, and save the file as <code>.env</code>.</p></li>
 </ol>
 <p>You should now have a virtual environment set up with the necessary libraries and a local copy of the repository. Your project structure should look like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">chatbot-code-interpreter</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="ex">├──</span> LICENSE</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="ex">├──</span> README.md</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="ex">├──</span> poetry.lock</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="ex">├──</span> pyproject.toml</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="ex">├──</span> requirements.txt</span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="ex">├──</span> src</span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="ex">│</span>   ├── app.py</span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="ex">│</span>   ├── config.py</span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="ex">│</span>   ├── prompts</span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="ex">│</span>   │   ├── system.prompt</span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="ex">│</span>   │   └── user.prompt</span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="ex">│</span>   ├── static</span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="ex">│</span>   │   └── all_stocks.csv</span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="ex">│</span>   ├── templates</span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="ex">│</span>   │   └── index.html</span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="ex">│</span>   ├── utils.py</span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="ex">│</span>   └── .env-example</span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="ex">chatbot-code-interpreter</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="ex">├──</span> LICENSE</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a><span class="ex">├──</span> README.md</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a><span class="ex">├──</span> poetry.lock</span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="ex">├──</span> pyproject.toml</span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a><span class="ex">├──</span> requirements.txt</span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a><span class="ex">├──</span> src</span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a><span class="ex">│</span>   ├── app.py</span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a><span class="ex">│</span>   ├── config.py</span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a><span class="ex">│</span>   ├── prompts</span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a><span class="ex">│</span>   │   ├── system.prompt</span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a><span class="ex">│</span>   │   └── user.prompt</span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a><span class="ex">│</span>   ├── static</span>
+<span id="cb4-14"><a href="#cb4-14" aria-label="14"></a><span class="ex">│</span>   │   └── all_stocks.csv</span>
+<span id="cb4-15"><a href="#cb4-15" aria-label="15"></a><span class="ex">│</span>   ├── templates</span>
+<span id="cb4-16"><a href="#cb4-16" aria-label="16"></a><span class="ex">│</span>   │   └── index.html</span>
+<span id="cb4-17"><a href="#cb4-17" aria-label="17"></a><span class="ex">│</span>   ├── utils.py</span>
+<span id="cb4-18"><a href="#cb4-18" aria-label="18"></a><span class="ex">│</span>   └── .env-example</span>
+<span id="cb4-19"><a href="#cb4-19" aria-label="19"></a><span class="ex">└──</span> .venv/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These are the most relevant files and directories in the project:</p>
 <ul>
 <li><code>poetry.lock</code> and <code>pyproject.toml</code>: These files contain the project’s specifications and dependencies. They’re used by Poetry to create a virtual environment.</li>
@@ -344,38 +347,38 @@ Subscribe to my newsletter
 <p>In this step, you’ll configure Pyodide to run Python in the browser. You’ll load <code>pyodide.js</code>, start it, import the required libraries, and define an event handler to process the questions asked by the user.</p>
 <p>To make the analysis simpler, I’ll split the code of <code>src/templates/index.html</code> into two sections. In the first section, you’ll only look at the contents of <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>, and in the second part, you’ll go through the JavaScript code defined in <code>&lt;script&gt;</code>.</p>
 <p>Here’s part one:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> http-equiv</span><span class="op">=</span><span class="st">"X-UA-Compatible"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"IE=edge"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1.0"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>Code Runner Chatbot<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>    <span class="dt">&lt;</span><span class="kw">link</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="ot">      rel</span><span class="op">=</span><span class="st">"stylesheet"</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="ot">      href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a></span>
-<span id="cb5-15"><a href="#cb5-15"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>      <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> style</span><span class="op">=</span><span class="st">"text-align:center;"</span><span class="dt">&gt;</span>Code Runner Chatbot<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>      <span class="dt">&lt;</span><span class="kw">textarea</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="ot">        name</span><span class="op">=</span><span class="st">"query"</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a><span class="ot">        id</span><span class="op">=</span><span class="st">"query"</span></span>
-<span id="cb5-21"><a href="#cb5-21"></a><span class="ot">        cols</span><span class="op">=</span><span class="st">"30"</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a><span class="ot">        rows</span><span class="op">=</span><span class="st">"10"</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="ot">        placeholder</span><span class="op">=</span><span class="st">"Ask a question about the dataset"</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="ot">      </span><span class="dt">&gt;&lt;/</span><span class="kw">textarea</span><span class="dt">&gt;</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> id</span><span class="op">=</span><span class="st">"ask-btn"</span><span class="dt">&gt;</span>Ask<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a>      <span class="dt">&lt;</span><span class="kw">blockquote</span><span class="ot"> id</span><span class="op">=</span><span class="st">"output"</span><span class="dt">&gt;&lt;/</span><span class="kw">blockquote</span><span class="dt">&gt;</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>    <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a>      <span class="op">&lt;!--</span> SECOND PART OF CODE <span class="op">--&gt;</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a>    <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> http-equiv</span><span class="op">=</span><span class="st">"X-UA-Compatible"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"IE=edge"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1.0"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>Code Runner Chatbot<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a>    <span class="dt">&lt;</span><span class="kw">link</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a><span class="ot">      rel</span><span class="op">=</span><span class="st">"stylesheet"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a><span class="ot">      href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-label="12"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-label="13"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-label="14"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-label="15"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-label="16"></a>    <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-label="17"></a>      <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> style</span><span class="op">=</span><span class="st">"text-align:center;"</span><span class="dt">&gt;</span>Code Runner Chatbot<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-label="18"></a>      <span class="dt">&lt;</span><span class="kw">textarea</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-label="19"></a><span class="ot">        name</span><span class="op">=</span><span class="st">"query"</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-label="20"></a><span class="ot">        id</span><span class="op">=</span><span class="st">"query"</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-label="21"></a><span class="ot">        cols</span><span class="op">=</span><span class="st">"30"</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-label="22"></a><span class="ot">        rows</span><span class="op">=</span><span class="st">"10"</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-label="23"></a><span class="ot">        placeholder</span><span class="op">=</span><span class="st">"Ask a question about the dataset"</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-label="24"></a><span class="ot">      </span><span class="dt">&gt;&lt;/</span><span class="kw">textarea</span><span class="dt">&gt;</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-label="25"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> id</span><span class="op">=</span><span class="st">"ask-btn"</span><span class="dt">&gt;</span>Ask<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-label="26"></a>      <span class="dt">&lt;</span><span class="kw">blockquote</span><span class="ot"> id</span><span class="op">=</span><span class="st">"output"</span><span class="dt">&gt;&lt;/</span><span class="kw">blockquote</span><span class="dt">&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-label="27"></a>    <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-label="28"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-label="29"></a>      <span class="op">&lt;!--</span> SECOND PART OF CODE <span class="op">--&gt;</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-label="30"></a>    <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-label="31"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-label="32"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This section of code loads the necessary libraries and styles, as well as defines the chatbot’s user interface. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 5 to 10</strong> set a title for the page, load <code>pyodide.js</code> and <code>pico.css</code> (a minimal CSS framework), and define a couple of standard <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta">meta tags</a>.</li>
@@ -383,58 +386,58 @@ Subscribe to my newsletter
 </ul>
 <p>Then, let’s go through the JavaScript code defined in <code>&lt;script&gt;</code>. This code will load Pyodide, install the required libraries, make the data available for use in Pyodide, and set an event handler to process the user’s question.</p>
 <p>Here’s how it looks:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">const</span> queryTextArea <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"query"</span>)<span class="op">;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">const</span> outputElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"output"</span>)<span class="op">;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">const</span> askBtn <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"ask-btn"</span>)<span class="op">;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">setupPyodide</span>() {</span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="kw">let</span> pyodide <span class="op">=</span> <span class="cf">await</span> <span class="fu">loadPyodide</span>()<span class="op">;</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a>  <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">loadPackage</span>([<span class="st">"pandas"</span><span class="op">,</span> <span class="st">"numpy"</span>])<span class="op">;</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">"/static/all_stocks.csv"</span>)<span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>  <span class="kw">const</span> fileContentArrayBuffer <span class="op">=</span> <span class="cf">await</span> response<span class="op">.</span><span class="fu">arrayBuffer</span>()<span class="op">;</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>  <span class="kw">const</span> fileContent <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(fileContentArrayBuffer)<span class="op">;</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a>  pyodide<span class="op">.</span><span class="at">FS</span><span class="op">.</span><span class="fu">writeFile</span>(<span class="st">"all_stocks.csv"</span><span class="op">,</span> fileContent)<span class="op">;</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a></span>
-<span id="cb6-15"><a href="#cb6-15"></a>  <span class="cf">return</span> pyodide<span class="op">;</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a>}</span>
-<span id="cb6-17"><a href="#cb6-17"></a></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="kw">let</span> pyodideReadyPromise <span class="op">=</span> <span class="fu">setupPyodide</span>()<span class="op">;</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a></span>
-<span id="cb6-20"><a href="#cb6-20"></a>askBtn<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">"click"</span><span class="op">,</span> <span class="kw">async</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
-<span id="cb6-21"><a href="#cb6-21"></a>  <span class="kw">let</span> pyodide <span class="op">=</span> <span class="cf">await</span> pyodideReadyPromise<span class="op">;</span></span>
-<span id="cb6-22"><a href="#cb6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23"></a>  <span class="kw">const</span> query <span class="op">=</span> queryTextArea<span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a>  <span class="kw">const</span> df_info <span class="op">=</span> <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">runPythonAsync</span>(<span class="vs">`</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="vs">    import pandas as pd</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="vs">    df = pd.read_csv('all_stocks.csv')</span></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="vs">    pd.set_option('display.max_columns', None)</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a><span class="vs">    df.head(3).T</span></span>
-<span id="cb6-29"><a href="#cb6-29"></a><span class="vs">    `</span>)<span class="op">;</span></span>
-<span id="cb6-30"><a href="#cb6-30"></a></span>
-<span id="cb6-31"><a href="#cb6-31"></a>  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">new</span> <span class="bu">FormData</span>()<span class="op">;</span></span>
-<span id="cb6-32"><a href="#cb6-32"></a>  data<span class="op">.</span><span class="fu">append</span>(<span class="st">"query"</span><span class="op">,</span> query)<span class="op">;</span></span>
-<span id="cb6-33"><a href="#cb6-33"></a>  data<span class="op">.</span><span class="fu">append</span>(<span class="st">"df_info"</span><span class="op">,</span> df_info)<span class="op">;</span></span>
-<span id="cb6-34"><a href="#cb6-34"></a></span>
-<span id="cb6-35"><a href="#cb6-35"></a>  <span class="cf">try</span> {</span>
-<span id="cb6-36"><a href="#cb6-36"></a>    <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">"/ask"</span><span class="op">,</span> {</span>
-<span id="cb6-37"><a href="#cb6-37"></a>      <span class="dt">method</span><span class="op">:</span> <span class="st">"POST"</span><span class="op">,</span></span>
-<span id="cb6-38"><a href="#cb6-38"></a>      <span class="dt">body</span><span class="op">:</span> data<span class="op">,</span></span>
-<span id="cb6-39"><a href="#cb6-39"></a>    })<span class="op">;</span></span>
-<span id="cb6-40"><a href="#cb6-40"></a></span>
-<span id="cb6-41"><a href="#cb6-41"></a>    <span class="cf">if</span> (response<span class="op">.</span><span class="at">ok</span>) {</span>
-<span id="cb6-42"><a href="#cb6-42"></a>      <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> response<span class="op">.</span><span class="fu">text</span>()<span class="op">;</span></span>
-<span id="cb6-43"><a href="#cb6-43"></a>      <span class="kw">const</span> output <span class="op">=</span> <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">runPythonAsync</span>(result)<span class="op">;</span></span>
-<span id="cb6-44"><a href="#cb6-44"></a></span>
-<span id="cb6-45"><a href="#cb6-45"></a>      outputElement<span class="op">.</span><span class="at">innerText</span> <span class="op">=</span> output<span class="op">;</span></span>
-<span id="cb6-46"><a href="#cb6-46"></a>    } <span class="cf">else</span> {</span>
-<span id="cb6-47"><a href="#cb6-47"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error:"</span><span class="op">,</span> response<span class="op">.</span><span class="at">statusText</span>)<span class="op">;</span></span>
-<span id="cb6-48"><a href="#cb6-48"></a>    }</span>
-<span id="cb6-49"><a href="#cb6-49"></a>  } <span class="cf">catch</span> (error) {</span>
-<span id="cb6-50"><a href="#cb6-50"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error:"</span><span class="op">,</span> error)<span class="op">;</span></span>
-<span id="cb6-51"><a href="#cb6-51"></a>  }</span>
-<span id="cb6-52"><a href="#cb6-52"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="kw">const</span> queryTextArea <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"query"</span>)<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a><span class="kw">const</span> outputElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"output"</span>)<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a><span class="kw">const</span> askBtn <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"ask-btn"</span>)<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">setupPyodide</span>() {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a>  <span class="kw">let</span> pyodide <span class="op">=</span> <span class="cf">await</span> <span class="fu">loadPyodide</span>()<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a>  <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">loadPackage</span>([<span class="st">"pandas"</span><span class="op">,</span> <span class="st">"numpy"</span>])<span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-label="10"></a>  <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">"/static/all_stocks.csv"</span>)<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>  <span class="kw">const</span> fileContentArrayBuffer <span class="op">=</span> <span class="cf">await</span> response<span class="op">.</span><span class="fu">arrayBuffer</span>()<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a>  <span class="kw">const</span> fileContent <span class="op">=</span> <span class="kw">new</span> <span class="bu">Uint8Array</span>(fileContentArrayBuffer)<span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-label="13"></a>  pyodide<span class="op">.</span><span class="at">FS</span><span class="op">.</span><span class="fu">writeFile</span>(<span class="st">"all_stocks.csv"</span><span class="op">,</span> fileContent)<span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-label="14"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-label="15"></a>  <span class="cf">return</span> pyodide<span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-label="16"></a>}</span>
+<span id="cb6-17"><a href="#cb6-17" aria-label="17"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-label="18"></a><span class="kw">let</span> pyodideReadyPromise <span class="op">=</span> <span class="fu">setupPyodide</span>()<span class="op">;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-label="19"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-label="20"></a>askBtn<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">"click"</span><span class="op">,</span> <span class="kw">async</span> (<span class="bu">event</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb6-21"><a href="#cb6-21" aria-label="21"></a>  <span class="kw">let</span> pyodide <span class="op">=</span> <span class="cf">await</span> pyodideReadyPromise<span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-label="22"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-label="23"></a>  <span class="kw">const</span> query <span class="op">=</span> queryTextArea<span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-label="24"></a>  <span class="kw">const</span> df_info <span class="op">=</span> <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">runPythonAsync</span>(<span class="vs">`</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-label="25"></a><span class="vs">    import pandas as pd</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-label="26"></a><span class="vs">    df = pd.read_csv('all_stocks.csv')</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-label="27"></a><span class="vs">    pd.set_option('display.max_columns', None)</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-label="28"></a><span class="vs">    df.head(3).T</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-label="29"></a><span class="vs">    `</span>)<span class="op">;</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-label="30"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-label="31"></a>  <span class="kw">const</span> data <span class="op">=</span> <span class="kw">new</span> <span class="bu">FormData</span>()<span class="op">;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-label="32"></a>  data<span class="op">.</span><span class="fu">append</span>(<span class="st">"query"</span><span class="op">,</span> query)<span class="op">;</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-label="33"></a>  data<span class="op">.</span><span class="fu">append</span>(<span class="st">"df_info"</span><span class="op">,</span> df_info)<span class="op">;</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-label="34"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-label="35"></a>  <span class="cf">try</span> {</span>
+<span id="cb6-36"><a href="#cb6-36" aria-label="36"></a>    <span class="kw">const</span> response <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">"/ask"</span><span class="op">,</span> {</span>
+<span id="cb6-37"><a href="#cb6-37" aria-label="37"></a>      <span class="dt">method</span><span class="op">:</span> <span class="st">"POST"</span><span class="op">,</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-label="38"></a>      <span class="dt">body</span><span class="op">:</span> data<span class="op">,</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-label="39"></a>    })<span class="op">;</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-label="40"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-label="41"></a>    <span class="cf">if</span> (response<span class="op">.</span><span class="at">ok</span>) {</span>
+<span id="cb6-42"><a href="#cb6-42" aria-label="42"></a>      <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> response<span class="op">.</span><span class="fu">text</span>()<span class="op">;</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-label="43"></a>      <span class="kw">const</span> output <span class="op">=</span> <span class="cf">await</span> pyodide<span class="op">.</span><span class="fu">runPythonAsync</span>(result)<span class="op">;</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-label="44"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-label="45"></a>      outputElement<span class="op">.</span><span class="at">innerText</span> <span class="op">=</span> output<span class="op">;</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-label="46"></a>    } <span class="cf">else</span> {</span>
+<span id="cb6-47"><a href="#cb6-47" aria-label="47"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error:"</span><span class="op">,</span> response<span class="op">.</span><span class="at">statusText</span>)<span class="op">;</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-label="48"></a>    }</span>
+<span id="cb6-49"><a href="#cb6-49" aria-label="49"></a>  } <span class="cf">catch</span> (error) {</span>
+<span id="cb6-50"><a href="#cb6-50" aria-label="50"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error:"</span><span class="op">,</span> error)<span class="op">;</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-label="51"></a>  }</span>
+<span id="cb6-52"><a href="#cb6-52" aria-label="52"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code loads Pyodide, installs the necessary libraries, makes the data accessible in Pyodide, and finally sets an event handler to process the user’s question. It works as follows:</p>
 <ul>
 <li><strong>Lines 1 to 3</strong> select the elements of the DOM that you’ll be interacting with.</li>
@@ -451,71 +454,71 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="create-the-chatbot">Create the Chatbot</h2>
 <p>Now, you’ll create a simple application that will allow users to make questions to the chatbot about the dataset.</p>
 <p>Take a look at the code in <code>src/app.py</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="im">from</span> langchain <span class="im">import</span> LLMChain</span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> ChatOpenAI</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="im">from</span> litestar <span class="im">import</span> Litestar, get, post</span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="im">from</span> litestar.contrib.jinja <span class="im">import</span> JinjaTemplateEngine</span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="im">from</span> litestar.enums <span class="im">import</span> RequestEncodingType</span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="im">from</span> litestar.params <span class="im">import</span> Body</span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="im">from</span> litestar.response_containers <span class="im">import</span> Template</span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="im">from</span> litestar.static_files.config <span class="im">import</span> StaticFilesConfig</span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="im">from</span> litestar.template.config <span class="im">import</span> TemplateConfig</span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="im">from</span> typing_extensions <span class="im">import</span> Annotated</span>
-<span id="cb7-14"><a href="#cb7-14"></a></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="im">from</span> config <span class="im">import</span> OpenAI</span>
-<span id="cb7-16"><a href="#cb7-16"></a><span class="im">from</span> utils <span class="im">import</span> get_prompt</span>
-<span id="cb7-17"><a href="#cb7-17"></a></span>
-<span id="cb7-18"><a href="#cb7-18"></a>chain_create <span class="op">=</span> LLMChain(</span>
-<span id="cb7-19"><a href="#cb7-19"></a>    llm<span class="op">=</span>ChatOpenAI(</span>
-<span id="cb7-20"><a href="#cb7-20"></a>        temperature<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb7-21"><a href="#cb7-21"></a>        model_name<span class="op">=</span>OpenAI.model_name,</span>
-<span id="cb7-22"><a href="#cb7-22"></a>        openai_api_key<span class="op">=</span>OpenAI.secret_key,</span>
-<span id="cb7-23"><a href="#cb7-23"></a>    ),</span>
-<span id="cb7-24"><a href="#cb7-24"></a>    prompt<span class="op">=</span>get_prompt(),</span>
-<span id="cb7-25"><a href="#cb7-25"></a>)</span>
-<span id="cb7-26"><a href="#cb7-26"></a></span>
-<span id="cb7-27"><a href="#cb7-27"></a></span>
-<span id="cb7-28"><a href="#cb7-28"></a><span class="at">@get</span>(path<span class="op">=</span><span class="st">"/"</span>, name<span class="op">=</span><span class="st">"index"</span>)</span>
-<span id="cb7-29"><a href="#cb7-29"></a><span class="kw">def</span> index() <span class="op">-&gt;</span> Template:</span>
-<span id="cb7-30"><a href="#cb7-30"></a>    <span class="cf">return</span> Template(name<span class="op">=</span><span class="st">"index.html"</span>)</span>
-<span id="cb7-31"><a href="#cb7-31"></a></span>
-<span id="cb7-32"><a href="#cb7-32"></a></span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="at">@dataclass</span></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="kw">class</span> Query:</span>
-<span id="cb7-35"><a href="#cb7-35"></a>    query: <span class="bu">str</span></span>
-<span id="cb7-36"><a href="#cb7-36"></a>    df_info: <span class="bu">str</span></span>
-<span id="cb7-37"><a href="#cb7-37"></a></span>
-<span id="cb7-38"><a href="#cb7-38"></a></span>
-<span id="cb7-39"><a href="#cb7-39"></a><span class="at">@post</span>(path<span class="op">=</span><span class="st">"/ask"</span>, name<span class="op">=</span><span class="st">"ask"</span>, sync_to_thread<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-40"><a href="#cb7-40"></a><span class="kw">def</span> ask(</span>
-<span id="cb7-41"><a href="#cb7-41"></a>    data: Annotated[Query, Body(media_type<span class="op">=</span>RequestEncodingType.MULTI_PART)],</span>
-<span id="cb7-42"><a href="#cb7-42"></a>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb7-43"><a href="#cb7-43"></a>    query <span class="op">=</span> data.query</span>
-<span id="cb7-44"><a href="#cb7-44"></a>    df_info <span class="op">=</span> data.df_info</span>
-<span id="cb7-45"><a href="#cb7-45"></a></span>
-<span id="cb7-46"><a href="#cb7-46"></a>    chain_result <span class="op">=</span> chain_create.run(</span>
-<span id="cb7-47"><a href="#cb7-47"></a>        {</span>
-<span id="cb7-48"><a href="#cb7-48"></a>            <span class="st">"df_info"</span>: df_info,</span>
-<span id="cb7-49"><a href="#cb7-49"></a>            <span class="st">"query"</span>: query,</span>
-<span id="cb7-50"><a href="#cb7-50"></a>        }</span>
-<span id="cb7-51"><a href="#cb7-51"></a>    )</span>
-<span id="cb7-52"><a href="#cb7-52"></a>    result <span class="op">=</span> chain_result.split(<span class="st">"```python"</span>)[<span class="op">-</span><span class="dv">1</span>][:<span class="op">-</span><span class="dv">3</span>].strip()</span>
-<span id="cb7-53"><a href="#cb7-53"></a></span>
-<span id="cb7-54"><a href="#cb7-54"></a>    <span class="cf">return</span> result</span>
-<span id="cb7-55"><a href="#cb7-55"></a></span>
-<span id="cb7-56"><a href="#cb7-56"></a></span>
-<span id="cb7-57"><a href="#cb7-57"></a>app <span class="op">=</span> Litestar(</span>
-<span id="cb7-58"><a href="#cb7-58"></a>    route_handlers<span class="op">=</span>[index, ask],</span>
-<span id="cb7-59"><a href="#cb7-59"></a>    static_files_config<span class="op">=</span>[</span>
-<span id="cb7-60"><a href="#cb7-60"></a>        StaticFilesConfig(directories<span class="op">=</span>[<span class="st">"static"</span>], path<span class="op">=</span><span class="st">"/static"</span>, name<span class="op">=</span><span class="st">"static"</span>),</span>
-<span id="cb7-61"><a href="#cb7-61"></a>    ],</span>
-<span id="cb7-62"><a href="#cb7-62"></a>    template_config<span class="op">=</span>TemplateConfig(</span>
-<span id="cb7-63"><a href="#cb7-63"></a>        engine<span class="op">=</span>JinjaTemplateEngine, directory<span class="op">=</span>Path(<span class="st">"templates"</span>)</span>
-<span id="cb7-64"><a href="#cb7-64"></a>    ),</span>
-<span id="cb7-65"><a href="#cb7-65"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-label="4"></a><span class="im">from</span> langchain <span class="im">import</span> LLMChain</span>
+<span id="cb7-5"><a href="#cb7-5" aria-label="5"></a><span class="im">from</span> langchain.chat_models <span class="im">import</span> ChatOpenAI</span>
+<span id="cb7-6"><a href="#cb7-6" aria-label="6"></a><span class="im">from</span> litestar <span class="im">import</span> Litestar, get, post</span>
+<span id="cb7-7"><a href="#cb7-7" aria-label="7"></a><span class="im">from</span> litestar.contrib.jinja <span class="im">import</span> JinjaTemplateEngine</span>
+<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a><span class="im">from</span> litestar.enums <span class="im">import</span> RequestEncodingType</span>
+<span id="cb7-9"><a href="#cb7-9" aria-label="9"></a><span class="im">from</span> litestar.params <span class="im">import</span> Body</span>
+<span id="cb7-10"><a href="#cb7-10" aria-label="10"></a><span class="im">from</span> litestar.response_containers <span class="im">import</span> Template</span>
+<span id="cb7-11"><a href="#cb7-11" aria-label="11"></a><span class="im">from</span> litestar.static_files.config <span class="im">import</span> StaticFilesConfig</span>
+<span id="cb7-12"><a href="#cb7-12" aria-label="12"></a><span class="im">from</span> litestar.template.config <span class="im">import</span> TemplateConfig</span>
+<span id="cb7-13"><a href="#cb7-13" aria-label="13"></a><span class="im">from</span> typing_extensions <span class="im">import</span> Annotated</span>
+<span id="cb7-14"><a href="#cb7-14" aria-label="14"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-label="15"></a><span class="im">from</span> config <span class="im">import</span> OpenAI</span>
+<span id="cb7-16"><a href="#cb7-16" aria-label="16"></a><span class="im">from</span> utils <span class="im">import</span> get_prompt</span>
+<span id="cb7-17"><a href="#cb7-17" aria-label="17"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-label="18"></a>chain_create <span class="op">=</span> LLMChain(</span>
+<span id="cb7-19"><a href="#cb7-19" aria-label="19"></a>    llm<span class="op">=</span>ChatOpenAI(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-label="20"></a>        temperature<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-label="21"></a>        model_name<span class="op">=</span>OpenAI.model_name,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-label="22"></a>        openai_api_key<span class="op">=</span>OpenAI.secret_key,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-label="23"></a>    ),</span>
+<span id="cb7-24"><a href="#cb7-24" aria-label="24"></a>    prompt<span class="op">=</span>get_prompt(),</span>
+<span id="cb7-25"><a href="#cb7-25" aria-label="25"></a>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-label="26"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-label="27"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-label="28"></a><span class="at">@get</span>(path<span class="op">=</span><span class="st">"/"</span>, name<span class="op">=</span><span class="st">"index"</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-label="29"></a><span class="kw">def</span> index() <span class="op">-&gt;</span> Template:</span>
+<span id="cb7-30"><a href="#cb7-30" aria-label="30"></a>    <span class="cf">return</span> Template(name<span class="op">=</span><span class="st">"index.html"</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-label="31"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-label="32"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-label="33"></a><span class="at">@dataclass</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-label="34"></a><span class="kw">class</span> Query:</span>
+<span id="cb7-35"><a href="#cb7-35" aria-label="35"></a>    query: <span class="bu">str</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-label="36"></a>    df_info: <span class="bu">str</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-label="37"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-label="38"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-label="39"></a><span class="at">@post</span>(path<span class="op">=</span><span class="st">"/ask"</span>, name<span class="op">=</span><span class="st">"ask"</span>, sync_to_thread<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-label="40"></a><span class="kw">def</span> ask(</span>
+<span id="cb7-41"><a href="#cb7-41" aria-label="41"></a>    data: Annotated[Query, Body(media_type<span class="op">=</span>RequestEncodingType.MULTI_PART)],</span>
+<span id="cb7-42"><a href="#cb7-42" aria-label="42"></a>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb7-43"><a href="#cb7-43" aria-label="43"></a>    query <span class="op">=</span> data.query</span>
+<span id="cb7-44"><a href="#cb7-44" aria-label="44"></a>    df_info <span class="op">=</span> data.df_info</span>
+<span id="cb7-45"><a href="#cb7-45" aria-label="45"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-label="46"></a>    chain_result <span class="op">=</span> chain_create.run(</span>
+<span id="cb7-47"><a href="#cb7-47" aria-label="47"></a>        {</span>
+<span id="cb7-48"><a href="#cb7-48" aria-label="48"></a>            <span class="st">"df_info"</span>: df_info,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-label="49"></a>            <span class="st">"query"</span>: query,</span>
+<span id="cb7-50"><a href="#cb7-50" aria-label="50"></a>        }</span>
+<span id="cb7-51"><a href="#cb7-51" aria-label="51"></a>    )</span>
+<span id="cb7-52"><a href="#cb7-52" aria-label="52"></a>    result <span class="op">=</span> chain_result.split(<span class="st">"```python"</span>)[<span class="op">-</span><span class="dv">1</span>][:<span class="op">-</span><span class="dv">3</span>].strip()</span>
+<span id="cb7-53"><a href="#cb7-53" aria-label="53"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-label="54"></a>    <span class="cf">return</span> result</span>
+<span id="cb7-55"><a href="#cb7-55" aria-label="55"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-label="56"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-label="57"></a>app <span class="op">=</span> Litestar(</span>
+<span id="cb7-58"><a href="#cb7-58" aria-label="58"></a>    route_handlers<span class="op">=</span>[index, ask],</span>
+<span id="cb7-59"><a href="#cb7-59" aria-label="59"></a>    static_files_config<span class="op">=</span>[</span>
+<span id="cb7-60"><a href="#cb7-60" aria-label="60"></a>        StaticFilesConfig(directories<span class="op">=</span>[<span class="st">"static"</span>], path<span class="op">=</span><span class="st">"/static"</span>, name<span class="op">=</span><span class="st">"static"</span>),</span>
+<span id="cb7-61"><a href="#cb7-61" aria-label="61"></a>    ],</span>
+<span id="cb7-62"><a href="#cb7-62" aria-label="62"></a>    template_config<span class="op">=</span>TemplateConfig(</span>
+<span id="cb7-63"><a href="#cb7-63" aria-label="63"></a>        engine<span class="op">=</span>JinjaTemplateEngine, directory<span class="op">=</span>Path(<span class="st">"templates"</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-label="64"></a>    ),</span>
+<span id="cb7-65"><a href="#cb7-65" aria-label="65"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This code provides users with a straightforward interface, allowing them to interact with the chatbot and ask questions about the dataset. Here’s how it works:</p>
 <ul>
 <li><strong>Lines 1 to 16</strong> import the required libraries. The application uses <a href="https://docs.litestar.dev/2/">Litestar</a>, which is a bit verbose; hence, you’ll notice many import statements. But there’s no real mystery to it, it’s <a href="https://docs.litestar.dev/2/migration/index.html">pretty similar to FastAPI or Flask</a>.</li>
@@ -525,7 +528,7 @@ Subscribe to my newsletter
 <li><strong>Lines 57 to 65</strong> set up the Litestar app, incorporating the previously defined routes and the locations of the templates and static files.</li>
 </ul>
 <p>To test the app, <code>cd</code> into <code>src/</code> and run this code in a terminal within the virtual environment:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="ex">litestar</span> run <span class="at">--reload</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="ex">litestar</span> run <span class="at">--reload</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If everything goes well, you’ll see an output similar to this one:</p>
 <p><a href="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/code-interpreter-chatbot-pyodide-langchain-openai/image-1.png" class="img-fluid"></a></p>
 <p>Next, open <code>http://127.0.0.1:8000</code> on your browser. You should see the app’s UI.</p>

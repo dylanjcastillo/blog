@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -270,27 +273,27 @@ Subscribe to my newsletter
 <p>So, how do you make a <em>figure</em>?</p>
 <p>There are multiple ways to do it. The lowest-level approach is to use Python dictionaries, and the highest-level one is using the <em>Plotly Express</em> interface<em>.</em> I tend to use a mid-level interface called <em>Figure Constructor</em>. It’s easier to debug than using Python dictionaries, and it’s more flexible than <em>Plotly Express</em>.</p>
 <p>The code for making a graph using the <em>Figure Constructor</em> looks as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-3"><a href="#cb1-3"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Simulate data</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
-<span id="cb1-8"><a href="#cb1-8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Generate graph using Figure Constructor</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>layout <span class="op">=</span> go.Layout(</span>
-<span id="cb1-12"><a href="#cb1-12"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13"></a>    xaxis_title<span class="op">=</span><span class="st">"time"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14"></a>    yaxis_title<span class="op">=</span><span class="st">"price"</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a>)</span>
-<span id="cb1-16"><a href="#cb1-16"></a></span>
-<span id="cb1-17"><a href="#cb1-17"></a>fig <span class="op">=</span> go.Figure(</span>
-<span id="cb1-18"><a href="#cb1-18"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
-<span id="cb1-19"><a href="#cb1-19"></a>    layout<span class="op">=</span>layout</span>
-<span id="cb1-20"><a href="#cb1-20"></a>)</span>
-<span id="cb1-21"><a href="#cb1-21"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a><span class="co"># Simulate data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a><span class="co"># Generate graph using Figure Constructor</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>    xaxis_title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a>    yaxis_title<span class="op">=</span><span class="st">"price"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>fig <span class="op">=</span> go.Figure(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a>    layout<span class="op">=</span>layout</span>
+<span id="cb1-20"><a href="#cb1-20" aria-label="20"></a>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-label="21"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>How to make make a line chart using Plotly</p>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/658.embed?autosize=true&amp;link=false">
@@ -314,35 +317,35 @@ Basic plot in Plotly
 <h3 class="anchored" data-anchor-id="remove-gridlines-and-background-color">#1: Remove gridlines and background color</h3>
 <p>Gridlines are lines that cross the chart to show axis divisions. They help the viewer visualize the value represented by an unlabeled data point fast. However, gridlines are not very useful when working with interactive graphs. You can hover over a data point and see its value. So more often than not, I remove gridlines when working with Plotly.</p>
 <p>Here’s how you can do it:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-3"><a href="#cb2-3"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Simulate data</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb2-7"><a href="#cb2-7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
-<span id="cb2-8"><a href="#cb2-8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>layout <span class="op">=</span> go.Layout(</span>
-<span id="cb2-11"><a href="#cb2-11"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
-<span id="cb2-12"><a href="#cb2-12"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFF"</span>,  <span class="co"># Sets background color to white</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb2-14"><a href="#cb2-14"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
-<span id="cb2-15"><a href="#cb2-15"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of X-axis line</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>        showgrid<span class="op">=</span><span class="va">False</span>  <span class="co"># Removes X-axis grid lines</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>    ),</span>
-<span id="cb2-18"><a href="#cb2-18"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb2-19"><a href="#cb2-19"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
-<span id="cb2-20"><a href="#cb2-20"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of Y-axis line</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a>        showgrid<span class="op">=</span><span class="va">False</span>,  <span class="co"># Removes Y-axis grid lines</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a>    )</span>
-<span id="cb2-23"><a href="#cb2-23"></a>)</span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a>fig <span class="op">=</span> go.Figure(</span>
-<span id="cb2-26"><a href="#cb2-26"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
-<span id="cb2-27"><a href="#cb2-27"></a>    layout<span class="op">=</span>layout</span>
-<span id="cb2-28"><a href="#cb2-28"></a>)</span>
-<span id="cb2-29"><a href="#cb2-29"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="co"># Simulate data</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a>returns <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a>price <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns.cumsum())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a>time <span class="op">=</span> np.arange(<span class="dv">100</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a>    title<span class="op">=</span><span class="st">"Historic Prices"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFF"</span>,  <span class="co"># Sets background color to white</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of X-axis line</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a>        showgrid<span class="op">=</span><span class="va">False</span>  <span class="co"># Removes X-axis grid lines</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-label="17"></a>    ),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-label="18"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb2-19"><a href="#cb2-19" aria-label="19"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-label="20"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,  <span class="co"># Sets color of Y-axis line</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-label="21"></a>        showgrid<span class="op">=</span><span class="va">False</span>,  <span class="co"># Removes Y-axis grid lines</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-label="22"></a>    )</span>
+<span id="cb2-23"><a href="#cb2-23" aria-label="23"></a>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-label="24"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-label="25"></a>fig <span class="op">=</span> go.Figure(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-label="26"></a>    data<span class="op">=</span>go.Scatter(x<span class="op">=</span>time, y<span class="op">=</span>price),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-label="27"></a>    layout<span class="op">=</span>layout</span>
+<span id="cb2-28"><a href="#cb2-28" aria-label="28"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-label="29"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Code snippet to remove grid lines</p>
 <p>And this is how it looks:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/627.embed?autosize=true&amp;link=false">
@@ -356,84 +359,84 @@ Line chart without gridlines
 <p>When working with categories, there are two things people usually like to do. First, they want to assign some specific colors to each group. For instance, if you are analyzing electoral results in the US, you probably want to use particular blue and red variations to identify the Democratic and Republican parties.</p>
 <p>Second, you want this color to remain consistent across all the graphs you do. For example, if you are analyzing some real-world companies, you may want to use their distinctive colors to plot their prices but also when you analyze their returns.</p>
 <p>Here’s how you can do that using Plotly:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-3"><a href="#cb3-3"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Simulate data</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb3-7"><a href="#cb3-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
-<span id="cb3-11"><a href="#cb3-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
-<span id="cb3-12"><a href="#cb3-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
-<span id="cb3-13"><a href="#cb3-13"></a></span>
-<span id="cb3-14"><a href="#cb3-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
-<span id="cb3-16"><a href="#cb3-16"></a></span>
-<span id="cb3-17"><a href="#cb3-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb3-18"><a href="#cb3-18"></a>    <span class="st">"company"</span>: companies,</span>
-<span id="cb3-19"><a href="#cb3-19"></a>    <span class="st">"time"</span>: time,</span>
-<span id="cb3-20"><a href="#cb3-20"></a>    <span class="st">"price"</span>: prices,</span>
-<span id="cb3-21"><a href="#cb3-21"></a>    <span class="st">"returns"</span>: returns</span>
-<span id="cb3-22"><a href="#cb3-22"></a>})</span>
-<span id="cb3-23"><a href="#cb3-23"></a></span>
-<span id="cb3-24"><a href="#cb3-24"></a><span class="co"># Build graph</span></span>
-<span id="cb3-25"><a href="#cb3-25"></a>COLORS_MAPPER <span class="op">=</span> {</span>
-<span id="cb3-26"><a href="#cb3-26"></a>    <span class="st">"A"</span>: <span class="st">"#38BEC9"</span>,</span>
-<span id="cb3-27"><a href="#cb3-27"></a>    <span class="st">"B"</span>: <span class="st">"#D64545"</span></span>
-<span id="cb3-28"><a href="#cb3-28"></a>}</span>
-<span id="cb3-29"><a href="#cb3-29"></a></span>
-<span id="cb3-30"><a href="#cb3-30"></a>layout <span class="op">=</span> go.Layout(</span>
-<span id="cb3-31"><a href="#cb3-31"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
-<span id="cb3-32"><a href="#cb3-32"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
-<span id="cb3-33"><a href="#cb3-33"></a>    barmode<span class="op">=</span><span class="st">"stack"</span>,</span>
-<span id="cb3-34"><a href="#cb3-34"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb3-35"><a href="#cb3-35"></a>        domain<span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.5</span>],</span>
-<span id="cb3-36"><a href="#cb3-36"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
-<span id="cb3-37"><a href="#cb3-37"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
-<span id="cb3-38"><a href="#cb3-38"></a>    ),</span>
-<span id="cb3-39"><a href="#cb3-39"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb3-40"><a href="#cb3-40"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
-<span id="cb3-41"><a href="#cb3-41"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
-<span id="cb3-42"><a href="#cb3-42"></a>    ),</span>
-<span id="cb3-43"><a href="#cb3-43"></a>    xaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb3-44"><a href="#cb3-44"></a>        domain<span class="op">=</span>[<span class="fl">0.6</span>, <span class="dv">1</span>],</span>
-<span id="cb3-45"><a href="#cb3-45"></a>        title<span class="op">=</span><span class="st">"returns"</span>,</span>
-<span id="cb3-46"><a href="#cb3-46"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
-<span id="cb3-47"><a href="#cb3-47"></a>    ),</span>
-<span id="cb3-48"><a href="#cb3-48"></a>    yaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb3-49"><a href="#cb3-49"></a>        anchor<span class="op">=</span><span class="st">"x2"</span>,</span>
-<span id="cb3-50"><a href="#cb3-50"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
-<span id="cb3-51"><a href="#cb3-51"></a>    )</span>
-<span id="cb3-52"><a href="#cb3-52"></a>)</span>
-<span id="cb3-53"><a href="#cb3-53"></a></span>
-<span id="cb3-54"><a href="#cb3-54"></a>data <span class="op">=</span> []</span>
-<span id="cb3-55"><a href="#cb3-55"></a><span class="cf">for</span> company,col <span class="kw">in</span> COLORS_MAPPER.items():</span>
-<span id="cb3-56"><a href="#cb3-56"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
-<span id="cb3-57"><a href="#cb3-57"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
-<span id="cb3-58"><a href="#cb3-58"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
-<span id="cb3-59"><a href="#cb3-59"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
-<span id="cb3-60"><a href="#cb3-60"></a>        x<span class="op">=</span>time,</span>
-<span id="cb3-61"><a href="#cb3-61"></a>        y<span class="op">=</span>price,</span>
-<span id="cb3-62"><a href="#cb3-62"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
-<span id="cb3-63"><a href="#cb3-63"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
-<span id="cb3-64"><a href="#cb3-64"></a>        name<span class="op">=</span>company</span>
-<span id="cb3-65"><a href="#cb3-65"></a>    )</span>
-<span id="cb3-66"><a href="#cb3-66"></a>    histogram <span class="op">=</span> go.Histogram(</span>
-<span id="cb3-67"><a href="#cb3-67"></a>        x<span class="op">=</span>returns,</span>
-<span id="cb3-68"><a href="#cb3-68"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
-<span id="cb3-69"><a href="#cb3-69"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
-<span id="cb3-70"><a href="#cb3-70"></a>        xaxis<span class="op">=</span><span class="st">"x2"</span>,</span>
-<span id="cb3-71"><a href="#cb3-71"></a>        yaxis<span class="op">=</span><span class="st">"y2"</span>,</span>
-<span id="cb3-72"><a href="#cb3-72"></a>        showlegend<span class="op">=</span><span class="va">False</span></span>
-<span id="cb3-73"><a href="#cb3-73"></a>    )</span>
-<span id="cb3-74"><a href="#cb3-74"></a>    data.append(line_chart)</span>
-<span id="cb3-75"><a href="#cb3-75"></a>    data.append(histogram)</span>
-<span id="cb3-76"><a href="#cb3-76"></a></span>
-<span id="cb3-77"><a href="#cb3-77"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb3-78"><a href="#cb3-78"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a><span class="co"># Simulate data</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb3-12"><a href="#cb3-12" aria-label="12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-label="13"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-label="14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-label="15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-label="16"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-label="17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-18"><a href="#cb3-18" aria-label="18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-label="19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-label="20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-label="21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb3-22"><a href="#cb3-22" aria-label="22"></a>})</span>
+<span id="cb3-23"><a href="#cb3-23" aria-label="23"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-label="24"></a><span class="co"># Build graph</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-label="25"></a>COLORS_MAPPER <span class="op">=</span> {</span>
+<span id="cb3-26"><a href="#cb3-26" aria-label="26"></a>    <span class="st">"A"</span>: <span class="st">"#38BEC9"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-label="27"></a>    <span class="st">"B"</span>: <span class="st">"#D64545"</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-label="28"></a>}</span>
+<span id="cb3-29"><a href="#cb3-29" aria-label="29"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-label="30"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb3-31"><a href="#cb3-31" aria-label="31"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-label="32"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-label="33"></a>    barmode<span class="op">=</span><span class="st">"stack"</span>,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-label="34"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-35"><a href="#cb3-35" aria-label="35"></a>        domain<span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.5</span>],</span>
+<span id="cb3-36"><a href="#cb3-36" aria-label="36"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-label="37"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb3-38"><a href="#cb3-38" aria-label="38"></a>    ),</span>
+<span id="cb3-39"><a href="#cb3-39" aria-label="39"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-40"><a href="#cb3-40" aria-label="40"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-label="41"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-label="42"></a>    ),</span>
+<span id="cb3-43"><a href="#cb3-43" aria-label="43"></a>    xaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-44"><a href="#cb3-44" aria-label="44"></a>        domain<span class="op">=</span>[<span class="fl">0.6</span>, <span class="dv">1</span>],</span>
+<span id="cb3-45"><a href="#cb3-45" aria-label="45"></a>        title<span class="op">=</span><span class="st">"returns"</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-label="46"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-label="47"></a>    ),</span>
+<span id="cb3-48"><a href="#cb3-48" aria-label="48"></a>    yaxis2<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb3-49"><a href="#cb3-49" aria-label="49"></a>        anchor<span class="op">=</span><span class="st">"x2"</span>,</span>
+<span id="cb3-50"><a href="#cb3-50" aria-label="50"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-label="51"></a>    )</span>
+<span id="cb3-52"><a href="#cb3-52" aria-label="52"></a>)</span>
+<span id="cb3-53"><a href="#cb3-53" aria-label="53"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-label="54"></a>data <span class="op">=</span> []</span>
+<span id="cb3-55"><a href="#cb3-55" aria-label="55"></a><span class="cf">for</span> company,col <span class="kw">in</span> COLORS_MAPPER.items():</span>
+<span id="cb3-56"><a href="#cb3-56" aria-label="56"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb3-57"><a href="#cb3-57" aria-label="57"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb3-58"><a href="#cb3-58" aria-label="58"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb3-59"><a href="#cb3-59" aria-label="59"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb3-60"><a href="#cb3-60" aria-label="60"></a>        x<span class="op">=</span>time,</span>
+<span id="cb3-61"><a href="#cb3-61" aria-label="61"></a>        y<span class="op">=</span>price,</span>
+<span id="cb3-62"><a href="#cb3-62" aria-label="62"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-label="63"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-label="64"></a>        name<span class="op">=</span>company</span>
+<span id="cb3-65"><a href="#cb3-65" aria-label="65"></a>    )</span>
+<span id="cb3-66"><a href="#cb3-66" aria-label="66"></a>    histogram <span class="op">=</span> go.Histogram(</span>
+<span id="cb3-67"><a href="#cb3-67" aria-label="67"></a>        x<span class="op">=</span>returns,</span>
+<span id="cb3-68"><a href="#cb3-68" aria-label="68"></a>        marker_color<span class="op">=</span>col,  <span class="co"># Defines specific color for a trace</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-label="69"></a>        legendgroup<span class="op">=</span>company,  <span class="co"># Groups traces belonging to the same group in the legend</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-label="70"></a>        xaxis<span class="op">=</span><span class="st">"x2"</span>,</span>
+<span id="cb3-71"><a href="#cb3-71" aria-label="71"></a>        yaxis<span class="op">=</span><span class="st">"y2"</span>,</span>
+<span id="cb3-72"><a href="#cb3-72" aria-label="72"></a>        showlegend<span class="op">=</span><span class="va">False</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-label="73"></a>    )</span>
+<span id="cb3-74"><a href="#cb3-74" aria-label="74"></a>    data.append(line_chart)</span>
+<span id="cb3-75"><a href="#cb3-75" aria-label="75"></a>    data.append(histogram)</span>
+<span id="cb3-76"><a href="#cb3-76" aria-label="76"></a></span>
+<span id="cb3-77"><a href="#cb3-77" aria-label="77"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb3-78"><a href="#cb3-78" aria-label="78"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/671.embed?autosize=true&amp;link=false">
 </iframe>
 <figcaption>
@@ -447,66 +450,66 @@ Consistent colors across graphs
 <section id="use-spike-lines-to-compare-data-points" class="level3">
 <h3 class="anchored" data-anchor-id="use-spike-lines-to-compare-data-points">#3: Use spike lines to compare data points</h3>
 <p>A spike line is a vertical or horizontal line that appears when hovering on data. It’s useful for comparing values in line charts and scatter plots. This is how you can add those using Plotly:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-3"><a href="#cb4-3"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># Simulate data</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb4-7"><a href="#cb4-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb4-8"><a href="#cb4-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
-<span id="cb4-11"><a href="#cb4-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
-<span id="cb4-12"><a href="#cb4-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
-<span id="cb4-16"><a href="#cb4-16"></a></span>
-<span id="cb4-17"><a href="#cb4-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb4-18"><a href="#cb4-18"></a>    <span class="st">"company"</span>: companies,</span>
-<span id="cb4-19"><a href="#cb4-19"></a>    <span class="st">"time"</span>: time,</span>
-<span id="cb4-20"><a href="#cb4-20"></a>    <span class="st">"price"</span>: prices,</span>
-<span id="cb4-21"><a href="#cb4-21"></a>    <span class="st">"returns"</span>: returns</span>
-<span id="cb4-22"><a href="#cb4-22"></a>})</span>
-<span id="cb4-23"><a href="#cb4-23"></a></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co"># Build graph</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>layout <span class="op">=</span> go.Layout(</span>
-<span id="cb4-26"><a href="#cb4-26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
-<span id="cb4-27"><a href="#cb4-27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
-<span id="cb4-28"><a href="#cb4-28"></a>    hovermode<span class="op">=</span><span class="st">"x"</span>,</span>
-<span id="cb4-29"><a href="#cb4-29"></a>    hoverdistance<span class="op">=</span><span class="dv">100</span>, <span class="co"># Distance to show hover label of data point</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a>    spikedistance<span class="op">=</span><span class="dv">1000</span>, <span class="co"># Distance to show spike</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb4-32"><a href="#cb4-32"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
-<span id="cb4-33"><a href="#cb4-33"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
-<span id="cb4-34"><a href="#cb4-34"></a>        showspikes<span class="op">=</span><span class="va">True</span>, <span class="co"># Show spike line for X-axis</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a>        <span class="co"># Format spike</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>        spikethickness<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb4-37"><a href="#cb4-37"></a>        spikedash<span class="op">=</span><span class="st">"dot"</span>,</span>
-<span id="cb4-38"><a href="#cb4-38"></a>        spikecolor<span class="op">=</span><span class="st">"#999999"</span>,</span>
-<span id="cb4-39"><a href="#cb4-39"></a>        spikemode<span class="op">=</span><span class="st">"across"</span>,</span>
-<span id="cb4-40"><a href="#cb4-40"></a>    ),</span>
-<span id="cb4-41"><a href="#cb4-41"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb4-42"><a href="#cb4-42"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
-<span id="cb4-43"><a href="#cb4-43"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
-<span id="cb4-44"><a href="#cb4-44"></a>    )</span>
-<span id="cb4-45"><a href="#cb4-45"></a>)</span>
-<span id="cb4-46"><a href="#cb4-46"></a></span>
-<span id="cb4-47"><a href="#cb4-47"></a>data <span class="op">=</span> []</span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
-<span id="cb4-49"><a href="#cb4-49"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
-<span id="cb4-50"><a href="#cb4-50"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
-<span id="cb4-51"><a href="#cb4-51"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
-<span id="cb4-52"><a href="#cb4-52"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
-<span id="cb4-53"><a href="#cb4-53"></a>        x<span class="op">=</span>time,</span>
-<span id="cb4-54"><a href="#cb4-54"></a>        y<span class="op">=</span>price,</span>
-<span id="cb4-55"><a href="#cb4-55"></a>        name<span class="op">=</span>company</span>
-<span id="cb4-56"><a href="#cb4-56"></a>    )</span>
-<span id="cb4-57"><a href="#cb4-57"></a>    data.append(line_chart)</span>
-<span id="cb4-58"><a href="#cb4-58"></a></span>
-<span id="cb4-59"><a href="#cb4-59"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb4-60"><a href="#cb4-60"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="co"># Simulate data</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-label="14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-label="15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-label="16"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-label="17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-18"><a href="#cb4-18" aria-label="18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-label="19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-label="20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-label="21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb4-22"><a href="#cb4-22" aria-label="22"></a>})</span>
+<span id="cb4-23"><a href="#cb4-23" aria-label="23"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-label="24"></a><span class="co"># Build graph</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-label="25"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb4-26"><a href="#cb4-26" aria-label="26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-label="27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-label="28"></a>    hovermode<span class="op">=</span><span class="st">"x"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-label="29"></a>    hoverdistance<span class="op">=</span><span class="dv">100</span>, <span class="co"># Distance to show hover label of data point</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-label="30"></a>    spikedistance<span class="op">=</span><span class="dv">1000</span>, <span class="co"># Distance to show spike</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-label="31"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb4-32"><a href="#cb4-32" aria-label="32"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-label="33"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-label="34"></a>        showspikes<span class="op">=</span><span class="va">True</span>, <span class="co"># Show spike line for X-axis</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-label="35"></a>        <span class="co"># Format spike</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-label="36"></a>        spikethickness<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-label="37"></a>        spikedash<span class="op">=</span><span class="st">"dot"</span>,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-label="38"></a>        spikecolor<span class="op">=</span><span class="st">"#999999"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-label="39"></a>        spikemode<span class="op">=</span><span class="st">"across"</span>,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-label="40"></a>    ),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-label="41"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb4-42"><a href="#cb4-42" aria-label="42"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb4-43"><a href="#cb4-43" aria-label="43"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-label="44"></a>    )</span>
+<span id="cb4-45"><a href="#cb4-45" aria-label="45"></a>)</span>
+<span id="cb4-46"><a href="#cb4-46" aria-label="46"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-label="47"></a>data <span class="op">=</span> []</span>
+<span id="cb4-48"><a href="#cb4-48" aria-label="48"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
+<span id="cb4-49"><a href="#cb4-49" aria-label="49"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb4-50"><a href="#cb4-50" aria-label="50"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb4-51"><a href="#cb4-51" aria-label="51"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb4-52"><a href="#cb4-52" aria-label="52"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb4-53"><a href="#cb4-53" aria-label="53"></a>        x<span class="op">=</span>time,</span>
+<span id="cb4-54"><a href="#cb4-54" aria-label="54"></a>        y<span class="op">=</span>price,</span>
+<span id="cb4-55"><a href="#cb4-55" aria-label="55"></a>        name<span class="op">=</span>company</span>
+<span id="cb4-56"><a href="#cb4-56" aria-label="56"></a>    )</span>
+<span id="cb4-57"><a href="#cb4-57" aria-label="57"></a>    data.append(line_chart)</span>
+<span id="cb4-58"><a href="#cb4-58" aria-label="58"></a></span>
+<span id="cb4-59"><a href="#cb4-59" aria-label="59"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-label="60"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Code snippet to add spike lines to chart</p>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/700.embed?autosize=true&amp;link=false">
@@ -520,64 +523,64 @@ Chart with spike lines
 <p>I’m not too fond of the floating menu that Plotly adds to your chart by default. It makes graphs look <em>cool</em>, but I’ve rarely seen people using it. It has so many options that it’s just confusing for someone looking at a graph for the first time. Usually, I remove it.</p>
 <p>Also, I like to re-define two other user interaction parameters. I prefer to limit the users’ ability to zoom in and change the behavior of clicking on a trace in the legend. In Plotly, by default, if you want to inspect a trace on its own, you have to double-click on the trace, instead of just clicking on it. That’s not very intuitive, so I tend to invert that behavior.</p>
 <p>This is how you can apply those changes:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-3"><a href="#cb5-3"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Simulate data</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb5-7"><a href="#cb5-7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
-<span id="cb5-8"><a href="#cb5-8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
-<span id="cb5-9"><a href="#cb5-9"></a></span>
-<span id="cb5-10"><a href="#cb5-10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
-<span id="cb5-11"><a href="#cb5-11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
-<span id="cb5-12"><a href="#cb5-12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
-<span id="cb5-16"><a href="#cb5-16"></a></span>
-<span id="cb5-17"><a href="#cb5-17"></a>df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="st">"company"</span>: companies,</span>
-<span id="cb5-19"><a href="#cb5-19"></a>    <span class="st">"time"</span>: time,</span>
-<span id="cb5-20"><a href="#cb5-20"></a>    <span class="st">"price"</span>: prices,</span>
-<span id="cb5-21"><a href="#cb5-21"></a>    <span class="st">"returns"</span>: returns</span>
-<span id="cb5-22"><a href="#cb5-22"></a>})</span>
-<span id="cb5-23"><a href="#cb5-23"></a></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="co"># Build graph</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a>layout <span class="op">=</span> go.Layout(</span>
-<span id="cb5-26"><a href="#cb5-26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
-<span id="cb5-27"><a href="#cb5-27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
-<span id="cb5-28"><a href="#cb5-28"></a>    legend<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb5-29"><a href="#cb5-29"></a>        <span class="co"># Adjust click behavior</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a>        itemclick<span class="op">=</span><span class="st">"toggleothers"</span>,</span>
-<span id="cb5-31"><a href="#cb5-31"></a>        itemdoubleclick<span class="op">=</span><span class="st">"toggle"</span>,</span>
-<span id="cb5-32"><a href="#cb5-32"></a>    ),</span>
-<span id="cb5-33"><a href="#cb5-33"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb5-34"><a href="#cb5-34"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
-<span id="cb5-35"><a href="#cb5-35"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
-<span id="cb5-36"><a href="#cb5-36"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
-<span id="cb5-37"><a href="#cb5-37"></a>    ),</span>
-<span id="cb5-38"><a href="#cb5-38"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb5-39"><a href="#cb5-39"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
-<span id="cb5-40"><a href="#cb5-40"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
-<span id="cb5-41"><a href="#cb5-41"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
-<span id="cb5-42"><a href="#cb5-42"></a>    )</span>
-<span id="cb5-43"><a href="#cb5-43"></a>)</span>
-<span id="cb5-44"><a href="#cb5-44"></a></span>
-<span id="cb5-45"><a href="#cb5-45"></a>data <span class="op">=</span> []</span>
-<span id="cb5-46"><a href="#cb5-46"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
-<span id="cb5-47"><a href="#cb5-47"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
-<span id="cb5-48"><a href="#cb5-48"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
-<span id="cb5-49"><a href="#cb5-49"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
-<span id="cb5-50"><a href="#cb5-50"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
-<span id="cb5-51"><a href="#cb5-51"></a>        x<span class="op">=</span>time,</span>
-<span id="cb5-52"><a href="#cb5-52"></a>        y<span class="op">=</span>price,</span>
-<span id="cb5-53"><a href="#cb5-53"></a>        name<span class="op">=</span>company</span>
-<span id="cb5-54"><a href="#cb5-54"></a>    )</span>
-<span id="cb5-55"><a href="#cb5-55"></a>    data.append(line_chart)</span>
-<span id="cb5-56"><a href="#cb5-56"></a></span>
-<span id="cb5-57"><a href="#cb5-57"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
-<span id="cb5-58"><a href="#cb5-58"></a>fig.show(config<span class="op">=</span>{<span class="st">"displayModeBar"</span>: <span class="va">False</span>, <span class="st">"showTips"</span>: <span class="va">False</span>}) <span class="co"># Remove floating menu and unnecesary dialog box</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a><span class="co"># Simulate data</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>returns_A <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>returns_B <span class="op">=</span> np.random.normal(<span class="fl">0.01</span>, <span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a>returns <span class="op">=</span> np.append(returns_A, returns_B)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a>prices_A <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_A.cumsum())</span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a>prices_B <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> np.exp(returns_B.cumsum())</span>
+<span id="cb5-12"><a href="#cb5-12" aria-label="12"></a>prices <span class="op">=</span> np.append(prices_A, prices_B)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-label="13"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-label="14"></a>companies <span class="op">=</span> [<span class="st">"A"</span>] <span class="op">*</span> <span class="dv">100</span> <span class="op">+</span> [<span class="st">"B"</span>] <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-label="15"></a>time <span class="op">=</span> np.append(np.arange(<span class="dv">100</span>), np.arange(<span class="dv">100</span>))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-label="16"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-label="17"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-18"><a href="#cb5-18" aria-label="18"></a>    <span class="st">"company"</span>: companies,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-label="19"></a>    <span class="st">"time"</span>: time,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-label="20"></a>    <span class="st">"price"</span>: prices,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-label="21"></a>    <span class="st">"returns"</span>: returns</span>
+<span id="cb5-22"><a href="#cb5-22" aria-label="22"></a>})</span>
+<span id="cb5-23"><a href="#cb5-23" aria-label="23"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-label="24"></a><span class="co"># Build graph</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-label="25"></a>layout <span class="op">=</span> go.Layout(</span>
+<span id="cb5-26"><a href="#cb5-26" aria-label="26"></a>    title<span class="op">=</span><span class="st">"Performance of A vs. B"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-label="27"></a>    plot_bgcolor<span class="op">=</span><span class="st">"#FFFFFF"</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-label="28"></a>    legend<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-29"><a href="#cb5-29" aria-label="29"></a>        <span class="co"># Adjust click behavior</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-label="30"></a>        itemclick<span class="op">=</span><span class="st">"toggleothers"</span>,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-label="31"></a>        itemdoubleclick<span class="op">=</span><span class="st">"toggle"</span>,</span>
+<span id="cb5-32"><a href="#cb5-32" aria-label="32"></a>    ),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-label="33"></a>    xaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-34"><a href="#cb5-34" aria-label="34"></a>        title<span class="op">=</span><span class="st">"time"</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-label="35"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-label="36"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-label="37"></a>    ),</span>
+<span id="cb5-38"><a href="#cb5-38" aria-label="38"></a>    yaxis<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb5-39"><a href="#cb5-39" aria-label="39"></a>        title<span class="op">=</span><span class="st">"price"</span>,</span>
+<span id="cb5-40"><a href="#cb5-40" aria-label="40"></a>        linecolor<span class="op">=</span><span class="st">"#BCCCDC"</span>,</span>
+<span id="cb5-41"><a href="#cb5-41" aria-label="41"></a>        fixedrange<span class="op">=</span><span class="va">True</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-label="42"></a>    )</span>
+<span id="cb5-43"><a href="#cb5-43" aria-label="43"></a>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-label="44"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-label="45"></a>data <span class="op">=</span> []</span>
+<span id="cb5-46"><a href="#cb5-46" aria-label="46"></a><span class="cf">for</span> company <span class="kw">in</span> [<span class="st">"A"</span>, <span class="st">"B"</span>]:</span>
+<span id="cb5-47"><a href="#cb5-47" aria-label="47"></a>    time <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"time"</span>]</span>
+<span id="cb5-48"><a href="#cb5-48" aria-label="48"></a>    price <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"price"</span>]</span>
+<span id="cb5-49"><a href="#cb5-49" aria-label="49"></a>    returns <span class="op">=</span> df.loc[df.company <span class="op">==</span> company, <span class="st">"returns"</span>]</span>
+<span id="cb5-50"><a href="#cb5-50" aria-label="50"></a>    line_chart <span class="op">=</span> go.Scatter(</span>
+<span id="cb5-51"><a href="#cb5-51" aria-label="51"></a>        x<span class="op">=</span>time,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-label="52"></a>        y<span class="op">=</span>price,</span>
+<span id="cb5-53"><a href="#cb5-53" aria-label="53"></a>        name<span class="op">=</span>company</span>
+<span id="cb5-54"><a href="#cb5-54" aria-label="54"></a>    )</span>
+<span id="cb5-55"><a href="#cb5-55" aria-label="55"></a>    data.append(line_chart)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-label="56"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-label="57"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>data, layout<span class="op">=</span>layout)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-label="58"></a>fig.show(config<span class="op">=</span>{<span class="st">"displayModeBar"</span>: <span class="va">False</span>, <span class="st">"showTips"</span>: <span class="va">False</span>}) <span class="co"># Remove floating menu and unnecesary dialog box</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is the resulting graph:</p>
 <iframe class="plotly-graph" src="https://chart-studio.plotly.com/~dylanjcastillo/716.embed?autosize=true&amp;link=false&amp;modebar=false">
 </iframe>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -240,7 +243,7 @@ Subscribe to my newsletter
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">July 24, 2026</p>
+      <p class="date-modified">July 26, 2026</p>
     </div>
   </div>
     
@@ -264,29 +267,29 @@ Subscribe to my newsletter
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>After a first failed attempt, I realized that Pydantic AI uses asyncio under the hood, so you need to enable <code>nest_asyncio</code> to use it in a notebook.</p>
 <div id="2a607486" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> nest_asyncio</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">import</span> nest_asyncio</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>nest_asyncio.<span class="bu">apply</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, I did the imports as usual. I hadn’t used <code>logfire</code> for monitoring LLM applications before, so I thought it’d be a good idea to try it out.</p>
 <div id="4081c493" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> os</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">import</span> logfire</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> requests</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent</span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="im">import</span> logfire</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a><span class="im">import</span> requests</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="im">from</span> pydantic_ai <span class="im">import</span> Agent</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a>load_dotenv()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>PydanticAI instrumentation uses OpenTelemetry (OTel). So it’s pretty straightforward to use it with Logfire or with any other OTel-compatible observability tool.</p>
 <p>You just need to create a project in Logfire, generate a <code>Write token</code> and add it to the <code>.env</code> file. Then, you just need to run:</p>
 <div id="014a1f88" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>logfire.configure(</span>
-<span id="cb3-2"><a href="#cb3-2"></a>    token<span class="op">=</span>os.getenv(<span class="st">'LOGFIRE_TOKEN'</span>),</span>
-<span id="cb3-3"><a href="#cb3-3"></a>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>logfire.configure(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>    token<span class="op">=</span>os.getenv(<span class="st">'LOGFIRE_TOKEN'</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>logfire.instrument_pydantic_ai()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This will ask you to select a project the first time you run it. It will generate a <code>logfire_credentials.json</code> file in your working directory. In following runs, it will automatically use the credentials from the file.</p>
 </section>
@@ -295,46 +298,46 @@ Subscribe to my newsletter
 <p>I decided to make an agent that had access to a tool to get the weather and another one that checks if the response that’s going to be sent to the user follows the company guidelines.</p>
 <p>Here’s the code:</p>
 <div id="d4edf351" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">class</span> Feedback(BaseModel):</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    feedback: <span class="bu">str</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>    status: Literal[<span class="st">'OK'</span>, <span class="st">'REQUIRES FIXING'</span>]</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>evaluator_agent <span class="op">=</span> Agent(</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb4-10"><a href="#cb4-10"></a>        <span class="st">"You're a helpful assistant. Your task is to check if a given response follows the company guidelines. The company guidelines are that responses should be written in the style of a haiku. You should reply with 'OK' or 'REQUIRES FIXING' and a short explanation."</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>    ),</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    output_type<span class="op">=</span>Feedback,</span>
-<span id="cb4-13"><a href="#cb4-13"></a>)</span>
-<span id="cb4-14"><a href="#cb4-14"></a></span>
-<span id="cb4-15"><a href="#cb4-15"></a>react_agent <span class="op">=</span> Agent(  </span>
-<span id="cb4-16"><a href="#cb4-16"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
-<span id="cb4-17"><a href="#cb4-17"></a>    system_prompt<span class="op">=</span>(</span>
-<span id="cb4-18"><a href="#cb4-18"></a>        <span class="st">"You're a helpful assistant. Use the tools provided when relevant. Then draft a response and check if it follows the company guidelines. Only respond to the user after you've validated and modified the response if needed."</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>    ),</span>
-<span id="cb4-20"><a href="#cb4-20"></a>)</span>
-<span id="cb4-21"><a href="#cb4-21"></a></span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="at">@react_agent.tool_plain</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="kw">def</span> get_weather(latitude: <span class="bu">float</span>, longitude: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb4-25"><a href="#cb4-25"></a>    <span class="co">"""Get the weather of a given latitude and longitude"""</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a>    response <span class="op">=</span> requests.get(</span>
-<span id="cb4-27"><a href="#cb4-27"></a>        <span class="ss">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc">{</span>latitude<span class="sc">}</span><span class="ss">&amp;longitude=</span><span class="sc">{</span>longitude<span class="sc">}</span><span class="ss">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a>    )</span>
-<span id="cb4-29"><a href="#cb4-29"></a>    data <span class="op">=</span> response.json()</span>
-<span id="cb4-30"><a href="#cb4-30"></a>    <span class="cf">return</span> <span class="bu">str</span>(data[<span class="st">"current"</span>][<span class="st">"temperature_2m"</span>])</span>
-<span id="cb4-31"><a href="#cb4-31"></a></span>
-<span id="cb4-32"><a href="#cb4-32"></a></span>
-<span id="cb4-33"><a href="#cb4-33"></a><span class="at">@react_agent.tool_plain</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a><span class="kw">def</span> check_guidelines(drafted_response: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb4-35"><a href="#cb4-35"></a>    <span class="co">"""Check if a given response follows the company guidelines"""</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>    response <span class="op">=</span> evaluator_agent.run_sync(drafted_response)</span>
-<span id="cb4-37"><a href="#cb4-37"></a>    <span class="cf">return</span> response.output</span>
-<span id="cb4-38"><a href="#cb4-38"></a></span>
-<span id="cb4-39"><a href="#cb4-39"></a></span>
-<span id="cb4-40"><a href="#cb4-40"></a>response <span class="op">=</span> react_agent.run_sync(<span class="st">"What is the temperature in Madrid?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a><span class="kw">class</span> Feedback(BaseModel):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>    feedback: <span class="bu">str</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a>    status: Literal[<span class="st">'OK'</span>, <span class="st">'REQUIRES FIXING'</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a>evaluator_agent <span class="op">=</span> Agent(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a>        <span class="st">"You're a helpful assistant. Your task is to check if a given response follows the company guidelines. The company guidelines are that responses should be written in the style of a haiku. You should reply with 'OK' or 'REQUIRES FIXING' and a short explanation."</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a>    ),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a>    output_type<span class="op">=</span>Feedback,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-label="14"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-label="15"></a>react_agent <span class="op">=</span> Agent(  </span>
+<span id="cb4-16"><a href="#cb4-16" aria-label="16"></a>    <span class="st">'openai:gpt-4.1-mini'</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-label="17"></a>    system_prompt<span class="op">=</span>(</span>
+<span id="cb4-18"><a href="#cb4-18" aria-label="18"></a>        <span class="st">"You're a helpful assistant. Use the tools provided when relevant. Then draft a response and check if it follows the company guidelines. Only respond to the user after you've validated and modified the response if needed."</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-label="19"></a>    ),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-label="20"></a>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-label="21"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-label="22"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-label="23"></a><span class="at">@react_agent.tool_plain</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-label="24"></a><span class="kw">def</span> get_weather(latitude: <span class="bu">float</span>, longitude: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-label="25"></a>    <span class="co">"""Get the weather of a given latitude and longitude"""</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-label="26"></a>    response <span class="op">=</span> requests.get(</span>
+<span id="cb4-27"><a href="#cb4-27" aria-label="27"></a>        <span class="ss">f"https://api.open-meteo.com/v1/forecast?latitude=</span><span class="sc">{</span>latitude<span class="sc">}</span><span class="ss">&amp;longitude=</span><span class="sc">{</span>longitude<span class="sc">}</span><span class="ss">&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m,relative_humidity_2m,wind_speed_10m"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-label="28"></a>    )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-label="29"></a>    data <span class="op">=</span> response.json()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-label="30"></a>    <span class="cf">return</span> <span class="bu">str</span>(data[<span class="st">"current"</span>][<span class="st">"temperature_2m"</span>])</span>
+<span id="cb4-31"><a href="#cb4-31" aria-label="31"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-label="32"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-label="33"></a><span class="at">@react_agent.tool_plain</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-label="34"></a><span class="kw">def</span> check_guidelines(drafted_response: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-35"><a href="#cb4-35" aria-label="35"></a>    <span class="co">"""Check if a given response follows the company guidelines"""</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-label="36"></a>    response <span class="op">=</span> evaluator_agent.run_sync(drafted_response)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-label="37"></a>    <span class="cf">return</span> response.output</span>
+<span id="cb4-38"><a href="#cb4-38" aria-label="38"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-label="39"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-label="40"></a>response <span class="op">=</span> react_agent.run_sync(<span class="st">"What is the temperature in Madrid?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>18:57:42.206 react_agent run
 18:57:42.208   chat gpt-4.1-mini
@@ -350,7 +353,7 @@ Subscribe to my newsletter
 </div>
 <p>And here’s the output:</p>
 <div id="d74111c3" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">print</span>(response.output)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="bu">print</span>(response.output)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>In Madrid sunshine,
 Temperature climbs so high,

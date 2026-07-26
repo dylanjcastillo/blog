@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -15,10 +15,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -78,10 +81,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0ac2d6ea832bd90f0611071b0391ab4d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8ca59788ad6f9220c3cf5f948d801f7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
@@ -295,74 +298,74 @@ Subscribe to my newsletter
 <section id="code-and-jinja-template" class="level2">
 <h2 class="anchored" data-anchor-id="code-and-jinja-template">Code and Jinja Template</h2>
 <p>First, create a directory called <code>my_pokemon_stats</code> and open a terminal from there. Then, create a virtual environment and install the required packages as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">source</span> venv/bin/activate</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">pip3</span> install boto3 gspread jinja2 oauth2client</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="bu">source</span> venv/bin/activate</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="ex">pip3</span> install boto3 gspread jinja2 oauth2client</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Create virtual environment and install required libraries</p>
 <p>Next, download and save these two files there: <a href="https://gist.github.com/dylanjcastillo/61018bf4474d388e2936a84368d40d07">template.html</a> and <a href="https://gist.github.com/dylanjcastillo/fbbdcb83694c2334714866340442ce18">site_builder.py</a>. These are the building blocks for generating the site.</p>
 <p><code>template.html</code> is the Jinja template we will use for building the site. It’s an HTML-like file where you can add logic that will be processed in Python and generate the definitive site. This file looks as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="dt">&lt;</span><span class="kw">meta</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="ot">      name</span><span class="op">=</span><span class="st">"viewport"</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="ot">      content</span><span class="op">=</span><span class="st">"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> http-equiv</span><span class="op">=</span><span class="st">"X-UA-Compatible"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"ie=edge"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="dt">&lt;</span><span class="kw">link</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="ot">      href</span><span class="op">=</span><span class="st">"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="ot">      rel</span><span class="op">=</span><span class="st">"stylesheet"</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="ot">      integrity</span><span class="op">=</span><span class="st">"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="ot">      crossorigin</span><span class="op">=</span><span class="st">"anonymous"</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>My Pokemon Stats<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a>    <span class="dt">&lt;</span><span class="kw">header</span><span class="ot"> id</span><span class="op">=</span><span class="st">"header"</span><span class="dt">&gt;</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container text-center"</span><span class="dt">&gt;</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a>        <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"pt-5 pb-1 font-weight-bold"</span><span class="dt">&gt;</span>My Pokemon Stats<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a>        <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a>        <span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> class</span><span class="op">=</span><span class="st">"pt-2"</span><span class="dt">&gt;</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a>          This is a site I use to store the stats of all my Pokemon.</span>
-<span id="cb2-25"><a href="#cb2-25"></a>        <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a>    <span class="dt">&lt;/</span><span class="kw">header</span><span class="dt">&gt;</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a></span>
-<span id="cb2-29"><a href="#cb2-29"></a>    <span class="dt">&lt;</span><span class="kw">section</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pokemon_table"</span><span class="dt">&gt;</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container py-4"</span><span class="dt">&gt;</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a>        <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"table-responsive"</span><span class="dt">&gt;</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a>          <span class="dt">&lt;</span><span class="kw">table</span><span class="ot"> class</span><span class="op">=</span><span class="st">"table table-hover"</span><span class="dt">&gt;</span></span>
-<span id="cb2-33"><a href="#cb2-33"></a>            <span class="dt">&lt;</span><span class="kw">thead</span><span class="ot"> class</span><span class="op">=</span><span class="st">"thead-dark"</span><span class="dt">&gt;</span></span>
-<span id="cb2-34"><a href="#cb2-34"></a>              <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Name<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-36"><a href="#cb2-36"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Type 1<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-37"><a href="#cb2-37"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Type 2<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-38"><a href="#cb2-38"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Total<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-39"><a href="#cb2-39"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>HP<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-40"><a href="#cb2-40"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Attack<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-41"><a href="#cb2-41"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Defense<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
-<span id="cb2-42"><a href="#cb2-42"></a>              <span class="dt">&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-43"><a href="#cb2-43"></a>            <span class="dt">&lt;/</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
-<span id="cb2-44"><a href="#cb2-44"></a>            <span class="dt">&lt;</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
-<span id="cb2-45"><a href="#cb2-45"></a>              {% for row in data %}</span>
-<span id="cb2-46"><a href="#cb2-46"></a>              <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-47"><a href="#cb2-47"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Name"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-48"><a href="#cb2-48"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Type 1"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-49"><a href="#cb2-49"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Type 2"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-50"><a href="#cb2-50"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Total"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-51"><a href="#cb2-51"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["HP"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-52"><a href="#cb2-52"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Attack"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-53"><a href="#cb2-53"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Defense"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
-<span id="cb2-54"><a href="#cb2-54"></a>              <span class="dt">&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-55"><a href="#cb2-55"></a>              {% endfor %}</span>
-<span id="cb2-56"><a href="#cb2-56"></a>            <span class="dt">&lt;/</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
-<span id="cb2-57"><a href="#cb2-57"></a>          <span class="dt">&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
-<span id="cb2-58"><a href="#cb2-58"></a>        <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-59"><a href="#cb2-59"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-60"><a href="#cb2-60"></a>    <span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span>
-<span id="cb2-61"><a href="#cb2-61"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-62"><a href="#cb2-62"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a>    <span class="dt">&lt;</span><span class="kw">meta</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a><span class="ot">      name</span><span class="op">=</span><span class="st">"viewport"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a><span class="ot">      content</span><span class="op">=</span><span class="st">"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> http-equiv</span><span class="op">=</span><span class="st">"X-UA-Compatible"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"ie=edge"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a>    <span class="dt">&lt;</span><span class="kw">link</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a><span class="ot">      href</span><span class="op">=</span><span class="st">"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a><span class="ot">      rel</span><span class="op">=</span><span class="st">"stylesheet"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a><span class="ot">      integrity</span><span class="op">=</span><span class="st">"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a><span class="ot">      crossorigin</span><span class="op">=</span><span class="st">"anonymous"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a><span class="ot">    </span><span class="dt">/&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>My Pokemon Stats<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-label="17"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-label="18"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-label="19"></a>    <span class="dt">&lt;</span><span class="kw">header</span><span class="ot"> id</span><span class="op">=</span><span class="st">"header"</span><span class="dt">&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-label="20"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container text-center"</span><span class="dt">&gt;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-label="21"></a>        <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"pt-5 pb-1 font-weight-bold"</span><span class="dt">&gt;</span>My Pokemon Stats<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-label="22"></a>        <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-label="23"></a>        <span class="dt">&lt;</span><span class="kw">p</span><span class="ot"> class</span><span class="op">=</span><span class="st">"pt-2"</span><span class="dt">&gt;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-label="24"></a>          This is a site I use to store the stats of all my Pokemon.</span>
+<span id="cb2-25"><a href="#cb2-25" aria-label="25"></a>        <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-label="26"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-label="27"></a>    <span class="dt">&lt;/</span><span class="kw">header</span><span class="dt">&gt;</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-label="28"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-label="29"></a>    <span class="dt">&lt;</span><span class="kw">section</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pokemon_table"</span><span class="dt">&gt;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-label="30"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container py-4"</span><span class="dt">&gt;</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-label="31"></a>        <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"table-responsive"</span><span class="dt">&gt;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-label="32"></a>          <span class="dt">&lt;</span><span class="kw">table</span><span class="ot"> class</span><span class="op">=</span><span class="st">"table table-hover"</span><span class="dt">&gt;</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-label="33"></a>            <span class="dt">&lt;</span><span class="kw">thead</span><span class="ot"> class</span><span class="op">=</span><span class="st">"thead-dark"</span><span class="dt">&gt;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-label="34"></a>              <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-label="35"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Name<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-label="36"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Type 1<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-label="37"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Type 2<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-label="38"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Total<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-label="39"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>HP<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-label="40"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Attack<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-label="41"></a>                <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">"col"</span><span class="dt">&gt;</span>Defense<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-label="42"></a>              <span class="dt">&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-label="43"></a>            <span class="dt">&lt;/</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-label="44"></a>            <span class="dt">&lt;</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-label="45"></a>              {% for row in data %}</span>
+<span id="cb2-46"><a href="#cb2-46" aria-label="46"></a>              <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-label="47"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Name"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-label="48"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Type 1"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-label="49"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Type 2"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-label="50"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Total"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-label="51"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["HP"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-label="52"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Attack"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-label="53"></a>                <span class="dt">&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>{{ row["Defense"] }}<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-label="54"></a>              <span class="dt">&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-label="55"></a>              {% endfor %}</span>
+<span id="cb2-56"><a href="#cb2-56" aria-label="56"></a>            <span class="dt">&lt;/</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-label="57"></a>          <span class="dt">&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-label="58"></a>        <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-label="59"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-label="60"></a>    <span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-label="61"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-label="62"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Let’s break it down:</p>
 <ul>
 <li>You can safely ignore most of what’s inside the <code>&lt;head&gt;</code> tag. It’s standard HTML5 code that you’ll see in most pages. However, there are just two interesting tags that we’ll take a closer a look at: <code>&lt;link&gt;</code> and <code>&lt;title&gt;</code>.</li>
@@ -378,70 +381,70 @@ Subscribe to my newsletter
 <p><a href="images/build-a-site-quickly-using-google-sheets-python-and-aws/image-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/build-a-site-quickly-using-google-sheets-python-and-aws/image-4.png" class="img-fluid"></a></p>
 <p>Table with Pokemon stats</p>
 <p>Next, we have the <code>site_builder.py</code> file. This script downloads the Pokemon’s data from Google Sheets, processes the data and the <code>template.html</code> file, and then uploads the resulting file to an S3 bucket.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> csv</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="im">import</span> boto3</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="im">import</span> gspread</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="im">import</span> jinja2</span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="im">from</span> oauth2client.service_account <span class="im">import</span> ServiceAccountCredentials</span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a>AWS_PROFILE <span class="op">=</span> <span class="st">"INSERT-AWS-PROFILE-HERE"</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a>BUCKET <span class="op">=</span> <span class="st">"INSERT-BUCKET-NAME-HERE"</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>WORKBOOK <span class="op">=</span> <span class="st">"INSERT-WORKBOOK-NAME-HERE"</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a></span>
-<span id="cb3-12"><a href="#cb3-12"></a></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="kw">def</span> download_data():</span>
-<span id="cb3-14"><a href="#cb3-14"></a>    <span class="co">"""Download data using the Google Sheets API"""</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>    scope <span class="op">=</span> [</span>
-<span id="cb3-16"><a href="#cb3-16"></a>        <span class="st">"https://spreadsheets.google.com/feeds"</span>,</span>
-<span id="cb3-17"><a href="#cb3-17"></a>        <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
-<span id="cb3-18"><a href="#cb3-18"></a>    ]</span>
-<span id="cb3-19"><a href="#cb3-19"></a>    credentials <span class="op">=</span> ServiceAccountCredentials.from_json_keyfile_name(</span>
-<span id="cb3-20"><a href="#cb3-20"></a>        <span class="st">"credentials.json"</span>, scope</span>
-<span id="cb3-21"><a href="#cb3-21"></a>    )</span>
-<span id="cb3-22"><a href="#cb3-22"></a>    client <span class="op">=</span> gspread.authorize(credentials)</span>
-<span id="cb3-23"><a href="#cb3-23"></a></span>
-<span id="cb3-24"><a href="#cb3-24"></a>    worksheet <span class="op">=</span> client.<span class="bu">open</span>(WORKBOOK).get_worksheet(<span class="dv">0</span>)</span>
-<span id="cb3-25"><a href="#cb3-25"></a>    sheet_values <span class="op">=</span> worksheet.get_all_values()</span>
-<span id="cb3-26"><a href="#cb3-26"></a></span>
-<span id="cb3-27"><a href="#cb3-27"></a>    <span class="bu">print</span>(<span class="ss">f"Downloading: </span><span class="sc">{</span>worksheet<span class="sc">.</span>title<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-28"><a href="#cb3-28"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"my_pokemon_stats.csv"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
-<span id="cb3-29"><a href="#cb3-29"></a>        writer <span class="op">=</span> csv.writer(f)</span>
-<span id="cb3-30"><a href="#cb3-30"></a>        writer.writerows(sheet_values)</span>
-<span id="cb3-31"><a href="#cb3-31"></a></span>
-<span id="cb3-32"><a href="#cb3-32"></a></span>
-<span id="cb3-33"><a href="#cb3-33"></a><span class="kw">def</span> generate_site():</span>
-<span id="cb3-34"><a href="#cb3-34"></a>    <span class="co">"""Generate site in local directory"""</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a>    <span class="bu">print</span>(<span class="st">"Process data and build site"</span>)</span>
-<span id="cb3-36"><a href="#cb3-36"></a></span>
-<span id="cb3-37"><a href="#cb3-37"></a>    template_loader <span class="op">=</span> jinja2.FileSystemLoader(searchpath<span class="op">=</span><span class="st">"./"</span>)</span>
-<span id="cb3-38"><a href="#cb3-38"></a>    template_env <span class="op">=</span> jinja2.Environment(loader<span class="op">=</span>template_loader)</span>
-<span id="cb3-39"><a href="#cb3-39"></a>    template <span class="op">=</span> template_env.get_template(<span class="st">"template.html"</span>)</span>
-<span id="cb3-40"><a href="#cb3-40"></a></span>
-<span id="cb3-41"><a href="#cb3-41"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"my_pokemon_stats.csv"</span>) <span class="im">as</span> csv_file:</span>
-<span id="cb3-42"><a href="#cb3-42"></a>        csv_reader <span class="op">=</span> csv.DictReader(csv_file)</span>
-<span id="cb3-43"><a href="#cb3-43"></a>        data <span class="op">=</span> [row <span class="cf">for</span> row <span class="kw">in</span> csv_reader]</span>
-<span id="cb3-44"><a href="#cb3-44"></a></span>
-<span id="cb3-45"><a href="#cb3-45"></a>    output <span class="op">=</span> template.render(data<span class="op">=</span>data)</span>
-<span id="cb3-46"><a href="#cb3-46"></a></span>
-<span id="cb3-47"><a href="#cb3-47"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"index.html"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
-<span id="cb3-48"><a href="#cb3-48"></a>        f.write(output)</span>
-<span id="cb3-49"><a href="#cb3-49"></a></span>
-<span id="cb3-50"><a href="#cb3-50"></a></span>
-<span id="cb3-51"><a href="#cb3-51"></a><span class="kw">def</span> deploy_site():</span>
-<span id="cb3-52"><a href="#cb3-52"></a>    <span class="co">"""Deploy site S3 bucket"""</span></span>
-<span id="cb3-53"><a href="#cb3-53"></a>    <span class="bu">print</span>(<span class="st">"Upload data to S3"</span>)</span>
-<span id="cb3-54"><a href="#cb3-54"></a>    session <span class="op">=</span> boto3.Session(profile_name<span class="op">=</span>AWS_PROFILE)</span>
-<span id="cb3-55"><a href="#cb3-55"></a>    s3 <span class="op">=</span> session.resource(<span class="st">"s3"</span>)</span>
-<span id="cb3-56"><a href="#cb3-56"></a>    s3.Bucket(BUCKET).upload_file(</span>
-<span id="cb3-57"><a href="#cb3-57"></a>        Filename<span class="op">=</span><span class="st">"index.html"</span>, Key<span class="op">=</span><span class="st">"index.html"</span>, ExtraArgs<span class="op">=</span>{<span class="st">"ContentType"</span>: <span class="st">"text/html"</span>}</span>
-<span id="cb3-58"><a href="#cb3-58"></a>    )</span>
-<span id="cb3-59"><a href="#cb3-59"></a></span>
-<span id="cb3-60"><a href="#cb3-60"></a></span>
-<span id="cb3-61"><a href="#cb3-61"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb3-62"><a href="#cb3-62"></a>    download_data()</span>
-<span id="cb3-63"><a href="#cb3-63"></a>    generate_site()</span>
-<span id="cb3-64"><a href="#cb3-64"></a>    deploy_site()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="im">import</span> csv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a><span class="im">import</span> boto3</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a><span class="im">import</span> gspread</span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a><span class="im">import</span> jinja2</span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a><span class="im">from</span> oauth2client.service_account <span class="im">import</span> ServiceAccountCredentials</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>AWS_PROFILE <span class="op">=</span> <span class="st">"INSERT-AWS-PROFILE-HERE"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a>BUCKET <span class="op">=</span> <span class="st">"INSERT-BUCKET-NAME-HERE"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a>WORKBOOK <span class="op">=</span> <span class="st">"INSERT-WORKBOOK-NAME-HERE"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-label="12"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-label="13"></a><span class="kw">def</span> download_data():</span>
+<span id="cb3-14"><a href="#cb3-14" aria-label="14"></a>    <span class="co">"""Download data using the Google Sheets API"""</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-label="15"></a>    scope <span class="op">=</span> [</span>
+<span id="cb3-16"><a href="#cb3-16" aria-label="16"></a>        <span class="st">"https://spreadsheets.google.com/feeds"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-label="17"></a>        <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-label="18"></a>    ]</span>
+<span id="cb3-19"><a href="#cb3-19" aria-label="19"></a>    credentials <span class="op">=</span> ServiceAccountCredentials.from_json_keyfile_name(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-label="20"></a>        <span class="st">"credentials.json"</span>, scope</span>
+<span id="cb3-21"><a href="#cb3-21" aria-label="21"></a>    )</span>
+<span id="cb3-22"><a href="#cb3-22" aria-label="22"></a>    client <span class="op">=</span> gspread.authorize(credentials)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-label="23"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-label="24"></a>    worksheet <span class="op">=</span> client.<span class="bu">open</span>(WORKBOOK).get_worksheet(<span class="dv">0</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-label="25"></a>    sheet_values <span class="op">=</span> worksheet.get_all_values()</span>
+<span id="cb3-26"><a href="#cb3-26" aria-label="26"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-label="27"></a>    <span class="bu">print</span>(<span class="ss">f"Downloading: </span><span class="sc">{</span>worksheet<span class="sc">.</span>title<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-label="28"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"my_pokemon_stats.csv"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb3-29"><a href="#cb3-29" aria-label="29"></a>        writer <span class="op">=</span> csv.writer(f)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-label="30"></a>        writer.writerows(sheet_values)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-label="31"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-label="32"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-label="33"></a><span class="kw">def</span> generate_site():</span>
+<span id="cb3-34"><a href="#cb3-34" aria-label="34"></a>    <span class="co">"""Generate site in local directory"""</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-label="35"></a>    <span class="bu">print</span>(<span class="st">"Process data and build site"</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-label="36"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-label="37"></a>    template_loader <span class="op">=</span> jinja2.FileSystemLoader(searchpath<span class="op">=</span><span class="st">"./"</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-label="38"></a>    template_env <span class="op">=</span> jinja2.Environment(loader<span class="op">=</span>template_loader)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-label="39"></a>    template <span class="op">=</span> template_env.get_template(<span class="st">"template.html"</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-label="40"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-label="41"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"my_pokemon_stats.csv"</span>) <span class="im">as</span> csv_file:</span>
+<span id="cb3-42"><a href="#cb3-42" aria-label="42"></a>        csv_reader <span class="op">=</span> csv.DictReader(csv_file)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-label="43"></a>        data <span class="op">=</span> [row <span class="cf">for</span> row <span class="kw">in</span> csv_reader]</span>
+<span id="cb3-44"><a href="#cb3-44" aria-label="44"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-label="45"></a>    output <span class="op">=</span> template.render(data<span class="op">=</span>data)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-label="46"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-label="47"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"index.html"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb3-48"><a href="#cb3-48" aria-label="48"></a>        f.write(output)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-label="49"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-label="50"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-label="51"></a><span class="kw">def</span> deploy_site():</span>
+<span id="cb3-52"><a href="#cb3-52" aria-label="52"></a>    <span class="co">"""Deploy site S3 bucket"""</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-label="53"></a>    <span class="bu">print</span>(<span class="st">"Upload data to S3"</span>)</span>
+<span id="cb3-54"><a href="#cb3-54" aria-label="54"></a>    session <span class="op">=</span> boto3.Session(profile_name<span class="op">=</span>AWS_PROFILE)</span>
+<span id="cb3-55"><a href="#cb3-55" aria-label="55"></a>    s3 <span class="op">=</span> session.resource(<span class="st">"s3"</span>)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-label="56"></a>    s3.Bucket(BUCKET).upload_file(</span>
+<span id="cb3-57"><a href="#cb3-57" aria-label="57"></a>        Filename<span class="op">=</span><span class="st">"index.html"</span>, Key<span class="op">=</span><span class="st">"index.html"</span>, ExtraArgs<span class="op">=</span>{<span class="st">"ContentType"</span>: <span class="st">"text/html"</span>}</span>
+<span id="cb3-58"><a href="#cb3-58" aria-label="58"></a>    )</span>
+<span id="cb3-59"><a href="#cb3-59" aria-label="59"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-label="60"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-label="61"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb3-62"><a href="#cb3-62" aria-label="62"></a>    download_data()</span>
+<span id="cb3-63"><a href="#cb3-63" aria-label="63"></a>    generate_site()</span>
+<span id="cb3-64"><a href="#cb3-64" aria-label="64"></a>    deploy_site()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The code is structured in 3 functions: <code>download_sheets</code>, <code>generate_site</code>, and <code>deploy_site</code>. We will fill the details for accessing AWS and the Google Sheets API in the next sections.</p>
 </section>
 <section id="using-the-google-sheets-api" class="level2">
@@ -474,18 +477,18 @@ Subscribe to my newsletter
 <li>Clear <em>Block all public access</em>, choose <em>Save</em>, and confirm. <strong>When you change this anyone on the internet will have access to the contents of this bucket</strong>. That’s what you want when you are publishing a site, however don’t put anything private there!</li>
 <li>Now go to <em>Bucket Policy</em>, replace the bucket name in the policy below, paste it there, and click Save.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">{</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="fu">{</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"PublicReadGetObject"</span><span class="fu">,</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>      <span class="dt">"Principal"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span><span class="ot">]</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>    <span class="fu">}</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>  <span class="ot">]</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>  <span class="dt">"Version"</span><span class="fu">:</span> <span class="st">"2012-10-17"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>  <span class="dt">"Statement"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>    <span class="fu">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a>      <span class="dt">"Sid"</span><span class="fu">:</span> <span class="st">"PublicReadGetObject"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a>      <span class="dt">"Effect"</span><span class="fu">:</span> <span class="st">"Allow"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a>      <span class="dt">"Principal"</span><span class="fu">:</span> <span class="st">"*"</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a>      <span class="dt">"Action"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"s3:GetObject"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a>      <span class="dt">"Resource"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"arn:aws:s3:::BUCKET-NAME-HERE/*"</span><span class="ot">]</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a>    <span class="fu">}</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a>  <span class="ot">]</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="10" type="1">
 <li>Go to the <code>site_builder.py</code> script. Set the variable <code>AWS_PROFILE</code> variable to the profile name you use for accessing AWS (in a UNIX sytem it should be one of the profiles in <code>~/.aws/credentials</code>).</li>
 </ol>
