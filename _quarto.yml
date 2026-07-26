@@ -24,11 +24,11 @@ website:
       - text: "About"
         href: about.qmd
     right:
-      - text: "{{< iconify fa6-brands github >}}"
+      - text: "{{< iconify simple-icons github >}}"
         href: https://github.com/dylanjcastillo
-      - text: "{{< iconify fa6-brands linkedin >}}"
+      - text: "{{< iconify simple-icons linkedin >}}"
         href: https://www.linkedin.com/in/dylanjcastillo/
-      - text: "{{< iconify fa6-solid rss >}}"
+      - text: "{{< iconify simple-icons rss >}}"
         href: index.xml
   page-footer:
     left: "© Dylan Castillo"
