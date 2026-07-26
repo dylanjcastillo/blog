@@ -224,6 +224,25 @@ $code-block-bg: black;
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Quarto's CSS reserves 82px for the fixed navbar and its JS then corrects
+// the body padding to the real height after load, which makes every page
+// jump vertically on navigation. Reserve the actual heights up front (the
+// JS correction stays as a safety net if these drift).
+body.nav-fixed {
+  padding-top: 68px;
+  @media (min-width: 992px) {
+    padding-top: 78px;
+  }
+}
+
+// Always show the scrollbar track so the centered grid doesn't shift
+// horizontally when navigating between pages that scroll and pages that
+// don't (only matters with classic, non-overlay scrollbars;
+// scrollbar-gutter alone isn't honored on the root in Chrome here)
+html {
+  overflow-y: scroll;
+}
+
 // Navbar: lay it out on the same page-columns grid as the content, so the
 // first nav link shares the content column's left edge on every page type
 // and breakpoint
@@ -241,7 +260,7 @@ $code-block-bg: black;
   padding-bottom: 0;
   &::after {
     content: "";
-    grid-column: body-content-start / page-end;
+    grid-column: body-content-start / body-content-end;
     height: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     // While collapsed to a hamburger the navbar reads as an app bar, so the
@@ -250,9 +269,11 @@ $code-block-bg: black;
       grid-column: screen-start / screen-end;
     }
   }
+  // Span exactly the text column (like the h2 underlines); the sidebar
+  // hangs outside the navbar's width
   .navbar-container {
     padding: 0;
-    grid-column: body-content-start / page-end;
+    grid-column: body-content-start / body-content-end;
   }
   .navbar-title {
     font-weight: 600;
@@ -345,25 +366,31 @@ main.content.column-page-left {
   }
 }
 
-// Pages without margin content (about, projects) have nothing in the
-// sidebar band, so let their content expand across it — same span as the
-// navbar — instead of leaving a lopsided empty area. The grid centers the
-// content+margin frame, so these pages read as centered.
-// (about's jolla template makes .quarto-about-jolla the grid item, with
-// main.content nested inside it as a flex child)
-body.fullcontent main.content,
-body.fullcontent .quarto-about-jolla {
-  grid-column: body-content-start / page-end;
+// On screens wide enough to afford it, truly center the text column: the
+// unnamed 237.4px spacer after screen-start-inset mirrors the right margin
+// band, so the column (and the navbar above it) sits at the viewport center
+// on every page while the categories/TOC hang in the right margin. Below
+// this width the grid falls back to the left-anchored layout above. Must
+// stay after the other grid overrides so it wins the cascade. The .navbar
+// twin is written out because sass's @extend trims it as redundant next to
+// `body .navbar`, losing the specificity needed on about/projects.
+@media (min-width: 1350px) {
+  body .page-columns,
+  body.fullcontent:not(.floating):not(.docked) .page-columns,
+  body.fullcontent:not(.floating):not(.docked) .navbar {
+    grid-template-columns:
+      [screen-start] 24px
+      [screen-start-inset] minmax(0px, 237.4px) 5fr
+      [page-start page-start-inset] 0px [body-start-outset] 0px
+      [body-start] 24px
+      [body-content-start] minmax(500px, calc(750px - 48px))
+      [body-content-end] 24px [body-end] 38.64px
+      [body-end-outset] minmax(82.8px, 160.08px)
+      [page-end-inset] 38.64px [page-end] 5fr
+      [screen-end-inset] 24px [screen-end];
+  }
 }
 
-// Keep running text at a readable measure (~702px matches the article
-// column) and center it within the wide frame; tables (projects) stay
-// full-width since they're scanned, not read linearly
-body.fullcontent .quarto-about-jolla main.content {
-  max-width: 702px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 // Categories/TOC sidebar: hide its scrollbar so it doesn't clash with the
 // navbar (it still scrolls with the trackpad/wheel)
@@ -396,7 +423,7 @@ body.fullcontent .quarto-about-jolla main.content {
     padding: 0.15rem 0;
     // Same computed size/color as .listing-date/.listing-reading-time
     font-size: $font-size-base * 0.9;
-    color: $gray-300;
+    color: $gray-400;
     cursor: pointer;
 
     &:hover {
@@ -430,10 +457,14 @@ h6 {
 
 // Section headings: underline matching the site's divider style.
 // The id selector is needed to beat Quarto's h2:first-of-type overrides.
+// clear: both keeps the previous listing's right-floated pagination from
+// intruding into the heading's line box (it wrapped "Today I Learned (TIL)"
+// onto two lines on phones)
 #quarto-content h2:not(#toc-title) {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 0.4rem;
   margin-top: 1.5rem;
+  clear: both;
 }
 
 // Cleaner listings: no header row, subtle dividers, muted metadata
