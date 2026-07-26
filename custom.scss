@@ -345,6 +345,26 @@ main.content.column-page-left {
   }
 }
 
+// Pages without margin content (about, projects) have nothing in the
+// sidebar band, so let their content expand across it — same span as the
+// navbar — instead of leaving a lopsided empty area. The grid centers the
+// content+margin frame, so these pages read as centered.
+// (about's jolla template makes .quarto-about-jolla the grid item, with
+// main.content nested inside it as a flex child)
+body.fullcontent main.content,
+body.fullcontent .quarto-about-jolla {
+  grid-column: body-content-start / page-end;
+}
+
+// Keep running text at a readable measure (~702px matches the article
+// column) and center it within the wide frame; tables (projects) stay
+// full-width since they're scanned, not read linearly
+body.fullcontent .quarto-about-jolla main.content {
+  max-width: 702px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 // Categories/TOC sidebar: hide its scrollbar so it doesn't clash with the
 // navbar (it still scrolls with the trackpad/wheel)
 #quarto-margin-sidebar {
@@ -457,11 +477,12 @@ h6 {
   }
 
   // Projects: give the title column a fixed share so descriptions read cleanly
-  tr:has(.listing-description) td:first-child {
+  tr:has(.listing-description) td:has(.listing-title) {
     width: 30%;
     padding-right: 1.5rem;
     vertical-align: top;
   }
+
 }
 
 .quarto-about-jolla .content {
