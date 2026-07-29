@@ -174,3 +174,8 @@ _extras/pelicanmaxxing/data/analysis/*
 
 # Quarto intermediate notebooks
 *.quarto_ipynb
+_extras/matryoshka-vs-pca/data/*
+!_extras/matryoshka-vs-pca/data/analysis/
+_extras/matryoshka-vs-pca/data/analysis/*
+!_extras/matryoshka-vs-pca/data/analysis/*/
+!_extras/matryoshka-vs-pca/data/analysis/*/*.csv
