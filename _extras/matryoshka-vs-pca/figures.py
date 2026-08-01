@@ -76,16 +76,24 @@ def _layout(fig: go.Figure, title: str, height: int, legend: bool = True) -> go.
     return fig
 
 
-def _method_trace(sub: pd.DataFrame, method: str, metric: str, showlegend: bool) -> go.Scatter:
+def _method_trace(sub: pd.DataFrame, method: str, metric: str, showlegend: bool,
+                  raw_metric: str | None = None) -> go.Scatter:
     style = METHOD_STYLE[method]
     sub = sub.sort_values("dim")
+    y_fmt = ".1%" if metric == "retention" else ".4f"
+    hover = f"<b>{style['name']}</b><br>d=%{{x}}<br>{metric}=%{{y:{y_fmt}}}"
+    kwargs = {}
+    if raw_metric is not None:
+        kwargs["customdata"] = sub[raw_metric]
+        hover += f"<br>{raw_metric}=%{{customdata:.4f}}"
     return go.Scatter(
         x=sub["dim"], y=sub[metric],
         mode="lines+markers",
         name=style["name"], legendgroup=method, showlegend=showlegend,
         line=dict(color=style["color"], dash=style["dash"], width=2),
         marker=dict(size=6, color=style["color"]),
-        hovertemplate=f"<b>{style['name']}</b><br>d=%{{x}}<br>{metric}=%{{y:.4f}}<extra></extra>",
+        hovertemplate=hover + "<extra></extra>",
+        **kwargs,
     )
 
 
@@ -93,27 +101,33 @@ MAIN_METHODS = ("mrl", "pca_in")  # pca_ood is reported in its own section
 
 
 def fig_ndcg_by_dim(metric: str = "ndcg@10", methods=MAIN_METHODS) -> go.Figure:
-    """The main chart: one panel per dataset, one line per method, the
-    full-dim score as a dashed ceiling."""
+    """One panel per dataset, in the same units as the summary chart: share of
+    the full-dimension score retained. Each panel's full NDCG@10 is in its
+    title; the dashed line marks 100%."""
     df = _results()
     datasets = sorted(df["dataset"].unique())
+    fulls = df[df["method"] == "full"].set_index("dataset")[metric]
+    titles = [f"{name} (full {metric}: {fulls[name]:.3f})" for name in datasets]
     n_rows = (len(datasets) + 1) // 2
-    fig = make_subplots(rows=n_rows, cols=2, subplot_titles=datasets,
+    fig = make_subplots(rows=n_rows, cols=2, subplot_titles=titles,
                         shared_xaxes=False, vertical_spacing=0.4 / n_rows)
 
     for i, name in enumerate(datasets):
         row, col = i // 2 + 1, i % 2 + 1
-        sub = df[df["dataset"] == name]
-        full = sub.loc[sub["method"] == "full", metric].iloc[0]
+        sub = df[df["dataset"] == name].copy()
+        sub["retention"] = sub[metric] / fulls[name]
         for method in methods:
-            fig.add_trace(_method_trace(sub[sub["method"] == method], method, metric,
-                                        showlegend=(i == 0)), row=row, col=col)
-        fig.add_hline(y=full, line=dict(color=MUTED, dash="dash", width=1),
-                      annotation_text=f"full ({full:.3f})",
-                      annotation_font=dict(size=10, color=MUTED), row=row, col=col)
+            fig.add_trace(_method_trace(sub[sub["method"] == method], method, "retention",
+                                        showlegend=(i == 0), raw_metric=metric), row=row, col=col)
+        fig.add_hline(y=1.0, line=dict(color=MUTED, dash="dash", width=1), row=row, col=col)
 
-    _layout(fig, f"{metric.upper()} by embedding dimension", 200 + 240 * n_rows)
+    height = 200 + 240 * n_rows
+    _layout(fig, f"Share of full-dim {metric.upper()} retained, per dataset", height)
+    # The shared legend y is in paper coordinates, so on a tall multi-row
+    # figure -0.25 becomes hundreds of blank pixels; pin it to ~50px instead.
+    fig.update_layout(legend_y=-50 / (height - 100))
     fig.update_xaxes(type="log", tickvals=[32, 64, 128, 256, 512])
+    fig.update_yaxes(tickformat=".0%")
     for ann in fig.layout.annotations[:len(datasets)]:
         ann.font = dict(size=13, color=INK)
     return fig
@@ -126,7 +140,8 @@ def _retention_means(df: pd.DataFrame, metric: str) -> pd.DataFrame:
     full = df[df["method"] == "full"].set_index("dataset")[metric]
     sub = df[df["method"] != "full"].copy()
     sub["retention"] = sub.apply(lambda r: r[metric] / full[r["dataset"]], axis=1)
-    return sub.groupby(["method", "dim"])["retention"].mean().reset_index()
+    mean = sub.groupby(["method", "dim"])[["retention", metric]].mean().reset_index()
+    return mean.rename(columns={metric: f"avg {metric}"})
 
 
 def fig_retention(metric: str = "ndcg@10", include_ada: bool = True,
@@ -155,7 +170,8 @@ def fig_retention(metric: str = "ndcg@10", include_ada: bool = True,
     for col, (_, mean) in enumerate(panels, start=1):
         for method in methods:
             fig.add_trace(_method_trace(mean[mean["method"] == method], method, "retention",
-                                        showlegend=(col == 1)), row=1, col=col)
+                                        showlegend=(col == 1), raw_metric=f"avg {metric}"),
+                          row=1, col=col)
         fig.add_hline(y=1.0, line=dict(color=MUTED, dash="dash", width=1), row=1, col=col)
 
     _layout(fig, f"Share of full-dim {metric.upper()} retained (mean of {n_datasets} datasets)", 440)
@@ -167,14 +183,43 @@ def fig_retention(metric: str = "ndcg@10", include_ada: bool = True,
     return fig
 
 
-def fig_ood_gap(dim: int = 64, metric: str = "ndcg@10") -> go.Figure:
-    """Per dataset at one aggressive dim: does moving PCA's fit corpus
-    out of domain cost more than switching to matryoshka truncation?"""
-    df = _results()
-    df = df[(df["dim"] == dim) & (df["method"].isin(["mrl", "pca_in", "pca_ood"]))]
+def fig_pca_models(metric: str = "ndcg@10") -> go.Figure:
+    """Retention of in-domain PCA on both models: if PCA's showing were an
+    artifact of MRL training, the ada-002 line would sit visibly lower."""
+    main = _results()
+    ada = pd.read_csv(ANALYSIS_DIR.parent / ADA_SLUG / "results.csv")
+    shared = set(main["dataset"].unique()) & set(ada["dataset"].unique())
 
     fig = go.Figure()
-    for method in ["pca_in", "mrl", "pca_ood"]:
+    for name, df, color, dash in [
+        ("3-small (MRL)", main, ACCENT, "solid"),
+        ("ada-002 (no MRL)", ada, "#60a5fa", "dash"),
+    ]:
+        mean = _retention_means(df[df["dataset"].isin(shared)], metric)
+        sub = mean[mean["method"] == "pca_in"].sort_values("dim")
+        fig.add_trace(go.Scatter(
+            x=sub["dim"], y=sub["retention"], mode="lines+markers", name=name,
+            line=dict(color=color, dash=dash, width=2), marker=dict(size=6, color=color),
+            customdata=sub[f"avg {metric}"],
+            hovertemplate=(f"<b>{name}</b><br>d=%{{x}}<br>retention=%{{y:.1%}}"
+                           f"<br>avg {metric}=%{{customdata:.4f}}<extra></extra>"),
+        ))
+    fig.add_hline(y=1.0, line=dict(color=MUTED, dash="dash", width=1))
+    _layout(fig, f"In-domain PCA: share of full-dim {metric.upper()} retained, both models", 420)
+    fig.update_xaxes(type="log", tickvals=[32, 64, 128, 256, 512],
+                     title=dict(text="dimensions", font=dict(size=12, color=MUTED)))
+    fig.update_yaxes(tickformat=".0%")
+    return fig
+
+
+def fig_ood_gap(dim: int = 64, metric: str = "ndcg@10",
+                methods=("pca_in", "pca_ood")) -> go.Figure:
+    """Per dataset at one aggressive dim: in-domain vs transferred PCA fit."""
+    df = _results()
+    df = df[(df["dim"] == dim) & (df["method"].isin(methods))]
+
+    fig = go.Figure()
+    for method in methods:
         style = METHOD_STYLE[method]
         sub = df[df["method"] == method].sort_values("dataset")
         fig.add_trace(go.Bar(
@@ -182,7 +227,7 @@ def fig_ood_gap(dim: int = 64, metric: str = "ndcg@10") -> go.Figure:
             marker_color=style["color"],
             hovertemplate=f"<b>{style['name']}</b><br>%{{x}}: %{{y:.4f}}<extra></extra>",
         ))
-    _layout(fig, f"{metric.upper()} at d={dim}: in-domain PCA vs matryoshka vs transferred PCA", 400)
+    _layout(fig, f"{metric.upper()} at d={dim}: in-domain vs out-of-domain PCA fit", 400)
     fig.update_layout(barmode="group", bargap=0.25)
     return fig
 
