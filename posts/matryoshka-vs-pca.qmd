@@ -6,6 +6,15 @@ description-meta: "I compared Matryoshka embeddings against PCA on BEIR datasets
 categories:
   - llm
   - evals
+format:
+  html:
+    include-after-body:
+      - text: |
+          <script>
+            // Plotly charts in initially-hidden tabs can't measure their
+            // container width; nudge them when a tab becomes visible.
+            document.addEventListener('shown.bs.tab', () => window.dispatchEvent(new Event('resize')));
+          </script>
 ---
 
 As people began using LLMs with their own documents, a new problem emerged: how do you store and search all that information efficiently?
