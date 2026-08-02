@@ -9,11 +9,15 @@ categories:
 draft: false
 ---
 
-As people began using LLMs with their own documents, storing and searching those documents became an important problem. That need drove the rapid adoption of [vector databases](https://en.wikipedia.org/wiki/Vector_database). But these can be easily get expensive and slow, when you store large vector representations of documents.
+As people began using LLMs with their own documents, a new problem emerged: how do you store and search all that information efficiently?
 
-So [AI labs](https://openai.com/index/new-embedding-models-and-api-updates/) [responded](https://docs.cohere.com/changelog/embed-multimodal-v4) with a technique called [Matryoshka Representation Learning (MRL)](https://arxiv.org/abs/2205.13147), which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. Since then, we've more or less lived happily ever after, with smaller vector database bills and faster queries.
+[Vector databases](https://en.wikipedia.org/wiki/Vector_database) quickly became the standard solution. But embeddings can be large, and storing millions of high-dimensional vectors can make retrieval slower and more expensive.
 
-I'm not one to be worried about my vector database cost on a typical Wednesday, but Doug Turnbull's [article](https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray) about using [Principal Component Analysis (PCA)](https://arxiv.org/abs/1404.1100), to reduce vector dimensions, got me curious: how would it compare with MRL?
+[AI labs](https://openai.com/index/new-embedding-models-and-api-updates/) [responded](https://docs.cohere.com/changelog/embed-multimodal-v4) with a technique called [Matryoshka Representation Learning (MRL)](https://arxiv.org/abs/2205.13147), which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. That means smaller vector database bills and faster queries.
+
+Happy ending. Almost.
+
+I do not usually spend my Wednesdays worrying about vector database bills. But Doug Turnbull's [article](https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray) about using [Principal Component Analysis (PCA)](https://arxiv.org/abs/1404.1100), to reduce vector dimensions made me curious: how would this older, simpler technique compare with MRL?
 
 So I ran an experiment comparing both methods across eight standard retrieval-quality datasets. In this article, I share what I found.
 
