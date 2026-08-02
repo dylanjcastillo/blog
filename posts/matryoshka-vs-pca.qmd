@@ -6,7 +6,6 @@ description-meta: "I compared Matryoshka embeddings against PCA on BEIR datasets
 categories:
   - llm
   - evals
-draft: false
 ---
 
 As people began using LLMs with their own documents, a new problem emerged: how do you store and search all that information efficiently?
