@@ -43,6 +43,7 @@ I generated all embeddings through OpenRouter and evaluated retrieval on eight [
 ::: {.callout-note collapse="true"}
 ## Dataset details
 
+::: {.table-responsive}
 | dataset | task | corpus | queries |
 |---|---|---|---|
 | SciFact | scientific claim verification | 5.2K | 300 |
@@ -53,6 +54,7 @@ I generated all embeddings through OpenRouter and evaluated retrieval on eight [
 | Quora | duplicate question retrieval | 523K | 10,000 |
 | TREC-COVID | biomedical search (COVID-19) | 171K | 50 |
 | Touché 2020 | argument retrieval from web docs | 382K | 49 |
+:::
 :::
 
 There were three questions I wanted to answer.
@@ -88,6 +90,7 @@ Before running the experiment, I wanted to make sure the evaluation pipeline was
 
 The table below compares NDCG@10 at full dimensions: the official MTEB score vs. the score produced by my evaluation pipeline.
 
+<div class="table-responsive">
 <table class="table">
   <thead>
     <tr>
@@ -113,6 +116,7 @@ The table below compares NDCG@10 at full dimensions: the official MTEB score vs.
     <tr><td>Touché 2020</td><td>0.2161</td><td>0.2143</td><td>0.2428</td><td>0.2433</td><td>0.3593</td><td>0.3596</td></tr>
   </tbody>
 </table>
+</div>
 
 Official numbers come from the MTEB results repository ([text-embedding-3-small](https://github.com/embeddings-benchmark/results/tree/main/results/openai__text-embedding-3-small), [text-embedding-ada-002](https://github.com/embeddings-benchmark/results/tree/main/results/openai__text-embedding-ada-002), [qwen3-embedding-8b](https://github.com/embeddings-benchmark/results/tree/main/results/Qwen__Qwen3-Embedding-8B)). My results are close enough to the official numbers that I'm confident the pipeline is working as expected.
 
@@ -134,6 +138,7 @@ PCA matched or outperformed MRL truncation at nearly every dimension across both
 
 Each cell below shows how much retrieval quality survives the reduction: NDCG@10 at that dimension divided by NDCG@10 at full dimensions (1,536 for `text-embedding-3-small`, 4,096 for `qwen3-embedding-8b`), averaged over the eight datasets.
 
+<div class="table-responsive">
 <table class="table">
   <thead>
     <tr>
@@ -154,6 +159,7 @@ Each cell below shows how much retrieval quality survives the reduction: NDCG@10
     <tr><td>32</td><td>46%</td><td>65%</td><td>68%</td><td>71%</td></tr>
   </tbody>
 </table>
+</div>
 
 ::: {.panel-tabset}
 ## 3-small
@@ -207,6 +213,7 @@ I worried that PCA might only look good on `text-embedding-3-small` and `qwen3-e
 
 For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same share of quality on `text-embedding-ada-002` as on `text-embedding-3-small`; below that, a small gap opens:
 
+<div class="table-responsive">
 <table class="table">
   <thead>
     <tr>
@@ -227,6 +234,7 @@ For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same
     <tr><td>32</td><td>59%</td><td>46%</td><td>65%</td></tr>
   </tbody>
 </table>
+</div>
 
 ```{python}
 #| echo: false
@@ -289,10 +297,12 @@ You can also shrink vectors using a technique called quantization. Instead of re
 
 Using quantization alone, you get these results for `text-embedding-3-small` at full 1,536 dimensions:
 
+::: {.table-responsive}
 | config | bytes per vector | size vs full float32 | quality retained |
 |---|---|---|---|
 | int8 | 1,536 | 25% | 100% |
 | binary | 192 | 3.1% | 95% |
+:::
 
 You can push this further by combining quantization with truncation or PCA. The resulting vectors can be dramatically smaller while still preserving a surprising amount of retrieval quality.
 
