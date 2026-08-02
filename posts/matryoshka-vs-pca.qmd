@@ -10,7 +10,7 @@ categories:
 
 As people began using LLMs with their own documents, a new problem emerged: how do you store and search all that information efficiently?
 
-[Vector databases](https://en.wikipedia.org/wiki/Vector_database) quickly became the standard solution. But embeddings can be large, and storing millions of high-dimensional vectors can make retrieval slower and more expensive.
+[Vector databases](https://en.wikipedia.org/wiki/Vector_database) quickly became the standard solution. But vectors can contain thousands of dimensions, and storing millions of them can make retrieval slow and expensive.
 
 [AI labs](https://openai.com/index/new-embedding-models-and-api-updates/) [responded](https://docs.cohere.com/changelog/embed-multimodal-v4) with a technique called [Matryoshka Representation Learning (MRL)](https://arxiv.org/abs/2205.13147), which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. That means smaller vector database bills and faster queries.
 
