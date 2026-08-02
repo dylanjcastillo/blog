@@ -19,7 +19,7 @@ Happy ending. Almost.
 
 I do not usually spend my Wednesdays worrying about vector database bills. But Doug Turnbull's [article](https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray) about using [Principal Component Analysis (PCA)](https://arxiv.org/abs/1404.1100), to reduce vector dimensions made me curious: how would this older, simpler technique compare with MRL?
 
-So I ran an experiment comparing both methods across eight standard retrieval-quality datasets. In this article, I share what I found.
+To find out, I compared the two methods across eight standard retrieval-quality datasets. In this article, I walk through the experiment and share what I found.
 
 All the code and data is available on [GitHub](https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca).
 
