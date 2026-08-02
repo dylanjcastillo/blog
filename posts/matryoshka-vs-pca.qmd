@@ -227,20 +227,20 @@ For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same
   <thead>
     <tr>
       <th rowspan="2" style="vertical-align: bottom;">dims</th>
-      <th colspan="1" style="text-align: center;">ada-002 (no MRL)</th>
+      <th colspan="2" style="text-align: center;">ada-002 (no MRL)</th>
       <th colspan="2" style="text-align: center;">3-small (MRL)</th>
     </tr>
     <tr>
-      <th>PCA</th>
+      <th>Truncation</th><th>PCA</th>
       <th>Truncation</th><th>PCA</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>512</td><td>99%</td><td>98%</td><td>97%</td></tr>
-    <tr><td>256</td><td>96%</td><td>94%</td><td>95%</td></tr>
-    <tr><td>128</td><td>89%</td><td>86%</td><td>90%</td></tr>
-    <tr><td>64</td><td>78%</td><td>71%</td><td>82%</td></tr>
-    <tr><td>32</td><td>59%</td><td>46%</td><td>65%</td></tr>
+    <tr><td>512</td><td>96%</td><td>99%</td><td>98%</td><td>97%</td></tr>
+    <tr><td>256</td><td>89%</td><td>96%</td><td>94%</td><td>95%</td></tr>
+    <tr><td>128</td><td>83%</td><td>89%</td><td>86%</td><td>90%</td></tr>
+    <tr><td>64</td><td>66%</td><td>78%</td><td>71%</td><td>82%</td></tr>
+    <tr><td>32</td><td>41%</td><td>59%</td><td>46%</td><td>65%</td></tr>
   </tbody>
 </table>
 </div>
