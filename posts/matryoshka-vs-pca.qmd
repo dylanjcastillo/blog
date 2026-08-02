@@ -9,11 +9,11 @@ categories:
 draft: false
 ---
 
-As people began using LLMs with their own documents, storing and searching those documents became an important problem. That need drove the rapid adoption of [vector databases](https://en.wikipedia.org/wiki/Vector_database).
+As people began using LLMs with their own documents, storing and searching those documents became an important problem. That need drove the rapid adoption of [vector databases](https://en.wikipedia.org/wiki/Vector_database). But these can be easily get expensive and slow, when you store large vector representations of documents.
 
-But vector databases came with a cost. People soon realized that storing and searching large vector representations of their documents could be both expensive and slow. So [AI labs](https://openai.com/index/new-embedding-models-and-api-updates/) [responded](https://docs.cohere.com/changelog/embed-multimodal-v4) with a technique called [Matryoshka Representation Learning (MRL)](https://arxiv.org/abs/2205.13147), which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. Since then, we've more or less lived happily ever after, with smaller vector database bills and faster queries.
+So [AI labs](https://openai.com/index/new-embedding-models-and-api-updates/) [responded](https://docs.cohere.com/changelog/embed-multimodal-v4) with a technique called [Matryoshka Representation Learning (MRL)](https://arxiv.org/abs/2205.13147), which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. Since then, we've more or less lived happily ever after, with smaller vector database bills and faster queries.
 
-Last week I read Doug Turnbull's [article](https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray) about using [Principal Component Analysis (PCA)](https://arxiv.org/abs/1404.1100)–an older, battle-tested technique–to reduce vector dimensions. It got me curious: how would PCA compare with MRL?
+I'm not one to be worried about my vector database cost on a typical Wednesday, but Doug Turnbull's [article](https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray) about using [Principal Component Analysis (PCA)](https://arxiv.org/abs/1404.1100), to reduce vector dimensions, got me curious: how would it compare with MRL?
 
 So I ran an experiment comparing both methods across eight standard retrieval-quality datasets. In this article, I share what I found.
 
@@ -21,15 +21,15 @@ All the code and data is available on [GitHub](https://github.com/dylanjcastillo
 
 ## What are MRL and PCA?
 
-Both methods produce smaller vectors that behave almost like the full ones. But they get there in different ways. 
+Both methods produce smaller vectors that behave almost like the full ones. But they get there in different ways.
 
-**MRL** works during training. You train the model with the loss applied at several prefix lengths at once: the first 64 dimensions, the first 128, and so on. This teaches it to pack the most important information at the start of the vector, like a set of nested matryoshka dolls. 
+**MRL** works during training. You train the model with the loss applied at several prefix lengths at once: the first 64 dimensions, the first 128, and so on. This teaches it to pack the most important information at the start of the vector, like a set of nested matryoshka dolls.
 
 At inference time, you simply keep the first _d_ dimensions and re-normalize the resulting vector. Many modern embedding models are trained this way, but older models aren't, so MRL-based truncation is not available for many popular embedding models.
 
-**PCA** works after training, which means it can be used with any model. You take a sample of embeddings, find the directions along which they vary the most, and keep the top _d_ of them as a projection matrix^[this [page](https://setosa.io/ev/principal-component-analysis/) explains it quite well]. From then on, every document and query gets multiplied by that matrix (and re-normalized) before it goes into the index. 
+**PCA** works after training, which means it can be used with any model. You take a sample of embeddings, find the directions along which they vary the most, and keep the top _d_ of them as a projection matrix^[this [page](https://setosa.io/ev/principal-component-analysis/) explains it quite well]. From then on, every document and query gets multiplied by that matrix (and re-normalized) before it goes into the index.
 
-But you get additional operational complexity. You need to store and version the PCA transformation, then apply the same version consistently when adding to and querying the index. 
+But you get additional operational complexity. You need to store and version the PCA transformation, then apply the same version consistently when adding to and querying the index.
 
 ## How I ran the experiment
 
@@ -56,22 +56,22 @@ There were three questions I wanted to answer.
 
 #### Q1: which method keeps more retrieval quality as you cut dims?
 
-To answer this, I used two MRL-trained models: OpenAI's `text-embedding-3-small` (1,536 dims), and Alibaba's `qwen3-embedding-8b` (4,096 dims), which sits at the top of the open-weights MTEB BEIR leaderboard. 
+To answer this, I used two MRL-trained models: OpenAI's `text-embedding-3-small` (1,536 dims), and Alibaba's `qwen3-embedding-8b` (4,096 dims), which sits at the top of the open-weights MTEB BEIR leaderboard.
 
 I reduced each model's embeddings in two ways:
 
 1. With **truncation**, I kept the first _d_ dimensions and re-normalized. This is how you [reduce dimensions](https://developers.openai.com/api/docs/guides/embeddings#reducing-embedding-dimensions) with MRL.
-2. With **PCA**, I fit the projection on the full-dimension document embeddings of the same dataset I then searched, and kept the top _d_ components. From then on, every document and query embedding gets multiplied by that projection matrix and re-normalized before searching. 
+2. With **PCA**, I fit the projection on the full-dimension document embeddings of the same dataset I then searched, and kept the top _d_ components. From then on, every document and query embedding gets multiplied by that projection matrix and re-normalized before searching.
 
 Then I ran the benchmarks on the eight datasets, comparing the two methods on both models, to see which one preserves more retrieval quality as the embeddings get smaller.
 
-#### Q2: Is it just the MRL training?
+#### Q2: is it just the MRL training?
 
 If PCA does well, that might be because MRL training has already organized the embedding space in a convenient way. To test that, I added `text-embedding-ada-002`, an older 1,536-dimensional model that wasn't trained using MRL, as a control.
 
 I applied PCA to both models. If PCA retains a similar share of retrieval quality on `text-embedding-3-small` and `text-embedding-ada-002`, that suggests its performance does not depend on MRL training.
 
-#### Q3: Does the fitting data matter?
+#### Q3: does the fitting data matter?
 
 PCA has to be fit on something, which raises two practical questions: how much fitting data do you need, and does it need to come from the corpus you'll be searching?
 
@@ -171,9 +171,9 @@ figures.fig_retention(model="qwen")
 
 At 512 dimensions, MRL truncation has a slight advantage. But as the vectors get smaller, PCA catches up and either beats or matches MRL. 
 
-On `text-embedding-3-small`, PCA is clearly better below 256 dims (65% vs 46% retained at 32). On `qwen3-embedding-8b` the race is much closer (71% vs 68% at 32). 
+On `text-embedding-3-small`, PCA is clearly better below 256 dims (65% vs 46% retained at 32). On `qwen3-embedding-8b` the race is much closer (71% vs 68% at 32).
 
-One thing I found interesting was that, qwen3-8b training is strong enough that its truncated 32-dim vectors, cut from 4,096 dimensions, retain more quality than 3-small's cut from 1,536.
+One thing I found interesting is that the MRL training in `qwen3-embedding-8b` is strong enough that its truncated 32-dim vectors, cut from 4,096 dimensions, retain more quality than 3-small's cut from 1,536.
 
 Going dataset by dataset, you find some differences:
 
@@ -196,13 +196,13 @@ figures.fig_ndcg_by_dim(model="qwen")
 
 At the smallest dimensions, PCA wins on seven of the eight datasets for `text-embedding-3-small` and six of the eight for `qwen3-embedding-8b`.
 
-Across dimensions, PCA performs better on SciFact, FiQA, and NFCorpus for both models. ArguAna and SciDocs also favor PCA with `text-embedding-3-small`, although the results are less conclusive with `qwen3-embedding-8b`. Truncation performs better on Quora for both models. Touché also tends to favor truncation, while the result for TREC-COVID depends on the dimension.
+Across dimensions, PCA performs better on SciFact, FiQA, and NFCorpus for both models. ArguAna and SciDocs also favor PCA with `text-embedding-3-small`, although the results are less conclusive with `qwen3-embedding-8b`. Truncation performs better on Quora for both models. Touché favors truncation on `qwen3-embedding-8b` but is basically a tie on `text-embedding-3-small`, and the result for TREC-COVID depends on the dimension.
 
 ## Q2: is it just the MRL training?
 
 I worried that PCA might only look good on `text-embedding-3-small` and `qwen3-embedding-8b` because MRL training had already organized their embedding spaces in some convenient way. If that were true, PCA on `text-embedding-ada-002`, which never saw MRL training, should be noticeably worse.
 
-For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same share of quality on `ada-002` as on `text-embedding-3-small`; below that, a small gap opens:
+For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same share of quality on `text-embedding-ada-002` as on `text-embedding-3-small`; below that, a small gap opens:
 
 <table class="table">
   <thead>
@@ -230,9 +230,9 @@ For the most part, it isn't. Down to 128 dimensions, PCA retains nearly the same
 figures.fig_pca_models()
 ```
 
-PCA on `ada-002` retains 78% at 64 dims and 59% at 32, against 82% and 65% on `text-embedding-3-small`. It might be that MRL genuinely helps, or simply that `text-embedding-3-small` is a newer, better model. I can't separate the two with this experiment. But either way, the hypothesis that PCA only works because of MRL seems unlikely given that even PCA on the non-MRL model beats truncation on the MRL model at those dimensions (59% vs 46% at 32 dims).
+PCA on `text-embedding-ada-002` retains 78% at 64 dims and 59% at 32, against 82% and 65% on `text-embedding-3-small`. It might be that MRL genuinely helps, or simply that `text-embedding-3-small` is a newer, better model. I can't separate the two with this experiment. But either way, the hypothesis that PCA only works because of MRL seems unlikely given that even PCA on the non-MRL model beats truncation on the MRL model at those dimensions (59% vs 46% at 32 dims).
 
-Out of curiosity, I also tried truncation on `ada-002`, even though the model was never trained for it. It held up much better than I imagined with 83% retained at 128 dimensions. 
+Out of curiosity, I also tried truncation on `text-embedding-ada-002`, even though the model was never trained for it. It held up much better than I imagined, with 83% retained at 128 dimensions.
 
 ## Q3: does the fitting data matter?
 
@@ -257,9 +257,9 @@ figures.fig_fit_size(model="qwen")
 
 :::
 
-**Out-of-domain fit.** In this scenario, the data you fit on doesn't match the data you end up searching, either because your corpus drifted over time or because you fit on whatever was available. To simulate the extreme version, I fit PCA once on 100K generic MS MARCO passages and searched every other dataset with that projection. 
+**Out-of-domain fit.** In this scenario, the data you fit on doesn't match the data you end up searching, either because your corpus drifted over time or because you fit on whatever was available. To simulate the extreme version, I fit PCA once on 100K generic MS MARCO passages and searched every other dataset with that projection.
 
-On `text-embedding-3-small`, it performs within a point or two of the in-domain fit everywhere, and on several datasets (ArguAna, NFCorpus) it is actually better. On `qwen3-embedding-8b` it keeps up down to 128 dimensions but falls behind at lower dimensions (56% vs 71% retained at 32 dims). 
+On `text-embedding-3-small`, the transferred fit is as good or better on average from 512 through 64 dimensions. Dataset-level gaps are larger in both directions, as the chart shows. On `qwen3-embedding-8b` it keeps up down to 128 dimensions but falls behind at lower dimensions (56% vs 71% retained at 32 dims).
 
 ::: {.panel-tabset}
 ## 3-small
@@ -278,13 +278,13 @@ figures.fig_ood_gap(model="qwen")
 
 :::
 
-Good news for lazy people like me. The fitting data matters much less than I expected. Though, that may be a consequence of the scale of these experiments or the particular benchmarks I used. 
+Good news for lazy people like me. Fit-sample size matters much less than I expected, and an out-of-domain fit holds up at moderate compression. Qwen at 32 dimensions is the clear exception. These patterns may be a consequence of the scale of the experiments or the particular benchmarks I used.
 
 ## What about quantization?
 
-You can also shrink vectors using a technique called quantization. Instead of reducing the number of dimensions, quantization stores each dimension using fewer bits. `Int8` uses 1 byte per dimension (4x smaller than `float32`), and binary keeps just the sign bit (32x smaller). 
+You can also shrink vectors using a technique called quantization. Instead of reducing the number of dimensions, quantization stores each dimension using fewer bits. With `int8`, each dimension uses 1 byte (4x smaller than `float32`); with binary, just the sign bit (32x smaller). For the numbers below, int8 quantizes the document vectors while keeping queries at float32; binary quantizes both documents and queries and ranks by dot product, which is equivalent to Hamming-distance ranking.
 
-Using quantization alone, you get these results for `text-embedding-small-3` at full 1,536 dimensions:
+Using quantization alone, you get these results for `text-embedding-3-small` at full 1,536 dimensions:
 
 | config | bytes per vector | size vs full float32 | quality retained |
 |---|---|---|---|
@@ -293,20 +293,11 @@ Using quantization alone, you get these results for `text-embedding-small-3` at 
 
 You can push this further by combining quantization with truncation or PCA. The resulting vectors can be dramatically smaller while still preserving a surprising amount of retrieval quality.
 
-For example, combining binary quantization with PCA at 512 dimensions retains 87% of the original performance while reducing the raw vector size to about 1% of the float32 baseline. That seems a bit too optimistic, so it might just be my AI psychosis. So, please take a look at the [results](https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca/data/analysis/openai__text-embedding-3-small/quantization_summary.csv) yourself.
-
-## How much can you save?
-
-I used Weaviate's [pricing calculator](https://weaviate.io/pricing) to get a rough estimate of the potential savings of reducing vector dimensions. I calculated the price difference for 50M objects on the Flex plan using a Performance Optimized profile:
-
-- 1536 dims: **$12,750/month**
-- 128 dims: **$1,173/month**
-
-In a year, this results in savings of ~$140k while theoretically retaining 90% of the quality if you go with PCA or 86% if you go with MRL on `text-embedding-3-small` (on `qwen3-embedding-8b`, both methods retain 91% at 128 dims). If you go with PCA, you'll need to account for the additional operational complexity and costs due to the PCA projection. 
+For example, combining binary quantization with PCA at 512 dimensions retains 82% of the original performance while reducing the raw vector size to about 1% of the float32 baseline. That seems a bit too optimistic, so it might just be my AI psychosis. Here are the full [results](https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca/data/analysis/openai__text-embedding-3-small/quantization_summary.csv).
 
 ## Limitations
 
-- **Few embedding models**: I tested three models, and two of them are from OpenAI. Qwen already showed that a stronger MRL implementation narrows PCA's lead, so other model families could shift the results further. 
+- **Few embedding models**: I tested three models, and two of them are from OpenAI. Qwen already showed that a stronger MRL implementation narrows PCA's lead, so other model families could shift the results further.
 - **Corpus size**: I excluded the largest BEIR datasets to keep the budget under control (~$30 spent), so it's possible PCA falls behind MRL at a scale I didn't reach.
 - **Lab conditions**: my evaluation runs exact search over raw vectors, which is not how an actual vector database works. A real deployment would use an approximate index, apply its own compression, rescore with full-precision vectors, and often mix in BM25 and a reranker. This could invalidate my results.
 - **Benchmark contamination**: BEIR datasets are widely used to train embedding models, so the absolute scores are probably inflated.
@@ -315,12 +306,12 @@ In a year, this results in savings of ~$140k while theoretically retaining 90% o
 
 PCA not only held its own against MRL truncation, it won on most dimensions.
 
-On `text-embedding-3-small`, PCA beat MRL truncation at nearly every dimension, and by a wide margin at aggressive compression: 65% of quality retained at 32 dims against truncation's 46%. On `qwen3-embedding-8b`, MRL truncation closed the gap but never meaningfully pulled ahead. 
+On `text-embedding-3-small`, PCA beat MRL truncation at nearly every dimension, and by a wide margin at aggressive compression: 65% of quality retained at 32 dims against truncation's 46%. On `qwen3-embedding-8b`, MRL had a small edge at 512 dimensions and was effectively tied at 256, while PCA led below that.
 
-And these results aren't an artifact of the MRL training. PCA worked similarly well on `ada-002`, a non-MRL trained model.
+These results also don’t appear to be an artifact of MRL training. PCA worked similarly well on ada-002, which wasn’t trained for truncation.
 
-It's also much lower-maintenance than I expected. Results didn't change much when fitting on a small sample of the data, or even when fitting on the _wrong_ corpus. 
+It's also lower-maintenance than I expected. Results barely changed when fitting on a small in-domain sample. An out-of-domain fit also held up at moderate compression. 
 
-Not bad for a technique that's older than the washing machine^[electric washing machine]! 
+Not bad for a technique that's older than the washing machine^[electric washing machine]!
 
 If you want to look at the data yourself, the full pipeline is in the [repo](https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca).

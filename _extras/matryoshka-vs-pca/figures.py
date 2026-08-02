@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
-from config import ANALYSIS_DIR, FIT_SIZE_DATASET, FULL_DIM, REPORT_EXCLUDE
+from config import ANALYSIS_DIR, FIT_SIZE_DATASET, REPORT_EXCLUDE
 
 # Blog palette (custom.scss): dark zinc background, white ink, orange accent.
 BG = "#18181b"
@@ -53,6 +53,13 @@ MODEL_SLUGS = {
     "ada-002": "openai__text-embedding-ada-002",
     "nomic": "nomic-ai__nomic-embed-text-v1.5",
     "qwen": "qwen__qwen3-embedding-8b",
+}
+
+MODEL_LABELS = {
+    "3-small": "3-small (MRL)",
+    "ada-002": "ada-002 (no MRL)",
+    "nomic": "nomic-embed-text-v1.5 (MRL)",
+    "qwen": "qwen3-8b (MRL)",
 }
 
 
@@ -179,7 +186,7 @@ def fig_retention(metric: str = "ndcg@10", include_ada: bool = False,
     df = _results(model)
     n_datasets = df["dataset"].nunique()
 
-    panels = [("3-small (MRL)", _retention_means(df, metric))]
+    panels = [(MODEL_LABELS[model], _retention_means(df, metric))]
     ada_path = ANALYSIS_DIR.parent / ADA_SLUG / "results.csv"
     if include_ada and ada_path.exists() and ADA_SLUG not in str(ANALYSIS_DIR):
         ada = pd.read_csv(ada_path)

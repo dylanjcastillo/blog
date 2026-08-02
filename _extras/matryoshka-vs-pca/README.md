@@ -17,7 +17,7 @@ Models:
 PCA arms: fit in-domain (on the eval corpus itself) and out-of-domain (fit
 once on 100k MS MARCO passages and transferred). A fit-sample-size sweep runs
 on FiQA. Full-dimension scores reproduce the official MTEB results within
-0.004 NDCG@10 for every model-dataset pair.
+0.005 NDCG@10 for every model-dataset pair.
 
 ## Pipeline
 
