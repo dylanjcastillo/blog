@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dylan Castillo">
+<meta name="dcterms.date" content="2026-08-01">
+<meta name="description" content="I compared Matryoshka embeddings against PCA on BEIR datasets.">
+
+<title>Honey, I shrunk the embeddings: Matryoshka vs.&nbsp;PCA – Dylan Castillo</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.webp" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-38e38714b11695c68f2c30db6934fc35.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="preload" href="../fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin="">
+<script src="https://cdn.usefathom.com/script.js" data-site="ZJFQREIA" defer=""></script>
+
+
+<meta property="og:title" content="Honey, I shrunk the embeddings: Matryoshka vs.&nbsp;PCA – Dylan Castillo">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://dylancastillo.co/posts/images/cards/matryoshka-vs-pca.png">
+<meta property="og:site_name" content="Dylan Castillo">
+<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="1200">
+<meta name="twitter:title" content="Honey, I shrunk the embeddings: Matryoshka vs.&nbsp;PCA – Dylan Castillo">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://dylancastillo.co/posts/images/cards/matryoshka-vs-pca.png">
+<meta name="twitter:creator" content="@dylanjcastillo">
+<meta name="twitter:site" content="@dylanjcastillo">
+<meta name="twitter:image-height" content="630">
+<meta name="twitter:image-width" content="1200">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/dylanjcastillo"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="simple-icons:github" aria-label="Icon github from simple-icons Iconify.design set." title="Icon github from simple-icons Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/dylanjcastillo/"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="simple-icons:linkedin" aria-label="Icon linkedin from simple-icons Iconify.design set." title="Icon linkedin from simple-icons Iconify.design set."></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../index.xml"> 
+<span class="menu-text"><iconify-icon role="img" inline="" icon="simple-icons:rss" aria-label="Icon rss from simple-icons Iconify.design set." title="Icon rss from simple-icons Iconify.design set."></iconify-icon></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-are-mrl-and-pca" id="toc-what-are-mrl-and-pca" class="nav-link active" data-scroll-target="#what-are-mrl-and-pca">What are MRL and PCA?</a></li>
+  <li><a href="#how-i-ran-the-experiment" id="toc-how-i-ran-the-experiment" class="nav-link" data-scroll-target="#how-i-ran-the-experiment">How I ran the experiment</a></li>
+  <li><a href="#but-first-a-sanity-check" id="toc-but-first-a-sanity-check" class="nav-link" data-scroll-target="#but-first-a-sanity-check">But first, a sanity check</a></li>
+  <li><a href="#q1-which-method-keeps-more-retrieval-quality" id="toc-q1-which-method-keeps-more-retrieval-quality" class="nav-link" data-scroll-target="#q1-which-method-keeps-more-retrieval-quality">Q1: which method keeps more retrieval quality?</a></li>
+  <li><a href="#q2-is-it-just-the-mrl-training-1" id="toc-q2-is-it-just-the-mrl-training-1" class="nav-link" data-scroll-target="#q2-is-it-just-the-mrl-training-1">Q2: is it just the MRL training?</a></li>
+  <li><a href="#q3-does-the-fitting-data-matter-1" id="toc-q3-does-the-fitting-data-matter-1" class="nav-link" data-scroll-target="#q3-does-the-fitting-data-matter-1">Q3: does the fitting data matter?</a></li>
+  <li><a href="#what-about-quantization" id="toc-what-about-quantization" class="nav-link" data-scroll-target="#what-about-quantization">What about quantization?</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    <div class="quarto-margin-footer"><div class="margin-footer-item">
+<button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">
+Subscribe to my newsletter
+</button>
+</div></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Honey, I shrunk the embeddings: Matryoshka vs.&nbsp;PCA</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">evals</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://dylancastillo.co">Dylan Castillo</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://iwanalabs.com">
+            Iwana Labs
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 1, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">August 2, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>As people began using LLMs with their own documents, storing and searching those documents became an important problem. That need drove the rapid adoption of <a href="https://en.wikipedia.org/wiki/Vector_database">vector databases</a>. But these can be easily get expensive and slow, when you store large vector representations of documents.</p>
+<p>So <a href="https://openai.com/index/new-embedding-models-and-api-updates/">AI labs</a> <a href="https://docs.cohere.com/changelog/embed-multimodal-v4">responded</a> with a technique called <a href="https://arxiv.org/abs/2205.13147">Matryoshka Representation Learning (MRL)</a>, which lets you use fewer embedding dimensions without sacrificing much accuracy in your retrieval. Since then, we’ve more or less lived happily ever after, with smaller vector database bills and faster queries.</p>
+<p>I’m not one to be worried about my vector database cost on a typical Wednesday, but Doug Turnbull’s <a href="https://softwaredoug.com/blog/2026/07/24/pca-shrink-ray">article</a> about using <a href="https://arxiv.org/abs/1404.1100">Principal Component Analysis (PCA)</a>, to reduce vector dimensions, got me curious: how would it compare with MRL?</p>
+<p>So I ran an experiment comparing both methods across eight standard retrieval-quality datasets. In this article, I share what I found.</p>
+<p>All the code and data is available on <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca">GitHub</a>.</p>
+<section id="what-are-mrl-and-pca" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-mrl-and-pca">What are MRL and PCA?</h2>
+<p>Both methods produce smaller vectors that behave almost like the full ones. But they get there in different ways.</p>
+<p><strong>MRL</strong> works during training. You train the model with the loss applied at several prefix lengths at once: the first 64 dimensions, the first 128, and so on. This teaches it to pack the most important information at the start of the vector, like a set of nested matryoshka dolls.</p>
+<p>At inference time, you simply keep the first <em>d</em> dimensions and re-normalize the resulting vector. Many modern embedding models are trained this way, but older models aren’t, so MRL-based truncation is not available for many popular embedding models.</p>
+<p><strong>PCA</strong> works after training, which means it can be used with any model. You take a sample of embeddings, find the directions along which they vary the most, and keep the top <em>d</em> of them as a projection matrix<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. From then on, every document and query gets multiplied by that matrix (and re-normalized) before it goes into the index.</p>
+<p>But you get additional operational complexity. You need to store and version the PCA transformation, then apply the same version consistently when adding to and querying the index.</p>
+</section>
+<section id="how-i-ran-the-experiment" class="level2">
+<h2 class="anchored" data-anchor-id="how-i-ran-the-experiment">How I ran the experiment</h2>
+<p>The idea behind the experiment was simple: I would shrink the embeddings with each method, run the benchmarks, and see how much retrieval quality suffers at each size.</p>
+<p>I generated all embeddings through OpenRouter and evaluated retrieval on eight <a href="https://github.com/beir-cellar/beir">BEIR</a> datasets: SciFact, NFCorpus, ArguAna, FiQA, SciDocs, Quora, TREC-COVID, and Webis-Touché 2020. For each dataset, I reduced the embeddings to 512, 256, 128, 64, and 32 dimensions.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Dataset details
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="table">
+<thead>
+<tr class="header">
+<th>dataset</th>
+<th>task</th>
+<th>corpus</th>
+<th>queries</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SciFact</td>
+<td>scientific claim verification</td>
+<td>5.2K</td>
+<td>300</td>
+</tr>
+<tr class="even">
+<td>NFCorpus</td>
+<td>medical search</td>
+<td>3.6K</td>
+<td>323</td>
+</tr>
+<tr class="odd">
+<td>ArguAna</td>
+<td>counterargument retrieval</td>
+<td>8.7K</td>
+<td>1,406</td>
+</tr>
+<tr class="even">
+<td>FiQA-2018</td>
+<td>financial question answering</td>
+<td>57K</td>
+<td>648</td>
+</tr>
+<tr class="odd">
+<td>SciDocs</td>
+<td>citation recommendation</td>
+<td>25K</td>
+<td>1,000</td>
+</tr>
+<tr class="even">
+<td>Quora</td>
+<td>duplicate question retrieval</td>
+<td>523K</td>
+<td>10,000</td>
+</tr>
+<tr class="odd">
+<td>TREC-COVID</td>
+<td>biomedical search (COVID-19)</td>
+<td>171K</td>
+<td>50</td>
+</tr>
+<tr class="even">
+<td>Touché 2020</td>
+<td>argument retrieval from web docs</td>
+<td>382K</td>
+<td>49</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>There were three questions I wanted to answer.</p>
+<section id="q1-which-method-keeps-more-retrieval-quality-as-you-cut-dims" class="level4">
+<h4 class="anchored" data-anchor-id="q1-which-method-keeps-more-retrieval-quality-as-you-cut-dims">Q1: which method keeps more retrieval quality as you cut dims?</h4>
+<p>To answer this, I used two MRL-trained models: OpenAI’s <code>text-embedding-3-small</code> (1,536 dims), and Alibaba’s <code>qwen3-embedding-8b</code> (4,096 dims), which sits at the top of the open-weights MTEB BEIR leaderboard.</p>
+<p>I reduced each model’s embeddings in two ways:</p>
+<ol type="1">
+<li>With <strong>truncation</strong>, I kept the first <em>d</em> dimensions and re-normalized. This is how you <a href="https://developers.openai.com/api/docs/guides/embeddings#reducing-embedding-dimensions">reduce dimensions</a> with MRL.</li>
+<li>With <strong>PCA</strong>, I fit the projection on the full-dimension document embeddings of the same dataset I then searched, and kept the top <em>d</em> components. From then on, every document and query embedding gets multiplied by that projection matrix and re-normalized before searching.</li>
+</ol>
+<p>Then I ran the benchmarks on the eight datasets, comparing the two methods on both models, to see which one preserves more retrieval quality as the embeddings get smaller.</p>
+</section>
+<section id="q2-is-it-just-the-mrl-training" class="level4">
+<h4 class="anchored" data-anchor-id="q2-is-it-just-the-mrl-training">Q2: is it just the MRL training?</h4>
+<p>If PCA does well, that might be because MRL training has already organized the embedding space in a convenient way. To test that, I added <code>text-embedding-ada-002</code>, an older 1,536-dimensional model that wasn’t trained using MRL, as a control.</p>
+<p>I applied PCA to both models. If PCA retains a similar share of retrieval quality on <code>text-embedding-3-small</code> and <code>text-embedding-ada-002</code>, that suggests its performance does not depend on MRL training.</p>
+</section>
+<section id="q3-does-the-fitting-data-matter" class="level4">
+<h4 class="anchored" data-anchor-id="q3-does-the-fitting-data-matter">Q3: does the fitting data matter?</h4>
+<p>PCA has to be fit on something, which raises two practical questions: how much fitting data do you need, and does it need to come from the corpus you’ll be searching?</p>
+<p>For the first question, I fit PCA on random samples of FiQA’s 57K documents (1,000, 5,000, 20,000, and the full corpus) and checked how much the size of the fitting sample changes retrieval quality.</p>
+<p>For the second, I compared regular PCA against <strong>out-of-domain PCA</strong>: a projection fit once on 100,000 MS MARCO passages and reused, unchanged, on every other dataset. This is the lazy version: fit on whatever data you have at the start and never update it.</p>
+</section>
+</section>
+<section id="but-first-a-sanity-check" class="level2">
+<h2 class="anchored" data-anchor-id="but-first-a-sanity-check">But first, a sanity check</h2>
+<p>Before running the experiment, I wanted to make sure the evaluation pipeline was producing sensible results. So I first tried to reproduce the official MTEB scores for the models.</p>
+<p>The table below compares NDCG@10 at full dimensions: the official MTEB score vs.&nbsp;the score produced by my evaluation pipeline.</p>
+<table class="table">
+<thead>
+<tr>
+<th rowspan="2" style="vertical-align: bottom;">
+dataset
+</th>
+<th colspan="2" style="text-align: center;">
+ada-002
+</th>
+<th colspan="2" style="text-align: center;">
+3-small
+</th>
+<th colspan="2" style="text-align: center;">
+qwen3-8b
+</th>
+</tr>
+<tr>
+<th>
+MTEB
+</th>
+<th>
+mine
+</th>
+<th>
+MTEB
+</th>
+<th>
+mine
+</th>
+<th>
+MTEB
+</th>
+<th>
+mine
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+SciFact
+</td>
+<td>
+0.7275
+</td>
+<td>
+0.7277
+</td>
+<td>
+0.7337
+</td>
+<td>
+0.7296
+</td>
+<td>
+0.7846
+</td>
+<td>
+0.7863
+</td>
+</tr>
+<tr>
+<td>
+NFCorpus
+</td>
+<td>
+0.3697
+</td>
+<td>
+0.3705
+</td>
+<td>
+0.3833
+</td>
+<td>
+0.3847
+</td>
+<td>
+0.4145
+</td>
+<td>
+0.4150
+</td>
+</tr>
+<tr>
+<td>
+ArguAna
+</td>
+<td>
+0.5744
+</td>
+<td>
+0.5757
+</td>
+<td>
+0.5549
+</td>
+<td>
+0.5573
+</td>
+<td>
+0.7685
+</td>
+<td>
+0.7689
+</td>
+</tr>
+<tr>
+<td>
+FiQA
+</td>
+<td>
+0.4441
+</td>
+<td>
+0.4440
+</td>
+<td>
+0.4491
+</td>
+<td>
+0.4484
+</td>
+<td>
+0.6457
+</td>
+<td>
+0.6492
+</td>
+</tr>
+<tr>
+<td>
+SciDocs
+</td>
+<td>
+0.1836
+</td>
+<td>
+0.1837
+</td>
+<td>
+0.2080
+</td>
+<td>
+0.2077
+</td>
+<td>
+0.3274
+</td>
+<td>
+0.3268
+</td>
+</tr>
+<tr>
+<td>
+Quora
+</td>
+<td>
+0.8760
+</td>
+<td>
+0.8759
+</td>
+<td>
+0.8883
+</td>
+<td>
+0.8880
+</td>
+<td>
+0.8890
+</td>
+<td>
+0.8901
+</td>
+</tr>
+<tr>
+<td>
+TREC-COVID
+</td>
+<td>
+0.6847
+</td>
+<td>
+0.6884
+</td>
+<td>
+0.7790
+</td>
+<td>
+0.7775
+</td>
+<td>
+0.9499
+</td>
+<td>
+0.9492
+</td>
+</tr>
+<tr>
+<td>
+Touché 2020
+</td>
+<td>
+0.2161
+</td>
+<td>
+0.2143
+</td>
+<td>
+0.2428
+</td>
+<td>
+0.2433
+</td>
+<td>
+0.3593
+</td>
+<td>
+0.3596
+</td>
+</tr>
+</tbody>
+</table>
+<p>Official numbers come from the MTEB results repository (<a href="https://github.com/embeddings-benchmark/results/tree/main/results/openai__text-embedding-3-small">text-embedding-3-small</a>, <a href="https://github.com/embeddings-benchmark/results/tree/main/results/openai__text-embedding-ada-002">text-embedding-ada-002</a>, <a href="https://github.com/embeddings-benchmark/results/tree/main/results/Qwen__Qwen3-Embedding-8B">qwen3-embedding-8b</a>). My results are close enough to the official numbers that I’m confident the pipeline is working as expected.</p>
+</section>
+<section id="q1-which-method-keeps-more-retrieval-quality" class="level2">
+<h2 class="anchored" data-anchor-id="q1-which-method-keeps-more-retrieval-quality">Q1: which method keeps more retrieval quality?</h2>
+<p>PCA matched or outperformed MRL truncation at nearly every dimension across both MRL-trained models.</p>
+<p>Each cell below shows how much retrieval quality survives the reduction: NDCG@10 at that dimension divided by NDCG@10 at full dimensions (1,536 for <code>text-embedding-3-small</code>, 4,096 for <code>qwen3-embedding-8b</code>), averaged over the eight datasets.</p>
+<table class="table">
+<thead>
+<tr>
+<th rowspan="2" style="vertical-align: bottom;">
+dims
+</th>
+<th colspan="2" style="text-align: center;">
+3-small (MRL)
+</th>
+<th colspan="2" style="text-align: center;">
+qwen3-8b (MRL)
+</th>
+</tr>
+<tr>
+<th>
+Truncation
+</th>
+<th>
+PCA
+</th>
+<th>
+Truncation
+</th>
+<th>
+PCA
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+512
+</td>
+<td>
+98%
+</td>
+<td>
+97%
+</td>
+<td>
+99%
+</td>
+<td>
+98%
+</td>
+</tr>
+<tr>
+<td>
+256
+</td>
+<td>
+94%
+</td>
+<td>
+95%
+</td>
+<td>
+96%
+</td>
+<td>
+96%
+</td>
+</tr>
+<tr>
+<td>
+128
+</td>
+<td>
+86%
+</td>
+<td>
+90%
+</td>
+<td>
+91%
+</td>
+<td>
+91%
+</td>
+</tr>
+<tr>
+<td>
+64
+</td>
+<td>
+71%
+</td>
+<td>
+82%
+</td>
+<td>
+83%
+</td>
+<td>
+84%
+</td>
+</tr>
+<tr>
+<td>
+32
+</td>
+<td>
+46%
+</td>
+<td>
+65%
+</td>
+<td>
+68%
+</td>
+<td>
+71%
+</td>
+</tr>
+</tbody>
+</table>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">3-small</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">qwen3-8b</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="17eed48e" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="00002b8f-c102-405c-aa6b-fc83ae24a17a" class="plotly-graph-div" style="height:440px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("00002b8f-c102-405c-aa6b-fc83ae24a17a")) {                    Plotly.newPlot(                        "00002b8f-c102-405c-aa6b-fc83ae24a17a",                        [{"customdata":{"dtype":"f8","bdata":"Xt1g3oyC0T+yUPaySrbZP07IxtLE3N0\u002fzmjm3uUR4D\u002fArmYScLTgPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"oi6fIJVs3T8xbiHgPLjmPzAR+7pWYes\u002fImHwkv4X7j8qP67aBGvvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"OSkgpFwr1z89KVLsQ2TcPwJcQq2N7t4\u002f1hQEABsq4D958zZbDnDgPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"9uFdmqun5D\u002fqI1FNXRzqP6uW0S+yyew\u002fR5mMooVe7j8eQ\u002fJzcvjuPw=="},"type":"scatter","xaxis":"x","yaxis":"y"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"size":12,"color":"#a1a1aa"},"text":"dimensions"},"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"annotations":[{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"3-small (MRL)","x":0.5,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"shapes":[{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.0,"y1":1.0,"yref":"y"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Share of full-dim NDCG@10 retained (mean of 8 datasets)","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":440,"showlegend":true,"dragmode":false},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('00002b8f-c102-405c-aa6b-fc83ae24a17a');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="d08a0e5f" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="56ce7007-5ba1-4413-ad5e-38051aaa2a38" class="plotly-graph-div" style="height:440px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("56ce7007-5ba1-4413-ad5e-38051aaa2a38")) {                    Plotly.newPlot(                        "56ce7007-5ba1-4413-ad5e-38051aaa2a38",                        [{"customdata":{"dtype":"f8","bdata":"YTpP264v3T8cC3DzlYvhPyFw6o4uAOM\u002fLrKtvzLj4z9Ut8A7CWDkPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"URkCcmqz5T8p7GFAzYHqP6t+ThwJCe0\u002fpDxf\u002foie7j+ZXbWIPZvvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"XiK4xTJz3j\u002fJ2DUWC7\u002fhP7aeq6kRFeM\u002fq2nZciXO4z+7MWLhnCrkPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"av0iIq\u002fJ5j+D2UvB6tjqP9acApe+Pu0\u002f124jygCY7j9cT5SHijjvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"size":12,"color":"#a1a1aa"},"text":"dimensions"},"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"annotations":[{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"qwen3-8b (MRL)","x":0.5,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"shapes":[{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.0,"y1":1.0,"yref":"y"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Share of full-dim NDCG@10 retained (mean of 8 datasets)","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":440,"showlegend":true,"dragmode":false},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('56ce7007-5ba1-4413-ad5e-38051aaa2a38');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>At 512 dimensions, MRL truncation has a slight advantage. But as the vectors get smaller, PCA catches up and either beats or matches MRL.</p>
+<p>On <code>text-embedding-3-small</code>, PCA is clearly better below 256 dims (65% vs 46% retained at 32). On <code>qwen3-embedding-8b</code> the race is much closer (71% vs 68% at 32).</p>
+<p>One thing I found interesting is that the MRL training in <code>qwen3-embedding-8b</code> is strong enough that its truncated 32-dim vectors, cut from 4,096 dimensions, retain more quality than 3-small’s cut from 1,536.</p>
+<p>Going dataset by dataset, you find some differences:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">3-small</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">qwen3-8b</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="03ab30a7" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="4f02ac19-0ecc-4280-99df-6fccdb74be48" class="plotly-graph-div" style="height:1160px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("4f02ac19-0ecc-4280-99df-6fccdb74be48")) {                    Plotly.newPlot(                        "4f02ac19-0ecc-4280-99df-6fccdb74be48",                        [{"customdata":{"dtype":"f8","bdata":"dd+OtS7m1T+pq0y1tnHdP2QOkzzKQOA\u002fHj1BwQpB4T+hpU0G5KzhPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"3kFXQqql4z9qFD28kGrqP5qTm2zSKe0\u002fnZBbRZ\u002f17j+hx0pbI7fvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"QpeUpqWS2T+BHuU4tVDfP3F9n\u002frI++A\u002fNkuhNyC04T8qxMOz6uvhPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"6TeTg2rx5j9gv4s9TRjsP8wc1Dxaee4\u002f5Y48zB7E7z9nDFMhHRTwPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"xDIkt+4fvD\u002fZAJeOtQXOP9MZtHl+yNU\u002f8CnXV8Gy2T+rxt3rkenbPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"9k2k60Vdzz8UK9GogL3gP+LopNHVSug\u002faooJT4uo7D\u002fqirkWpiDvPw=="},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"customdata":{"dtype":"f8","bdata":"qFg0DV5CzT8K0k6\u002fIT\u002fVP0xk\u002fMrndNg\u002fiFZCASvK2j9RDoCYiK7bPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"wQ7eypRQ4D8mEbiPprHnP+mCcwUVRus\u002f7RMcRyTg7T+RunXmz97uPw=="},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"customdata":{"dtype":"f8","bdata":"Nkb+Oek1wT8+\u002fRwMtofMP00V9Hv1GtM\u002fRJv1oQ2w1j+mhNLrMdzXPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"RWEGzBhf1j\u002f+Bovf7IriPycstCyY1eg\u002fxwC83LF97T9cDbjK1gPvPw=="},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"customdata":{"dtype":"f8","bdata":"E0AFQ+sczz9wCVrBq7LTPzpatDdT2tU\u002fxFclMAPX1j+57bypFHDXPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"0v3Lk6o45D9LzI+\u002fzJrpP2rwGWvgZ+w\u002fcoiGJ1aw7T9yyPsLTnfuPw=="},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"customdata":{"dtype":"f8","bdata":"14aoR5lC6T\u002fv+TO7VmHrP1nuxVcF+us\u002faAGkG+A87D9Sy6aGa1vsPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"wWZRVVZy7D\u002flpHnBitXuPyTrNgF8ge8\u002fPpabvMXM7z8m\u002f+2LK+\u002fvPw=="},"type":"scatter","xaxis":"x4","yaxis":"y4"},{"customdata":{"dtype":"f8","bdata":"6AoM56Au6D8\u002fFiwBhobqP7xEmwz9qes\u002fwaK4mt0c7D8QlaVulVfsPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"3R\u002fq6Y076z86Vb63H9\u002ftP\u002fHGgS9bJ+8\u002fvuKNhrmo7z9RHLCQ2ervPw=="},"type":"scatter","xaxis":"x4","yaxis":"y4"},{"customdata":{"dtype":"f8","bdata":"m70IPCgOsD\u002fS\u002fQWYpVa8PxvcY7ZjwMM\u002fr4RUnY43xz+6lTAw\u002f4rJPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"hltNhcNT0z9Ei\u002feZiA7hP7GeVwfUxuc\u002f9wEajMry6z\u002fAOa1Ek7\u002fuPw=="},"type":"scatter","xaxis":"x5","yaxis":"y5"},{"customdata":{"dtype":"f8","bdata":"4kJ2+FaMvj8xngEqbUrEPwg7zuNh2sY\u002fXV4bVIUbyT\u002f4cAx01\u002fDJPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"huBFagVj4j\u002fcxCLh\u002fmzoP5gir+Oggus\u002f8G3EsWE57j+j7A7JLDrvPw=="},"type":"scatter","xaxis":"x5","yaxis":"y5"},{"customdata":{"dtype":"f8","bdata":"FLhQAAfe1j\u002fLOt+a4HzgP\u002feO5En3yuM\u002fHEO8mPwk5j\u002fGx16svQTnPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"EASMaR9X3z\u002fCLhxH15jmP8PYNF5uIOs\u002fbqSi1IRZ7j\u002fmHUVKLozvPw=="},"type":"scatter","xaxis":"x6","yaxis":"y6"},{"customdata":{"dtype":"f8","bdata":"C73T\u002fRfs4T8uWS+82ofkPz4xQw3fNuY\u002f1K4hnZPE5j8jB4Te4jnnPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"069WQx+Q6D+aosH6TiPsPyvJKb4Hcu4\u002fSLMd4D007z+vDhKgBNXvPw=="},"type":"scatter","xaxis":"x6","yaxis":"y6"},{"customdata":{"dtype":"f8","bdata":"glqvQoW30j9YYB+j0mbkP8YRUfiyEec\u002fyrJEMcw35z8h\u002fIaCY6LoPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"78Kz5NgS2D93xc5tlj3qP+H\u002fmfXmq+0\u002fj\u002fJ4iufc7T\u002f8RxvERK\u002fvPw=="},"type":"scatter","xaxis":"x7","yaxis":"y7"},{"customdata":{"dtype":"f8","bdata":"YmywpyW\u002f3T+aDv5nc3bjP8grnuhCQuU\u002f9C\u002fOUUdp5j9cY+dNeZ7mPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"i5R5wksh4z+Ho\u002fDlawjpP0TD8EXUV+s\u002faacOq0fT7D8G7QsasxftPw=="},"type":"scatter","xaxis":"x7","yaxis":"y7"},{"customdata":{"dtype":"f8","bdata":"DDByRfyzuT+BYkp5V7TGP6TUfTAa58s\u002f\u002fThGsMDUzj852Nt9uLnOPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"EXlCQDBp2j+nBhasZ1TnP2d+hhDQq+w\u002fEr6Qfhuu7z+f+rm5VJLvPw=="},"type":"scatter","xaxis":"x8","yaxis":"y8"},{"customdata":{"dtype":"f8","bdata":"UrKERdsBwD+KCZ+Se2HHPz2LhfZi9Mo\u002f3axwRBvqzD8y9wQzSGTNPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"coaxlrRy4D9KIiJkUAboPz+v37lpsus\u002fk\u002fMGFvO17T94eJ1WfTPuPw=="},"type":"scatter","xaxis":"x8","yaxis":"y8"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"anchor":"x","domain":[0.825,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis2":{"anchor":"y2","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis2":{"anchor":"x2","domain":[0.825,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis3":{"anchor":"y3","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis3":{"anchor":"x3","domain":[0.55,0.7250000000000001],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis4":{"anchor":"y4","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis4":{"anchor":"x4","domain":[0.55,0.7250000000000001],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis5":{"anchor":"y5","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis5":{"anchor":"x5","domain":[0.275,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis6":{"anchor":"y6","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis6":{"anchor":"x6","domain":[0.275,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis7":{"anchor":"y7","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis7":{"anchor":"x7","domain":[0.0,0.175],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis8":{"anchor":"y8","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis8":{"anchor":"x8","domain":[0.0,0.175],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"annotations":[{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"arguana (full ndcg@10: 0.557)","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"fiqa (full ndcg@10: 0.448)","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"nfcorpus (full ndcg@10: 0.385)","x":0.225,"xanchor":"center","xref":"paper","y":0.7250000000000001,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"quora (full ndcg@10: 0.888)","x":0.775,"xanchor":"center","xref":"paper","y":0.7250000000000001,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"scidocs (full ndcg@10: 0.208)","x":0.225,"xanchor":"center","xref":"paper","y":0.45,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"scifact (full ndcg@10: 0.730)","x":0.775,"xanchor":"center","xref":"paper","y":0.45,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"trec-covid (full ndcg@10: 0.777)","x":0.225,"xanchor":"center","xref":"paper","y":0.175,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"webis-touche2020 (full ndcg@10: 0.243)","x":0.775,"xanchor":"center","xref":"paper","y":0.175,"yanchor":"bottom","yref":"paper"}],"shapes":[{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.0,"y1":1.0,"yref":"y"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x2 domain","y0":1.0,"y1":1.0,"yref":"y2"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x3 domain","y0":1.0,"y1":1.0,"yref":"y3"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x4 domain","y0":1.0,"y1":1.0,"yref":"y4"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x5 domain","y0":1.0,"y1":1.0,"yref":"y5"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x6 domain","y0":1.0,"y1":1.0,"yref":"y6"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x7 domain","y0":1.0,"y1":1.0,"yref":"y7"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x8 domain","y0":1.0,"y1":1.0,"yref":"y8"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Share of full-dim NDCG@10 retained, per dataset","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.04716981132075472,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":1160,"showlegend":true,"dragmode":false},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('4f02ac19-0ecc-4280-99df-6fccdb74be48');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="d51a3965" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="9d2928ae-b9d8-440c-9cb5-6a2034b02496" class="plotly-graph-div" style="height:1160px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("9d2928ae-b9d8-440c-9cb5-6a2034b02496")) {                    Plotly.newPlot(                        "9d2928ae-b9d8-440c-9cb5-6a2034b02496",                        [{"customdata":{"dtype":"f8","bdata":"njO9tPm94j9PZtrr4a7lP8oaeAP0Dec\u002fFG4I4QFF6D\u002fGc+R903roPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"GWCmozNg6D8WzR70bDPsP1dRYFoG\u002fO0\u002fAD0bNZSQ7z+LobQ9k9bvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"t+omSGrK4z9iSM6PBOvlP1Q8YiHOGec\u002f6Weaj2yz5z+TL\u002fVomBjoPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":true,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"gIdf+VS96T+cOgYUo4HsPxEBNH9wC+4\u002fgcQtFTzT7j9fY9Iu0VbvPw=="},"type":"scatter","xaxis":"x","yaxis":"y"},{"customdata":{"dtype":"f8","bdata":"ES7piGBc1z\u002fyn1mCt47gP0p7shhPgOI\u002fB5YqyezA4z99g8kS+HTkPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"2PWxQ+z94T8vRzltFoHpP0bJYiONf+w\u002fPY9LH2lt7j\u002fLAPuevYLvPw=="},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"customdata":{"dtype":"f8","bdata":"1E\u002fOCFsU3D\u002f1k8t+xjHhP9H7fpP6COM\u002f3OqS0I7y4z+b0puwMX7kPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"uiK7YUag5T+aEiYKQXzqP3TVRPARUu0\u002fVgdby9y57j+9t25T85DvPw=="},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"customdata":{"dtype":"f8","bdata":"ydv\u002feANrzD+xLAqiCivTP8RjkdM649U\u002f85Ye8pae1z\u002fBy4SlJ83ZPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"JNAOT+Ue4T\u002fFJEWXlBjnP\u002f7EXgxuX+o\u002fH\u002fhUVaR17D+V\u002fEK\u002fqhbvPw=="},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"customdata":{"dtype":"f8","bdata":"QndlgAwR0T\u002fvO+y+yQfVP1jhX2brrdc\u002fT0hzyXMm2T\u002fhWm7nX3bZPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"qy989VeQ5D8URl1MBVfpPwVCGfociOw\u002fCoDq2s1N7j9POvSbGq7uPw=="},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"customdata":{"dtype":"f8","bdata":"M3wfOLBC6j9AKyP9OIzrP8Zl+hjJE+w\u002fyRmytihR7D+iJL4C6mnsPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"g+af8vOA7T8jBA5uL\u002fPuP9Idlo99i+8\u002f2qxEl3HQ7z8\u002fDlSOQezvPw=="},"type":"scatter","xaxis":"x4","yaxis":"y4"},{"customdata":{"dtype":"f8","bdata":"GiFgc\u002fQV5j+SJfRkW\u002fjpPw2YaGJ6b+s\u002fngaw6MEJ7D997zSWDE3sPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"KqtHlzrQ6D+fOQgHcS3tP63oKwbk0u4\u002fyzfVUTmA7z++ZjuG08vvPw=="},"type":"scatter","xaxis":"x4","yaxis":"y4"},{"customdata":{"dtype":"f8","bdata":"d0zMhah6yT8C97pguZXQPyI72jfshNI\u002fKtot3NPR0z+uN8E+hpzUPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"NNa80Rp+4z\u002fnUt6ZT2DpP8LNAIcBVuw\u002f+SsayWBT7j8YjKRjhYnvPw=="},"type":"scatter","xaxis":"x5","yaxis":"y5"},{"customdata":{"dtype":"f8","bdata":"\u002fdQxSq+\u002fzD8HlRy2AeTQP+9MMo\u002fyn9I\u002fZlJMowqU0z9inAYtXBjUPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"MOYH\u002fHb+5T9H6UX6FtjpP\u002fsJJCpbf+w\u002fQLDVHtf07T8YxTdzTL\u002fuPw=="},"type":"scatter","xaxis":"x5","yaxis":"y5"},{"customdata":{"dtype":"f8","bdata":"OBNNUMdT4T8ftlnzqGnlPyTpndxvkuc\u002fmi84u2oL6D9jCmzINLLoPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"cTWwOSoJ5j9e6O6JQTvrP\u002f+CkOA++u0\u002f4Mx20xmU7j\u002f3UeS4NmjvPw=="},"type":"scatter","xaxis":"x6","yaxis":"y6"},{"customdata":{"dtype":"f8","bdata":"YJ8UDkS15D90MFOIGI7mP0vvO2Mhvuc\u002f4Z17+YIm6D8wBZB1kIXoPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"fdtFXddV6j93lhSvKK\u002fsP6H1T\u002frPMe4\u002fCw6074627j+8LnTYcC\u002fvPw=="},"type":"scatter","xaxis":"x6","yaxis":"y6"},{"customdata":{"dtype":"f8","bdata":"DOouBa4p5j9PVw5hJeDqP90u\u002fjlVz+w\u002fHlJq2Pw67j\u002fO83Cc62vuPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"tvqhzJ9Z5z\u002fXiMjVuFDsP5KT3cFvWu4\u002fFGDxmJLZ7z90hYw3kAbwPw=="},"type":"scatter","xaxis":"x7","yaxis":"y7"},{"customdata":{"dtype":"f8","bdata":"Ul5JygaN5z9DD4ho8ZHrPwj+Hbyyv+w\u002fQousavqg7T9Akj5O4BPuPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"dkpv2gHQ6D\u002fbFZUzCwztP7m9KNn2Se4\u002f5LKpDlA37z\u002fPCCetXbDvPw=="},"type":"scatter","xaxis":"x7","yaxis":"y7"},{"customdata":{"dtype":"f8","bdata":"WW3ymgNkzD83EL20WdHQP3Y7uUsfk9M\u002fkXJ\u002fQ8OH1T+nPTPnOafWPw=="},"hovertemplate":"\u003cb\u003eMatryoshka (truncate + renorm)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"mrl","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"Matryoshka (truncate + renorm)","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"k7f6jnW84z\u002f9X86i2GHnP5cTTZ8ZN+s\u002fABt3fCfv7T+nVsKP0n7vPw=="},"type":"scatter","xaxis":"x8","yaxis":"y8"},{"customdata":{"dtype":"f8","bdata":"opxUrweexz+zcARLCjXPPwlC4DcO49I\u002f6frLZmM51T80EoUagyDWPw=="},"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003endcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"pca_in","line":{"color":"#60a5fa","dash":"solid","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"PCA","showlegend":false,"x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"HVp89fpq4D+Wad27sLHlPycoukpPQuo\u002f3IGfJjCC7T8Wwl6fhsPuPw=="},"type":"scatter","xaxis":"x8","yaxis":"y8"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"anchor":"x","domain":[0.825,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis2":{"anchor":"y2","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis2":{"anchor":"x2","domain":[0.825,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis3":{"anchor":"y3","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis3":{"anchor":"x3","domain":[0.55,0.7250000000000001],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis4":{"anchor":"y4","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis4":{"anchor":"x4","domain":[0.55,0.7250000000000001],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis5":{"anchor":"y5","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis5":{"anchor":"x5","domain":[0.275,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis6":{"anchor":"y6","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis6":{"anchor":"x6","domain":[0.275,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis7":{"anchor":"y7","domain":[0.0,0.45],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis7":{"anchor":"x7","domain":[0.0,0.175],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"xaxis8":{"anchor":"y8","domain":[0.55,1.0],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"type":"log","tickvals":[32,64,128,256,512]},"yaxis8":{"anchor":"x8","domain":[0.0,0.175],"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"},"annotations":[{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"arguana (full ndcg@10: 0.769)","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"fiqa (full ndcg@10: 0.649)","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"nfcorpus (full ndcg@10: 0.415)","x":0.225,"xanchor":"center","xref":"paper","y":0.7250000000000001,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"quora (full ndcg@10: 0.890)","x":0.775,"xanchor":"center","xref":"paper","y":0.7250000000000001,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"scidocs (full ndcg@10: 0.327)","x":0.225,"xanchor":"center","xref":"paper","y":0.45,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"scifact (full ndcg@10: 0.786)","x":0.775,"xanchor":"center","xref":"paper","y":0.45,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"trec-covid (full ndcg@10: 0.949)","x":0.225,"xanchor":"center","xref":"paper","y":0.175,"yanchor":"bottom","yref":"paper"},{"font":{"color":"#e4e4e7","size":13},"showarrow":false,"text":"webis-touche2020 (full ndcg@10: 0.360)","x":0.775,"xanchor":"center","xref":"paper","y":0.175,"yanchor":"bottom","yref":"paper"}],"shapes":[{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.0,"y1":1.0,"yref":"y"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x2 domain","y0":1.0,"y1":1.0,"yref":"y2"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x3 domain","y0":1.0,"y1":1.0,"yref":"y3"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x4 domain","y0":1.0,"y1":1.0,"yref":"y4"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x5 domain","y0":1.0,"y1":1.0,"yref":"y5"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x6 domain","y0":1.0,"y1":1.0,"yref":"y6"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x7 domain","y0":1.0,"y1":1.0,"yref":"y7"},{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x8 domain","y0":1.0,"y1":1.0,"yref":"y8"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"Share of full-dim NDCG@10 retained, per dataset","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.04716981132075472,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":1160,"showlegend":true,"dragmode":false},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('9d2928ae-b9d8-440c-9cb5-6a2034b02496');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>At the smallest dimensions, PCA wins on seven of the eight datasets for <code>text-embedding-3-small</code> and six of the eight for <code>qwen3-embedding-8b</code>.</p>
+<p>Across dimensions, PCA performs better on SciFact, FiQA, and NFCorpus for both models. ArguAna and SciDocs also favor PCA with <code>text-embedding-3-small</code>, although the results are less conclusive with <code>qwen3-embedding-8b</code>. Truncation performs better on Quora for both models. Touché favors truncation on <code>qwen3-embedding-8b</code> but is basically a tie on <code>text-embedding-3-small</code>, and the result for TREC-COVID depends on the dimension.</p>
+</section>
+<section id="q2-is-it-just-the-mrl-training-1" class="level2">
+<h2 class="anchored" data-anchor-id="q2-is-it-just-the-mrl-training-1">Q2: is it just the MRL training?</h2>
+<p>I worried that PCA might only look good on <code>text-embedding-3-small</code> and <code>qwen3-embedding-8b</code> because MRL training had already organized their embedding spaces in some convenient way. If that were true, PCA on <code>text-embedding-ada-002</code>, which never saw MRL training, should be noticeably worse.</p>
+<p>For the most part, it isn’t. Down to 128 dimensions, PCA retains nearly the same share of quality on <code>text-embedding-ada-002</code> as on <code>text-embedding-3-small</code>; below that, a small gap opens:</p>
+<table class="table">
+<thead>
+<tr>
+<th rowspan="2" style="vertical-align: bottom;">
+dims
+</th>
+<th colspan="1" style="text-align: center;">
+ada-002 (no MRL)
+</th>
+<th colspan="2" style="text-align: center;">
+3-small (MRL)
+</th>
+</tr>
+<tr>
+<th>
+PCA
+</th>
+<th>
+Truncation
+</th>
+<th>
+PCA
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+512
+</td>
+<td>
+99%
+</td>
+<td>
+98%
+</td>
+<td>
+97%
+</td>
+</tr>
+<tr>
+<td>
+256
+</td>
+<td>
+96%
+</td>
+<td>
+94%
+</td>
+<td>
+95%
+</td>
+</tr>
+<tr>
+<td>
+128
+</td>
+<td>
+89%
+</td>
+<td>
+86%
+</td>
+<td>
+90%
+</td>
+</tr>
+<tr>
+<td>
+64
+</td>
+<td>
+78%
+</td>
+<td>
+71%
+</td>
+<td>
+82%
+</td>
+</tr>
+<tr>
+<td>
+32
+</td>
+<td>
+59%
+</td>
+<td>
+46%
+</td>
+<td>
+65%
+</td>
+</tr>
+</tbody>
+</table>
+<div id="e722af0c" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="b4c859b9-1c02-4f7d-96d5-fcd18409d2ea" class="plotly-graph-div" style="height:420px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("b4c859b9-1c02-4f7d-96d5-fcd18409d2ea")) {                    Plotly.newPlot(                        "b4c859b9-1c02-4f7d-96d5-fcd18409d2ea",                        [{"customdata":{"dtype":"f8","bdata":"OSkgpFwr1z89KVLsQ2TcPwJcQq2N7t4\u002f1hQEABsq4D958zZbDnDgPw=="},"hovertemplate":"\u003cb\u003e3-small (MRL)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#eb841b","dash":"solid","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"3-small (MRL)","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"9uFdmqun5D\u002fqI1FNXRzqP6uW0S+yyew\u002fR5mMooVe7j8eQ\u002fJzcvjuPw=="},"type":"scatter"},{"customdata":{"dtype":"f8","bdata":"nbn\u002frm391D85Z5bkphnaPy2r+4gzd90\u002f2RvhInZG3z9S8XBvjgLgPw=="},"hovertemplate":"\u003cb\u003eada-002 (no MRL)\u003c\u002fb\u003e\u003cbr\u003ed=%{x}\u003cbr\u003eretention=%{y:.1%}\u003cbr\u003eavg ndcg@10=%{customdata:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#60a5fa","dash":"dash","width":2},"marker":{"color":"#60a5fa","size":6},"mode":"lines+markers","name":"ada-002 (no MRL)","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"7LBhpqjv4j\u002ftHXsHJtLoP70nIJVXkew\u002fjsGs3tTM7j9h3AGyjpPvPw=="},"type":"scatter"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"shapes":[{"line":{"color":"#a1a1aa","dash":"dash","width":1},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":1.0,"y1":1.0,"yref":"y"}],"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"In-domain PCA: share of full-dim NDCG@10 retained, both models","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":420,"showlegend":true,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"size":12,"color":"#a1a1aa"},"text":"dimensions"},"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"tickformat":".0%"}},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('b4c859b9-1c02-4f7d-96d5-fcd18409d2ea');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p>PCA on <code>text-embedding-ada-002</code> retains 78% at 64 dims and 59% at 32, against 82% and 65% on <code>text-embedding-3-small</code>. It might be that MRL genuinely helps, or simply that <code>text-embedding-3-small</code> is a newer, better model. I can’t separate the two with this experiment. But either way, the hypothesis that PCA only works because of MRL seems unlikely given that even PCA on the non-MRL model beats truncation on the MRL model at those dimensions (59% vs 46% at 32 dims).</p>
+<p>Out of curiosity, I also tried truncation on <code>text-embedding-ada-002</code>, even though the model was never trained for it. It held up much better than I imagined, with 83% retained at 128 dimensions.</p>
+</section>
+<section id="q3-does-the-fitting-data-matter-1" class="level2">
+<h2 class="anchored" data-anchor-id="q3-does-the-fitting-data-matter-1">Q3: does the fitting data matter?</h2>
+<p>Compared to MRL, PCA adds more operational complexity: fitting and versioning the projection, using it while querying, updating the projection when the index changes. So I wanted to know what happens if you’re lazy: fit PCA once, when you first create the index, and never touch it again.</p>
+<p><strong>In-domain fit on a small sample.</strong> In this scenario, you fit PCA on the documents you have at the start (1,000, 5,000, 20,000, or all of FiQA’s 57K) and use that projection for everything you index afterwards. At this scale, it doesn’t matter much: the projection fit on 1,000 documents performs almost the same as the one fit on the full corpus, at every dimension, on both models.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">3-small</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">qwen3-8b</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div id="89e4b2ae" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="2843e6e3-c051-405d-9128-172eeb3bb097" class="plotly-graph-div" style="height:420px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("2843e6e3-c051-405d-9128-172eeb3bb097")) {                    Plotly.newPlot(                        "2843e6e3-c051-405d-9128-172eeb3bb097",                        [{"hovertemplate":"%{y:.4f}","line":{"color":"#3f3f46","width":2},"marker":{"color":"#3f3f46","size":6},"mode":"lines+markers","name":"fit on 1,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"aE1h87n7zD+q\u002fS50UdPUP6fvKnm1Wtg\u002f0XG5iOqZ2j\u002foyjNJ3YfbPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#71717a","width":2},"marker":{"color":"#71717a","size":6},"mode":"lines+markers","name":"fit on 5,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"1u7O\u002fq0IzD9aRHFQcBHVP9e2FrAQkdg\u002fth\u002flNWzq2j\u002f8DuelUsXbPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#a1a1aa","width":2},"marker":{"color":"#a1a1aa","size":6},"mode":"lines+markers","name":"fit on 20,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"cMrIgHX8zD9QqAWpx0bVP4QNHrwcftg\u002fke\u002fxd3HD2j9MvpBALKfbPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#eb841b","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"fit on 57,638 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"qFg0DV5CzT8K0k6\u002fIT\u002fVP0xk\u002fMrndNg\u002fiFZCASvK2j9RDoCYiK7bPw=="},"type":"scatter"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"In-domain PCA on fiqa: NDCG@10 by fit-sample size","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":420,"showlegend":true,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"size":12,"color":"#a1a1aa"},"text":"dimensions"},"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"hovermode":"x unified"},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('2843e6e3-c051-405d-9128-172eeb3bb097');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div id="d3614179" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="3d69f4c5-2bc6-4373-bfb5-fb6d9ba41796" class="plotly-graph-div" style="height:420px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("3d69f4c5-2bc6-4373-bfb5-fb6d9ba41796")) {                    Plotly.newPlot(                        "3d69f4c5-2bc6-4373-bfb5-fb6d9ba41796",                        [{"hovertemplate":"%{y:.4f}","line":{"color":"#3f3f46","width":2},"marker":{"color":"#3f3f46","size":6},"mode":"lines+markers","name":"fit on 1,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"PIru2HVH3D9GIwOU8DnhPz9\u002fiVpcwuI\u002fj5EHZCnU4z+e1c5wuVPkPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#71717a","width":2},"marker":{"color":"#71717a","size":6},"mode":"lines+markers","name":"fit on 5,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"UpqfTYS62z8eC+ht7i7hP5E27yuj+uI\u002fyQDPRevz4z\u002fGuC5vz13kPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#a1a1aa","width":2},"marker":{"color":"#a1a1aa","size":6},"mode":"lines+markers","name":"fit on 20,000 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"HzmjKvlD3D+GTEZevyrhP4Y22OQMAeM\u002f8+Fjjxv84z+DEQG5N2nkPw=="},"type":"scatter"},{"hovertemplate":"%{y:.4f}","line":{"color":"#eb841b","width":2},"marker":{"color":"#eb841b","size":6},"mode":"lines+markers","name":"fit on 57,638 docs","x":{"dtype":"i2","bdata":"IABAAIAAAAEAAg=="},"y":{"dtype":"f8","bdata":"1E\u002fOCFsU3D\u002f1k8t+xjHhP9H7fpP6COM\u002f3OqS0I7y4z+b0puwMX7kPw=="},"type":"scatter"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"In-domain PCA on fiqa: NDCG@10 by fit-sample size","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":420,"showlegend":true,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true,"title":{"font":{"size":12,"color":"#a1a1aa"},"text":"dimensions"},"type":"log","tickvals":[32,64,128,256,512]},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"hovermode":"x unified"},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('3d69f4c5-2bc6-4373-bfb5-fb6d9ba41796');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Out-of-domain fit.</strong> In this scenario, the data you fit on doesn’t match the data you end up searching, either because your corpus drifted over time or because you fit on whatever was available. To simulate the extreme version, I fit PCA once on 100K generic MS MARCO passages and searched every other dataset with that projection.</p>
+<p>On <code>text-embedding-3-small</code>, the transferred fit is as good or better on average from 512 through 64 dimensions. Dataset-level gaps are larger in both directions, as the chart shows. On <code>qwen3-embedding-8b</code> it keeps up down to 128 dimensions but falls behind at lower dimensions (56% vs 71% retained at 32 dims).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">3-small</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">qwen3-8b</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div id="627854e7" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="576c9920-0f05-4408-a856-f2b86deb08d8" class="plotly-graph-div" style="height:400px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("576c9920-0f05-4408-a856-f2b86deb08d8")) {                    Plotly.newPlot(                        "576c9920-0f05-4408-a856-f2b86deb08d8",                        [{"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003e%{x}: %{y:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#60a5fa"},"name":"PCA","x":["arguana","fiqa","nfcorpus","quora","scidocs","scifact","trec-covid","webis-touche2020"],"y":{"dtype":"f8","bdata":"gR7lOLVQ3z8K0k6\u002fIT\u002fVP3AJWsGrstM\u002fPxYsAYaG6j8xngEqbUrEPy5ZL7zah+Q\u002fmg7+Z3N24z+KCZ+Se2HHPw=="},"type":"bar"},{"hovertemplate":"\u003cb\u003ePCA (fit on MS MARCO)\u003c\u002fb\u003e\u003cbr\u003e%{x}: %{y:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#f87171"},"name":"PCA (fit on MS MARCO)","x":["arguana","fiqa","nfcorpus","quora","scidocs","scifact","trec-covid","webis-touche2020"],"y":{"dtype":"f8","bdata":"K7tJ5rFp4D8QE3m13dTTPxKwgNra59I\u002fT8t0fYJl6z\u002fkXyasPAHCP+qvPk7vLuM\u002fIVhJPD+S5T88C8xm17\u002fKPw=="},"type":"bar"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"NDCG@10 at d=64: in-domain vs out-of-domain PCA fit","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":400,"showlegend":true,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"barmode":"group","bargap":0.25},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('576c9920-0f05-4408-a856-f2b86deb08d8');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div id="06ff4b53" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="c3895cdf-524c-497a-ae23-bcff38cf9749" class="plotly-graph-div" style="height:400px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("c3895cdf-524c-497a-ae23-bcff38cf9749")) {                    Plotly.newPlot(                        "c3895cdf-524c-497a-ae23-bcff38cf9749",                        [{"hovertemplate":"\u003cb\u003ePCA\u003c\u002fb\u003e\u003cbr\u003e%{x}: %{y:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#60a5fa"},"name":"PCA","x":["arguana","fiqa","nfcorpus","quora","scidocs","scifact","trec-covid","webis-touche2020"],"y":{"dtype":"f8","bdata":"YkjOjwTr5T\u002f1k8t+xjHhP+877L7JB9U\u002fkiX0ZFv46T8HlRy2AeTQP3QwU4gYjuY\u002fQw+IaPGR6z+zcARLCjXPPw=="},"type":"bar"},{"hovertemplate":"\u003cb\u003ePCA (fit on MS MARCO)\u003c\u002fb\u003e\u003cbr\u003e%{x}: %{y:.4f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#f87171"},"name":"PCA (fit on MS MARCO)","x":["arguana","fiqa","nfcorpus","quora","scidocs","scifact","trec-covid","webis-touche2020"],"y":{"dtype":"f8","bdata":"zl+Jem\u002fj5D+YZflH8CPgP7m0hPMap9E\u002fOUwrtby96j8xEA0pAJvMP2CVv3XMyOQ\u002ffxOEo0g16D9TzaAxMk7RPw=="},"type":"bar"}],                        {"template":{"data":{"scatter":[{"type":"scatter"}]},"layout":{"margin":{"b":0,"l":0,"r":0,"t":30}}},"title":{"font":{"size":15,"color":"#e4e4e7"},"text":"NDCG@10 at d=64: in-domain vs out-of-domain PCA fit","x":0.5,"xanchor":"center"},"font":{"family":"Georgia, serif","size":13,"color":"#e4e4e7"},"margin":{"l":10,"r":10,"t":60,"b":40},"legend":{"font":{"size":12,"color":"#a1a1aa"},"orientation":"h","yanchor":"bottom","y":-0.25,"x":0.5,"xanchor":"center"},"hoverlabel":{"font":{"family":"Georgia, serif","size":12,"color":"#e4e4e7"},"bgcolor":"#27272a","bordercolor":"#eb841b","align":"left"},"paper_bgcolor":"#18181b","plot_bgcolor":"#18181b","height":400,"showlegend":true,"dragmode":false,"xaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"yaxis":{"gridcolor":"#3f3f46","zeroline":false,"linecolor":"#3f3f46","tickcolor":"#3f3f46","automargin":true},"barmode":"group","bargap":0.25},                        {"displayModeBar": false, "responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('c3895cdf-524c-497a-ae23-bcff38cf9749');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Good news for lazy people like me. Fit-sample size matters much less than I expected, and an out-of-domain fit holds up at moderate compression. Qwen at 32 dimensions is the clear exception. These patterns may be a consequence of the scale of the experiments or the particular benchmarks I used.</p>
+</section>
+<section id="what-about-quantization" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-quantization">What about quantization?</h2>
+<p>You can also shrink vectors using a technique called quantization. Instead of reducing the number of dimensions, quantization stores each dimension using fewer bits. With <code>int8</code>, each dimension uses 1 byte (4x smaller than <code>float32</code>); with binary, just the sign bit (32x smaller). For the numbers below, int8 quantizes the document vectors while keeping queries at float32; binary quantizes both documents and queries and ranks by dot product, which is equivalent to Hamming-distance ranking.</p>
+<p>Using quantization alone, you get these results for <code>text-embedding-3-small</code> at full 1,536 dimensions:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>config</th>
+<th>bytes per vector</th>
+<th>size vs full float32</th>
+<th>quality retained</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>int8</td>
+<td>1,536</td>
+<td>25%</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>binary</td>
+<td>192</td>
+<td>3.1%</td>
+<td>95%</td>
+</tr>
+</tbody>
+</table>
+<p>You can push this further by combining quantization with truncation or PCA. The resulting vectors can be dramatically smaller while still preserving a surprising amount of retrieval quality.</p>
+<p>For example, combining binary quantization with PCA at 512 dimensions retains 82% of the original performance while reducing the raw vector size to about 1% of the float32 baseline. That seems a bit too optimistic, so it might just be my AI psychosis. Here are the full <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca/data/analysis/openai__text-embedding-3-small/quantization_summary.csv">results</a>.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ul>
+<li><strong>Few embedding models</strong>: I tested three models, and two of them are from OpenAI. Qwen already showed that a stronger MRL implementation narrows PCA’s lead, so other model families could shift the results further.</li>
+<li><strong>Corpus size</strong>: I excluded the largest BEIR datasets to keep the budget under control (~$30 spent), so it’s possible PCA falls behind MRL at a scale I didn’t reach.</li>
+<li><strong>Lab conditions</strong>: my evaluation runs exact search over raw vectors, which is not how an actual vector database works. A real deployment would use an approximate index, apply its own compression, rescore with full-precision vectors, and often mix in BM25 and a reranker. This could invalidate my results.</li>
+<li><strong>Benchmark contamination</strong>: BEIR datasets are widely used to train embedding models, so the absolute scores are probably inflated.</li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>PCA not only held its own against MRL truncation, it won on most dimensions.</p>
+<p>On <code>text-embedding-3-small</code>, PCA beat MRL truncation at nearly every dimension, and by a wide margin at aggressive compression: 65% of quality retained at 32 dims against truncation’s 46%. On <code>qwen3-embedding-8b</code>, MRL had a small edge at 512 dimensions and was effectively tied at 256, while PCA led below that.</p>
+<p>These results also don’t appear to be an artifact of MRL training. PCA worked similarly well on ada-002, which wasn’t trained for truncation.</p>
+<p>It’s also lower-maintenance than I expected. Results barely changed when fitting on a small in-domain sample. An out-of-domain fit also held up at moderate compression.</p>
+<p>Not bad for a technique that’s older than the washing machine<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>!</p>
+<p>If you want to look at the data yourself, the full pipeline is in the <a href="https://github.com/dylanjcastillo/blog/tree/main/_extras/matryoshka-vs-pca">repo</a>.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>this <a href="https://setosa.io/ev/principal-component-analysis/">page</a> explains it quite well<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>electric washing machine<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{castillo2026,
+  author = {Castillo, Dylan},
+  title = {Honey, {I} Shrunk the Embeddings: {Matryoshka} Vs. {PCA}},
+  date = {2026-08-01},
+  url = {https://dylancastillo.co/posts/matryoshka-vs-pca.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-castillo2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Castillo, Dylan. 2026. <span>“Honey, I Shrunk the Embeddings: Matryoshka
+Vs. PCA.”</span> August 1. <a href="https://dylancastillo.co/posts/matryoshka-vs-pca.html">https://dylancastillo.co/posts/matryoshka-vs-pca.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dylancastillo\.co");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="dylanjcastillo/blog_comments" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Dylan Castillo</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://subscribe.dylancastillo.co">
+<p>Newsletter</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
