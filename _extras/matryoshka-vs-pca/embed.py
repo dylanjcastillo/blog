@@ -35,6 +35,7 @@ from config import (
     PROVIDER,
     QUERY_PREFIX,
     RAW_DIR,
+    TASK_INSTRUCTIONS,
 )
 
 
@@ -164,7 +165,10 @@ def main() -> None:
     for name in names:
         encode(name, "docs", DOC_PREFIX, args.limit, backend)
         if name != PCA_FIT_CORPUS:
-            encode(name, "queries", QUERY_PREFIX, args.limit, backend)
+            query_prefix = QUERY_PREFIX
+            if MODEL_NAME.startswith("qwen/") and name in TASK_INSTRUCTIONS:
+                query_prefix = f"Instruct: {TASK_INSTRUCTIONS[name]}\nQuery: "
+            encode(name, "queries", query_prefix, args.limit, backend)
 
 
 if __name__ == "__main__":

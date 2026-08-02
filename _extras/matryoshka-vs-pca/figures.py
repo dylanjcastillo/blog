@@ -26,7 +26,7 @@ FONT = dict(family="Georgia, serif", size=13, color=INK)
 
 METHOD_STYLE = {
     "mrl": dict(name="Matryoshka (truncate + renorm)", color=ACCENT, dash="solid"),
-    "pca_in": dict(name="PCA (fit in-domain)", color="#60a5fa", dash="solid"),
+    "pca_in": dict(name="PCA", color="#60a5fa", dash="solid"),
     "pca_ood": dict(name="PCA (fit on MS MARCO)", color="#f87171", dash="solid"),
 }
 
@@ -48,9 +48,31 @@ def init() -> None:
     go.Figure().show()
 
 
-def _results() -> pd.DataFrame:
-    df = pd.read_csv(ANALYSIS_DIR / "results.csv")
+MODEL_SLUGS = {
+    "3-small": "openai__text-embedding-3-small",
+    "ada-002": "openai__text-embedding-ada-002",
+    "nomic": "nomic-ai__nomic-embed-text-v1.5",
+    "qwen": "qwen__qwen3-embedding-8b",
+}
+
+
+def _analysis_dir(model: str):
+    return ANALYSIS_DIR.parent / MODEL_SLUGS[model]
+
+
+def _results(model: str = "3-small") -> pd.DataFrame:
+    df = pd.read_csv(_analysis_dir(model) / "results.csv")
     return df[~df["dataset"].isin(REPORT_EXCLUDE)]
+
+
+def _placeholder(msg: str) -> go.Figure:
+    fig = go.Figure()
+    fig.add_annotation(text=msg, showarrow=False, font=dict(size=14, color=MUTED),
+                       xref="paper", yref="paper", x=0.5, y=0.5)
+    _layout(fig, "", 220)
+    fig.update_xaxes(visible=False)
+    fig.update_yaxes(visible=False)
+    return fig
 
 
 def _layout(fig: go.Figure, title: str, height: int, legend: bool = True) -> go.Figure:
@@ -100,11 +122,14 @@ def _method_trace(sub: pd.DataFrame, method: str, metric: str, showlegend: bool,
 MAIN_METHODS = ("mrl", "pca_in")  # pca_ood is reported in its own section
 
 
-def fig_ndcg_by_dim(metric: str = "ndcg@10", methods=MAIN_METHODS) -> go.Figure:
+def fig_ndcg_by_dim(metric: str = "ndcg@10", methods=MAIN_METHODS,
+                    model: str = "3-small") -> go.Figure:
     """One panel per dataset, in the same units as the summary chart: share of
     the full-dimension score retained. Each panel's full NDCG@10 is in its
     title; the dashed line marks 100%."""
-    df = _results()
+    if not (_analysis_dir(model) / "results.csv").exists():
+        return _placeholder(f"{model} results not generated yet")
+    df = _results(model)
     datasets = sorted(df["dataset"].unique())
     fulls = df[df["method"] == "full"].set_index("dataset")[metric]
     titles = [f"{name} (full {metric}: {fulls[name]:.3f})" for name in datasets]
@@ -144,12 +169,14 @@ def _retention_means(df: pd.DataFrame, metric: str) -> pd.DataFrame:
     return mean.rename(columns={metric: f"avg {metric}"})
 
 
-def fig_retention(metric: str = "ndcg@10", include_ada: bool = True,
-                  methods=MAIN_METHODS) -> go.Figure:
+def fig_retention(metric: str = "ndcg@10", include_ada: bool = False,
+                  methods=MAIN_METHODS, model: str = "3-small") -> go.Figure:
     """Fraction of full-dim performance retained, averaged over datasets.
-    Two panels when the ada-002 control results exist: ada left, the main
-    (MRL) model right, mirroring the grouped table in the post."""
-    df = _results()
+    Two panels when include_ada is set and the ada-002 control results exist:
+    ada left, the main (MRL) model right."""
+    if not (_analysis_dir(model) / "results.csv").exists():
+        return _placeholder(f"{model} results not generated yet")
+    df = _results(model)
     n_datasets = df["dataset"].nunique()
 
     panels = [("3-small (MRL)", _retention_means(df, metric))]
@@ -213,9 +240,11 @@ def fig_pca_models(metric: str = "ndcg@10") -> go.Figure:
 
 
 def fig_ood_gap(dim: int = 64, metric: str = "ndcg@10",
-                methods=("pca_in", "pca_ood")) -> go.Figure:
+                methods=("pca_in", "pca_ood"), model: str = "3-small") -> go.Figure:
     """Per dataset at one aggressive dim: in-domain vs transferred PCA fit."""
-    df = _results()
+    if not (_analysis_dir(model) / "results.csv").exists():
+        return _placeholder(f"{model} results not generated yet")
+    df = _results(model)
     df = df[(df["dim"] == dim) & (df["method"].isin(methods))]
 
     fig = go.Figure()
@@ -258,9 +287,12 @@ def fig_index_growth() -> go.Figure:
     return fig
 
 
-def fig_fit_size(metric: str = "ndcg@10") -> go.Figure:
+def fig_fit_size(metric: str = "ndcg@10", model: str = "3-small") -> go.Figure:
     """PCA fit-sample-size sweep on the largest corpus."""
-    df = pd.read_csv(ANALYSIS_DIR / "fit_size_sweep.csv")
+    path = _analysis_dir(model) / "fit_size_sweep.csv"
+    if not path.exists():
+        return _placeholder(f"{model} results not generated yet")
+    df = pd.read_csv(path)
     sizes = sorted(df["fit_size"].unique())
     shades = ["#3f3f46", "#71717a", "#a1a1aa", ACCENT][-len(sizes):]
 
@@ -271,9 +303,12 @@ def fig_fit_size(metric: str = "ndcg@10") -> go.Figure:
             x=sub["dim"], y=sub[metric], mode="lines+markers",
             name=f"fit on {size:,} docs",
             line=dict(color=color, width=2), marker=dict(size=6, color=color),
-            hovertemplate=f"<b>{size:,} docs</b><br>d=%{{x}}<br>{metric}=%{{y:.4f}}<extra></extra>",
+            hovertemplate="%{y:.4f}",
         ))
     _layout(fig, f"In-domain PCA on {FIT_SIZE_DATASET}: {metric.upper()} by fit-sample size", 420)
+    # One hover box per dimension showing all fit sizes at once; the lines sit
+    # nearly on top of each other, which is the whole point of the chart.
+    fig.update_layout(hovermode="x unified")
     fig.update_xaxes(type="log", tickvals=[32, 64, 128, 256, 512],
                      title=dict(text="dimensions", font=dict(size=12, color=MUTED)))
     return fig

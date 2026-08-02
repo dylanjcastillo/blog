@@ -1,53 +1,54 @@
 # Matryoshka embeddings vs PCA
 
-Compares two ways of shrinking embedding vectors for retrieval: truncating an
-MRL-trained model (nomic-embed-text-v1.5) versus projecting its full vectors
-with PCA. Same model, same corpora, so the comparison isolates the reduction
-method.
+Compares two ways of shrinking embedding vectors for retrieval: MRL truncation
+(keep the first d dimensions, re-normalize) versus PCA projection. Evaluated
+on eight BEIR datasets with exact search, NDCG@10 and recall@10/100, at
+512/256/128/64/32 dimensions.
 
-The interesting axis is distribution shift: matryoshka truncation has no
-fitting step, while PCA quality depends on what it was fit on. `pca_in` fits
-on the eval corpus itself; `pca_ood` fits on a 100k MS MARCO sample and
-transfers, standing in for "you fit PCA once, then your domain drifted".
+Models:
 
-Evaluated on four small BEIR datasets (scifact, nfcorpus, arguana, fiqa) with
-exact search, NDCG@10 and recall@10/100, at 512/256/128/64/32 dims.
+- `openai/text-embedding-3-small` (1536 dims, MRL): the main model
+- `openai/text-embedding-ada-002` (1536 dims, pre-MRL): control for whether
+  PCA's performance depends on MRL training
+- `qwen/qwen3-embedding-8b` (4096 dims, MRL): replication on a stronger,
+  open-weights MRL implementation. Queries use the per-task instructions that
+  official MTEB evaluations use (see `TASK_INSTRUCTIONS` in `config.py`)
+
+PCA arms: fit in-domain (on the eval corpus itself) and out-of-domain (fit
+once on 100k MS MARCO passages and transferred). A fit-sample-size sweep runs
+on FiQA. Full-dimension scores reproduce the official MTEB results within
+0.004 NDCG@10 for every model-dataset pair.
 
 ## Pipeline
 
-Run from the repo root. Embedding runs locally (MPS), no API keys needed.
+Run from the repo root. Needs `OPENROUTER_API_KEY` in the repo's `.env`.
+Select the model with `EMBED_MODEL` (see `API_MODELS` in `config.py`);
+`EMBED_PROVIDER=local` runs nomic-embed-text-v1.5 on-device instead.
 
 ```bash
 # 1. Download BEIR corpora/queries/qrels (msmarco is streamed, 100k sample)
 uv run python _extras/matryoshka-vs-pca/download.py
 
-# 2. Embed everything at full 768 dims (~175k texts, resumable per file)
-uv run python _extras/matryoshka-vs-pca/embed.py
+# 2. Embed everything at full dimension (resumable per file)
+EMBED_MODEL=openai/text-embedding-3-small uv run python _extras/matryoshka-vs-pca/embed.py
 
 # 3. Evaluate every (dataset, method, dim) cell + the PCA fit-size sweep
-uv run python _extras/matryoshka-vs-pca/evaluate.py
+EMBED_MODEL=openai/text-embedding-3-small uv run python _extras/matryoshka-vs-pca/evaluate.py
 ```
 
-Steps 1-2 are resumable: existing files are skipped. To smoke-test the
-pipeline end to end on one small dataset first:
+Extras:
 
 ```bash
-uv run python _extras/matryoshka-vs-pca/download.py --only scifact
-uv run python _extras/matryoshka-vs-pca/embed.py --only scifact
+# int8/binary quantization grid (asymmetric int8, symmetric + asymmetric binary)
+uv run python _extras/matryoshka-vs-pca/quantize_eval.py
+
+# exhaustive-search speed benchmark over Quora with faiss
+uv run python _extras/matryoshka-vs-pca/speed_bench.py
+
+# check that local truncation matches the API's `dimensions` parameter
+uv run python _extras/matryoshka-vs-pca/verify_truncation.py
 ```
 
-Outputs land in `data/analysis/`: `results.csv` (main grid),
-`fit_size_sweep.csv` (PCA fit-sample-size sweep), and `index_growth.csv`
-(PCA fit on half the corpus, queries split by whether their relevant docs
-were seen by the fit — simulates docs added to the index after fitting, with
-MRL on the same query split as the difficulty control). The post's charts
-read those via `figures.py`.
-
-## Details that matter
-
-- Truncated vectors are re-normalized before scoring, which matches what the
-  OpenAI `dimensions` parameter does (verified: cosine 1.0 against the API).
-- PCA is fit once per fit-corpus at 512 components and sliced, since the top-k
-  eigenvectors are nested (PCA is matryoshka-shaped too, in that one sense).
-- ArguAna queries are themselves corpus documents; self-matches are removed
-  before scoring, as is standard for that dataset.
+Outputs land in `data/analysis/<model>/` as CSVs (committed; everything else
+under `data/` is gitignored and regenerates for a few dollars). The post's
+charts read the CSVs via `figures.py`.

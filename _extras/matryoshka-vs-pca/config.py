@@ -20,6 +20,7 @@ PROVIDER = os.environ.get("EMBED_PROVIDER", "openrouter")
 API_MODELS = {
     "openai/text-embedding-3-small": 1536,
     "openai/text-embedding-ada-002": 1536,
+    "qwen/qwen3-embedding-8b": 4096,
 }
 
 if PROVIDER == "local":
@@ -28,7 +29,27 @@ if PROVIDER == "local":
 else:
     MODEL_NAME = os.environ.get("EMBED_MODEL", "openai/text-embedding-3-small")
     FULL_DIM = API_MODELS[MODEL_NAME]
-    QUERY_PREFIX = DOC_PREFIX = ""
+    # Qwen3-Embedding expects an instruction prefix on queries only.
+    if MODEL_NAME.startswith("qwen/"):
+        QUERY_PREFIX = ("Instruct: Given a web search query, retrieve relevant "
+                        "passages that answer the query\nQuery: ")
+        DOC_PREFIX = ""
+    else:
+        QUERY_PREFIX = DOC_PREFIX = ""
+
+# Per-task query instructions, matching what official MTEB evaluations use
+# for instruction-tuned embedding models (the E5/Qwen instruction set).
+# Applied for qwen instead of the generic QUERY_PREFIX above.
+TASK_INSTRUCTIONS = {
+    "scifact": "Given a scientific claim, retrieve documents that support or refute the claim",
+    "nfcorpus": "Given a question, retrieve relevant documents that best answer the question",
+    "arguana": "Given a claim, find documents that refute the claim",
+    "fiqa": "Given a financial question, retrieve user replies that best answer the question",
+    "scidocs": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
+    "quora": "Given a question, retrieve questions that are semantically equivalent to the given question",
+    "trec-covid": "Given a query on COVID-19, retrieve documents that answer the query",
+    "webis-touche2020": "Given a question, retrieve detailed and persuasive arguments that answer the question",
+}
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
