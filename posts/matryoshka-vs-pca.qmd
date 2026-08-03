@@ -89,9 +89,9 @@ I applied PCA to both models. If PCA retains a similar share of retrieval qualit
 
 PCA has to be fit on something, which raises two practical questions: how much fitting data do you need, and does it need to come from the corpus you'll be searching?
 
-For the first question, I fit PCA on random samples of FiQA's 57K documents (1,000, 5,000, 20,000, and the full corpus) and checked how much the size of the fitting sample changes retrieval quality.
+For the first question, I fit PCA on random samples of FiQA's 57K documents (1,000, 5,000, 20,000, and the full corpus) and checked how much the size of the fitting sample changes retrieval quality. This covers the scenario where you fit PCA on a sample of your data and never update it as the index grows.
 
-For the second, I compared regular PCA against **out-of-domain PCA**: a projection fit once on 100,000 MS MARCO passages and reused, unchanged, on every other dataset. This is the most extreme version: you fit PCA on  
+For the second, I compared regular PCA against **out-of-domain PCA**: a projection fit once on 100,000 MS MARCO passages and reused, unchanged, on every other dataset. This is the most extreme version: you fit PCA on data that ends up looking quite different from what you actually index.
 
 ## But first, a sanity check
 
