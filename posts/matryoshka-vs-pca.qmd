@@ -39,9 +39,7 @@ Both methods produce smaller vectors that behave almost like the full ones. But 
 
 At inference time, you simply keep the first _d_ dimensions and re-normalize the resulting vector. Many modern embedding models are trained this way, but older models aren't, so MRL-based truncation is not available for many popular embedding models.
 
-**PCA** works after training, which means it can be used with any model. You take a sample of embeddings, find the directions along which they vary the most, and keep the top _d_ of them as a projection matrix^[this [page](https://setosa.io/ev/principal-component-analysis/) explains it quite well]. From then on, every document and query gets multiplied by that matrix (and re-normalized) before it goes into the index.
-
-But you get additional operational complexity. You need to store and version the PCA transformation, then apply the same version consistently when adding to and querying the index.
+**PCA** works after training, which means it can be used with any model. You take a sample of embeddings, find the directions along which they vary the most, and keep the top _d_ of them as a projection matrix^[this [page](https://setosa.io/ev/principal-component-analysis/) explains it quite well]. PCA gives you smaller vectors, but also additional operational complexity. You need to store and version the PCA transformation, then apply the same version consistently when adding to and querying the index.
 
 ## How I ran the experiment
 
