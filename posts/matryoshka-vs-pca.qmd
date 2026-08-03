@@ -298,7 +298,7 @@ figures.fig_retention(model="qwen", methods=("pca_in", "pca_ood"))
 
 :::
 
-Good news for lazy people like me. Fit-sample size matters much less than I expected, and an out-of-domain fit holds up at moderate compression. Qwen at 32 dimensions is the clear exception. These patterns may be a consequence of the scale of the experiments or the particular benchmarks I used.
+Good news for lazy people like me. Fit-sample size matters much less than I expected, and an out-of-domain fit holds up at moderate compression. However, these patterns may be a consequence of the scale of the experiments or the particular benchmarks I used. So take these with a grain of salt.
 
 ## What about quantization?
 
