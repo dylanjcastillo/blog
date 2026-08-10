@@ -43,11 +43,9 @@ These are longer posts covering mostly technical topics and a few personal posts
 
 ## Today I Learned (TIL)
 
-I'm a big fan of [Simon Willison's "TIL" posts](https://til.simonwillison.net/), so I copied his idea.
+I’ve always liked [Simon Willison's "TIL" posts](https://til.simonwillison.net/), so I decided to borrow the idea.
 
-They're a great way to force yourself to write more often by lowering the bar for what it's worth sharing.
-
-These are short, less polished posts about things I've learned that I think others might find useful.
+This is where I’ll share small things I learn along the way. Nothing too polished or elaborate. Just things I found useful and thought someone else might too.
 
 :::{#today-i-learned}
 :::
