@@ -1,0 +1,29 @@
+---
+title: "When Genius Failed: The Rise and Fall of Long Term Capital Management"
+subtitle: "Roger Lowenstein"
+date: 2019-08-31
+highlights: 4
+description-meta: "Kindle highlights from When Genius Failed: The Rise and Fall of Long Term Capital Management by Roger Lowenstein."
+book-cover: "https://m.media-amazon.com/images/I/81pSAvORG3L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00HY59G7C"
+---
+
+## Highlights
+
+4 highlights.
+
+> and no market, no matter how liquid, can accommodate all potential sellers when the day of reckoning comes.
+>
+> [Page: 106]{.highlight-ref}
+
+> Markets can remain irrational longer than you can remain solvent.
+>
+> [Page: 123]{.highlight-ref}
+
+> long-term thinking is a luxury not always available to the highly leveraged; they may not survive that long.
+>
+> [Page: 151]{.highlight-ref}
+
+> The next time a Merton proposes an elegant model to manage risks and foretell odds, the next time a computer with a perfect memory of the past is said to quantify risks in the future, investors should run—and quickly—the other way.
+>
+> [Page: 235]{.highlight-ref}

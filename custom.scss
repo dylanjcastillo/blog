@@ -487,9 +487,16 @@ h6 {
   }
 
   .listing-date,
-  .listing-reading-time {
+  .listing-reading-time,
+  .listing-subtitle {
     color: $gray-300;
     font-size: 0.9em;
+  }
+
+  // Book notes: author column, right-aligned like reading time
+  td:has(.listing-subtitle) {
+    text-align: right;
+    padding-left: 1.25rem;
   }
 
   td:has(.listing-date) {
@@ -558,6 +565,68 @@ main.content img {
   &-footer {
     color: body-mix(75%);
   }
+}
+
+// Book identity stays together; the small cover supports the reading column.
+#title-block-header.book-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  .book-heading {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .title {
+    margin: 0;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
+  }
+
+  .book-author {
+    color: $gray-300;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .book-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+    color: $gray-400;
+    font-size: 0.875rem;
+
+    p { margin: 0; }
+    a { text-underline-offset: 0.2em; }
+    a:focus-visible { outline: 2px solid $orange; outline-offset: 4px; }
+  }
+
+  .book-cover {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 144px;
+    object-fit: contain;
+    object-position: top right;
+    border-radius: 0;
+  }
+
+  @media (max-width: 575.98px) {
+    gap: 1rem;
+
+    .book-cover {
+      width: 64px;
+      height: 96px;
+    }
+  }
+}
+
+// Book notes: page/location reference under each highlight
+.highlight-ref {
+  display: block;
+  color: $gray-500;
+  font-size: 0.8em;
 }
 
 // Forms

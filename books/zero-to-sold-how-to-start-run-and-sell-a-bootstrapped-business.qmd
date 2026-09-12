@@ -1,0 +1,53 @@
+---
+title: "Zero to Sold: How to Start, Run, and Sell a Bootstrapped Business"
+subtitle: "Arvid Kahl"
+date: 2021-07-05
+highlights: 10
+description-meta: "Kindle highlights from Zero to Sold: How to Start, Run, and Sell a Bootstrapped Business by Arvid Kahl."
+book-cover: "https://m.media-amazon.com/images/I/71F9MT+lhML._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B08BWZS8VN"
+---
+
+## Highlights
+
+10 highlights.
+
+> Find your niche audience. Find and validate their critical problem. Invent and validate a solution to their problem. Build a product to implement that solution. Build a business that can repeatedly sell that product to your audience.
+>
+> [Location: 274]{.highlight-ref}
+
+> Successful businesses are built by solving critical problems for an audience that will pay for a solution to their issues.
+>
+> [Location: 290]{.highlight-ref}
+
+> Record the calls and wait a few days before you analyze the results. Right after a call, you may still be under the influence of primacy and confirmation biases, so let some time pass between the conversation and the analysis.
+>
+> [Location: 295]{.highlight-ref}
+
+> That’s why niches work so well for bootstrapped businesses: if you can provide a tool that solves a niche problem very well, you can be sure that everyone in the niche will be interested in it.
+>
+> [Location: 344]{.highlight-ref}
+
+> mostly homogenous, often tribal, and allow for much better measurement and planning than huge non-specific audiences.
+>
+> [Location: 352]{.highlight-ref}
+
+> In your marketing communication, you can assume that everyone in the niche has specific knowledge that you can build on.
+>
+> [Location: 366]{.highlight-ref}
+
+> People derive their identity from belonging to a tribe. If you can place your business in a way that makes your product a thing that “people in our tribe use,” then you will have a guaranteed sales funnel for as long as your niche exists.
+>
+> [Location: 375]{.highlight-ref}
+
+> If you’re in a niche with a healthy and active tribe, you will have success with customer referral systems.
+>
+> [Location: 412]{.highlight-ref}
+
+> Some products will make sharing easier, like network-effect-driven collaboration tools, where a new user will add value to the network for everyone involved. Other products won’t be as easy to share, such as a tool that makes a recruiter find better leads—recruiters probably wouldn’t want competitors to use this tool as well.
+>
+> [Location: 413]{.highlight-ref}
+
+> Enterprise markets are hard to sell into for a small company, although it’s not impossible. Purchasing decisions take a long time, there are a lot of requirements even to be considered, and contracts tend to be custom and require a lot of work. Many enterprise customers won’t buy from small companies out of fear they will vanish within a few years, and that fear is not unfounded. In fact, even for your own bootstrapped business, I would recommend against using services offered by companies smaller than yourself.
+>
+> [Location: 505]{.highlight-ref}

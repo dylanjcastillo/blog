@@ -1,0 +1,33 @@
+---
+title: "Cartas Filosoficas de Séneca (Spanish Edition)"
+subtitle: "Séneca"
+date: 2019-04-07
+highlights: 5
+description-meta: "Kindle highlights from Cartas Filosoficas de Séneca (Spanish Edition) by Séneca."
+book-cover: "https://m.media-amazon.com/images/I/71RW5zkygXL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B06XD7KRNN"
+---
+
+## Highlights
+
+5 highlights.
+
+> «homo, sacra res homini».
+>
+> [Location: 29]{.highlight-ref}
+
+> sigamos una vida mejor que la del vulgo, no la contraria;
+>
+> [Location: 437]{.highlight-ref}
+
+> De este modo el sabio se basta a sí mismo, no porque desee estar sin un amigo, sino porque puede estarlo.
+>
+> [Location: 604]{.highlight-ref}
+
+> «Yo te descubriré un modo de provocar el amor sin filtro mágico, sin hierbas, sin ensalmos de hechicera alguna: si quieres ser amado, ama»\[33\]
+>
+> [Location: 609]{.highlight-ref}
+
+> suprime los defectos naturales del cuerpo o del espíritu: todo cuanto está arraigado y es congénito, la disciplina lo modera, pero no lo elimina\[43\]
+>
+> [Location: 686]{.highlight-ref}

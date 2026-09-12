@@ -1,0 +1,29 @@
+---
+title: "Where Wizards Stay Up Late: The Origins Of The Internet"
+subtitle: "Matthew Lyon and Katie Hafner"
+date: 2022-06-01
+highlights: 4
+description-meta: "Kindle highlights from Where Wizards Stay Up Late: The Origins Of The Internet by Matthew Lyon and Katie Hafner."
+book-cover: "https://m.media-amazon.com/images/I/81dvEjqwMiL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B000FC0WP6"
+---
+
+## Highlights
+
+4 highlights.
+
+> The project had embodied the most peaceful intentions—to link computers at scientific laboratories across the country so that researchers might share computer resources. Taylor knew the ARPANET and its progeny, the Internet, had nothing to do with supporting or surviving war—never did.Yet
+>
+> [Location: 52]{.highlight-ref}
+
+> IPTO contractors, most of whom were at research universities, were beginning to request more and more computer resources. Every principal investigator, it seemed, wanted his own computer. Not only was there an obvious duplication of effort across the research community, but it was getting damned expensive. Computers weren’t small and they weren’t cheap. Why not try tying them all together?
+>
+> [Location: 574]{.highlight-ref}
+
+> Researchers were duplicating, and isolating, costly computing resources. Not only were the scientists at each site engaging in more, and more diverse, computer research, but their demands for computer resources were growing faster than Taylor’s budget. Every new project required setting up a new and costly computing operation. Depending on the computer being used and the number of graduate students being supported, IPTO’s individual grants ranged from \$500,000 to \$3 million.
+>
+> [Location: 604]{.highlight-ref}
+
+> And none of the resources or results was easily shared. If the scientists doing graphics in Salt Lake City wanted to use the programs developed by the people at Lincoln Lab, they had to fly to Boston. Still more frustrating, if after a trip to Boston people in Utah wanted to start a similar project on their own machine, they would need to spend considerable time and money duplicating what they had just seen. In those days, software programs were one-of-a-kind, like original works of art, and not easily transferred from one machine to another. Taylor was convinced of the technical feasibility of sharing such resources over a computer network, though it had never been done.
+>
+> [Location: 607]{.highlight-ref}

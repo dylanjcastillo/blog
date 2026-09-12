@@ -1,0 +1,19 @@
+<header id="title-block-header" class="quarto-title-block book-header">
+  <div class="quarto-title book-heading">
+    <h1 class="title">$title$</h1>
+$if(subtitle)$
+    <p class="book-author">$subtitle$</p>
+$endif$
+    <div class="book-details">
+$if(date)$
+      <p class="book-date">Last read $date$</p>
+$endif$
+$if(amazon-url)$
+      <a href="$amazon-url$">View on Amazon</a>
+$endif$
+    </div>
+  </div>
+$if(book-cover)$
+  <img class="book-cover" src="$book-cover$" alt="" width="96" height="144" decoding="async">
+$endif$
+</header>

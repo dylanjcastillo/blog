@@ -1,0 +1,65 @@
+---
+title: "Data Pipelines Pocket Reference: Moving and Processing Data for Analytics"
+subtitle: "James Densmore"
+date: 2022-12-21
+highlights: 13
+description-meta: "Kindle highlights from Data Pipelines Pocket Reference: Moving and Processing Data for Analytics by James Densmore."
+book-cover: "https://m.media-amazon.com/images/I/81XmIUEHkIL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B08WGSM9CJ"
+---
+
+## Highlights
+
+13 highlights.
+
+> Data pipelines are sets of processes that move and transform data from various sources to a destination where new value can be derived.
+>
+> [Location: 90]{.highlight-ref}
+
+> a data engineer isn’t going to get the job done with “no code” tools even if they have some good ones in their arsenal.
+>
+> [Location: 117]{.highlight-ref}
+
+> Assume your input datasets will contain numerous validity and consistency issues, but build pipelines that identify and cleanse data in the interest of clean output.
+>
+> [Location: 234]{.highlight-ref}
+
+> extract-load-transform (ELT) rather than extract-transform-load (ETL) approach for data warehousing (more in Chapter 3). It’s sometimes optimal to load data into a data lake in a fairly raw form and to worry about structuring and cleaning later in the pipeline.
+>
+> [Location: 237]{.highlight-ref}
+
+> Three things transformed the landscape of analytics and data warehousing over the last 10 years, and they’re all related to the emergence of the major public cloud providers (Amazon, Google, and Microsoft): The ease of building and deploying data pipelines, data lakes, warehouses, and analytics processing in the cloud. No more waiting on IT departments and budget approval for large up-front costs. Managed services — databases in particular — have become mainstream. Continued drop-in storage costs in the cloud. The emergence of highly scalable, columnar databases, such as Amazon Redshift, Snowflake, and Google Big Query.
+>
+> [Location: 254]{.highlight-ref}
+
+> A data warehouse is a database where data from different systems is stored and modeled to support analysis and other activities related to answering questions with it. Data in a data warehouse is structured and optimized for reporting and analysis queries.
+>
+> [Location: 263]{.highlight-ref}
+
+> A data lake is where data is stored, but without the structure or query optimization of a data warehouse.
+>
+> [Location: 265]{.highlight-ref}
+
+> In practice, I find most data teams choose to limit the number of transformations they make during data ingestion and thus stick to ingestion tools that are good at two things: extracting data from a source and loading it into a destination.
+>
+> [Location: 285]{.highlight-ref}
+
+> Data modeling is a more specific type of data transformation. A data model structures and defines data in a format that is understood and optimized for data analysis. A data model is usually represented as one or more tables in a data warehouse.
+>
+> [Location: 298]{.highlight-ref}
+
+> Every major public cloud provider has a service similar to S3. Equivalents on other public clouds are Azure Storage in Microsoft Azure and Google Cloud Storage (GCS) in GCP.
+>
+> [Location: 623]{.highlight-ref}
+
+> Though incremental extraction is ideal for optimal performance, there are some downsides and reasons why it may not be possible for a given table. First, with this method deleted, rows are not captured. If a row is deleted from the source MySQL table, you won’t know, and it will remain in the destination table as if nothing changed. Second, the source table must have a reliable timestamp for when it was last updated (the LastUpdated column in the previous example).
+>
+> [Location: 712]{.highlight-ref}
+
+> Never assume a LastUpdated column in a source system is reliably updated. Check with the owner of the source system and confirm before relying on it for an incremental extraction.
+>
+> [Location: 740]{.highlight-ref}
+
+> Publishing data via a Kafka topic is an excellent way to maintain an agreed-upon schema while leaving the particulars of the source system that publishes an event and the system that subscribes to it (the ingestion) completely separate from each other.
+>
+> [Location: 3,811]{.highlight-ref}

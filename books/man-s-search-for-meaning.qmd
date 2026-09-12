@@ -1,0 +1,53 @@
+---
+title: "Man's Search for Meaning"
+subtitle: "Viktor E. Frankl, Harold S. Kushner, and William J. Winslade"
+date: 2023-01-19
+highlights: 10
+description-meta: "Kindle highlights from Man's Search for Meaning by Viktor E. Frankl, Harold S. Kushner, and William J. Winslade."
+book-cover: "https://m.media-amazon.com/images/I/71tdb1udZnL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B009U9S6FI"
+---
+
+## Highlights
+
+10 highlights.
+
+> “He who has a Why to live for can bear almost any How.”
+>
+> [Location: 21]{.highlight-ref}
+
+> Frankl kept himself alive and kept hope alive by summoning up thoughts of his wife and the prospect of seeing her again, and by dreaming at one point of lecturing after the war about the psychological lessons to be learned from the Auschwitz experience.
+>
+> [Location: 23]{.highlight-ref}
+
+> Life is not primarily a quest for pleasure, as Freud believed, or a quest for power, as Alfred Adler taught, but a quest for meaning.
+>
+> [Location: 28]{.highlight-ref}
+
+> Frankl saw three possible sources for meaning: in work (doing something significant), in love (caring for another person), and in courage during difficult times.
+>
+> [Location: 29]{.highlight-ref}
+
+> You cannot control what happens to you in life, but you can always control what you will feel and do about what happens to you.
+>
+> [Location: 35]{.highlight-ref}
+
+> We have come to recognize that this is a profoundly religious book. It insists that life is meaningful and that we must learn to see life as meaningful despite our circumstances. It emphasizes that there is an ultimate purpose to life.
+>
+> [Location: 51]{.highlight-ref}
+
+> “Don’t aim at success—the more you aim at it and make it a target, the more you are going to miss it. For success, like happiness, cannot be pursued; it must ensue, and it only does so as the unintended side-effect of one’s dedication to a cause greater than oneself or as the by-product of one’s surrender to a person other than oneself. Happiness must happen, and the same holds for success: you have to let it happen by not caring about it. I want you to listen to what your conscience commands you to do and go on to carry it out to the best of your knowledge. Then you will live to see that in the long run—in the long run, I say!—success will follow you precisely because you had forgotten to think of it.”
+>
+> [Location: 80]{.highlight-ref}
+
+> EXPERIENCES IN A CONCENTRATION CAMP
+>
+> [Page: 3]{.highlight-ref}
+
+> When one examines the vast amount of material which has been amassed as the result of many prisoners’ observations and experiences, three phases of the inmate’s mental reactions to camp life become apparent: the period following his admission; the period when he is well entrenched in camp routine; and the period following his release and liberation.
+>
+> [Page: 8]{.highlight-ref}
+
+> The symptom that characterizes the first phase is shock.
+>
+> [Page: 8]{.highlight-ref}

@@ -1,0 +1,73 @@
+---
+title: "Building Machine Learning Powered Applications: Going from Idea to Product"
+subtitle: "Emmanuel Ameisen"
+date: 2024-07-31
+highlights: 15
+description-meta: "Kindle highlights from Building Machine Learning Powered Applications: Going from Idea to Product by Emmanuel Ameisen."
+book-cover: "https://m.media-amazon.com/images/I/81K0-dM91hL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0842ZD3Y7"
+---
+
+## Highlights
+
+15 highlights.
+
+> Server-side deployment consists of setting up a web server that can accept requests from clients, run them through an inference pipeline, and return the results.
+>
+> [Location: 3,721]{.highlight-ref}
+
+> Streaming workflows accept requests as they come and process them immediately.
+>
+> [Location: 3,725]{.highlight-ref}
+
+> Batch workflows are run less frequently and process a large number of requests all at once.
+>
+> [Location: 3,726]{.highlight-ref}
+
+> Figure 9-1. Streaming API workflow
+>
+> [Location: 3,738]{.highlight-ref}
+
+> The batch approach considers the inference pipeline as a job that can be run on multiple examples at once. A batch job runs a model on many examples and stores predictions so they can be used when needed. Batch jobs are appropriate when you have access to the features needed for a model before the model’s prediction is required.
+>
+> [Location: 3,776]{.highlight-ref}
+
+> Figure 9-3. Example of batch workflow
+>
+> [Location: 3,791]{.highlight-ref}
+
+> Figure 9-4. A model running inference on device (we can still train on a server)
+>
+> [Location: 3,810]{.highlight-ref}
+
+> Figure 9-5. Running on a server, or locally
+>
+> [Location: 3,821]{.highlight-ref}
+
+> In neural networks, for example, weights are often pruned (removing those with values close to zero) and quantized (lowering the precision of weights).
+>
+> [Location: 3,828]{.highlight-ref}
+
+> The right approach depends on your application’s needs, such as latency requirements, hardware, network and privacy concerns, and inference costs.
+>
+> [Location: 3,894]{.highlight-ref}
+
+> Figure 10-2. Example branching logic for input checks
+>
+> [Location: 3,946]{.highlight-ref}
+
+> The worse model makes more mistakes, but its mistakes are different from the complex model because of the different shape of its decision boundary. Because of this, the simpler model gets some examples right that the complex model gets wrong.
+>
+> [Location: 3,984]{.highlight-ref}
+
+> This is the intuition for why using a simple model as a backup is a reasonable idea when a primary model fails.
+>
+> [Location: 3,986]{.highlight-ref}
+
+> If those probabilities are well calibrated (see “Calibration Curve”), they can be used to detect instances where a model is uncertain and decide not to display results to a user.
+>
+> [Location: 4,003]{.highlight-ref}
+
+> Figure 10-8. Deploying an updated version of the same model can seem like a simple change
+>
+> [Location: 4,137]{.highlight-ref}

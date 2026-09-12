@@ -1,0 +1,133 @@
+---
+title: "Antifragile: Things that Gain from Disorder"
+subtitle: "Nassim Taleb"
+date: 2021-05-30
+highlights: 30
+description-meta: "Kindle highlights from Antifragile: Things that Gain from Disorder by Nassim Taleb."
+book-cover: "https://m.media-amazon.com/images/I/711xunjhasL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B009K6DKTS"
+---
+
+## Highlights
+
+30 highlights.
+
+> what makes the species prosper isn’t peace, but freedom.”
+>
+> [Location: 1,842]{.highlight-ref}
+
+> For we have managed to transfer religious belief into gullibility for whatever can masquerade as science.
+>
+> [Location: 2,059]{.highlight-ref}
+
+> People are still under the illusion that “science” means more data.
+>
+> [Location: 2,357]{.highlight-ref}
+
+> A man is honorable in proportion to the personal risks he takes for his opinion—in
+>
+> [Location: 2,631]{.highlight-ref}
+
+> My idea of the modern Stoic sage is someone who transforms fear into prudence, pain into information, mistakes into initiation, and desire into undertaking.
+>
+> [Location: 2,751]{.highlight-ref}
+
+> Fragility implies more to lose than to gain, equals more downside than upside, equals (unfavorable) asymmetry
+>
+> [Location: 2,783]{.highlight-ref}
+
+> you need to know whether you do not like the pursuit of money and wealth because you genuinely do not like it, or because you are rationalizing your inability to be successful at it
+>
+> [Location: 3,023]{.highlight-ref}
+
+> options benefit from variability, but also from situations in which errors carry small costs.
+>
+> [Location: 3,143]{.highlight-ref}
+
+> lack of vigilance is not the cause of the death of a mafia don; the cause of death is making enemies, and the cure is making friends.
+>
+> [Location: 3,389]{.highlight-ref}
+
+> universities prospered as a consequence of national wealth, not the other way around.
+>
+> [Location: 3,871]{.highlight-ref}
+
+> history has been written by those who want you to believe that reasoning has a monopoly or near monopoly on the production of knowledge.
+>
+> [Location: 4,064]{.highlight-ref}
+
+> Perhaps there is a realm of wisdom from which the logician is exiled?
+>
+> [Location: 4,330]{.highlight-ref}
+
+> So, to repeat, the probability (hence True/False) does not work in the real world; it is the payoff that matters.
+>
+> [Location: 4,433]{.highlight-ref}
+
+> Education is an institution that has been growing without external stressors; eventually the thing will collapse.
+>
+> [Location: 4,458]{.highlight-ref}
+
+> what is fragile is something that is both unbroken and subjected to nonlinear effects—and
+>
+> [Location: 4,551]{.highlight-ref}
+
+> since squaring is a convex function, the average of the square payoff is higher than the square of the average payoff.
+>
+> [Location: 5,002]{.highlight-ref}
+
+> In life, antifragility is reached by not being a sucker.
+>
+> [Location: 5,059]{.highlight-ref}
+
+> we know a lot more what is wrong than what is right,
+>
+> [Location: 5,064]{.highlight-ref}
+
+> (what is wrong, what does not work) is more robust to error than positive knowledge (what is right, what works).
+>
+> [Location: 5,065]{.highlight-ref}
+
+> since one small observation can disprove a statement, while millions can hardly confirm it, disconfirmation is more rigorous than confirmation.
+>
+> [Location: 5,068]{.highlight-ref}
+
+> keeping one’s distance from an ignorant person is equivalent to keeping company with a wise man.
+>
+> [Location: 5,091]{.highlight-ref}
+
+> The robustness of an item is proportional to its life!
+>
+> [Location: 5,321]{.highlight-ref}
+
+> the non-natural needs to prove its benefits, not the natural—according to the statistical principle outlined earlier that nature is to be considered much less of a sucker than humans.
+>
+> [Location: 5,646]{.highlight-ref}
+
+> The “do you have evidence” fallacy, mistaking evidence of no harm for no evidence of harm, is similar to the one of misinterpreting NED (no evidence of disease) for evidence of no disease.
+>
+> [Location: 5,648]{.highlight-ref}
+
+> The only condition for such brand of more sophisticated rationalism: to believe and act as if one does not have the full story—to be sophisticated you need to accept that you are not so.
+>
+> [Location: 5,973]{.highlight-ref}
+
+> “The good is mostly in the absence of bad”;
+>
+> [Location: 6,035]{.highlight-ref}
+
+> We live to produce information, or improve on it.
+>
+> [Location: 6,207]{.highlight-ref}
+
+> he who does not stop a crime is an accomplice.
+>
+> [Location: 6,393]{.highlight-ref}
+
+> There is no penalty for opinion makers who harm society.
+>
+> [Location: 6,403]{.highlight-ref}
+
+> Suckers try to win arguments, nonsuckers try to win.
+>
+> [Location: 6,511]{.highlight-ref}

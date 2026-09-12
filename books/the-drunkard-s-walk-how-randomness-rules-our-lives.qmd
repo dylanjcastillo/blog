@@ -1,0 +1,45 @@
+---
+title: "The Drunkard's Walk: How Randomness Rules Our Lives"
+subtitle: "Leonard Mlodinow"
+date: 2019-06-16
+highlights: 8
+description-meta: "Kindle highlights from The Drunkard's Walk: How Randomness Rules Our Lives by Leonard Mlodinow."
+book-cover: "https://m.media-amazon.com/images/I/71Iq3tadP2L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B002RI9E0K"
+---
+
+## Highlights
+
+8 highlights.
+
+> life is both hard to predict and hard to interpret.
+>
+> [Location: 101]{.highlight-ref}
+
+> That’s why successful people in every field are almost universally members of a certain set—the set of people who don’t give up.
+>
+> [Location: 211]{.highlight-ref}
+
+> That is not to say that ability doesn’t matter—it is one of the factors that increase the chances of success—but the connection between actions and results is not as direct as we might like to believe.
+>
+> [Location: 215]{.highlight-ref}
+
+> We all understand that genius doesn’t guarantee success, but it’s seductive to assume that success must come from genius.
+>
+> [Location: 225]{.highlight-ref}
+
+> although Fortune is fair in potentialities, she is not fair in outcomes.
+>
+> [Location: 253]{.highlight-ref}
+
+> To make matters worse, not only do we preferentially seek evidence to confirm our preconceived notions, but we also interpret ambiguous evidence in favor of our ideas.
+>
+> [Location: 3,095]{.highlight-ref}
+
+> ability does not guarantee achievement, nor is achievement proportional to ability.
+>
+> [Location: 3,526]{.highlight-ref}
+
+> What I’ve learned, above all, is to keep marching forward because the best news is that since chance does play a role, one important factor in success is under our control: the number of at bats, the number of chances taken, the number of opportunities seized.
+>
+> [Location: 3,532]{.highlight-ref}

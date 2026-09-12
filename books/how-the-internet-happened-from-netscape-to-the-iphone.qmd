@@ -1,0 +1,77 @@
+---
+title: "How the Internet Happened: From Netscape to the iPhone"
+subtitle: "Brian McCullough"
+date: 2022-08-17
+highlights: 16
+description-meta: "Kindle highlights from How the Internet Happened: From Netscape to the iPhone by Brian McCullough."
+book-cover: "https://m.media-amazon.com/images/I/81c4yxu7yBL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07BLJ1QYZ"
+---
+
+## Highlights
+
+16 highlights.
+
+> THE INTERNET, AND ESPECIALLY the World Wide Web, finally brought computers into the mainstream. The Internet is the reason that computers actually became useful for the average person.
+>
+> [Location: 92]{.highlight-ref}
+
+> To Gates’s mind, the biggest question of all was how Microsoft could make money on the Internet. Seemingly everything on the Internet was free.
+>
+> [Location: 797]{.highlight-ref}
+
+> The company didn’t like to publicize it, but chat was AOL’s bread and butter. The more chat, email and picture trading users did, the more money AOL made. Some users spent hours in chat, racking up monthly overage costs running into the hundreds of dollars.
+>
+> [Location: 1,001]{.highlight-ref}
+
+> Yahoo already had millions of loyal users; surely there would be some way to monetize them.
+>
+> [Location: 1,490]{.highlight-ref}
+
+> BLOWING BUBBLES
+>
+> [Location: 2,227]{.highlight-ref}
+
+> If history tells us anything, it’s that when people come to believe only good news can ever happen, a speculative financial bubble is probably inevitable.
+>
+> [Location: 2,245]{.highlight-ref}
+
+> “For practical purposes,” Galbraith wrote, “the financial memory should be assumed to last, at a maximum, no more than 20 years. This is normally the time it takes for the recollection of one disaster to be erased and for some variant on previous dementia to come forward to capture the financial mind. It is also the time generally required for a new generation to enter the scene, impressed, as had been its predecessors, with its own innovative genius.”
+>
+> [Location: 2,253]{.highlight-ref}
+
+> Hedge fund managers, mutual fund managers, stock analysts, even financial reporters learned and internalized a sharp lesson in the late nineties: People didn’t want to hear negativity.
+>
+> [Location: 2,343]{.highlight-ref}
+
+> WEB 2.0 Wikipedia, YouTube and the Wisdom of Crowds
+>
+> [Location: 4,097]{.highlight-ref}
+
+> “the best way to get the right answer on the Internet is not to ask a question, it’s to post the wrong answer.”
+>
+> [Location: 4,168]{.highlight-ref}
+
+> THE RISE OF MOBILE Palm, BlackBerry and Smartphones
+>
+> [Location: 4,979]{.highlight-ref}
+
+> The devices earned the sobriquet “CrackBerry” because users seemingly couldn’t tear themselves away.
+>
+> [Location: 5,084]{.highlight-ref}
+
+> ONE MORE THING The iPhone
+>
+> [Location: 5,138]{.highlight-ref}
+
+> Apple engineers used artificial intelligence techniques to create an algorithm that would predict which letter a user might want to type next. For example, if someone types the letter “t,” there is a very high probability that they will want to type “h” next. So, the letter “h” would, to the naked eye, look like it stayed the same size on the keyboard when, in fact, the “hit area” for the letter h would get bigger.
+>
+> [Location: 5,320]{.highlight-ref}
+
+> OUTRO
+>
+> [Location: 5,427]{.highlight-ref}
+
+> There will nevertheless be a fairly long interim during which the main intellectual advances will be made by men and computers working together in intimate association.
+>
+> [Location: 5,436]{.highlight-ref}

@@ -1,0 +1,25 @@
+---
+title: "The Lean Product Playbook: How to Innovate with Minimum Viable Products and Rapid Customer Feedback"
+subtitle: "Dan Olsen"
+date: 2025-07-11
+highlights: 3
+description-meta: "Kindle highlights from The Lean Product Playbook: How to Innovate with Minimum Viable Products and Rapid Customer Feedback by Dan Olsen."
+book-cover: "https://m.media-amazon.com/images/I/51cQBxzM22L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00SZ638C8"
+---
+
+## Highlights
+
+3 highlights.
+
+> The “what” describes the benefits that the product should give the customer—what the product will accomplish for the user or allow the user to accomplish. The “how” is the way in which the product delivers the “what” to the customer. The “how” is the design of the product and the specific technology used to implement the product. “What” is problem space and “how” is solution space.
+>
+> [Location: 828]{.highlight-ref}
+
+> The reality is that customers are much better at giving you feedback in the solution space. If you show them a new product or design, they can tell you what they like and don't like. They can compare it to other solutions and identify pros and cons. Having solution space discussions with customers is much more fruitful than trying to explicitly discuss the problem space with them.
+>
+> [Location: 913]{.highlight-ref}
+
+> “Customers don't care about your solution. They care about their problems.”
+>
+> [Location: 926]{.highlight-ref}

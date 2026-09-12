@@ -21,6 +21,8 @@ website:
         href: index.qmd
       - text: "Projects"
         href: projects.qmd
+      - text: "Reading log"
+        href: books.qmd
       - text: "About"
         href: about.qmd
     right:

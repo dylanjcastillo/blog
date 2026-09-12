@@ -1,0 +1,49 @@
+---
+title: "Deep Work: Rules for Focused Success in a Distracted World"
+subtitle: "Cal Newport"
+date: 2019-08-31
+highlights: 9
+description-meta: "Kindle highlights from Deep Work: Rules for Focused Success in a Distracted World by Cal Newport."
+book-cover: "https://m.media-amazon.com/images/I/71din4TLubL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B013UWFM52"
+---
+
+## Highlights
+
+9 highlights.
+
+> In this new economy, three groups will have a particular advantage: those who can work well and creatively with intelligent machines, those who are the best at what they do, and those with access to capital.
+>
+> [Page: 28]{.highlight-ref}
+
+> If you can’t learn, you can’t thrive.
+>
+> [Page: 31]{.highlight-ref}
+
+> If you don’t produce, you won’t thrive—no matter how skilled or talented you are.
+>
+> [Page: 32]{.highlight-ref}
+
+> To learn hard things quickly, you must focus intensely without distraction. To learn, in other words, is an act of deep work.
+>
+> [Page: 37]{.highlight-ref}
+
+> why cultures of connectivity persist, the answer, according to our principle, is because it’s easier.
+>
+> [Page: 58]{.highlight-ref}
+
+> If you’re using busyness as a proxy for productivity, then these behaviors can seem crucial for convincing yourself and others that you’re doing your job well.
+>
+> [Page: 64]{.highlight-ref}
+
+> To build your working life around the experience of flow produced by deep work is a proven path to deep satisfaction.
+>
+> [Page: 86]{.highlight-ref}
+
+> A deep life is a good life, any way you look at it.
+>
+> [Page: 92]{.highlight-ref}
+
+> The key to this strategy is not the specifics, but instead the motivating idea that your ability to concentrate is only as strong as your commitment to train it.
+>
+> [Page: 180]{.highlight-ref}

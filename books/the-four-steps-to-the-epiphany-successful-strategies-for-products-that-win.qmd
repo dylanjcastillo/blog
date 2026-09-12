@@ -1,0 +1,277 @@
+---
+title: "The Four Steps to the Epiphany: Successful Strategies for Products that Win"
+subtitle: "Steve Blank"
+date: 2024-05-19
+highlights: 66
+description-meta: "Kindle highlights from The Four Steps to the Epiphany: Successful Strategies for Products that Win by Steve Blank."
+book-cover: "https://m.media-amazon.com/images/I/81eSbvmbZBL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B084RG9Q2B"
+---
+
+## Highlights
+
+66 highlights.
+
+> this: Startups that survive the first few tough years do not follow the traditional product-centric launch model espoused by product managers or the venture capital community. Through trial and error, hiring and firing, successful startups all invent a parallel process to Product Development. In particular, the winners invent and live by a process of customer learning and discovery. I call this process “Customer Development,” a sibling to “Product Development,” and each and every startup that succeeds recapitulates it, knowingly or not.
+>
+> [Location: 462]{.highlight-ref}
+
+> The greatest risk—and hence the greatest cause of failure—in startups is not in the development of the new product but in the development of customers and markets. Startups don't fail because they lack a product; they fail because they lack customers and a proven financial model.
+>
+> [Location: 628]{.highlight-ref}
+
+> Simply put, a startup should focus on reaching a deep understanding of customers and their problems, their pains, and the jobs they need done to discover a repeatable roadmap of how they buy, and building a financial model that results in profitability.
+>
+> [Location: 703]{.highlight-ref}
+
+> So instead of dreaming up ways to cross the chasm, the first step for a startup is to focus on learning and discovery processes, from starting the company to scaling the business.
+>
+> [Location: 918]{.highlight-ref}
+
+> The Customer Development model, depicted in Figure 2.1, is designed to solve the 10 problems of the Product Development model enumerated in Chapter 1. Rigor and flexibility are its strengths. The model separates out all the customer-related activities in the early stage of a company into their own processes, designed as four easy-to-understand steps: Customer Discovery, Customer Validation, Customer Creation, and Company Building.
+>
+> [Location: 1,008]{.highlight-ref}
+
+> Customer Discovery focuses on testing whether a company's business model is correct, specifically focused on whether the product solves customer problems and needs (this match of product features and customers is called Product/Market fit). Customer Validation develops a sales model that can be replicated, Customer Creation creates and drives end-user demand, and Company Building transitions the organization from one designed for learning and discovery to a well-oiled machine engineered for execution.
+>
+> [Location: 1,017]{.highlight-ref}
+
+> “It's OK to screw it up if you plan to learn from it” is the heart of the methodology presented in this book.
+>
+> [Location: 1,029]{.highlight-ref}
+
+> The goal of Customer Discovery is just what the name implies: finding out who the customers for your product are and whether the problem you believe you are solving is important to them.
+>
+> [Location: 1,058]{.highlight-ref}
+
+> Step 2: Customer Validation
+>
+> [Location: 1,085]{.highlight-ref}
+
+> The goal of this step is to build a repeatable sales roadmap for the sales and marketing teams that will follow later.
+>
+> [Location: 1,086]{.highlight-ref}
+
+> The sales roadmap is the playbook of the proven and repeatable sales process that has been field-tested by successfully selling the product to early customers.
+>
+> [Location: 1,087]{.highlight-ref}
+
+> Customer Validation proves you have found a set of customers and a market that react positively to the product. A customer purchase in this step validates lots of polite words from potential customers about your product.
+>
+> [Location: 1,088]{.highlight-ref}
+
+> Step 3: Customer Creation
+>
+> [Location: 1,100]{.highlight-ref}
+
+> Its goal is to create end-user demand and drive that demand into the company's sales channel. This step is placed after Customer Validation to move heavy marketing spending after the point where a startup acquires its first customers, thus allowing the company to control its cash-burn rate and protect its most precious asset.
+>
+> [Location: 1,101]{.highlight-ref}
+
+> Step 4: Company Building
+>
+> [Location: 1,117]{.highlight-ref}
+
+> Company Building is where the company transitions from its informal, learning and discovery-oriented Customer Development team into formal departments with VPs of Sales, Marketing and Business Development.
+>
+> [Location: 1,118]{.highlight-ref}
+
+> there are four types of startups, each of them needing a very different set of requirements to succeed: Startups that are entering an existing market Startups that are creating an entirely new market Startups that want to resegment an existing market as a low-cost entrant Startups that want to resegment an existing market as a niche player
+>
+> [Location: 1,139]{.highlight-ref}
+
+> You are in an existing market if your product offers higher performance than what is currently offered. Higher performance can be a product or service that runs faster, does something better or substantially improves on what is already on the market.
+>
+> [Location: 1,190]{.highlight-ref}
+
+> A new market results when a company creates a large customer base that couldn't do something before. This happens because of true innovation, creating something brand-new; dramatically lower cost, creating a new class of users; or because the new product solves availability, skill, convenience, or location issues in a way no other product has.
+>
+> [Location: 1,197]{.highlight-ref}
+
+> Being a great entrepreneur means finding the path through the fog, confusion and myriad of choices. To do that, you need vision and a process. This book gives you the process. Its premise is simple: If you execute the four steps of Customer Development rigorously and thoroughly, you increase the odds of achieving success, and you can reach the epiphany.
+>
+> [Location: 1,319]{.highlight-ref}
+
+> Have we identified a problem a customer wants solved? Does our product solve these customer needs? If so, do we have a viable and profitable business model? Have we learned enough to go out and sell? Answering these questions is the purpose of the first step in the Customer Development model, Customer Discovery.
+>
+> [Location: 1,376]{.highlight-ref}
+
+> It's instructive to enumerate all things you are not going to do: Understand the needs and wants of all customers Make a list of all the features customers want before they buy your product Hand product development a features list of the sum of all customer requests Hand product development a detailed marketing requirements document Run focus groups and test customers’ reactions to your product to see if they will buy
+>
+> [Location: 1,391]{.highlight-ref}
+
+> Earlyvangelists can be identified by these customer characteristics (see Figure 3.1): The customer has a problem The customer understands he or she has a problem The customer is actively searching for a solution and has a timetable for finding it The problem is painful enough the customer has cobbled together an interim solution The customer has committed, or can quickly acquire, budget dollars to solve the problem
+>
+> [Location: 1,446]{.highlight-ref}
+
+> having a product you can demonstrate and iterate is helpful in moving the Customer Development process along.
+>
+> [Location: 1,468]{.highlight-ref}
+
+> For the first product in a startup, your initial purpose in meeting customers is not to gather feature requests so you can change the product; it is to find customers for the product you are already building.
+>
+> [Location: 1,473]{.highlight-ref}
+
+> If, and only if, no customers can be found for the product as spec'd do you bring the features customers requested to the Product Development team.
+>
+> [Location: 1,475]{.highlight-ref}
+
+> Phase 1 is a rigorous process of writing a series of briefs that capture the hypotheses embodied in your company's vision and business model.
+>
+> [Location: 1,509]{.highlight-ref}
+
+> In Phase 2 you qualify those assumptions by testing them in front of potential customers. At this point you want to do very little talking and a lot of listening.
+>
+> [Location: 1,512]{.highlight-ref}
+
+> In Phase 3 you take your revised product concept and test its features in front of customers. The goal is not to sell the product but to validate the Phase 1 hypotheses by having customers say, “Yes, these features solve our problems.”
+>
+> [Location: 1,516]{.highlight-ref}
+
+> in Phase 4 you stop and verify you understand customers’ problems, that the product solves those problems, customers will pay for the product, and that the resulting revenue will result in a profitable business model. This phase culminates in the deliverables for the Customer Discovery step: a problem statement document, an expanded product requirement document, an updated sales and revenue plan, and a sound business and product plan.
+>
+> [Location: 1,524]{.highlight-ref}
+
+> The Customer Development Team
+>
+> [Location: 1,533]{.highlight-ref}
+
+> Customer Development must have the authority to radically change the company's direction, product or mission and the creative, flexible mindset of an entrepreneur.
+>
+> [Location: 1,543]{.highlight-ref}
+
+> Phase 0: Get Buy-In
+>
+> [Location: 1,553]{.highlight-ref}
+
+> The Product Development process emphasizes execution. The Customer Development process emphasizes learning, discovery, failure, iterations and pivots.
+>
+> [Location: 1,561]{.highlight-ref}
+
+> Unique to the process is the commitment of the Product Development team to spend at least 15% of its time outside the building talking to customers.
+>
+> [Location: 1,565]{.highlight-ref}
+
+> In times of crisis or confusion, understanding why the company exists and what its goals are will provide a welcome beacon of clarity.
+>
+> [Location: 1,572]{.highlight-ref}
+
+> When the company's mission or direction is uncertain, the core values can be referenced for direction and guidance. For core values to be of use, a maximum of three to five should be articulated.
+>
+> [Location: 1,584]{.highlight-ref}
+
+> Phase 1: State Your Hypotheses
+>
+> [Location: 1,588]{.highlight-ref}
+
+> Getting your hypotheses down on paper is essential because you will refer to them, test them, and update them during the entire Customer Development process.
+>
+> [Location: 1,591]{.highlight-ref}
+
+> Product Hypotheses: Product Features
+>
+> [Location: 1,614]{.highlight-ref}
+
+> one-or two-sentence summaries of the top 10 (or fewer) features of the product.
+>
+> [Location: 1,615]{.highlight-ref}
+
+> Product Hypotheses: Product Benefits
+>
+> [Location: 1,620]{.highlight-ref}
+
+> In a startup Product Development has all kinds of customer “facts.” Use this meeting to flush these out. At this point, the marketing people must bite their tongues and listen to the Product Development group's assumptions about how the features will benefit customers.
+>
+> [Location: 1,623]{.highlight-ref}
+
+> Product Hypotheses: Intellectual Property
+>
+> [Location: 1,627]{.highlight-ref}
+
+> Product Hypotheses: Dependency Analysis
+>
+> [Location: 1,635]{.highlight-ref}
+
+> “For us to be successful (that is, to sell our product in volume), here's what has to happen that is out of our control.”
+>
+> [Location: 1,637]{.highlight-ref}
+
+> Product Hypotheses: Product Delivery Schedule
+>
+> [Location: 1,644]{.highlight-ref}
+
+> the Customer Development team will be out trying to convince a small group of early customers to buy based on the product spec long before you can physically deliver the product. To do so they will have to paint a picture for customers of what the product will ultimately look like several releases into the future.
+>
+> [Location: 1,650]{.highlight-ref}
+
+> Product Hypotheses: Total Cost Of Ownership/Adoption
+>
+> [Location: 1,658]{.highlight-ref}
+
+> B. State Your Hypotheses: Customer Hypotheses
+>
+> [Location: 1,669]{.highlight-ref}
+
+> Customer Hypotheses: Types of Customers
+>
+> [Location: 1,678]{.highlight-ref}
+
+> You need a deep understanding of the end users’ needs, but it's important to realize in some cases the end user may have the least influence in the sales process.
+>
+> [Location: 1,693]{.highlight-ref}
+
+> Customer Hypotheses: Customer Problems
+>
+> [Location: 1,742]{.highlight-ref}
+
+> It's much easier to sell when you can build the story about your product's features and benefits around a solution to a problem you know the customer already has.
+>
+> [Location: 1,743]{.highlight-ref}
+
+> Understanding your customers’ problems involves understanding their pain—that is, how customers experience the problem, and why (and how much) it matters to them.
+>
+> [Location: 1,746]{.highlight-ref}
+
+> writing down the answer to “If they could wave a magic wand and change anything at all, what would it be?” gives you a tremendous leg up on how to present your new product.
+>
+> [Location: 1,763]{.highlight-ref}
+
+> one test of a have-to-have product is that the customers have built or have been trying to build a solution themselves.
+>
+> [Location: 1,781]{.highlight-ref}
+
+> Customer Hypotheses: A Day in your Customer's Life
+>
+> [Location: 1,785]{.highlight-ref}
+
+> Your final exam doesn't happen until you come back to the company and, in meetings with the Product Development team and your peers, draw a vivid and specific picture of a day in the life of your customer.
+>
+> [Location: 1,806]{.highlight-ref}
+
+> Customer Hypotheses: Organizational Map and Customer Influence Map
+>
+> [Location: 1,809]{.highlight-ref}
+
+> This part of the brief has you first listing all the people you can think of who could influence a customer's buying decisions.
+>
+> [Location: 1,812]{.highlight-ref}
+
+> Customer Hypotheses: ROI (Return On Investment) Justification
+>
+> [Location: 1,821]{.highlight-ref}
+
+> Most startups are unprepared to deal with the customer's ROI. At best, they ignore it, and at worst, they confuse it with the price of the product. (ROI, as you'll see, involves a lot more than price.)
+>
+> [Location: 1,844]{.highlight-ref}
+
+> Your earlyvangelists will end up using your ROI metrics to help sell your product inside their own company! It's with that end in mind that you include an ROI justification in the customer/problem brief.
+>
+> [Location: 1,850]{.highlight-ref}
+
+> Customer Hypotheses: Minimum Feature Set
+>
+> [Location: 1,853]{.highlight-ref}
+
+> Rather than asking customers explicitly about feature X, Y or Z, one approach to defining the minimum features set is to ask, “What is the smallest or least complicated problem the customer will pay us to solve?”
+>
+> [Location: 1,860]{.highlight-ref}

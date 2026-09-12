@@ -1,0 +1,29 @@
+---
+title: "The Kaggle Book: Data analysis and machine learning for competitive data science"
+subtitle: "Konrad Banachewicz, Luca Massaron, and Anthony Goldbloom"
+date: 2024-02-14
+highlights: 4
+description-meta: "Kindle highlights from The Kaggle Book: Data analysis and machine learning for competitive data science by Konrad Banachewicz, Luca Massaron, and Anthony Goldbloom."
+book-cover: "https://m.media-amazon.com/images/I/81VPNGvwmaL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B09F3STL34"
+---
+
+## Highlights
+
+4 highlights.
+
+> A loss function is a function that is defined on a single data point, and, considering the prediction of the model and the ground truth for the data point, computes a penalty.
+>
+> [Location: 1,795]{.highlight-ref}
+
+> A cost function takes into account the whole dataset used for training (or a batch from it), computing a sum or average over the loss penalties of its data points. It can comprise further constraints, such as the L1 or L2 penalties, for instance. The cost function directly affects how the training happens.
+>
+> [Location: 1,797]{.highlight-ref}
+
+> Firstly, the choice of the number of folds should reflect your goals: If your purpose is performance estimation, you need models with low bias estimates (which means no systematic distortion of estimates). You can achieve this by using a higher number of folds, usually between 10 and 20. If your aim is parameter tuning, you need a mix of bias and variance, so it is advisable to use a medium number of folds, usually between 5 and 7. Finally, if your purpose is just to apply variable selection and simplify your dataset, you need models with low variance estimates (or you will have disagreement). Hence, a lower number of folds will suffice, usually between 3 and 5.
+>
+> [Location: 3,130]{.highlight-ref}
+
+> As a golden rule, be guided in devising your validation strategy by the idea that you have to replicate the same approach used by the organizers of the competition to split the data into training, private, and public test sets. Ask yourself how the organizers have arranged those splits. Did they draw a random sample? Did they try to preserve some specific distribution in the data? Are the test sets actually drawn from the same distribution as the training data?
+>
+> [Location: 3,376]{.highlight-ref}

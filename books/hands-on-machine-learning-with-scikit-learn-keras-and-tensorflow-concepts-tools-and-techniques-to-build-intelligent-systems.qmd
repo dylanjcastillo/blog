@@ -1,0 +1,37 @@
+---
+title: "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems"
+subtitle: "Aurélien Géron"
+date: 2024-03-16
+highlights: 6
+description-meta: "Kindle highlights from Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems by Aurélien Géron."
+book-cover: "https://m.media-amazon.com/images/I/81kv0vHJ0QL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07XGF2G87"
+---
+
+## Highlights
+
+6 highlights.
+
+> “if intelligence was a cake, unsupervised learning would be the cake, supervised learning would be the icing on the cake, and reinforcement learning would be the cherry on the cake.”
+>
+> [Location: 4,924]{.highlight-ref}
+
+> The goal is to group similar instances together into clusters. Clustering is a great tool for data analysis, customer segmentation, recommender systems, search engines, image segmentation, semi-supervised learning, dimensionality reduction, and more.
+>
+> [Location: 4,937]{.highlight-ref}
+
+> just start by placing the centroids randomly (e.g., by picking k instances at random and using their locations as centroids). Then label the instances, update the centroids, label the instances, update the centroids, and so on until the centroids stop moving. The algorithm is guaranteed to converge in a finite number of steps (usually quite small); it will not oscillate forever.2
+>
+> [Location: 5,054]{.highlight-ref}
+
+> But how exactly does it know which solution is the best? It uses a performance metric! That metric is called the model’s inertia, which is the mean squared distance between each instance and its closest centroid.
+>
+> [Location: 5,084]{.highlight-ref}
+
+> K-Means does not behave very well when the clusters have varying sizes, different densities, or nonspherical shapes.
+>
+> [Location: 5,185]{.highlight-ref}
+
+> To make sure the time series is indeed sufficiently stationary, you can plot the model’s errors on the validation set across time: if the model performs much better on the first part of the validation set than on the last part, then the time series may not be stationary enough, and you might be better off training the model on a shorter time span.
+>
+> [Location: 11,863]{.highlight-ref}

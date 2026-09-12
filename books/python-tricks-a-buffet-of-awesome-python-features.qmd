@@ -1,0 +1,41 @@
+---
+title: "Python Tricks: A Buffet of Awesome Python Features"
+subtitle: "Dan Bader"
+date: 2021-04-27
+highlights: 7
+description-meta: "Kindle highlights from Python Tricks: A Buffet of Awesome Python Features by Dan Bader."
+book-cover: "https://m.media-amazon.com/images/I/815VmQScW4L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0785Q7GSY"
+---
+
+## Highlights
+
+7 highlights.
+
+> Techniques like that allow you to communicate clearly about parts of your class architecture so that new development work is naturally guided to happen within these boundaries. Of course, it would be easy enough to defy these restrictions. But in practice, they often help avoid accidental modifications that go against the original design.
+>
+> [Page: 152]{.highlight-ref}
+
+> using static methods and class methods are ways to communicate developer intent while enforcing that intent enough to avoid most “slip of the mind” mistakes and bugs that would break the design.
+>
+> [Page: 152]{.highlight-ref}
+
+> Python dictionaries are based on a well-tested and finely tuned hash table implementation that provides the performance characteristics you’d expect: O(1) time complexity for lookup, insert, update, and delete operations in the average case.
+>
+> [Page: 160]{.highlight-ref}
+
+> You need to store arbitrary objects, potentially with mixed data types? Use a list or a tuple, depending on whether you want an immutable data structure or not.
+>
+> [Page: 173]{.highlight-ref}
+
+> You have numeric (integer or floating point) data and tight packing and performance is important? Try out array.array and see if it does everything you need. Also, consider going beyond the standard library and try out packages like NumPy or Pandas.
+>
+> [Page: 173]{.highlight-ref}
+
+> You have textual data represented as Unicode characters? Use Python’s built-in str. If you need a “mutable string,” use a list of characters.
+>
+> [Page: 174]{.highlight-ref}
+
+> You want to store a contiguous block of bytes? Use the immutable bytes type, or bytearray if you need a mutable data structure.
+>
+> [Page: 174]{.highlight-ref}

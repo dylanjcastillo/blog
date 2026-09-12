@@ -1,0 +1,145 @@
+---
+title: "Rebooting AI: Building Artificial Intelligence We Can Trust"
+subtitle: "Gary Marcus and Ernest Davis"
+date: 2022-09-30
+highlights: 33
+description-meta: "Kindle highlights from Rebooting AI: Building Artificial Intelligence We Can Trust by Gary Marcus and Ernest Davis."
+book-cover: "https://m.media-amazon.com/images/I/81iZVu-bW-L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07MYLGQLB"
+---
+
+## Highlights
+
+33 highlights.
+
+> The central problem, in a word: current AI is narrow; it works for particular tasks that it is programmed for, provided that what it encounters isn’t too different from what it has experienced before.
+>
+> [Page: 13]{.highlight-ref}
+
+> The bitter truth is that for now the vast majority of dollars invested in AI are going toward solutions that are brittle, cryptic, and too unreliable to be used in high-stakes problems.
+>
+> [Page: 15]{.highlight-ref}
+
+> Without that deeper understanding, we will never get to truly trustworthy AI. In the technical lingo, we may be stuck at a local maximum, an approach that is better than anything similar that’s been tried, but nowhere good enough to get us where we want to go.
+>
+> [Page: 18]{.highlight-ref}
+
+> In 2016, a Tesla owner came to trust the Autopilot with his life, to the point that he (allegedly) watched Harry Potter while the car chauffeured him around. All was well—until it wasn’t. After driving safely for hundreds or thousands of miles, the car literally ran into an unexpected circumstance: a white tractor trailer crossed a highway and the Tesla drove directly underneath the trailer, killing the car’s owner.
+>
+> [Page: 19]{.highlight-ref}
+
+> There is another way in which games like Go differ deeply from the real world, and it has to do with data: games can be perfectly simulated, so AI systems that play them can collect vast amounts of data cheaply.
+>
+> [Page: 20]{.highlight-ref}
+
+> the issue isn’t even how many miles a given driverless car might go without an accident, it’s how adaptable those cars are.
+>
+> [Page: 21]{.highlight-ref}
+
+> but in five fundamental ways, our human brains still vastly outperform our silicon counterparts: we can understand language, we can understand the world, we can adapt flexibly to new circumstances, we can learn new things quickly (even without gobs of data), and we can reason in the face of incomplete and even inconsistent information.
+>
+> [Page: 25]{.highlight-ref}
+
+> What’s at Stake
+>
+> [Page: 27]{.highlight-ref}
+
+> To take over the world, the robots would have to want to; they’d have to be aggressive, ambitious, and unsatisfied, with a violent streak. We’ve yet to encounter a robot remotely like that. And for now there is no reason to build robots with emotional states at all, and no compelling idea about how we could do so even if we wanted to.
+>
+> [Page: 30]{.highlight-ref}
+
+> AI doesn’t have to want to destroy us in order to create havoc. In the short term, what we should worry most about is whether machines are actually capable of reliably doing the tasks that we assign them to do.
+>
+> [Page: 30]{.highlight-ref}
+
+> Another problem, for now utterly unsolved, is that machines have to correctly infer our intentions, even when we may be far from explicit, or even manifestly unclear.
+>
+> [Page: 31]{.highlight-ref}
+
+> AI includes machine learning, but also includes, for example, any necessary algorithm or knowledge that is hand-coded or built by traditional programming techniques rather than learned. Machine learning includes any technique that allows a machine to learn from data; deep learning is the best-known of those techniques, but not the only one.
+>
+> [Page: 45]{.highlight-ref}
+
+> Realistically, deep learning is only part of the larger challenge of building intelligent machines. Such techniques lack ways of representing causal relationships (such as between diseases and their symptoms), and are likely to face challenges in acquiring abstract ideas like “sibling” or “identical to.” They have no obvious ways of performing logical inferences, and they are also still a long way from integrating abstract knowledge…
+>
+> [Page: 55]{.highlight-ref}
+
+> much of what we do as humans we learn in a just a few moments; the first time you are handed a pair of 3-D glasses you can probably put them on and infer roughly what is going on, without having to try them on a hundred thousand times.
+>
+> [Page: 56]{.highlight-ref}
+
+> “If a typical person can do a mental task with less than one second of thought, and we can gather an enormous amount of directly relevant data, we have a fighting chance—so long as the problems we actually encounter aren’t too terribly different from the training data, and the domain doesn’t change too much over time.”
+>
+> [Page: 56]{.highlight-ref}
+
+> in many real-world problems getting enough data of the right sort is unrealistic or even impossible.
+>
+> [Page: 56]{.highlight-ref}
+
+> A neural network that learns a particular task might score, say, 95 percent correct on some test. But then what? It’s often very difficult to figure out why the network is making mistakes on the other 5 percent, even when some of those mistakes are dramatic errors that no human would ever make,
+>
+> [Page: 57]{.highlight-ref}
+
+> Our visual systems are built to be robust; deep learning, not so much.
+>
+> [Page: 60]{.highlight-ref}
+
+> problem can occur in machine translation. When Google Translate was given the input text dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog dog and asked to translate that from Yoruba (and some other languages) to English, it gave back this translation: Doomsday clock is three minutes to twelve. We are experiencing characters and a dramatic developments in the world, which indicate that we are increasingly approaching the end times and Jesus’ return.
+>
+> [Page: 62]{.highlight-ref}
+
+> “You can’t get to the moon by climbing successively taller trees.”
+>
+> [Page: 66]{.highlight-ref}
+
+> The ability to understand unstructured text is for now a significant bottleneck in a huge range of potential commercial applications of AI. We can’t yet automate the process of reading legal contracts, scientific articles, or financial reports, because each consists in part of the kind of text that AI still can’t grasp.
+>
+> [Page: 86]{.highlight-ref}
+
+> Virtually every sentence that we encounter requires that we make inferences about how a broad range of background knowledge interrelates with what we read. Deep learning lacks a direct way of representing that knowledge, let alone performing inferences over it in the context of understanding a sentence.
+>
+> [Page: 88]{.highlight-ref}
+
+> So here’s where things stand today, as we approach the sixty-fifth anniversary of AI: roboticists have done an excellent job of getting robots to figure out where they are, and a fairly good job of figuring how to get robots to perform individual behaviors. But the field has made much less progress in three other areas that are essential to coping in the open-ended world: assessing situations, predicting the probable future, and deciding, dynamically, as situations change, which of the many possible actions makes the most sense in a given environment.
+>
+> [Page: 113]{.highlight-ref}
+
+> The real reason we don’t have general-purpose domestic robots yet is that we don’t know how to build them to be flexible enough to cope with the real world.
+>
+> [Page: 113]{.highlight-ref}
+
+> The lack of explicit representations causes similar problems for DeepMind’s Atari game system. Its failure in Breakout—when the paddle is repositioned by a few pixels—is tightly connected with the fact that it never really comes to represent abstractions like paddles, balls, and walls, at all.
+>
+> [Page: 121]{.highlight-ref}
+
+> without a rich cognitive model, there can be no robustness. About all you can have instead is a lot of data, accompanied by a hope that new things won’t be too different from those that have come before. But that hope is often misplaced, and when new things are different enough from what happens before, the system breaks down.
+>
+> [Page: 121]{.highlight-ref}
+
+> As Brown University machine-learning expert Stuart Geman put it, “The fundamental challenges in neural modeling are about representations rather than learning per se.”
+>
+> [Page: 122]{.highlight-ref}
+
+> A rooster’s crow reliably precedes dawn; but any human should be able to tell you that silencing a rooster will not stop the sun from rising.
+>
+> [Page: 140]{.highlight-ref}
+
+> To make progress, we need two things to get started: an inventory of what kind of knowledge a general intelligence should have, and an understanding of how this knowledge would be represented, clearly and unambiguously in a self-contained fashion, inside a machine.
+>
+> [Page: 155]{.highlight-ref}
+
+> our recipe for achieving common sense, and ultimately general intelligence, is this: Start by developing systems that can represent the core frameworks of human knowledge: time, space, causality, basic knowledge of physical objects and their interactions, basic knowledge of humans and their interactions. Embed these in an architecture that can be freely extended to every kind of knowledge, keeping always in mind the central tenets of abstraction, compositionality, and tracking of individuals. Develop powerful reasoning techniques that can deal with knowledge that is complex, uncertain, and incomplete and that can freely work both top-down and bottom-up. Connect these to perception, manipulation, and language. Use these to build rich cognitive models of the world. Then finally the keystone: construct a kind of human-inspired learning system that uses all the knowledge and cognitive abilities that the AI has; that incorporates what it learns into its prior knowledge; and that, like a child, voraciously learns from every possible source of information: interacting with the world, interacting with people, reading, watching videos, even being explicitly taught. Put all that together, and that’s how you get to deep understanding.
+>
+> [Page: 178]{.highlight-ref}
+
+> but it better be much more reliable when the police start using it to find suspects in surveillance photos. Google Search may not need stress testing, but driverless cars certainly do.
+>
+> [Page: 181]{.highlight-ref}
+
+> The goal of AI shouldn’t be to fool humans; it should be to understand and act in the world in ways that are useful, powerful, and robust. The Turing test just doesn’t get at that. We need something better.
+>
+> [Page: 184]{.highlight-ref}
+
+> In the 1982 film Blade Runner, the world is filled with advanced AI-powered replicants that seem all but indistinguishable from humans—and yet at a crucial moment Rick Deckard (Harrison Ford) stops at a pay phone to place a call.
+>
+> [Page: 201]{.highlight-ref}

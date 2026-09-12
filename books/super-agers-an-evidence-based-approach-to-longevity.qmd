@@ -1,0 +1,37 @@
+---
+title: "Super Agers: An Evidence-Based Approach to Longevity"
+subtitle: "Eric Topol"
+date: 2026-03-07
+highlights: 6
+description-meta: "Kindle highlights from Super Agers: An Evidence-Based Approach to Longevity by Eric Topol."
+book-cover: "https://m.media-amazon.com/images/I/81YFqJMEIFL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0DJ3K4LRD"
+---
+
+## Highlights
+
+6 highlights.
+
+> It turned out we were wrong. Despite the arduous and expensive task of sequencing and interpreting whole genomes several years ago, there wasn’t much in their DNA to illuminate the basis for healthy aging. Their genetic risk markers for Alzheimer’s and heart disease were only marginally smaller than they are for the rest of us. In contrast with the lack of novel genomic findings, this group of people, with an average age of eighty-four years, were obviously thinner, by almost thirty pounds, exercised more, and had more education than the general population of advanced-aged Americans.
+>
+> [Location: 165]{.highlight-ref}
+
+> Dysfunctionality in our immune response is a principal driver of accelerated aging.
+>
+> [Location: 197]{.highlight-ref}
+
+> but here are some of the chemicals you should avoid or limit: coloring agents, sweeteners such as maltodextrin, high-fructose corn syrup, fruit juice concentrates, dextrose, lactose, artificial sweeteners, hydrogenated oils, palm oil, calcium propionate, soy protein isolate, modified starches such as maltitol, calcium caseinate, hydrolyzed beef gelatin, and emulsifiers such as soy lecithin, xanthan gum, guar gum, and diacetyl tartaric acid esters of mono- and diglycerides.
+>
+> [Location: 328]{.highlight-ref}
+
+> Regular consumption of ultra-processed red meat, such as bologna, bacon, sausage, and hot dogs, has been associated with a 14 percent higher risk of dementia. There is a remarkable dose-response curve.
+>
+> [Location: 361]{.highlight-ref}
+
+> As seen in a large cohort of more than thirteen thousand people age forty-five and older, followed for six years, consumption of high sugary beverages, including fruit juices, was associated with a 24 percent increased all-cause mortality. This finding was independently replicated and extended by several other studies, in much larger cohorts and with longer follow-up, for both increased cardiovascular and cancer-related mortality.
+>
+> [Location: 401]{.highlight-ref}
+
+> In 120 healthy adults given saccharin, sucralose, aspartame, and stevia, versus controls for two weeks, the first two sweeteners induced impaired glucose regulation (also known as glycemic response), and all four were associated with changes in the oral and gut microbiome.
+>
+> [Location: 413]{.highlight-ref}

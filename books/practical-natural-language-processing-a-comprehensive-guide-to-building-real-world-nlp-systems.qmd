@@ -1,0 +1,65 @@
+---
+title: "Practical Natural Language Processing: A Comprehensive Guide to Building Real-World NLP Systems"
+subtitle: "Sowmya Vajjala, Bodhisattwa Majumder, Anuj Gupta, and Harshit Surana"
+date: 2021-05-26
+highlights: 13
+description-meta: "Kindle highlights from Practical Natural Language Processing: A Comprehensive Guide to Building Real-World NLP Systems by Sowmya Vajjala, Bodhisattwa Majumder, Anuj Gupta, and Harshit Surana."
+book-cover: "https://m.media-amazon.com/images/I/91pDCEA5uTL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B08BF7N3L4"
+---
+
+## Highlights
+
+13 highlights.
+
+> Any machine learning approach for NLP, supervised or unsupervised, can be described as consisting of three common steps: extracting features from text, using the feature representation to learn a model, and evaluating and improving the model.
+>
+> [Location: 650]{.highlight-ref}
+
+> If the overlap between corpus vocabulary and embedding vocabulary is less than 80%, we’re unlikely to see good performance from our NLP model.
+>
+> [Location: 2,681]{.highlight-ref}
+
+> One typically follows these steps when building a text classification system: Collect or create a labeled dataset suitable for the task. Split the dataset into two (training and test) or three parts: training, validation (i.e., development), and test sets, then decide on evaluation metric(s). Transform raw text into feature vectors. Train a classifier using the feature vectors and the corresponding labels from the training set. Using the evaluation metric(s) from Step 2, benchmark the model performance on the test set. Deploy the model to serve the real-world use case and monitor its performance.
+>
+> [Location: 3,098]{.highlight-ref}
+
+> it learns the probability of a text for each class and chooses the one with maximum probability. Such a classifier is called a generative classifier.
+>
+> [Location: 3,278]{.highlight-ref}
+
+> In contrast, there’s a discriminative classifier that aims to learn the probability distribution over all classes.
+>
+> [Location: 3,280]{.highlight-ref}
+
+> it aims to look for an optimal hyperplane in a higher dimensional space, which can separate the classes in the data by a maximum possible margin.
+>
+> [Location: 3,312]{.highlight-ref}
+
+> If the overlap between the vocabulary of our custom domain and that of pre-trained word embeddings is greater than 80%, pre-trained word embeddings tend to give good results in text classification.
+>
+> [Location: 3,402]{.highlight-ref}
+
+> An important factor to consider when deploying models with embedding-based feature extraction approaches is that the learned or pre-trained embedding models have to be stored and loaded into memory while using these approaches. If the model itself is bulky (e.g., the pre-trained model we used takes 3.6 GB), we need to factor this into our deployment needs.
+>
+> [Location: 3,403]{.highlight-ref}
+
+> fastText is a good option to use to set up a strong working baseline.
+>
+> [Location: 3,445]{.highlight-ref}
+
+> While working with classification, it’s very important to have a balanced dataset where all categories have an equal representation.
+>
+> [Location: 4,008]{.highlight-ref}
+
+> Building a classification system is not just about building a model. For most industrial settings, building a model is often just 5% to 10% of the total project. The rest consists of gathering data, building data pipelines, deployment, testing, monitoring, etc.
+>
+> [Location: 4,018]{.highlight-ref}
+
+> Stanford NER \[28\], spaCy, and AllenNLP \[29\] are some well-known NLP libraries that can be used to incorporate a pre-trained NER model into a software product.
+>
+> [Location: 4,465]{.highlight-ref}
+
+> This allows us to improve an existing pre-trained NER model by manually tagging a few example sentences containing new NER categories or correct a few model predictions manually and use these to retrain the model.
+>
+> [Location: 4,495]{.highlight-ref}

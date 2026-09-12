@@ -1,0 +1,213 @@
+---
+title: "Hooked: How to Build Habit-Forming Products"
+subtitle: "Nir Eyal"
+date: 2022-07-29
+highlights: 50
+description-meta: "Kindle highlights from Hooked: How to Build Habit-Forming Products by Nir Eyal."
+book-cover: "https://m.media-amazon.com/images/I/81CqmsyyVDL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00NW01MKM"
+---
+
+## Highlights
+
+50 highlights.
+
+> Neuroscientists believe habits give us the ability to focus our attention on other things by storing automatic responses in the basal ganglia,
+>
+> [Location: 384]{.highlight-ref}
+
+> MBAs are taught that a business is worth the sum of its future profits. This benchmark is how investors calculate the fair price of a company’s shares.
+>
+> [Location: 413]{.highlight-ref}
+
+> Viral Cycle Time is the amount of time it takes a user to invite another user, and it can have a massive impact.
+>
+> [Location: 444]{.highlight-ref}
+
+> Products that change customer routines are less susceptible to attacks from other companies.
+>
+> [Location: 451]{.highlight-ref}
+
+> But when it comes to shaking consumers’ old habits, these naive entrepreneurs often find that better products don’t always win—especially if a large number of users have already adopted a competing product.
+>
+> [Location: 453]{.highlight-ref}
+
+> users also increase their dependency on habit-forming products by storing value in them—
+>
+> [Location: 470]{.highlight-ref}
+
+> For one, new behaviors have a short half-life, as our minds tend to revert to our old ways of thinking and doing.
+>
+> [Location: 484]{.highlight-ref}
+
+> To borrow a term from accounting, behaviors are LIFO—“last in, first out.” In other words, the habits you’ve most recently acquired are also the ones most likely to go soonest.
+>
+> [Location: 486]{.highlight-ref}
+
+> Two-thirds of alcoholics who complete a rehabilitation program will pick up the bottle, and their old habits, within a year’s time.11 Research shows that nearly everyone who loses weight on a diet gains back the pounds within two years.12
+>
+> [Location: 488]{.highlight-ref}
+
+> So why haven’t more Google users switched to Bing? Habits keep users loyal. If a user is familiar with the Google interface, switching to Bing requires cognitive effort. Although many aspects of Bing are similar to Google, even a slight change in pixel placement forces the would-be user to learn a new way of interacting with the site.
+>
+> [Location: 503]{.highlight-ref}
+
+> A company can begin to determine its product’s habit-forming potential by plotting two factors: frequency (how often the behavior occurs) and perceived utility (how useful and rewarding the behavior is in the user’s mind over alternative solutions).
+>
+> [Location: 532]{.highlight-ref}
+
+> Remember, the Hooked Model does not get people to do things they don’t want to do. Your product must ultimately be useful.
+>
+> [Location: 544]{.highlight-ref}
+
+> “Are you building a vitamin or painkiller?” is a common, almost clichéd question many investors ask founders eager to cash their first venture capital check.
+>
+> [Location: 557]{.highlight-ref}
+
+> Painkillers solve an obvious need, relieving a specific pain, and often have quantifiable markets.
+>
+> [Location: 562]{.highlight-ref}
+
+> Vitamins, by contrast, do not necessarily solve an obvious pain point. Instead they appeal to users’ emotional rather than functional needs.
+>
+> [Location: 565]{.highlight-ref}
+
+> Before making up your mind on the vitamin versus painkiller debate for some of the world’s most successful tech companies, consider this idea: A habit is when not doing an action causes a bit of discomfort.
+>
+> [Location: 578]{.highlight-ref}
+
+> The sensation is similar to an itch, a feeling that manifests within the mind until it is satisfied. The habit-forming products we use are simply there to provide some sort of relief. Using a technology or product to scratch the itch provides faster satisfaction than ignoring it.
+>
+> [Location: 579]{.highlight-ref}
+
+> My answer to the vitamin versus painkiller question: Habit-forming technologies are both. These services seem at first to be offering nice-to-have vitamins, but once the habit is established, they provide an ongoing pain remedy.
+>
+> [Location: 582]{.highlight-ref}
+
+> habits are not the same things as addictions. The latter describes persistent, compulsive dependencies on a behavior or substance that harms the user. Addictions, by definition, are self-destructive.
+>
+> [Location: 588]{.highlight-ref}
+
+> If you are building a habit-forming product, write down the answers to these questions: What habits does your business model require? What problem are users turning to your product to solve? How do users currently solve that problem and why does it need a solution? How frequently do you expect users to engage with your product once they are habituated? What user behavior do you want to make into a habit?
+>
+> [Location: 616]{.highlight-ref}
+
+> External triggers are embedded with information, which tells the user what to do next.
+>
+> [Location: 652]{.highlight-ref}
+
+> More choices require the user to evaluate multiple options. Too many choices or irrelevant options can cause hesitation, confusion, or worse—abandonment.4 Reducing the thinking required to take the next action increases the likelihood of the desired behavior occurring with little thought.
+>
+> [Location: 665]{.highlight-ref}
+
+> Emotions, particularly negative ones, are powerful internal triggers and greatly influence our daily routines. Feelings of boredom, loneliness, frustration, confusion, and indecisiveness often instigate a slight pain or irritation and prompt an almost instantaneous and often mindless action to quell the negative sensation.
+>
+> [Location: 714]{.highlight-ref}
+
+> The desire to be entertained can be thought of as the need to satiate boredom.
+>
+> [Location: 721]{.highlight-ref}
+
+> A need to share good news can also be thought of as an attempt to find and maintain social connections.
+>
+> [Location: 721]{.highlight-ref}
+
+> Once we’re hooked, using these products does not always require an explicit call to action. Instead, they rely upon our automatic responses to feelings that precipitate the desired behavior. Products that attach to these internal triggers provide users with quick relief.
+>
+> [Location: 742]{.highlight-ref}
+
+> In the case of internal triggers, the information about what to do next is encoded as a learned association in the user’s memory.
+>
+> [Location: 746]{.highlight-ref}
+
+> product designers must know their user’s internal triggers—that is, the pain they seek to solve. Finding customers’ internal triggers requires learning more about people than what they can tell you in a survey, though.
+>
+> [Location: 754]{.highlight-ref}
+
+> The ultimate goal of a habit-forming product is to solve the user’s pain by creating an association so that the user identifies the company’s product or service as the source of relief.
+>
+> [Location: 757]{.highlight-ref}
+
+> As Evan Williams, cofounder of Blogger and Twitter said, the Internet is “a giant machine designed to give people what they want.”8 Williams continued, “We often think the Internet enables you to do new things … But people just want to do the same things they’ve always done.”
+>
+> [Location: 762]{.highlight-ref}
+
+> Why do people really send text messages? Why do they take photos? What role does watching television or sports play in their lives? Ask yourself what pain these habits solve and what the user might be feeling right before one of these actions.
+>
+> [Location: 771]{.highlight-ref}
+
+> One method is to try asking the question “Why?” as many times as it takes to get to an emotion.
+>
+> [Location: 786]{.highlight-ref}
+
+> Fogg states that all humans are motivated to seek pleasure and avoid pain; to seek hope and avoid fear; and finally, to seek social acceptance and avoid rejection.
+>
+> [Location: 876]{.highlight-ref}
+
+> What motivates some people will not motivate others, a fact that provides all the more reason to understand the needs of your particular target audience.
+>
+> [Location: 893]{.highlight-ref}
+
+> Consequently, any technology or product that significantly reduces the steps to complete a task will enjoy high adoption rates by the people it assists.
+>
+> [Location: 915]{.highlight-ref}
+
+> “Take a human desire, preferably one that has been around for a really long time … Identify that desire and use modern technology to take out steps.”
+>
+> [Location: 936]{.highlight-ref}
+
+> Fogg describes six “elements of simplicity”—the factors that influence a task’s difficulty.6 These are: Time—how long it takes to complete an action. Money—the fiscal cost of taking an action. Physical effort—the amount of labor involved in taking the action. Brain cycles—the level of mental effort and focus required to take an action. Social deviance—how accepted the behavior is by others. Non-routine—according to Fogg, “How much the action matches or disrupts existing routines.”
+>
+> [Location: 952]{.highlight-ref}
+
+> Two groups of customers were given punch cards awarding a free car wash once the cards were fully punched. One group was given a blank punch card with eight squares; the other was given a punch card with ten squares that came with two free punches. Both groups still had to purchase eight car washes to receive a free wash; however, the second group of customers—those that were given two free punches—had a staggering 82 percent higher completion rate.
+>
+> [Location: 1,115]{.highlight-ref}
+
+> The study revealed that what draws us to act is not the sensation we receive from the reward itself, but the need to alleviate the craving for that reward.
+>
+> [Location: 1,185]{.highlight-ref}
+
+> To hold our attention, products must have an ongoing degree of novelty.
+>
+> [Location: 1,199]{.highlight-ref}
+
+> In fact, a recent meta-analysis of forty-two studies involving over twenty-two thousand participants concluded that these few words, placed at the end of a request, are a highly effective way to gain compliance, doubling the likelihood of people saying yes.24 The magic words the researchers discovered? The phrase “But you are free to accept or refuse.”
+>
+> [Location: 1,414]{.highlight-ref}
+
+> Experiences with finite variability become less engaging because they eventually become predictable.
+>
+> [Location: 1,509]{.highlight-ref}
+
+> Companies building these sorts of products and services need not necessarily add more uncertainty, but rather give the user a greater sense of agency and control over inherently variable circumstances.
+>
+> [Location: 1,548]{.highlight-ref}
+
+> In a classic Aesop’s fable, a hungry fox encounters grapes hanging from a vine. The fox desperately wants the grapes. Yet as hard as he tries, he cannot reach them. Frustrated, the fox decides the grapes must be sour and that therefore he would not want them anyway.
+>
+> [Location: 1,637]{.highlight-ref}
+
+> This approach still generally holds true, as does my advice in the action phase to make the intended actions as simple as possible. In the investment phase, however, asking users to do a bit of work comes after users have received variable rewards, not before.
+>
+> [Location: 1,685]{.highlight-ref}
+
+> What do users really want? What pain is your product relieving? (Internal trigger) What brings users to your service? (External trigger)
+>
+> [Location: 1,869]{.highlight-ref}
+
+> What is the simplest action users take in anticipation of reward, and how can you simplify your product to make this action easier? (Action) Are users fulfilled by the reward yet left wanting more? (Variable reward) What “bit of work” do users invest in your product? Does it load the next trigger and store value to improve the product with use? (Investment)
+>
+> [Location: 1,870]{.highlight-ref}
+
+> Ian Bogost, the famed game creator and professor, calls the wave of habit-forming technologies the “cigarette of this century” and warns of their equally addictive and potentially destructive side effects.
+>
+> [Location: 1,886]{.highlight-ref}
+
+> “It’s OK to deceive people if it’s in their best interests, or if they’ve given implicit consent to be deceived as part of a persuasive strategy.”
+>
+> [Location: 1,908]{.highlight-ref}
+
+> “Instead of asking ‘what problem should I solve?’ ask ‘what problem do I wish someone else would solve for me?’”
+>
+> [Location: 2,299]{.highlight-ref}

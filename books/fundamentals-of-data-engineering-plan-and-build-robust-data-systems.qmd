@@ -1,0 +1,57 @@
+---
+title: "Fundamentals of Data Engineering: Plan and Build Robust Data Systems"
+subtitle: "Joe Reis and Matt Housley"
+date: 2024-12-10
+highlights: 11
+description-meta: "Kindle highlights from Fundamentals of Data Engineering: Plan and Build Robust Data Systems by Joe Reis and Matt Housley."
+book-cover: "https://m.media-amazon.com/images/I/81+oMD7Lm7L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0B4VH4T37"
+---
+
+## Highlights
+
+11 highlights.
+
+> Data architecture is the design of systems to support the evolving data needs of an enterprise, achieved by flexible and reversible decisions reached through a careful evaluation of trade-offs.
+>
+> [Location: 2,050]{.highlight-ref}
+
+> Bad architecture is authoritarian and tries to cram a bunch of one-size-fits-all decisions into a big ball of mud.
+>
+> [Location: 2,077]{.highlight-ref}
+
+> Good data architecture is flexible and easily maintainable. It evolves in response to changes within the business and new technologies and practices that may unlock even more value in the future.
+>
+> [Location: 2,080]{.highlight-ref}
+
+> any hardware component will fail, given enough time. To build highly robust data systems, you must consider failures in your designs.
+>
+> [Location: 2,144]{.highlight-ref}
+
+> “If you walk through and don’t like what you see on the other side, you can’t get back to before. We can call these Type 1 decisions. But most decisions aren’t like that—they are changeable, reversible—they’re two-way doors.” Aim for two-way doors whenever possible.
+>
+> [Location: 2,266]{.highlight-ref}
+
+> A data catalog is a centralized metadata store for all data across an organization.
+>
+> [Location: 5,622]{.highlight-ref}
+
+> Schema can function as a sort of Rosetta stone, instructions that tell us how to read the data. Two major schema patterns exist: schema on write and schema on read.
+>
+> [Location: 5,661]{.highlight-ref}
+
+> Schema on write is essentially the traditional data warehouse pattern: a table has an integrated schema; any writes to the table must conform.
+>
+> [Location: 5,663]{.highlight-ref}
+
+> With schema on read, the schema is dynamically created when data is written, and a reader must determine the schema when reading the data.
+>
+> [Location: 5,665]{.highlight-ref}
+
+> Data validation is analyzing data to ensure that it accurately represents financial information, customer interactions, and sales. Data observability provides an ongoing view of data and data processes.
+>
+> [Location: 8,646]{.highlight-ref}
+
+> A classic engineering mistake is simply building without understanding the requirements, needs of the end user, or product/market fit. This disaster happens when you build data products nobody wants to use.
+>
+> [Location: 8,697]{.highlight-ref}

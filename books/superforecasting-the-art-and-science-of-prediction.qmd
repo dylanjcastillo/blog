@@ -1,0 +1,145 @@
+---
+title: "Superforecasting: The Art and Science of Prediction"
+subtitle: "Philip E. Tetlock and Dan Gardner"
+date: 2015-10-29
+highlights: 33
+description-meta: "Kindle highlights from Superforecasting: The Art and Science of Prediction by Philip E. Tetlock and Dan Gardner."
+book-cover: "https://m.media-amazon.com/images/I/71bDrBXgvYL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00RKO6MS8"
+---
+
+## Highlights
+
+33 highlights.
+
+> It was easiest to beat chance on the shortest-range questions that only required looking one year out, and accuracy fell off the further out experts tried to forecast—approaching the dart-throwing-chimpanzee level three to five years out.
+>
+> [Location: 149]{.highlight-ref}
+
+> So we can’t say that weather is predictable or not, only that weather is predictable to some extent under some circumstances—and we must be very careful when we try to be more precise than that.
+>
+> [Location: 269]{.highlight-ref}
+
+> superforecasting demands thinking that is open-minded, careful, curious, and—above all—self-critical. It also demands focus. The kind of thinking that produces superior judgment does not come effortlessly. Only the determined can deliver it reasonably consistently, which is why our analyses have consistently found commitment to self-improvement to be the strongest predictor of performance.
+>
+> [Location: 385]{.highlight-ref}
+
+> “All who drink of this treatment recover in a short time, except those whom it does not help, who all die,” he wrote. “It is obvious, therefore, that it fails only in incurable cases.”5
+>
+> [Location: 496]{.highlight-ref}
+
+> Scientists must be able to answer the question “What would convince me I am wrong?” If they can’t, it’s a sign they have grown too attached to their beliefs.
+>
+> [Location: 677]{.highlight-ref}
+
+> My inner cynic started to suspect that no matter what had happened the experts would have been just as adept at downplaying their predictive failures and sketching an arc of history that made it appear they saw it coming all along.
+>
+> [Location: 885]{.highlight-ref}
+
+> Hence the old joke about statisticians sleeping with their feet in an oven and their head in a freezer because the average temperature is comfortable.
+>
+> [Location: 1,132]{.highlight-ref}
+
+> This particular bait and switch—replacing “Was it a good decision?” with “Did it have a good outcome?”—is both popular and pernicious.
+>
+> [Location: 1,375]{.highlight-ref}
+
+> So regression to the mean is an indispensable tool for testing the role of luck in performance: Mauboussin notes that slow regression is more often seen in activities dominated by skill, while faster regression is more associated with chance.15
+>
+> [Location: 1,652]{.highlight-ref}
+
+> It’s natural to be drawn to the inside view. It’s usually concrete and filled with engaging detail we can use to craft a story about what’s going on. The outside view is typically abstract, bare, and doesn’t lend itself so readily to storytelling. So even smart, accomplished people routinely fail to consider the outside view.
+>
+> [Location: 1,904]{.highlight-ref}
+
+> When we make estimates, we tend to start with some number and adjust. The number we start with is called the anchor.
+>
+> [Location: 1,935]{.highlight-ref}
+
+> “If you don’t get this elementary, but mildly unnatural, mathematics of elementary probability into your repertoire, then you go through a long life like a one-legged man in an ass-kicking contest.”
+>
+> [Location: 2,351]{.highlight-ref}
+
+> And to the extent that we allow our thoughts to move in the direction of fate, we undermine our ability to think probabilistically.
+>
+> [Location: 2,396]{.highlight-ref}
+
+> “You tend to believe that history played out in a logical sort of sense, that people ought to have foreseen, but it’s not like that,” he told me. “It’s an illusion of hindsight.”
+>
+> [Location: 2,430]{.highlight-ref}
+
+> Unpack the question into components. Distinguish as sharply as you can between the known and unknown and leave no assumptions unscrutinized. Adopt the outside view and put the problem into a comparative perspective that downplays its uniqueness and treats it as a special case of a wider class of phenomena. Then adopt the inside view that plays up the uniqueness of the problem. Also explore the similarities and differences between your views and those of others—and pay special attention to prediction markets and other methods of extracting wisdom from crowds. Synthesize all these different views into a single vision as acute as that of a dragonfly. Finally, express your judgment as precisely as you can, using a finely grained scale of probability.
+>
+> [Location: 2,461]{.highlight-ref}
+
+> To be a top-flight forecaster, a growth mindset is essential. The
+>
+> [Location: 2,817]{.highlight-ref}
+
+> It should be equally obvious that learning to forecast requires trying to forecast. Reading books on forecasting is no substitute for the experience of the real thing.9
+>
+> [Location: 2,879]{.highlight-ref}
+
+> To learn from failure, we must know when we fail.
+>
+> [Location: 2,905]{.highlight-ref}
+
+> People often assume that when a decision is followed by a good outcome, the decision was good, which isn’t always true, and can be dangerous if it blinds us to the flaws in our thinking.13
+>
+> [Location: 2,987]{.highlight-ref}
+
+> Superforecasters are perpetual beta.
+>
+> [Location: 3,052]{.highlight-ref}
+
+> rough composite portrait of the modal superforecaster.
+>
+> [Location: 3,055]{.highlight-ref}
+
+> In philosophic outlook, they tend to be: CAUTIOUS: Nothing is certain HUMBLE: Reality is infinitely complex NONDETERMINISTIC: What happens is not meant to be and does not have to happen
+>
+> [Location: 3,056]{.highlight-ref}
+
+> In their abilities and thinking styles, they tend to be: ACTIVELY OPEN-MINDED: Beliefs are hypotheses to be tested, not treasures to be protected INTELLIGENT AND KNOWLEDGEABLE, WITH A “NEED FOR COGNITION”: Intellectually curious, enjoy puzzles and mental challenges REFLECTIVE: Introspective and self-critical NUMERATE: Comfortable with numbers
+>
+> [Location: 3,059]{.highlight-ref}
+
+> In their methods of forecasting they tend to be: PRAGMATIC: Not wedded to any idea or agenda ANALYTICAL: Capable of stepping back from the tip-of-your-nose perspective and considering other views DRAGONFLY-EYED: Value diverse views and synthesize them into their own PROBABILISTIC: Judge using many grades of maybe THOUGHTFUL UPDATERS: When facts change, they change their minds GOOD INTUITIVE PSYCHOLOGISTS: Aware of the value of checking thinking for cognitive and emotional biases
+>
+> [Location: 3,065]{.highlight-ref}
+
+> In their work ethic, they tend to have: A GROWTH MINDSET: Believe it’s possible to get better GRIT: Determined to keep at it however long it takes
+>
+> [Location: 3,072]{.highlight-ref}
+
+> The strongest predictor of rising into the ranks of superforecasters is perpetual beta, the degree to which one is committed to belief updating and self-improvement.
+>
+> [Location: 3,075]{.highlight-ref}
+
+> Teams can cause terrible mistakes. They can also sharpen judgment and accomplish together what cannot be done alone. Managers tend to focus on the negative or the positive but they need to see both.
+>
+> [Location: 3,158]{.highlight-ref}
+
+> An imperfect decision made in time was better than a perfect one made too late.
+>
+> [Location: 3,441]{.highlight-ref}
+
+> “Ironically,” Damian McKinney told the Financial Times, “companies are much more focused on what I call ‘command and control’ than their military counterparts.”28
+>
+> [Location: 3,625]{.highlight-ref}
+
+> History does sometimes jump. But it also crawls, and slow, incremental change can be profoundly important.
+>
+> [Location: 3,837]{.highlight-ref}
+
+> In my EPJ research, the accuracy of expert predictions declined toward chance five years out.
+>
+> [Location: 3,886]{.highlight-ref}
+
+> If you have to plan for a future beyond the forecasting horizon, plan for surprise. That means, as Danzig advises, planning for adaptability and resilience.
+>
+> [Location: 3,891]{.highlight-ref}
+
+> We hear them most because they are the loudest and the media reward people who shout into bullhorns.
+>
+> [Location: 4,290]{.highlight-ref}

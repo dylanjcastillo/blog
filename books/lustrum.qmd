@@ -1,0 +1,47 @@
+---
+title: "Lustrum"
+subtitle: "Robert Harris"
+date: 2026-09-10
+highlights: 6
+description-meta: "Kindle highlights from Lustrum by Robert Harris."
+book-cover: "https://m.media-amazon.com/images/I/814JtKxko7L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0041RRH86"
+---
+
+## Notes
+
+*Reading in progress.*
+
+So far, I like this more than *Imperium*. I already knew the main characters, and it moves faster. It focuses mostly on Cicero’s year as consul and his constant fight against Caesar’s plans.
+
+If you thought modern politics used dirty tactics, you haven’t read enough about Rome. Catilina repeatedly tried to openly kill Cicero. After failing, he even went to the Senate as if nothing had happened.
+
+Reading this and *Imperium* taught me a lot about Cicero’s character. He came across as someone who truly cared about Rome’s wellbeing, but was also willing to compromise his principles for power.
+
+## Highlights
+
+6 highlights.
+
+> Cicero’s first law of rhetoric, that a speech must always contain at least one surprise.
+>
+> [Page 52, location 786]{.highlight-ref}
+
+> any rash fool can be a hero if he sets no value on his life, or hasn’t the wit to appreciate danger. But to understand the risks, perhaps even to flinch at first, but then to summon the strength to face them down – that in my opinion is the most commendable form of valour, and that was what Cicero displayed that day.
+>
+> [Page 69, location 1025]{.highlight-ref}
+
+> ‘“The Warden of Land and Sea”’, murmured Cicero. ‘I suppose we should be grateful he’s left us the air.’
+>
+> [Page 96, location 1390]{.highlight-ref}
+
+> ‘If a fire is raised to consume my fortunes,’ he said very deliberately, turning to look at Cicero, ‘then I will put it out – not with water but by demolition.’
+>
+> [Page 125, location 1784]{.highlight-ref}
+
+> the only safe place to put a Trojan horse is outside your walls.’
+>
+> [Page 176, location 2486]{.highlight-ref}
+
+> Tiro was the first man to record a speech in the senate verbatim, and his shorthand system, known as Notae Tironianae, was still in use in the Church in the sixth century; indeed some traces of it (the symbol ‘&’, the abbreviations etc, NB, i.e., e.g.) survive to this day.
+>
+> [Location: 85]{.highlight-ref}

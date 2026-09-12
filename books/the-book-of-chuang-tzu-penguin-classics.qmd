@@ -1,0 +1,29 @@
+---
+title: "The Book of Chuang Tzu (Penguin Classics)"
+subtitle: "Chuang Tzu and Martin Palmer"
+date: 2024-02-17
+highlights: 4
+description-meta: "Kindle highlights from The Book of Chuang Tzu (Penguin Classics) by Chuang Tzu and Martin Palmer."
+book-cover: "https://m.media-amazon.com/images/I/71X7RD8EUfL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B002RI99KU"
+---
+
+## Highlights
+
+4 highlights.
+
+> Wandering Where You Will
+>
+> [Page: 1]{.highlight-ref}
+
+> The understanding of the small cannot be compared to the understanding of the great. A few years cannot be compared to many years.
+>
+> [Page: 2]{.highlight-ref}
+
+> The perfect man has no self; The spiritual man has no merit; The holy man has no fame.
+>
+> [Page: 3]{.highlight-ref}
+
+> The cook may not run his kitchen well, but the shaman does not jump up and take over.’
+>
+> [Page: 4]{.highlight-ref}

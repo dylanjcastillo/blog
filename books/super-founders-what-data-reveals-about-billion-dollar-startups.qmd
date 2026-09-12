@@ -1,0 +1,49 @@
+---
+title: "Super Founders: What Data Reveals About Billion-Dollar Startups"
+subtitle: "Ali Tamaseb"
+date: 2025-11-14
+highlights: 9
+description-meta: "Kindle highlights from Super Founders: What Data Reveals About Billion-Dollar Startups by Ali Tamaseb."
+book-cover: "https://m.media-amazon.com/images/I/812NyUH4PWL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B08HLZZT6G"
+---
+
+## Highlights
+
+9 highlights.
+
+> ON AGE
+>
+> [Location: 228]{.highlight-ref}
+
+> The distribution of age is more or less the same in the random group of startups, meaning that a founder’s age—whether younger or older—doesn’t correlate strongly with the success of their company. In other words, age doesn’t matter. The data showed a slight advantage for the younger founders, but it was not statistically large.
+>
+> [Location: 249]{.highlight-ref}
+
+> Founders of health and biotech companies skew older—on average, they were forty-two when starting out—but there is also a wide age range among founders of enterprise and consumer tech companies, bucking the logic that only millennials can capture those markets.
+>
+> [Location: 265]{.highlight-ref}
+
+> ON SOLO FOUNDERS
+>
+> [Location: 271]{.highlight-ref}
+
+> In reality, one in five billion-dollar companies was founded by a solo founder. That’s less common than dual founders (36 percent) or companies with three co-founders (28 percent), but more common than you might think. There are also a few cases where billion-dollar companies were started by more than three people: 12 percent of billion-dollar companies had four co-founders; a very small percentage had five or more. These numbers are similar to those in the random group, suggesting no specific advantage or disadvantage to any of these situations, including the solo-founder scenario.
+>
+> [Location: 279]{.highlight-ref}
+
+> ON BEING TECHNICAL
+>
+> [Location: 336]{.highlight-ref}
+
+> The founding CEOs of billion-dollar startups were split right down the middle: 50.5 percent had a business background, and 49.5 percent had a technical background.
+>
+> [Location: 348]{.highlight-ref}
+
+> when the founding CEO was non-technical, there was a higher chance that the second founder was non-technical too.
+>
+> [Location: 361]{.highlight-ref}
+
+> ON BEING RELATED
+>
+> [Location: 374]{.highlight-ref}

@@ -1,0 +1,61 @@
+---
+title: "Nudge: Improving Decisions About Health, Wealth, and Happiness"
+subtitle: "Richard H. Thaler and Cass R. Sunstein"
+date: 2016-08-29
+highlights: 12
+description-meta: "Kindle highlights from Nudge: Improving Decisions About Health, Wealth, and Happiness by Richard H. Thaler and Cass R. Sunstein."
+book-cover: "https://m.media-amazon.com/images/I/713WQ0Mqr+L._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00A5DCALY"
+---
+
+## Highlights
+
+12 highlights.
+
+> A choice architect has the responsibility for organizing the context in which people make decisions.
+>
+> [Location: 133]{.highlight-ref}
+
+> our understanding of human behavior can be improved by appreciating how people systematically go wrong.
+>
+> [Location: 363]{.highlight-ref}
+
+> As we will see, loss aversion operates as a kind of cognitive nudge, pressing us not to make changes, even when changes are very much in our interests.
+>
+> [Location: 607]{.highlight-ref}
+
+> The combination of loss aversion with mindless choosing implies that if an option is designated as the “default,” it will attract a large market share. Default options thus act as powerful nudges.
+>
+> [Location: 629]{.highlight-ref}
+
+> (Note to political parties: If you would like to increase turnout, please do not lament the large numbers of people who fail to vote.)
+>
+> [Location: 1,133]{.highlight-ref}
+
+> Self-control issues are most likely to arise when choices and their consequences are separated in time.
+>
+> [Location: 1,249]{.highlight-ref}
+
+> At one extreme are what might be called investment goods, such as exercise, flossing, and dieting. For these goods the costs are borne immediately, but the benefits are delayed. For investment goods, most people err on the side of doing too little.
+>
+> [Location: 1,249]{.highlight-ref}
+
+> Most of the time, competition ensures that price serves as a good signal of quality.
+>
+> [Location: 1,329]{.highlight-ref}
+
+> One way to start to think about incentives is to ask four questions about a particular choice architecture: Who uses? Who chooses? Who pays? Who profits?
+>
+> [Location: 1,651]{.highlight-ref}
+
+> The more choices you give people, the more help you need to provide.
+>
+> [Location: 2,625]{.highlight-ref}
+
+> It is not possible to avoid choice architecture, and in that sense it is not possible to avoid influencing people.
+>
+> [Location: 4,034]{.highlight-ref}
+
+> people are most likely to need nudges for decisions that are difficult, complex, and infrequent, and when they have poor feedback and few opportunities for learning.
+>
+> [Location: 4,040]{.highlight-ref}

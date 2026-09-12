@@ -1,0 +1,37 @@
+---
+title: "Tiny Habits: The Small Changes That Change Everything"
+subtitle: "BJ Fogg, PhD"
+date: 2021-11-01
+highlights: 6
+description-meta: "Kindle highlights from Tiny Habits: The Small Changes That Change Everything by BJ Fogg, PhD."
+book-cover: "https://m.media-amazon.com/images/I/81NH6CPgxPL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07LC9KDP5"
+---
+
+## Highlights
+
+6 highlights.
+
+> In order to design successful habits and change your behaviors, you should do three things. Stop judging yourself. Take your aspirations and break them down into tiny behaviors. Embrace mistakes as discoveries and use them to move forward.
+>
+> [Page: 2]{.highlight-ref}
+
+> One tiny action, one small bite, might feel insignificant at first, but it allows you to gain the momentum you need to ramp up to bigger challenges and faster progress. The next thing you know, you’ve eaten the whole whale.
+>
+> [Page: 9]{.highlight-ref}
+
+> Keeping changes small and expectations low is how you design around fair-weather friends like motivation and willpower. When something is tiny, it’s easy to do—which means you don’t need to rely on the unreliable nature of motivation.
+>
+> [Page: 10]{.highlight-ref}
+
+> The Anatomy of Tiny Habits 1. ANCHOR MOMENT An existing routine (like brushing your teeth) or an event that happens (like a phone ringing). The Anchor Moment reminds you to do the new Tiny Behavior. 2. NEW TINY BEHAVIOR A simple version of the new habit you want, such as flossing one tooth or doing two push-ups. You do the Tiny Behavior immediately after the Anchor Moment. 3. INSTANT CELEBRATION Something you do to create positive emotions, such as saying, “I did a good job!” You celebrate immediately after doing the new Tiny Behavior. Anchor Behavior Celebration
+>
+> [Page: 12]{.highlight-ref}
+
+> You can disrupt a behavior you don’t want by removing the prompt. This isn’t always easy, but removing the prompt is your best first move to stop a behavior from happening.
+>
+> [Page: 28]{.highlight-ref}
+
+> You follow these steps instead. Try each step in order. If you don’t get results, move to the next step. Check to see if there’s a prompt to do the behavior. See if the person has the ability to do the behavior. See if the person is motivated to do the behavior.
+>
+> [Page: 33]{.highlight-ref}

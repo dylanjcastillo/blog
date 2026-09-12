@@ -1,0 +1,37 @@
+---
+title: "The 4-Hour Body: The Revolutionary Guide to Weight Loss from the Bestselling Author"
+subtitle: "Timothy Ferriss"
+date: 2022-01-23
+highlights: 6
+description-meta: "Kindle highlights from The 4-Hour Body: The Revolutionary Guide to Weight Loss from the Bestselling Author by Timothy Ferriss."
+book-cover: "https://m.media-amazon.com/images/I/718yDjorBpL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B004M8S3Y6"
+---
+
+## Highlights
+
+6 highlights.
+
+> there are two fundamental MEDs to keep in mind: To remove stored fat → do the least necessary to trigger a fat loss cascade of specific hormones. To add muscle in small or large quantities → do the least necessary to trigger local (specific muscles) and systemic (hormonal2) growth mechanisms.
+>
+> [Location: 503]{.highlight-ref}
+
+> Take adherence seriously: will you actually stick with this change until you hit your goal? If not, find another method, even if it’s less effective and less efficient. The decent method you follow is better than the perfect method you quit.
+>
+> [Location: 634]{.highlight-ref}
+
+> On average, women have less than one-tenth (often less than one-fortieth) the testosterone of men. This biochemical recipe just doesn’t support rapid muscular growth unless you’re an outlier, so, for the duration of this book, please suspend any fear of “getting bulky”.
+>
+> [Location: 767]{.highlight-ref}
+
+> Tracking anything is better than tracking nothing.
+>
+> [Location: 840]{.highlight-ref}
+
+> The moral of the story? Don’t drink fruit juice, and absolutely avoid a high-fructose diet. It doesn’t do the body good.
+>
+> [Location: 1,600]{.highlight-ref}
+
+> Conclusions: Milk products appear insulinotropic as judged from 3-fold to 6-fold higher insulinemic indexes than expected from the corresponding glycaemic indexes.
+>
+> [Location: 1,703]{.highlight-ref}

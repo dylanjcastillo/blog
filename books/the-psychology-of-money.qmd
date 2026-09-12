@@ -1,0 +1,139 @@
+---
+title: "The Psychology of Money"
+subtitle: "Morgan Housel"
+date: 2024-10-20
+highlights: 30
+description-meta: "Kindle highlights from The Psychology of Money by Morgan Housel."
+book-cover: "https://m.media-amazon.com/images/I/715AV-uaIZL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B084HJSJJ2"
+---
+
+## Notes
+
+Great book. Very applicable. It changed my views on how to invest.
+
+I used to favor Taleb’s barbell strategy: keeping most of my money in very secure assets, such as Treasury bills or cash, and putting a small amount into very risky assets. The book helped me realize that my financial goals didn’t match how I was investing. Now I lean more toward index funds or ETFs that fit my risk profile.
+
+## Highlights
+
+30 highlights.
+
+> If you grew up when inflation was high, you invested less of your money in bonds later in life compared to those who grew up when inflation was low.
+>
+> [Page 16, location 164]{.highlight-ref}
+
+> It was not until the 1980s that the idea that everyone deserves, and should have, a dignified retirement took hold.
+>
+> [Page 24, location 243]{.highlight-ref}
+
+> The difficulty in identifying what is luck, what is skill, and what is risk is one of the biggest problems we face when trying to learn about the best way to manage money.
+>
+> [Page 34, location 377]{.highlight-ref}
+
+> Studying a specific person can be dangerous because we tend to study extreme examples—the billionaires, the CEOs, or the massive failures that dominate the news—and extreme examples are often the least applicable to other situations, given their complexity
+>
+> [Page 35, location 386]{.highlight-ref}
+
+> What Gupta and Madoff did is something different. They already had everything: unimaginable wealth, prestige, power, freedom. And they threw it all away because they wanted more. They had no sense of enough.
+>
+> [Page 41, location 454]{.highlight-ref}
+
+> There is no reason to risk what you have and need for what you don’t have and don’t need.
+>
+> [Page 41, location 462]{.highlight-ref}
+
+> His skill is investing, but his secret is time.
+>
+> [Page 49, location 556]{.highlight-ref}
+
+> “It’s not whether you’re right or wrong that’s important,” George Soros once said, “but how much money you make when you’re right and how much you lose when you’re wrong.”
+>
+> [Page 75, location 869]{.highlight-ref}
+
+> Controlling your time is the highest dividend money pays.
+>
+> [Page 84, location 972]{.highlight-ref}
+
+> We tend to judge wealth by what we see, because that’s the information we have in front of us. We can’t see people’s bank accounts or brokerage statements.
+>
+> [Page 89, location 1007]{.highlight-ref}
+
+> The world is filled with people who look modest but are actually wealthy and people who look rich who live at the razor’s edge of insolvency.
+>
+> [Page 92, location 1047]{.highlight-ref}
+
+> The further back in history you look, the more general your takeaways should be.
+>
+> [Page 121, location 1389]{.highlight-ref}
+
+> few things matter more with money than understanding your own time horizon and not being persuaded by the actions and behaviors of people playing different games than you are.
+>
+> [Location: 1,783]{.highlight-ref}
+
+> “I am a passive investor optimistic in the world’s ability to generate real economic growth and I’m confident that over the next 30 years that growth will accrue to my investments.”
+>
+> [Location: 1,788]{.highlight-ref}
+
+> “I have observed that not the man who hopes when others despair, but the man who despairs when others hope, is admired by a large class of persons as a sage.”
+>
+> [Location: 1,848]{.highlight-ref}
+
+> Only 2.5% of Americans owned stocks on the eve of the great crash of 1929 that sparked the Great Depression. But the majority of Americans—if not the world—watched in amazement as the market collapsed, wondering what it signaled about their own fate.
+>
+> [Location: 1,870]{.highlight-ref}
+
+> There is an iron law in economics: extremely good and extremely bad circumstances rarely stay that way for long because supply and demand adapt in hard-to-predict ways.
+>
+> [Location: 1,884]{.highlight-ref}
+
+> The Washington Post wrote in 1909: “There will never be such a thing as commercial aerial freighters. Freight will continue to drag its slow weight across the patient earth.” The first cargo plane took off five months later.
+>
+> [Location: 1,922]{.highlight-ref}
+
+> 1. The more you want something to be true, the more likely you are to believe a story that overestimates the odds of it being true.
+>
+> [Location: 1,986]{.highlight-ref}
+
+> The plague killed a quarter of Londoners in 18 months. You’ll believe just about anything when the stakes are that high.
+>
+> [Location: 2,009]{.highlight-ref}
+
+> If you think a recession is coming and you cash out your stocks in anticipation, your view of the economy is suddenly going to be warped by what you want to happen. Every blip, every anecdote, will look like a sign that doom has arrived—maybe not because it has, but because you want it to.
+>
+> [Location: 2,041]{.highlight-ref}
+
+> Everyone has an incomplete view of the world. But we form a complete narrative to fill in the gaps.
+>
+> [Location: 2,045]{.highlight-ref}
+
+> To each their own. But the foundation of, “does this help me sleep at night?” is the best universal guidepost for all financial decisions.
+>
+> [Location: 2,159]{.highlight-ref}
+
+> Judging how you’ve done by focusing on individual investments makes winners look more brilliant than they were, and losers appear more regrettable than they should.
+>
+> [Location: 2,166]{.highlight-ref}
+
+> The ability to do what you want, when you want, with who you want, for as long as you want to, pays the highest dividend that exists in finance.
+>
+> [Location: 2,168]{.highlight-ref}
+
+> Define the game you’re playing, and make sure your actions are not being influenced by people playing a different game.
+>
+> [Location: 2,184]{.highlight-ref}
+
+> Independence, to me, doesn’t mean you’ll stop working. It means you only do the work you like with people you like at the times you want for as long as you want.
+>
+> [Location: 2,222]{.highlight-ref}
+
+> If I had to summarize my views on investing, it’s this: Every investor should pick a strategy that has the highest odds of successfully meeting their goals. And I think for most investors, dollar-cost averaging into a low-cost index fund will provide the highest odds of long-term success.
+>
+> [Location: 2,266]{.highlight-ref}
+
+> I know people who think it’s insane to try to beat the market but encourage their kids to reach for the stars and try to become professional athletes. To each their own.
+>
+> [Location: 2,274]{.highlight-ref}
+
+> “The more the Internet exposes people to new points of view, the angrier people get that different views exist.”
+>
+> [Location: 2,524]{.highlight-ref}

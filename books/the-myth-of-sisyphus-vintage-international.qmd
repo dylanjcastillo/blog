@@ -1,0 +1,37 @@
+---
+title: "The Myth of Sisyphus (Vintage International)"
+subtitle: "Albert Camus"
+date: 2024-02-17
+highlights: 6
+description-meta: "Kindle highlights from The Myth of Sisyphus (Vintage International) by Albert Camus."
+book-cover: "https://m.media-amazon.com/images/I/71PLcOtnFQL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07HLQQZ3L"
+---
+
+## Highlights
+
+6 highlights.
+
+> The answer, underlying and appearing through the paradoxes which cover it, is this: even if one does not believe in God, suicide is not legitimate. Written fifteen years ago, in 1940, amid the French and European disaster, this book declares that even within the limits of nihilism it is possible to find the means to proceed beyond nihilism.
+>
+> [Location: 45]{.highlight-ref}
+
+> In a sense, and as in melodrama, killing yourself amounts to confessing. It is confessing that life is too much for you or that you do not understand it.
+>
+> [Location: 122]{.highlight-ref}
+
+> Does its absurdity require one to escape it through hope or suicide—this is what must be clarified, hunted down, and elucidated while brushing aside all the rest. Does the Absurd dictate death? This problem must be given priority over others, outside all methods of thought and all exercises of the disinterested mind.
+>
+> [Location: 161]{.highlight-ref}
+
+> If one believes Homer, Sisyphus was the wisest and most prudent of mortals.
+>
+> [Location: 1,528]{.highlight-ref}
+
+> If this myth is tragic, that is because its hero is conscious. Where would his torture be, indeed, if at every step the hope of succeeding upheld him? The workman of today works every day in his life at the same tasks, and this fate is no less absurd. But it is tragic only at the rare moments when it becomes conscious.
+>
+> [Location: 1,553]{.highlight-ref}
+
+> Each atom of that stone, each mineral flake of that night-filled mountain, in itself forms a world. The struggle itself toward the heights is enough to fill a man’s heart. One must imagine Sisyphus happy.
+>
+> [Location: 1,582]{.highlight-ref}

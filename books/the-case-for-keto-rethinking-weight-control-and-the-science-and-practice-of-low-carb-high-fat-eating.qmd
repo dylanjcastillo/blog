@@ -1,0 +1,149 @@
+---
+title: "The Case for Keto: Rethinking Weight Control and the Science and Practice of Low-Carb/High-Fat Eating"
+subtitle: "Gary Taubes"
+date: 2021-12-19
+highlights: 34
+description-meta: "Kindle highlights from The Case for Keto: Rethinking Weight Control and the Science and Practice of Low-Carb/High-Fat Eating by Gary Taubes."
+book-cover: "https://m.media-amazon.com/images/I/71dXjvFXSSL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07XXFHP9S"
+---
+
+## Highlights
+
+34 highlights.
+
+> Astwood called this thinking “the conviction of the primacy of gluttony,” by which he meant the unshakable belief that virtually all cases of obesity, child or adult, mild or extreme, are caused ultimately by the overconsumption of calories; that is, people get fat because they eat too much.
+>
+> [Location: 371]{.highlight-ref}
+
+> It is for this hormonal, physiological reason that some of us spend our lives fighting and losing a battle to remain lean, while others win it effortlessly.
+>
+> [Location: 485]{.highlight-ref}
+
+> “What you see is all there is,” as the Nobel laureate behavioral psychologist Daniel Kahneman memorably put it. And the perspective of lean people—what they see—has been the determining factor in how the nutritional authorities have come to think about how all of us should eat. Those who are lean find it easy or at least relatively easy to control their weight. For this reason, they assume the rest of us can also do it.
+>
+> [Location: 568]{.highlight-ref}
+
+> whether maybe the world is full (and getting more so) of individuals who are overweight or obese who do eat healthy and in moderation, who do work out regularly, who do try diligently to eat “not too much.” (Just as it may be full of lean people who do none of the above and yet remain resolutely and stubbornly lean.)
+>
+> [Location: 591]{.highlight-ref}
+
+> If we’re getting fatter, it means our body mass is increasing, our energy stores are increasing, and so we are indeed taking in more energy—calories—than we expend. Okay, we’re overeating. But by the same token, if we’re getting taller we’re taking in more calories than we expend. But nobody would say we get taller because we overeat.
+>
+> [Location: 696]{.highlight-ref}
+
+> The counterargument, which I’m defending, is Astwood’s belief that those who fatten easily are fundamentally, physiologically and metabolically different from those who don’t. This implies that those of us who fatten easily can get fat on precisely the same food and even the same amount on which lean people stay lean.
+>
+> [Location: 705]{.highlight-ref}
+
+> Indeed, researchers would occasionally admit that it’s clearly true about animals and animal models of obesity—that some animals get fat effectively independent of how much they eat and even when they eat no more than lean animals—but then somehow reject its relevance to humans on the basis that everyone knows that humans get fat because they eat too much.
+>
+> [Location: 711]{.highlight-ref}
+
+> When we assume that people who get fat are merely lean people who ate too much, we do them a terrible injustice.
+>
+> [Location: 872]{.highlight-ref}
+
+> This is what happens when we assume that a disorder or a disease like obesity is caused by something as meaningless as caloric imbalance. It puts the shame on the person who suffers from it, who couldn’t stop herself from being obese, from accumulating a tiny amount of fat daily, rather than on the community of authorities who have failed so conspicuously to understand it.
+>
+> [Location: 879]{.highlight-ref}
+
+> Hunger is a response, not a cause.
+>
+> [Location: 995]{.highlight-ref}
+
+> Obesity. If we spend a lifetime trying to eat less or not too much and we end up fat and diabetic anyway—as many of us have—it’s a good reason to believe that eating too much wasn’t the problem
+>
+> [Location: 1,109]{.highlight-ref}
+
+> “The great progress in dietary control of obesity” since the mid-nineteenth century, she wrote, “was the recognition that meat, ‘the strong food,’ was not fat producing; but that it was the innocent foodstuffs, such as bread and sweets, which lead to obesity.”
+>
+> [Location: 1,211]{.highlight-ref}
+
+> The gist of it is that the power plants in the cells (known as mitochondria) that generate the energy we use for life can do so by burning carbohydrates, proteins, or fats as fuel, the three “macronutrients” in our diet.
+>
+> [Location: 1,303]{.highlight-ref}
+
+> “The fact that insulin increases the formation of fat has been obvious ever since the first emaciated dog or diabetic patient demonstrated a fine pad of adipose tissue, made as a result of treatment with the hormone.”
+>
+> [Location: 1,326]{.highlight-ref}
+
+> When we are insulin resistant, our bodies (the pancreas, specifically) produce more and more insulin trying to achieve the necessary blood sugar control.
+>
+> [Location: 1,346]{.highlight-ref}
+
+> by 1965, there were now two competing ideas about how foods and diets can affect our weight and how much fat we store. The conventional wisdom was then and remains still (going back to how the Textbook of Obesity phrased it in 2012) that All diets that result in weight loss do so on one basis and one basis only: They reduce total calorie intake. The alternative, the one that’s based on biology rather than (supposedly) physics, is: All diets that result in weight loss do so on one basis and one basis only: They reduce circulating levels of insulin; they create and prolong the negative stimulus of insulin deficiency.
+>
+> [Location: 1,361]{.highlight-ref}
+
+> our bodies burn carbohydrates for fuel (specifically glucose, the stuff of blood sugar) when carbohydrates are available, and they burn fat when the carbohydrates have been effectively used up or stored (as a compound called glycogen). This makes eminent sense since our bodies have limited space for storing carbohydrates, about two thousand calories’ worth, but they can store relatively huge amounts of fat.
+>
+> [Location: 1,387]{.highlight-ref}
+
+> Now imagine eating a typical mixed meal containing all three of the macronutrients—protein, carbohydrates, and fat (leaving aside alcohol for the moment). The carbohydrates break down into glucose and enter the circulation, and your blood sugar (glucose) rises. That glucose has to be used for fuel or stored quickly to minimize the toxicity of this quickly elevating blood sugar. The fat can be stored while that happens and then used for fuel later, and the protein, ideally, will be used for cell and tissue repair.
+>
+> [Location: 1,391]{.highlight-ref}
+
+> Insulin is the hormone primarily responsible for orchestrating all this. It prompts cells in your lean tissues and organs to take up carbohydrates and use them for fuel; it inhibits them from burning fat and lets that fat escape back into the circulation, where it can be returned to storage.
+>
+> [Location: 1,395]{.highlight-ref}
+
+> As we finish burning off or storing (as glycogen) the carbohydrates we’ve consumed, as our blood sugar is under control and now coming down, so should insulin. With insulin decreasing, the fat tissue will eventually experience that negative stimulus of insulin deficiency, and the fat cells will release the fat from storage—they will mobilize it—and we will burn that fat for fuel. This is what happens or should happen between meals; it happens overnight while we’re sleeping, and it will happen for days, weeks, or even longer if we have to survive a lengthy famine or self-imposed period of fasting.
+>
+> [Location: 1,400]{.highlight-ref}
+
+> Excess fat, specifically above the waist, is an exceedingly good sign of insulin resistance, in which case insulin is indeed elevated higher than it should be and elevated for longer than it should be. Those who are insulin resistant are in fat-storage mode (which is the kind of phrase used by diet book authors but one that is nonetheless biologically appropriate) for much longer in the day than ideal and will be predisposed to hold on to fat rather than mobilize it or burn it.
+>
+> [Location: 1,454]{.highlight-ref}
+
+> Here’s a less technical translation: High blood sugar, which you can have when you either are diabetic or have eaten a carb-rich meal, will prompt your pancreas to secrete insulin, which in turn will prompt you to burn the carbohydrates for fuel, store glucose as glycogen and fat, and prompt your fat cells to store the fat you’ve eaten and the fat made from glucose and hold on to the fat it already has.
+>
+> [Location: 1,483]{.highlight-ref}
+
+> Metabolism researchers like to say that insulin is the signal for the “fed state,” meaning that it’s a signal that we’ve eaten, and we have fuel available to store and use for energy. That actually oversimplifies the reality: Insulin is the signal that the body has been fed carbohydrates. The fat we eat won’t stimulate insulin secretion.
+>
+> [Location: 1,504]{.highlight-ref}
+
+> ketones and nutritional ketosis can be thought of as signs, as biological markers, that fat is being mobilized and burned for fuel rather than stored. Ideally, that would mean you are becoming leaner—the goal, after all, of a weight-loss diet. If the goal is to burn fat without hunger, then nutritional ketosis is a good thing.
+>
+> [Location: 1,647]{.highlight-ref}
+
+> Yet they all agree, whether they state it explicitly or not, that we should avoid highly processed grains and sugar and sugary beverages (and, implicitly, alcoholic beverages like beer), which are the most fattening of the carbohydrates by our understanding of insulin dynamics. Even vegan and vegetarian diet proponents who blame meat and animal products for our eating-related chronic disorders will describe their recommended diet as “healthy” only if it avoids these offending carbohydrates, essentially none of which are animal products.
+>
+> [Location: 1,968]{.highlight-ref}
+
+> instance, eating foods that humans have been eating for thousands or hundreds of thousands of years, and in the form in which these foods were originally eaten, is likely to have fewer risks and so to be more benign than eating foods that are relatively new to human diets or processed in a way that is relatively new.
+>
+> [Location: 2,066]{.highlight-ref}
+
+> New foods or old foods in unnatural forms are more likely to be harmful than those foods to which we are presumably genetically adapted.
+>
+> [Location: 2,106]{.highlight-ref}
+
+> Trying to tell what’s true by looking at the latest articles published in a journal—and particularly in nutrition—is another fool’s game. The best idea is to attend little to the latest research and focus instead on the long-term trends, the accumulation of studies (one hopes, interpreted without bias), even if the long-term trends rarely, if ever, appear in the news.
+>
+> [Location: 2,134]{.highlight-ref}
+
+> The trials are still incapable of telling us whether embracing LCHF/ketogenic eating will extend our lives (compared to other patterns of eating the authorities might recommend), but they continue to challenge, relentlessly, the conventional thinking on the dangers of high-fat diets, and they tell us that in the short term, this way of eating is safe and beneficial.
+>
+> [Location: 2,311]{.highlight-ref}
+
+> The definitive evidence to answer this question does not exist. It may never exist. But it’s hard to imagine that a way of eating that makes people so much healthier in the short run, that can even reverse diabetes, which is considered a progressive chronic disease—one that only gets worse as time goes by—will harm us in the long run. The authorities are willing to think in terms of hypotheticals and hold on dearly to their cherished beliefs. Those beliefs have already failed us. We have to take the gamble and leave them behind.
+>
+> [Location: 2,341]{.highlight-ref}
+
+> The way to judge the viability of a hypothesis is to judge whether the evidence has grown significantly stronger with time.
+>
+> [Location: 2,354]{.highlight-ref}
+
+> For the past half century, evidence supporting the idea that the saturated fat in our diet is a cause of heart disease and premature death has simply been eroding away.
+>
+> [Location: 2,379]{.highlight-ref}
+
+> What we have instead, he notes, is the idea that people who eat a lot of plant foods tend to be healthier than people who eat the standard American diet (given the appropriate acronym SAD), that is, who eat at fast-food restaurants and buy the packaged, highly processed, sugary foods in the supermarket that Pollan aptly calls “foodlike substances,” food that health-conscious people naturally avoid.
+>
+> [Location: 2,393]{.highlight-ref}
+
+> Finally, the medical community has known since 1977 (if not twenty years earlier) that low HDL cholesterol is a far better predictor of heart disease than high LDL cholesterol, many times more likely to be regrettably right, and that high triglycerides are at least as predictive as high LDL. The likelihood is that when you have a heart attack, metabolic syndrome will be the reason, not your elevated LDL cholesterol.
+>
+> [Location: 2,463]{.highlight-ref}

@@ -1,0 +1,269 @@
+---
+title: "Running Lean: Iterate from Plan A to a Plan That Works"
+subtitle: "Ash Maurya"
+date: 2023-03-01
+highlights: 64
+description-meta: "Kindle highlights from Running Lean: Iterate from Plan A to a Plan That Works by Ash Maurya."
+book-cover: "https://m.media-amazon.com/images/I/61-wMOsNklL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B09T95R99G"
+---
+
+## Highlights
+
+64 highlights.
+
+> We are living through a global entrepreneurial renaissance. Today, it is cheaper and easier than ever to build a product, which means that there are many more people “starting up” all over the world. While this explosion in startup activity represents an incredible opportunity for all of us, it comes with a dark cloud: more products translates to more choices for both investors and customers, making it harder to stand out.
+>
+> [Location: 235]{.highlight-ref}
+
+> Customers don’t care about your solution; they care about their problems.
+>
+> [Location: 261]{.highlight-ref}
+
+> This leads to a number of epiphanies for Larry: Mindset \#1 The business model is the product. Mindset \#2 Love the problem, not your solution. Mindset \#3 Traction is the goal.
+>
+> [Location: 263]{.highlight-ref}
+
+> The challenge question today isn’t “Can we build it?” but “Should we build it?”
+>
+> [Location: 287]{.highlight-ref}
+
+> Mindset \#4 Right action, right time.
+>
+> [Location: 290]{.highlight-ref}
+
+> A minimum viable product (MVP) is the smallest solution that creates, delivers, and captures customer value.
+>
+> [Location: 296]{.highlight-ref}
+
+> Steve is following a Build-Demo-Sell playbook, while Larry is following a Demo-Sell-Build playbook.
+>
+> [Location: 298]{.highlight-ref}
+
+> This puts Larry’s idea on solid footing, and he spends the next four weeks building out a first version of his solution which is aimed not at everyone, but at his ideal early adopters.
+>
+> [Location: 301]{.highlight-ref}
+
+> Mindset \#5 Tackle your riskiest assumptions in stages.
+>
+> [Location: 309]{.highlight-ref}
+
+> Mindset \#6 Constraints are a gift.
+>
+> [Location: 315]{.highlight-ref}
+
+> Mindset \#7 Hold yourself externally accountable.
+>
+> [Location: 333]{.highlight-ref}
+
+> Mindset \#8 Place many small bets. Mindset \#9 Make evidence-based decisions.
+>
+> [Location: 349]{.highlight-ref}
+
+> Mindset \#10 Breakthrough requires unexpected outcomes.
+>
+> [Location: 361]{.highlight-ref}
+
+> The old way of building products used to work at a time when there were huge barriers to entry and few competitors. Even if you got the product completely wrong, you had time to course-correct and get back on track.
+>
+> [Location: 379]{.highlight-ref}
+
+> Speed of Learning Is the New Unfair Advantage
+>
+> [Location: 394]{.highlight-ref}
+
+> Model Mindset \#1: Your business model is the product. Mindset \#2: Love the problem, not your solution. Mindset \#3: Traction is the goal.
+>
+> [Location: 406]{.highlight-ref}
+
+> Prioritize Mindset \#4: Right action, right time. Mindset \#5: Tackle your riskiest assumptions in stages. Mindset \#6: Constraints are a gift. Mindset \#7: Hold yourself externally accountable.
+>
+> [Location: 409]{.highlight-ref}
+
+> Test Mindset \#8: Place many small bets. Mindset \#9: Make evidence-based decisions. Mindset \#10: Breakthrough requires unexpected outcomes.
+>
+> [Location: 413]{.highlight-ref}
+
+> Facebook, Apple, Microsoft, Toyota—I can keep going—weren’t first movers. They were all fast followers.”
+>
+> [Location: 470]{.highlight-ref}
+
+> A minimum viable product is the smallest solution you can build that delivers monetizable value to your customers.
+>
+> [Location: 476]{.highlight-ref}
+
+> You need to find the smallest solution that solves a big enough customer problem and deliver that. To do that, you have to really narrow down on your ideal early adopters first and not go too broad. When you’re trying to market to everyone, you reach no one.”
+>
+> [Location: 478]{.highlight-ref}
+
+> Investors today don’t fund ideas, or product development, but traction.
+>
+> [Location: 482]{.highlight-ref}
+
+> The challenge today isn’t building more features, but uncovering what to build.”
+>
+> [Location: 530]{.highlight-ref}
+
+> starting with a solution is like building a key without a door. Sure, you can build a great-looking key quickly, but then you spend a whole load of time searching for the right door to open. You might get lucky or brute-force your way in, but where you end up is usually not where you expected to be.”
+>
+> [Location: 531]{.highlight-ref}
+
+> A key mindset for putting the ideas in this book into practice is viewing your business model, not your solution, as the true product of your startup.
+>
+> [Location: 636]{.highlight-ref}
+
+> Unlike the visionary launch, which aims to perfectly hit the mark, it is possible to start either to the left (too early) or the right (too late) of the customer adoption curve, as long as you can learn where the curve is heading and eventually intersect it before running out of iterations (cash).
+>
+> [Location: 702]{.highlight-ref}
+
+> what’s more important than acting on an idea is having a process to quickly separate good ideas from bad ideas.
+>
+> [Location: 708]{.highlight-ref}
+
+> your initial canvas should be sketched quickly—ideally in less than 20 minutes.
+>
+> [Location: 791]{.highlight-ref}
+
+> avoid creating a Lean Canvas as a group exercise. Instead, have each team member create their own snapshot first. Then get together as a group and reconcile your canvases into a single Lean Canvas.
+>
+> [Location: 793]{.highlight-ref}
+
+> If you’re unsure about a particular box, it’s okay to leave it blank.
+>
+> [Location: 796]{.highlight-ref}
+
+> Based on your current stage and what you know right now, what are the next sets of hypotheses you need to test to move your product forward?
+>
+> [Location: 802]{.highlight-ref}
+
+> Your list of customer segments should represent the total addressable market (TAM) for your idea, while your early adopters represent a specific subset of your TAM.
+>
+> [Location: 829]{.highlight-ref}
+
+> prioritize the top one to three issues that you believe are most pressing for your customers.
+>
+> [Location: 837]{.highlight-ref}
+
+> Your UVP is hard to get right because you have to distill the essence of your product in a few words that can fit in the headline of your landing page.
+>
+> [Location: 860]{.highlight-ref}
+
+> A good UVP gets inside customers’ heads and focuses on the benefits they will derive from using your product—that is, the desired outcomes.
+>
+> [Location: 873]{.highlight-ref}
+
+> A good UVP needs to clearly describe what your product is for and who it’s for. The “why” is often hard to fit into the same statement, so a sub-headline is often used for this.
+>
+> [Location: 881]{.highlight-ref}
+
+> simply sketch out the simplest thing you could possibly build to address each problem listed on your Lean Canvas.
+>
+> [Location: 907]{.highlight-ref}
+
+> The initial goal of a startup is to learn, not to scale. So, at first, it’s OK to rely on any channels that get you in front of potential customers.
+>
+> [Location: 916]{.highlight-ref}
+
+> While you might be aiming to build a mainstream product, you need to start with a specific customer in mind. Even Facebook, with its now 500 million+ users, was originally oriented toward a very specific user group: Harvard University students.
+>
+> [Location: 1,062]{.highlight-ref}
+
+> The reason most Lean Canvases become too broad is that they try to capture too many business model stories on a single canvas. Your objective should be to describe a single business model story per Lean Canvas.
+>
+> [Location: 1,085]{.highlight-ref}
+
+> Defining better starts with recognizing that customers don’t care about solutions, but about achieving desired outcomes.
+>
+> [Location: 1,178]{.highlight-ref}
+
+> new problems come from old solutions.
+>
+> [Location: 1,225]{.highlight-ref}
+
+> New problems worth solving come from old solutions. There is always an old way. Innovation is fundamentally about causing a switch from the old way to a new way. The best way to cause this switch is by anchoring new solutions against problems caused by old solutions—i.e., breaking the old way.
+>
+> [Location: 1,261]{.highlight-ref}
+
+> what job arises in people’s lives that causes them to come to this restaurant to hire a milkshake? Framing the question this way allowed the team to uncover why people bought a milkshake, which led to very different insights than when you simply ask customers how to improve a milkshake.
+>
+> [Location: 1,279]{.highlight-ref}
+
+> a job-to-be-done is the instantiation of an unmet need or want in response to a trigger.
+>
+> [Location: 1,292]{.highlight-ref}
+
+> There are generally three types of switching triggers: A bad experience (e.g., food poisoning from the usual lunch spot) A change in circumstance (e.g., a special occasion like a birthday) An awareness event (e.g., hearing about a new popular restaurant that just opened)
+>
+> [Location: 1,322]{.highlight-ref}
+
+> Email and spreadsheets have killed more startups than other startups.
+>
+> [Location: 1,444]{.highlight-ref}
+
+> On a product website, getting someone to do anything other than leave (abandon) the site is a measure of acquisition. I specifically recommend measuring acquisition at the point when you can uniquely identify a visitor and start a conversation with them (e.g., getting their email address).
+>
+> [Location: 1,576]{.highlight-ref}
+
+> On a product website, once the prospect signs up, you have to quickly get them to a point where they can connect the promise you made on your landing page (your UVP) with your product.
+>
+> [Location: 1,584]{.highlight-ref}
+
+> in the case of the product website, the act of logging back in to use the product again—would count as retention.
+>
+> [Location: 1,588]{.highlight-ref}
+
+> Remember that innovation is about causing a switch from an old way to your better new way. When customers consider a switch, they compare the new way against the old way. That’s how you too should think about your product’s pricing.
+>
+> [Location: 1,886]{.highlight-ref}
+
+> Ballpark your business model using the three-step process outlined here: Define your minimum success criteria. Remember, this can be a deep “why” question, but it’s critical to use your MSC to constrain your idea, not the other way around. Test whether your idea can deliver on your goal. Use your pricing model, customer lifetime, and conversion rate assumptions to estimate how many customers you’ll need to hit and sustain your goal. Revise your goal or adjust your business model (if needed). If your idea falls short of your MSC goal, identify the key levers that broke your model and see if they can be dialed in to fix it. These key levers are typically also the first set of assumptions you should test.
+>
+> [Location: 1,960]{.highlight-ref}
+
+> I recommend that you set your starting growth rate to 10x/yr for the first 3 years.
+>
+> [Location: 2,073]{.highlight-ref}
+
+> you don’t need a working product to acquire paying customers.
+>
+> [Location: 2,155]{.highlight-ref}
+
+> The end deliverable of this stage is an evidence-based go or no-go decision to move forward to the build stage of your idea (stage 2). By the end of this first stage, you specifically need to: Have a clear understanding of your customers’ needs (and wants) Know the smallest thing you need to build to deliver value to your customers (your MVP) Have secured sufficient tangible commitments (e.g., advance payments, letters of intent) from customers
+>
+> [Location: 2,156]{.highlight-ref}
+
+> reduce the scope of your initial MVP by cobbling together existing solutions, instead of building everything from scratch.”
+>
+> [Location: 2,312]{.highlight-ref}
+
+> Use the following template to outline your elevator pitch as a story about your customers: When \[customers\] encounter a \[triggering event\], they need to do \[job-to-be-done\] in order to achieve \[desired outcome\]. They would normally use \[existing alternatives\], but because of \[switching trigger\] these \[existing alternatives\] no longer work because of \[these problems\]. If these problems are left unaddressed, then \[what’s at stake\]. So we built a solution that helps \[customers\] achieve \[desired outcome\] by helping them \[unique value proposition\].
+>
+> [Location: 2,463]{.highlight-ref}
+
+> This is what they really want to know: How big is the market opportunity? They don’t care who your customers are, but how many there are—your market size. How will you make money? They want to understand the intersection of your cost structure and revenue streams — your profitability or growth potential. How will you deter competition? They want to know how you will defend against copycats and competition who will inevitably enter the market if you are successful — your unfair advantage.
+>
+> [Location: 2,505]{.highlight-ref}
+
+> The way to flip specialization from being a curse to being a blessing is by fostering a diversity of ideas by using a converge-diverge process (Figure II-3). In this technique, meetings are used only for alignment and decisions—not free-form discussion or group brainstorming.
+>
+> [Location: 2,742]{.highlight-ref}
+
+> As we’ve discussed previously, getting your customer’s attention is the first battle. This is the job of your UVP, where you make an assertion about how you are better than the existing alternatives. Once you have their attention, the next step is convincing your customer that you can indeed deliver on your promised UVP—and here’s the counterintuitive bit.
+>
+> [Location: 3,337]{.highlight-ref}
+
+> The art of the demo is showing the least amount possible to convince your customers you can deliver on your UVP and secure their commitment.
+>
+> [Location: 3,340]{.highlight-ref}
+
+> Contrary to popular belief, you never need a finished product to close a sale with an early adopter. Depending on your product’s level of technical risk (feasibility), you may sometimes need a working prototype for your demo, but don’t assume this unless your customers specifically ask for it.
+>
+> [Location: 3,352]{.highlight-ref}
+
+> the mafia offer campaign is the least scalable, but it packs in the most amount of learning per unit time. It also has the highest conversion rate of all the offer types because it’s delivered to prospects in person, one-on-one. Yes, it may seem to take longer than the other campaign types, but from my experience it’s the fastest way to get you to repeatable sales. Once you can repeatedly sell even 10 people on your product, how to scale from there becomes a lot more obvious.”
+>
+> [Location: 3,427]{.highlight-ref}
+
+> Focusing on making your customers better versus making your solution better is a way of breaking through the product context.
+>
+> [Location: 3,736]{.highlight-ref}

@@ -1,0 +1,35 @@
+---
+title: "Build a Large Language Model (From Scratch)"
+subtitle: "Sebastian Raschka"
+date: 2024-03-16
+highlights: 6
+description-meta: "Kindle highlights from Build a Large Language Model (From Scratch) by Sebastian Raschka."
+---
+
+## Highlights
+
+6 highlights added in March 2024.
+
+> the primary purpose of embeddings is to convert non-numeric data into a format that neural networks can process.
+>
+> [Page 35, location 315]{.highlight-ref}
+
+> An RNN is a type of neural network where outputs from previous steps are fed as inputs to the current step, making them well-suited for sequential data like text.
+>
+> [Page 96, location 886]{.highlight-ref}
+
+> the key idea here is that the encoder part processes the entire input text into a hidden state (memory cell). The decoder then takes in this hidden state to produce the output. You can think of this hidden state as an embedding vector,
+>
+> [Page 97, location 897]{.highlight-ref}
+
+> Tensors represent a mathematical concept that generalizes vectors and matrices to potentially higher dimensions. In other words, tensors are mathematical objects that can be characterized by their order (or rank), which provides the number of dimensions.
+>
+> [Page 241, location 2340]{.highlight-ref}
+
+> the chain rule is a way to compute gradients of a loss function with respect to the model's parameters in a computation graph. This provides the information needed to update each parameter in a way that minimizes the loss function, using a method such as gradient descent.
+>
+> [Page 252, location 2447]{.highlight-ref}
+
+> However if you iterate over the dataset a second time, you will see that the shuffling order will change. This is desired to prevent deep neural networks getting caught in repetitive update cycles during training.
+>
+> [Page 270, location 2634]{.highlight-ref}

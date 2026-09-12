@@ -1,0 +1,45 @@
+---
+title: "Click Here: The Art and Science of Digital Marketing and Advertising"
+subtitle: "Alex Schultz"
+date: 2025-12-15
+highlights: 8
+description-meta: "Kindle highlights from Click Here: The Art and Science of Digital Marketing and Advertising by Alex Schultz."
+book-cover: "https://m.media-amazon.com/images/I/71VPFfb+cpL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0DYP4F2WP"
+---
+
+## Highlights
+
+8 highlights added between October and November 2025.
+
+> ‘It isn’t prioritization if it doesn’t hurt.’
+>
+> [Page 36, location 442]{.highlight-ref}
+
+> When introducing people to your product, you want to create a simple message, then run it in whichever channels overlap best with your target audience.
+>
+> [Page 45, location 546]{.highlight-ref}
+
+> Before I start any campaign, I make sure I: 1. Know what the conversion is we are supposed to drive. 2. Ensure the conversion is thoroughly logged with all the data we need, meaning it can be tracked and recorded by the marketing technology as we make progress. 3. Use that logging to understand the conversion flow. 4. Come to an opinion if the funnel itself needs improvement.
+>
+> [Page 53, location 639]{.highlight-ref}
+
+> Mediocre marketing with a great conversion flow is way better than brilliant marketing with a broken one.
+>
+> [Page 53, location 645]{.highlight-ref}
+
+> Acquisition – Newly acquired monthly active users. 2. Churned users – Users who were last active thirty-one days ago, so not monthly active (the industry standard is to define a month as thirty days, which is irritating since some people only use a service on weekends or weekdays, so a multiple of seven would really help). 3. Resurrected users – Users who were active today but were counted as inactive users yesterday, meaning they had not been active in the previous thirty days. We then created the following accounting equation: + Acquisitions - Churn + Resurrections = Net Growth
+>
+> [Page 54, location 656]{.highlight-ref}
+
+> Today, I tell teams that they should measure what can be measured really well, then be clear when something can’t be measured.
+>
+> [Page 121, location 1493]{.highlight-ref}
+
+> 1. Mission – What are you trying to achieve as a team, company or organization? 2. Strategy – How do you plan to achieve it? 3. Tactic – What are the actions you need to take to execute the strategy?
+>
+> [Page 126, location 1565]{.highlight-ref}
+
+> Goal – What is the outcome expected from the tactic? 5. Metric – How do you express that outcome as a number? 6. Target – How much do you want that number to move in a given timeframe?
+>
+> [Page 126, location 1568]{.highlight-ref}

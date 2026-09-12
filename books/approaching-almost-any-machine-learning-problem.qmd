@@ -1,0 +1,37 @@
+---
+title: "Approaching (Almost) Any Machine Learning Problem"
+subtitle: "Abhishek Thakur"
+date: 2022-08-26
+highlights: 6
+description-meta: "Kindle highlights from Approaching (Almost) Any Machine Learning Problem by Abhishek Thakur."
+book-cover: "https://m.media-amazon.com/images/I/51uYSSdTmEL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B089P13QHT"
+---
+
+## Highlights
+
+6 highlights.
+
+> Stratified k-fold cross-validation keeps the ratio of labels in each fold constant.
+>
+> [Location: 10,051]{.highlight-ref}
+
+> To use stratified k-fold for a regression problem, we have first to divide the target into bins, and then we can use stratified k-fold in the same way as for classification problems.
+>
+> [Location: 11,797]{.highlight-ref}
+
+> For example, let’s say we have a problem in which we would like to build a model to detect skin cancer from skin images of patients. Our task is to build a binary classifier which takes an input image and predicts the probability for it being benign or malignant. In these kinds of datasets, you might have multiple images for the same patient in the training dataset. So, to build a good cross-validation system here, you must have stratified k-folds, but you must also make sure that patients in training data do not appear in validation data. Fortunately, scikit-learn offers a type of cross-validation known as GroupKFold. Here the patients can be considered as groups. But unfortunately, there is no way to combine GroupKFold with StratifiedKFold in scikit-learn.
+>
+> [Location: 12,672]{.highlight-ref}
+
+> This model gives an accuracy of 93%! Whoa! That’s much better than any other model. But is it worth it? We were able to achieve 90% using LSTMs, and they are much simpler, easier to train and faster when it comes to inference.
+>
+> [Location: 118,403]{.highlight-ref}
+
+> Don’t choose BERT only because it’s “cool”.
+>
+> [Location: 118,404]{.highlight-ref}
+
+> In simple words, the combination of models which are not highly correlated works better than the combination of models which are very correlated with each other.
+>
+> [Location: 118,841]{.highlight-ref}

@@ -1,0 +1,145 @@
+---
+title: "A Philosophy of Software Design, 2nd Edition"
+subtitle: "John K. Ousterhout"
+date: 2026-03-07
+highlights: 33
+description-meta: "Kindle highlights from A Philosophy of Software Design, 2nd Edition by John K. Ousterhout."
+book-cover: "https://m.media-amazon.com/images/I/7146AYGD0AL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B09B8LFKQL"
+---
+
+## Highlights
+
+33 highlights.
+
+> The best modules are those whose interfaces are much simpler than their implementations. Such modules have two advantages. First, a simple interface minimizes the complexity that a module imposes on the rest of the system. Second, if a module is modified in a way that does not change its interface, then no other module will be affected by the modification.
+>
+> [Page: 20]{.highlight-ref}
+
+> The interface to a module contains two kinds of information: formal and informal. The formal parts of an interface are specified explicitly in the code, and some of these can be checked for correctness by the programming language. For example, the formal interface for a method is its signature, which includes the names and types of its parameters, the type of its return value, and information about exceptions thrown by the method.
+>
+> [Page: 20]{.highlight-ref}
+
+> The informal aspects of an interface can only be described using comments, and the programming language cannot ensure that the description is complete or accurate1. For most interfaces the informal aspects are larger and more complex than the formal aspects.
+>
+> [Page: 21]{.highlight-ref}
+
+> In the definition of abstraction, the word “unimportant” is crucial. The more unimportant details that are omitted from an abstraction, the better. However, a detail can only be omitted from an abstraction if it really is unimportant. An abstraction can go wrong in two ways. First, it can include details that are not really important; when this happens, it makes the abstraction more complicated than necessary, which increases the cognitive load on developers using the abstraction. The second error is when an abstraction omits details that really are important.
+>
+> [Page: 22]{.highlight-ref}
+
+> The key to designing abstractions is to understand what is important, and to look for designs that minimize the amount of information that is important.
+>
+> [Page: 22]{.highlight-ref}
+
+> The best modules are those that provide powerful functionality yet have simple interfaces.
+>
+> [Page: 23]{.highlight-ref}
+
+> a shallow module is one whose interface is relatively complex in comparison to the functionality that it provides.
+>
+> [Page: 25]{.highlight-ref}
+
+> When designing a new module, you should think carefully about what information can be hidden in that module. If you can hide more information, you should also be able to simplify the module’s interface, and this makes the module deeper.
+>
+> [Page: 30]{.highlight-ref}
+
+> The opposite of information hiding is information leakage. Information leakage occurs when a design decision is reflected in multiple modules. This creates a dependency between the modules: any change to that design decision will require changes to all of the involved modules.
+>
+> [Page: 30]{.highlight-ref}
+
+> Information leakage is one of the most important red flags in software design. One of the best skills you can learn as a software designer is a high level of sensitivity to information leakage.
+>
+> [Page: 33]{.highlight-ref}
+
+> “How can I reorganize these classes so that this particular piece of knowledge only affects a single class?” If the affected classes are relatively small and closely tied to the leaked information, it may make sense to merge them into a single class. Another possible approach is to pull the information out of all of the affected classes and create a new class that encapsulates just that information.
+>
+> [Page: 33]{.highlight-ref}
+
+> When designing modules, focus on the knowledge that’s needed to perform each task, not the order in which tasks occur.
+>
+> [Page: 33]{.highlight-ref}
+
+> Information hiding and deep modules are closely related. If a module hides a lot of information, that tends to increase the amount of functionality provided by the module while also reducing its interface. This makes the module deeper. Conversely, if a module doesn’t hide much information, then either it doesn’t have much functionality, or it has a complex interface; either way, the module is shallow.
+>
+> [Page: 37]{.highlight-ref}
+
+> think about the different pieces of knowledge that are needed to carry out the tasks of your application, and design each module to encapsulate one or a few of those pieces of knowledge.
+>
+> [Page: 38]{.highlight-ref}
+
+> The general-purpose approach seems consistent with the investment mindset discussed in Chapter 3, where you spend a bit more time up front to save time later on.
+>
+> [Page: 40]{.highlight-ref}
+
+> On the other hand, we know that it’s hard to predict the future needs of a software system, so a general-purpose solution might include facilities that are never actually needed. Furthermore, if you implement something that is too general-purpose, it might not do a good job of solving the particular problem you have today.
+>
+> [Page: 40]{.highlight-ref}
+
+> the sweet spot is to implement new modules in a somewhat general-purpose fashion. The phrase “somewhat general-purpose” means that the module’s functionality should reflect your current needs, but its interface should not. Instead, the interface should be general enough to support multiple uses. The interface should be easy to use for today’s needs without being tied specifically to them. The word “somewhat” is important: don’t get carried away and build something so general-purpose that it is difficult to use for your current needs.
+>
+> [Page: 40]{.highlight-ref}
+
+> Unnecessary specialization, whether in the form of special-purpose classes and methods or special cases in code, is a significant contributor to software complexity.
+>
+> [Page: 50]{.highlight-ref}
+
+> A pass-through method is one that does nothing except pass its arguments to another method, usually with the same API as the pass-through method. This typically indicates that there is not a clean division of responsibility between the classes.
+>
+> [Page: 52]{.highlight-ref}
+
+> Another form of API duplication across layers is a pass-through variable, which is a variable that is passed down through a long chain of methods.
+>
+> [Page: 57]{.highlight-ref}
+
+> In order for an element to provide a net gain against complexity, it must eliminate some complexity that would be present in the absence of the design element.
+>
+> [Page: 59]{.highlight-ref}
+
+> The “different layer, different abstraction” rule is just an application of this idea: if different layers have the same abstraction, such as pass-through methods or decorators, then there’s a good chance that they haven’t provided enough benefit to compensate for the additional infrastructure they represent. Similarly, pass-through arguments require each of several methods to be aware of their existence (which adds to complexity) without contributing additional functionality.
+>
+> [Page: 59]{.highlight-ref}
+
+> it is more important for a module to have a simple interface than a simple implementation.
+>
+> [Page: 61]{.highlight-ref}
+
+> The best way to reduce the complexity damage caused by exception handling is to reduce the number of places where exceptions have to be handled. The rest of this chapter will discuss four techniques for reducing the number of exception handlers.
+>
+> [Page: 81]{.highlight-ref}
+
+> With exceptions, as with many other areas in software design, you must determine what is important and what is not important. Things that are not important should be hidden, and the more of them the better. But when something is important, it must be exposed
+>
+> [Page: 90]{.highlight-ref}
+
+> I have noticed that the design-it-twice principle is sometimes hard for really smart people to embrace. When they are growing up, smart people discover that their first quick idea about any problem is sufficient for a good grade; there is no need to consider a second or third possibility. This tends to result in bad work habits. However, as these people get older, they get promoted into environments with harder and harder problems. Eventually, everyone reaches a point where your first ideas are no longer good enough; if you want to get really great results, you have to consider a second possibility, or perhaps a third, no matter how smart you are. The design of large software systems falls in this category: no-one is good enough to get it right with their first try.
+>
+> [Page: 94]{.highlight-ref}
+
+> The guiding principle for comments is that comments should describe things that aren’t obvious from the code.
+>
+> [Page: 101]{.highlight-ref}
+
+> When writing comments, try to put yourself in the mindset of the reader and ask yourself what are the key things he or she will need to know. If your code is undergoing review and a reviewer tells you that something is not obvious, don’t argue with them; if a reader thinks it’s not obvious, then it’s not obvious.
+>
+> [Page: 120]{.highlight-ref}
+
+> Consistency creates cognitive leverage: once you have learned how something is done in one place, you can use that knowledge to immediately understand other places that use the same approach. If a system is not implemented in a consistent fashion, developers must learn about each situation separately. This will take more time.
+>
+> [Page: 143]{.highlight-ref}
+
+> To make code obvious, you must ensure that readers always have the information they need to understand it. You can do this in three ways. The best way is to reduce the amount of information that is needed, using design techniques such as abstraction and eliminating special cases. Second, you can take advantage of information that readers have already acquired in other contexts (for example, by following conventions and conforming to expectations) so readers don’t have to learn new information for your code. Third, you can present the important information to them in the code, using techniques such as good names and strategic comments.
+>
+> [Page: 152]{.highlight-ref}
+
+> Things that matter should be emphasized and made more obvious; things that don’t matter should be hidden as much as possible.
+>
+> [Page: 171]{.highlight-ref}
+
+> The phrase “good taste” describes the ability to distinguish what is important from what isn’t important. Having good taste is an important part of being a good software designer.
+>
+> [Page: 174]{.highlight-ref}
+
+> Dealing with complexity is the most important challenge in software design.
+>
+> [Page: 175]{.highlight-ref}

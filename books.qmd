@@ -1,0 +1,22 @@
+---
+title: "Reading log"
+aliases:
+  - /books/
+listing:
+  - id: books
+    contents: books
+    sort: "date desc"
+    type: table
+    fields: [date, title, subtitle]
+    field-display-names:
+      date: "Last read"
+    categories: false
+    sort-ui: false
+    filter-ui: false
+    page-size: 50
+---
+
+These are passages I highlighted while reading, along with my own notes on some of the books.
+
+:::{#books}
+:::

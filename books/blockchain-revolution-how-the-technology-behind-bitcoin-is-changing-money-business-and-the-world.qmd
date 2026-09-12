@@ -1,0 +1,49 @@
+---
+title: "Blockchain Revolution: How the Technology Behind Bitcoin Is Changing Money, Business, and the World"
+subtitle: "Don Tapscott and Alex Tapscott"
+date: 2016-08-29
+highlights: 9
+description-meta: "Kindle highlights from Blockchain Revolution: How the Technology Behind Bitcoin Is Changing Money, Business, and the World by Don Tapscott and Alex Tapscott."
+book-cover: "https://m.media-amazon.com/images/I/81e2YrHxtAL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0141ZP32E"
+---
+
+## Highlights
+
+9 highlights.
+
+> Money is making more money than many people do.
+>
+> [Location: 391]{.highlight-ref}
+
+> 1. Networked Integrity
+>
+> [Location: 863]{.highlight-ref}
+
+> 2. Distributed Power
+>
+> [Location: 938]{.highlight-ref}
+
+> 3. Value as Incentive
+>
+> [Location: 973]{.highlight-ref}
+
+> If we design for integrity, power, value, privacy, security, rights, and inclusion, then we will be redesigning our economy and social institutions to be worthy of trust.
+>
+> [Location: 1,316]{.highlight-ref}
+
+> The global financial services industry today is fraught with problems: It is antiquated, built on decades-old technology that is at odds with our rapidly advancing digital world, making it oftentimes slow and unreliable. It is exclusive, leaving billions of people with no access to basic financial tools. It is centralized, exposing it to data breaches, other attacks, or outright failure. And it is monopolistic, reinforcing the status quo and stifling innovation.
+>
+> [Location: 1,382]{.highlight-ref}
+
+> Most so-called sharing economy companies are really service aggregators. They aggregate the willingness of suppliers to sell their excess capacity (cars, equipment, vacant rooms, handyman skills) through a centralized platform and then resell them, all while collecting valuable data for further commercial exploitation.
+>
+> [Location: 2,845]{.highlight-ref}
+
+> What would-be borrower or saver would choose the opaque and murky when she can choose the open?
+>
+> [Location: 3,933]{.highlight-ref}
+
+> “You will not find a solution to political problems in cryptography.”
+>
+> [Location: 5,254]{.highlight-ref}

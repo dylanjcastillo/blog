@@ -1,0 +1,153 @@
+---
+title: "Zero to One: Notes on Start Ups, or How to Build the Future"
+subtitle: "Blake Masters and Peter Thiel"
+date: 2022-06-14
+highlights: 35
+description-meta: "Kindle highlights from Zero to One: Notes on Start Ups, or How to Build the Future by Blake Masters and Peter Thiel."
+book-cover: "https://m.media-amazon.com/images/I/71uAI28kJuL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B00KHX0II4"
+---
+
+## Highlights
+
+35 highlights.
+
+> In the most dysfunctional organizations, signaling that work is being done becomes a better strategy for career advancement than actually doing work (if this describes your company, you should quit now).
+>
+> [Location: 117]{.highlight-ref}
+
+> Positively defined, a startup is the largest group of people you can convince of a plan to build a different future.
+>
+> [Location: 120]{.highlight-ref}
+
+> that is what a startup has to do: question received ideas and rethink business from scratch.
+>
+> [Location: 123]{.highlight-ref}
+
+> “Madness is rare in individuals—but in groups, parties, nations, and ages it is the rule,”
+>
+> [Location: 128]{.highlight-ref}
+
+> the opposite principles are probably more correct: 1. It is better to risk boldness than triviality. 2. A bad plan is better than no plan. 3. Competitive markets destroy profits. 4. Sales matters just as much as product.
+>
+> [Location: 223]{.highlight-ref}
+
+> The most contrarian thing of all is not to oppose the crowd but to think for yourself.
+>
+> [Location: 233]{.highlight-ref}
+
+> if you want to create and capture lasting value, don’t build an undifferentiated commodity business.
+>
+> [Location: 258]{.highlight-ref}
+
+> Non-monopolists exaggerate their distinction by defining their market as the intersection of various smaller markets:
+>
+> [Location: 304]{.highlight-ref}
+
+> Monopolists, by contrast, disguise their monopoly by framing their market as the union of several large markets:
+>
+> [Location: 306]{.highlight-ref}
+
+> Only one thing can allow a business to transcend the daily brute struggle for survival: monopoly profits.
+>
+> [Location: 325]{.highlight-ref}
+
+> monopolies deserve their bad reputation—but only in a world where nothing changes.
+>
+> [Location: 328]{.highlight-ref}
+
+> Monopoly is the condition of every successful business.
+>
+> [Location: 356]{.highlight-ref}
+
+> All happy companies are different: each one earns a monopoly by solving a unique problem. All failed companies are the same: they failed to escape competition.
+>
+> [Location: 358]{.highlight-ref}
+
+> Winning is better than losing, but everybody loses when the war isn’t one worth fighting.
+>
+> [Location: 425]{.highlight-ref}
+
+> either don’t throw any punches, or strike hard and end it quickly.
+>
+> [Location: 452]{.highlight-ref}
+
+> If you can recognize competition as a destructive force instead of a sign of value, you’re already more sane than most.
+>
+> [Location: 458]{.highlight-ref}
+
+> Simply stated, the value of a business today is the sum of all the money it will make in the future.
+>
+> [Location: 468]{.highlight-ref}
+
+> The clearest way to make a 10x improvement is to invent something completely new.
+>
+> [Location: 508]{.highlight-ref}
+
+> No technology company can be built on branding alone.
+>
+> [Location: 558]{.highlight-ref}
+
+> If you think your initial market might be too big, it almost certainly is.
+>
+> [Location: 563]{.highlight-ref}
+
+> The perfect target market for a startup is a small group of particular people concentrated together and served by few or no competitors.
+>
+> [Location: 569]{.highlight-ref}
+
+> Once you create and dominate a niche market, then you should gradually expand into related and slightly broader markets.
+>
+> [Location: 575]{.highlight-ref}
+
+> Jeff Bezos’s founding vision was to dominate all of online retail, but he very deliberately started with books.
+>
+> [Location: 576]{.highlight-ref}
+
+> The most successful companies make the core progression—to first dominate a specific niche and then scale to adjacent markets—a part of their founding narrative.
+>
+> [Location: 591]{.highlight-ref}
+
+> What really matters is generating cash flows in the future, so being the first mover doesn’t do you any good if someone else comes along and unseats you.
+>
+> [Location: 614]{.highlight-ref}
+
+> dominate a small niche and scale up from there, toward your ambitious long-term vision.
+>
+> [Location: 616]{.highlight-ref}
+
+> It begins by rejecting the unjust tyranny of Chance. You are not a lottery ticket.
+>
+> [Location: 848]{.highlight-ref}
+
+> If you focus on diversification instead of single-minded pursuit of the very few companies that can become overwhelmingly valuable, you’ll miss those rare companies in the first place.
+>
+> [Location: 884]{.highlight-ref}
+
+> The biggest secret in venture capital is that the best investment in a successful fund equals or outperforms the entire rest of the fund combined.
+>
+> [Location: 889]{.highlight-ref}
+
+> a startup messed up at its foundation cannot be fixed.
+>
+> [Location: 1,112]{.highlight-ref}
+
+> Actually, a huge board will exercise no effective oversight at all; it merely provides cover for whatever microdictator actually runs the organization.
+>
+> [Location: 1,178]{.highlight-ref}
+
+> seven questions that every business must answer:
+>
+> [Location: 1,607]{.highlight-ref}
+
+> Cleantech shows the result: hundreds of undifferentiated products all in the name of one overbroad goal.
+>
+> [Location: 1,731]{.highlight-ref}
+
+> The single greatest danger for a founder is to become so certain of his own myth that he loses his mind.
+>
+> [Location: 1,924]{.highlight-ref}
+
+> Our task today is to find singular ways to create the new things that will make the future not just different, but better—to go from 0 to 1.
+>
+> [Location: 1,960]{.highlight-ref}

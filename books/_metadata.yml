@@ -1,0 +1,15 @@
+# options specified here will apply to all book notes in this folder
+freeze: true
+title-block-banner: false
+toc: false
+citation: false
+comments: false
+format:
+  html:
+    template-partials:
+      - ../_extras/book_notes/title-block.html
+language:
+  title-block-published: "Last read"
+
+margin-footer: |
+  <button onclick="window.location.href='https://subscribe.dylancastillo.co'" style="background-color: #eb841b; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;">Subscribe to my newsletter</button>

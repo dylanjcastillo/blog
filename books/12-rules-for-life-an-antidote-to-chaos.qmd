@@ -1,0 +1,25 @@
+---
+title: "12 Rules for Life: An Antidote to Chaos"
+subtitle: "Jordan B. Peterson"
+date: 2021-11-01
+highlights: 3
+description-meta: "Kindle highlights from 12 Rules for Life: An Antidote to Chaos by Jordan B. Peterson."
+book-cover: "https://m.media-amazon.com/images/I/619G6HHEWyL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B01FPGY5T0"
+---
+
+## Highlights
+
+3 highlights.
+
+> The order within the chaos and order of Being is all the more “natural” the longer it has lasted. This is because “nature” is “what selects,” and the longer a feature has existed the more time it has had to be selected—and to shape life.
+>
+> [Location: 757]{.highlight-ref}
+
+> How could the nature of man ever reach its full potential without challenge and danger? How dull and contemptible would we become if there was no longer reason to pay attention? Maybe God thought His new creation would be able to handle the serpent, and considered its presence the lesser of two evils.
+>
+> [Location: 1,300]{.highlight-ref}
+
+> As the Russian playwright Anton Chekhov advised, “If there is a rifle hanging on the wall in act one, it must be fired in the next act. Otherwise it has no business being there.”
+>
+> [Location: 1,307]{.highlight-ref}

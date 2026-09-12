@@ -1,0 +1,57 @@
+---
+title: "Natural Language Processing with Transformers"
+subtitle: "Lewis Tunstall, Leandro von Werra and Thomas Wolf"
+date: 2024-02-29
+highlights: 11
+description-meta: "Kindle highlights from Natural Language Processing with Transformers by Lewis Tunstall, Leandro von Werra and Thomas Wolf."
+book-cover: "https://m.media-amazon.com/images/I/81P2sVWFBEL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B09R8V14T9"
+---
+
+## Highlights
+
+11 highlights.
+
+> The job of the encoder is to encode the information from the input sequence into a numerical representation that is often called the last hidden state. This state is then passed to the decoder, which generates the output sequence.
+>
+> [Page 25, location 311]{.highlight-ref}
+
+> The main idea behind attention is that instead of producing a single hidden state for the input sequence, the encoder outputs a hidden state at each step that the decoder can access. However, using all the states at the same time would create a huge input for the decoder, so some mechanism is needed to prioritize which states to use. This is where attention comes in: it lets the decoder assign a different amount of weight, or “attention,” to each of the encoder states at every decoding timestep.
+>
+> [Page 27, location 330]{.highlight-ref}
+
+> major shortcoming with using recurrent models for the encoder and decoder: the computations are inherently sequential and cannot be parallelized across the input sequence.
+>
+> [Page 28, location 344]{.highlight-ref}
+
+> Architecturally, this involves splitting the model into of a body and a head, where the head is a task-specific network. During training, the weights of the body learn broad features of the source domain, and these weights are used to initialize a new model for the new task.
+>
+> [Page 29, location 365]{.highlight-ref}
+
+> Although greedy search decoding is rarely used for text generation tasks that require diversity, it can be useful for producing short sequences like arithmetic where a deterministic and factually correct output is preferred.
+>
+> [Page 230, location 4998]{.highlight-ref}
+
+> Why do we score the sequences using log probabilities instead of the probabilities themselves? That calculating the overall probability of a sequence P ( y 1 , y 2 , ... , y t | 𝐱 ) involves calculating a product of conditional probabilities P ( y t | y \<t , 𝐱 ) is one reason. Since each conditional probability is typically a small number in the range \[ 0 , 1 \], taking their product can lead to an overall probability that can easily underflow.
+>
+> [Page 232, location 5016]{.highlight-ref}
+
+> If you want your model to perform a precise task like arithmetic or providing an answer to a specific question, then you should lower the temperature or use deterministic methods like greedy search in combination with beam search to guarantee getting the most likely answer.
+>
+> [Page 247, location 5265]{.highlight-ref}
+
+> creative, then you should switch to sampling methods and increase the temperature or use a mix of top-k and nucleus sampling.
+>
+> [Page 247, location 5267]{.highlight-ref}
+
+> about transformers. Thom helped build
+>
+> [Page 285, location 6154]{.highlight-ref}
+
+> As we saw, the BLEU and ROUGE metrics can better evaluate generated texts; however, human judgment remains the best measure.
+>
+> [Page 285, location 6163]{.highlight-ref}
+
+> Why do we score the sequences using log probabilities instead of the probabilities themselves? That calculating the overall probability of a sequence P ( y 1 , y 2 , ... , y t | 5534956369 ) involves calculating a product of conditional probabilities P ( y t | y \<t , 5534956369 ) is one reason. Since each conditional probability is typically a small number in the range \[ 0 , 1 \], taking their product can lead to an overall probability that can
+>
+> [Location: 5,016]{.highlight-ref}

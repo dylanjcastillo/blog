@@ -1,0 +1,161 @@
+---
+title: "AI Engineering: Building Applications with Foundation Models"
+subtitle: "Chip Huyen"
+date: 2025-06-23
+highlights: 37
+description-meta: "Kindle highlights from AI Engineering: Building Applications with Foundation Models by Chip Huyen."
+book-cover: "https://m.media-amazon.com/images/I/81rZFw+9buL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B0DPLNK9GN"
+---
+
+## Highlights
+
+37 highlights.
+
+> Every model’s post-training is different. However, in general, post-training consists of two steps: Supervised finetuning (SFT): Finetune the pre-trained model on high-quality instruction data to optimize models for conversations instead of completion. Preference finetuning: Further finetune the model to output responses that align with human preference. Preference finetuning is typically done with reinforcement learning (RL).22 Techniques for preference finetuning include reinforcement learning from human feedback (RLHF) (used by GPT-3.5 and Llama 2), DPO (Direct Preference Optimization) (used by Llama 3), and reinforcement learning from AI feedback (RLAIF) (potentially used by Claude).
+>
+> [Location: 2,015]{.highlight-ref}
+
+> Some people compare pre-training to reading to acquire knowledge, while post-training is like learning how to use that knowledge.
+>
+> [Location: 2,031]{.highlight-ref}
+
+> Always picking the most likely outcome = is called greedy sampling. This often works for classification tasks.
+>
+> [Location: 2,233]{.highlight-ref}
+
+> How does a model compute these probabilities? Given an input, a neural network outputs a logit vector. Each logit corresponds to one possible value. In the case of a language model, each logit corresponds to one token in the model’s vocabulary. The logit vector size is the size of the vocabulary.
+>
+> [Location: 2,240]{.highlight-ref}
+
+> While larger logits correspond to higher probabilities, logits don’t represent probabilities. Logits don’t sum up to one. Logits can even be negative, while probabilities have to be non-negative. To convert logits to probabilities, a softmax layer is often used.
+>
+> [Location: 2,245]{.highlight-ref}
+
+> To redistribute the probabilities of the possible values, you can sample with a temperature. Intuitively, a higher temperature reduces the probabilities of common tokens, and as a result, increases the probabilities of rarer tokens. This enables models to create more creative responses.
+>
+> [Location: 2,265]{.highlight-ref}
+
+> It’s common practice to set the temperature to 0 for the model’s outputs to be more consistent. Technically, temperature can never be 0—logits can’t be divided by 0. In practice, when we set the temperature to 0, the model just picks the token with the largest logit,25 without doing logit adjustment and softmax calculation.
+>
+> [Location: 2,286]{.highlight-ref}
+
+> A common debugging technique when working with an AI model is to look at the probabilities this model computes for given inputs. For example, if the probabilities look random, the model hasn’t learned much.
+>
+> [Location: 2,290]{.highlight-ref}
+
+> after the model has computed the logits, we pick the top-k logits and perform softmax over these top-k logits only.
+>
+> [Location: 2,313]{.highlight-ref}
+
+> Top-p, also known as nucleus sampling, allows for a more dynamic selection of values to be sampled from. In top-p
+>
+> [Location: 2,321]{.highlight-ref}
+
+> sampling, the model sums the probabilities of the most likely next values in descending order and stops when the sum reaches p.
+>
+> [Location: 2,322]{.highlight-ref}
+
+> One simple way to improve a model’s response quality is test time compute: instead of generating only one response per query, you generate multiple responses to increase the chance of good responses.
+>
+> [Location: 2,352]{.highlight-ref}
+
+> With summing, longer sequences are likely to have a lower total logprob (logprob values are usually negative, because log of values between 0 and 1 is negative). To avoid biasing toward short sequences, you can use the average logprob by dividing the sum of a sequence by its length.
+>
+> [Location: 2,377]{.highlight-ref}
+
+> You can also use application-specific heuristics to select the best response. For example, if your application benefits from shorter responses, you can pick the shortest candidate. If your application converts natural language to SQL queries, you can get the model to keep on generating outputs until it generates a valid SQL query.
+>
+> [Location: 2,402]{.highlight-ref}
+
+> This is what Google did when evaluating Gemini on the MMLU benchmark. They sampled 32 outputs for each question. This allowed the model to achieve a higher score than what it would’ve achieved with only one output per question.
+>
+> [Location: 2,411]{.highlight-ref}
+
+> Grammar verification can also increase generation latency (Brandon T. Willard, 2024).
+>
+> [Location: 2,496]{.highlight-ref}
+
+> The two hypotheses discussed complement each other. The self-delusion hypothesis focuses on how self-supervision causes hallucinations, whereas the mismatched internal knowledge hypothesis focuses on how supervision causes hallucinations.
+>
+> [Location: 2,635]{.highlight-ref}
+
+> The lower a language’s entropy (the less information a token of a language carries), the more predictable that language.
+>
+> [Location: 2,890]{.highlight-ref}
+
+> One unit of entropy and cross entropy is bits. If the cross entropy of a language model is 6 bits, this language model needs 6 bits to represent each token.
+>
+> [Location: 2,919]{.highlight-ref}
+
+> Some use the number of bits-per-character (BPC) instead. If the number of bits per token is 6 and on average, each token consists of 2 characters, the BPC is 6/2 = 3.
+>
+> [Location: 2,922]{.highlight-ref}
+
+> Cross entropy tells us how efficient a language model will be at compressing text. If the BPB of a language model is 3.43, meaning it can represent each original byte (8 bits) using 3.43 bits, this language model can compress the original training text to less than half the text’s original size.
+>
+> [Location: 2,927]{.highlight-ref}
+
+> Other than guiding the training of language models, perplexity is useful in many parts of an AI engineering workflow. First, perplexity is a good proxy for a model’s capabilities. If a model’s bad at predicting the next token, its performance on downstream tasks will also likely be bad.
+>
+> [Location: 2,969]{.highlight-ref}
+
+> Perplexity might not be a great proxy to evaluate models that have been post-trained using techniques like SFT and RLHF.9 Post-training is about teaching models how to complete tasks. As a model gets better at completing tasks, it might get worse at predicting the next tokens.
+>
+> [Location: 2,992]{.highlight-ref}
+
+> Some people say that post-training collapses entropy. Similarly, quantization—a technique that reduces a model’s numerical precision and, with it, its memory footprint—can also change a model’s perplexity in unexpected ways.
+>
+> [Location: 2,995]{.highlight-ref}
+
+> Common metrics for lexical similarity are BLEU, ROUGE, METEOR++, TER, and CIDEr. They differ in exactly how the overlapping is calculated. Before foundation models, BLEU, ROUGE, and their relatives were common, especially for translation tasks. Since the rise of foundation models, fewer benchmarks use lexical similarity.
+>
+> [Location: 3,151]{.highlight-ref}
+
+> Studies have shown that certain AI judges are strongly correlated to human evaluators. In 2023, Zheng et al. found that on their evaluation benchmark, MT-Bench, the agreement between GPT-4 and humans reached 85%, which is even higher than the agreement among humans (81%). AlpacaEval authors (Dubois et al., 2023) also found that their AI judges have a near perfect (0.98) correlation with LMSYS’s Chat Arena leaderboard, which is evaluated by humans.
+>
+> [Location: 3,273]{.highlight-ref}
+
+> Language models are generally better with text than with numbers. It’s been reported that AI judges work better with classification than with numerical scoring systems. For numerical scoring systems, discrete scoring seems to work better than continuous scoring. Empirically, the wider the range for discrete scoring, the worse the model seems to get. Typical discrete scoring systems are between 1 and 5.
+>
+> [Location: 3,325]{.highlight-ref}
+
+> Zheng et al. (2023) showed that including evaluation examples in the prompt can increase the consistency of GPT-4 from 65% to 77.5%. However, they acknowledged that high consistency may not imply high accuracy—the judge might consistently make the same mistakes.
+>
+> [Location: 3,360]{.highlight-ref}
+
+> Many AI models have first-position bias. An AI judge may favor the first answer in a pairwise comparison or the first in a list of options. This can be mitigated by repeating the same test multiple times with different orderings or with carefully crafted prompts. The position bias of AI is the opposite of that of humans. Humans tend to favor the answer they see last, which is called recency bias.
+>
+> [Location: 3,432]{.highlight-ref}
+
+> Some AI judges have verbosity bias, favoring lengthier answers, regardless of their quality.
+>
+> [Location: 3,436]{.highlight-ref}
+
+> When collecting comparative feedback from users, one challenge is to determine what questions can be determined by preference voting and what shouldn’t be. Preference-based voting only works if the voters are knowledgeable in the subject. This approach generally works in applications where AI serves as an intern or assistant, helping users speed up tasks they know how to do—and not where users ask AI to perform tasks they themselves don’t know how to do.
+>
+> [Location: 3,537]{.highlight-ref}
+
+> Many rating algorithms developed for these other domains can be adapted to evaluating AI models, such as Elo, Bradley–Terry, and TrueSkill. LMSYS’s Chatbot Arena originally used Elo to compute models’ ranking but later switched to the Bradley–Terry algorithm because they found Elo sensitive to the order of evaluators and prompts.23
+>
+> [Location: 3,575]{.highlight-ref}
+
+> we don’t always need direct comparisons between two models to determine which one is better. Ranking algorithms typically assume transitivity. If model A ranks higher than B, and B ranks higher than C, then with transitivity, you can infer that A ranks higher than C. This means that if the algorithm is certain that A is better than B and B is better than C, it doesn’t need to compare A against C to know that A is better.
+>
+> [Location: 3,598]{.highlight-ref}
+
+> Comparative evaluation is relatively hard to game, as there’s no easy way to cheat, like training your model on reference data. For this reason, many trust the results of public comparative leaderboards more than any other public leaderboards.
+>
+> [Location: 3,684]{.highlight-ref}
+
+> In the words of an AI researcher friend, “Write your system prompt assuming that it will one day become public.”
+>
+> [Location: 5,595]{.highlight-ref}
+
+> An agent is anything that can perceive its environment and act upon that environment.10 This means that an agent is characterized by the environment it operates in and the set of actions it can perform.
+>
+> [Location: 6,510]{.highlight-ref}
+
+> Compound mistakes: an agent often needs to perform multiple steps to accomplish a task, and the overall accuracy decreases as the number of steps increases. If the model’s accuracy is 95% per step, over 10 steps, the accuracy will drop to 60%, and over 100 steps, the accuracy will be only 0.6%.
+>
+> [Location: 6,543]{.highlight-ref}

@@ -1,0 +1,89 @@
+---
+title: "Deep Learning for Coders with fastai and PyTorch: AI Applications Without a PhD"
+subtitle: "Jeremy Howard and Sylvain Gugger"
+date: 2024-02-29
+highlights: 19
+description-meta: "Kindle highlights from Deep Learning for Coders with fastai and PyTorch: AI Applications Without a PhD by Jeremy Howard and Sylvain Gugger."
+book-cover: "https://m.media-amazon.com/images/I/91CB1tXICjL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B08C2KM7NR"
+---
+
+## Highlights
+
+19 highlights.
+
+> Recommendation systems are really just a special type of tabular data. In particular, they generally have a high-cardinality categorical variable representing users, and another one representing products (or something similar).
+>
+> [Location: 2,017]{.highlight-ref}
+
+> Entity embedding not only reduces memory usage and speeds up neural networks compared with one-hot encoding, but more importantly by mapping similar values close to each other in the embedding space it reveals the intrinsic properties of the categorical variables…\[It\]
+>
+> [Location: 8,982]{.highlight-ref}
+
+> Ensembles of decision trees (i.e., random forests and gradient boosting machines), mainly for structured data
+>
+> [Location: 9,060]{.highlight-ref}
+
+> Multilayered neural networks learned with SGD (i.e., shallow and/or deep learning),
+>
+> [Location: 9,064]{.highlight-ref}
+
+> audio, images, and natural language)
+>
+> [Location: 9,065]{.highlight-ref}
+
+> Therefore, ensembles of decision trees are our first approach for analyzing a new tabular dataset. The exception to this guideline is when the dataset meets one of these conditions: There are some high-cardinality categorical variables that are very important (“cardinality” refers to the number of discrete levels representing categories, so a high-cardinality categorical variable is something like a zip code, which can take on thousands of possible levels). There are some columns that contain data that would be best understood with a neural network, such as plain text data.
+>
+> [Location: 9,075]{.highlight-ref}
+
+> Loop through each column of the dataset in turn.
+>
+> [Location: 9,263]{.highlight-ref}
+
+> For each column, loop through each possible level of that column in turn. Try splitting the data into two groups, based on whether they are greater than or less than that value (or if it is a categorical variable, based on whether they are equal to or not equal to that level of that categorical variable). Find the average sale price for each of those two groups, and see how close that is to the actual sale price of each of the items of equipment in that group. Treat this as a very simple “model” in which our predictions are simply the average sale price of the item’s group. After looping through all of the columns and all the possible levels for each, pick the split point that gave the best predictions using that simple model. We now have two groups for our data, based on this selected split. Treat each group as a separate dataset, and find the best split for each by going back to step 1 for each group. Continue this process recursively, until you have reached some stopping criterion for each group—for instance, stop splitting a group further when it has only 20 items in it.
+>
+> [Location: 9,264]{.highlight-ref}
+
+> It is also possible to use one-hot encoding to replace a single categorical variable with multiple one-hot-encoded columns,
+>
+> [Location: 9,599]{.highlight-ref}
+
+> However, there is not really any evidence that such an approach improves the end result.
+>
+> [Location: 9,604]{.highlight-ref}
+
+> 2019, this issue was explored in the paper “Splitting on Categorical Predictors in Random Forests” by Marvin Wright and Inke König:
+>
+> [Location: 9,606]{.highlight-ref}
+
+> Here is the procedure that Breiman is proposing: Randomly choose a subset of the rows of your data (i.e., “bootstrap replicates of your learning set”). Train a model using this subset. Save that model, and then return to step 1 a few times. This will give you multiple trained models. To make a prediction, predict using all of the models, and then take the average of each of those model’s predictions.
+>
+> [Location: 9,630]{.highlight-ref}
+
+> This procedure is known as bagging. It is based on a deep and important insight: although each of the models trained on a subset of data will make more errors than a model trained on the full dataset, those errors will not be correlated with each other. Different models will make different errors. The average of those errors, therefore, is zero!
+>
+> [Location: 9,635]{.highlight-ref}
+
+> He went even further than just randomly choosing rows for each model’s training, but also randomly selected from a subset of columns when choosing each split in each decision tree. He called this method the random forest.
+>
+> [Location: 9,641]{.highlight-ref}
+
+> For some auctions, there is a low standard deviation because the trees agree. For others, it’s higher, as the trees don’t agree. This is information that would be useful in a production setting; for instance, if you were using this model to decide which items to bid on at auction, a low-confidence prediction might cause you to look more carefully at an item before you made a bid.
+>
+> [Location: 9,785]{.highlight-ref}
+
+> The feature importance algorithm loops through each tree, and then recursively explores each branch. At each branch, it looks to see what feature was used for that split, and how much the model improves as a result of that split. The improvement (weighted by the number of rows in that group) is added to the importance score for that feature.
+>
+> [Location: 9,834]{.highlight-ref}
+
+> Removing these variables has slightly improved the model’s accuracy; but more importantly, it should make it more resilient over time, and easier to maintain and understand. We recommend that for all datasets, you try building a model in which your dependent variable is is\_valid, as we did here. It can often uncover subtle domain shift issues that you may otherwise miss.
+>
+> [Location: 10,243]{.highlight-ref}
+
+> As we write this, sklearn has just added a HistGradientBoostingRegressor class that provides excellent performance. There are many hyperparameters to tweak for this class, and for all gradient boosted tree methods we have seen. Unlike random forests, gradient boosted trees are extremely sensitive to the choices of these hyperparameters; in practice, most people use a loop that tries a range of hyperparameters to find the ones that work best.
+>
+> [Location: 10,487]{.highlight-ref}
+
+> the first item in the list, xxbos, is a special token that indicates the start of a new text (“BOS” is a standard NLP acronym that means “beginning of stream”).
+>
+> [Location: 10,747]{.highlight-ref}

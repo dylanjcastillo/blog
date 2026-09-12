@@ -1,0 +1,25 @@
+---
+title: "Meditaciones (Serie Great Ideas) (Spanish Edition)"
+subtitle: "Marco Aurelio, Miquel Dolç, and Óscar Martínez García"
+date: 2018-12-22
+highlights: 3
+description-meta: "Kindle highlights from Meditaciones (Serie Great Ideas) (Spanish Edition) by Marco Aurelio, Miquel Dolç, and Óscar Martínez García."
+book-cover: "https://m.media-amazon.com/images/I/71n3OvsZPxL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B009KAT7YQ"
+---
+
+## Highlights
+
+3 highlights.
+
+> haberme proveído de buenos maestros en casa, bien persuadido que en este particular es menester gastar asiduamente.
+>
+> [Location: 8]{.highlight-ref}
+
+> Teofrasto sostiene que los desórdenes cometidos por placer son más censurables que los cometidos con dolor.
+>
+> [Location: 157]{.highlight-ref}
+
+> Ciertamente, en el último caso, el culpable parece ser un hombre provocado por la justicia y forzado a inflamarse en cólera; en el primer caso, por el contrario, es él mismo quien ha decidido ser injusto, arrastrado a obrar así por el capricho de la concupiscencia.
+>
+> [Location: 157]{.highlight-ref}
