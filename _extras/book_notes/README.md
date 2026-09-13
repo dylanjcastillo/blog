@@ -23,8 +23,8 @@ button into the bookmarks bar. Visit <https://read.amazon.com/notebook>, sign in
 and click the bookmark. Leave that tab open while it loads each book and downloads
 one JSON file. The progress box can stop the export and save what it has collected.
 The export also includes each book’s ASIN and cover image URL. Generated book pages
-show a small cover beside the title and a “View on Amazon” link alongside the last
-read date when available. The shared `title-block.html` partial keeps this header
+show a small cover beside the title that links to the book on Amazon. Books with an
+ASIN but no cover fall back to a “View on Amazon” text link beside the last read date. The shared `title-block.html` partial keeps this header
 consistent, including books without covers. Images are loaded
 from Amazon; links use amazon.com and contain no affiliate tags. Older exports
 already contain ASINs, but need a fresh export to capture the covers.

@@ -612,6 +612,17 @@ main.content img {
     border-radius: 0;
   }
 
+  // The cover links to Amazon when the book has an ASIN
+  .book-cover-link {
+    flex: 0 0 auto;
+    display: block;
+    line-height: 0;
+    transition: opacity 0.15s ease;
+
+    &:hover { opacity: 0.85; }
+    &:focus-visible { outline: 2px solid $orange; outline-offset: 4px; }
+  }
+
   @media (max-width: 575.98px) {
     gap: 1rem;
 
