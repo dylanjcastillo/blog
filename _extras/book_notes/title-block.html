@@ -1,4 +1,13 @@
 <header id="title-block-header" class="quarto-title-block book-header">
+$if(book-cover)$
+$if(amazon-url)$
+  <a class="book-cover-link" href="$amazon-url$" title="View on Amazon" aria-label="View on Amazon">
+    <img class="book-cover" src="$book-cover$" alt="" width="96" height="144" decoding="async">
+  </a>
+$else$
+  <img class="book-cover" src="$book-cover$" alt="" width="96" height="144" decoding="async">
+$endif$
+$endif$
   <div class="quarto-title book-heading">
     <h1 class="title">$title$</h1>
 $if(subtitle)$
@@ -16,13 +25,4 @@ $endif$
 $endif$
     </div>
   </div>
-$if(book-cover)$
-$if(amazon-url)$
-  <a class="book-cover-link" href="$amazon-url$" title="View on Amazon" aria-label="View on Amazon">
-    <img class="book-cover" src="$book-cover$" alt="" width="96" height="144" decoding="async">
-  </a>
-$else$
-  <img class="book-cover" src="$book-cover$" alt="" width="96" height="144" decoding="async">
-$endif$
-$endif$
 </header>
