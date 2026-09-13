@@ -574,8 +574,10 @@ main.content img {
   gap: 2rem;
   margin-bottom: 2rem;
 
+  // Size the heading to its text so the cover sits next to it instead of
+  // being pushed to the far edge of the column
   .book-heading {
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 0;
   }
 
@@ -608,7 +610,7 @@ main.content img {
     width: 96px;
     height: 144px;
     object-fit: contain;
-    object-position: top right;
+    object-position: top left;
     border-radius: 0;
   }
 
