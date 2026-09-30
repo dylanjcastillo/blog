@@ -179,3 +179,6 @@ _extras/matryoshka-vs-pca/data/*
 _extras/matryoshka-vs-pca/data/analysis/*
 !_extras/matryoshka-vs-pca/data/analysis/*/
 !_extras/matryoshka-vs-pca/data/analysis/*/*.csv
+
+# Scheduled posts stay local until published (scripts/publish_scheduled.py)
+/_scheduled/

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Runs scripts/publish_scheduled.py hourly and at login.
+  Install:   cp scripts/co.dylancastillo.blog-publish-scheduled.plist ~/Library/LaunchAgents/
+             launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/co.dylancastillo.blog-publish-scheduled.plist
+  Uninstall: launchctl bootout gui/$(id -u)/co.dylancastillo.blog-publish-scheduled
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>co.dylancastillo.blog-publish-scheduled</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/python3</string>
+    <string>/Users/dcast/Documents/GitHub/blog/scripts/publish_scheduled.py</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+  <key>StartInterval</key>
+  <integer>3600</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/dcast/Library/Logs/blog-publish-scheduled.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/dcast/Library/Logs/blog-publish-scheduled.log</string>
+</dict>
+</plist>
