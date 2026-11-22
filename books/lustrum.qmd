@@ -1,8 +1,8 @@
 ---
 title: "Lustrum"
 subtitle: "Robert Harris"
-date: 2026-09-10
-highlights: 6
+date: 2026-09-19
+highlights: 10
 description-meta: "Kindle highlights from Lustrum by Robert Harris."
 book-cover: "https://m.media-amazon.com/images/I/814JtKxko7L._SY160.jpg"
 amazon-url: "https://www.amazon.com/dp/B0041RRH86"
@@ -20,7 +20,7 @@ Reading this and *Imperium* taught me a lot about Cicero’s character. He came 
 
 ## Highlights
 
-6 highlights.
+10 highlights.
 
 > Cicero’s first law of rhetoric, that a speech must always contain at least one surprise.
 >
@@ -45,3 +45,19 @@ Reading this and *Imperium* taught me a lot about Cicero’s character. He came 
 > Tiro was the first man to record a speech in the senate verbatim, and his shorthand system, known as Notae Tironianae, was still in use in the Church in the sixth century; indeed some traces of it (the symbol ‘&’, the abbreviations etc, NB, i.e., e.g.) survive to this day.
 >
 > [Location: 85]{.highlight-ref}
+
+> ‘We have so much – our arts and learning, laws, treasure, slaves, the beauty of Italy, dominion over the entire earth – and yet why is it that some ineradicable impulse of the human mind always impels us to foul our own nest?’
+>
+> [Location: 3,175]{.highlight-ref}
+
+> ‘Claudians make unreliable friends,’ replied Cicero, pulling himself free. ‘Yes, but we make very reliable enemies.’
+>
+> [Location: 4,158]{.highlight-ref}
+
+> ‘My fellow citizens,’ he said, ‘this is not a victory for me. This is a victory for you, the people.’
+>
+> [Location: 4,435]{.highlight-ref}
+
+> Therefore I say to Cato and to Celer, and to any other of my friends who contemplate making dead heroes of themselves: the people will not understand your action, for you cannot oppose illegality by illegality and hope to command respect. Hard times lie ahead, gentlemen, and although you may not feel you need Rome any more, Rome has need of you. Preserve yourselves for the battles yet to come rather than sacrificing yourselves uselessly in one that is already lost.’
+>
+> [Location: 5,106]{.highlight-ref}

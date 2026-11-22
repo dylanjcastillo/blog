@@ -1,7 +1,7 @@
 ---
 title: "$100M Offers"
 subtitle: "Alex Hormozi"
-date: 2024-12-10
+date: 2026-10-03
 highlights: 31
 description-meta: "Kindle highlights from $100M Offers by Alex Hormozi."
 book-cover: "https://m.media-amazon.com/images/I/714C2OOry4L._SY160.jpg"
@@ -94,44 +94,44 @@ amazon-url: "https://www.amazon.com/dp/B099QVG1H8"
 
 > So, then, what does it take to grow? Thankfully, just three simple things: 1) Get more customers 2) Increase their average purchase value 3) Get them to buy more times
 >
-> [Location: 420]{.highlight-ref}
+> [Location: 447]{.highlight-ref}
 
 > There are really only two ways to grow: get more customers, and increase each customer’s value. “Increasing each customer’s value” has two sub-buckets: 1) Increasing profit per purchase 2) Increasing the number of times they buy.
 >
-> [Location: 435]{.highlight-ref}
+> [Location: 462]{.highlight-ref}
 
 > It’s an offer you present to the marketplace that cannot be compared to any other product or service available, combining an attractive promotion, an unmatchable value proposition, a premium price, and an unbeatable guarantee with a money model (payment terms) that allows you to get paid to get new customers . . . forever removing the cash constraint on business growth.
 >
-> [Location: 488]{.highlight-ref}
+> [Location: 515]{.highlight-ref}
 
 > Here’s the key takeaway from all this: a business does the same work in both cases (with a commoditized or a Grand Slam Offer). The fulfillment is the same. But if one business uses a Grand Slam Offer and another uses a “commodity” offer, the Grand Slam Offer makes that business appear as if it has a totally different product — and that means a value- driven, versus price-driven, purchase.
 >
-> [Location: 504]{.highlight-ref}
+> [Location: 532]{.highlight-ref}
 
 > There is a market in desperate need of your abilities. You need to find it. And when you do, you will capitalize, all while wondering what took you so long. Don’t be romantic about your audience. Serve the people who can pay you what you’re worth.
 >
-> [Location: 716]{.highlight-ref}
+> [Location: 745]{.highlight-ref}
 
 > In order to sell anything, you need demand. We are not trying to create demand. We are trying to channel it.
 >
-> [Location: 719]{.highlight-ref}
+> [Location: 748]{.highlight-ref}
 
 > First, don’t pick a bad market. Normal markets are fine. Great markets are great. Second, once you pick, commit to it until you figure it out.
 >
-> [Location: 895]{.highlight-ref}
+> [Location: 926]{.highlight-ref}
 
 > First and foremost, charge a premium. It will allow you to do things no one else can to make your clients successful. We were able to charge a premium because we provided more value than anyone else in the industry. In a real way, we were charging on a fraction of what our clients made using our system. This is important. Our clients still got a deal. The gap between what they paid (price) and what they got (value) was massive. As a result, the virtuous cycle continued to spin. We charged the most money. We provided the most value.
 >
-> [Location: 1,115]{.highlight-ref}
+> [Location: 1,150]{.highlight-ref}
 
 > Many entrepreneurs believe that charging “too much” is bad. The reality is that, yes, you should never charge more than your product is worth. But you should charge far more for your product and services than it costs to fulfill it.
 >
-> [Location: 1,139]{.highlight-ref}
+> [Location: 1,175]{.highlight-ref}
 
 > As you can see from the picture, there are four primary drivers of value. Two of the drivers (on top), you will seek to increase. The other two (on the bottom), you will seek to decrease. (Yay) The Dream Outcome (Goal: Increase) (Yay) Perceived Likelihood of Achievement (Goal: Increase) (Boo) Perceived Time Delay Between Start and Achievement (Goal: Decrease) (Boo) Perceived Effort & Sacrifice (Goal: Decrease)
 >
-> [Location: 1,165]{.highlight-ref}
+> [Location: 1,201]{.highlight-ref}
 
 > Perception is reality. It’s not about how much you increase your prospect’s likelihood of success, or decrease the time delay to achievement, or decrease their effort and sacrifice. That in itself is not valuable. Many times, they will have no idea. The Grand Slam Offer only becomes valuable once the prospect perceives the increase in likelihood of achievement, perceives the decrease in time delay, and perceives the decrease in effort and sacrifice.
 >
-> [Location: 1,200]{.highlight-ref}
+> [Location: 1,236]{.highlight-ref}

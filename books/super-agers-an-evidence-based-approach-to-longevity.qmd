@@ -4,7 +4,7 @@ subtitle: "Eric Topol"
 date: 2026-03-07
 highlights: 6
 description-meta: "Kindle highlights from Super Agers: An Evidence-Based Approach to Longevity by Eric Topol."
-book-cover: "https://m.media-amazon.com/images/I/81YFqJMEIFL._SY160.jpg"
+book-cover: "https://m.media-amazon.com/images/I/81OWegmQkBL._SY160.jpg"
 amazon-url: "https://www.amazon.com/dp/B0DJ3K4LRD"
 ---
 

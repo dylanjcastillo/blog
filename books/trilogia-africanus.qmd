@@ -1,0 +1,25 @@
+---
+title: "Trilogía Africanus"
+subtitle: "Santiago Posteguillo"
+date: 2026-11-16
+highlights: 3
+description-meta: "Kindle highlights from Trilogía Africanus by Santiago Posteguillo."
+book-cover: "https://m.media-amazon.com/images/I/81IqubRTKRL._SY160.jpg"
+amazon-url: "https://www.amazon.com/dp/B07YP17RZ8"
+---
+
+## Highlights
+
+3 highlights.
+
+> Estoy seguro de que los actores agradecerán tanto debate sobre sus representaciones. Parece que Fabio Máximo no entiende que si deseas que algo pase desapercibido lo mejor es no mencionarlo.
+>
+> [Location: 110]{.highlight-ref}
+
+> \[La guerra debe emprenderse de tal manera que parezca que sólo se busca la paz.\]
+>
+> [Location: 690]{.highlight-ref}
+
+> Los que se han emborrachado o han perdido la cabeza por una mujer en alguna ocasión saben que todos somos vulnerables, y eso es importante, ser conscientes de nuestras limitaciones, ¿no comparte esa opinión, decurión?
+>
+> [Location: 2,422]{.highlight-ref}
